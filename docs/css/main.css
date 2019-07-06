@@ -1,0 +1,415 @@
+
+* {
+-moz-user-select: none;
+-ms-user-select: none;
+-webkit-user-select: none;
+-webkit-touch-callout: none;
+/*user-select: none;*/
+margin: 0;
+padding: 0;
+}
+
+input{
+ -webkit-user-select : auto;
+}
+
+body{
+  background:#fff;
+}
+
+header{
+  width:100%;
+  height: auto;
+  margin: 0 auto;
+  background:#fff;
+  padding-top: 15px;
+}
+
+h3 {
+  text-align: center;
+}
+
+#top_button{
+  position: relative;
+  max-width: 440px;
+  text-align: center;
+  margin: 0 auto;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+.button {
+  display: inline-block;
+  padding: 2px 5px;
+  text-decoration: none;
+  background: #fff;/*ボタン色*/
+  color: #000;
+  border-radius: 4px;
+}
+
+#buttons{
+  font-size: 0;
+  border: 1px solid #000;
+  width: 440px;
+  margin: 0 auto;
+  padding-top:10px;
+  padding-bottom:10px;
+  margin-bottom: 5px;
+}
+
+.mode_button{
+  position: relative;
+  text-align: left;
+}
+
+.submode_button{
+  position: relative;
+  text-align: left;
+  padding-top: 5px;
+}
+
+.stylemode_button{
+  position: relative;
+  text-align: left;
+  padding-bottom:-5px;
+}
+
+.label_mode {
+display: inline;
+text-align: left;
+margin: 0px;
+width: 100px;
+height: 25px;
+padding-left: 5px;
+padding-right: 5px;
+color: #000000;
+font-size: 14px;
+text-align: center;
+line-height: 28px;
+}
+
+.label {
+display: inline-block;
+margin: 0px;
+text-align: left;
+width: 45px;
+height: 25px;
+padding-left: 5px;
+padding-right: 5px;
+color: #000000;
+font-size: 14px;
+text-align: center;
+line-height: 28px;
+border: 1px solid #000060;
+border-radius: 3px;
+}
+
+.label:hover {
+  background: #eeeeee;
+}
+
+
+.labelL {
+display: inline-block;
+margin: 0px;
+text-align: left;
+width: 30px;
+height: 25px;
+padding-left: 5px;
+padding-right: 5px;
+color: #000000;
+font-size: 14px;
+text-align: center;
+line-height: 28px;
+border: 1px solid #000060;
+border-radius: 3px;
+}
+
+.labelL:hover {
+  background: #eeeeee;
+}
+
+input[type=radio] {
+display: none; /* ラジオボタンを非表示にする */
+}
+
+input[type="radio"]:checked + label {
+background: #cccccc;
+color: #000000;
+}
+
+#panel_button0{
+  width: auto;
+  border:none;
+  background: none;
+  padding-left:10px;
+}
+#panel_button{
+  width: 25px;
+  border:1px solid #ccc;
+  background: none;
+  margin-left:0px;
+  border-radius: 1px;
+}
+#panel_button:hover{
+  background: #ccc;
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  width: auto;
+  height: 25px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav li {
+  position: relative;
+  list-style: none;
+}
+.nav li span {
+  display: inline-block;
+  margin-left: 0px;
+  text-align: left;
+  width: 45px;
+  height: 25px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #000000;
+  font-size: 14px;
+  background: #ffffff;
+  text-align: center;
+  line-height: 28px;
+  border: 1px solid #000060;
+  border-radius: 3px;
+  }
+
+.nav > li:hover > span {/*layer-1*/
+  color: black;
+  background: #cccccc;
+}
+.nav > li li:hover > span {/*layer-2*/
+  color: black;
+  background: #cccccc;
+}
+.nav li ul {
+  position: absolute;
+  top: 26px;
+  left: 0px;
+  width:0px;
+  height:0px;
+}
+.nav li ul li {
+  overflow: hidden;
+  height: 0px;
+  left: 0px;
+  width: 80px;
+}
+.nav li ul li span {
+  display: inline-block;
+  margin-left: 0px;
+  text-align: left;
+  width: 80px;
+  height: 25px;
+  padding-left: 0px;
+  padding-right: 0px;
+  color: #000000;
+  font-size: 12px;
+  background: #ffffff;
+  text-align: center;
+  line-height: 28px;
+  border: 1px solid #000090;
+  border-radius: 0px;
+}
+.nav li:hover > ul > li {
+  overflow: visible;
+  height: 25px;
+  left: 10px;
+  top: 0px;
+}
+  .nav li ul li ul {
+    top: 0px;
+    left: 71px;
+  }
+  .nav li ul li ul:before {/*layer-2▷*/
+    position: absolute;
+    content: "";
+    top: 9px;
+    left: 0px;
+    border: 5px solid transparent;
+    border-left: 5px solid #000;
+  }
+
+  .nav li.symbolmode_display span{
+    width: auto;
+    border:none;
+    background: none;
+  }
+  .nav li.symbolmode_display span.symmode_content{
+    margin-left: -10px;
+  }
+  .nav > li.symbolmode_display:hover > span {/*layer-1*/
+    color: black;
+    background: none;
+  }
+
+  #symmode_content{
+    font-size: 12px;
+  }
+
+  #dvique{
+    background: #ccc;
+    border: 1px solid #232323;
+    width: auto;
+    margin: 0 auto;
+  }
+
+  #canvas {
+    background: #ccc;
+  }
+
+  #float-key{
+  position: absolute;
+  display: none;
+  z-index: 1;
+  left: 300px;
+  top: 250px;
+  width: 0px;
+  height:0px;
+  background-color: #fff;
+  border-radius: 20px;
+  }
+
+  #float-key-header{
+    width:200px;
+    height: 20px;
+    text-align: center;
+    background:#aaa;
+    padding-top: 0px;
+    border-radius: 5px 5px 0px 0px;
+    cursor:move;
+  }
+
+  #float-key-body{
+    position: relative;
+    width:200px;
+    height: 140px;
+    margin-top: 0px;
+    text-align: center;
+    background:#ddd;
+    padding-top: 0px;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 4px 4px 4px rgba(0,0,0,0.6);
+  }
+
+  #float-key-menu{
+    /*display: none;*/
+    width:100%;
+    height: 20px;
+    text-align: center;
+    background:#ccc;
+    padding-top: 20px;
+    border-radius: 5px 5px 0px 0px;
+  }
+
+  .panel_menu {
+    display: flex;
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+  }
+  .panel_menu li {
+    border-right: 1px solid #fff;
+    list-style: none;
+    vertical-align: middle;
+    background-color: #ccc;
+    width: 100%;
+    height: 100%;
+  }
+  .panel_menu li:last-child {
+    border-right: 0;
+  }
+
+  .label_menu{
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  #float-canvas {
+    margin-top: 5px;
+    background: none;
+  }
+
+.drag-and-drop {
+    cursor: move;
+    position: absolute;
+    z-index: 100;
+}
+
+.drag {
+    z-index: 101;
+}
+
+  #modal {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+  }
+
+  #modal-content{
+  background-color: white;
+  width: 300px;
+  height: 350px;
+  margin:0 auto;
+  margin-top: 15px;
+  border-radius: 20px;
+  }
+
+  #modal-header{
+    width:300px;
+    height: 30px;
+    text-align: center;
+    background:#ddd;
+    padding-top: 0px;
+    border-radius: 20px 20px 0px 0px;
+  }
+
+  h4 {
+    display: inline;
+  }
+
+  input[type=number] {
+  width: 50px;
+  }
+
+#nb_button{
+  text-align: center;
+}
+
+#modal-size{
+    text-align: center;
+    margin-left: 40px;
+}
+#modal-sizeA{
+    text-align: center;
+    margin-left: 40px;
+}
+#modal-spaceud{
+    text-align: center;
+}
+#modal-spacelr{
+    text-align: center;
+}
