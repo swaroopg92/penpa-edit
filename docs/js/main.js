@@ -223,11 +223,18 @@ window.addEventListener("beforeunload", function(eve){
     eve.returnValue = "ページを移動します";
 },{passive: false});
 
+var modal1 = document.getElementById("modal");
+var modal2 = document.getElementById("modal-save");
 window.addEventListener('click', function(e) {
-  if (e.target == modal) {
-    modal.style.display = 'none';
+  if (e.target == modal1) {
+    modal1.style.display = 'none';
+  }else if(e.target == modal2) {
+    modal2.style.display = 'none';
   }
-});
+}, {passive: false});
+window.addEventListener('touchstart', function(e) {
+  e.stopPropagation();
+}, {passive: false});
 
 //drag_window
 //要素の取得
@@ -264,7 +271,6 @@ window.addEventListener('click', function(e) {
         } else {
             var event = e.changedTouches[0];
         }
-
         e.preventDefault();
 
         drag.style.top = event.pageY - y_window + "px";
@@ -272,6 +278,9 @@ window.addEventListener('click', function(e) {
         body.style.top = event.pageY - y_window + "px";
         body.style.left = event.pageX - x_window + "px";
 
+        drag.addEventListener('touchmove', function(e){
+          e.preventDefault();
+        }, {passive: false});
         drag.addEventListener("mouseup", mup, {passive: false});
         document.body.addEventListener("mouseleave", mup, {passive: false});
         drag.addEventListener("touchend", mup, {passive: false});
@@ -335,7 +344,6 @@ window.addEventListener('click', function(e) {
         "ヤユヨワンラリルレロャュョヲ　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　"
         var cont = str.split("");
         var n = numxf+numyf*10;
-                  console.log(n);
         if (0<=n&&n<=79&&n!=49){
           key_number(cont[n]);
         }else if (n===49){

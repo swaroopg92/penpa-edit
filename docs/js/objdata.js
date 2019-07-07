@@ -336,11 +336,27 @@ function savegraph(){
     redraw();
 }
 
-function savetext(){
-    var text = maketext();
-    var downloadLink = document.getElementById('download_link');
-    var filename = 'Save.txt';
-    var blob = new Blob([text],{type: "text/plain"});
+function savetext() {
+  var text = maketext();
+  document.getElementById("modal-save").style.display = 'block';
+  document.getElementById("savetextarea").value = text;
+}
+
+function savetext_copy() {
+  var textarea = document.getElementById("savetextarea");
+  textarea.select();
+  document.execCommand("copy");
+}
+
+function savetext_download(){
+  var text = document.getElementById("savetextarea").value;
+  var downloadLink = document.getElementById('download_link');
+  var filename = document.getElementById("savetextname").value;
+  if(filename.slice(-4)!=".txt"){
+    filename += ".txt";
+  }
+  var blob = new Blob([text],{type: "text/plain"});
+  try{
     if (window.navigator.msSaveBlob) {
         window.navigator.msSaveBlob(blob, filename);
     } else {
@@ -349,11 +365,14 @@ function savetext(){
         downloadLink.download = filename;
         downloadLink.click();
     }
+  }catch(error){
+    alert("ブラウザが対応していません。")
+  }
 }
 
 function duplicate(){
   var address = maketext();
-  window.open(address, '_blank', 'width=700,height=500');
+  window.open(address)
 }
 
 function maketext(){
