@@ -3,7 +3,7 @@
 <html>
   <head>
     <title>Penpa-editor</title>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <link href="./css/main.css" rel="stylesheet" type="text/css">
@@ -176,7 +176,6 @@
                       <li><span onclick="subsymbolmode('arrow_B_W');">白</span></li>
                     </ul>
                   </li>
-                  <li><span onclick="subsymbolmode('arrow_Short');">短太</span></li>
                   <li><span>細</span>
                     <ul>
                       <li><span onclick="subsymbolmode('arrow_N_B');">黒</span></li>
@@ -184,7 +183,6 @@
                       <li><span onclick="subsymbolmode('arrow_N_W');">白</span></li>
                     </ul>
                   </li>
-                  <li><span onclick="subsymbolmode('arrow_S');">小</span></li>
                   <li><span>三角形</span>
                     <ul>
                       <li><span onclick="subsymbolmode('arrow_tri_B');">黒</span></li>
@@ -192,6 +190,8 @@
                       <li><span onclick="subsymbolmode('arrow_tri_W');">白</span></li>
                     </ul>
                   </li>
+                  <li><span onclick="subsymbolmode('arrow_Short');">短太</span></li>
+                  <li><span onclick="subsymbolmode('arrow_S');">小</span></li>
                   <li><span onclick="subsymbolmode('arrow_cross');">十字</span></li>
                   <li><span onclick="subsymbolmode('arrow_eight');">八方</span></li>
                 </ul>
@@ -384,7 +384,6 @@
           <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
           <span>ファイル名：<input type="text" value="Save.txt" id="savetextname"></span>
         </div>
-        <br>
         <div id="nb_button">
           <input type="button" id="closeBtn" value="コピー" onclick="savetext_copy();"/>
           <input type="button" id="closeBtn" value="ダウンロード" onclick="savetext_download();"/>

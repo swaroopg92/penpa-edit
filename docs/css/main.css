@@ -198,7 +198,7 @@ color: #000000;
 }
 .nav li ul {
   position: absolute;
-  top: 26px;
+  top: 27px;
   left: 0px;
   width:0px;
   height:0px;
@@ -217,6 +217,7 @@ color: #000000;
   height: 25px;
   padding-left: 0px;
   padding-right: 0px;
+  margin-top:0px;
   color: #000000;
   font-size: 12px;
   background: #ffffff;
@@ -227,7 +228,7 @@ color: #000000;
 }
 .nav li:hover > ul > li {
   overflow: visible;
-  height: 25px;
+  height: 27px;
   left: 10px;
   top: 0px;
 }
@@ -243,6 +244,14 @@ color: #000000;
     border: 5px solid transparent;
     border-left: 5px solid #000;
   }
+/*
+  .nav li ul hr{
+    margin  : 0px;
+    padding : 0px;
+    border  : none;
+    height  : 1px;
+    color   : lime;
+  }*/
 
   .nav li.symbolmode_display span{
     width: auto;
@@ -390,6 +399,11 @@ color: #000000;
   background-color: rgba(0,0,0,0.3);
   }
 
+  #modal-save-body {
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
   #modal-save-content{
   background-color: white;
   width: 300px;
@@ -398,6 +412,7 @@ color: #000000;
   margin-top: 30px;
   border-radius: 20px;
   }
+
 
   textarea {
       min-width: 200px;
