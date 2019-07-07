@@ -341,7 +341,7 @@ window.addEventListener('touchstart', function(e) {
         }
       }else if(pu.panelmode === "ja_K"){
         var str = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモ"+
-        "ヤユヨワンラリルレロャュョヲ　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　"
+        "ヤユヨワンラリルレロャュョヲ　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォ"
         var cont = str.split("");
         var n = numxf+numyf*10;
         if (0<=n&&n<=79&&n!=49){
