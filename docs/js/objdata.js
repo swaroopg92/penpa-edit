@@ -354,6 +354,7 @@ function savetext_copy() {
   textarea.setSelectionRange(0, 1e5);
 
   document.execCommand("copy");
+  alert("コピーしました。")
 }
 
 function savetext_download(){
@@ -363,8 +364,8 @@ function savetext_download(){
   if(filename.slice(-4)!=".txt"){
     filename += ".txt";
   }
-  var blob = new Blob([text],{type: "text/plain"});
   try{
+  var blob = new Blob([text],{type: "text/plain"});
     if (window.navigator.msSaveBlob) {
         window.navigator.msSaveBlob(blob, filename);
     } else {
