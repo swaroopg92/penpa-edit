@@ -4,8 +4,8 @@ class Puzzle {
     //盤面情報
     this.nx = nx;
     this.ny = ny;
-    this.spacex = 20.5;
-    this.spacey = 20.5;
+    this.spacex = 5.5;
+    this.spacey = 5.5;
     this.sizex = size;
     this.sizey = size;
     this.resol = 3;

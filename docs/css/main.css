@@ -244,6 +244,7 @@ color: #000000;
     border: 5px solid transparent;
     border-left: 5px solid #000;
   }
+
 /*
   .nav li ul hr{
     margin  : 0px;
@@ -271,14 +272,15 @@ color: #000000;
   }
 
   #dvique{
-    background: #ccc;
+    background: #fff;
     border: 1px solid #232323;
     width: auto;
     margin: 0 auto;
+    padding: 10px;
   }
 
   #canvas {
-    background: #ccc;
+    background: #fff;
   }
 
   #float-key{
