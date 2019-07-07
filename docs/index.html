@@ -3,7 +3,7 @@
 <html>
   <head>
     <title>Penpa-editor</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <link href="./css/main.css" rel="stylesheet" type="text/css">
@@ -14,9 +14,9 @@
 
   <body>
     <header>
-      <h3>ペンパくん　β版1</h3>
+      <h3>ペンパくん　β版</h3>
 
-      <div id = "top_button">
+      <div id="top_button">
         <input type="button" value="新規作成・枠変更" class="button" onclick="newboard();"/>
         <input type="button" id="download_button" value="画像保存" class="button" onclick="savegraph();"/>
         <input type="button" id="download_button_T" value="データ保存" class="button"  onclick="savetext();"/>
@@ -25,9 +25,9 @@
       </div>
 
       <div id="buttons">
-        <div id="mode_button" class = "mode_button">
+        <div id="mode_button" class="mode_button">
           <label class="label_mode">　編集：</label>
-          <input type="radio" name="mode_qa" id="pu_q" value=1 checked = "checked" onclick="mode_qa();"/>
+          <input type="radio" name="mode_qa" id="pu_q" value=1 checked="checked" onclick="mode_qa();"/>
           <label for="pu_q" class="label">問題</label>
           <input type="radio" name="mode_qa" id="pu_a" value=2 onclick="mode_qa();"/>
           <label for="pu_a" class="label">解答</label>
@@ -35,9 +35,9 @@
           <span id="panel_button0" class="label">パネル：</span>
           <span id="panel_button" class="label" onclick="panel_onoff();">OFF</span>
         </div>
-        <div id="mode_button" class = "mode_button">
+        <div id="mode_button" class="mode_button">
           <label class="label_mode">モード：</label>
-          <input type="radio" name="mode" id="surface" checked = "checked" onclick="mode_surface();"/>
+          <input type="radio" name="mode" id="surface" checked="checked" onclick="mode_surface();"/>
           <label for="surface" class="label">黒マス</label>
           <input type="radio" name="mode" id="line" onclick="mode_line();"/>
           <label for="line" class="label">線</label>
@@ -61,8 +61,8 @@
           <label for="special" class="label">特殊</label>
           <br>
         </div>
-        <hr size = 1 noshade>
-        <div id="submode_button" class = "submode_button" >
+        <hr size=1 noshade>
+        <div id="submode_button" class="submode_button" >
           <span id="div_all">
             <label class="label_mode">　サブ：</label>
           </span>
@@ -226,7 +226,7 @@
         </div>
 
 
-        <div id="stylemode_button" class = "stylemode_button">
+        <div id="stylemode_button" class="stylemode_button">
           <span id="div_all">
             <label class="label_mode">スタイル</label>
           </span>
@@ -333,7 +333,7 @@
             <label for="st_symL1" class="label">線-奥</label>
             <input type="radio" name="style_symbolL" value="2" id="st_symL2" checked="checked" onclick="stylemode_check('style_symbolL');">
             <label for="st_symL2" class="label">線-前</label>
-            <span class = "symbolmode_display">
+            <span class="symbolmode_display">
               <span id="panel_button0" class="label">　　　</span>
               <span id="panel_button0" class="label">選択中：</span>
               <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
@@ -350,16 +350,16 @@
       </div>
     </header>
 
-    <div id = "dvique" class = "dvique"></div>
+    <div id="dvique" class="dvique"></div>
 
-    <div id = "top_button">
+    <div id="top_button">
       <input type="button" value="戻" class="button" onclick="undo();"/>
       <input type="button" value="進" class="button" onclick="redo();"/>
       <input type="button" value="選択消去" class="button" onclick="ResetCheck();"/>
       <input type="button" value="問題・解答消去" class="button" onclick="DeleteCheck();"/>
     </div>
 
-    <div id = "float-key">
+    <div id="float-key">
       <div class="drag-and-drop" id="float-key-header"><h4>panel</h4></div>
       <div id="float-key-body">
         <div id="float-key-menu">
@@ -370,12 +370,12 @@
           </ul>
         </div>
         <div id="float-key-board">
-          <canvas id="float-canvas" class = "float-canvas"></canvas>
+          <canvas id="float-canvas" class="float-canvas"></canvas>
         </div>
       </div>
     </div>
 
-    <div id = "modal-save" class = "modal">
+    <div id="modal-save" class="modal">
       <div id="modal-save-content">
         <div id="modal-header">
           <h3>テキスト保存</h3>
@@ -388,7 +388,7 @@
         <div id="nb_button">
           <input type="button" id="closeBtn" value="コピー" onclick="savetext_copy();"/>
           <input type="button" id="closeBtn" value="ダウンロード" onclick="savetext_download();"/>
-          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-save').style.display = 'none';"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-save').style.display='none';"/>
         </div>
       </div>
     </div>
@@ -451,7 +451,7 @@
         <div id="nb_button">
           <input type="button" id="closeBtn" value="作成" onclick="CreateCheck();"/>
           <input type="button" id="closeBtn" value="枠変更" onclick="newgrid();"/>
-          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal').style.display = 'none';"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal').style.display='none';"/>
         </div>
       </div>
     </div>
