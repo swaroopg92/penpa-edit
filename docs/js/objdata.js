@@ -352,9 +352,8 @@ function savetext_copy() {
   sel.removeAllRanges();
   sel.addRange(range);
   textarea.setSelectionRange(0, 1e5);
-
-  document.execCommand("copy");
   alert("コピーしました。");
+  document.execCommand("copy");
 }
 
 function savetext_download(){
@@ -364,18 +363,20 @@ function savetext_download(){
   if(filename.slice(-4)!=".txt"){
     filename += ".txt";
   }
-  try{
   var blob = new Blob([text],{type: "text/plain"});
-    if (window.navigator.msSaveBlob) {
-        window.navigator.msSaveBlob(blob, filename);
-    } else {
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.target = "_blank";
-        downloadLink.download = filename;
-        downloadLink.click();
-    }
-  }catch(error){
-    alert("ブラウザが対応していません。")
+  var ua = window.navigator.userAgent.toLowerCase();
+
+  if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1){
+    //safari
+    window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+  }else if (window.navigator.msSaveBlob) {
+    // for IE
+    window.navigator.msSaveBlob(blob, filename);
+  }else{
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.target = "_blank";
+    downloadLink.download = filename;
+    downloadLink.click();
   }
 }
 
