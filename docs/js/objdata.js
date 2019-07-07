@@ -354,7 +354,7 @@ function savetext_copy() {
   textarea.setSelectionRange(0, 1e5);
 
   document.execCommand("copy");
-  alert("コピーしました。")
+  alert("コピーしました。");
 }
 
 function savetext_download(){
