@@ -93,11 +93,7 @@ function onKeyDown(e){
       if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 ||str_alph_up.indexOf(key) != -1|| str_sym.indexOf(key) != -1){
         key_number(key);
       }else if (key === " "){
-        if (!shift_key){
-          key_space();
-        }else if(shift_key){
-          key_shiftspace();
-        }
+        key_space();
         event.returnValue = false;
       }else if (key === "Backspace"){
         key_backspace();
@@ -117,6 +113,10 @@ function onKeyDown(e){
           break;
         case "z": //Ctrl+z
           undo();
+          event.returnValue = false;
+          break;
+        case " ": //Ctrl+space
+          key_shiftspace();
           event.returnValue = false;
           break;
       }
