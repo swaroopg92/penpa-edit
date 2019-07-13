@@ -14,12 +14,13 @@
 
   <body>
     <header>
-      <h3>ペンパくん　β版</h3>
+      <h3 id="title">ペンパくん　編集モード</h3>
 
       <div id="top_button">
-        <input type="button" value="新規作成・枠変更" class="button" onclick="newboard();"/>
-        <input type="button" id="download_button" value="画像保存" class="button" onclick="savegraph();"/>
-        <input type="button" id="download_button_T" value="データ保存" class="button"  onclick="savetext();"/>
+        <input type="button" id="newboard" value="新規作成・枠変更" class="button" onclick="newboard();"/>
+        <input type="button" id="newsize" value="サイズ変更" class="button" style="display:inline;" onclick="newsize();"/>
+        <input type="button" id="download_button" value="画像保存" class="button" onclick="saveimage();"/>
+        <input type="button" id="download_button_T" value="アドレス出力" class="button"  onclick="savetext();"/>
         <a id="download_link"></a>
         <input type="button" value="複製" class="button" onclick="duplicate();"/>
       </div>
@@ -28,7 +29,7 @@
         <div id="mode_button" class="mode_button">
           <label class="label_mode">　編集：</label>
           <input type="radio" name="mode_qa" id="pu_q" value=1 checked="checked" onclick="mode_qa();"/>
-          <label for="pu_q" class="label">問題</label>
+          <label for="pu_q" class="label" id="pu_q_label">問題</label>
           <input type="radio" name="mode_qa" id="pu_a" value=2 onclick="mode_qa();"/>
           <label for="pu_a" class="label">解答</label>
           <span id="panel_button0" class="label">　　　</span>
@@ -211,17 +212,20 @@
                   <li><span onclick="subsymbolmode('compass');">コンパス</span></li>
                   <li><span onclick="subsymbolmode('angleloop');">鋭直鈍ループ</span></li>
                   <li><span onclick="subsymbolmode('firefly');">ホタルビーム</span></li>
-                  <li><span onclick="subsymbolmode('Buttenburg');">Buttenburg</span></li>
+                  <li><span onclick="subsymbolmode('sun_moon');">月か太陽</span></li>
+                  <li><span onclick="subsymbolmode('sudokuetc');">数独特殊記号</span></li>
                 </ul>
               </li>
             </ul>
           </span>
 
           <span id="mode_special" style="display:none;">
-            <input type="radio" name="mode_special" value="1" id="special1" checked="checked" onclick="submode_check('mode_special');">
+            <input type="radio" name="mode_special" value="thermo" id="special1" checked="checked" onclick="submode_check('mode_special');">
             <label for="special1" class="label">サーモ</label>
-            <input type="radio" name="mode_special" value="2" id="special2" onclick="submode_check('mode_special');">
+            <input type="radio" name="mode_special" value="arrows" id="special2" onclick="submode_check('mode_special');">
             <label for="special2" class="label">アロー</label>
+            <input type="radio" name="mode_special" value="direction" id="special3" onclick="submode_check('mode_special');">
+            <label for="special3" class="label">矢印</label>
           </span>
         </div>
 
@@ -277,6 +281,8 @@
             <label for="st_lineE3" class="labelL">点</label>
             <input type="radio" name="style_lineE" value="13" id="st_lineE6" onclick="stylemode_check('style_lineE');">
             <label for="st_lineE6" class="labelL">太点</label>
+            <input type="radio" name="style_lineE" value="14" id="st_lineE8" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE8" class="labelL">灰点</label>
             <input type="radio" name="style_lineE" value="5" id="st_lineE5" onclick="stylemode_check('style_lineE');">
             <label for="st_lineE5" class="labelL">灰</label>
           </span>
@@ -292,6 +298,8 @@
             <label for="st_wall3" class="labelL">点</label>
             <input type="radio" name="style_wall" value="13" id="st_wall6" onclick="stylemode_check('style_wall');">
             <label for="st_wall6" class="labelL">太点</label>
+            <input type="radio" name="style_wall" value="14" id="st_wall9" onclick="stylemode_check('style_wall');">
+            <label for="st_wall9" class="labelL">灰点</label>
             <input type="radio" name="style_wall" value="5" id="st_wall5" onclick="stylemode_check('style_wall');">
             <label for="st_wall5" class="labelL">灰</label>
             <input type="radio" name="style_wall" value="30" id="st_wall8" onclick="stylemode_check('style_wall');">
@@ -356,7 +364,7 @@
       <input type="button" value="戻" class="button" onclick="undo();"/>
       <input type="button" value="進" class="button" onclick="redo();"/>
       <input type="button" value="選択消去" class="button" onclick="ResetCheck();"/>
-      <input type="button" value="問題・解答消去" class="button" onclick="DeleteCheck();"/>
+      <input type="button" value="問題・解答消去" class="button" id="button_delete" onclick="DeleteCheck();"/>
     </div>
 
     <div id="float-key">
@@ -378,7 +386,11 @@
     <div id="modal-save" class="modal">
       <div id="modal-save-content">
         <div id="modal-header">
-          <h3>テキスト保存</h3>
+          <h3 id="savetexttitle">アドレス出力</h3>
+        </div>
+        <div id="nb_button">
+          <input type="button" id="address_edit" value="編集アドレス" onclick="savetext_edit();"/>
+          <input type="button" id="address_solve" value="出題用アドレス" onclick="savetext_solve();"/>
         </div>
         <div id="modal-save-body">
           <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
@@ -388,6 +400,30 @@
           <input type="button" id="closeBtn" value="コピー" onclick="savetext_copy();"/>
           <input type="button" id="closeBtn" value="ダウンロード" onclick="savetext_download();"/>
           <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-save').style.display='none';"/>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-image" class="modal">
+      <div id="modal-image-content">
+        <div id="modal-header">
+          <h3 id="saveimagetitle">画像保存</h3>
+        </div>
+
+        <div id="modal-image-body">
+          <h4 id="div_all"><label class="label_imagespace">　余白：</label></h4>
+          <input type="radio" name="nb_margin" value="1" id="nb_margin1" checked="checked">
+          <label for="nb_margin1" class="label">あり</label>
+          <input type="radio" name="nb_margin" value="2" id="nb_margin2">
+          <label for="nb_margin2" class="label">なし</label>
+          <br><br>
+          <span>ファイル名：<input type="text" value="Image.png" id="saveimagename"></span>
+        </div>
+        <br>
+        <div id="nb_button">
+          <input type="button" id="closeBtn" value="別ウィンドウ" onclick="saveimage_window();"/>
+          <input type="button" id="closeBtn" value="ダウンロード" onclick="saveimage_download();"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-image').style.display='none';"/>
         </div>
       </div>
     </div>
@@ -451,6 +487,23 @@
           <input type="button" id="closeBtn" value="作成" onclick="CreateCheck();"/>
           <input type="button" id="closeBtn" value="枠変更" onclick="newgrid();"/>
           <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal').style.display='none';"/>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-newsize" class="modal">
+      <div id="modal-newsize-content">
+        <div id="modal-header">
+          <h3>　サイズ変更</h3>
+        </div>
+        <span id="modal-sizeA">
+          <span><label class="label_nb">表示サイズ：</label></span>
+          <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="36" min="10" max="60" step="1">
+        </span>
+        <br>
+        <div id="nb_button">
+          <input type="button" id="closeBtn" value="枠変更" onclick="newgrid_r();"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-newsize').style.display='none';"/>
         </div>
       </div>
     </div>

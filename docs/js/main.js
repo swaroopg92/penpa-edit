@@ -68,7 +68,7 @@ function onContextmenu(e){ //右クリック
 }
 
 function onKeyDown(e){
-  if(e.target.type === "number"){
+  if(e.target.type === "number" || e.target.type === "text"){
     //入力フォーム用
   }else{
     var key = e.key;
@@ -93,7 +93,11 @@ function onKeyDown(e){
       if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 ||str_alph_up.indexOf(key) != -1|| str_sym.indexOf(key) != -1){
         key_number(key);
       }else if (key === " "){
-        key_space();
+        if (!shift_key){
+          key_space();
+        }else if(shift_key){
+          key_shiftspace();
+        }
         event.returnValue = false;
       }else if (key === "Backspace"){
         key_backspace();
@@ -224,17 +228,23 @@ window.addEventListener("beforeunload", function(eve){
 },{passive: false});
 
 var modal1 = document.getElementById("modal");
-var modal2 = document.getElementById("modal-save");
-window.addEventListener('click', function(e) {
+var modal2 = document.getElementById("modal-image");
+var modal3 = document.getElementById("modal-save");
+window.addEventListener('mousedown', modaldelete, {passive: false});
+window.addEventListener('touchstart', modaldelete, {passive: false});
+window.addEventListener('touchstart', function(e) {
+  e.stopPropagation();
+}, {passive: false});
+
+function modaldelete(e) {
   if (e.target == modal1) {
     modal1.style.display = 'none';
   }else if(e.target == modal2) {
     modal2.style.display = 'none';
+  }else if(e.target == modal3) {
+    modal3.style.display = 'none';
   }
-}, {passive: false});
-window.addEventListener('touchstart', function(e) {
-  e.stopPropagation();
-}, {passive: false});
+}
 
 //drag_window
 //要素の取得

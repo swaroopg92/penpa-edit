@@ -4,10 +4,10 @@ class Puzzle {
     //盤面情報
     this.nx = nx;
     this.ny = ny;
-    this.spacex = 5.5;
-    this.spacey = 5.5;
     this.sizex = size;
     this.sizey = size;
+    this.spacex = size*0.5+0.5;
+    this.spacey = size*0.5+0.5;
     this.resol = 3;
 
     //描画位置
@@ -42,6 +42,7 @@ class Puzzle {
     this.edit_stylemode_id = "st_surface1";
     this.edit_subsymbolmode = "circle_L";
     this.panelmode = "number";
+    this.mmode = ""; //出題モード用
 
     this.reset();
   }
@@ -78,6 +79,7 @@ class Puzzle {
     this.freelinecircle = [[-1,-1],[-1,-1]];
     this.arr.thermo = [];
     this.arr.arrows =[];
+    this.arr.direction = [];
   }
 }
 
@@ -115,7 +117,7 @@ Stack.prototype.toString = function() {
 function undo(){
   var a = pu.command_undo.pop();/*a[0]:list_name,a[1]:number,a[2]:value*/
   if(a){
-    if((a[0]==="thermo"||a[0]==="arrows") && a[1] === -1){
+    if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction") && a[1] === -1){
       if(pu.arr[a[0]].length > 0){
         pu.command_redo.push([a[0],a[1],pu.arr[a[0]].pop()]);
       }
@@ -138,7 +140,7 @@ function undo(){
 function redo(){
   var a = pu.command_redo.pop();
   if(a){
-    if((a[0]==="thermo"||a[0]==="arrows") && a[1] === -1){
+    if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction") && a[1] === -1){
         pu.command_undo.push([a[0],a[1],null]);
         pu.arr[a[0]].push(a[2]);
     }else{
@@ -158,7 +160,7 @@ function redo(){
 }
 
 function record(arr,num){
-  if((arr === "thermo"||arr === "arrows") && num===-1){
+  if((arr === "thermo"||arr === "arrows"||arr==="direction") && num===-1){
     pu.command_undo.push([arr,num,null]);
   }else{
     if (pu.arr[arr][num]){
@@ -177,6 +179,10 @@ function record(arr,num){
 
 function newboard(){
   document.getElementById('modal').style.display = 'block';
+}
+
+function newsize(){
+  document.getElementById('modal-newsize').style.display = 'block';
 }
 
 function create(){
@@ -220,9 +226,34 @@ function newgrid(){
     reset_frame(pu_q);
     pu_a.sizex = size;
     pu_a.sizey = size;
+    pu_a.spacex = size*0.5+0.5;
+    pu_a.spacey = size*0.5+0.5;
+    pu_a.cursolsize = pu.sizex;
+    pu_a.cursolSsize = pu.sizex*0.5;
+    pu_a.cursolEsize = 2/3*pu.sizex;
     redraw();
     draw_panel();
     document.getElementById('modal').style.display = 'none';
+  }else{
+    alert("サイズ:15~60");
+  }
+}
+
+function newgrid_r(){
+  var size = parseInt(document.getElementById("nb_size3_r").value,10);
+  document.getElementById("nb_size3").value=size;
+  if(15<=size && size<=60){
+    reset_frame(pu_q);
+    pu_a.sizex = size;
+    pu_a.sizey = size;
+    pu_a.spacex = size*0.5+0.5;
+    pu_a.spacey = size*0.5+0.5;
+    pu_a.cursolsize = pu.sizex;
+    pu_a.cursolSsize = pu.sizex*0.5;
+    pu_a.cursolEsize = 2/3*pu.sizex;
+    redraw();
+    draw_panel();
+    document.getElementById('modal-newsize').style.display = 'none';
   }else{
     alert("サイズ:15~60");
   }
@@ -235,6 +266,8 @@ function reset_frame(pu){
   var size = parseInt(document.getElementById("nb_size3").value,10);
   pu.sizex = size;
   pu.sizey = size;
+  pu.spacex = size*0.5+0.5;
+  pu.spacey = size*0.5+0.5;
   pu.cursolsize = pu.sizex;
   pu.cursolSsize = pu.sizex*0.5;
   pu.cursolEsize = 2/3*pu.sizex;
@@ -317,28 +350,113 @@ function qamode_check(){
   }
 }
 
-function savegraph(){
+function canvasset(pu){
+  var obj = document.getElementById("dvique");
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  var size = parseInt(document.getElementById("nb_size3").value,10);
+
+  canvas.width=(pu.nx*pu.sizex+pu.spacex*2)*pu.resol;
+  canvas.height=(pu.ny*pu.sizey+pu.spacey*2)*pu.resol;
+  ctx.scale(pu.resol,pu.resol);
+  canvas.style.width = (pu.nx*pu.sizex+pu.spacex*2).toString()+"px";
+  canvas.style.height = (pu.ny*pu.sizey+pu.spacey*2).toString()+"px";
+  obj.style.width = canvas.style.width;
+  obj.style.height = canvas.style.height;
+}
+
+function saveimage() {
+  document.getElementById("modal-image").style.display = 'block';
+}
+
+function saveimage_download(){
+    var downloadLink = document.getElementById('download_link');
+    var filename = document.getElementById('saveimagename').value;
+    if(filename.slice(-4)!=".png"){
+      filename += ".png";
+    }
+    var str_sym = "\\/:*?\"<>|";
+    var valid_name = 1;
+    for(var i=0 ; i<filename.length;i++){
+      if(str_sym.indexOf(filename[i]) != -1){
+        valid_name = 0;
+      }
+    }
+    var canvas = document.getElementById("canvas");
     var mode = pu.edit_mode;
     pu.edit_mode = "surface"; //枠線削除用
-    redraw();
-    var canvas = document.getElementById("canvas");
-    var downloadLink = document.getElementById('download_link');
-    var filename = 'Image.png';
-    if (canvas.msToBlob) {
-        var blob = canvas.msToBlob();
-        window.navigator.msSaveBlob(blob, filename);
-    } else {
-        downloadLink.href = canvas.toDataURL('image/png');
-        downloadLink.download = filename;
-        downloadLink.click();
+    if (document.getElementById("nb_margin2").checked){
+      pu_q.spacex = 1.5;
+      pu_q.spacey = 1.5;
+      pu_a.spacex = 1.5;
+      pu_a.spacey = 1.5;
+      canvasset(pu_q);
     }
+    redraw();
+
+    if(valid_name){
+      if (canvas.msToBlob) {
+          var blob = canvas.msToBlob();
+          window.navigator.msSaveBlob(blob, filename);
+      } else {
+          downloadLink.href = canvas.toDataURL('image/png');
+          downloadLink.download = filename;
+          downloadLink.click();
+      }
+    }else{
+      alert("ファイル名に使えない文字列が含まれています。")
+    }
+    var size = parseInt(document.getElementById("nb_size3").value,10);
     pu.edit_mode = mode;
+    pu_q.spacex = size*0.5+0.5;
+    pu_q.spacey = size*0.5+0.5;
+    pu_a.spacex = size*0.5+0.5;
+    pu_a.spacey = size*0.5+0.5;
+    canvasset(pu_q);
     redraw();
 }
 
+
+
+function saveimage_window(){
+  var downloadLink = document.getElementById('download_link');
+
+  var mode = pu.edit_mode;
+  pu.edit_mode = "surface"; //枠線削除用
+  if (document.getElementById("nb_margin2").checked){
+    pu_q.spacex = 1.5;
+    pu_q.spacey = 1.5;
+    pu_a.spacex = 1.5;
+    pu_a.spacey = 1.5;
+    canvasset(pu_q);
+  }
+  redraw();
+  var canvas = document.getElementById("canvas");
+    var win=window.open();
+    win.document.write("<img src='"+canvas.toDataURL("image/png")+"'/>");
+
+  var size = parseInt(document.getElementById("nb_size3").value,10);
+  pu.edit_mode = mode;
+  pu_q.spacex = size*0.5+0.5;
+  pu_q.spacey = size*0.5+0.5;
+  pu_a.spacex = size*0.5+0.5;
+  pu_a.spacey = size*0.5+0.5;
+  canvasset(pu_q);
+  redraw();
+}
+
 function savetext() {
-  var text = maketext();
   document.getElementById("modal-save").style.display = 'block';
+}
+
+function savetext_edit() {
+  var text = maketext();
+  document.getElementById("savetextarea").value = text;
+}
+
+function savetext_solve() {
+  var text = maketext_solve();
+  //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
   document.getElementById("savetextarea").value = text;
 }
 
@@ -365,24 +483,37 @@ function savetext_download(){
   }
   var blob = new Blob([text],{type: "text/plain"});
   var ua = window.navigator.userAgent.toLowerCase();
-
-  if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1){
-    //safari
-    window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
-  }else if (window.navigator.msSaveBlob) {
-    // for IE
-    window.navigator.msSaveBlob(blob, filename);
+  var str_sym = "\\/:*?\"<>|";
+  var valid_name = 1;
+  for(var i=0 ; i<filename.length;i++){
+    if(str_sym.indexOf(filename[i]) != -1){
+      valid_name = 0;
+    }
+  }
+  if(valid_name){
+    if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1){
+      //safari
+      window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+    }else if (window.navigator.msSaveBlob) {
+      // for IE
+      window.navigator.msSaveBlob(blob, filename);
+    }else{
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.target = "_blank";
+      downloadLink.download = filename;
+      downloadLink.click();
+    }
   }else{
-    downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.target = "_blank";
-    downloadLink.download = filename;
-    downloadLink.click();
+    alert("ファイル名に使えない文字列が含まれています。");
   }
 }
 
 function duplicate(){
   var address = maketext();
-  window.open(address)
+  if (pu_a.mmode === "solve"){
+    address = address + "&l=solvedup";
+  }
+  window.open(address);
 }
 
 function maketext(){
@@ -414,6 +545,30 @@ function maketext(){
   return url+"?p="+ba;
 }
 
+function maketext_solve(){
+  var text = "";
+  text = text + pu.nx.toString() + "," + pu.ny.toString() +","+pu.sizex.toString()+","+
+      document.getElementById("nb_space1").value + "," + document.getElementById("nb_space2").value + "," +
+      document.getElementById("nb_space3").value + "," + document.getElementById("nb_space4").value + "," +
+      framemode_check() +"\n";
+
+  var arr_text = [];
+  for (var i in pu_q.arr){
+    arr_text.push(pu_q.arr[i]);
+  }
+  text += JSON.stringify(arr_text) + "\n";
+
+  var u8text = new TextEncoder().encode(text);
+  var deflate = new Zlib.RawDeflate(u8text);
+  var compressed = deflate.compress();
+  var char8 = Array.from(compressed,e=>String.fromCharCode(e)).join("");
+  var ba = window.btoa(char8);
+  var url = location.href.split('?')[0];
+
+  //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+  return url+"?m=solve&p="+ba;
+}
+
 function load(){
   var urlParam = location.search.substring(1);
   if(urlParam){
@@ -421,11 +576,13 @@ function load(){
       var param = urlParam.split('&');
       var paramArray = [];
 
+      //アドレスを要素に分解
       for(var i=0; i<param.length;i++){
         var paramItem = param[i].split('=');
         paramArray[paramItem[0]] = paramItem[1];
       }
 
+      //pを復号
       var ab = atob(paramArray.p);
       ab = Uint8Array.from(ab.split(""),e=>e.charCodeAt(0));
       var inflate = new Zlib.RawInflate(ab);
@@ -433,6 +590,7 @@ function load(){
       var rtext = new TextDecoder().decode(plain);
       rtext = rtext.split("\n");
 
+      //初期設定を読み込み
       var rtext_para = rtext[0].split(',');
       document.getElementById("nb_size1").value = rtext_para[0];
       document.getElementById("nb_size2").value = rtext_para[1];
@@ -447,41 +605,77 @@ function load(){
         }
       }
       create();
-      mode_qa();
 
-      pu_q.edit_mode = rtext_para[11];
-      pu_q.edit_submode = rtext_para[12];
-      pu_q.edit_submode_id = rtext_para[13];
-      pu_q.edit_stylemode = parseInt(rtext_para[14],10);
-      pu_q.edit_stylemode_id = rtext_para[15];
-      pu_q.edit_subsymbolmode = rtext_para[16];
-      pu_a.edit_mode = rtext_para[17];
-      pu_a.edit_submode = rtext_para[18];
-      pu_a.edit_submode_id = rtext_para[19];
-      pu_a.edit_stylemode = parseInt(rtext_para[20],10);
-      pu_a.edit_stylemode_id = rtext_para[21];
-      pu_a.edit_subsymbolmode = rtext_para[22];
+      if(paramArray.m === "solve"){
+        set_solvemode()
+        mode_reset();
 
-      mode_reset();
+        //盤面状態読み込み
+        var k = 0;
+        var rt = JSON.parse(rtext[1]);
+        for (var i in pu_q.arr){
+          if(rt[k]){
+            pu_q.arr[i] = rt[k];
+            k++;
+          }
+        }
 
-      //盤面状態取得
-      var k = 0;
-      var rt = JSON.parse(rtext[1]);
-      for (var i in pu_q.arr){
-        pu_q.arr[i] = rt[k];
-        k++;
-      }
-      k = 0;
-      rt = JSON.parse(rtext[2]);
-      for (var i in pu_a.arr){
-        pu_a.arr[i] = rt[k];
-        k++;
+      }else{
+        if(paramArray.l === "solvedup"){
+          set_solvemode();
+        }
+        mode_qa();
+        pu_q.edit_mode = rtext_para[11];
+        pu_q.edit_submode = rtext_para[12];
+        pu_q.edit_submode_id = rtext_para[13];
+        pu_q.edit_stylemode = parseInt(rtext_para[14],10);
+        pu_q.edit_stylemode_id = rtext_para[15];
+        pu_q.edit_subsymbolmode = rtext_para[16];
+        pu_a.edit_mode = rtext_para[17];
+        pu_a.edit_submode = rtext_para[18];
+        pu_a.edit_submode_id = rtext_para[19];
+        pu_a.edit_stylemode = parseInt(rtext_para[20],10);
+        pu_a.edit_stylemode_id = rtext_para[21];
+        pu_a.edit_subsymbolmode = rtext_para[22];
+
+        mode_reset();
+
+        //盤面状態読み込み
+        var k = 0;
+        var rt = JSON.parse(rtext[1]);
+        for (var i in pu_q.arr){
+          if(rt[k]){
+            pu_q.arr[i] = rt[k];
+            k++;
+          }
+        }
+        k = 0;
+        rt = JSON.parse(rtext[2]);
+        for (var i in pu_a.arr){
+          if(rt[k]){
+            pu_a.arr[i] = rt[k];
+            k++;
+          }
+        }
       }
       redraw();
     }catch(error){
       alert("不正なアドレスです");
     }
   }
+}
+
+function set_solvemode(){
+  pu = pu_a;
+  pu_a.mmode = "solve";
+  document.getElementById("title").innerHTML = "ペンパくん　解答モード"
+  document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
+  document.getElementById("newsize").style.display = "inline";
+  document.getElementById("pu_a").checked = true;
+  document.getElementById("pu_q_label").style.display = "none";
+  document.getElementById("download_button_T").style.display = "none";
+  document.getElementById("newboard").style.display = "none";
+  document.getElementById("button_delete").value = "解答消去"
 }
 
 function ResetCheck() {
@@ -491,11 +685,17 @@ function ResetCheck() {
 }
 
 function DeleteCheck() {
-    if( confirm("盤面をリセットします") ) {
-        pu.reset();
-        reset_frame(pu_q);
-        redraw();
-    }
+  var text;
+  if(document.getElementById("pu_q").checked){
+    text = "問題";
+  }else if(document.getElementById("pu_a").checked){
+    text = "解答";
+  }
+  if( confirm(text+"盤面をリセットします") ) {
+      pu.reset();
+      reset_frame(pu_q);
+      redraw();
+  }
 }
 
 function CreateCheck() {
@@ -546,11 +746,7 @@ function reset(){
       pu.arr.cageV = {};
       break;
     case "special":
-      if(pu.edit_submode === "1"){
-        pu.arr.thermo = [];
-      }else if(pu.edit_submode === "2"){
-        pu.arr.arrows = [];
-      }
+      pu.arr[pu.edit_submode] = [];
       break;
     }
   redraw();
@@ -1050,6 +1246,26 @@ function key_space(){
   redraw();
 }
 
+function key_shiftspace(){
+  if(pu.edit_mode === "number" || pu.edit_mode === "symbol"){
+    if(pu.edit_mode === "number" && pu.edit_submode === "3"){
+      record("numberS",pu.cursolSx+pu.cursolSy*pu.nx*2);
+      delete pu.arr.numberS[pu.cursolSx+pu.cursolSy*pu.nx*2];
+    }else{
+      record("number",pu.cursolx+pu.cursoly*pu.nx);
+      delete pu.arr.number[pu.cursolx+pu.cursoly*pu.nx];
+      record("symbol",pu.cursolx+pu.cursoly*pu.nx);
+      delete pu.arr.symbol[pu.cursolx+pu.cursoly*pu.nx];
+    }
+  }else if(pu.edit_mode === "numberE" || pu.edit_mode === "symbolE"){
+    record("numberE",pu.cursolEx+pu.cursolEy*(2*pu.nx+1));
+    delete pu.arr.numberE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)];
+    record("symbolE",pu.cursolEx+pu.cursolEy*(2*pu.nx+1));
+    delete pu.arr.symbolE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)];
+  }
+  redraw();
+}
+
 function key_backspace(){
   var number;
   if(pu.edit_mode === "number"){
@@ -1190,11 +1406,7 @@ function drawonDown(numx,numy){
       pu.lasty = numy;
       break;
     case "special":
-      if (pu.edit_submode === "1"){
-        re_specialdown(numx,numy,"thermo");
-      }else if (pu.edit_submode === "2"){
-        re_specialdown(numx,numy,"arrows");
-      }
+      re_specialdown(numx,numy,pu.edit_submode);
       break;
   }
 }
@@ -1254,11 +1466,7 @@ function drawonUp(numx,numy){
       pu.lasty = -1;
       break;
     case "special":
-      if (pu.edit_submode === "1"){
-        re_specialup(numx,numy,"thermo");
-      }else if (pu.edit_submode === "2"){
-        re_specialup(numx,numy,"arrows");
-      }
+      re_specialup(numx,numy,pu.edit_submode);
       break;
   }
 }
@@ -1316,13 +1524,8 @@ function drawonMove(numx,numy){
         }
         break;
       case "special":
-
         if (pu.line_drawing === 1 && pu.lineD_edge === 0){
-          if(pu.edit_submode === "1"){
-            re_special(numx,numy,"thermo");
-          }else if(pu.edit_submode === "2"){
-            re_special(numx,numy,"arrows");
-          }
+          re_special(numx,numy,pu.edit_submode);
         }
         break;
       }
@@ -1366,11 +1569,7 @@ function drawonOut() {
         }
         break;
       case "special":
-        if (pu.edit_submode === "1"){
-          re_specialup(pu.lastx,pu.lasty,"thermo");
-        }else if (pu.edit_submode === "2"){
-          re_specialup(pu.lastx,pu.lasty,"arrows");
-        }
+        re_specialup(pu.lastx,pu.lasty,pu.edit_submode);
         break;
     }
 }

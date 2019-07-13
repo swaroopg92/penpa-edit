@@ -18,7 +18,7 @@ body{
 }
 
 header{
-  width:100%;
+  width:100%;image
   height: auto;
   margin: 0 auto;
   background:#fff;
@@ -389,6 +389,53 @@ color: #000000;
   border-radius: 20px;
   }
 
+  #modal-newsize {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+  }
+
+  #modal-newsize-content{
+  background-color: white;
+  width: 300px;
+  height: 100px;
+  margin:0 auto;
+  margin-top: 40px;
+  border-radius: 20px;
+  }
+
+  #modal-image {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+  }
+
+  #modal-image-body {
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
+  #modal-image-content{
+  background-color: white;
+  width: 300px;
+  height: 200px;
+  margin:0 auto;
+  margin-top: 30px;
+  border-radius: 20px;
+  }
+
   #modal-save {
   display: none;
   position: fixed;
@@ -409,18 +456,17 @@ color: #000000;
   #modal-save-content{
   background-color: white;
   width: 300px;
-  height: 250px;
+  height: 270px;
   margin:0 auto;
   margin-top: 30px;
   border-radius: 20px;
   }
 
-
   textarea {
       min-width: 200px;
       min-height: 80px;
       max-width: 280px;
-      max-height: 150px;
+      max-height: 130px;
  }
 
   #modal-header{

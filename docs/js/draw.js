@@ -9,7 +9,7 @@ function set_surface_style(ctx,type){
         ctx.fillStyle = "rgba(255,255,255,0)";
         break;
       case 1:
-        ctx.fillStyle = "#333";
+        ctx.fillStyle = "#444";
         break;
       case 2:
         ctx.fillStyle = "#a3ffa3";　//緑
@@ -74,7 +74,7 @@ function set_line_style(ctx,type){
         ctx.lineWidth = 1;
         break;
       case 10: //cage
-        ctx.setLineDash([3,3]);
+        ctx.setLineDash([3,4]);
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 1;
         break;
@@ -93,6 +93,11 @@ function set_line_style(ctx,type){
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 3;
         break;
+      case 14:  //gray dash
+        ctx.setLineDash([4,4]);
+        ctx.strokeStyle = "#999";
+        ctx.lineWidth = 2;
+        break;
       case 20: //white
         ctx.strokeStyle = "#fff";
         ctx.lineWidth = 1;
@@ -103,7 +108,7 @@ function set_line_style(ctx,type){
         break;
       case 40: //short line
         ctx.strokeStyle = "#999";
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         break;
       case 80: //grid-likeline
         ctx.strokeStyle = "#000";
@@ -434,6 +439,8 @@ function draw(){
   draw_arr_freeline(pu_a,ctx);
   draw_arr_line(pu_q,ctx);
   draw_arr_line(pu_a,ctx);
+  draw_arr_direction(pu_q,ctx);
+  draw_arr_direction(pu_a,ctx);
   draw_arr_lattice(ctx);
   draw_arr_frameBold(pu_q,ctx);
   draw_arr_symbol(pu_q,ctx,layer=2);
@@ -442,7 +449,7 @@ function draw(){
   draw_arr_cage(pu_a,ctx);
   draw_arr_number(pu_q,ctx);
   draw_arr_number(pu_a,ctx);
-  /*only a focusing array*/
+  /*only on focusing board*/
   draw_arr_cursol(pu,ctx);
   draw_arr_freecircle(pu,ctx);
 }
@@ -506,6 +513,32 @@ function draw_arr_arrow(pu,ctx) {
     }
   }
 }
+
+function draw_arr_direction(pu,ctx) {
+  for(var i=0; i<pu.arr.direction.length;i++){
+    if(pu.arr.direction[i]){
+      ctx.setLineDash([]);
+      ctx.lineCap = "square";
+      ctx.strokeStyle = "#999";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(pu.spacex+(pu.arr.direction[i][0]%pu.nx+0.5)*pu.sizex,pu.spacey+((pu.arr.direction[i][0]/pu.nx|0)+0.5)*pu.sizey);
+      for(var j=1;j<pu.arr.direction[i].length-1;j++){
+        ctx.lineTo(pu.spacex+(pu.arr.direction[i][j]%pu.nx+0.5)*pu.sizex,pu.spacey+((pu.arr.direction[i][j]/pu.nx|0)+0.5)*pu.sizey);
+      }
+      ctx.stroke();
+
+      j = pu.arr.direction[i].length-1;
+      ctx.lineJoin = "bevel";
+      ctx.beginPath();
+      ctx.arrow(pu.spacex+(pu.arr.direction[i][j-1]%pu.nx+0.5)*pu.sizex,pu.spacey+((pu.arr.direction[i][j-1]/pu.nx|0)+0.5)*pu.sizey,
+                pu.spacex+(pu.arr.direction[i][j]%pu.nx+0.5)*pu.sizex,pu.spacey+((pu.arr.direction[i][j]/pu.nx|0)+0.5)*pu.sizey,
+              [-0.00001,0,-0.25*pu.sizex,0.25*pu.sizex]);
+      ctx.stroke();
+    }
+  }
+}
+
 function draw_arr_symbol(pu,ctx,layer) {
   /*symbol_layer1*/
   for(var i in pu.arr.symbol){
@@ -868,10 +901,10 @@ function draw_arr_number(pu,ctx) {
           ctx.fillText(pu.arr.number[i][0],pu.spacex+(i%pu.nx+0.5)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.78)*pu.sizey,pu.sizex*0.8);
         }else if (pu.arr.number[i][0].length === 2){
           set_font_style(ctx,0.5*pu.sizex.toString(10),pu.arr.number[i][1]);
-          ctx.strokeText(pu.arr.number[i][0].slice(0,1),pu.spacex+(i%pu.nx+0.3)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.5)*pu.sizey,pu.sizex*0.8);
-          ctx.strokeText(pu.arr.number[i][0].slice(1,2),pu.spacex+(i%pu.nx+0.7)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.9)*pu.sizey,pu.sizex*0.8);
-          ctx.fillText(pu.arr.number[i][0].slice(0,1),pu.spacex+(i%pu.nx+0.3)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.5)*pu.sizey,pu.sizex*0.8);
-          ctx.fillText(pu.arr.number[i][0].slice(1,2),pu.spacex+(i%pu.nx+0.7)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.9)*pu.sizey,pu.sizex*0.8);
+          ctx.strokeText(pu.arr.number[i][0].slice(0,1),pu.spacex+(i%pu.nx+0.3)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.48)*pu.sizey,pu.sizex*0.8);
+          ctx.strokeText(pu.arr.number[i][0].slice(1,2),pu.spacex+(i%pu.nx+0.7)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.88)*pu.sizey,pu.sizex*0.8);
+          ctx.fillText(pu.arr.number[i][0].slice(0,1),pu.spacex+(i%pu.nx+0.3)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.48)*pu.sizey,pu.sizex*0.8);
+          ctx.fillText(pu.arr.number[i][0].slice(1,2),pu.spacex+(i%pu.nx+0.7)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.88)*pu.sizey,pu.sizex*0.8);
         }else if (pu.arr.number[i][0].length === 3){
           set_font_style(ctx,0.45*pu.sizex.toString(10),pu.arr.number[i][1]);
           ctx.strokeText(pu.arr.number[i][0].slice(0,1),pu.spacex+(i%pu.nx+0.25)*pu.sizex,pu.spacey+((i/pu.nx|0)+0.55)*pu.sizey,pu.sizex*0.8);
@@ -930,10 +963,10 @@ function draw_arr_number(pu,ctx) {
           ctx.fillText(pu.arr.numberE[i][0],pu.spacex+(i%(2*pu.nx+1))*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.58)*pu.sizey*0.5,pu.sizex*0.8);
         }else if (pu.arr.numberE[i][0].length === 2){
           set_font_style(ctx,0.5*pu.sizex.toString(10),pu.arr.numberE[i][1]);
-          ctx.strokeText(pu.arr.numberE[i][0].slice(0,1),pu.spacex+(i%(2*pu.nx+1)-0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.0)*pu.sizey*0.5,pu.sizex*0.8);
-          ctx.strokeText(pu.arr.numberE[i][0].slice(1,2),pu.spacex+(i%(2*pu.nx+1)+0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.8)*pu.sizey*0.5,pu.sizex*0.8);
-          ctx.fillText(pu.arr.numberE[i][0].slice(0,1),pu.spacex+(i%(2*pu.nx+1)-0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.0)*pu.sizey*0.5,pu.sizex*0.8);
-          ctx.fillText(pu.arr.numberE[i][0].slice(1,2),pu.spacex+(i%(2*pu.nx+1)+0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.8)*pu.sizey*0.5,pu.sizex*0.8);
+          ctx.strokeText(pu.arr.numberE[i][0].slice(0,1),pu.spacex+(i%(2*pu.nx+1)-0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)-0.02)*pu.sizey*0.5,pu.sizex*0.8);
+          ctx.strokeText(pu.arr.numberE[i][0].slice(1,2),pu.spacex+(i%(2*pu.nx+1)+0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.78)*pu.sizey*0.5,pu.sizex*0.8);
+          ctx.fillText(pu.arr.numberE[i][0].slice(0,1),pu.spacex+(i%(2*pu.nx+1)-0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)-0.02)*pu.sizey*0.5,pu.sizex*0.8);
+          ctx.fillText(pu.arr.numberE[i][0].slice(1,2),pu.spacex+(i%(2*pu.nx+1)+0.4)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.78)*pu.sizey*0.5,pu.sizex*0.8);
         }else if (pu.arr.numberE[i][0].length === 3){
           set_font_style(ctx,0.45*pu.sizex.toString(10),pu.arr.numberE[i][1]);
           ctx.strokeText(pu.arr.numberE[i][0].slice(0,1),pu.spacex+(i%(2*pu.nx+1)-0.5)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx+1)|0)+0.1)*pu.sizey*0.5,pu.sizex*0.8);
@@ -975,15 +1008,20 @@ function draw_arr_number(pu,ctx) {
 
   /*numberS*/
   for(var i in pu.arr.numberS){
-      set_font_style(ctx,0.4*pu.sizex.toString(10),pu.arr.numberS[i][1]);
       if (pu.arr.numberS[i][0].length <= 2 ){
+        //if(pu.arr.numberS[i][1]===5){
+        //  set_circle_style(ctx,7);
+        //  draw_circle(ctx,pu.spacex+(i%(2*pu.nx)+0.5)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.5)*pu.sizey*0.5,0.2)
+        //}
+        set_font_style(ctx,0.38*pu.sizex.toString(10),pu.arr.numberS[i][1]);
         ctx.textAlign = "center";
-        ctx.strokeText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.5)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.80)*pu.sizey*0.5);
-        ctx.fillText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.5)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.80)*pu.sizey*0.5);
+        ctx.strokeText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.5)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.75)*pu.sizey*0.5);
+        ctx.fillText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.5)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.75)*pu.sizey*0.5);
       }else{
+        set_font_style(ctx,0.38*pu.sizex.toString(10),pu.arr.numberS[i][1]);
         ctx.textAlign = "left";
-        ctx.strokeText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.1)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.80)*pu.sizey*0.5);
-        ctx.fillText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.1)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.80)*pu.sizey*0.5);
+        ctx.strokeText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.1)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.75)*pu.sizey*0.5);
+        ctx.fillText(pu.arr.numberS[i][0],pu.spacex+(i%(2*pu.nx)+0.1)*pu.sizex*0.5,pu.spacey+((i/(2*pu.nx)|0)+0.75)*pu.sizey*0.5);
       }
   }
 }
@@ -1259,11 +1297,13 @@ function draw_symbol(ctx,x,y,num,sym){
       draw_angleloop(ctx,num,x,y);
       break;
     case "firefly":
-      set_circle_style(ctx,1);
       draw_firefly(ctx,num,x,y);
       break;
-    case "Buttenburg":
-      draw_Buttenburg(ctx,num,x,y);
+    case "sun_moon":
+      draw_sun_moon(ctx,num,x,y);
+      break;
+    case "sudokuetc":
+      draw_sudokuetc(ctx,num,x,y);
       break;
   }
 }
@@ -2085,21 +2125,21 @@ function draw_star(ctx,num,x,y){
       ctx.setLineDash([]);
       ctx.strokeStyle = "#000";
       ctx.lineWidth = 1;
-      draw_star0(ctx,x,y,r1,r2,5);
+      draw_star0(ctx,x,y+0.03*pu.sizex,r1,r2,5);
       break;
     case 2:
       ctx.fillStyle = "#000";  //"#009826";
       ctx.setLineDash([]);
       ctx.strokeStyle = "rgba(0,0,0,0)";
       ctx.lineWidth = 1;
-      draw_star0(ctx,x,y,r1,r2,5);
+      draw_star0(ctx,x,y+0.03*pu.sizex,r1,r2,5);
       break;
     case 3:
       ctx.fillStyle = "#999999";
       ctx.setLineDash([]);
       ctx.strokeStyle = "rgba(0,0,0,0)";
       ctx.lineWidth = 1;
-      draw_star0(ctx,x,y,r1,r2,5);
+      draw_star0(ctx,x,y+0.03*pu.sizex,r1,r2,5);
       break;
     case 4:
       ctx.fillStyle = "#fff";
@@ -2121,6 +2161,41 @@ function draw_star(ctx,num,x,y){
       ctx.strokeStyle = "rgba(0,0,0,0)";
       ctx.lineWidth = 1;
       draw_star0(ctx,x,y,r1,r2*0.9,4);
+      break;
+    case 7:
+      ctx.fillStyle = "#fff";
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 1;
+      draw_star0(ctx,x,y,r2*0.9,r1,4);
+      break;
+    case 8:
+      ctx.fillStyle = "#000";  //"#009826";
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "rgba(0,0,0,0)";
+      ctx.lineWidth = 1;
+      draw_star0(ctx,x,y,r2*0.9,r1,4);
+      break;
+    case 9:
+      ctx.fillStyle = "#999999";
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "rgba(0,0,0,0)";
+      ctx.lineWidth = 1;
+      draw_star0(ctx,x,y,r2*0.9,r1,4);
+      break;
+    case 0:
+      var r = 0.4;
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "#999";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x+r*Math.cos(45*(Math.PI/180))*pu.sizex,y+r*Math.sin(45*(Math.PI/180))*pu.sizey);
+      ctx.lineTo(x+r*Math.cos(225*(Math.PI/180))*pu.sizex,y+r*Math.sin(225*(Math.PI/180))*pu.sizey);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x+r*Math.cos(135*(Math.PI/180))*pu.sizex,y+r*Math.sin(135*(Math.PI/180))*pu.sizey);
+      ctx.lineTo(x+r*Math.cos(315*(Math.PI/180))*pu.sizex,y+r*Math.sin(315*(Math.PI/180))*pu.sizey);
+      ctx.stroke();
       break;
   }
 }
@@ -2368,18 +2443,53 @@ function draw_firefly(ctx,num,x,y){
   }
 }
 
-function draw_Buttenburg(ctx,num,x,y){
+function draw_sun_moon(ctx,num,x,y){
+  var r1 = 0.36,r2 = 0.34;
   switch(num){
     case 1:
-    var r = 0.14;
-    ctx.strokeStyle = "rgba(0,0,0,0)";
-    ctx.fillStyle = "#ccc";
-    draw_square(ctx,x-r*pu.sizex,y+r*pu.sizey,r);
-    draw_square(ctx,x+r*pu.sizex,y-r*pu.sizey,r);
-    ctx.fillStyle = "#666";
-    draw_square(ctx,x-r*pu.sizex,y-r*pu.sizey,r);
-    draw_square(ctx,x+r*pu.sizex,y+r*pu.sizey,r);
-    break;
+      set_circle_style(ctx,1);
+      draw_circle(ctx,x,y,r1);
+      break;
+    case 2:
+      set_circle_style(ctx,2);
+      ctx.beginPath();
+      ctx.arc(x,y,r1*pu.sizex,-0.34*Math.PI,0.73*Math.PI,false);
+      ctx.arc(x-0.12*pu.sizex,y-0.08*pu.sizey,r2*pu.sizex,0.67*Math.PI,-0.28*Math.PI,true);
+      ctx.closePath();
+      ctx.fill();
+      break;
+  }
+}
+
+function draw_sudokuetc(ctx,num,x,y){
+  switch(num){
+    case 1:
+      var r = 0.14;
+      ctx.strokeStyle = "rgba(0,0,0,0)";
+      ctx.fillStyle = "#ccc";
+      draw_square(ctx,x-r*pu.sizex,y+r*pu.sizey,r);
+      draw_square(ctx,x+r*pu.sizex,y-r*pu.sizey,r);
+      ctx.fillStyle = "#666";
+      draw_square(ctx,x-r*pu.sizex,y-r*pu.sizey,r);
+      draw_square(ctx,x+r*pu.sizex,y+r*pu.sizey,r);
+      break;
+    case 2:
+      ctx.setLineDash([]);
+      ctx.fillStyle = "rgba(0,0,0,0)";
+      ctx.strokeStyle = "#ccc";
+      ctx.lineWidth = 4;
+      draw_circle(ctx,x,y,0.71);
+      break;
+    case 3:
+      var r = 0.99;
+      set_circle_style(ctx,3)
+      ctx.beginPath();
+      ctx.moveTo(x,y+r*pu.sizey);
+      ctx.lineTo(x+r*pu.sizex,y);
+      ctx.lineTo(x,y-r*pu.sizey);
+      ctx.lineTo(x-r*pu.sizex,y);
+      ctx.fill();
+      break;
   }
 }
 
