@@ -365,6 +365,40 @@ function canvasset(pu){
   obj.style.height = canvas.style.height;
 }
 
+function resizecanvas(){
+  var resizedCanvas = document.createElement("canvas");
+  var resizedContext = resizedCanvas.getContext("2d");
+  var canvas = document.getElementById("canvas");
+
+  var mode = pu.edit_mode;
+  pu.edit_mode = "surface"; //枠線削除用
+  if (document.getElementById("nb_margin2").checked){
+    pu_q.spacex = 1.5;
+    pu_q.spacey = 1.5;
+    pu_a.spacex = 1.5;
+    pu_a.spacey = 1.5;
+    canvasset(pu_q);
+  }
+  redraw();
+  var width = canvas.width*0.5;
+  resizedCanvas.width = width.toString();
+  resizedCanvas.height = (width*canvas.height/canvas.width).toString();
+
+  resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+  var canvastext = resizedCanvas.toDataURL("image/png")
+
+  var size = parseInt(document.getElementById("nb_size3").value,10);
+  pu.edit_mode = mode;
+  pu_q.spacex = size*0.5+0.5;
+  pu_q.spacey = size*0.5+0.5;
+  pu_a.spacex = size*0.5+0.5;
+  pu_a.spacey = size*0.5+0.5;
+  canvasset(pu_q);
+  redraw();
+
+  return canvastext;
+}
+
 function saveimage() {
   document.getElementById("modal-image").style.display = 'block';
 }
@@ -383,66 +417,26 @@ function saveimage_download(){
       }
     }
     var canvas = document.getElementById("canvas");
-    var mode = pu.edit_mode;
-    pu.edit_mode = "surface"; //枠線削除用
-    if (document.getElementById("nb_margin2").checked){
-      pu_q.spacex = 1.5;
-      pu_q.spacey = 1.5;
-      pu_a.spacex = 1.5;
-      pu_a.spacey = 1.5;
-      canvasset(pu_q);
-    }
-    redraw();
 
     if(valid_name){
       if (canvas.msToBlob) {
           var blob = canvas.msToBlob();
           window.navigator.msSaveBlob(blob, filename);
       } else {
-          downloadLink.href = canvas.toDataURL('image/png');
+          downloadLink.href = resizecanvas();
           downloadLink.download = filename;
           downloadLink.click();
       }
     }else{
       alert("ファイル名に使えない文字列が含まれています。")
     }
-    var size = parseInt(document.getElementById("nb_size3").value,10);
-    pu.edit_mode = mode;
-    pu_q.spacex = size*0.5+0.5;
-    pu_q.spacey = size*0.5+0.5;
-    pu_a.spacex = size*0.5+0.5;
-    pu_a.spacey = size*0.5+0.5;
-    canvasset(pu_q);
-    redraw();
 }
-
-
 
 function saveimage_window(){
   var downloadLink = document.getElementById('download_link');
-
-  var mode = pu.edit_mode;
-  pu.edit_mode = "surface"; //枠線削除用
-  if (document.getElementById("nb_margin2").checked){
-    pu_q.spacex = 1.5;
-    pu_q.spacey = 1.5;
-    pu_a.spacex = 1.5;
-    pu_a.spacey = 1.5;
-    canvasset(pu_q);
-  }
-  redraw();
-  var canvas = document.getElementById("canvas");
-    var win=window.open();
-    win.document.write("<img src='"+canvas.toDataURL("image/png")+"'/>");
-
-  var size = parseInt(document.getElementById("nb_size3").value,10);
-  pu.edit_mode = mode;
-  pu_q.spacex = size*0.5+0.5;
-  pu_q.spacey = size*0.5+0.5;
-  pu_a.spacex = size*0.5+0.5;
-  pu_a.spacey = size*0.5+0.5;
-  canvasset(pu_q);
-  redraw();
+  var win=window.open();
+  var address = resizecanvas();
+  win.document.write("<img src='"+address+"'/>");
 }
 
 function savetext() {
