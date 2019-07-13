@@ -447,6 +447,7 @@ function saveimage_window(){
 
 function savetext() {
   document.getElementById("modal-save").style.display = 'block';
+  document.getElementById("savetextarea").value = "";
 }
 
 function savetext_edit() {
