@@ -553,6 +553,8 @@ function maketext_solve(){
   }
   text += JSON.stringify(arr_text) + "\n";
 
+  //console.log(text);
+
   var u8text = new TextEncoder().encode(text);
   var deflate = new Zlib.RawDeflate(u8text);
   var compressed = deflate.compress();
@@ -1333,6 +1335,8 @@ function drawonDown(numx,numy){
     case "line":
       if (pu.edit_submode === "3"){
         re_linedown_free(numx,numy);
+      }else if(pu.edit_submode === "4"){
+        re_lineX(numx,numy);
       }else{
         pu.lastx = numx;
         pu.lasty = numy;
@@ -1481,7 +1485,7 @@ function drawonMove(numx,numy){
       case "line":
         if (pu.edit_submode === "3"){
           re_linemove_free(numx,numy);
-        }else if (pu.edit_submode != "2" || pu.lineD_edge === 0){
+        }else if (pu.edit_submode!= "4" &&(pu.edit_submode != "2" || pu.lineD_edge === 0)){ //対角線でないor対角線で内側
           re_linemove(numx,numy);
           pu.lastx = numx;
           pu.lasty = numy;
@@ -1627,12 +1631,15 @@ function re_numberarrow(numx,numy){
 function re_surface(numx,numy){
   if(numx>=0 && numx<pu.nx && numy>=0 && numy<pu.ny){
     record("surface",numx+numy*pu.nx);
-    if(pu.arr.surface[numx+numy*pu.nx] && pu.arr.surface[numx+numy*pu.nx] === pu.edit_stylemode){
+    if(pu.arr.surface[numx+numy*pu.nx] && pu.arr.surface[numx+numy*pu.nx] === pu.edit_stylemode && pu.edit_stylemode === 1){
+      pu.arr.surface[numx+numy*pu.nx] = 2;
+      pu.surface_drawing = 2;
+    }else if(pu.arr.surface[numx+numy*pu.nx] && (pu.arr.surface[numx+numy*pu.nx] === pu.edit_stylemode || (pu.arr.surface[numx+numy*pu.nx] === 2 &&  pu.edit_stylemode === 1))){
       delete pu.arr.surface[numx+numy*pu.nx];
       pu.surface_drawing = 0;
     }else{
       pu.arr.surface[numx+numy*pu.nx] = pu.edit_stylemode;
-      pu.surface_drawing = 1;
+      pu.surface_drawing = pu.edit_stylemode;
     }
     redraw();
   }
@@ -1654,14 +1661,13 @@ function re_surfaceR(numx,numy){
 
 function re_surfacemove(numx,numy){
   if(numx>=0 && numx<pu.nx && numy>=0 && numy<pu.ny){
-
-    if(pu.surface_drawing === 1){
-      if(!pu.arr.surface[numx+numy*pu.nx] || pu.arr.surface[numx+numy*pu.nx] != pu.edit_stylemode){
+    if(pu.surface_drawing === 0){
+      if(!pu.arr.surface[numx+numy*pu.nx] || pu.arr.surface[numx+numy*pu.nx] != pu.surface_drawing){
         record("surface",numx+numy*pu.nx);
-        pu.arr.surface[numx+numy*pu.nx] = pu.edit_stylemode;
+        delete pu.arr.surface[numx+numy*pu.nx];
         redraw();
       }
-    }else if(pu.surface_drawing === 2 || pu.surface_drawing === 0){
+    }else if(pu.surface_drawing != -1){
       if(!pu.arr.surface[numx+numy*pu.nx] || pu.arr.surface[numx+numy*pu.nx] != pu.surface_drawing){
         record("surface",numx+numy*pu.nx);
         pu.arr.surface[numx+numy*pu.nx] = pu.surface_drawing;
@@ -1731,6 +1737,33 @@ function re_linemove(numx,numy){
       }
       redraw();
     }
+  }
+}
+
+function re_lineX(numx,numy){
+  var num;
+  if(numx>0 && numx<2*pu.nx && numy>0 && numy<2*pu.ny){
+    if(numx%2===1 && numy%2===0){
+      num = (numx-1)*0.5+(numy*0.5-1)*pu.ny;
+      if(!pu.arr.lineV[num]){
+        record("lineV",num);
+        pu.arr.lineV[num] = 98;
+      }else if(pu.arr.lineV[num] === 98){
+        record("lineV",num);
+        delete pu.arr.lineV[num];
+      }
+    }else if(numx%2===0 && numy%2===1){
+      num = (numx*0.5-1)+(numy-1)*0.5*(pu.ny-1);
+      if(!pu.arr.lineH[num]){
+        record("lineH",num);
+        pu.arr.lineH[num] = 98;
+      }else if(pu.arr.lineH[num] === 98){
+        record("lineH",num);
+        delete pu.arr.lineH[num];
+      }
+    }
+    //console.log(numx,numy);
+    redraw();
   }
 }
 

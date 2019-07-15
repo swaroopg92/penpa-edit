@@ -74,6 +74,8 @@
             <label for="line2" class="label">対角線</label>
             <input type="radio" name="mode_line" value="3" id="line3" onclick="submode_check('mode_line');">
             <label for="line3" class="label">自由線</label>
+            <input type="radio" name="mode_line" value="4" id="line4" onclick="submode_check('mode_line');">
+            <label for="line4" class="label">補助×</label>
           </span>
 
           <span id="mode_lineE" style="display:none;">
@@ -197,7 +199,7 @@
                   <li><span onclick="subsymbolmode('arrow_eight');">八方</span></li>
                 </ul>
               </li>
-              <li><span>固有</span>
+              <li><span>固有1</span>
                 <ul id="mode_symbolul3">
                   <li><span>バトルシップ</span>
                     <ul>
@@ -210,10 +212,15 @@
                   <li><span onclick="subsymbolmode('tents');">テント</span></li>
                   <li><span onclick="subsymbolmode('star');">スター</span></li>
                   <li><span onclick="subsymbolmode('compass');">コンパス</span></li>
+                  <li><span onclick="subsymbolmode('sudokuetc');">数独特殊記号</span></li>
+                </ul>
+              </li>
+              <li><span>固有2</span>
+                <ul id="mode_symbolul4">
                   <li><span onclick="subsymbolmode('angleloop');">鋭直鈍ループ</span></li>
                   <li><span onclick="subsymbolmode('firefly');">ホタルビーム</span></li>
                   <li><span onclick="subsymbolmode('sun_moon');">月か太陽</span></li>
-                  <li><span onclick="subsymbolmode('sudokuetc');">数独特殊記号</span></li>
+                  <li><span onclick="subsymbolmode('pencils');">ペンシルズ</span></li>
                 </ul>
               </li>
             </ul>

@@ -142,15 +142,20 @@ function calc_num(x,y){
       numy = Math.floor(y/pu.sizey);
       break;
     case "line":
-      numx = Math.floor(x/pu.sizex);
-      numy = Math.floor(y/pu.sizey);
-      if (pu.edit_submode === "2"){
-        dicx = x/pu.sizex-Math.floor(x/pu.sizex);
-        dicy = y/pu.sizey-Math.floor(y/pu.sizey);
-        if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
-          pu.lineD_edge = 1;
-        }else{
-          pu.lineD_edge = 0;
+      if (pu.edit_submode === "4"){
+        numx = Math.floor(x/pu.sizex*2+0.5);
+        numy = Math.floor(y/pu.sizey*2+0.5);
+      }else{
+        numx = Math.floor(x/pu.sizex);
+        numy = Math.floor(y/pu.sizey);
+        if (pu.edit_submode === "2"){
+          dicx = x/pu.sizex-Math.floor(x/pu.sizex);
+          dicy = y/pu.sizey-Math.floor(y/pu.sizey);
+          if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
+            pu.lineD_edge = 1;
+          }else{
+            pu.lineD_edge = 0;
+          }
         }
       }
       break;
@@ -351,12 +356,12 @@ function modaldelete(e) {
         }
       }else if(pu.panelmode === "ja_K"){
         var str = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモ"+
-        "ヤユヨワンラリルレロャュョヲ　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　"
+        "ヤユヨ　　ラリルレロワヲン　　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　ー。、　　"
         var cont = str.split("");
         var n = numxf+numyf*10;
-        if (0<=n&&n<=79&&n!=49){
+        if (cont[n] && cont[n]!="　"){
           key_number(cont[n]);
-        }else if (n===49){
+        }else if (cont[n]==="　"){
           key_space();
         }
       }

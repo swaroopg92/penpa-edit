@@ -114,6 +114,10 @@ function set_line_style(ctx,type){
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 1;
         break;
+      case 98: //x-mark
+        ctx.strokeStyle = "rgba(32,128,32,1)";
+        ctx.lineWidth = 1;
+        break;
       case 99: //cursol
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
@@ -300,7 +304,7 @@ function draw_panel() {
         break;
       case "ja_K":
       nxf = 10;
-      nyf = 8;
+      nyf = 9;
       canvasf.width=((sizef+spacef)*nxf-spacef)*pu.resol;
       canvasf.height=((sizef+spacef)*nyf-spacef)*pu.resol;
       ctxf.scale(pu.resol,pu.resol);
@@ -314,7 +318,7 @@ function draw_panel() {
       fkb.style.display = "block";
       fkm.style.display = "flex";
       var str = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモ"+
-      "ヤユヨワンラリルレロャュョヲ　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　"
+      "ヤユヨ　　ラリルレロワヲン　　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　ー。、　　"
       var cont = str.split("");
       set_surface_style(ctxf,99);
       for(var i = 0 ; i < nxf*nyf ; i++){
@@ -671,6 +675,20 @@ function draw_arr_line(pu,ctx) {
 
   /*line*/
   for(var i in pu.arr.lineH){
+    if(pu.arr.lineH[i]===98){
+      var r = 0.2;
+      var x = pu.spacex+(i%(pu.nx-1)+1)*pu.sizex;
+      var y = pu.spacey+(((i/(pu.nx-1))|0)+0.5)*pu.sizey;
+      set_line_style(ctx,98);
+      ctx.beginPath();
+      ctx.moveTo(x+r*Math.cos(45*(Math.PI/180))*pu.sizex,y+r*Math.sin(45*(Math.PI/180))*pu.sizey);
+      ctx.lineTo(x+r*Math.cos(225*(Math.PI/180))*pu.sizex,y+r*Math.sin(225*(Math.PI/180))*pu.sizey);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x+r*Math.cos(135*(Math.PI/180))*pu.sizex,y+r*Math.sin(135*(Math.PI/180))*pu.sizey);
+      ctx.lineTo(x+r*Math.cos(315*(Math.PI/180))*pu.sizex,y+r*Math.sin(315*(Math.PI/180))*pu.sizey);
+      ctx.stroke();
+    }else{
       set_line_style(ctx,pu.arr.lineH[i]);
       if(pu.arr.lineH[i]===30){
         ctx.beginPath();
@@ -692,8 +710,23 @@ function draw_arr_line(pu,ctx) {
         ctx.lineTo(pu.spacex+(i%(pu.nx-1)+1.5)*pu.sizex+ctx.lineWidth/2,pu.spacey+((i/(pu.nx-1)|0)+0.5)*pu.sizey);
         ctx.stroke();
       }
+    }
   }
   for(var i in pu.arr.lineV){
+    if(pu.arr.lineV[i]===98){
+      var r = 0.2;
+      var x = pu.spacex+(i%pu.nx+0.5)*pu.sizex;
+      var y = pu.spacey+((i/pu.nx|0)+1)*pu.sizey;
+      set_line_style(ctx,98);
+      ctx.beginPath();
+      ctx.moveTo(x+r*Math.cos(45*(Math.PI/180))*pu.sizex,y+r*Math.sin(45*(Math.PI/180))*pu.sizey);
+      ctx.lineTo(x+r*Math.cos(225*(Math.PI/180))*pu.sizex,y+r*Math.sin(225*(Math.PI/180))*pu.sizey);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x+r*Math.cos(135*(Math.PI/180))*pu.sizex,y+r*Math.sin(135*(Math.PI/180))*pu.sizey);
+      ctx.lineTo(x+r*Math.cos(315*(Math.PI/180))*pu.sizex,y+r*Math.sin(315*(Math.PI/180))*pu.sizey);
+      ctx.stroke();
+    }else{
       set_line_style(ctx,pu.arr.lineV[i]);
       if(pu.arr.lineV[i]===30){
         ctx.beginPath();
@@ -715,6 +748,7 @@ function draw_arr_line(pu,ctx) {
         ctx.lineTo(pu.spacex+(i%pu.nx+0.5)*pu.sizex,pu.spacey+((i/pu.nx|0)+1.5)*pu.sizey+ctx.lineWidth/2);
         ctx.stroke();
       }
+    }
   }
   for(var i in pu.arr.lineDa){
       set_line_style(ctx,pu.arr.lineDa[i]);
@@ -1304,6 +1338,9 @@ function draw_symbol(ctx,x,y,num,sym){
       break;
     case "sudokuetc":
       draw_sudokuetc(ctx,num,x,y);
+      break;
+    case "pencils":
+      draw_pencils(ctx,num,x,y);
       break;
   }
 }
@@ -2455,6 +2492,73 @@ function draw_sun_moon(ctx,num,x,y){
       ctx.beginPath();
       ctx.arc(x,y,r1*pu.sizex,-0.34*Math.PI,0.73*Math.PI,false);
       ctx.arc(x-0.12*pu.sizex,y-0.08*pu.sizey,r2*pu.sizex,0.67*Math.PI,-0.28*Math.PI,true);
+      ctx.closePath();
+      ctx.fill();
+      break;
+  }
+}
+
+function draw_pencils(ctx,num,x,y){
+  var r = 0.2;
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#000";
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+  ctx.lineJoin = "bevel"
+  switch(num){
+    case 1:
+      ctx.beginPath();
+      ctx.moveTo(x+0.5*pu.sizex,y-0.5*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x+0.5*pu.sizex,y+0.5*pu.sizey);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x+r*pu.sizex,y-r*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x+r*pu.sizex,y+r*pu.sizey);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    case 2:
+      ctx.beginPath();
+      ctx.moveTo(x+0.5*pu.sizex,y+0.5*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x-0.5*pu.sizex,y+0.5*pu.sizey);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x+r*pu.sizex,y+r*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x-r*pu.sizex,y+r*pu.sizey);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    case 3:
+      ctx.beginPath();
+      ctx.moveTo(x-0.5*pu.sizex,y+0.5*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x-0.5*pu.sizex,y-0.5*pu.sizey);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x-r*pu.sizex,y+r*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x-r*pu.sizex,y-r*pu.sizey);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    case 4:
+      ctx.beginPath();
+      ctx.moveTo(x-0.5*pu.sizex,y-0.5*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x+0.5*pu.sizex,y-0.5*pu.sizey);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x-r*pu.sizex,y-r*pu.sizey);
+      ctx.lineTo(x,y);
+      ctx.lineTo(x+r*pu.sizex,y-r*pu.sizey);
       ctx.closePath();
       ctx.fill();
       break;
