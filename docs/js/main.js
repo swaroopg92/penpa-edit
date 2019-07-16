@@ -250,11 +250,6 @@ function modaldelete(e) {
     modal3.style.display = 'none';
   }
 }
-  
-var buttons = document.getElementById("buttons");
-buttons.addEventListener("ontouchstart", function(e){
-    e.preventDefault();
-},{passive: false});
 
 //drag_window
 //要素の取得
