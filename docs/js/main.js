@@ -252,7 +252,7 @@ function modaldelete(e) {
 }
   
 var buttons = document.getElementById("buttons");
-buttons.addEventListener("ontouchstart", function(e){
+buttons.addEventListener("touchstart", function(e){
 },{passive: false});
 
 //drag_window
