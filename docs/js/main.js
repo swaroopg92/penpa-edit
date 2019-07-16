@@ -238,7 +238,7 @@ var modal3 = document.getElementById("modal-save");
 window.addEventListener('mousedown', modaldelete, {passive: false});
 window.addEventListener('touchstart', modaldelete, {passive: false});
 window.addEventListener('touchstart', function(e) {
-  //e.stopPropagation();
+  e.stopPropagation();
 }, {passive: false});
 
 function modaldelete(e) {
@@ -250,10 +250,6 @@ function modaldelete(e) {
     modal3.style.display = 'none';
   }
 }
-  
-var buttons = document.getElementById("buttons");
-buttons.addEventListener("touchstart", function(e){
-},{passive: false});
 
 //drag_window
 //要素の取得
