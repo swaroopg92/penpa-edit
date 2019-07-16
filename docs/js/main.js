@@ -238,7 +238,7 @@ var modal3 = document.getElementById("modal-save");
 window.addEventListener('mousedown', modaldelete, {passive: false});
 window.addEventListener('touchstart', modaldelete, {passive: false});
 window.addEventListener('touchstart', function(e) {
-  e.stopPropagation();
+  //e.stopPropagation();
 }, {passive: false});
 
 function modaldelete(e) {
