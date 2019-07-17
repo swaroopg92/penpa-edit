@@ -8,12 +8,32 @@ obj.appendChild(canvas);
 create();
 load();
 
+window.addEventListener("beforeunload", function(eve){
+    eve.returnValue = "ページを移動します";
+},{passive: false});
+
+var ondown_key = ("ontouchstart" in window) ? "touchstart" : "mousedown";
+var checkms;//hover event用一時変数
+
+//canvas
+//canvas.addEventListener('mousedown', onDown, {passive: false});
+//canvas.addEventListener('touchstart', onDown, {passive: false});
+canvas.addEventListener('mouseup', onUp, {passive: false});
+canvas.addEventListener('touchend', onUp, {passive: false});
+//canvas.addEventListener('click', onClick, {passive: false});
+canvas.addEventListener('mousemove', onMove, {passive: false});
+canvas.addEventListener('touchmove', onMove, {passive: false});
+canvas.addEventListener('mouseover', onOver, {passive: false});
+canvas.addEventListener('mouseout', onOut, {passive: false});
+canvas.addEventListener('contextmenu',onContextmenu,{passive: false});
+document.addEventListener('keydown',onKeyDown,{passive: false});
+
 function onDown(e) {
   if(e.type === "mousedown") {
       var event = e;
   } else {
       var event = e.changedTouches[0];
-      e.preventDefault();
+      //e.preventDefault();
   }
   var [numx,numy] = coord(event);
   if (event.button === 2){
@@ -29,7 +49,7 @@ function onUp(e) {
       var event = e;
   } else {
       var event = e.changedTouches[0];
-      e.preventDefault();
+      //e.preventDefault();
   }
   var [numx,numy] = coord(event);
   drawonUp(numx,numy);
@@ -47,7 +67,6 @@ function onMove(e) {
   } else {
       var event = e.changedTouches[0];
   }
-
   //フリックしたときに画面を動かさないようにデフォルト動作を抑制
   e.preventDefault();
   var [numx,numy] = coord(event);
@@ -87,6 +106,12 @@ function onKeyDown(e){
     }
 
     if(key === "F2"){ //function_key
+      document.getElementById("pu_q").checked = true;
+      mode_qa();
+      event.returnValue = false;
+    }else if(key === "F3"){
+      document.getElementById("pu_a").checked = true;
+      mode_qa();
       event.returnValue = false;
     }
     if(!ctrl_key){
@@ -217,52 +242,271 @@ function calc_num(x,y){
 }
 
 
-canvas.addEventListener('mousedown', onDown, {passive: false});
-canvas.addEventListener('touchstart', onDown, {passive: false});
-canvas.addEventListener('mouseup', onUp, {passive: false});
-canvas.addEventListener('touchend', onUp, {passive: false});
-canvas.addEventListener('click', onClick, {passive: false});
-canvas.addEventListener('mousemove', onMove, {passive: false});
-canvas.addEventListener('touchmove', onMove, {passive: false});
-canvas.addEventListener('mouseover', onOver, {passive: false});
-canvas.addEventListener('mouseout', onOut, {passive: false});
-canvas.addEventListener('contextmenu',onContextmenu,{passive: false});
-document.addEventListener('keydown',onKeyDown,{passive: false});
-window.addEventListener("beforeunload", function(eve){
-    eve.returnValue = "ページを移動します";
-},{passive: false});
+//クリックイベント
+window.addEventListener(ondown_key, window_click, {passive: false});
 
-var modal1 = document.getElementById("modal");
-var modal2 = document.getElementById("modal-image");
-var modal3 = document.getElementById("modal-save");
-window.addEventListener('mousedown', modaldelete, {passive: false});
-window.addEventListener('touchstart', modaldelete, {passive: false});
-window.addEventListener('touchstart', function(e) {
-  e.stopPropagation();
-}, {passive: false});
-
-function modaldelete(e) {
-  if (e.target == modal1) {
-    modal1.style.display = 'none';
-  }else if(e.target == modal2) {
-    modal2.style.display = 'none';
-  }else if(e.target == modal3) {
-    modal3.style.display = 'none';
+function window_click(e) {
+  //console.log(e.target.id);
+  //modalwindow
+  if (e.target.className === "modal") {
+    document.getElementById(e.target.id).style.display = 'none';
+    e.preventDefault();
+  }
+  switch(e.target.id){
+    case "canvas":
+      onDown(e);
+      e.preventDefault(); break;
+    //top/bottom button
+    case "newboard":
+      newboard();
+      e.preventDefault(); break;
+    case "newsize":
+      newsize();
+      e.preventDefault(); break;
+    case "saveimage":
+      saveimage();
+      e.preventDefault(); break;
+    case "savetext":
+      savetext();
+      e.preventDefault(); break;
+    case "duplicate":
+      duplicate();
+      e.preventDefault(); break;
+    case "duplicate":
+      duplicate();
+      e.preventDefault(); break;
+    case "tb_undo":
+      undo();
+      e.preventDefault(); break;
+    case "tb_redo":
+      redo();
+      e.preventDefault(); break;
+    case "tb_reset":
+      ResetCheck();
+      e.preventDefault(); break;
+    case "tb_delete":
+      DeleteCheck();
+      e.preventDefault(); break;
+    //panel_menu
+    case "panel_1_lbmenu":
+      panel_mode_set('number');
+      e.preventDefault(); break;
+    case "panel_A_lbmenu":
+      panel_mode_set('alphabet');
+      e.preventDefault(); break;
+    case "panel_!_lbmenu":
+      panel_mode_set('key_symbol');
+      e.preventDefault(); break;
+    case "panel_ja_K_lbmenu":
+      panel_mode_set('ja_K');
+      e.preventDefault(); break;
+    case "float-canvas":
+      f_mdown(e);
+      e.preventDefault(); break;
+    //savetext
+    case "address_edit":
+      savetext_edit();
+      e.preventDefault(); break;
+    case "address_solve":
+      savetext_solve();
+      e.preventDefault(); break;
+    case "savetextarea":
+      return;
+    case "savetextname":
+      return;
+    case "closeBtn_save1":
+      savetext_copy();
+      e.preventDefault(); break;
+    case "closeBtn_save2":
+      savetext_download();
+      e.preventDefault(); break;
+    case "closeBtn_save3":
+      savetext_window();
+      e.preventDefault(); break;
+    case "closeBtn_save4":
+      document.getElementById('modal-save').style.display='none';
+      e.preventDefault(); break;
+    //saveimage
+    case "nb_margin1_lb":
+      document.getElementById("nb_margin1").checked = true;
+      e.preventDefault(); break;
+    case "nb_margin2_lb":
+      document.getElementById("nb_margin2").checked = true;
+      e.preventDefault(); break;
+    case "saveimagename":
+      return;
+    case "closeBtn_image1":
+      saveimage_window();
+      e.preventDefault(); break;
+    case "closeBtn_image2":
+      saveimage_download();
+      e.preventDefault(); break;
+    case "closeBtn_image3":
+      document.getElementById('modal-image').style.display='none';
+      e.preventDefault(); break;
+    //newboard
+    case "nb_size1":
+      return;
+    case "nb_size2":
+      return;
+    case "nb_size3":
+      return;
+    case "nb_space1":
+      return;
+    case "nb_space2":
+      return;
+    case "nb_space3":
+      return;
+    case "nb_space4":
+      return;
+    case "nb_grid1_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "nb_grid2_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "nb_grid3_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "nb_lat1_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "nb_lat2_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "nb_out1_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "nb_out2_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      e.preventDefault(); break;
+    case "closeBtn_nb1":
+      CreateCheck();
+      e.preventDefault(); break;
+    case "closeBtn_nb2":
+      newgrid();
+      e.preventDefault(); break;
+    case "closeBtn_nb3":
+      document.getElementById('modal').style.display='none';
+      e.preventDefault(); break;
+    //newsize
+    case "nb_size3_r":
+      return;
+    case "closeBtn_size1":
+      newgrid_r();
+      e.preventDefault(); break;
+    case "closeBtn_size2":
+      document.getElementById('modal-newsize').style.display='none';
+      e.preventDefault(); break;
+    case "float-key-header":
+      mdown(e);
+      e.preventDefault(); break;
+    case "float-key-header-lb":
+      mdown(e);
+      e.preventDefault(); break;
+    //buttons
+    case "panel_button":
+      panel_onoff();
+      e.preventDefault(); break;
+    case "pu_q_lb":
+      document.getElementById("pu_q").checked = true;
+      mode_qa();
+      e.preventDefault(); break;
+    case "pu_a_lb":
+      document.getElementById("pu_a").checked = true;
+      mode_qa();
+      e.preventDefault(); break;
+    case "surface_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_surface();
+      e.preventDefault(); break;
+    case "line_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_line();
+      e.preventDefault(); break;
+    case "lineE_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_lineE();
+      e.preventDefault(); break;
+    case "wall_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_wall();
+      e.preventDefault(); break;
+    case "cage_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_cage();
+      e.preventDefault(); break;
+    case "number_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_number();
+      e.preventDefault(); break;
+    case "numberE_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_numberE();
+      e.preventDefault(); break;
+    case "symbol_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_symbol();
+      e.preventDefault(); break;
+    case "symbolE_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_symbolE();
+      e.preventDefault(); break;
+    case "special_lb":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      mode_special();
+      e.preventDefault(); break;
+  }
+  switch(e.target.id.slice(0,-4)){
+    case "line":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      submode_check('mode_'+e.target.id.slice(0,-4));
+      e.preventDefault(); break;
+    case "lineE":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      submode_check('mode_'+e.target.id.slice(0,-4));
+      e.preventDefault(); break;
+    case "number":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      submode_check('mode_'+e.target.id.slice(0,-4));
+      e.preventDefault(); break;
+    case "numberE":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      submode_check('mode_'+e.target.id.slice(0,-4));
+      e.preventDefault(); break;
+    case "special":
+      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      submode_check('mode_'+e.target.id.slice(0,-4));
+      e.preventDefault(); break;
+    }
+    //スタイル
+  if(e.target.id.slice(0,3)==="st_"){
+    document.getElementById(e.target.id.slice(0,-3)).checked = true;
+    stylemode_check('style_'+e.target.id.slice(3,-4));
+    e.preventDefault();
+  }
+    //シンボル
+  if(e.target.id.slice(0,3)==="ms_"){
+    checkms = 1;
+    subsymbolmode(e.target.id.slice(3));
+    e.preventDefault();
+    //シンボルホバーetc
+  }else if(e.target.id.slice(0,2)==="ms"){
+    checkms = 1;
+    return; //preventDefault回避
+  }else if(checkms === 1){
+    checkms = 0;
+    return;
   }
 }
 
-//drag_window
-//要素の取得
-    var elements = document.getElementById("float-key-header");
-
+//panel(drag_window)
     var x_window;
     var y_window;
 
-    elements.addEventListener("mousedown", mdown,{passive: false});
-    elements.addEventListener("touchstart", mdown, {passive: false});
-
     function mdown(e) {
-        this.classList.add("drag");
+        var elements = document.getElementById("float-key-header");
+        elements.classList.add("drag");
 
         if(e.type === "mousedown") {
             var event = e;
@@ -270,9 +514,9 @@ function modaldelete(e) {
             var event = e.changedTouches[0];
         }
 
-        x_window = event.pageX - this.offsetLeft;
-        y_window = event.pageY - this.offsetTop;
-
+        x_window = event.pageX - elements.offsetLeft;
+        y_window = event.pageY - elements.offsetTop;
+        var drag = document.getElementsByClassName("drag")[0];
         document.body.addEventListener("mousemove", mmove, {passive: false});
         document.body.addEventListener("touchmove", mmove, {passive: false});
     }
@@ -293,9 +537,6 @@ function modaldelete(e) {
         body.style.top = event.pageY - y_window + "px";
         body.style.left = event.pageX - x_window + "px";
 
-        drag.addEventListener('touchmove', function(e){
-          e.preventDefault();
-        }, {passive: false});
         drag.addEventListener("mouseup", mup, {passive: false});
         document.body.addEventListener("mouseleave", mup, {passive: false});
         drag.addEventListener("touchend", mup, {passive: false});
@@ -319,9 +560,6 @@ function modaldelete(e) {
     //パネル入力設定
     var float_canvas = document.getElementById("float-canvas");
 
-    float_canvas.addEventListener("mousedown", f_mdown, {passive: false});
-    float_canvas.addEventListener("touchstart", f_mdown, {passive: false});
-
     function f_mdown(e) {
       if(e.type === "mousedown") {
         var event = e;
@@ -332,7 +570,6 @@ function modaldelete(e) {
         var event = e.changedTouches[0];
         var xf = event.pageX-(float_canvas.getBoundingClientRect().x-document.documentElement.getBoundingClientRect().left);
         var yf = event.pageY-(float_canvas.getBoundingClientRect().y-document.documentElement.getBoundingClientRect().top);
-        e.preventDefault();
       }
       var numxf = Math.floor(xf/(pu.sizex+3));
       var numyf = Math.floor(yf/(pu.sizey+3));
@@ -352,6 +589,15 @@ function modaldelete(e) {
         if (0<=n&&n<=28){
           key_number(cont[n].toString());
         }else if (n>=29){
+          key_space();
+        }
+      }else if(pu.panelmode === "key_symbol"){
+        var str = "!?#$%&()[]+－×＊/÷＝\u{221E}^<>～|@;:,._   "
+        var cont = str.split("");
+        var n = numxf+numyf*6;
+        if (cont[n] && cont[n]!=" "){
+          key_number(cont[n]);
+        }else if (cont[n]===" "){
           key_space();
         }
       }else if(pu.panelmode === "ja_K"){

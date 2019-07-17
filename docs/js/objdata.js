@@ -503,6 +503,13 @@ function savetext_download(){
   }
 }
 
+function savetext_window(){
+  var text = document.getElementById("savetextarea").value;
+  if(text){
+    window.open(text);
+  }
+}
+
 function duplicate(){
   var address = maketext();
   if (pu_a.mmode === "solve"){
@@ -669,10 +676,10 @@ function set_solvemode(){
   document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
   document.getElementById("newsize").style.display = "inline";
   document.getElementById("pu_a").checked = true;
-  document.getElementById("pu_q_label").style.display = "none";
-  document.getElementById("download_button_T").style.display = "none";
+  document.getElementById("pu_q_lb").style.display = "none";
+  document.getElementById("savetext").style.display = "none";
   document.getElementById("newboard").style.display = "none";
-  document.getElementById("button_delete").value = "解答消去"
+  document.getElementById("tb_delete").value = "解答消去"
 }
 
 function ResetCheck() {
@@ -707,16 +714,31 @@ function reset(){
       pu.arr.surface = {};
       break;
     case "line":
-      pu.arr.lineH = {};
-      pu.arr.lineV = {};
-      pu.arr.lineDa = {};
-      pu.arr.lineDb = {};
+      if(pu.edit_submode != "4"){
+        pu.arr.lineH = {};
+        pu.arr.lineV = {};
+        pu.arr.lineDa = {};
+        pu.arr.lineDb = {};
+        pu.arr.freeline = {};
+      }else{
+        for(i in pu.arr.lineH){
+          if(pu.arr.lineH[i]===98){
+            delete pu.arr.lineH[i];
+          }
+        }
+        for(i in pu.arr.lineV){
+          if(pu.arr.lineV[i]===98){
+            delete pu.arr.lineV[i];
+          }
+        }
+      }
       break;
     case "lineE":
       pu.arr.lineHE = {};
       pu.arr.lineVE = {};
       pu.arr.lineDaE = {};
       pu.arr.lineDbE = {};
+      pu.arr.freelineE = {};
       break;
     case "wall":
       pu.arr.wallH = {};
@@ -1470,10 +1492,6 @@ function drawonUp(numx,numy){
   }
 }
 
-function drawonClick(numx,numy){
-  return;
-}
-
 function drawonMove(numx,numy){
   if (numx != pu.lastx || numy != pu.lasty){ //別のセルに移動したら
     switch(pu.edit_mode){
@@ -1762,7 +1780,6 @@ function re_lineX(numx,numy){
         delete pu.arr.lineH[num];
       }
     }
-    //console.log(numx,numy);
     redraw();
   }
 }
