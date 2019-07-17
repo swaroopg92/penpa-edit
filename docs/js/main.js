@@ -528,7 +528,7 @@ function window_click(e) {
         e.preventDefault(); break;
       case "style_txt":
         e.preventDefault(); break;
-    }*/
+    }
   }
 }
 
