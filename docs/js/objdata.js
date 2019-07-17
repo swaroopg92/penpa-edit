@@ -428,7 +428,7 @@ function saveimage_download(){
           downloadLink.click();
       }
     }else{
-      alert("ファイル名に使えない文字列が含まれています。")
+      alert("ファイル名に使えない文字列が含まれています")
     }
 }
 
@@ -569,7 +569,7 @@ function maketext_solve(){
 function load(){
   var urlParam = location.search.substring(1);
   if(urlParam){
-    //try{
+    try{
       var param = urlParam.split('&');
       var paramArray = [];
 
@@ -585,8 +585,9 @@ function load(){
       var inflate = new Zlib.RawInflate(ab);
       var plain = inflate.decompress();
       var rtext = new TextDecoder().decode(plain);
-      rtext = rtext.split("\n");
 	  console.log(rtext);
+      rtext = rtext.split("\n");
+	
 
       //初期設定を読み込み
       var rtext_para = rtext[0].split(',');
@@ -657,9 +658,9 @@ function load(){
         }
       }
       redraw();
-   // }catch(error){
-   //   alert("不正なアドレスです");
-   // }
+    }catch(error){
+      alert("不正なアドレスです");
+    }
   }
 }
 
