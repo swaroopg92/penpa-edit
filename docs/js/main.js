@@ -287,12 +287,13 @@ function window_click(e) {
     case "tb_redo":
       redo();
       e.preventDefault(); break;
-    case "tb_reset":
-      ResetCheck();
-      break;
-    case "tb_delete":
-      DeleteCheck();
-      break;
+    //case "tb_reset":
+    //  ResetCheck();
+    //  break;
+    //case "tb_delete":
+    //  DeleteCheck();
+    //  break;
+    
     //panel_menu
     case "panel_1_lbmenu":
       panel_mode_set('number');
