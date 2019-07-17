@@ -289,10 +289,10 @@ function window_click(e) {
       e.preventDefault(); break;
     case "tb_reset":
       ResetCheck();
-      e.preventDefault(); break;
+      break;
     case "tb_delete":
       DeleteCheck();
-      e.preventDefault(); break;
+      break;
     //panel_menu
     case "panel_1_lbmenu":
       panel_mode_set('number');
