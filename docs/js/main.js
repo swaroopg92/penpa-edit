@@ -293,7 +293,7 @@ function window_click(e) {
     //case "tb_delete":
     //  DeleteCheck();
     //  break;
-    
+
     //panel_menu
     case "panel_1_lbmenu":
       panel_mode_set('number');
@@ -309,6 +309,9 @@ function window_click(e) {
       e.preventDefault(); break;
     case "float-canvas":
       f_mdown(e);
+      if(checkms === 0){
+        e.preventDefault();
+      }
       break;
     //savetext
     case "address_edit":
@@ -504,10 +507,10 @@ function window_click(e) {
   }else if(checkms === 1){
     checkms = 0;
     return;
-  }else{
+  }/*else{
     switch(e.target.id){
       //preventbuttonclick
-      /*case "edit_button":
+      case "edit_button":
         e.preventDefault(); break;
       case "panel_button0":
         e.preventDefault(); break;
@@ -524,8 +527,8 @@ function window_click(e) {
       case "sub_txt":
         e.preventDefault(); break;
       case "style_txt":
-        e.preventDefault(); break;*/
-    }
+        e.preventDefault(); break;
+    }*/
   }
 }
 
