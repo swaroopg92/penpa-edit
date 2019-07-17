@@ -670,9 +670,9 @@ function set_solvemode(){
   document.getElementById("newsize").style.display = "inline";
   document.getElementById("pu_a").checked = true;
   document.getElementById("pu_q_label").style.display = "none";
-  document.getElementById("download_button_T").style.display = "none";
+  document.getElementById("savetext").style.display = "none";
   document.getElementById("newboard").style.display = "none";
-  document.getElementById("button_delete").value = "解答消去"
+  document.getElementById("tb_delete").value = "解答消去"
 }
 
 function ResetCheck() {

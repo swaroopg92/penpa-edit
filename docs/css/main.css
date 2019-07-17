@@ -29,7 +29,7 @@ h3 {
   text-align: center;
 }
 
-#top_button{
+#top_button, #bottom_button{
   position: relative;
   max-width: 440px;
   text-align: center;
@@ -287,7 +287,7 @@ color: #000000;
   position: absolute;
   display: none;
   z-index: 1;
-  left: 250px;
+  left: 300px;
   top: 250px;
   width: 0px;
   height:0px;
