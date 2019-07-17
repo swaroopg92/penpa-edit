@@ -14,225 +14,225 @@
 
   <body>
     <header>
-      <h3 id="title">編集モード</h3>
+      <h3 id="title">ペンパくん　編集モード</h3>
 
       <div id="top_button">
-        <input type="button" id="newboard" value="新規作成・枠変更" class="button"/>
-        <input type="button" id="newsize" value="サイズ変更" class="button" style="display:none;"/>
-        <input type="button" id="saveimage" value="画像保存" class="button"/>
-        <input type="button" id="savetext" value="アドレス出力" class="button"/>
+        <input type="button" id="newboard" value="新規作成・枠変更" class="button" onclick="newboard();"/>
+        <input type="button" id="newsize" value="サイズ変更" class="button" style="display:none;" onclick="newsize();"/>
+        <input type="button" id="download_button" value="画像保存" class="button" onclick="saveimage();"/>
+        <input type="button" id="download_button_T" value="アドレス出力" class="button"  onclick="savetext();"/>
         <a id="download_link"></a>
-        <input type="button" id="duplicate" value="複製" class="button"/ onclick="duplicate();">
+        <input type="button" value="複製" class="button" onclick="duplicate();"/>
       </div>
 
       <div id="buttons">
         <div id="mode_button" class="mode_button">
           <label class="label_mode">　編集：</label>
-          <input type="radio" name="mode_qa" id="pu_q" value=1 checked="checked"/>
-          <label for="pu_q" class="label" id="pu_q_lb">問題</label>
-          <input type="radio" name="mode_qa" id="pu_a" value=2 />
-          <label for="pu_a" class="label" id="pu_a_lb">解答</label>
+          <input type="radio" name="mode_qa" id="pu_q" value=1 checked="checked" onclick="mode_qa();"/>
+          <label for="pu_q" class="label" id="pu_q_label">問題</label>
+          <input type="radio" name="mode_qa" id="pu_a" value=2 onclick="mode_qa();"/>
+          <label for="pu_a" class="label">解答</label>
           <span id="panel_button0" class="label">　　　</span>
           <span id="panel_button0" class="label">パネル：</span>
-          <span id="panel_button" class="label">OFF</span>
+          <span id="panel_button" class="label" onclick="panel_onoff();">OFF</span>
         </div>
         <div id="mode_button" class="mode_button">
           <label class="label_mode">モード：</label>
-          <input type="radio" name="mode" id="surface" checked="checked"/>
-          <label for="surface" class="label" id="surface_lb">黒マス</label>
-          <input type="radio" name="mode" id="line"/>
-          <label for="line" class="label" id="line_lb">線</label>
-          <input type="radio" name="mode" id="lineE"/>
-          <label for="lineE" class="label" id="lineE_lb">辺</label>
-          <input type="radio" name="mode" id="wall"/>
-          <label for="wall" class="label" id="wall_lb">壁</label>
-          <input type="radio" name="mode" id="cage"/>
-          <label for="cage" class="label" id="cage_lb">枠</label>
+          <input type="radio" name="mode" id="surface" checked="checked" onclick="mode_surface();"/>
+          <label for="surface" class="label">黒マス</label>
+          <input type="radio" name="mode" id="line" onclick="mode_line();"/>
+          <label for="line" class="label">線</label>
+          <input type="radio" name="mode" id="lineE" onclick="mode_lineE();"/>
+          <label for="lineE" class="label">辺</label>
+          <input type="radio" name="mode" id="wall" onclick="mode_wall();"/>
+          <label for="wall" class="label">壁</label>
+          <input type="radio" name="mode" id="cage" onclick="mode_cage();"/>
+          <label for="cage" class="label">枠</label>
           <br>
           <label class="label_mode">　　　　</label>
-          <input type="radio" name="mode" id="number"/>
-          <label for="number" class="label" id="number_lb">数字</label>
-          <input type="radio" name="mode" id="numberE"/>
-          <label for="numberE" class="label" id="numberE_lb">辺数字</label>
-          <input type="radio" name="mode" id="symbol"/>
-          <label for="symbol" class="label" id="symbol_lb">記号</label>
-          <input type="radio" name="mode" id="symbolE"/>
-          <label for="symbolE" class="label" id="symbolE_lb">辺記号</label>
-          <input type="radio" name="mode" id="special"/>
-          <label for="special" class="label" id="special_lb">特殊</label>
+          <input type="radio" name="mode" id="number" onclick="mode_number();"/>
+          <label for="number" class="label">数字</label>
+          <input type="radio" name="mode" id="numberE" onclick="mode_numberE();"/>
+          <label for="numberE" class="label">辺数字</label>
+          <input type="radio" name="mode" id="symbol" onclick="mode_symbol();"/>
+          <label for="symbol" class="label">記号</label>
+          <input type="radio" name="mode" id="symbolE" onclick="mode_symbolE();"/>
+          <label for="symbolE" class="label">辺記号</label>
+          <input type="radio" name="mode" id="special" onclick="mode_special();"/>
+          <label for="special" class="label">特殊</label>
           <br>
         </div>
         <hr size=1 noshade>
-        <div id="submode_button" class="submode_button">
+        <div id="submode_button" class="submode_button" >
           <span id="div_all">
             <label class="label_mode">　サブ：</label>
           </span>
           <span id="mode_line" style="display:none;">
-            <input type="radio" name="mode_line" value="1" id="line1" checked="checked">
-            <label for="line1" class="label" id="line1_lb">通常</label>
-            <input type="radio" name="mode_line" value="2" id="line2">
-            <label for="line2" class="label" id="line2_lb">対角線</label>
-            <input type="radio" name="mode_line" value="3" id="line3">
-            <label for="line3" class="label" id="line3_lb">自由線</label>
-            <input type="radio" name="mode_line" value="4" id="line4">
-            <label for="line4" class="label" id="line4_lb">補助×</label>
+            <input type="radio" name="mode_line" value="1" id="line1" checked="checked" onclick="submode_check('mode_line');">
+            <label for="line1" class="label">通常</label>
+            <input type="radio" name="mode_line" value="2" id="line2" onclick="submode_check('mode_line');">
+            <label for="line2" class="label">対角線</label>
+            <input type="radio" name="mode_line" value="3" id="line3" onclick="submode_check('mode_line');">
+            <label for="line3" class="label">自由線</label>
+            <input type="radio" name="mode_line" value="4" id="line4" onclick="submode_check('mode_line');">
+            <label for="line4" class="label">補助×</label>
           </span>
 
           <span id="mode_lineE" style="display:none;">
-            <input type="radio" name="mode_lineE" value="1" id="lineE1" checked="checked">
-            <label for="lineE1" class="label" id="lineE1_lb">通常</label>
-            <input type="radio" name="mode_lineE" value="2" id="lineE2">
-            <label for="lineE2" class="label" id="lineE2_lb">対角線</label>
-            <input type="radio" name="mode_lineE" value="3" id="lineE3">
-            <label for="lineE3" class="label" id="lineE3_lb">自由線</label>
+            <input type="radio" name="mode_lineE" value="1" id="lineE1" checked="checked" onclick="submode_check('mode_lineE');">
+            <label for="lineE1" class="label">通常</label>
+            <input type="radio" name="mode_lineE" value="2" id="lineE2" onclick="submode_check('mode_lineE');">
+            <label for="lineE2" class="label">対角線</label>
+            <input type="radio" name="mode_lineE" value="3" id="lineE3" onclick="submode_check('mode_lineE');">
+            <label for="lineE3" class="label">自由線</label>
           </span>
 
           <span id="mode_number" style="display:none;">
-            <input type="radio" name="mode_number" value="1" id="number1" checked="checked">
-            <label for="number1" class="labelL" id="number1_lb">通常</label>
-            <input type="radio" name="mode_number" value="2" id="number2">
-            <label for="number2" class="labelL" id="number2_lb">矢印</label>
-            <input type="radio" name="mode_number" value="3" id="number3">
-            <label for="number3" class="labelL" id="number3_lb">1/4</label>
-            <input type="radio" name="mode_number" value="4" id="number4">
-            <label for="number4" class="labelL" id="number4_lb">Tapa</label>
-            <input type="radio" name="mode_number" value="6" id="number6">
-            <label for="number6" class="labelL" id="number6_lb">中</label>
-            <input type="radio" name="mode_number" value="5" id="number5">
-            <label for="number5" class="labelL" id="number5_lb">小</label>
-            <input type="radio" name="mode_number" value="7" id="number7">
-            <label for="number7" class="labelL" id="number7_lb">候補</label>
-            <!-- <input type="radio" name="mode_number" value="8" id="number8">
-            <label for="number8" class="label">ｺﾝﾊﾟｽ</label> -->
+            <input type="radio" name="mode_number" value="1" id="num1" checked="checked" onclick="submode_check('mode_number');">
+            <label for="num1" class="labelL">通常</label>
+            <input type="radio" name="mode_number" value="2" id="num2" onclick="submode_check('mode_number');">
+            <label for="num2" class="labelL">矢印</label>
+            <input type="radio" name="mode_number" value="3" id="num3" onclick="submode_check('mode_number');">
+            <label for="num3" class="labelL">1/4</label>
+            <input type="radio" name="mode_number" value="4" id="num4" onclick="submode_check('mode_number');">
+            <label for="num4" class="labelL">Tapa</label>
+            <input type="radio" name="mode_number" value="6" id="num6" onclick="submode_check('mode_number');">
+            <label for="num6" class="labelL">中</label>
+            <input type="radio" name="mode_number" value="5" id="num5" onclick="submode_check('mode_number');">
+            <label for="num5" class="labelL">小</label>
+            <input type="radio" name="mode_number" value="7" id="num7" onclick="submode_check('mode_number');">
+            <label for="num7" class="labelL">候補</label>
+            <!-- <input type="radio" name="mode_number" value="8" id="num8" onclick="submode_check('mode_number');">
+            <label for="num8" class="label">ｺﾝﾊﾟｽ</label> -->
           </span>
 
           <span id="mode_numberE" style="display:none;">
-            <input type="radio" name="mode_numberE" value="1" id="numberE1" checked="checked">
-            <label for="numberE1" class="label" id="numberE1_lb">通常</label>
-            <!-- <input type="radio" name="mode_numberE" value="2" id="numberE2">
-            <label for="numberE2" class="label">矢印</label> -->
-            <input type="radio" name="mode_numberE" value="4" id="numberE4">
-            <label for="numberE4" class="label" id="numberE4_lb">Tapa</label>
-            <input type="radio" name="mode_numberE" value="6" id="numberE6">
-            <label for="numberE6" class="label" id="numberE6_lb">中</label>
-            <input type="radio" name="mode_numberE" value="5" id="numberE5">
-            <label for="numberE5" class="label" id="numberE5_lb">小</label>
-            <input type="radio" name="mode_numberE" value="7" id="numberE7">
-            <label for="numberE7" class="label" id="numberE7_lb">長文</label>
+            <input type="radio" name="mode_numberE" value="1" id="numE1" checked="checked" onclick="submode_check('mode_numberE');">
+            <label for="numE1" class="label">通常</label>
+            <!-- <input type="radio" name="mode_numberE" value="2" id="numE2" onclick="submode_check('mode_numberE');">
+            <label for="numE2" class="label">矢印</label> -->
+            <input type="radio" name="mode_numberE" value="4" id="numE4" onclick="submode_check('mode_numberE');">
+            <label for="numE4" class="label">Tapa</label>
+            <input type="radio" name="mode_numberE" value="6" id="numE6" onclick="submode_check('mode_numberE');">
+            <label for="numE6" class="label">中</label>
+            <input type="radio" name="mode_numberE" value="5" id="numE5" onclick="submode_check('mode_numberE');">
+            <label for="numE5" class="label">小</label>
+            <input type="radio" name="mode_numberE" value="7" id="numE7" onclick="submode_check('mode_numberE');">
+            <label for="numE7" class="label">長文</label>
           </span>
 
           <span id="mode_symbol" class="mode_symbol" style="display:none;">
-            <ul class="nav">
-              <li><span id="ms1">図形</span>
+            <ul class="nav" ontouchstart="">
+              <li><span>図形</span>
                 <ul id="mode_symbolul1">
-                  <li><span id="ms1_circle">円</span>
+                  <li><span>円</span>
                     <ul>
-                      <li><span id="ms_circle_L">大</span></li>
-                      <li><span id="ms_circle_M">中</span></li>
-                      <li><span id="ms_circle_S">小</span></li>
-                      <li><span id="ms_circle_SS">極小</span></li>
+                      <li><span onclick="subsymbolmode('circle_L');">大</span></li>
+                      <li><span onclick="subsymbolmode('circle_M');">中</span></li>
+                      <li><span onclick="subsymbolmode('circle_S');">小</span></li>
+                      <li><span onclick="subsymbolmode('circle_SS');">極小</span></li>
                     </ul>
                   </li>
-                  <li><span id="ms1_square">正方形</span>
+                  <li><span>正方形</span>
                     <ul>
-                      <li><span id="ms_square_LL">特大</span></li>
-                      <li><span id="ms_square_L">大</span></li>
-                      <li><span id="ms_square_M">中</span></li>
-                      <li><span id="ms_square_S">小</span></li>
-                      <li><span id="ms_square_SS">極小</span></li>
+                      <li><span onclick="subsymbolmode('square_LL');">特大</span></li>
+                      <li><span onclick="subsymbolmode('square_L');">大</span></li>
+                      <li><span onclick="subsymbolmode('square_M');">中</span></li>
+                      <li><span onclick="subsymbolmode('square_S');">小</span></li>
+                      <li><span onclick="subsymbolmode('square_SS');">極小</span></li>
                     </ul>
                   </li>
-                  <li><span id="ms1_diamond">ダイヤ</span>
+                  <li><span>ダイヤ</span>
                     <ul>
-                      <li><span id="ms_diamond_L">大</span></li>
-                      <li><span id="ms_diamond_M">中</span></li>
-                      <li><span id="ms_diamond_SS">極小</span></li>
+                      <li><span onclick="subsymbolmode('diamond_L');">大</span></li>
+                      <li><span onclick="subsymbolmode('diamond_M');">中</span></li>
+                      <li><span onclick="subsymbolmode('diamond_SS');">極小</span></li>
                     </ul>
                   </li>
-                  <li><span id="ms1_ox">○△□×</span>
+                  <li><span>○△□×</span>
                     <ul>
-                      <li><span id="ms_ox_B">黒</span></li>
-                      <li><span id="ms_ox_E">緑</span></li>
-                      <li><span id="ms_ox_G">灰</span></li>
+                      <li><span onclick="subsymbolmode('ox_B');">黒</span></li>
+                      <li><span onclick="subsymbolmode('ox_E');">緑</span></li>
+                      <li><span onclick="subsymbolmode('ox_G');">灰</span></li>
                     </ul>
                   </li>
-                  <li><span id="ms_tri">直角三角形</span></li>
-                  <li><span id="ms_cross">十字</span></li>
+                  <li><span onclick="subsymbolmode('tri');">直角三角形</span></li>
+                  <li><span onclick="subsymbolmode('cross');">十字</span></li>
                 </ul>
               </li>
-              <li><span id="ms2">数字</span>
-                <ul id="mode_symbolul2">
-                  <li><span id="ms_inequality">不等号</span></li>
-                  <li><span id="ms_math">無限・計算</span></li>
-                  <li><span id="ms_degital">デジタル数字</span></li>
-                  <li><span id="ms_degital_f">デジタル(枠)</span></li>
-                  <li><span id="ms_dice">サイコロ</span></li>
-                  <li><span id="ms_pills">pills</span></li>
-                </ul>
-              </li>
-              <li><span id="ms3">矢印</span>
-                <ul id="mode_symbolul3">
-                  <li><span id="ms3_arrow_B">太</span>
-                    <ul>
-                      <li><span id="ms_arrow_B_B">黒</span></li>
-                      <li><span id="ms_arrow_B_G">灰</span></li>
-                      <li><span id="ms_arrow_B_W">白</span></li>
-                    </ul>
-                  </li>
-                  <li><span id="ms3_arrow_N">細</span>
-                    <ul>
-                      <li><span id="ms_arrow_N_B">黒</span></li>
-                      <li><span id="ms_arrow_N_G">灰</span></li>
-                      <li><span id="ms_arrow_N_W">白</span></li>
-                    </ul>
-                  </li>
-                  <li><span id="ms3_arrow_tri">三角形</span>
-                    <ul>
-                      <li><span id="ms_arrow_tri_B">黒</span></li>
-                      <li><span id="ms_arrow_tri_G">灰</span></li>
-                      <li><span id="ms_arrow_tri_W">白</span></li>
-                    </ul>
-                  </li>
-                  <li><span id="ms_arrow_Short">短太</span></li>
-                  <li><span id="ms_arrow_S">小</span></li>
-                  <li><span id="ms_arrow_cross">十字</span></li>
-                  <li><span id="ms_arrow_eight">八方</span></li>
-                </ul>
-              </li>
-              <li><span id="ms4">固有1</span>
+              <li><span>数字</span>
                 <ul id="mode_symbolul4">
-                  <li><span id="ms4_battleship">バトルシップ</span>
-                    <ul>
-                      <li><span id="ms_battleship_B">黒</span></li>
-                      <li><span id="ms_battleship_G">灰</span></li>
-                      <li><span id="ms_battleship_W">白</span></li>
-                    </ul>
-                  </li>
-                  <li><span id="ms_kakuro">カックロ</span></li>
-                  <li><span id="ms_tents">テント</span></li>
-                  <li><span id="ms_star">スター</span></li>
-                  <li><span id="ms_compass">コンパス</span></li>
-                  <li><span id="ms_sudokuetc">数独特殊記号</span></li>
+                  <li><span onclick="subsymbolmode('inequality');">不等号</span></li>
+                  <li><span onclick="subsymbolmode('math');">無限・計算</span></li>
+                  <li><span onclick="subsymbolmode('degital');">デジタル数字</span></li>
+                  <li><span onclick="subsymbolmode('degital_f');">デジタル(枠)</span></li>
+                  <li><span onclick="subsymbolmode('dice');">サイコロ</span></li>
+                  <li><span onclick="subsymbolmode('pills');">pills</span></li>
                 </ul>
               </li>
-              <li><span id="ms5">固有2</span>
-                <ul id="mode_symbolul5">
-                  <li><span id="ms_angleloop">鋭直鈍ループ</span></li>
-                  <li><span id="ms_firefly">ホタルビーム</span></li>
-                  <li><span id="ms_sun_moon">月か太陽</span></li>
-                  <li><span id="ms_pencils">ペンシルズ</span></li>
+              <li><span>矢印</span>
+                <ul id="mode_symbolul2">
+                  <li><span>太</span>
+                    <ul>
+                      <li><span onclick="subsymbolmode('arrow_B_B');">黒</span></li>
+                      <li><span onclick="subsymbolmode('arrow_B_G');">灰</span></li>
+                      <li><span onclick="subsymbolmode('arrow_B_W');">白</span></li>
+                    </ul>
+                  </li>
+                  <li><span>細</span>
+                    <ul>
+                      <li><span onclick="subsymbolmode('arrow_N_B');">黒</span></li>
+                      <li><span onclick="subsymbolmode('arrow_N_G');">灰</span></li>
+                      <li><span onclick="subsymbolmode('arrow_N_W');">白</span></li>
+                    </ul>
+                  </li>
+                  <li><span>三角形</span>
+                    <ul>
+                      <li><span onclick="subsymbolmode('arrow_tri_B');">黒</span></li>
+                      <li><span onclick="subsymbolmode('arrow_tri_G');">灰</span></li>
+                      <li><span onclick="subsymbolmode('arrow_tri_W');">白</span></li>
+                    </ul>
+                  </li>
+                  <li><span onclick="subsymbolmode('arrow_Short');">短太</span></li>
+                  <li><span onclick="subsymbolmode('arrow_S');">小</span></li>
+                  <li><span onclick="subsymbolmode('arrow_cross');">十字</span></li>
+                  <li><span onclick="subsymbolmode('arrow_eight');">八方</span></li>
+                </ul>
+              </li>
+              <li><span>固有1</span>
+                <ul id="mode_symbolul3">
+                  <li><span>バトルシップ</span>
+                    <ul>
+                      <li><span onclick="subsymbolmode('battleship_B');">黒</span></li>
+                      <li><span onclick="subsymbolmode('battleship_G');">灰</span></li>
+                      <li><span onclick="subsymbolmode('battleship_W');">白</span></li>
+                    </ul>
+                  </li>
+                  <li><span onclick="subsymbolmode('kakuro');">カックロ</span></li>
+                  <li><span onclick="subsymbolmode('tents');">テント</span></li>
+                  <li><span onclick="subsymbolmode('star');">スター</span></li>
+                  <li><span onclick="subsymbolmode('compass');">コンパス</span></li>
+                  <li><span onclick="subsymbolmode('sudokuetc');">数独特殊記号</span></li>
+                </ul>
+              </li>
+              <li><span>固有2</span>
+                <ul id="mode_symbolul4">
+                  <li><span onclick="subsymbolmode('angleloop');">鋭直鈍ループ</span></li>
+                  <li><span onclick="subsymbolmode('firefly');">ホタルビーム</span></li>
+                  <li><span onclick="subsymbolmode('sun_moon');">月か太陽</span></li>
+                  <li><span onclick="subsymbolmode('pencils');">ペンシルズ</span></li>
                 </ul>
               </li>
             </ul>
           </span>
 
           <span id="mode_special" style="display:none;">
-            <input type="radio" name="mode_special" value="thermo" id="special1" checked="checked">
-            <label for="special1" class="label" id="special1_lb">サーモ</label>
-            <input type="radio" name="mode_special" value="arrows" id="special2">
-            <label for="special2" class="label" id="special2_lb">アロー</label>
-            <input type="radio" name="mode_special" value="direction" id="special3">
-            <label for="special3" class="label" id="special3_lb">矢印</label>
+            <input type="radio" name="mode_special" value="thermo" id="special1" checked="checked" onclick="submode_check('mode_special');">
+            <label for="special1" class="label">サーモ</label>
+            <input type="radio" name="mode_special" value="arrows" id="special2" onclick="submode_check('mode_special');">
+            <label for="special2" class="label">アロー</label>
+            <input type="radio" name="mode_special" value="direction" id="special3" onclick="submode_check('mode_special');">
+            <label for="special3" class="label">矢印</label>
           </span>
         </div>
 
@@ -242,112 +242,112 @@
             <label class="label_mode">スタイル</label>
           </span>
           <span id="style_surface" style="display:'inline-box';">
-            <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
-            <label for="st_surface1" class="labelL" id="st_surface1_lb">濃灰</label>
-            <input type="radio" name="style_surface" value="3" id="st_surface2">
-            <label for="st_surface2" class="labelL" id="st_surface2_lb">薄灰</label>
-            <input type="radio" name="style_surface" value="4" id="st_surface3">
-            <label for="st_surface3" class="labelL" id="st_surface3_lb">黒</label>
-            <input type="radio" name="style_surface" value="2" id="st_surface4">
-            <label for="st_surface4" class="labelL" id="st_surface4_lb">緑</label>
-            <input type="radio" name="style_surface" value="5" id="st_surface5">
-            <label for="st_surface5" class="labelL" id="st_surface5_lb">水</label>
-            <input type="radio" name="style_surface" value="6" id="st_surface6">
-            <label for="st_surface6" class="labelL" id="st_surface6_lb">赤</label>
-            <input type="radio" name="style_surface" value="7" id="st_surface7">
-            <label for="st_surface7" class="labelL" id="st_surface7_lb">黄</label>
+            <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked" onclick="stylemode_check('style_surface');">
+            <label for="st_surface1" class="labelL">濃灰</label>
+            <input type="radio" name="style_surface" value="3" id="st_surface2" onclick="stylemode_check('style_surface');">
+            <label for="st_surface2" class="labelL">薄灰</label>
+            <input type="radio" name="style_surface" value="4" id="st_surface3" onclick="stylemode_check('style_surface');">
+            <label for="st_surface3" class="labelL">黒</label>
+            <input type="radio" name="style_surface" value="2" id="st_surface4" onclick="stylemode_check('style_surface');">
+            <label for="st_surface4" class="labelL">緑</label>
+            <input type="radio" name="style_surface" value="5" id="st_surface5" onclick="stylemode_check('style_surface');">
+            <label for="st_surface5" class="labelL">水</label>
+            <input type="radio" name="style_surface" value="6" id="st_surface6" onclick="stylemode_check('style_surface');">
+            <label for="st_surface6" class="labelL">赤</label>
+            <input type="radio" name="style_surface" value="7" id="st_surface7" onclick="stylemode_check('style_surface');">
+            <label for="st_surface7" class="labelL">黄</label>
           </span>
 
           <span id="style_line" style="display:none;">
-            <input type="radio" name="style_line" value="3" id="st_line4" checked="checked">
-            <label for="st_line4" class="labelL" id="st_line4_lb">緑</label>
-            <input type="radio" name="style_line" value="80" id="st_line7">
-            <label for="st_line7" class="labelL" id="st_line7_lb">細</label>
-            <input type="radio" name="style_line" value="2" id="st_line2">
-            <label for="st_line2" class="labelL" id="st_line2_lb">太</label>
-            <input type="radio" name="style_line" value="12" id="st_line3">
-            <label for="st_line3" class="labelL" id="st_line3_lb">点</label>
-            <input type="radio" name="style_line" value="13" id="st_line6">
-            <label for="st_line6" class="labelL" id="st_line6_lb">太点</label>
-            <input type="radio" name="style_line" value="5" id="st_line5">
-            <label for="st_line5" class="labelL" id="st_line5_lb">灰</label>
-            <input type="radio" name="style_line" value="30" id="st_line8">
-            <label for="st_line8" class="labelL" id="st_line8_lb">二重</label>
-            <input type="radio" name="style_line" value="40" id="st_line9">
-            <label for="st_line9" class="labelL" id="st_line9_lb">短</label>
+            <input type="radio" name="style_line" value="3" id="st_line4" checked="checked" onclick="stylemode_check('style_line');">
+            <label for="st_line4" class="labelL">緑</label>
+            <input type="radio" name="style_line" value="80" id="st_line7" onclick="stylemode_check('style_line');">
+            <label for="st_line7" class="labelL">細</label>
+            <input type="radio" name="style_line" value="2" id="st_line2" onclick="stylemode_check('style_line');">
+            <label for="st_line2" class="labelL">太</label>
+            <input type="radio" name="style_line" value="12" id="st_line3" onclick="stylemode_check('style_line');">
+            <label for="st_line3" class="labelL">点</label>
+            <input type="radio" name="style_line" value="13" id="st_line6" onclick="stylemode_check('style_line');">
+            <label for="st_line6" class="labelL">太点</label>
+            <input type="radio" name="style_line" value="5" id="st_line5" onclick="stylemode_check('style_line');">
+            <label for="st_line5" class="labelL">灰</label>
+            <input type="radio" name="style_line" value="30" id="st_line8" onclick="stylemode_check('style_line');">
+            <label for="st_line8" class="labelL">二重</label>
+            <input type="radio" name="style_line" value="40" id="st_line9" onclick="stylemode_check('style_line');">
+            <label for="st_line9" class="labelL">短</label>
           </span>
 
           <span id="style_lineE" style="display:none;">
-            <input type="radio" name="style_lineE" value="3" id="st_lineE4">
-            <label for="st_lineE4" class="labelL" id="st_lineE4_lb">緑</label>
-            <input type="radio" name="style_lineE" value="80" id="st_lineE7">
-            <label for="st_lineE7" class="labelL" id="st_lineE7_lb">細</label>
-            <input type="radio" name="style_lineE" value="2" id="st_lineE2" checked="checked">
-            <label for="st_lineE2" class="labelL" id="st_lineE2_lb">太</label>
-            <input type="radio" name="style_lineE" value="12" id="st_lineE3">
-            <label for="st_lineE3" class="labelL" id="st_lineE3_lb">点</label>
-            <input type="radio" name="style_lineE" value="13" id="st_lineE6">
-            <label for="st_lineE6" class="labelL" id="st_lineE6_lb">太点</label>
-            <input type="radio" name="style_lineE" value="14" id="st_lineE8">
-            <label for="st_lineE8" class="labelL" id="st_lineE8_lb">灰点</label>
-            <input type="radio" name="style_lineE" value="5" id="st_lineE5">
-            <label for="st_lineE5" class="labelL" id="st_lineE5_lb">灰</label>
+            <input type="radio" name="style_lineE" value="3" id="st_lineE4" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE4" class="labelL">緑</label>
+            <input type="radio" name="style_lineE" value="80" id="st_lineE7" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE7" class="labelL">細</label>
+            <input type="radio" name="style_lineE" value="2" id="st_lineE2" checked="checked" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE2" class="labelL">太</label>
+            <input type="radio" name="style_lineE" value="12" id="st_lineE3" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE3" class="labelL">点</label>
+            <input type="radio" name="style_lineE" value="13" id="st_lineE6" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE6" class="labelL">太点</label>
+            <input type="radio" name="style_lineE" value="14" id="st_lineE8" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE8" class="labelL">灰点</label>
+            <input type="radio" name="style_lineE" value="5" id="st_lineE5" onclick="stylemode_check('style_lineE');">
+            <label for="st_lineE5" class="labelL">灰</label>
           </span>
 
           <span id="style_wall" style="display:none;">
-            <input type="radio" name="style_wall" value="3" id="st_wall4" checked="checked">
-            <label for="st_wall4" class="labelL" id="st_wall4_lb">緑</label>
-            <input type="radio" name="style_wall" value="1" id="st_wall7">
-            <label for="st_wall7" class="labelL" id="st_wall7_lb">細</label>
-            <input type="radio" name="style_wall" value="2" id="st_wall2">
-            <label for="st_wall2" class="labelL" id="st_wall2_lb">太</label>
-            <input type="radio" name="style_wall" value="12" id="st_wall3">
-            <label for="st_wall3" class="labelL" id="st_wall3_lb">点</label>
-            <input type="radio" name="style_wall" value="13" id="st_wall6">
-            <label for="st_wall6" class="labelL" id="st_wall6_lb">太点</label>
-            <input type="radio" name="style_wall" value="14" id="st_wall9">
-            <label for="st_wall9" class="labelL" id="st_wall9_lb">灰点</label>
-            <input type="radio" name="style_wall" value="5" id="st_wall5">
-            <label for="st_wall5" class="labelL" id="st_wall5_lb">灰</label>
-            <input type="radio" name="style_wall" value="30" id="st_wall8">
-            <label for="st_wall8" class="labelL" id="st_wall8_lb">二重</label>
+            <input type="radio" name="style_wall" value="3" id="st_wall4" checked="checked" onclick="stylemode_check('style_wall');">
+            <label for="st_wall4" class="labelL">緑</label>
+            <input type="radio" name="style_wall" value="1" id="st_wall7" onclick="stylemode_check('style_wall');">
+            <label for="st_wall7" class="labelL">細</label>
+            <input type="radio" name="style_wall" value="2" id="st_wall2" onclick="stylemode_check('style_wall');">
+            <label for="st_wall2" class="labelL">太</label>
+            <input type="radio" name="style_wall" value="12" id="st_wall3" onclick="stylemode_check('style_wall');">
+            <label for="st_wall3" class="labelL">点</label>
+            <input type="radio" name="style_wall" value="13" id="st_wall6" onclick="stylemode_check('style_wall');">
+            <label for="st_wall6" class="labelL">太点</label>
+            <input type="radio" name="style_wall" value="14" id="st_wall9" onclick="stylemode_check('style_wall');">
+            <label for="st_wall9" class="labelL">灰点</label>
+            <input type="radio" name="style_wall" value="5" id="st_wall5" onclick="stylemode_check('style_wall');">
+            <label for="st_wall5" class="labelL">灰</label>
+            <input type="radio" name="style_wall" value="30" id="st_wall8" onclick="stylemode_check('style_wall');">
+            <label for="st_wall8" class="labelL">二重</label>
           </span>
 
           <span id="style_number" style="display:none;">
-            <input type="radio" name="style_number" value="1" id="st_number1" checked="checked">
-            <label for="st_number1" class="label" id="st_number1_lb">黒</label>
-            <input type="radio" name="style_number" value="2" id="st_number3">
-            <label for="st_number3" class="label" id="st_number3_lb">緑</label>
-            <input type="radio" name="style_number" value="3" id="st_number4">
-            <label for="st_number4" class="label" id="st_number4_lb">灰</label>
-            <input type="radio" name="style_number" value="4" id="st_number5">
-            <label for="st_number5" class="label" id="st_number5_lb">白</label>
-            <input type="radio" name="style_number" value="0" id="st_number2">
-            <label for="st_number2" class="label" id="st_number2_lb">白ぬき</label>
-            <input type="radio" name="style_number" value="5" id="st_number6">
-            <label for="st_number6" class="label" id="st_number6_lb">白フチ</label>
+            <input type="radio" name="style_number" value="1" id="st_num1" checked="checked" onclick="stylemode_check('style_number');">
+            <label for="st_num1" class="label">黒</label>
+            <input type="radio" name="style_number" value="2" id="st_num3" onclick="stylemode_check('style_number');">
+            <label for="st_num3" class="label">緑</label>
+            <input type="radio" name="style_number" value="3" id="st_num4" onclick="stylemode_check('style_number');">
+            <label for="st_num4" class="label">灰</label>
+            <input type="radio" name="style_number" value="4" id="st_num5" onclick="stylemode_check('style_number');">
+            <label for="st_num5" class="label">白</label>
+            <input type="radio" name="style_number" value="0" id="st_num2" onclick="stylemode_check('style_number');">
+            <label for="st_num2" class="label">白ぬき</label>
+            <input type="radio" name="style_number" value="5" id="st_num6" onclick="stylemode_check('style_number');">
+            <label for="st_num6" class="label">白フチ</label>
           </span>
 
           <span id="style_numberE" style="display:none;">
-            <input type="radio" name="style_numberE" value="1" id="st_numberE1" checked="checked">
-            <label for="st_numberE1" class="label" id="st_numberE1_lb">黒</label>
-            <input type="radio" name="style_numberE" value="2" id="st_numberE3">
-            <label for="st_numberE3" class="label" id="st_numberE3_lb">緑</label>
-            <input type="radio" name="style_numberE" value="3" id="st_numberE4">
-            <label for="st_numberE4" class="label" id="st_numberE4_lb">灰</label>
-            <input type="radio" name="style_numberE" value="4" id="st_numberE5">
-            <label for="st_numberE5" class="label" id="st_numberE5_lb">白</label>
-            <input type="radio" name="style_numberE" value="0" id="st_numberE2">
-            <label for="st_numberE2" class="label" id="st_numberE2_lb">白ぬき</label>
-            <input type="radio" name="style_numberE" value="5" id="st_numberE6">
-            <label for="st_numberE6" class="label" id="st_numberE6_lb">白フチ</label>
+            <input type="radio" name="style_numberE" value="1" id="st_numE1" checked="checked" onclick="stylemode_check('style_numberE');">
+            <label for="st_numE1" class="label">黒</label>
+            <input type="radio" name="style_numberE" value="2" id="st_numE3" onclick="stylemode_check('style_numberE');">
+            <label for="st_numE3" class="label">緑</label>
+            <input type="radio" name="style_numberE" value="3" id="st_numE4" onclick="stylemode_check('style_numberE');">
+            <label for="st_numE4" class="label">灰</label>
+            <input type="radio" name="style_numberE" value="4" id="st_numE5" onclick="stylemode_check('style_numberE');">
+            <label for="st_numE5" class="label">白</label>
+            <input type="radio" name="style_numberE" value="0" id="st_numE2" onclick="stylemode_check('style_numberE');">
+            <label for="st_numE2" class="label">白ぬき</label>
+            <input type="radio" name="style_numberE" value="5" id="st_numE6" onclick="stylemode_check('style_numberE');">
+            <label for="st_numE6" class="label">白フチ</label>
           </span>
 
           <span id="style_symbol" style="display:none;">
-            <input type="radio" name="style_symbolL" value="1" id="st_symbolL1">
-            <label for="st_symbolL1" class="label" id="st_symbolL1_lb">線-奥</label>
-            <input type="radio" name="style_symbolL" value="2" id="st_symbolL2" checked="checked">
-            <label for="st_symbolL2" class="label" id="st_symbolL2_lb">線-前</label>
+            <input type="radio" name="style_symbolL" value="1" id="st_symL1" onclick="stylemode_check('style_symbolL');">
+            <label for="st_symL1" class="label">線-奥</label>
+            <input type="radio" name="style_symbolL" value="2" id="st_symL2" checked="checked" onclick="stylemode_check('style_symbolL');">
+            <label for="st_symL2" class="label">線-前</label>
             <span class="symbolmode_display">
               <span id="panel_button0" class="label">　　　</span>
               <span id="panel_button0" class="label">選択中：</span>
@@ -356,10 +356,10 @@
           </span>
 
           <span id="style_cage" style="display:none;">
-            <input type="radio" name="style_cage" value="10" id="st_cage1" checked="checked">
-            <label for="st_cage1" class="label" id="st_cage1_lb">点線</label>
-            <input type="radio" name="style_cage" value="7" id="st_cage2">
-            <label for="st_cage2" class="label" id="st_cage2_lb">灰線</label>
+            <input type="radio" name="style_cage" value="10" id="st_cage1" checked="checked" onclick="stylemode_check('style_cage');">
+            <label for="st_cage1" class="label">点線</label>
+            <input type="radio" name="style_cage" value="7" id="st_cage2" onclick="stylemode_check('style_cage');">
+            <label for="st_cage2" class="label">灰線</label>
           </span>
         </div>
       </div>
@@ -367,26 +367,70 @@
 
     <div id="dvique" class="dvique"></div>
 
-    <div id="bottom_button">
-      <input type="button" id="tb_undo" value="戻" class="button"/>
-      <input type="button" id="tb_redo" value="進" class="button"/>
-      <input type="button" id="tb_reset" value="選択消去" class="button"/>
-      <input type="button" id="tb_delete" value="問題・解答消去" class="button"/>
+    <div id="top_button">
+      <input type="button" value="戻" class="button" onclick="undo();"/>
+      <input type="button" value="進" class="button" onclick="redo();"/>
+      <input type="button" value="選択消去" class="button" onclick="ResetCheck();"/>
+      <input type="button" value="問題・解答消去" class="button" id="button_delete" onclick="DeleteCheck();"/>
     </div>
 
-    <div id="float-key" onclick="">
-      <div class="drag-and-drop" id="float-key-header"><h4 id="float-key-header-lb">panel</h4></div>
+    <div id="float-key">
+      <div class="drag-and-drop" id="float-key-header"><h4>panel</h4></div>
       <div id="float-key-body">
         <div id="float-key-menu">
           <ul class="panel_menu">
-            <li><span id="panel_1"><label for="panel_1" id="panel_1_lbmenu" class="label_menu"> 1 </label></span></li>
-            <li><span id="panel_A"><label for="panel_A" id="panel_A_lbmenu" class="label_menu">A</label></span></li>
-            <li><span id="panel_!"><label for="panel_!" id="panel_!_lbmenu" class="label_menu">!</label></span></li>
-            <li><span id="panel_ja_K"><label for="panel_ja_K" id="panel_ja_K_lbmenu" class="label_menu">ア</label></span></li>
+            <li><span onclick="panel_mode_set('number');" id="panel_1"><label for="panel_1" class="label_menu"> 1 </label></span></li>
+            <li><span onclick="panel_mode_set('alphabet');" id="panel_A"><label for="panel_A" class="label_menu">A</label></span></li>
+            <li><span onclick="panel_mode_set('ja_K');" id="panel_ja_K"><label for="panel_ja_K" class="label_menu">ア</label></span></li>
           </ul>
         </div>
         <div id="float-key-board">
           <canvas id="float-canvas" class="float-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-save" class="modal">
+      <div id="modal-save-content">
+        <div id="modal-header">
+          <h3 id="savetexttitle">アドレス出力</h3>
+        </div>
+        <div id="nb_button">
+          <input type="button" id="address_edit" value="編集アドレス" onclick="savetext_edit();"/>
+          <input type="button" id="address_solve" value="出題用アドレス" onclick="savetext_solve();"/>
+        </div>
+        <div id="modal-save-body">
+          <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
+          <span>ファイル名：<input type="text" value="Save.txt" id="savetextname"></span>
+        </div>
+        <div id="nb_button">
+          <input type="button" id="closeBtn" value="コピー" onclick="savetext_copy();"/>
+          <input type="button" id="closeBtn" value="ダウンロード" onclick="savetext_download();"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-save').style.display='none';"/>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-image" class="modal">
+      <div id="modal-image-content">
+        <div id="modal-header">
+          <h3 id="saveimagetitle">画像保存</h3>
+        </div>
+
+        <div id="modal-image-body">
+          <h4 id="div_all"><label class="label_imagespace">　余白：</label></h4>
+          <input type="radio" name="nb_margin" value="1" id="nb_margin1" checked="checked">
+          <label for="nb_margin1" class="label">あり</label>
+          <input type="radio" name="nb_margin" value="2" id="nb_margin2">
+          <label for="nb_margin2" class="label">なし</label>
+          <br><br>
+          <span>ファイル名：<input type="text" value="Image.png" id="saveimagename"></span>
+        </div>
+        <br>
+        <div id="nb_button">
+          <input type="button" id="closeBtn" value="別ウィンドウ" onclick="saveimage_window();"/>
+          <input type="button" id="closeBtn" value="ダウンロード" onclick="saveimage_download();"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-image').style.display='none';"/>
         </div>
       </div>
     </div>
@@ -428,28 +472,28 @@
         <br><br>
         <h4 id="div_all"><label class="label_nb">グリッド：</label></h4>
         <input type="radio" name="nb_grid" value="1" id="nb_grid1" checked="checked">
-        <label for="nb_grid1" class="label" id="nb_grid1_lb">実線</label>
+        <label for="nb_grid1" class="label">実線</label>
         <input type="radio" name="nb_grid" value="2" id="nb_grid2">
-        <label for="nb_grid2" class="label" id="nb_grid2_lb">点線</label>
+        <label for="nb_grid2" class="label">点線</label>
         <input type="radio" name="nb_grid" value="3" id="nb_grid3">
-        <label for="nb_grid3" class="label" id="nb_grid3_lb">なし</label>
+        <label for="nb_grid3" class="label">なし</label>
         <br>
         <h4 id="div_all"><label class="label_nb">　格子点：</label></h4>
         <input type="radio" name="nb_lat" value="1" id="nb_lat1">
-        <label for="nb_lat1" class="label" id="nb_lat1_lb">あり</label>
+        <label for="nb_lat1" class="label">あり</label>
         <input type="radio" name="nb_lat" value="2" id="nb_lat2" checked="checked">
-        <label for="nb_lat2" class="label" id="nb_lat2_lb">なし</label>
+        <label for="nb_lat2" class="label">なし</label>
         <br>
         <h4 id="div_all"><label class="label_nb">　　外枠：</label></h4>
         <input type="radio" name="nb_out" value="1" id="nb_out1" checked="checked">
-        <label for="nb_out1" class="label" id="nb_out1_lb">あり</label>
+        <label for="nb_out1" class="label">あり</label>
         <input type="radio" name="nb_out" value="2" id="nb_out2">
-        <label for="nb_out2" class="label" id="nb_out2_lb">なし</label>
+        <label for="nb_out2" class="label">なし</label>
         <br><br>
-        <div class="nb_button">
-          <input type="button" id="closeBtn_nb1" value="作成"/>
-          <input type="button" id="closeBtn_nb2" value="枠変更"/>
-          <input type="button" id="closeBtn_nb3" value="キャンセル"/>
+        <div id="nb_button">
+          <input type="button" id="closeBtn" value="作成" onclick="CreateCheck();"/>
+          <input type="button" id="closeBtn" value="枠変更" onclick="newgrid();"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal').style.display='none';"/>
         </div>
       </div>
     </div>
@@ -464,59 +508,12 @@
           <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="36" min="10" max="60" step="1">
         </span>
         <br>
-        <div class="nb_button">
-          <input type="button" id="closeBtn_size1" value="枠変更"/>
-          <input type="button" id="closeBtn_size2" value="キャンセル"/>
+        <div id="nb_button">
+          <input type="button" id="closeBtn" value="枠変更" onclick="newgrid_r();"/>
+          <input type="button" id="closeBtn" value="キャンセル" onclick="document.getElementById('modal-newsize').style.display='none';"/>
         </div>
       </div>
     </div>
-
-    <div id="modal-image" class="modal">
-      <div id="modal-image-content">
-        <div id="modal-header">
-          <h3 id="saveimagetitle">画像保存</h3>
-        </div>
-
-        <div id="modal-image-body">
-          <h4 id="div_all"><label class="label_imagespace">　余白：</label></h4>
-          <input type="radio" name="nb_margin" value="1" id="nb_margin1" checked="checked">
-          <label for="nb_margin1" class="label" id="nb_margin1_lb">あり</label>
-          <input type="radio" name="nb_margin" value="2" id="nb_margin2">
-          <label for="nb_margin2" class="label"id="nb_margin2_lb">なし</label>
-          <br><br>
-          <span>ファイル名：<input type="text" value="Image.png" id="saveimagename"></span>
-        </div>
-        <br>
-        <div class="nb_button">
-          <input type="button" id="closeBtn_image1" value="別ウィンドウ" onclick="saveimage_window();"/>
-          <input type="button" id="closeBtn_image2" value="ダウンロード"/>
-          <input type="button" id="closeBtn_image3" value="キャンセル"/>
-        </div>
-      </div>
-    </div>
-
-    <div id="modal-save" class="modal">
-      <div id="modal-save-content">
-        <div id="modal-header">
-          <h3 id="savetexttitle">アドレス出力</h3>
-        </div>
-        <div class="nb_button">
-          <input type="button" id="address_edit" value="編集アドレス"/>
-          <input type="button" id="address_solve" value="出題用アドレス"/>
-        </div>
-        <div id="modal-save-body">
-          <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
-          <span>ファイル名：<input type="text" value="Save.txt" id="savetextname"></span>
-        </div>
-        <div class="nb_button">
-          <input type="button" id="closeBtn_save1" value="コピー"/>
-          <input type="button" id="closeBtn_save2" value="ダウンロード"/>
-          <input type="button" id="closeBtn_save3" value="開く" onclick="savetext_window();"/>
-          <input type="button" id="closeBtn_save4" value="キャンセル"/>
-        </div>
-      </div>
-    </div>
-
 
   </body>
 </html>
