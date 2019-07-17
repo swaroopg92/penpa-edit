@@ -414,11 +414,11 @@ function window_click(e) {
     case "panel_button":
       panel_onoff();
       e.preventDefault(); break;
-    case "pu_q_lb":
+    case "pu_q_label":
       document.getElementById("pu_q").checked = true;
       mode_qa();
       e.preventDefault(); break;
-    case "pu_a_lb":
+    case "pu_a_label":
       document.getElementById("pu_a").checked = true;
       mode_qa();
       e.preventDefault(); break;
