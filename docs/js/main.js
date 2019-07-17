@@ -506,7 +506,7 @@ function window_click(e) {
   }else{
     switch(e.target.id){
       //preventbuttonclick
-      case "edit_button":
+      /*case "edit_button":
         e.preventDefault(); break;
       case "panel_button0":
         e.preventDefault(); break;
@@ -523,7 +523,7 @@ function window_click(e) {
       case "sub_txt":
         e.preventDefault(); break;
       case "style_txt":
-        e.preventDefault(); break;
+        e.preventDefault(); break;*/
     }
   }
 }
