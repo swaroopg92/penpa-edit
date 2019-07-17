@@ -569,7 +569,7 @@ function maketext_solve(){
 function load(){
   var urlParam = location.search.substring(1);
   if(urlParam){
-    try{
+    //try{
       var param = urlParam.split('&');
       var paramArray = [];
 
@@ -586,6 +586,7 @@ function load(){
       var plain = inflate.decompress();
       var rtext = new TextDecoder().decode(plain);
       rtext = rtext.split("\n");
+	  console.log(rtext);
 
       //初期設定を読み込み
       var rtext_para = rtext[0].split(',');
@@ -656,9 +657,9 @@ function load(){
         }
       }
       redraw();
-    }catch(error){
-      alert("不正なアドレスです");
-    }
+   // }catch(error){
+   //   alert("不正なアドレスです");
+   // }
   }
 }
 
