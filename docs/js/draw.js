@@ -1227,7 +1227,6 @@ function draw_symbol(ctx,x,y,num,sym){
       draw_inequality(ctx,num,x,y);
       break;
     case "math":
-      set_font_style(ctx,0.8*pu.sizex.toString(10),1);
       draw_math(ctx,num,x,y+0.3*pu.sizey);
       break;
     case "degital":
@@ -1633,13 +1632,15 @@ function draw_inequality(ctx,num,x,y){
 }
 
 function draw_math(ctx,num,x,y){
+  set_font_style(ctx,0.8*pu.sizex.toString(10),1);
   switch(num){
     case 1:
       ctx.font = 0.8*pu.sizex + "px sans-serif";
-      ctx.fillText("\u{221E}",x,y-0.05*pu.sizey);
+      ctx.fillText("\u{221E}",x,y-0.02*pu.sizey);
       break;
     case 2:
-      ctx.fillText("＋",x,y);
+      set_font_style(ctx,0.7*pu.sizex.toString(10),1);
+      ctx.fillText("＋",x,y-0.07*pu.sizey);
       break;
     case 3:
       ctx.fillText("－",x,y);

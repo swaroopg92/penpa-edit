@@ -17,12 +17,12 @@
       <h3 id="title">ペンパくん　編集モード</h3>
 
       <div id="top_button">
-        <input type="button" id="newboard" value="新規作成・枠変更" class="button"/>
-        <input type="button" id="newsize" value="サイズ変更" class="button" style="display:none;"/>
-        <input type="button" id="saveimage" value="画像保存" class="button"/>
-        <input type="button" id="savetext" value="アドレス出力" class="button"/>
+        <input type="button" id="newboard" value="新規作成・枠変更" class="button" onclick="newboard();"/>
+        <input type="button" id="newsize" value="サイズ変更" class="button" style="display:none;" onclick="newsize();"/>
+        <input type="button" id="download_button" value="画像保存" class="button" onclick="saveimage();"/>
+        <input type="button" id="download_button_T" value="アドレス出力" class="button"  onclick="savetext();"/>
         <a id="download_link"></a>
-        <input type="button" id="duplicate" value="複製" class="button"/>
+        <input type="button" value="複製" class="button" onclick="duplicate();"/>
       </div>
 
       <div id="buttons">
@@ -122,7 +122,7 @@
           </span>
 
           <span id="mode_symbol" class="mode_symbol" style="display:none;">
-            <ul class="nav">
+            <ul class="nav" ontouchstart="">
               <li><span>図形</span>
                 <ul id="mode_symbolul1">
                   <li><span>円</span>
@@ -367,11 +367,11 @@
 
     <div id="dvique" class="dvique"></div>
 
-    <div id="bottom_button">
-      <input type="button" id="tb_undo" value="戻" class="button"/>
-      <input type="button" id="tb_redo" value="進" class="button"/>
-      <input type="button" id="tb_reset" value="選択消去" class="button"/>
-      <input type="button" id="tb_delete" value="問題・解答消去" class="button"/>
+    <div id="top_button">
+      <input type="button" value="戻" class="button" onclick="undo();"/>
+      <input type="button" value="進" class="button" onclick="redo();"/>
+      <input type="button" value="選択消去" class="button" onclick="ResetCheck();"/>
+      <input type="button" value="問題・解答消去" class="button" id="button_delete" onclick="DeleteCheck();"/>
     </div>
 
     <div id="float-key">
