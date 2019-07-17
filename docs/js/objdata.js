@@ -585,7 +585,7 @@ function load(){
       var inflate = new Zlib.RawInflate(ab);
       var plain = inflate.decompress();
       var rtext = new TextDecoder().decode(plain);
-	  console.log(rtext);
+      //console.log(rtext);
       rtext = rtext.split("\n");
 	
 
