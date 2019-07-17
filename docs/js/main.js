@@ -529,7 +529,7 @@ function window_click(e) {
       case "style_txt":
         e.preventDefault(); break;
     }
-  }
+  }*/
 }
 
 //panel(drag_window)
