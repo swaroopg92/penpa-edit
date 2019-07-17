@@ -12,8 +12,15 @@ window.addEventListener("beforeunload", function(eve){
     eve.returnValue = "ページを移動します";
 },{passive: false});
 
-var ondown_key = ("ontouchstart" in window) ? "touchstart" : "mousedown";
-console.log(ondown_key)
+var ua = navigator.userAgent;
+if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
+    ondown_key = "touchstart";
+} else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0) {
+    ondown_key = "touchstart";
+} else {
+    ondown_key = "mousedown";
+}
+
 var checkms;//hover event用一時変数
 
 //canvas
@@ -247,7 +254,7 @@ function calc_num(x,y){
 window.addEventListener(ondown_key, window_click, {passive: false});
 
 function window_click(e) {
-  console.log(e.target.id);
+  //console.log(e.target.id);
   //modalwindow
   if (e.target.className === "modal") {
     document.getElementById(e.target.id).style.display = 'none';
