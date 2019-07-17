@@ -302,6 +302,33 @@ function draw_panel() {
           ctxf.fillText(cont[i].toString(),(i%nxf+0.45)*(sizef+spacef),((i/nxf|0)+0.7)*(sizef+spacef));
         }
         break;
+      case "key_symbol":
+        nxf = 6;
+        nyf = 5;
+        canvasf.width=((sizef+spacef)*nxf-spacef)*pu.resol;
+        canvasf.height=((sizef+spacef)*nyf-spacef)*pu.resol;
+        ctxf.scale(pu.resol,pu.resol);
+        canvasf.style.width = ((sizef+spacef)*nxf-spacef).toString()+"px";
+        canvasf.style.height = ((sizef+spacef)*nyf-spacef).toString()+"px";
+
+        fkh.style.width = ((sizef+spacef)*nxf+spacef).toString()+"px";
+        fkb.style.width = ((sizef+spacef)*nxf+spacef).toString()+"px";
+        fkb.style.height = ((sizef+spacef)*nyf+spacef+45).toString()+"px";
+        fkb.style.paddingTop = "0px";
+        fkb.style.display = "block";
+        fkm.style.display = "flex";
+        var str = "!?#$%&()[]+－×＊/÷＝\u{221E}^<>～|@;:,._   "
+        var cont = str.split("");
+        set_surface_style(ctxf,99);
+        for(var i = 0 ; i < nxf*nyf ; i++){
+            ctxf.fillRect((i%nxf)*(sizef+spacef),(i/nxf|0)*(sizef+spacef), sizef, sizef);
+        }
+        for(var i = 0 ; i < nxf*nyf ; i++){
+          set_font_style(ctxf,0.8*sizef.toString(10),pu.edit_stylemode);
+          ctxf.strokeText(cont[i].toString(),(i%nxf+0.45)*(sizef+spacef),((i/nxf|0)+0.7)*(sizef+spacef));
+          ctxf.fillText(cont[i].toString(),(i%nxf+0.45)*(sizef+spacef),((i/nxf|0)+0.7)*(sizef+spacef));
+        }
+        break;
       case "ja_K":
       nxf = 10;
       nyf = 9;
@@ -388,41 +415,6 @@ function makecont(n){
   }
   return a;
 }
-
-
-/*unction draw_panelA() {
-  var canvasf = document.getElementById("float-canvas");
-  var ctxf = canvasf.getContext("2d");
-  var spacef = 3;
-  var sizef = Math.min(45,Math.max(pu.sizex,28));
-  var nxf = 6;
-  var nyf = 5;
-
-  canvasf.width=((sizef+spacef)*nxf-spacef)*pu.resol;
-  canvasf.height=((sizef+spacef)*nyf-spacef)*pu.resol;
-  ctxf.scale(pu.resol,pu.resol);
-  canvasf.style.width = ((sizef+spacef)*nxf-spacef).toString()+"px";
-  canvasf.style.height = ((sizef+spacef)*nyf-spacef).toString()+"px";
-
-  var fkh = document.getElementById("float-key-header");
-  var fkb = document.getElementById("float-key-body");
-  fkh.style.width = ((sizef+spacef)*nxf+spacef).toString()+"px";
-  fkb.style.width = ((sizef+spacef)*nxf+spacef).toString()+"px";
-  fkb.style.height = ((sizef+spacef)*nyf+spacef+45).toString()+"px";
-  fkb.style.display = "block";
-
-  var cont = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O",
-  "P","Q","R","S","T","U","V","W","X","Y","Z","?","_","",""];
-  set_surface_style(ctxf,99);
-  for(var i = 0 ; i < nxf*nyf ; i++){
-      ctxf.fillRect((i%nxf)*(sizef+spacef),(i/nxf|0)*(sizef+spacef), sizef, sizef);
-  }
-  for(var i = 0 ; i < nxf*nyf ; i++){
-    set_font_style(ctxf,0.8*sizef.toString(10),pu.edit_stylemode);
-    ctxf.strokeText(cont[i].toString(),(i%nxf+0.45)*(sizef+spacef),((i/nxf|0)+0.7)*(sizef+spacef));
-    ctxf.fillText(cont[i].toString(),(i%nxf+0.45)*(sizef+spacef),((i/nxf|0)+0.7)*(sizef+spacef));
-  }
-}*/
 
 function draw(){
   var canvas = document.getElementById("canvas");
@@ -1227,6 +1219,7 @@ function draw_symbol(ctx,x,y,num,sym){
       draw_inequality(ctx,num,x,y);
       break;
     case "math":
+      set_font_style(ctx,0.8*pu.sizex.toString(10),1);
       draw_math(ctx,num,x,y+0.3*pu.sizey);
       break;
     case "degital":
@@ -1632,15 +1625,13 @@ function draw_inequality(ctx,num,x,y){
 }
 
 function draw_math(ctx,num,x,y){
-  set_font_style(ctx,0.8*pu.sizex.toString(10),1);
   switch(num){
     case 1:
       ctx.font = 0.8*pu.sizex + "px sans-serif";
-      ctx.fillText("\u{221E}",x,y-0.02*pu.sizey);
+      ctx.fillText("\u{221E}",x,y-0.05*pu.sizey);
       break;
     case 2:
-      set_font_style(ctx,0.7*pu.sizex.toString(10),1);
-      ctx.fillText("＋",x,y-0.07*pu.sizey);
+      ctx.fillText("＋",x,y);
       break;
     case 3:
       ctx.fillText("－",x,y);
@@ -2084,6 +2075,20 @@ function draw_compass(ctx,num,x,y){
       var r = 0.33;
       ctx.setLineDash([]);
       ctx.strokeStyle = "#000";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x-r*pu.sizex,y-r*pu.sizey);
+      ctx.lineTo(x+r*pu.sizex,y+r*pu.sizey);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x+r*pu.sizex,y-r*pu.sizey);
+      ctx.lineTo(x-r*pu.sizex,y+r*pu.sizey);
+      ctx.stroke();
+      break;
+    case 3:
+      var r = 0.5;
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "#fff";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x-r*pu.sizex,y-r*pu.sizey);
