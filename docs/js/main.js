@@ -21,7 +21,7 @@ if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile'
     ondown_key = "mousedown";
 }
 
-var checkms;//hover event用一時変数
+var checkms = 0;//hover event用一時変数
 
 //canvas
 //canvas.addEventListener('mousedown', onDown, {passive: false});
@@ -503,33 +503,11 @@ function window_click(e) {
     //シンボルホバーetc
   }else if(e.target.id.slice(0,2)==="ms"){
     checkms = 1;
-    return;  //preventDefault回避
+    return;
   }else if(checkms === 1){
     checkms = 0;
     return;
-  }/*else{
-    switch(e.target.id){
-      //preventbuttonclick
-      case "edit_button":
-        e.preventDefault(); break;
-      case "panel_button0":
-        e.preventDefault(); break;
-      case "mode_button":
-        e.preventDefault(); break;
-      case "submode_button":
-        e.preventDefault(); break;
-      case "stylemode_button":
-        e.preventDefault(); break;
-      case "edit_txt":
-        e.preventDefault(); break;
-      case "mode_txt":
-        e.preventDefault(); break;
-      case "sub_txt":
-        e.preventDefault(); break;
-      case "style_txt":
-        e.preventDefault(); break;
-    }
-  }*/
+  }
 }
 
 //panel(drag_window)
