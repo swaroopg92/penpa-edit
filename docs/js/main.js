@@ -264,6 +264,9 @@ function window_click(e) {
     //canvas
     case "canvas":
       onDown(e);
+      if(checkms === 0){
+        e.preventDefault();
+      }
       break;
     //top/bottom button
     case "newboard":
