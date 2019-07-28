@@ -28,7 +28,6 @@ var checkms = 0;//hover event用一時変数
 //canvas.addEventListener('touchstart', onDown, {passive: false});
 canvas.addEventListener('mouseup', onUp, {passive: false});
 canvas.addEventListener('touchend', onUp, {passive: false});
-//canvas.addEventListener('click', onClick, {passive: false});
 canvas.addEventListener('mousemove', onMove, {passive: false});
 canvas.addEventListener('touchmove', onMove, {passive: false});
 canvas.addEventListener('mouseover', onOver, {passive: false});
@@ -193,15 +192,20 @@ function calc_num(x,y){
       }
       break;
     case "lineE":
-      numx = Math.floor(x/pu.sizex+0.5);
-      numy = Math.floor(y/pu.sizey+0.5);
-      if (pu.edit_submode === "2"){
-        dicx = x/pu.sizex+0.5-Math.floor(x/pu.sizex+0.5);
-        dicy = y/pu.sizey+0.5-Math.floor(y/pu.sizey+0.5);
-        if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
-          pu.lineD_edge = 1;
-        }else{
-          pu.lineD_edge = 0;
+      if (pu.edit_submode === "4"){
+        numx = Math.floor(x/pu.sizex*2+0.5);
+        numy = Math.floor(y/pu.sizey*2+0.5);
+      }else{
+        numx = Math.floor(x/pu.sizex+0.5);
+        numy = Math.floor(y/pu.sizey+0.5);
+        if (pu.edit_submode === "2"){
+          dicx = x/pu.sizex+0.5-Math.floor(x/pu.sizex+0.5);
+          dicy = y/pu.sizey+0.5-Math.floor(y/pu.sizey+0.5);
+          if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
+            pu.lineD_edge = 1;
+          }else{
+            pu.lineD_edge = 0;
+          }
         }
       }
       break;
@@ -264,9 +268,6 @@ function window_click(e) {
     //canvas
     case "canvas":
       onDown(e);
-      if(checkms === 0){
-        e.preventDefault();
-      }
       break;
     //top/bottom button
     case "newboard":
@@ -470,29 +471,13 @@ function window_click(e) {
       mode_special();
       e.preventDefault(); break;
   }
-  switch(e.target.id.slice(0,-4)){
-    case "line":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      submode_check('mode_'+e.target.id.slice(0,-4));
-      e.preventDefault(); break;
-    case "lineE":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      submode_check('mode_'+e.target.id.slice(0,-4));
-      e.preventDefault(); break;
-    case "number":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      submode_check('mode_'+e.target.id.slice(0,-4));
-      e.preventDefault(); break;
-    case "numberE":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      submode_check('mode_'+e.target.id.slice(0,-4));
-      e.preventDefault(); break;
-    case "special":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      submode_check('mode_'+e.target.id.slice(0,-4));
-      e.preventDefault(); break;
-    }
-    //スタイル
+  //サブモード
+  if(e.target.id.slice(0,4)==="sub_"){
+    document.getElementById(e.target.id.slice(0,-3)).checked = true;
+    submode_check('mode_'+e.target.id.slice(4,-4));
+    e.preventDefault();
+  }
+    //スタイルモード
   if(e.target.id.slice(0,3)==="st_"){
     document.getElementById(e.target.id.slice(0,-3)).checked = true;
     stylemode_check('style_'+e.target.id.slice(3,-4));
@@ -584,8 +569,9 @@ function window_click(e) {
         var xf = event.pageX-(float_canvas.getBoundingClientRect().x-document.documentElement.getBoundingClientRect().left);
         var yf = event.pageY-(float_canvas.getBoundingClientRect().y-document.documentElement.getBoundingClientRect().top);
       }
-      var numxf = Math.floor(xf/(pu.sizex+3));
-      var numyf = Math.floor(yf/(pu.sizey+3));
+      var sizef = Math.min(45,Math.max(pu.sizex,28));
+      var numxf = Math.floor(xf/(sizef+3));
+      var numyf = Math.floor(yf/(sizef+3));
 
       if(pu.panelmode === "number"||pu.edit_mode === "symbol"||pu.edit_mode === "symbolE"){
         var cont = [1,2,3,4,5,6,7,8,9,0,"?",""];

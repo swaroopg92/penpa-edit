@@ -8,7 +8,7 @@ class Puzzle {
     this.sizey = size;
     this.spacex = size*0.5+0.5;
     this.spacey = size*0.5+0.5;
-    this.resol = 3;
+    this.resol = 4;
 
     //描画位置
     this.lastx = -1;
@@ -80,6 +80,7 @@ class Puzzle {
     this.arr.thermo = [];
     this.arr.arrows =[];
     this.arr.direction = [];
+    this.arr.squareframe = [];
   }
 }
 
@@ -117,7 +118,7 @@ Stack.prototype.toString = function() {
 function undo(){
   var a = pu.command_undo.pop();/*a[0]:list_name,a[1]:number,a[2]:value*/
   if(a){
-    if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction") && a[1] === -1){
+    if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe") && a[1] === -1){
       if(pu.arr[a[0]].length > 0){
         pu.command_redo.push([a[0],a[1],pu.arr[a[0]].pop()]);
       }
@@ -140,7 +141,7 @@ function undo(){
 function redo(){
   var a = pu.command_redo.pop();
   if(a){
-    if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction") && a[1] === -1){
+    if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe") && a[1] === -1){
         pu.command_undo.push([a[0],a[1],null]);
         pu.arr[a[0]].push(a[2]);
     }else{
@@ -160,7 +161,7 @@ function redo(){
 }
 
 function record(arr,num){
-  if((arr === "thermo"||arr === "arrows"||arr==="direction") && num===-1){
+  if((arr === "thermo"||arr === "arrows"||arr==="direction"||arr==="squareframe") && num===-1){
     pu.command_undo.push([arr,num,null]);
   }else{
     if (pu.arr[arr][num]){
@@ -371,7 +372,7 @@ function resizecanvas(){
   var canvas = document.getElementById("canvas");
 
   var mode = pu.edit_mode;
-  pu.edit_mode = "surface"; //枠線削除用
+  pu.edit_mode = "surface"; //選択枠削除用
   if (document.getElementById("nb_margin2").checked){
     pu_q.spacex = 1.5;
     pu_q.spacey = 1.5;
@@ -380,7 +381,7 @@ function resizecanvas(){
     canvasset(pu_q);
   }
   redraw();
-  var width = canvas.width*0.5;
+  var width = canvas.width*1.5/pu.resol;
   resizedCanvas.width = width.toString();
   resizedCanvas.height = (width*canvas.height/canvas.width).toString();
 
@@ -734,11 +735,24 @@ function reset(){
       }
       break;
     case "lineE":
-      pu.arr.lineHE = {};
-      pu.arr.lineVE = {};
-      pu.arr.lineDaE = {};
-      pu.arr.lineDbE = {};
-      pu.arr.freelineE = {};
+      if(pu.edit_submode != "4"){
+        pu.arr.lineHE = {};
+        pu.arr.lineVE = {};
+        pu.arr.lineDaE = {};
+        pu.arr.lineDbE = {};
+        pu.arr.freelineE = {};
+      }else{
+        for(i in pu.arr.lineHE){
+          if(pu.arr.lineHE[i]===98){
+            delete pu.arr.lineHE[i];
+          }
+        }
+        for(i in pu.arr.lineVE){
+          if(pu.arr.lineVE[i]===98){
+            delete pu.arr.lineVE[i];
+          }
+        }
+      }
       break;
     case "wall":
       pu.arr.wallH = {};
@@ -895,7 +909,6 @@ function submode_check(name){
   		break ;
   	}
   }
-  redraw();   //cursol位置更新用
 }
 
 function stylemode_check(name){
@@ -982,6 +995,7 @@ function mode_reset(){
 //
 /////////////////////////////
 function key_arrow(key_code){
+    console.log(pu.edit_mode,pu.edit_submode);
   if (pu.edit_mode === "number" || pu.edit_mode === "symbol"){
     if (pu.edit_mode === "number" && pu.edit_submode === "3"){
       switch(key_code){
@@ -1288,7 +1302,7 @@ function key_shiftspace(){
 function key_backspace(){
   var number;
   if(pu.edit_mode === "number"){
-    if(pu.edit_submode === "3"){
+    if(pu.edit_submode === "3"){//1/4
       if(pu.arr.numberS[pu.cursolSx+pu.cursolSy*pu.nx*2]){
         record("numberS",pu.cursolSx+pu.cursolSy*pu.nx*2);
         number = pu.arr.numberS[pu.cursolSx+pu.cursolSy*pu.nx*2][0].slice(0,-1);
@@ -1298,11 +1312,15 @@ function key_backspace(){
       if(pu.arr.number[pu.cursolx+pu.cursoly*pu.nx]){
         record("number",pu.cursolx+pu.cursoly*pu.nx);
         number = pu.arr.number[pu.cursolx+pu.cursoly*pu.nx][0];
-        if(number != "" && pu.arr.number[pu.cursolx+pu.cursoly*pu.nx][2] != "2"){
-            number = number.slice(0,-1);
-        }else if(number != "" && pu.arr.number[pu.cursolx+pu.cursoly*pu.nx][2] === "2"){
-          if (number.slice(-2,-1) === "_"){
-            number = number.slice(0,-2).slice(0,-1)+number.slice(-2);
+        if(number){
+          if(pu.arr.number[pu.cursolx+pu.cursoly*pu.nx][2] === "2"){
+            if (number.slice(-2,-1) === "_"){
+              number = number.slice(0,-2).slice(0,-1)+number.slice(-2);
+            }else{
+              number = number.slice(0,-1);
+            }
+          }else if(pu.arr.number[pu.cursolx+pu.cursoly*pu.nx][2] === "7"){
+            key_space();
           }else{
             number = number.slice(0,-1);
           }
@@ -1368,6 +1386,8 @@ function drawonDown(numx,numy){
     case "lineE":
       if (pu.edit_submode === "3"){
         re_linedown_freeE(numx,numy);
+      }else if(pu.edit_submode === "4"){
+        re_lineXE(numx,numy);
       }else{
         pu.lastx = numx;
         pu.lasty = numy;
@@ -1778,6 +1798,32 @@ function re_lineX(numx,numy){
       }else if(pu.arr.lineH[num] === 98){
         record("lineH",num);
         delete pu.arr.lineH[num];
+      }
+    }
+    redraw();
+  }
+}
+
+function re_lineXE(numx,numy){
+  var num;
+  if(numx>=0 && numx<=2*pu.nx && numy>=0 && numy<=2*pu.ny){
+    if(numx%2===0 && numy%2===1){
+      num = numx*0.5+(numy-1)*0.5*(pu.ny+1);
+      if(!pu.arr.lineVE[num]){
+        record("lineVE",num);
+        pu.arr.lineVE[num] = 98;
+      }else if(pu.arr.lineVE[num] === 98){
+        record("lineVE",num);
+        delete pu.arr.lineVE[num];
+      }
+    }else if(numx%2===1 && numy%2===0){
+      num = (numx-1)*0.5+numy*0.5*pu.ny;
+      if(!pu.arr.lineHE[num]){
+        record("lineHE",num);
+        pu.arr.lineHE[num] = 98;
+      }else if(pu.arr.lineHE[num] === 98){
+        record("lineHE",num);
+        delete pu.arr.lineHE[num];
       }
     }
     redraw();
