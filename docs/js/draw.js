@@ -681,7 +681,7 @@ function draw_arr_wall(pu,ctx) {
 
 function draw_arr_frame(pu,ctx) {
   for(var i = 0 ; i < pu.nx*(pu.ny+1) ; i++){
-    if(pu.frameH[i]){
+    if(pu.frameH[i]&&!pu.arr.deletelineHE[i]){
       set_line_style(ctx,pu.frameH[i]);
       ctx.beginPath();
       ctx.moveTo(pu.spacex+(i%pu.nx)*pu.sizex,pu.spacey+(i/pu.nx|0)*pu.sizey);
@@ -690,7 +690,7 @@ function draw_arr_frame(pu,ctx) {
     }
   }
   for(var i = 0 ; i < (pu.nx+1)*pu.ny ; i++){
-    if(pu.frameV[i]){
+    if(pu.frameV[i]&&!pu.arr.deletelineVE[i]){
       set_line_style(ctx,pu.frameV[i]);
       ctx.beginPath();
       ctx.moveTo(pu.spacex+(i%(pu.nx+1))*pu.sizex,pu.spacey+(i/(pu.nx+1)|0)*pu.sizey);
@@ -1172,7 +1172,7 @@ function draw_arr_number(pu,ctx) {
 function draw_arr_frameBold(pu,ctx){
   /*frame-B*/
   for(var i = 0 ; i < pu.nx*(pu.ny+1) ; i++){
-    if(pu.frameH[i] === 2){
+    if(pu.frameH[i] === 2&&!pu.arr.deletelineHE[i]){
       set_line_style(ctx,pu.frameH[i]);
       ctx.beginPath();
       ctx.moveTo(pu.spacex+(i%pu.nx)*pu.sizex,pu.spacey+(i/pu.nx|0)*pu.sizey);
@@ -1181,7 +1181,7 @@ function draw_arr_frameBold(pu,ctx){
     }
   }
   for(var i = 0 ; i < (pu.nx+1)*pu.ny ; i++){
-    if(pu.frameV[i] === 2){
+    if(pu.frameV[i] === 2&&!pu.arr.deletelineVE[i]){
       set_line_style(ctx,pu.frameV[i]);
       ctx.beginPath();
       ctx.moveTo(pu.spacex+(i%(pu.nx+1))*pu.sizex,pu.spacey+(i/(pu.nx+1)|0)*pu.sizey);
