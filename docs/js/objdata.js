@@ -680,6 +680,9 @@ function set_solvemode(){
   document.getElementById("newsize").style.display = "inline";
   document.getElementById("pu_a").checked = true;
   document.getElementById("pu_q_label").style.display = "none";
+  if(document.getElementById("sub_lineE5_lb")){
+    document.getElementById("sub_lineE5_lb").style.display = "none";
+  }
   document.getElementById("savetext").style.display = "none";
   document.getElementById("newboard").style.display = "none";
   document.getElementById("tb_delete").value = "解答消去"
