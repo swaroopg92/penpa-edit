@@ -8,7 +8,7 @@ class Puzzle {
     this.sizey = size;
     this.spacex = size*0.5+0.5;
     this.spacey = size*0.5+0.5;
-    this.resol = 3;
+    this.resol = 3.5;
 
     //描画位置
     this.lastx = -1;
