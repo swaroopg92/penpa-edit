@@ -136,14 +136,17 @@ function onKeyDown(e){
     if(ctrl_key){
       switch(key){
         case "d"://Ctrl+d
+        case "D":
           duplicate();
           event.returnValue = false;
           break;
         case "y"://Ctrl+y
+        case "Y":
           redo();
           event.returnValue = false;
           break;
         case "z": //Ctrl+z
+        case "Z":
           undo();
           event.returnValue = false;
           break;
@@ -576,7 +579,20 @@ function window_click(e) {
       var numxf = Math.floor(xf/(sizef+3));
       var numyf = Math.floor(yf/(sizef+3));
 
-      if(pu.panelmode === "number"||pu.edit_mode === "symbol"||pu.edit_mode === "symbolE"){
+      if(pu.edit_mode === "symbol"||pu.edit_mode === "symbolE"){
+        var n = numxf+numyf*4;
+        pu.edit_subsymbolmode_num = n;
+        if(document.getElementById('panel_button').textContent === "ON"&&pu.onoff_symbolmode_list.indexOf(pu.edit_subsymbolmode) != -1){
+          if (0<=pu.edit_subsymbolmode_num&&pu.edit_subsymbolmode_num<=8){
+            key_number((pu.edit_subsymbolmode_num+1).toString());
+          }else if (pu.edit_subsymbolmode_num===9){
+            key_number((pu.edit_subsymbolmode_num-9).toString());
+          }else if (pu.edit_subsymbolmode_num===11){
+            key_space();
+          }
+        }
+        draw_panel();
+      }else if(pu.panelmode === "number"){
         var cont = [1,2,3,4,5,6,7,8,9,0,"?",""];
         var n = numxf+numyf*4;
         if (0<=n&&n<=10){

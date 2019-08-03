@@ -41,8 +41,10 @@ class Puzzle {
     this.edit_stylemode = 1;
     this.edit_stylemode_id = "st_surface1";
     this.edit_subsymbolmode = "circle_L";
+    this.edit_subsymbolmode_num = 0;
     this.panelmode = "number";
     this.mmode = ""; //出題モード用
+    this.onoff_symbolmode_list = ["cross","arrow_cross","degital","degital_f","arrow_eight","dice","polyomino"];
 
     this.reset();
   }
@@ -81,8 +83,6 @@ class Puzzle {
     this.arr.arrows =[];
     this.arr.direction = [];
     this.arr.squareframe = [];
-    this.arr.deletelineHE = {};
-    this.arr.deletelineVE = {};
   }
 }
 
@@ -680,9 +680,6 @@ function set_solvemode(){
   document.getElementById("newsize").style.display = "inline";
   document.getElementById("pu_a").checked = true;
   document.getElementById("pu_q_label").style.display = "none";
-  if(document.getElementById("sub_lineE5_lb")){
-    document.getElementById("sub_lineE5_lb").style.display = "none";
-  }
   document.getElementById("savetext").style.display = "none";
   document.getElementById("newboard").style.display = "none";
   document.getElementById("tb_delete").value = "解答消去"
@@ -740,7 +737,13 @@ function reset(){
       }
       break;
     case "lineE":
-      if(pu.edit_submode === "4"){
+      if(pu.edit_submode != "4"){
+        pu.arr.lineHE = {};
+        pu.arr.lineVE = {};
+        pu.arr.lineDaE = {};
+        pu.arr.lineDbE = {};
+        pu.arr.freelineE = {};
+      }else{
         for(i in pu.arr.lineHE){
           if(pu.arr.lineHE[i]===98){
             delete pu.arr.lineHE[i];
@@ -751,15 +754,6 @@ function reset(){
             delete pu.arr.lineVE[i];
           }
         }
-      }else if(pu.edit_submode === "5"){
-        pu.arr.deletelineHE = {};
-        pu.arr.deletelineVE = {};
-      }else{
-        pu.arr.lineHE = {};
-        pu.arr.lineVE = {};
-        pu.arr.lineDaE = {};
-        pu.arr.lineDbE = {};
-        pu.arr.freelineE = {};
       }
       break;
     case "wall":
@@ -917,7 +911,7 @@ function submode_check(name){
   		break ;
   	}
   }
-  redraw();//Cursol更新用
+  redraw();
 }
 
 function stylemode_check(name){
@@ -937,6 +931,7 @@ function subsymbolmode(mode){
   pu.edit_subsymbolmode = mode;
   document.getElementById("symmode_content").innerHTML = mode;
   draw_panel();
+  redraw();
   //document.getElementById("mode_symbolul2").style.visibility = "hidden";
 }
 
@@ -948,6 +943,7 @@ function panel_onoff(){
     document.getElementById('panel_button').textContent = "OFF";
     document.getElementById('float-key').style.display = "none";
   }
+  redraw();
 }
 
 function panel_mode_set(mode) {
@@ -977,10 +973,8 @@ function mode_qa(){
   }
   if (mode_qa === "1"){
     pu = pu_q;
-    document.getElementById("sub_lineE5_lb").style.display ='inline-block';
   }else if(mode_qa === "2"){
     pu = pu_a;
-    document.getElementById("sub_lineE5_lb").style.display ='none';
   }
   mode_reset();
   redraw(); //cursol更新用
@@ -1224,7 +1218,12 @@ function key_number(key){
     }else if(pu.edit_mode === "symbol"){
       if (str_num.indexOf(key) != -1){
         if(pu.arr.symbol[pu.cursolx+pu.cursoly*pu.nx]){
-          con = pu.arr.symbol[pu.cursolx+pu.cursoly*pu.nx][0];
+          if(pu.arr.symbol[pu.cursolx+pu.cursoly*pu.nx][0]===parseInt(key,10)&&pu.arr.symbol[pu.cursolx+pu.cursoly*pu.nx][1]===pu.edit_subsymbolmode){
+            key_space();//内容が同じなら削除
+            return;
+          }else{
+            con = pu.arr.symbol[pu.cursolx+pu.cursoly*pu.nx][0];
+          }
         }else{
           con = "";
         }
@@ -1235,7 +1234,7 @@ function key_number(key){
           number = onofftext(7,key,con);
         }else if(pu.edit_subsymbolmode === "arrow_eight"){
           number = onofftext(8,key,con);
-        }else if(pu.edit_subsymbolmode === "dice"){
+        }else if(pu.edit_subsymbolmode === "dice"||pu.edit_subsymbolmode === "polyomino"){
           number = onofftext(9,key,con);
         }else{
           number = parseInt(key,10);
@@ -1245,7 +1244,12 @@ function key_number(key){
     }else if(pu.edit_mode === "symbolE"){
       if (str_num.indexOf(key) != -1){
         if(pu.arr.symbolE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)]){
-          con = pu.arr.symbolE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)][0];
+          if(pu.arr.symbolE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)][0]===parseInt(key,10)&&pu.arr.symbolE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)][1]===pu.edit_subsymbolmode){
+            key_space();//内容が同じなら削除
+            return;
+          }else{
+            con = pu.arr.symbolE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)][0];
+          }
         }else{
           con = "";
         }
@@ -1256,7 +1260,7 @@ function key_number(key){
           number = onofftext(7,key,con);
         }else if(pu.edit_subsymbolmode === "arrow_eight"){
           number = onofftext(8,key,con);
-        }else if(pu.edit_subsymbolmode === "dice"){
+        }else if(pu.edit_subsymbolmode === "dice"||pu.edit_subsymbolmode === "polyomino"){
           number = onofftext(9,key,con);
         }else{
           number = parseInt(key,10);
@@ -1439,6 +1443,15 @@ function drawonDown(numx,numy){
         pu.lasty = numy;
         pu.cursolx = numx;
         pu.cursoly = numy;
+        if(document.getElementById('panel_button').textContent === "ON"&&pu.onoff_symbolmode_list.indexOf(pu.edit_subsymbolmode) === -1){
+          if (0<=pu.edit_subsymbolmode_num&&pu.edit_subsymbolmode_num<=8){
+            key_number((pu.edit_subsymbolmode_num+1).toString());
+          }else if (pu.edit_subsymbolmode_num===9){
+            key_number((pu.edit_subsymbolmode_num-9).toString());
+          }else if (pu.edit_subsymbolmode_num===11){
+            key_space();
+          }
+        }
         redraw();
       }
       break;
@@ -1448,6 +1461,15 @@ function drawonDown(numx,numy){
         pu.lasty = numy;
         pu.cursolEx = numx;
         pu.cursolEy = numy;
+        if(document.getElementById('panel_button').textContent === "ON"&&pu.onoff_symbolmode_list.indexOf(pu.edit_subsymbolmode) === -1){
+          if (0<=pu.edit_subsymbolmode_num&&pu.edit_subsymbolmode_num<=8){
+            key_number((pu.edit_subsymbolmode_num+1).toString());
+          }else if (pu.edit_subsymbolmode_num===9){
+            key_number((pu.edit_subsymbolmode_num-9).toString());
+          }else if (pu.edit_subsymbolmode_num===11){
+            key_space();
+          }
+        }
         redraw();
       }
       break;
@@ -1462,12 +1484,48 @@ function drawonDown(numx,numy){
   }
 }
 
-function drawonDownR(numx,numy){
+function drawonDownR(numx,numy){//右クリック
   switch(pu.edit_mode){
     case "surface":
       re_surfaceR(numx,numy);
       pu.lastx = numx;
       pu.lasty = numy;
+      break;
+    case "number":
+      if(pu.edit_submode === "3" &&numx>=0 && numx<pu.nx*2 && numy>=0 && numy<pu.ny*2){
+        pu.cursolSx = numx;
+        pu.cursolSy = numy;
+        redraw();
+      }else if(numx>=0 && numx<pu.nx && numy>=0 && numy<pu.ny){
+        pu.cursolx = numx;
+        pu.cursoly = numy;
+        redraw();
+      }
+      break;
+    case "numberE":
+      if(numx>=0 && numx<=pu.nx*2 && numy>=0 && numy<=pu.ny*2){
+        pu.cursolEx = numx;
+        pu.cursolEy = numy;
+        redraw();
+      }
+      break;
+    case "symbol":
+      if(numx>=0 && numx<pu.nx && numy>=0 && numy<pu.ny){
+        pu.lastx = numx;
+        pu.lasty = numy;
+        pu.cursolx = numx;
+        pu.cursoly = numy;
+        redraw();
+      }
+      break;
+    case "symbolE":
+      if(numx>=0 && numx<=pu.nx*2 && numy>=0 && numy<=pu.ny*2){
+        pu.lastx = numx;
+        pu.lasty = numy;
+        pu.cursolEx = numx;
+        pu.cursolEy = numy;
+        redraw();
+      }
       break;
   }
 }
@@ -1793,12 +1851,15 @@ function re_lineX(numx,numy){
   if(numx>0 && numx<2*pu.nx && numy>0 && numy<2*pu.ny){
     if(numx%2===1 && numy%2===0){
       num = (numx-1)*0.5+(numy*0.5-1)*pu.ny;
-      if(!pu.arr.lineV[num]){
+      if(!pu.arr.lineV[num]){//線が引かれてない
         record("lineV",num);
         pu.arr.lineV[num] = 98;
-      }else if(pu.arr.lineV[num] === 98){
+      }else if(pu.arr.lineV[num] === 98){//×印
         record("lineV",num);
         delete pu.arr.lineV[num];
+      }else{//線が引かれている
+        record("lineV",num);
+        pu.arr.lineV[num] = 98;
       }
     }else if(numx%2===0 && numy%2===1){
       num = (numx*0.5-1)+(numy-1)*0.5*(pu.ny-1);
@@ -1808,6 +1869,9 @@ function re_lineX(numx,numy){
       }else if(pu.arr.lineH[num] === 98){
         record("lineH",num);
         delete pu.arr.lineH[num];
+      }else{
+        record("lineH",num);
+        pu.arr.lineH[num] = 98;
       }
     }
     redraw();
@@ -1825,6 +1889,9 @@ function re_lineXE(numx,numy){
       }else if(pu.arr.lineVE[num] === 98){
         record("lineVE",num);
         delete pu.arr.lineVE[num];
+      }else{
+        record("lineVE",num);
+        pu.arr.lineVE[num] = 98;
       }
     }else if(numx%2===1 && numy%2===0){
       num = (numx-1)*0.5+numy*0.5*pu.ny;
@@ -1834,6 +1901,9 @@ function re_lineXE(numx,numy){
       }else if(pu.arr.lineHE[num] === 98){
         record("lineHE",num);
         delete pu.arr.lineHE[num];
+      }else{
+        record("lineHE",num);
+        pu.arr.lineHE[num] = 98;
       }
     }
     redraw();
@@ -1873,16 +1943,6 @@ function re_linemoveE(numx,numy){
           num = Math.min(numx,pu.lastx)+Math.min(numy,pu.lasty)*pu.nx;
           array = "lineDbE";
           re_line(array,num,line_style);
-        }
-      }else if (pu.edit_submode === "5"){
-        if(Math.abs(numx - pu.lastx) === 1 && numy === pu.lasty){
-          num = Math.min(numx,pu.lastx)+numy*pu.nx;
-          array = "deletelineHE";
-          re_line(array,num,1);
-        }else if(Math.abs(numy - pu.lasty) === 1 && numx === pu.lastx){
-          num = numx+Math.min(numy,pu.lasty)*(pu.nx+1);
-          array = "deletelineVE";
-          re_line(array,num,1);
         }
       }
       redraw();
