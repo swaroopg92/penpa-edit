@@ -83,6 +83,8 @@ class Puzzle {
     this.arr.arrows =[];
     this.arr.direction = [];
     this.arr.squareframe = [];
+    this.arr.deletelineHE = {};
+    this.arr.deletelineVE = {};
   }
 }
 
@@ -737,13 +739,7 @@ function reset(){
       }
       break;
     case "lineE":
-      if(pu.edit_submode != "4"){
-        pu.arr.lineHE = {};
-        pu.arr.lineVE = {};
-        pu.arr.lineDaE = {};
-        pu.arr.lineDbE = {};
-        pu.arr.freelineE = {};
-      }else{
+      if(pu.edit_submode === "4"){
         for(i in pu.arr.lineHE){
           if(pu.arr.lineHE[i]===98){
             delete pu.arr.lineHE[i];
@@ -754,6 +750,15 @@ function reset(){
             delete pu.arr.lineVE[i];
           }
         }
+      }else if(pu.edit_submode === "5"){
+        pu.arr.deletelineHE = {};
+        pu.arr.deletelineVE = {};
+      }else{
+        pu.arr.lineHE = {};
+        pu.arr.lineVE = {};
+        pu.arr.lineDaE = {};
+        pu.arr.lineDbE = {};
+        pu.arr.freelineE = {};
       }
       break;
     case "wall":
@@ -1943,6 +1948,16 @@ function re_linemoveE(numx,numy){
           num = Math.min(numx,pu.lastx)+Math.min(numy,pu.lasty)*pu.nx;
           array = "lineDbE";
           re_line(array,num,line_style);
+        }
+      }else if (pu.edit_submode === "5"){
+        if(Math.abs(numx - pu.lastx) === 1 && numy === pu.lasty){
+          num = Math.min(numx,pu.lastx)+numy*pu.nx;
+          array = "deletelineHE";
+          re_line(array,num,1);
+        }else if(Math.abs(numy - pu.lasty) === 1 && numx === pu.lastx){
+          num = numx+Math.min(numy,pu.lasty)*(pu.nx+1);
+          array = "deletelineVE";
+          re_line(array,num,1);
         }
       }
       redraw();
