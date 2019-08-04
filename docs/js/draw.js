@@ -12,7 +12,7 @@ function set_surface_style(ctx,type){
         ctx.fillStyle = "#444";
         break;
       case 2:
-        ctx.fillStyle = "#a3ffa3";　//緑
+        ctx.fillStyle = "#b3ffb3";　//緑
         break;
       case 3:
         ctx.fillStyle = "#ccc";
