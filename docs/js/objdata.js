@@ -1190,6 +1190,7 @@ function key_number(key){
         pu.arr.numberE[pu.cursolEx+pu.cursolEy*(2*pu.nx+1)] = [number,pu.edit_stylemode,pu.edit_submode];
         break;
       case "4": //tapa
+        if (key === "."){key = " ";}
         record("numberE",pu.cursolEx+pu.cursolEy*(2*pu.nx+1));
         if(con.length>=0 && con.length<=3){　　 //3文字以内なら追加
           number = con+key;
