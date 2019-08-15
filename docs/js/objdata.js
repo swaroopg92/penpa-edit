@@ -541,11 +541,7 @@ function maketext(){
   }
   text += JSON.stringify(arr_text) + "\n";
 
-  var buf = new ArrayBuffer(text.length);
-  var u8text = new Uint8Array(buf);
-  for (var i=0; i<text.length; i++){
-    u8text[i] = text.charCodeAt(i)
-  }
+  var u8text = new TextEncoder().encode(text);
   var deflate = new Zlib.RawDeflate(u8text);
   var compressed = deflate.compress();
   var char8 = Array.from(compressed,e=>String.fromCharCode(e)).join("");
@@ -571,11 +567,7 @@ function maketext_solve(){
 
   //console.log(text);
 
-  var buf = new ArrayBuffer(text.length);
-  var u8text = new Uint8Array(buf);
-  for (var i=0; i<text.length; i++){
-    u8text[i] = text.charCodeAt(i)
-  }
+  var u8text = new TextEncoder().encode(text);
   var deflate = new Zlib.RawDeflate(u8text);
   var compressed = deflate.compress();
   var char8 = Array.from(compressed,e=>String.fromCharCode(e)).join("");
@@ -604,10 +596,7 @@ function load(){
       ab = Uint8Array.from(ab.split(""),e=>e.charCodeAt(0));
       var inflate = new Zlib.RawInflate(ab);
       var plain = inflate.decompress();
-      var rtext = "";
-      for (var i=0; i<plain.length; i++){
-        rtext += String.fromCharCode(plain[i])
-      }
+      var rtext = new TextDecoder().decode(plain);
       rtext = rtext.split("\n");
 
       //初期設定を読み込み
