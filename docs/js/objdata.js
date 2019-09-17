@@ -1856,7 +1856,7 @@ function re_lineX(numx,numy){
   var num;
   if(numx>0 && numx<2*pu.nx && numy>0 && numy<2*pu.ny){
     if(numx%2===1 && numy%2===0){
-      num = (numx-1)*0.5+(numy*0.5-1)*pu.ny;
+      num = (numx-1)*0.5+(numy*0.5-1)*pu.nx;
       if(!pu.arr.lineV[num]){//線が引かれてない
         record("lineV",num);
         pu.arr.lineV[num] = 98;
@@ -1868,7 +1868,7 @@ function re_lineX(numx,numy){
         pu.arr.lineV[num] = 98;
       }
     }else if(numx%2===0 && numy%2===1){
-      num = (numx*0.5-1)+(numy-1)*0.5*(pu.ny-1);
+      num = (numx*0.5-1)+(numy-1)*0.5*(pu.nx-1);
       if(!pu.arr.lineH[num]){
         record("lineH",num);
         pu.arr.lineH[num] = 98;
@@ -1888,7 +1888,7 @@ function re_lineXE(numx,numy){
   var num;
   if(numx>=0 && numx<=2*pu.nx && numy>=0 && numy<=2*pu.ny){
     if(numx%2===0 && numy%2===1){
-      num = numx*0.5+(numy-1)*0.5*(pu.ny+1);
+      num = numx*0.5+(numy-1)*0.5*(pu.nx+1);
       if(!pu.arr.lineVE[num]){
         record("lineVE",num);
         pu.arr.lineVE[num] = 98;
@@ -1900,7 +1900,7 @@ function re_lineXE(numx,numy){
         pu.arr.lineVE[num] = 98;
       }
     }else if(numx%2===1 && numy%2===0){
-      num = (numx-1)*0.5+numy*0.5*pu.ny;
+      num = (numx-1)*0.5+numy*0.5*pu.nx;
       if(!pu.arr.lineHE[num]){
         record("lineHE",num);
         pu.arr.lineHE[num] = 98;
