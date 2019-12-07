@@ -40,6 +40,10 @@ h3 {
   padding-bottom:10px;
 }
 
+#tb_undo, #tb_redo {
+  color: #ccc;
+}
+
 .button {
   display: inline-block;
   padding: 2px 5px;
@@ -102,11 +106,32 @@ color: #000000;
 font-size: 14px;
 text-align: center;
 line-height: 28px;
-border: 1px solid #000060;
+border: 1px solid #1e50a2;
+border-radius: 3px;
+}
+
+.label_option {
+display: inline-block;
+margin: 0px;
+text-align: left;
+width: 45px;
+height: 25px;
+padding-left: 5px;
+padding-right: 5px;
+color: #000000;
+font-size: 14px;
+text-align: center;
+line-height: 28px;
+border: 2px solid #dd0000;
 border-radius: 3px;
 }
 
 .label:hover {
+  background: #eeeeee;
+}
+
+
+.label_option:hover {
   background: #eeeeee;
 }
 
@@ -123,7 +148,7 @@ color: #000000;
 font-size: 14px;
 text-align: center;
 line-height: 28px;
-border: 1px solid #000060;
+border: 1px solid #1e50a2;
 border-radius: 3px;
 }
 
@@ -146,14 +171,14 @@ color: #000000;
   background: none;
   padding-left:10px;
 }
-#panel_button{
+#panel_button,#edge_button{
   width: 25px;
   border:1px solid #ccc;
   background: none;
   margin-left:0px;
   border-radius: 1px;
 }
-#panel_button:hover{
+#panel_button:hover,#edge_button:hover{
   background: #ccc;
 }
 
@@ -186,7 +211,7 @@ color: #000000;
   background: #ffffff;
   text-align: center;
   line-height: 28px;
-  border: 1px solid #000060;
+  border: 1px solid #1e50a2;
   border-radius: 3px;
   }
 
@@ -225,7 +250,7 @@ color: #000000;
   background: #ffffff;
   text-align: center;
   line-height: 28px;
-  border: 1px solid #000090;
+  border: 1px solid #1e50a2;
   border-radius: 0px;
 }
 .nav li:hover > ul > li {
@@ -347,6 +372,35 @@ color: #000000;
     border-right: 0;
   }
 
+  #float-key-select{
+  position: absolute;
+  display: none;
+  z-index: 1;
+  left: 0px;
+  top: 0px;
+  width:50px;
+  height: 20px;
+  text-align: center;
+  padding-top: 20px;
+  }
+
+  .panel_menu_select {
+    display: block;
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+  }
+  .panel_menu_select li {
+    border-left: 1px solid #fff;
+    border-top: 1px solid #fff;
+    list-style: none;
+    vertical-align: middle;
+    background-color: #ccc;
+    width: 100%;
+    height: 0px;
+  }
+
+
   .label_menu{
     background-color: #ccc;
     display: flex;
@@ -450,6 +504,27 @@ color: #000000;
   background-color: rgba(0,0,0,0.3);
   }
 
+  #modal-rotate{
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+  }
+
+  #modal-rotate-content{
+  background-color: white;
+  width: 300px;
+  height: 270px;
+  margin:0 auto;
+  margin-top: 30px;
+  border-radius: 20px;
+  }
+
   #modal-save-body {
     padding-left: 10px;
     padding-top: 10px;
@@ -485,7 +560,7 @@ color: #000000;
   }
 
   input[type=number] {
-  width: 50px;
+  width: 40px;
   }
 
 .nb_button{
