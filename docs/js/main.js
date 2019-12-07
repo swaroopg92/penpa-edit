@@ -1,12 +1,6 @@
 onload = function(){
 
-var obj = document.getElementById("dvique");
-
-var canvas = document.createElement("canvas");
-canvas.id = "canvas";
-obj.appendChild(canvas);
-create();
-load();
+boot();
 
 document.addEventListener("beforeunload", function(eve){
     eve.returnValue = "ページを移動します";
@@ -15,22 +9,26 @@ document.addEventListener("beforeunload", function(eve){
 var ua = navigator.userAgent;
 if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
     ondown_key = "touchstart";
+    onup_key = "touchend";
+    onmove_key = "touchmove";
+    onleave_key = "touchmove";
 } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0) {
     ondown_key = "touchstart";
+    onup_key = "touchend";
+    onmove_key = "touchmove";
+    onleave_key = "touchmove";
 } else {
     ondown_key = "mousedown";
+    onup_key = "mouseup";
+    onmove_key = "mousemove";
+    onleave_key = "mouseleave";
 }
 
 var checkms = 0;//hover event用一時変数
 
 //canvas
-//canvas.addEventListener('mousedown', onDown, {passive: false});
-//canvas.addEventListener('touchstart', onDown, {passive: false});
-canvas.addEventListener('mouseup', onUp, {passive: false});
-canvas.addEventListener('touchend', onUp, {passive: false});
-canvas.addEventListener('mousemove', onMove, {passive: false});
-canvas.addEventListener('touchmove', onMove, {passive: false});
-canvas.addEventListener('mouseover', onOver, {passive: false});
+canvas.addEventListener(onup_key, onUp, {passive: false});
+canvas.addEventListener(onmove_key, onMove, {passive: false});
 canvas.addEventListener('mouseout', onOut, {passive: false});
 canvas.addEventListener('contextmenu',onContextmenu,{passive: false});
 document.addEventListener('keydown',onKeyDown,{passive: false});
@@ -42,12 +40,13 @@ function onDown(e) {
       var event = e.changedTouches[0];
       //e.preventDefault();
   }
-  var [numx,numy] = coord(event);
-  if (event.button === 2){
-      drawonDownR(numx,numy);
-  }else{  //左クリックorタップ
-    //console.log(numx,numy);
-      drawonDown(numx,numy);
+  var num = coord_point(event);
+  if(pu.point[num].use===1){
+    if (event.button === 2){
+        pu.drawonDownR(num);
+    }else{  //左クリックorタップ
+        pu.drawonDown(num);
+    }
   }
 }
 
@@ -58,26 +57,21 @@ function onUp(e) {
       var event = e.changedTouches[0];
       //e.preventDefault();
   }
-  var [numx,numy] = coord(event);
-  drawonUp(numx,numy);
-}
-
-function onClick(e) {
-  var [numx,numy] = coord(e);
-  drawonClick(numx,numy);
+  var num = coord_point(event);
+  pu.drawonUp(num);
 }
 
 function onMove(e) {
-  //同様にマウスとタッチの差異を吸収
   if(e.type === "mousemove") {
       var event = e;
   } else {
       var event = e.changedTouches[0];
   }
-  //フリックしたときに画面を動かさないようにデフォルト動作を抑制
   e.preventDefault();
-  var [numx,numy] = coord(event);
-  drawonMove(numx,numy);
+  var num = coord_point(event);
+  if(pu.point[num].use===1){
+    pu.drawonMove(num);
+  }
 }
 
 function onOver(e) {
@@ -85,7 +79,7 @@ function onOver(e) {
 }
 
 function onOut() {
-  drawonOut();
+  pu.drawonOut();
   return;
 }
 
@@ -107,28 +101,26 @@ function onKeyDown(e){
     var str_alph_up =  "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_";
 
+    if(key === "F2"){ //function_key
+      pu.mode_qa("pu_q");
+      event.returnValue = false;
+    }else if(key === "F3"){
+      pu.mode_qa("pu_a");
+      event.returnValue = false;
+    }
     if (key ==="ArrowLeft" ||key ==="ArrowRight" ||key ==="ArrowUp" ||key ==="ArrowDown" ){ //arrow
-      key_arrow(key);
+      pu.key_arrow(key);
       event.returnValue = false;
     }
 
-    if(key === "F2"){ //function_key
-      document.getElementById("pu_q").checked = true;
-      mode_qa();
-      event.returnValue = false;
-    }else if(key === "F3"){
-      document.getElementById("pu_a").checked = true;
-      mode_qa();
-      event.returnValue = false;
-    }
     if(!ctrl_key){
       if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 ||str_alph_up.indexOf(key) != -1|| str_sym.indexOf(key) != -1){
-        key_number(key);
+        pu.key_number(key);
       }else if (key === " "){
-        key_space();
+        pu.key_space();
         event.returnValue = false;
       }else if (key === "Backspace"){
-        key_backspace();
+        pu.key_backspace();
         event.returnValue = false;
       }
     }
@@ -142,16 +134,16 @@ function onKeyDown(e){
           break;
         case "y"://Ctrl+y
         case "Y":
-          redo();
+          pu.redo();
           event.returnValue = false;
           break;
         case "z": //Ctrl+z
         case "Z":
-          undo();
+          pu.undo();
           event.returnValue = false;
           break;
         case " ": //Ctrl+space
-          key_shiftspace();
+          pu.key_shiftspace();
           event.returnValue = false;
           break;
       }
@@ -159,102 +151,75 @@ function onKeyDown(e){
   }
 }
 
-function coord(e){
-  var x = e.pageX - canvas.offsetLeft - pu.spacex;
-  var y = e.pageY - canvas.offsetTop - pu.spacey;
-  var [numx,numy] = calc_num(x,y);
-  return [numx,numy];
+function coord_point(e){
+  var x = e.pageX - canvas.offsetLeft;
+  var y = e.pageY - canvas.offsetTop;
+  var min0,min = 10e6;
+  var num = 0;
+  for (var i in pu.point){
+    if(pu.type.indexOf(pu.point[i].type) != -1){
+      min0 = (x-pu.point[i].x)**2+(y-pu.point[i].y)**2;
+      if(min0<min){
+        min = min0;
+        num = i;
+      }
+    }
+  }
+  return parseInt(num);
 }
 
-function calc_num(x,y){
-  var numx;
-  var numy;
-  var dicx;
-  var dicy;
-  switch(pu.edit_mode){
-    case "surface":
-      numx = Math.floor(x/pu.sizex);
-      numy = Math.floor(y/pu.sizey);
-      break;
-    case "line":
-      if (pu.edit_submode === "4"){
-        numx = Math.floor(x/pu.sizex*2+0.5);
-        numy = Math.floor(y/pu.sizey*2+0.5);
-      }else{
-        numx = Math.floor(x/pu.sizex);
-        numy = Math.floor(y/pu.sizey);
-        if (pu.edit_submode === "2"){
-          dicx = x/pu.sizex-Math.floor(x/pu.sizex);
-          dicy = y/pu.sizey-Math.floor(y/pu.sizey);
-          if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
-            pu.lineD_edge = 1;
-          }else{
-            pu.lineD_edge = 0;
-          }
-        }
-      }
-      break;
-    case "lineE":
-      if (pu.edit_submode === "4"){
-        numx = Math.floor(x/pu.sizex*2+0.5);
-        numy = Math.floor(y/pu.sizey*2+0.5);
-      }else{
-        numx = Math.floor(x/pu.sizex+0.5);
-        numy = Math.floor(y/pu.sizey+0.5);
-        if (pu.edit_submode === "2"){
-          dicx = x/pu.sizex+0.5-Math.floor(x/pu.sizex+0.5);
-          dicy = y/pu.sizey+0.5-Math.floor(y/pu.sizey+0.5);
-          if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
-            pu.lineD_edge = 1;
-          }else{
-            pu.lineD_edge = 0;
-          }
-        }
-      }
-      break;
-    case "wall":
-      numx = Math.floor(x/pu.sizex*2);
-      numy = Math.floor(y/pu.sizey*2);
-      break;
-    case "number":
-      if (pu.edit_submode === "3"){
-        numx = Math.floor(x/pu.sizex*2);
-        numy = Math.floor(y/pu.sizey*2);
-      }else{
-        numx = Math.floor(x/pu.sizex);
-        numy = Math.floor(y/pu.sizey);
-      }
-      break;
-    case "numberE":
-      numx = Math.floor(x/pu.sizex*2+0.5);
-      numy = Math.floor(y/pu.sizey*2+0.5);
-      break;
-    case "symbol":
-      numx = Math.floor(x/pu.sizex);
-      numy = Math.floor(y/pu.sizey);
-      break;
-    case "symbolE":
-      numx = Math.floor(x/pu.sizex*2+0.5);
-      numy = Math.floor(y/pu.sizey*2+0.5);
-      break;
-    case "cage":
-      numx = Math.floor(x/pu.sizex*2);
-      numy = Math.floor(y/pu.sizey*2);
-      break;
-    case "special":
-    numx = Math.floor(x/pu.sizex);
-    numy = Math.floor(y/pu.sizey);
-    dicx = x/pu.sizex-Math.floor(x/pu.sizex);
-    dicy = y/pu.sizey-Math.floor(y/pu.sizey);
-    if(dicx < pu.lineD_space || dicx > 1-pu.lineD_space || dicy < pu.lineD_space || dicy > 1-pu.lineD_space){
-      pu.lineD_edge = 1;
-    }else{
-      pu.lineD_edge = 0;
+
+let count = 0;
+let timer;
+var undo_button = document.getElementById("tb_undo")
+var redo_button = document.getElementById("tb_redo")
+undo_button.addEventListener(ondown_key, e => {
+  e.preventDefault();
+  timer = setInterval(() => {
+    count++;
+    if(count>20){
+      pu.undo();
     }
-    break;
+  }, 20);
+}, {passive: false});
+
+undo_button.addEventListener(onup_key, e => {
+  e.preventDefault();
+  if (count) {
+    clearInterval(timer);
+    count = 0;
   }
-  return [numx,numy];
-}
+}, {passive: false});
+
+undo_button.addEventListener(onleave_key, e => {
+  e.preventDefault();
+  clearInterval(timer);
+  count = 0;
+});
+
+redo_button.addEventListener(ondown_key, e => {
+  e.preventDefault();
+  timer = setInterval(() => {
+    count++;
+    if(count>20){
+      pu.redo();
+    }
+  }, 20);
+}, {passive: false});
+
+redo_button.addEventListener(onup_key, e => {
+  e.preventDefault();
+  if (count) {
+    clearInterval(timer);
+    count = 0;
+  }
+}, {passive: false});
+
+redo_button.addEventListener(onleave_key, e => {
+  e.preventDefault();
+  clearInterval(timer);
+  count = 0;
+});
 
 
 //クリックイベント
@@ -279,6 +244,9 @@ function window_click(e) {
     case "newboard":
       newboard();
       e.preventDefault(); break;
+    case "rotation":
+      rotation();
+      e.preventDefault(); break;
     case "newsize":
       newsize();
       e.preventDefault(); break;
@@ -292,30 +260,73 @@ function window_click(e) {
       //duplicate();
     //  break;
     case "tb_undo":
-      undo();
+      pu.undo();
       e.preventDefault(); break;
     case "tb_redo":
-      redo();
+      pu.redo();
       e.preventDefault(); break;
-    //case "tb_reset":
-    //  ResetCheck();
-    //  break;
-    //case "tb_delete":
-    //  DeleteCheck();
-    //  break;
+    case "tb_reset":
+      ResetCheck();
+      break;
+    case "tb_delete":
+      DeleteCheck();
+      break;
 
     //panel_menu
     case "panel_1_lbmenu":
-      panel_mode_set('number');
+      panel_pu.mode_set('number');
+      panel_pu.select_close();
       e.preventDefault(); break;
     case "panel_A_lbmenu":
-      panel_mode_set('alphabet');
+      panel_pu.mode_set('alphabet');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_a_lbmenu":
+      panel_pu.mode_set('alphabet_s');
+      panel_pu.select_close();
       e.preventDefault(); break;
     case "panel_!_lbmenu":
-      panel_mode_set('key_symbol');
+      panel_pu.mode_set('key_symbol');
+      panel_pu.select_close();
       e.preventDefault(); break;
     case "panel_ja_K_lbmenu":
-      panel_mode_set('ja_K');
+      panel_pu.mode_set('ja_K');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_ja_H_lbmenu":
+      panel_pu.mode_set('ja_H');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_Kan_lbmenu":
+      panel_pu.mode_set('Kan');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_Rome_lbmenu":
+      panel_pu.mode_set('Rome');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_Greek_lbmenu":
+      panel_pu.mode_set('Greek');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_europe_lbmenu":
+      panel_pu.mode_set('europe');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_Cyrillic_lbmenu":
+      panel_pu.mode_set('Cyrillic');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_Chess_lbmenu":
+      panel_pu.mode_set('Chess');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_card_lbmenu":
+      panel_pu.mode_set('card');
+      panel_pu.select_close();
+      e.preventDefault(); break;
+    case "panel_select_lbmenu":
+      panel_pu.select_open();
       e.preventDefault(); break;
     case "float-canvas":
       f_mdown(e);
@@ -329,6 +340,9 @@ function window_click(e) {
       e.preventDefault(); break;
     case "address_solve":
       savetext_solve();
+      e.preventDefault(); break;
+    case "pp_file":
+      make_ppfile();
       e.preventDefault(); break;
     case "savetextarea":
       return;
@@ -345,6 +359,30 @@ function window_click(e) {
     //  break;
     case "closeBtn_save4":
       document.getElementById('modal-save').style.display='none';
+      e.preventDefault(); break;
+    case "rt_right":
+      pu.rotate_right();
+      e.preventDefault(); break;
+    case "rt_left":
+      pu.rotate_left();
+      e.preventDefault(); break;
+    case "rt_LR":
+      pu.rotate_LR();
+      e.preventDefault(); break;
+    case "rt_UD":
+      pu.rotate_UD();
+      e.preventDefault(); break;
+    case "rt_center":
+      pu.rotate_center();
+      e.preventDefault(); break;
+    case "rt_size":
+      pu.rotate_size();
+      e.preventDefault(); break;
+    case "rt_reset":
+      pu.rotate_reset();
+      e.preventDefault(); break;
+    case "closeBtn_rotate1":
+      document.getElementById('modal-rotate').style.display='none';
       e.preventDefault(); break;
     //saveimage
     case "nb_margin1_lb":
@@ -366,39 +404,22 @@ function window_click(e) {
       e.preventDefault(); break;
     //newboard
     case "nb_size1":
-      return;
     case "nb_size2":
-      return;
     case "nb_size3":
-      return;
+      return; //textbox
     case "nb_space1":
-      return;
     case "nb_space2":
-      return;
     case "nb_space3":
-      return;
     case "nb_space4":
-      return;
+      return; //textbox
     case "nb_grid1_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      e.preventDefault(); break;
     case "nb_grid2_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      e.preventDefault(); break;
     case "nb_grid3_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      e.preventDefault(); break;
     case "nb_lat1_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      e.preventDefault(); break;
     case "nb_lat2_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      e.preventDefault(); break;
     case "nb_out1_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      e.preventDefault(); break;
     case "nb_out2_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
+      pu.mode_grid(e.target.id.slice(0,-3));
       e.preventDefault(); break;
     case "closeBtn_nb1":
       CreateCheck();
@@ -428,71 +449,35 @@ function window_click(e) {
     case "panel_button":
       panel_onoff();
       e.preventDefault(); break;
+    case "edge_button":
+      edge_onoff();
+      e.preventDefault(); break;
     case "pu_q_label":
-      document.getElementById("pu_q").checked = true;
-      mode_qa();
+      pu.mode_qa("pu_q");
       e.preventDefault(); break;
     case "pu_a_label":
-      document.getElementById("pu_a").checked = true;
-      mode_qa();
+      pu.mode_qa("pu_a");
       e.preventDefault(); break;
-    case "surface_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_surface();
-      e.preventDefault(); break;
-    case "line_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_line();
-      e.preventDefault(); break;
-    case "lineE_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_lineE();
-      e.preventDefault(); break;
-    case "wall_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_wall();
-      e.preventDefault(); break;
-    case "cage_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_cage();
-      e.preventDefault(); break;
-    case "number_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_number();
-      e.preventDefault(); break;
-    case "numberE_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_numberE();
-      e.preventDefault(); break;
-    case "symbol_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_symbol();
-      e.preventDefault(); break;
-    case "symbolE_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_symbolE();
-      e.preventDefault(); break;
-    case "special_lb":
-      document.getElementById(e.target.id.slice(0,-3)).checked = true;
-      mode_special();
-      e.preventDefault(); break;
+  }
+  //メインモード
+  if(e.target.id.slice(0,3)==="mo_"){
+    pu.mode_set(e.target.id.slice(3,-3));
+    e.preventDefault();
   }
   //サブモード
   if(e.target.id.slice(0,4)==="sub_"){
-    document.getElementById(e.target.id.slice(0,-3)).checked = true;
-    submode_check('mode_'+e.target.id.slice(4,-4));
+    pu.submode_check(e.target.id.slice(0,-3));
     e.preventDefault();
   }
     //スタイルモード
   if(e.target.id.slice(0,3)==="st_"){
-    document.getElementById(e.target.id.slice(0,-3)).checked = true;
-    stylemode_check('style_'+e.target.id.slice(3,-4));
+    pu.stylemode_check(e.target.id.slice(0,-3));
     e.preventDefault();
   }
     //シンボル
   if(e.target.id.slice(0,3)==="ms_"){
     checkms = 1;
-    subsymbolmode(e.target.id.slice(3));
+    pu.subsymbolmode(e.target.id.slice(3));
     e.preventDefault();
     //シンボルホバーetc
   }else if(e.target.id.slice(0,2)==="ms"){
@@ -521,8 +506,7 @@ function window_click(e) {
         x_window = event.pageX - elements.offsetLeft;
         y_window = event.pageY - elements.offsetTop;
         var drag = document.getElementsByClassName("drag")[0];
-        document.body.addEventListener("mousemove", mmove, {passive: false});
-        document.body.addEventListener("touchmove", mmove, {passive: false});
+        document.body.addEventListener(onmove_key, mmove, {passive: false});
     }
 
     function mmove(e) {
@@ -541,9 +525,8 @@ function window_click(e) {
         body.style.top = event.pageY - y_window + "px";
         body.style.left = event.pageX - x_window + "px";
 
-        drag.addEventListener("mouseup", mup, {passive: false});
+        drag.addEventListener(onup_key, mup, {passive: false});
         document.body.addEventListener("mouseleave", mup, {passive: false});
-        drag.addEventListener("touchend", mup, {passive: false});
         document.body.addEventListener("touchleave", mup, {passive: false});
 
     }
@@ -551,10 +534,8 @@ function window_click(e) {
     function mup(e) {
         var drag = document.getElementsByClassName("drag")[0];
         if(drag){
-          document.body.removeEventListener("mousemove", mmove, {passive: false});
-          drag.removeEventListener("mouseup", mup, {passive: false});
-          document.body.removeEventListener("touchmove", mmove, {passive: false});
-          drag.removeEventListener("touchend", mup, {passive: false});
+          document.body.removeEventListener(onmove_key, mmove, {passive: false});
+          drag.removeEventListener(onup_key, mup, {passive: false});
 
           drag.classList.remove("drag");
         }
@@ -575,58 +556,51 @@ function window_click(e) {
         var xf = event.pageX-(float_canvas.getBoundingClientRect().x-document.documentElement.getBoundingClientRect().left);
         var yf = event.pageY-(float_canvas.getBoundingClientRect().y-document.documentElement.getBoundingClientRect().top);
       }
-      var sizef = Math.min(45,Math.max(pu.sizex,28));
+      var sizef = panel_pu.sizef;
       var numxf = Math.floor(xf/(sizef+3));
       var numyf = Math.floor(yf/(sizef+3));
+      var n = numxf+numyf*panel_pu.nxf;
+      var paneletc = ["ja_K","ja_H","Kan","Rome","Greek","Cyrillic","europe","Chess","card"];
 
-      if(pu.edit_mode === "symbol"||pu.edit_mode === "symbolE"){
-        var n = numxf+numyf*4;
-        pu.edit_subsymbolmode_num = n;
-        if(document.getElementById('panel_button').textContent === "ON"&&pu.onoff_symbolmode_list.indexOf(pu.edit_subsymbolmode) != -1){
-          if (0<=pu.edit_subsymbolmode_num&&pu.edit_subsymbolmode_num<=8){
-            key_number((pu.edit_subsymbolmode_num+1).toString());
-          }else if (pu.edit_subsymbolmode_num===9){
-            key_number((pu.edit_subsymbolmode_num-9).toString());
-          }else if (pu.edit_subsymbolmode_num===11){
-            key_space();
+      if(pu.mode[pu.mode.qa].edit_mode === "symbol"){
+        panel_pu.edit_num = n;
+        if(document.getElementById('panel_button').textContent === "ON"&&pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]){
+          if (0<=panel_pu.edit_num&&panel_pu.edit_num<=8){
+            pu.key_number((panel_pu.edit_num+1).toString());
+          }else if (panel_pu.edit_num===9){
+            pu.key_number(0);
+          }else if (panel_pu.edit_num===11){
+            pu.key_space();
           }
         }
-        draw_panel();
-      }else if(pu.panelmode === "number"){
-        var cont = [1,2,3,4,5,6,7,8,9,0,"?",""];
-        var n = numxf+numyf*4;
-        if (0<=n&&n<=10){
-          key_number(cont[n].toString());
+        panel_pu.draw_panel();
+      }else if(panel_pu.panelmode === "number"){
+        if (0<=n&&n<=9){
+          pu.key_number(panel_pu.cont[n].toString());
+        }else if (n===10){
+          pu.key_backspace();
         }else if (n===11){
-          key_space();
+          pu.key_space();
         }
-      }else if(pu.panelmode === "alphabet"){
-        var cont = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O",
-        "P","Q","R","S","T","U","V","W","X","Y","Z","!","?"," ",""];
-        var n = numxf+numyf*6;
-        if (0<=n&&n<=28){
-          key_number(cont[n].toString());
+      }else if(panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s"){
+        if (0<=n&&n<=27){
+          pu.key_number(panel_pu.cont[n].toString());
+        }else if (n===28){
+          pu.key_number(" ");
         }else if (n>=29){
-          key_space();
+          pu.key_space();
         }
-      }else if(pu.panelmode === "key_symbol"){
-        var str = "!?#$%&()[]+－×＊/÷＝\u{221E}^<>～|@;:,._   "
-        var cont = str.split("");
-        var n = numxf+numyf*6;
-        if (cont[n] && cont[n]!=" "){
-          key_number(cont[n]);
-        }else if (cont[n]===" "){
-          key_space();
+      }else if(panel_pu.panelmode === "key_symbol"){
+        if (panel_pu.cont[n] && panel_pu.cont[n]!=" "){
+          pu.key_number(panel_pu.cont[n]);
+        }else if (panel_pu.cont[n]===" "){
+          pu.key_space();
         }
-      }else if(pu.panelmode === "ja_K"){
-        var str = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモ"+
-        "ヤユヨ　　ラリルレロワヲン　　ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポァィゥェォャュョ　　ー。、　　"
-        var cont = str.split("");
-        var n = numxf+numyf*10;
-        if (cont[n] && cont[n]!="　"){
-          key_number(cont[n]);
-        }else if (cont[n]==="　"){
-          key_space();
+      }else if(paneletc.indexOf(panel_pu.panelmode)!=-1){
+        if (panel_pu.cont[n] && panel_pu.cont[n]!="　"){
+          pu.key_number(panel_pu.cont[n]);
+        }else if (panel_pu.cont[n]==="　"){
+          pu.key_space();
         }
       }
     }
