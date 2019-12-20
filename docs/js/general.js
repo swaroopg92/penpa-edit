@@ -836,6 +836,9 @@ function loadqa_arrayver1(qa,rtext_qa){
     }else if(pu[qa].symbol[i1][1]==="firefly"){
       dif_symbol = [0,3,4,1,2,5];
       pu[qa].symbol[i1][0]=dif_symbol[pu[qa].symbol[i1][0]];
+    }else if(pu[qa].symbol[i1][1]==="inequality"){
+      dif_symbol = [0,1,3,4,2,5,7,8,6];
+      pu[qa].symbol[i1][0]=dif_symbol[pu[qa].symbol[i1][0]];
     }
   }
   for (var i in rtext_qa[qa][18]){//freeline
@@ -885,30 +888,36 @@ function loadqa_arrayver1(qa,rtext_qa){
       pu[qa].direction[pu[qa].direction.length-1].push(pu.centerlist[j]);
     }
   }
-  for (var i of rtext_qa[qa][23]){//squareframe
-    pu[qa].squareframe.push([]);
-    for (j of i){
-      pu[qa].squareframe[pu[qa].squareframe.length-1].push(pu.centerlist[j]);
+  if(rtext_qa[qa][23]){
+    for (var i of rtext_qa[qa][23]){//squareframe
+      pu[qa].squareframe.push([]);
+      for (j of i){
+        pu[qa].squareframe[pu[qa].squareframe.length-1].push(pu.centerlist[j]);
+      }
     }
   }
-  for (var i in rtext_qa[qa][24]){//deletelineHE
-    if(parseInt(i/pu.nx)===pu.ny){
-      i2 = pu.centerlist[i-pu.nx]+pu.nx+4;
-    }else{
-      i2 = pu.centerlist[i]
+  if(rtext_qa[qa][24]){
+    for (var i in rtext_qa[qa][24]){//deletelineHE
+      if(parseInt(i/pu.nx)===pu.ny){
+        i2 = pu.centerlist[i-pu.nx]+pu.nx+4;
+      }else{
+        i2 = pu.centerlist[i]
+      }
+      key = pu.point[i2].surround[0]+","+pu.point[i2].surround[1];
+      pu[qa].deletelineE[key]=rtext_qa[qa][24][i];
     }
-    key = pu.point[i2].surround[0]+","+pu.point[i2].surround[1];
-    pu[qa].deletelineE[key]=rtext_qa[qa][24][i];
   }
-  for (var i in rtext_qa[qa][25]){//deletelineVE
-    i1 = i%(pu.nx+1)+parseInt(i/(pu.nx+1))*(pu.nx);
-    if(i%(pu.nx+1)===pu.nx){
-      i2 = pu.centerlist[i1-1]+1;
-    }else{
-      i2 = pu.centerlist[i1]
+  if(rtext_qa[qa][25]){
+    for (var i in rtext_qa[qa][25]){//deletelineVE
+      i1 = i%(pu.nx+1)+parseInt(i/(pu.nx+1))*(pu.nx);
+      if(i%(pu.nx+1)===pu.nx){
+        i2 = pu.centerlist[i1-1]+1;
+      }else{
+        i2 = pu.centerlist[i1]
+      }
+      key = pu.point[i2].surround[0]+","+pu.point[i2].surround[3];
+      pu[qa].deletelineE[key]=rtext_qa[qa][25][i];
     }
-    key = pu.point[i2].surround[0]+","+pu.point[i2].surround[3];
-    pu[qa].deletelineE[key]=rtext_qa[qa][25][i];
   }
 }
 
