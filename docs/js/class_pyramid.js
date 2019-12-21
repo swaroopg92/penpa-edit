@@ -46,6 +46,9 @@ class Puzzle_pyramid extends Puzzle{
     for (var i of this.group3){
       document.getElementById(i).style.display = "none";
     }
+    for (var i of this.group4){
+      document.getElementById(i).style.display = "none";
+    }
   }
 
   create_point(){
@@ -240,7 +243,11 @@ class Puzzle_pyramid extends Puzzle{
         }
         break;
       case "special":
-        type = [0];
+        if(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon"){
+          type = [1];
+        }else{
+          type = [0];
+        }
         break;
     }
     return type;
@@ -373,6 +380,8 @@ class Puzzle_pyramid extends Puzzle{
     this.draw_wall("pu_q");
     this.draw_wall("pu_a");
     this.draw_frame();
+    this.draw_polygonsp("pu_q");
+    this.draw_polygonsp("pu_a");
     this.draw_freeline("pu_q");
     this.draw_freeline("pu_a");
     this.draw_line("pu_q");
@@ -385,9 +394,9 @@ class Puzzle_pyramid extends Puzzle{
     this.draw_symbol("pu_a",2);
     //this.draw_cage("pu_q");
     //this.draw_cage("pu_a");
-    this.draw_cursol();
     this.draw_number("pu_q");
     this.draw_number("pu_a");
+    this.draw_cursol();
     this.draw_freecircle();
 
     //this.draw_point();
@@ -914,14 +923,10 @@ class Puzzle_pyramid extends Puzzle{
           set_circle_style(this.ctx,2);
           this.draw_circle(this.ctx,this.point[i].x,this.point[i].y,0.18);
         }
-        if (this[pu].numberS[i][0].length <= 2 ){
-          set_font_style(this.ctx,0.28*this.size.toString(10),this[pu].numberS[i][1]);
+        if (true){
+          set_font_style(this.ctx,0.32*this.size.toString(10),this[pu].numberS[i][1]);
           this.ctx.textAlign = "center";
-          this.ctx.text(this[pu].numberS[i][0],this.point[i].x,this.point[i].y+0.03*this.size);
-        }else{
-          set_font_style(this.ctx,0.28*this.size.toString(10),this[pu].numberS[i][1]);
-          this.ctx.textAlign = "left";
-          this.ctx.text(this[pu].numberS[i][0],this.point[i].x-0.15*this.size,this.point[i].y+0.03*this.size);
+          this.ctx.text(this[pu].numberS[i][0],this.point[i].x,this.point[i].y+0.03*this.size,0.3*this.size);
         }
     }
   }

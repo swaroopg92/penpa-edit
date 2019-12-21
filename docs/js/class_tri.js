@@ -44,6 +44,9 @@ class Puzzle_tri extends Puzzle{
     for (var i of this.group3){
       document.getElementById(i).style.display = "inline-block";
     }
+    for (var i of this.group4){
+      document.getElementById(i).style.display = "none";
+    }
   }
 
   create_point(){
@@ -207,7 +210,6 @@ class Puzzle_tri extends Puzzle{
     var type;
     switch(this.mode[this.mode.qa].edit_mode){
       case "surface":
-      case "special":
       case "board":
         type = [0];
         break;
@@ -251,6 +253,13 @@ class Puzzle_tri extends Puzzle{
           type = [this.point[this.last].type];
         }else{
           type = [2,3,4];
+        }
+        break;
+      case "special":
+        if(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon"){
+          type = [1];
+        }else{
+          type = [0];
         }
         break;
       case "cage":
@@ -361,6 +370,8 @@ class Puzzle_tri extends Puzzle{
     //this.draw_wall("pu_q");
     //this.draw_wall("pu_a");
     this.draw_frame();
+    this.draw_polygonsp("pu_q");
+    this.draw_polygonsp("pu_a");
     this.draw_freeline("pu_q");
     this.draw_freeline("pu_a");
     this.draw_line("pu_q");
@@ -373,9 +384,9 @@ class Puzzle_tri extends Puzzle{
     this.draw_symbol("pu_a",2);
     //this.draw_cage("pu_q");
     //this.draw_cage("pu_a");
-    this.draw_cursol();
     this.draw_number("pu_q");
     this.draw_number("pu_a");
+    this.draw_cursol();
     this.draw_freecircle();
 
     //this.draw_point();
@@ -802,10 +813,10 @@ class Puzzle_tri extends Puzzle{
 
   draw_freecircle(){ //override
     /*free_circle*/
-    if ((this.mode[this.mode.qa].edit_mode === "line"||this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3"){
+    if (((this.mode[this.mode.qa].edit_mode === "line"||this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3")||this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]==="polygon"){
       this.ctx.setLineDash([]);
       this.ctx.fillStyle = "rgba(0,0,0,0)";
-      this.ctx.strokeStyle = "#c0e0ff";
+      this.ctx.strokeStyle = "#1e90ff";
       this.ctx.lineWidth = 4;
       if(this.freelinecircle_g[0]!=-1){
         this.draw_circle(this.ctx,this.point[this.freelinecircle_g[0]].x,this.point[this.freelinecircle_g[0]].y,0.25);

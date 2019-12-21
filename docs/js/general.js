@@ -520,8 +520,6 @@ function loadver1(paramArray,rtext){
 
   panel_pu = new Panel();
 
-    console.log(rtext[1]);
-
   if(!paramArray.m){  //edit_mode
     var rtext_q = JSON.parse(rtext[1]);
     var rtext_a = JSON.parse(rtext[2]);

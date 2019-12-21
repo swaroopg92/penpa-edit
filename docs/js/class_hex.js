@@ -41,6 +41,9 @@ class Puzzle_hex extends Puzzle{
     for (var i of this.group3){
       document.getElementById(i).style.display = "inline-block";
     }
+    for (var i of this.group4){
+      document.getElementById(i).style.display = "inline-block";
+    }
   }
 
   create_point(){
@@ -115,7 +118,7 @@ class Puzzle_hex extends Puzzle{
       }
     }
     //  1/6
-    var r = 0.16;
+    var r = 1/6;
     type = 5;
     for (var j=0; j<n; j++){
       for (var i=0; i<n; i++){
@@ -138,23 +141,28 @@ class Puzzle_hex extends Puzzle{
     }
 
     //  1/6
-    var r = 0.16;
+    var r = 1/6;
     type = 6;
     for (var j=0; j<n; j++){
       for (var i=0; i<n; i++){
         if(i===0||i===n-1||j===0||j===n-1){use=-1;}else{use=1;}
-        adjacent = [];
         surround = [];
+        adjacent = [k-6*(n+1)+4+6*(j%2),k-4,k+1,k+3];
         point[k] = new Point(point[i+j*n].x-r*this.size*Math.sqrt(3),point[i+j*n].y-r*this.size,type,adjacent,surround,use);
         k++;
-        point[k] = new Point(point[i+j*n].x+r*this.size*Math.sqrt(3),point[i+j*n].y-r*this.size,type,adjacent,surround,use);
-        k++;
+        adjacent = [k-6*(n+1)+4+6*(j%2),k-6*(n+1)+8+6*(j%2),k-1,k+1];
         point[k] = new Point(point[i+j*n].x,point[i+j*n].y-2*r*this.size,type,adjacent,surround,use);
         k++;
-        point[k] = new Point(point[i+j*n].x,point[i+j*n].y+2*r*this.size,type,adjacent,surround,use);
+        adjacent = [k-6*(n+1)+8+6*(j%2),k-1,k+3,k+4];
+        point[k] = new Point(point[i+j*n].x+r*this.size*Math.sqrt(3),point[i+j*n].y-r*this.size,type,adjacent,surround,use);
         k++;
+        adjacent = [k-4,k-3,k+1,k+6*(n-1)-2+6*(j%2)];
         point[k] = new Point(point[i+j*n].x-r*this.size*Math.sqrt(3),point[i+j*n].y+r*this.size,type,adjacent,surround,use);
         k++;
+        adjacent = [k-1,k+1,k+6*(n-1)-2+6*(j%2),k+6*(n-1)+2+6*(j%2)];
+        point[k] = new Point(point[i+j*n].x,point[i+j*n].y+2*r*this.size,type,adjacent,surround,use);
+        k++;
+        adjacent = [k-3,k-1,k+4,k+6*(n-1)+2+6*(j%2)];
         point[k] = new Point(point[i+j*n].x+r*this.size*Math.sqrt(3),point[i+j*n].y+r*this.size,type,adjacent,surround,use);
         k++;
       }
@@ -193,7 +201,6 @@ class Puzzle_hex extends Puzzle{
     var type;
     switch(this.mode[this.mode.qa].edit_mode){
       case "surface":
-      case "special":
       case "board":
         type = [0];
         break;
@@ -239,8 +246,15 @@ class Puzzle_hex extends Puzzle{
           type = [2,3,4];
         }
         break;
+      case "special":
+        if(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon"){
+          type = [1];
+        }else{
+          type = [0];
+        }
+        break;
       case "cage":
-        type = [];
+        type = [6];
         break;
     }
     return type;
@@ -349,6 +363,8 @@ class Puzzle_hex extends Puzzle{
     this.draw_wall("pu_q");
     this.draw_wall("pu_a");
     this.draw_frame();
+    this.draw_polygonsp("pu_q");
+    this.draw_polygonsp("pu_a");
     this.draw_freeline("pu_q");
     this.draw_freeline("pu_a");
     this.draw_line("pu_q");
@@ -359,11 +375,11 @@ class Puzzle_hex extends Puzzle{
     this.draw_frameBold();
     this.draw_symbol("pu_q",2);
     this.draw_symbol("pu_a",2);
-    //this.draw_cage("pu_q");
-    //this.draw_cage("pu_a");
-    this.draw_cursol();
+    this.draw_cage("pu_q");
+    this.draw_cage("pu_a");
     this.draw_number("pu_q");
     this.draw_number("pu_a");
+    this.draw_cursol();
     this.draw_freecircle();
 
     //this.draw_point();
@@ -377,23 +393,28 @@ class Puzzle_hex extends Puzzle{
         this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
       }else if(this.point[i].type===1){
         this.ctx.fillStyle = "blue";
-        this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
+        //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
       }else if(this.point[i].type===2){
         this.ctx.fillStyle = "red";
         //this.ctx.fillStyle = "rgba(0,0,0,0)";
-        this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
+        //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
       }else if(this.point[i].type===3){
         this.ctx.fillStyle = "orange";
         //this.ctx.fillStyle = "rgba(0,0,0,0)";
-        this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
+        //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
       }else if(this.point[i].type===4){
         this.ctx.fillStyle = "green";
         //this.ctx.fillStyle = "rgba(0,0,0,0)";
-        this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
+        //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
       }else if(this.point[i].type===5){
-        this.ctx.fillStyle = "rgba(0,0,0,0)";
+        this.ctx.fillStyle = "green";
+        //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
       }else if(this.point[i].type===6){
-        this.ctx.fillStyle = "rgba(0,0,0,0)";
+        this.ctx.fillStyle = "green";
+        this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
+        //this.ctx.beginPath();
+        //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
+        //this.ctx.fill();
       }
       this.ctx.beginPath();
       //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
@@ -673,6 +694,123 @@ class Puzzle_hex extends Puzzle{
     }
   }
 
+  draw_cage(pu) {
+    var r = 0.16;//space between grid
+    var r0 = Math.sqrt(3)/3-1/3-r;
+
+    for(var i in this[pu].cage){
+      var i1 = i.split(",")[0];
+      var i2 = i.split(",")[1];
+      var x1,y1,x2,y2,x3=-1,y3=-1,th;
+
+      if(i1%6===0){
+        th = this.rotate_theta_cage(150);
+        x1 = this.point[i1].x+r*Math.cos(th)*this.size;
+        y1 = this.point[i1].y-r*Math.sin(th)*this.size;
+        if(i2%6===1){
+          th = this.rotate_theta_cage(90);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+        }else if(i2%6===3){
+          th = this.rotate_theta_cage(210);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+        }
+      }else if(i1%6===1){
+        th = this.rotate_theta_cage(90);
+        x1 = this.point[i1].x+r*Math.cos(th)*this.size;
+        y1 = this.point[i1].y-r*Math.sin(th)*this.size;
+        if(i2%6===2){
+          th = this.rotate_theta_cage(30);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+        }
+      }else if(i1%6===2){
+        th = this.rotate_theta_cage(30);
+        x1 = this.point[i1].x+r*Math.cos(th)*this.size;
+        y1 = this.point[i1].y-r*Math.sin(th)*this.size;
+        if(i2%6===0){
+          th = this.rotate_theta_cage(150);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+          th = this.rotate_theta_cage(330);
+          x3 = x1+r0*Math.cos(th)*this.size;
+          y3 = y1-r0*Math.sin(th)*this.size;
+        }else if(i2%6===5){
+          th = this.rotate_theta_cage(330);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+        }
+      }else if(i1%6===3){
+        th = this.rotate_theta_cage(210);
+        x1 = this.point[i1].x+r*Math.cos(th)*this.size;
+        y1 = this.point[i1].y-r*Math.sin(th)*this.size;
+        if(i2%6===1){
+          th = this.rotate_theta_cage(90);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+          th = this.rotate_theta_cage(270);
+          x3 = x1+r0*Math.cos(th)*this.size;
+          y3 = y1-r0*Math.sin(th)*this.size;
+        }else if(i2%6===4){
+          th = this.rotate_theta_cage(270);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+        }
+      }else if(i1%6===4){
+        th = this.rotate_theta_cage(270);
+        x1 = this.point[i1].x+r*Math.cos(th)*this.size;
+        y1 = this.point[i1].y-r*Math.sin(th)*this.size;
+        if(i2%6===0){
+          th = this.rotate_theta_cage(150);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+          th = this.rotate_theta_cage(330);
+          x3 = x1+r0*Math.cos(th)*this.size;
+          y3 = y1-r0*Math.sin(th)*this.size;
+        }else if(i2%6===2){
+          th = this.rotate_theta_cage(30);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+          th = this.rotate_theta_cage(210);
+          x3 = x1+r0*Math.cos(th)*this.size;
+          y3 = y1-r0*Math.sin(th)*this.size;
+        }else if(i2%6===5){
+          th = this.rotate_theta_cage(330);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+        }
+      }else if(i1%6===5){
+        th = this.rotate_theta_cage(330);
+        x1 = this.point[i1].x+r*Math.cos(th)*this.size;
+        y1 = this.point[i1].y-r*Math.sin(th)*this.size;
+        if(i2%6===1){
+          th = this.rotate_theta_cage(90);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+          th = this.rotate_theta_cage(270);
+          x3 = x1+r0*Math.cos(th)*this.size;
+          y3 = y1-r0*Math.sin(th)*this.size;
+        }else if(i2%6===3){
+          th = this.rotate_theta_cage(210);
+          x2 = this.point[i2].x+r*Math.cos(th)*this.size;
+          y2 = this.point[i2].y-r*Math.sin(th)*this.size;
+          th = this.rotate_theta_cage(30);
+          x3 = x1+r0*Math.cos(th)*this.size;
+          y3 = y1-r0*Math.sin(th)*this.size;
+        }
+      }
+
+      set_line_style(this.ctx,this[pu].cage[i]);
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(x1,y1);
+      if(x3!=-1){this.ctx.lineTo(x3,y3);}
+      this.ctx.lineTo(x2,y2);
+      this.ctx.stroke();
+    }
+  }
+
   draw_symbol(pu,layer) {
     /*symbol_layer*/
     for(var i in this[pu].symbol){
@@ -703,7 +841,7 @@ class Puzzle_hex extends Puzzle{
           if(this.reflect[1] === -1){direction = (360-direction+360)%360;}
           switch(direction){
             case 120:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(arrowlength*0.25+0.15)*this.size, this.point[i].y+(arrowlength*0.25*Math.sqrt(3)-0.15)*this.size,
                           this.point[i].x+(-arrowlength*0.25+0.15)*this.size, this.point[i].y+(-arrowlength*0.25*Math.sqrt(3)-0.15)*this.size,
@@ -712,7 +850,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 300:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(-arrowlength*0.25+0.2)*this.size, this.point[i].y+(-arrowlength*0.25*Math.sqrt(3)-0.1)*this.size,
                           this.point[i].x+(arrowlength*0.25+0.2)*this.size, this.point[i].y+(arrowlength*0.25*Math.sqrt(3)-0.1)*this.size,
@@ -721,7 +859,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 60:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x-(arrowlength*0.25+0.15)*this.size, this.point[i].y+(arrowlength*0.25*Math.sqrt(3)-0.15)*this.size,
                           this.point[i].x-(-arrowlength*0.25+0.15)*this.size, this.point[i].y+(-arrowlength*0.25*Math.sqrt(3)-0.15)*this.size,
@@ -730,7 +868,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 240:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.1*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x-(-arrowlength*0.25+0.2)*this.size, this.point[i].y+(-arrowlength*0.25*Math.sqrt(3)-0.1)*this.size,
                           this.point[i].x-(arrowlength*0.25+0.2)*this.size, this.point[i].y+(arrowlength*0.25*Math.sqrt(3)-0.1)*this.size,
@@ -739,7 +877,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 180:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(arrowlength*0.5+0.0)*this.size, this.point[i].y+(arrowlength*0.0-0.3)*this.size,
                           this.point[i].x+(-arrowlength*0.5+0.0)*this.size, this.point[i].y+(-arrowlength*0.0-0.3)*this.size,
@@ -748,7 +886,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 0:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x-(arrowlength*0.5+0.0)*this.size, this.point[i].y+(arrowlength*0.0-0.3)*this.size,
                           this.point[i].x-(-arrowlength*0.5+0.0)*this.size, this.point[i].y+(-arrowlength*0.0-0.3)*this.size,
@@ -757,7 +895,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 150:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(arrowlength*0.25*Math.sqrt(3)+0.1)*this.size, this.point[i].y+(arrowlength*0.25-0.2)*this.size,
                           this.point[i].x+(-arrowlength*0.25*Math.sqrt(3)+0.1)*this.size, this.point[i].y+(-arrowlength*0.25-0.2)*this.size,
@@ -766,7 +904,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 330:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(-arrowlength*0.25*Math.sqrt(3)+0.15)*this.size, this.point[i].y+(-arrowlength*0.25-0.15)*this.size,
                           this.point[i].x+(arrowlength*0.25*Math.sqrt(3)+0.15)*this.size, this.point[i].y+(arrowlength*0.25-0.15)*this.size,
@@ -775,7 +913,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 30:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x-(arrowlength*0.25*Math.sqrt(3)+0.1)*this.size, this.point[i].y+(arrowlength*0.25-0.2)*this.size,
                           this.point[i].x-(-arrowlength*0.25*Math.sqrt(3)+0.1)*this.size, this.point[i].y+(-arrowlength*0.25-0.2)*this.size,
@@ -784,7 +922,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 210:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x+0.0*this.size,this.point[i].y+0.15*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x-(-arrowlength*0.25*Math.sqrt(3)+0.15)*this.size, this.point[i].y+(-arrowlength*0.25-0.15)*this.size,
                           this.point[i].x-(arrowlength*0.25*Math.sqrt(3)+0.15)*this.size, this.point[i].y+(arrowlength*0.25-0.15)*this.size,
@@ -793,7 +931,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 90:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.05*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.05*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(arrowlength*0.0+0.25)*this.size, this.point[i].y+(arrowlength*0.5-0.0)*this.size,
                           this.point[i].x+(-arrowlength*0.0+0.25)*this.size, this.point[i].y+(-arrowlength*0.5-0.0)*this.size,
@@ -802,7 +940,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             case 270:
-                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.05*this.size,this.size*0.8);
+                this.ctx.text(this[pu].number[i][0].slice(0,-2),this.point[i].x-0.1*this.size,this.point[i].y+0.05*this.size,this.size*0.7);
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[i].x+(arrowlength*0.0+0.25)*this.size, this.point[i].y+(-arrowlength*0.5-0.0)*this.size,
                           this.point[i].x+(-arrowlength*0.0+0.25)*this.size, this.point[i].y+(arrowlength*0.5-0.0)*this.size,
@@ -893,14 +1031,10 @@ class Puzzle_hex extends Puzzle{
           set_circle_style(this.ctx,2);
           this.draw_circle(this.ctx,this.point[i].x,this.point[i].y,0.15);
         }
-        if (this[pu].numberS[i][0].length <= 2 ){
-          set_font_style(this.ctx,0.25*this.size.toString(10),this[pu].numberS[i][1]);
+        if (true){
+          set_font_style(this.ctx,0.26*this.size.toString(10),this[pu].numberS[i][1]);
           this.ctx.textAlign = "center";
-          this.ctx.text(this[pu].numberS[i][0],this.point[i].x,this.point[i].y+0.03*this.size);
-        }else{
-          set_font_style(this.ctx,0.25*this.size.toString(10),this[pu].numberS[i][1]);
-          this.ctx.textAlign = "left";
-          this.ctx.text(this[pu].numberS[i][0],this.point[i].x-0.15*this.size,this.point[i].y+0.03*this.size);
+          this.ctx.text(this[pu].numberS[i][0],this.point[i].x,this.point[i].y+0.03*this.size,0.3*this.size);
         }
     }
   }
@@ -2291,6 +2425,14 @@ class Puzzle_hex extends Puzzle{
 
   rotate_theta(th){
     th = (th+this.theta);
+    if(this.reflect[0] === -1){th = (180-th+360)%360;}
+    if(this.reflect[1] === -1){th = (360-th+360)%360;}
+    th = th/180*Math.PI;
+    return th;
+  }
+
+  rotate_theta_cage(th){
+    th = (th-this.theta);
     if(this.reflect[0] === -1){th = (180-th+360)%360;}
     if(this.reflect[1] === -1){th = (360-th+360)%360;}
     th = th/180*Math.PI;

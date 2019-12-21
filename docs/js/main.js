@@ -226,7 +226,6 @@ redo_button.addEventListener(onleave_key, e => {
 document.addEventListener(ondown_key, window_click, {passive: false});
 
 function window_click(e) {
-  //console.log(e.target.id);
   //modalwindow
   if (e.target.className === "modal") {
     document.getElementById(e.target.id).style.display = 'none';
@@ -472,6 +471,11 @@ function window_click(e) {
     //スタイルモード
   if(e.target.id.slice(0,3)==="st_"){
     pu.stylemode_check(e.target.id.slice(0,-3));
+    e.preventDefault();
+  }
+  //コンビモード
+  if(e.target.id.slice(0,9)==="combisub_"){
+    pu.subcombimode(e.target.id.slice(9));
     e.preventDefault();
   }
     //シンボル

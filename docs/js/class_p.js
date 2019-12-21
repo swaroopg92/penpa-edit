@@ -52,12 +52,18 @@ class Puzzle{
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.obj = document.getElementById("dvique");
-    this.group1 = ["mo_cage_lb","sub_line2_lb","sub_lineE2_lb","sub_number9_lb","ms_tri","ms_pencils","ms_arrow_fourtip","mo_combi_lb"];
+    //square
+    this.group1 = ["sub_line2_lb","sub_lineE2_lb","sub_number9_lb","ms_tri","ms_pencils","ms_arrow_fourtip","ms0_arrow_fouredge","mo_combi_lb"];
+    //square,pyramid,hex
     this.group2 = ["mo_wall_lb","sub_number2_lb","sub_number3_lb","sub_number6_lb","ms4","ms5"];
-    this.group3 = ["sub_line5_lb"]
+    //square,tri,hex
+    this.group3 = ["sub_line5_lb"];
+    //square,hex
+    this.group4 = ["mo_cage_lb"];
 
     //描画位置
     this.last = -1;
+    this.first = -1;
     this.start_point = {}; //for move_redo
     this.drawing_surface = -1;
     this.drawing_line = -1;
@@ -145,13 +151,13 @@ class Puzzle{
       this[i].number = {};
       this[i].numberS = {};
       this[i].symbol = {};
-      //this[i].symbol2 = {};
       this[i].freeline = {};
       this[i].freelineE = {};
       this[i].thermo = [];
       this[i].arrows =[];
       this[i].direction = [];
       this[i].squareframe = [];
+      this[i].polygon = [];
       this[i].line = {};
       this[i].lineE = {};
       this[i].wall = {};
@@ -172,13 +178,13 @@ class Puzzle{
     this[this.mode.qa].number = {};
     this[this.mode.qa].numberS = {};
     this[this.mode.qa].symbol = {};
-    //this[this.mode.qa].symbol2 = {};
     this[this.mode.qa].freeline = {};
     this[this.mode.qa].freelineE = {};
     this[this.mode.qa].thermo = [];
     this[this.mode.qa].arrows =[];
     this[this.mode.qa].direction = [];
     this[this.mode.qa].squareframe = [];
+    this[this.mode.qa].polygon = [];
     this[this.mode.qa].line = {};
     this[this.mode.qa].lineE = {};
     this[this.mode.qa].wall = {};
@@ -557,6 +563,13 @@ class Puzzle{
     this.redraw();
   }
 
+  subcombimode(mode){
+    this.mode[this.mode.qa].combi[0] = mode;
+    document.getElementById("combimode_content").innerHTML = mode;
+    this.type = this.type_set();
+    this.redraw();
+  }
+
   mode_qa(mode){
     document.getElementById(mode).checked = true;
     this.mode.qa = mode;
@@ -591,6 +604,7 @@ class Puzzle{
     document.getElementById('style_number').style.display='none';
     document.getElementById('style_symbol').style.display='none';
     document.getElementById('style_cage').style.display='none';
+    document.getElementById('style_combi').style.display='none';
   }
 
   reset_selectedmode(){
@@ -1083,7 +1097,7 @@ class Puzzle{
   undo(){
     var a = this[this.mode.qa].command_undo.pop();/*a[0]:list_name,a[1]:point_number,a[2]:value*/
     if(a){
-      if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe") && a[1] === -1){
+      if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe"||a[0]==="polygon") && a[1] === -1){
         if(this[this.mode.qa][a[0]].length > 0){
           this[this.mode.qa].command_redo.push([a[0],a[1],this[this.mode.qa][a[0]].pop()]);
         }
@@ -1114,7 +1128,7 @@ class Puzzle{
   redo(){
     var a = this[this.mode.qa].command_redo.pop();
     if(a){
-      if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe") && a[1] === -1){
+      if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe"||a[0]==="polygon") && a[1] === -1){
           this[this.mode.qa].command_undo.push([a[0],a[1],null]);
           this[this.mode.qa][a[0]].push(a[2]);
       }else if(a[0]==="move"){//a[0]:move a[1]:point_from a[2]:point_to
@@ -1461,7 +1475,9 @@ class Puzzle{
         this.last = num;
         break;
       case "special":
-        if(this.point[num].type === 0){
+        if(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]==="polygon"){
+          this.re_polygondown(num);
+        }else if(this.point[num].type === 0){
           this.re_specialdown(num,this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
         }
         break;
@@ -1537,14 +1553,16 @@ class Puzzle{
         this.last = -1;
         break;
       case "special":
-        if(pu.point[num].use===1){
-          if(this.point[num].type === 0){
-            this.re_specialup(num,this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
+        if(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]!="polygon"){
+          if(pu.point[num].use===1){
+            if(this.point[num].type === 0){
+              this.re_specialup(num,this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
+            }
           }
+          this.drawing_line = -1;
+          this.last = -1;
+          this.redraw();
         }
-        this.drawing_line = -1;
-        this.last = -1;
-        this.redraw();
         break;
       case "board":
         this.drawing_board = -1;
@@ -1599,7 +1617,9 @@ class Puzzle{
           }
           break;
         case "special":
-          if (this.drawing_line === 1 &&this.point[num].type === 0){
+          if(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]==="polygon"){
+            this.re_polygonmove(num);
+          }else if (this.drawing_line === 1 &&this.point[num].type === 0){
             this.re_special(num,this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
           }
           break;
@@ -1650,6 +1670,12 @@ class Puzzle{
             this.start_point = {};
             this.last = -1;
           }
+          break;
+        case "combi":
+          if(this.drawing_line != -1){
+            this.drawing_line = -1;
+          }
+          this.paneloff = false;
           break;
       }
   }
@@ -1975,6 +2001,40 @@ class Puzzle{
     }
   }
 
+  re_polygonmove(num){
+    var arr = "polygon";
+    this.freelinecircle_g[1] = num;
+    if(this.drawing_line === 1){
+      this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length-1] = num;
+    }
+    this.redraw();
+  }
+
+  re_polygondown(num){
+    var arr = "polygon";
+    if(this.drawing_line  != 1){
+      /* //1マス目をクリックすると消える機能
+      for (var i=this[this.mode.qa][arr].length-1;i>=0;i--){
+        if(this[this.mode.qa][arr][i][0]===num){
+          this.record(arr,i);
+          this[this.mode.qa][arr][i] = [];
+          return;
+        }
+      }
+      */
+      this.drawing_line = 1;
+      this.record(arr,-1);
+      this[this.mode.qa][arr].push([num,num]);
+    }else if(this.drawing_line === 1){
+      if(num != this[this.mode.qa][arr].slice(-1)[0][0] && num != this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length-2]){
+        this[this.mode.qa][arr].slice(-1)[0].push(num);
+      }else{
+        this[this.mode.qa][arr].slice(-1)[0].pop();
+        this.drawing_line = -1;
+      }
+    }
+  }
+
   redraw(){
     this.flushcanvas();
     panel_pu.draw_panel();
@@ -2032,12 +2092,31 @@ class Puzzle{
     }
   }
 
+  draw_polygonsp(pu) {
+    for(var i=0; i<this[pu].polygon.length;i++){
+      if(this[pu].polygon[i][0]){
+        this.ctx.setLineDash([]);
+        this.ctx.lineCap = "square";
+        this.ctx.strokeStyle = "#000";
+        this.ctx.fillStyle = "#000";
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.point[this[pu].polygon[i][0]].x,this.point[this[pu].polygon[i][0]].y);
+        for(var j=1;j<this[pu].polygon[i].length;j++){
+          this.ctx.lineTo(this.point[this[pu].polygon[i][j]].x,this.point[this[pu].polygon[i][j]].y);
+        }
+        this.ctx.stroke();
+        this.ctx.fill();
+      }
+    }
+  }
+
   draw_freecircle(){
     /*free_circle*/
-    if ((this.mode[this.mode.qa].edit_mode === "line"||this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3"){
+    if (((this.mode[this.mode.qa].edit_mode === "line"||this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3")||this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]==="polygon"){
       this.ctx.setLineDash([]);
       this.ctx.fillStyle = "rgba(0,0,0,0)";
-      this.ctx.strokeStyle = "#c0e0ff";
+      this.ctx.strokeStyle = "#1e90ff";
       this.ctx.lineWidth = 4;
       if(this.freelinecircle_g[0]!=-1){
         this.draw_circle(this.ctx,this.point[this.freelinecircle_g[0]].x,this.point[this.freelinecircle_g[0]].y,0.3);
