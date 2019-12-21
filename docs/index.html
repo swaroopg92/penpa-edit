@@ -219,6 +219,13 @@
                       <li><span id="ms_arrow_tri_W">白</span></li>
                     </ul>
                   </li>
+                  <li id="ms0_arrow_fouredge"><span id="ms3_arrow_fouredge">四辺</span>
+                    <ul>
+                      <li><span id="ms_arrow_fouredge_B">黒</span></li>
+                      <li><span id="ms_arrow_fouredge_G">灰</span></li>
+                      <li><span id="ms_arrow_fouredge_E">緑</span></li>
+                    </ul>
+                  </li>
                   <li><span id="ms_arrow_Short">短太</span></li>
                   <li><span id="ms_arrow_S">小</span></li>
                   <li><span id="ms_arrow_cross">十字</span></li>
@@ -264,6 +271,8 @@
             <label for="sub_specialdirection" class="label" id="sub_specialdirection_lb">矢印</label>
             <input type="radio" name="mode_special" value="squareframe" id="sub_specialsquareframe">
             <label for="sub_specialsquareframe" class="label" id="sub_specialsquareframe_lb">四角枠</label>
+            <input type="radio" name="mode_special" value="polygon" id="sub_specialpolygon">
+            <label for="sub_specialpolygon" class="label" id="sub_specialpolygon_lb">多角形</label>
           </span>
 
           <span id="mode_move" style="display:none;">
@@ -276,8 +285,44 @@
           </span>
 
           <span id="mode_combi" style="display:none;">
-            <input type="radio" name="mode_combi" value="battleship" id="sub_combibattleship" checked="checked">
-            <label for="sub_combibattleship" class="label" id="sub_combibattleship_lb">船</label>
+            <ul class="nav">
+              <li><span id="subc1">塗り</span>
+                <ul>
+                  <li><span id="combisub_blpo">黒・点</span></li>
+                  <li><span id="combisub_blwh">白丸黒丸</span></li>
+                  <li><span id="combisub_shaka">シャカシャカ</span></li>
+                </ul>
+              </li>
+              <li><span id="subc2">ループ</span>
+                <ul>
+                  <li><span id="combisub_linex">線・×</span></li>
+                  <li><span id="combisub_lineox">線・OX</span></li>
+                  <li><span id="combisub_edgexoi">辺・x・内外</span></li>
+                  <li><span id="combisub_yajilin">ヤジリン</span></li>
+                  <li><span id="combisub_hashi">橋をかけろ</span></li>
+                </ul>
+              </li>
+              <li><span id="subc3">領域</span>
+                <ul>
+                  <li><span id="combisub_edgesub">辺・補助線</span></li>
+                </ul>
+              </li>
+              <li><span id="subc4">物体</span>
+                <ul>
+                  <li><span id="combisub_battleship">バトルシップ</span></li>
+                  <li><span id="combisub_star">スターバトル</span></li>
+                  <li><span id="combisub_tents">テント</span></li>
+                </ul>
+              </li>
+              <li><span id="subc5">数字埋</span>
+                <ul>
+                  <li><span id="combisub_numfl">数字フリック</span></li>
+                  <li><span id="combisub_alfl">英字フリック</span></li>
+                </ul>
+              </li>
+            </ul>
+            <!--<input type="radio" name="mode_combi" value="battleship" id="sub_combibattleship" checked="checked">
+            <label for="sub_combibattleship" class="label" id="sub_combibattleship_lb">船</label>-->
           </span>
         </div>
 
@@ -397,6 +442,13 @@
             <span class="symbolmode_display">
               <span id="panel_button0" class="label">選択中：</span>
               <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
+            </span>
+          </span>
+
+          <span id="style_combi" style="display:none;">
+            <span class="combimode_display">
+              <span id="panel_button0" class="label">選択中：</span>
+              <b><span id="combimode_content" class="combimode_content">blpo</span></b>
             </span>
           </span>
 
