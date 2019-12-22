@@ -109,6 +109,8 @@ class Puzzle{
     this.theta = 0;
     this.reflect = [1,1];
     this.centerlist = [];
+    this.solution = "";
+    this.sol_flag = 0;
 
     this.replace = [
       ["\"qa\"","z9"],
@@ -729,9 +731,200 @@ class Puzzle{
       return url+"?m=solve&p="+ba;
     }
 
+    maketext_solve_solution(){
+      var text_head = this.maketext_solve();
+      var text;
+      text = JSON.stringify(this.make_solution());
+
+      var u8text = new TextEncoder().encode(text);
+      var deflate = new Zlib.RawDeflate(u8text);
+      var compressed = deflate.compress();
+      var char8 = Array.from(compressed,e=>String.fromCharCode(e)).join("");
+      var ba = window.btoa(char8);
+      //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+      return text_head+"&a="+ba;
+    }
+
+    make_solution(){
+      var sol = [[],[],[],[],[],[]];
+      var pu = "pu_a";
+
+      for(var i in this[pu].surface){
+        if(this[pu].surface[i] === 1||this[pu].surface[i] === 4){
+          sol[0].push(i);
+        }
+      }
+      for(var i in this[pu].symbol){
+        if(this[pu].symbol[i][0] === 2&&this[pu].symbol[i][1] === "square_LL"){
+          if(sol[0].indexOf(i)===-1){
+            sol[0].push(i);
+          }
+        }
+      }
+
+      for(var i in this[pu].line){
+        if(this[pu].line[i] === 3){
+          sol[1].push(i+",1");
+        }else if(this[pu].line[i] === 30){
+          sol[1].push(i+",2");
+        }
+      }
+
+      for(var i in this[pu].lineE){
+        if(this[pu].lineE[i] === 3){
+          sol[2].push(i+",1");
+        }else if(this[pu].lineE[i] === 30){
+          sol[2].push(i+",2");
+        }
+      }
+
+      for(var i in this[pu].wall){
+        if(this[pu].wall[i] === 3){
+          sol[3].push(i);
+        }
+      }
+
+      for(var i in this[pu].number){
+        if(this[pu].number[i][1]===2 && this[pu].number[i][2]==="7"){
+          var sum = 0,a;
+          for(var j=0;j<10;j++){
+            if(this[pu].number[i][0][j]===1){
+              sum+=1;
+              a = j+1;
+            }
+          }
+          if(sum === 1){
+            sol[4].push(i+","+a);
+          }
+        }else if(!isNaN(this[pu].number[i][0])||!this[pu].number[i][0].match(/[^A-Za-z]+/)){
+          if(this[pu].number[i][1]===2 && (this[pu].number[i][2]==="1"||this[pu].number[i][2]==="5"||this[pu].number[i][2]==="6")){
+            sol[4].push(i+","+this[pu].number[i][0]);
+          }
+        }
+      }
+
+      for(var i in this[pu].symbol){
+        switch(this[pu].symbol[i][1]){
+          case "circle_M":
+            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 2){
+              sol[5].push(i+","+this[pu].symbol[i][0]+"A");
+            }
+            break;
+          case "tri":
+            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 4){
+              sol[5].push(i+","+this[pu].symbol[i][0]+"B");
+            }
+            break;
+          case "arrow_S":
+            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 8){
+              sol[5].push(i+","+this[pu].symbol[i][0]+"C");
+            }
+            break;
+          case "battleship_B":
+            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 6){
+              sol[5].push(i+","+this[pu].symbol[i][0]+"D");
+            }
+            break;
+          case "star"://starは色を無視
+            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 3){
+              sol[5].push(i+","+1+"E");
+            }
+            break;
+          case "tents":
+            if(this[pu].symbol[i][0] === 2){
+              sol[5].push(i+","+this[pu].symbol[i][0]+"F");
+            }
+            break;
+        }
+      }
+
+      for(var i=0;i<6;i++){
+        sol[i] = sol[i].sort();
+      }
+      return sol;
+    }
+
     maketext_ppfile() {
       var text = "";
       var gridsize = "19.842";
+      var fontsize = "16";
+      var header = document.getElementById("savetextarea_pp").value;
+
+      //セット
+      if(header != ""){
+        if(header === "Tromino"){
+          text += '#リスト:0,True\n'+
+          '*Grid:11.9052,-11.9052\n'+
+          '*Skew:0,0\n'+
+          '*Offset:11.9052,-11.9052\n'+
+          '*Size:11.9052,-11.9052\n'+
+          '*Alignment:0,0\n'+
+          '*Fill:80\n'+
+          '*Stroke:100,0.25,0,1\n'+
+          '*Border:-1,2,0,1\n'+
+          '. . . 1\n'+
+          ' 1 . 1\n'+
+          ' . . 1\n'+
+          '--------\n';
+        }else if(header === "LITS"){
+
+        }else if(header === "LITSO"){
+          text += '#リスト:0,True\n'+
+          '*Grid:11.9052,-11.9052\n'+
+          '*Skew:0,0\n'+
+          '*Offset:11.9052,-11.9052\n'+
+          '*Size:11.9052,-11.9052\n'+
+          '*Alignment:0,0\n'+
+          '*Fill:80\n'+
+          '*Stroke:100,0.25,0,1\n'+
+          '*Border:-1,2,0,1\n'+
+          '. 1 1 . . . 1 . .\n'+
+          '. 1 1 . . 1 1 . .\n'+
+          '. . . . . 1 . . .\n'+
+          '1 . . . . . . . .\n'+
+          '1 . . 1 1 . . 1 .\n'+
+          '1 . . 1 . . . 1 1\n'+
+          '1 . . 1 . . . 1 .\n'+
+          '--------\n';
+        }else if(header === "Pentomino"){
+          text += '#リスト:0,True\n'+
+          '*Grid:11.9052,-11.9052\n'+
+          '*Skew:0,0\n'+
+          '*Offset:11.9052,-11.9052\n'+
+          '*Size:11.9052,-11.9052\n'+
+          '*Alignment:0,0\n'+
+          '*Fill:80\n'+
+          '*Stroke:100,0.25,0,1\n'+
+          '*Border:-1,2,0,1\n'+
+          '. . 1 . . . 1 . . 1 1 . . . .\n'+
+          '. 1 1 1 . . 1 . . 1 . . . . .\n'+
+          '. . 1 . . 1 1 . 1 1 . . . . .\n'+
+          '. . . . . . 1 . . . . . . . .\n'+
+          '. . . . . . . . . . . . . . .\n'+
+          '. 1 . . 1 1 1 . 1 1 1 . . 1 1\n'+
+          '. 1 . . 1 . 1 . . . 1 . 1 1 .\n'+
+          '1 1 1 . . . . . . . 1 . 1 . .\n'+
+          '. . . . 1 . . . . . . . . . .\n'+
+          '. 1 . . 1 . 1 1 . 1 . . 1 . .\n'+
+          '1 1 . . 1 . 1 . . 1 . . 1 1 .\n'+
+          '. 1 1 . 1 . 1 . . 1 1 . 1 1 .\n'+
+          '. . . . 1 . 1 . . . 1 . . . .\n'+
+          '--------\n';
+        }else{
+          text += '#セット:7,True\n'+
+          '*Grid:'+gridsize+','+gridsize+'\n'+
+          '*Skew:0,0\n'+
+          '*Offset:'+0+','+(-gridsize)+'\n'+
+          '*Size:'+gridsize+','+gridsize+'\n'+
+          '*Alignment:0,0\n'+
+          '*Fill:100\n'+
+          '*Stroke:-1,0,0,1\n'+
+          '*Font:IPAGothic,Normal,Normal,Normal,'+fontsize+'\n'+
+          '*TextAlignment:0,0\n';
+          text += header + '\n';
+          text += "--------\n";
+        }
+      }
 
       //解答線
       if(!isEmpty(this.pu_a.line)){
@@ -850,7 +1043,7 @@ class Puzzle{
         '*Alignment:0,0\n'+
         '*Fill:100\n'+
         '*Stroke:-1,0,0,1\n'+
-        '*Font:IPAGothic,Normal,Normal,Normal,16\n'+
+        '*Font:IPAGothic,Normal,Normal,Normal,'+fontsize+'\n'+
         '*TextAlignment:1,1\n';
         for (var j=2; j<this.ny0-2; j++){
           for (var i=2; i<this.nx0-2; i++){
@@ -932,7 +1125,7 @@ class Puzzle{
         '*Alignment:0,0\n'+
         '*Fill:100\n'+
         '*Stroke:-1,0,0,1\n'+
-        '*Font:IPAGothic,Normal,Normal,Normal,16\n'+
+        '*Font:IPAGothic,Normal,Normal,Normal,'+fontsize+'\n'+
         '*TextAlignment:1,1\n';
         for (var j=2; j<this.ny0-2; j++){
           for (var i=2; i<this.nx0-2; i++){
@@ -2040,6 +2233,7 @@ class Puzzle{
     panel_pu.draw_panel();
     this.draw();
     this.set_redoundocolor();
+    this.check_solution();
   }
 
   set_redoundocolor(){
@@ -2182,5 +2376,19 @@ class Puzzle{
         }
       }
     }*/
+  }
+
+  check_solution(){
+    if(this.solution){
+      var text = JSON.stringify(this.make_solution());
+      if(text === this.solution &&this.sol_flag === 0){
+        setTimeout(() => {
+          alert("正解です");
+        }, 10)
+        this.sol_flag = 1;
+      }else if(text != this.solution &&this.sol_flag === 1){//答えが変わったら改めて判定
+        this.sol_flag = 0;
+      }
+    }
   }
 }

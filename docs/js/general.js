@@ -290,6 +290,20 @@ function savetext() {
   document.getElementById("savetextarea").value = "";
 }
 
+function expansion() {
+  document.getElementById("modal-save2").style.display = 'block';
+}
+
+function solution_open(){
+  document.getElementById("modal-save2-solution").style.display = 'block';
+  document.getElementById("modal-save2-pp").style.display = 'none';
+}
+
+function pp_file_open(){
+  document.getElementById("modal-save2-solution").style.display = 'none';
+  document.getElementById("modal-save2-pp").style.display = 'block';
+}
+
 function savetext_edit() {
   var text = pu.maketext();
   document.getElementById("savetextarea").value = text;
@@ -297,6 +311,12 @@ function savetext_edit() {
 
 function savetext_solve() {
   var text = pu.maketext_solve();
+  //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
+  document.getElementById("savetextarea").value = text;
+}
+
+function savetext_withsolution() {
+  var text = pu.maketext_solve_solution();
   //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
   document.getElementById("savetextarea").value = text;
 }
@@ -461,6 +481,16 @@ function load(urlParam){
           pu[i][j] = new Stack();
           pu[i][j].set(t);
         }
+      }
+
+      //aを復号
+      if(paramArray.a){
+        var ab = atob(paramArray.a);
+        ab = Uint8Array.from(ab.split(""),e=>e.charCodeAt(0));
+        var inflate = new Zlib.RawInflate(ab);
+        var plain = inflate.decompress();
+        var atext = new TextDecoder().decode(plain);
+        pu.solution = atext; 
       }
     }
 

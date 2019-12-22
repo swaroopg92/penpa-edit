@@ -88,7 +88,7 @@ function onContextmenu(e){ //右クリック
 }
 
 function onKeyDown(e){
-  if(e.target.type === "number" || e.target.type === "text"){
+  if(e.target.type === "number" || e.target.type === "text"||e.target.id == "savetextarea_pp"){
     //入力フォーム用
   }else{
     var key = e.key;
@@ -340,12 +340,17 @@ function window_click(e) {
     case "address_solve":
       savetext_solve();
       e.preventDefault(); break;
+    case "expansion":
+      expansion();
+      e.preventDefault(); break;
     case "pp_file":
       make_ppfile();
       e.preventDefault(); break;
     case "savetextarea":
       return;
     case "savetextname":
+      return;
+    case "savetextarea_pp":
       return;
     case "closeBtn_save1":
       savetext_copy();
@@ -358,6 +363,15 @@ function window_click(e) {
     //  break;
     case "closeBtn_save4":
       document.getElementById('modal-save').style.display='none';
+      e.preventDefault(); break;
+    case "closeBtn_save5":
+      savetext_withsolution();
+      e.preventDefault(); break;
+    case "solution_open":
+      solution_open();
+      e.preventDefault(); break;
+    case "pp_file_open":
+      pp_file_open();
       e.preventDefault(); break;
     case "rt_right":
       pu.rotate_right();

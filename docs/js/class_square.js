@@ -275,6 +275,7 @@ class Puzzle_square extends Puzzle{
             break;
           case "shaka":
           case "edgesub":
+          case "arrowS":
           case "numfl":
           case "alfl":
             type = [0,1];
@@ -517,6 +518,9 @@ class Puzzle_square extends Puzzle{
           case "tents":
             this.re_combi_tents(num);
             break;
+          case "arrowS":
+            this.re_combi_arrowS(num);
+            break;
           case "numfl":
             this.re_combi_numfl(num);
             break;
@@ -641,6 +645,8 @@ class Puzzle_square extends Puzzle{
             break;
           case "shaka":
             this.re_combi_shaka_up(num);
+          case "arrowS":
+            this.re_combi_arrowS_up(num);
           case "numfl":
             this.re_combi_numfl_up(num);
           case "alfl":
@@ -743,6 +749,9 @@ class Puzzle_square extends Puzzle{
               break;
             case "tents":
               this.re_combi_tents_move(num);
+              break;
+            case "arrowS":
+              this.re_combi_arrowS_move(num);
               break;
             case "numfl":
               this.re_combi_numfl_move(num);
@@ -1317,6 +1326,41 @@ class Puzzle_square extends Puzzle{
     this.redraw();
   }
 
+  re_combi_arrowS_up(num){
+    if(this.point[num].type === 0 && this.last === num && this.first === num){
+      if(this[this.mode.qa].symbol[this.last] && this[this.mode.qa].symbol[this.last][1] === "arrow_S"){
+        this.record("symbol",this.last);
+        delete this[this.mode.qa].symbol[this.last];
+      }
+    }
+    this.drawing_line = -1;
+    this.first = -1;
+    this.last = -1;
+    this.redraw();
+  }
+
+  re_combi_arrowS(num){
+    if(this.point[num].type===0){
+      this.first = num;
+      this.last = num;
+      this.drawing_line = 1;
+    }
+  }
+
+  re_combi_arrowS_move(num){
+    if(this.drawing_line === 1){
+      var n = this.point[this.last].adjacent.indexOf(parseInt(num));
+      if(n>=0 && n<=7){
+        var a = [3,1,5,7,2,4,8,6];
+        this.record("symbol",this.last);
+        this[this.mode.qa].symbol[this.last] = [a[n],"arrow_S",2];
+        this.drawing_line = -1;
+        this.last = -1;
+        this.redraw();
+      }
+    }
+  }
+
   re_combi_numfl_up(num){
     if(this.point[num].type === 0 && this.last === num && this.first === num){
       if(!this[this.mode.qa].number[this.last] || this[this.mode.qa].number[this.last][0] != "5"){
@@ -1426,6 +1470,8 @@ class Puzzle_square extends Puzzle{
     this.draw_number("pu_a");
     this.draw_cursol();
     this.draw_freecircle();
+
+    //this.draw_point();
   }
 
   draw_point() {
