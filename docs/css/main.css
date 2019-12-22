@@ -550,6 +550,39 @@ color: #000000;
       max-height: 130px;
  }
 
+#savetextarea_pp{
+  min-width: 200px;
+  min-height: 40px;
+  max-width: 280px;
+  max-height: 60px;
+}
+
+ #modal-save2 {
+ display: none;
+ position: fixed;
+ z-index: 3;
+ left: 0;
+ top: 0;
+ height: 100%;
+ width: 100%;
+ overflow: auto;
+ background-color: rgba(0,0,0,0.5);
+ }
+
+ #modal-save2-content{
+ background-color: white;
+ width: 300px;
+ height: 270px;
+ margin:0 auto;
+ margin-top: 160px;
+ border-radius: 20px;
+ }
+
+ #modal-save2-solution {
+   padding-left: 10px;
+   padding-top: 10px;
+ }
+
   #modal-header{
     width:300px;
     height: 30px;
@@ -561,6 +594,10 @@ color: #000000;
 
   h4 {
     display: inline;
+  }
+
+  #solutiontext{
+    font-size: 12px;
   }
 
   input[type=number] {
