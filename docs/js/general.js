@@ -457,8 +457,8 @@ function load(urlParam){
       }
       pu.pu_q = JSON.parse(rtext[3]);
       pu.pu_a = JSON.parse(rtext[4]);
-      if(pu.pu_q.polygon){pu.pu_q.polygon=[];}
-      if(pu.pu_a.polygon){pu.pu_a.polygon=[];}
+      if(!pu.pu_q.polygon){pu.pu_q.polygon=[];}
+      if(!pu.pu_a.polygon){pu.pu_a.polygon=[];}
       pu.centerlist = rtext[5];
 
       //classがコピーできないので別
@@ -475,7 +475,7 @@ function load(urlParam){
       pu.mode_set("surface");
       pu.mode.grid = JSON.parse(rtext[2]);
       pu.pu_q = JSON.parse(rtext[3]);
-      if(pu.pu_q.polygon){pu.pu_q.polygon=[];}
+      if(!pu.pu_q.polygon){pu.pu_q.polygon=[];}
       pu.centerlist = rtext[5];
       //classがコピーできないので別
       for (var i of ["pu_q"]){
