@@ -455,7 +455,6 @@ function load(urlParam){
           pu.mode[i][j] = mode[i][j];
         }
       }
-      console.log(pu.pu_q);
       pu.pu_q = JSON.parse(rtext[3]);
       pu.pu_a = JSON.parse(rtext[4]);
       if(pu.pu_q.polygon){pu.pu_q.polygon=[];}
@@ -735,11 +734,9 @@ function loadqa_arrayver1(qa,rtext_qa){
   }
 
   for (var i in rtext_qa[qa][12]){//numberS
-    console.log(i);
     i1 = (pu.nx+4)*(pu.ny+4)*4+4*(pu.nx+4)*2+8;//topleft
     p = i%(2*pu.nx);
     q = parseInt(i/(2*pu.nx));
-    console.log(p,q);
     if(p%2===0 && q%2===0){
       i1 += p*2+q*(pu.nx+4)*2;
     }else if(p%2===1 && q%2===0){
@@ -749,7 +746,6 @@ function loadqa_arrayver1(qa,rtext_qa){
     }else if(p%2===1 && q%2===1){
       i1 += p*2+1+(q-1)*(pu.nx+4)*2;
     }
-    console.log(i1);
     pu[qa].numberS[i1]=rtext_qa[qa][12][i];
   }
   for (var i in rtext_qa[qa][13]){//numberE
