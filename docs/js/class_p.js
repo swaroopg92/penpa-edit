@@ -806,27 +806,27 @@ class Puzzle{
       for(var i in this[pu].symbol){
         switch(this[pu].symbol[i][1]){
           case "circle_M":
-            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 2){
+            if(this[pu].symbol[i][0] >= 1&&this[pu].symbol[i][0] <= 2){
               sol[5].push(i+","+this[pu].symbol[i][0]+"A");
             }
             break;
           case "tri":
-            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 4){
+            if(this[pu].symbol[i][0] >= 1&&this[pu].symbol[i][0] <= 4){
               sol[5].push(i+","+this[pu].symbol[i][0]+"B");
             }
             break;
           case "arrow_S":
-            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 8){
+            if(this[pu].symbol[i][0] >= 1&&this[pu].symbol[i][0] <= 8){
               sol[5].push(i+","+this[pu].symbol[i][0]+"C");
             }
             break;
           case "battleship_B":
-            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 6){
+            if(this[pu].symbol[i][0] >= 1&&this[pu].symbol[i][0] <= 6){
               sol[5].push(i+","+this[pu].symbol[i][0]+"D");
             }
             break;
           case "star"://starは色を無視
-            if(this[pu].symbol[i][0] >= 1||this[pu].symbol[i][0] <= 3){
+            if(this[pu].symbol[i][0] >= 1&&this[pu].symbol[i][0] <= 3){
               sol[5].push(i+","+1+"E");
             }
             break;
@@ -2383,7 +2383,7 @@ class Puzzle{
       var text = JSON.stringify(this.make_solution());
       if(text === this.solution &&this.sol_flag === 0){
         setTimeout(() => {
-          alert("正解です");
+          alert("正解です")
         }, 10)
         this.sol_flag = 1;
       }else if(text != this.solution &&this.sol_flag === 1){//答えが変わったら改めて判定
