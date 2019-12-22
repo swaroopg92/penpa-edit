@@ -735,18 +735,21 @@ function loadqa_arrayver1(qa,rtext_qa){
   }
 
   for (var i in rtext_qa[qa][12]){//numberS
+    console.log(i);
     i1 = (pu.nx+4)*(pu.ny+4)*4+4*(pu.nx+4)*2+8;//topleft
     p = i%(2*pu.nx);
     q = parseInt(i/(2*pu.nx));
+    console.log(p,q);
     if(p%2===0 && q%2===0){
-      i1 += p*2+q*(pu.nx+2)*2;
+      i1 += p*2+q*(pu.nx+4)*2;
     }else if(p%2===1 && q%2===0){
-      i1 += p*2-1+q*(pu.nx+2)*2;
+      i1 += p*2-1+q*(pu.nx+4)*2;
     }else if(p%2===0 && q%2===1){
-      i1 += p*2+2+(q-1)*(pu.nx+2)*2;
+      i1 += p*2+2+(q-1)*(pu.nx+4)*2;
     }else if(p%2===1 && q%2===1){
-      i1 += p*2+1+(q-1)*(pu.nx+2)*2;
+      i1 += p*2+1+(q-1)*(pu.nx+4)*2;
     }
+    console.log(i1);
     pu[qa].numberS[i1]=rtext_qa[qa][12][i];
   }
   for (var i in rtext_qa[qa][13]){//numberE
