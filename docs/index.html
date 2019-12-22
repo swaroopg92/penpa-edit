@@ -312,6 +312,7 @@
                   <li><span id="combisub_battleship">バトルシップ</span></li>
                   <li><span id="combisub_star">スターバトル</span></li>
                   <li><span id="combisub_tents">テント</span></li>
+                  <li><span id="combisub_arrowS">矢印</span></li>
                 </ul>
               </li>
               <li><span id="subc5">数字埋</span>
@@ -671,7 +672,8 @@
         <div class="nb_button">
           <input type="button" id="address_edit" value="編集アドレス"/>
           <input type="button" id="address_solve" value="出題用アドレス"/>
-          <input type="button" id="pp_file" value="pp_file"/>
+          <input type="button" id="expansion" value="拡張出力"/>
+          <!--<input type="button" id="pp_file" value="pp_file"/>-->
         </div>
         <div id="modal-save-body">
           <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
@@ -683,6 +685,57 @@
           <input type="button" id="closeBtn_save3" value="開く" onclick="savetext_window();"/>
           <input type="button" id="closeBtn_save4" value="キャンセル"/>
         </div>
+      </div>
+    </div>
+
+    <div id="modal-save2" class="modal">
+      <div id="modal-save2-content">
+        <div id="modal-header">
+          <h3 id="save2texttitle">拡張出力</h3>
+        </div>
+        <div class="nb_button">
+          <input type="button" id="solution_open" value="解答判定"/>
+          <input type="button" id="pp_file_open" value="pp_file"/>
+        </div>
+        <div id="modal-save2-solution">
+          <h3 id="save3texttitle">解答判定設定</h3>
+          <div class="nb_button">
+            <h5>判定対象：解答モードの以下</h5>
+            <div align="left" id="solutiontext">
+              <p>黒マス：濃灰・黒・正方形特大2</p>
+              <p>線：緑・二重　辺：緑・二重　壁：緑</p>
+              <p>数字：通常・中・小・候補（1桁のみ）の緑</p>
+              <p>記号：円中1-2、直角三角形1-4、矢印小1-8</p>
+              <p>固有1-バトルシップ黒1-6、テント2、スター1-3</p>
+            </div>
+            <!--
+            <input type="checkbox" name="nb_solution_bl" value="solution_bl" id="nb_check_solution_bl" checked = "checked">
+            <label for="nb_check_solution_bl"  id="nb_check_solution_bl_lb">黒マス</label>
+            <input type="checkbox" name="nb_solution_line" value="solution_line" id="nb_check_solution_line" checked = "checked">
+            <label for="nb_check_solution_line"  id="nb_check_solution_line_lb">緑線</label>
+            <input type="checkbox" name="nb_solution_line" value="solution_lineE" id="nb_check_solution_lineE" checked = "checked">
+            <label for="nb_check_solution_lineE"  id="nb_check_solution_lineE_lb">緑辺</label>
+            <input type="checkbox" name="nb_solution_wall" value="solution_wall" id="nb_check_solution_wall" checked = "checked">
+            <label for="nb_check_solution_wall"  id="nb_check_solution_wall_lb">緑壁</label>
+            <br>
+            <input type="checkbox" name="nb_solution_num" value="solution_num" id="nb_check_solution_num" checked = "checked">
+            <label for="nb_check_solution_num"  id="nb_check_solution_num_lb">緑数字</label>
+            <input type="checkbox" name="nb_solution_sym" value="solution_sym" id="nb_check_solution_sym" checked = "checked">
+            <label for="nb_check_solution_sym"  id="nb_check_solution_sym_lb">記号</label>
+            -->
+            <br>
+            <input type="button" id="closeBtn_save5" value="解答判定付き出題用アドレスを出力"/>
+          </div>
+        </div>
+        <div id="modal-save2-pp" style="display:none;">
+          <h3 id="save4texttitle">pp_file</h3>
+          <h5 id="save5texttitle">ヘッダー</h5>
+          <textarea rows="1" cols="50" id="savetextarea_pp"></textarea>
+          <div class="nb_button">
+            <input type="button" id="pp_file" value="pp_fileを出力"/>
+          </div>
+        </div>
+
       </div>
     </div>
 
