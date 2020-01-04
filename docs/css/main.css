@@ -305,7 +305,7 @@ color: #000000;
   #dvique{
     background: #fff;
     border: 1px solid #232323;
-    width: auto;
+    width: 400px;
     margin: 0 auto;
     padding: 10px;
   }
@@ -622,3 +622,195 @@ color: #000000;
 #modal-spacelr{
     text-align: center;
 }
+
+/* ============================================================= */
+/* メニュー領域 */
+#menupanel {
+  display  : block;
+  position : relative;
+  top      : 0px;
+  left     : 0px;
+  height   : 1.5em;
+  margin   : 0;
+  padding  : 0 0 0 2pt;
+  background : #efefef;
+  font-size : 0.95em;
+  border-bottom: silver 1px solid;
+
+  user-select         : none;
+  -ms-user-select     : none;
+  -moz-user-select    : none;
+  -webkit-user-select : none;
+}
+@media screen and (max-device-width: 1024px) {
+#menupanel {
+  height   : 1.8em;
+}
+}
+
+/* main-menu items */
+#menupanel > li {
+  position   : relative;
+  float      : left;
+  margin     : 0;
+  padding    : 0pt 4pt;
+  height     : 100%;
+  list-style : none;
+  cursor     : pointer;
+}
+#menupanel > li:hover {
+  background : #ffcccc;
+}
+#menupanel > li > span {
+  color       : blue;
+  line-height : 1.5;
+  font-size   : 110%;
+  vertical-align : middle;
+}
+@media screen and (max-device-width: 1024px) {
+#menupanel > li > span {
+  line-height : 1.8;
+}
+}
+#menupanel > li:hover > span {
+  color : maroon;
+  font-weight : 900;
+}
+
+/* submenu popup (any level) */
+#menupanel li:hover > menu {
+  display : block;
+}
+
+/* for all level1+ submenus */
+#menupanel > li > menu {
+  font-size : 0.9em;
+}
+#menupanel menu {
+  display  : none;
+  position : absolute;
+  list-style-type : none;
+  background : gray;
+  background : #cccccc linear-gradient(to right bottom, rgba(0,0,0,.75), rgba(0,0,0,0));
+  margin     : 0pt;
+  padding    : 3px;
+  border-radius:8px;
+  box-shadow : 6px 6px 6px rgba(64,64,64,.5);
+  /* box-shadow : 6px 6px 6px rgba(64,64,64,.5), inset 32px 32px 48px -16px rgba(0,0,0,.5); */
+
+  text-align : left;
+  cursor     : default;
+}
+#menupanel menu[label]:before {
+  margin  : 0pt;
+  padding : 4pt 8pt 4pt 4pt;
+  line-height : 140%;
+  white-space : nowrap;
+  color   : white;
+  content : attr(label);
+
+  text-shadow : 0px 0px 1px black;
+}
+#menupanel menu li:first-child {
+  border-top-left-radius :3px;
+  border-top-right-radius:3px;
+}
+#menupanel menu li:last-child {
+  border-bottom-left-radius :6px;
+  border-bottom-right-radius:6px;
+}
+
+/* level1, level2+ submenus */
+#menupanel menu
+  { left:0px;   top:1.5em;  min-width:132px; z-index:22;}
+@media screen and (max-device-width: 1024px) {
+#menupanel menu { top:2.0em;}
+}
+#menupanel menu menu[label]
+  { left:120px; top:-1.5em; min-width:80px;  z-index:23;}
+#menupanel menu menu
+  { left:120px; top:-0.2em; min-width:80px;  z-index:23;}
+#menupanel menu menu[label] menu
+  { left:72px;  top:-1.5em; min-width:80px;  z-index:24;}
+
+/* submenu items */
+#menupanel menu li {
+  display    : block;
+  position   : relative;
+  line-height: 1.1;
+  float      : none;
+  list-style : none;
+  margin     : 0pt;
+  padding    : 0.2em 2pt 0.2em 4pt;
+  color      : black;
+  background : white;
+  cursor     : pointer;
+}
+@media screen and (max-device-width: 1024px) {
+#menupanel menu li {
+  line-height: 1.8;
+}
+}
+#menupanel menu li:hover {
+  background : #ffcccc;
+}
+#menupanel menu li:hover > span {
+  font-weight : 900;
+  text-decoration : underline;
+}
+@media screen and (max-device-width: 1024px) {
+#menupanel menu li + li {
+  margin-top:1px;
+}
+}
+#menupanel menu hr {
+  margin  : 0px;
+  padding : 0px;
+  border  : none;
+  height  : 3px;
+  color   : lime;
+}
+@media screen and (max-device-width: 1024px) {
+#menupanel menu hr {
+  height  : 4px;
+}
+}
+#menupanel menu span {
+  white-space: nowrap;
+}
+#menupanel menu a {
+  color : black;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* disabled submenu items */
+#menupanel menu li.disabled {
+  background : #dfdfdf;
+  color      : gray;
+  cursor     : default;
+}
+/* (cancel hover, for unsupporting :not(.disabled)) */
+#menupanel menu li.disabled:hover {
+  background : #dfdfdf;
+}
+#menupanel menu li.disabled:hover > span {
+  font-weight : 100;
+  text-decoration : none;
+}
+
+/* toggle submenu items */
+#menupanel menu li.check > span,
+#menupanel menu li[data-value] > span
+  { font-size:small; color:gray;}
+#menupanel menu li.checked > span
+  { font-size:small; color:black;}
+
+#menupanel menu li.check > span:before,
+#menupanel menu li[data-value] > span:before
+  { padding:0pt 2pt; color:white; content:"_"; font-size:small;}
+#menupanel menu li.checked > span:before
+  { padding:0pt 2pt; color:black; content:"+"; font-size:small;}
+
+#menu_link li
+  { font-size: 0.9em;}
