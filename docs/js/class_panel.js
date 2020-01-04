@@ -68,7 +68,7 @@ class Panel{
 
   draw_panel() {
     this.select_close();
-    if(pu.mode[pu.mode.qa].edit_mode === "number"&&!pu.paneloff){
+    if(pu.mode[pu.mode.qa].edit_mode === "number"){
       switch(this.panelmode){
         case "number":
           this.nxf = 4;
@@ -229,7 +229,7 @@ class Panel{
           this.draw_unicodesymbol();
           break;
       }
-    }else if (pu.mode[pu.mode.qa].edit_mode === "symbol"&&!pu.paneloff){
+    }else if (pu.mode[pu.mode.qa].edit_mode === "symbol"){
       this.nxf = 4;
       this.nyf = 3;
       this.sizef = 36;

@@ -240,7 +240,7 @@ class Puzzle_hex extends Puzzle{
         }
         break;
       case "wall":
-        if(this.drawing_line != -1){
+        if(this.drawing){
           type = [this.point[this.last].type];
         }else{
           type = [2,3,4];
@@ -256,8 +256,56 @@ class Puzzle_hex extends Puzzle{
       case "cage":
         type = [6];
         break;
+      case "combi":
+        switch(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]){
+          case "tents":
+          case "linex":
+            type = [0,2,3,4];
+            break;
+          case "edgexoi":
+            type = [0,1,2,3,4];
+            break;
+          case "blpo":
+          case "blwh":
+          case "battleship":
+          case "star":
+          case "magnets":
+          case "lineox":
+          case "yajilin":
+          case "hashi":
+          case "arrowS":
+          case "shaka":
+          case "numfl":
+          case "alfl":
+            type = [0];
+            break;
+          case "edgesub":
+            type = [0,1];
+            break;
+        }
+        break;
     }
     return type;
+  }
+
+  coord_p_edgex(x,y){
+    var min0,min = 10e6;
+    var num = 0;
+    for (var i=0;i<this.point.length;i++){
+      if(this.type.indexOf(this.point[i].type) != -1){
+        min0 = (x-this.point[i].x)**2+(y-this.point[i].y)**2;
+        if(min0<min){
+          if(this.point[i].type === 2 || this.point[i].type === 3 || this.point[i].type === 4){
+            if(min0 > (0.7*this.size)**2){
+              break;
+            }
+          }
+          min = min0;
+          num = i;
+        }
+      }
+    }
+    return parseInt(num);
   }
 
   rotate_left(){
@@ -346,6 +394,29 @@ class Puzzle_hex extends Puzzle{
       }
     }
     this.redraw();
+  }
+
+  direction_arrow8(x,y,x0,y0){
+    var angle = Math.atan2(y-y0,x-x0) * 360 / 2 / Math.PI + 180;
+    if(this.reflect[0] === -1){angle = (180-angle+360)%360;}
+    if(this.reflect[1] === -1){angle = (360-angle+360)%360;}
+    angle = (angle-this.theta+360)%360;
+    angle -= 180;
+    var a;
+    if(angle<-150||angle>150){
+      a = 2;
+    }else if(angle > -150 && angle < -90){
+      a = 0;
+    }else if(angle > -90 && angle < -30){
+      a = 1;
+    }else if(angle > -30 && angle < 30){
+      a = 3;
+    }else if(angle > 30 && angle < 90){
+      a = 5;
+    }else if(angle > 90 && angle < 150){
+      a = 4;
+    }
+    return a;
   }
 ////////////////draw/////////////////////
 
@@ -949,7 +1020,7 @@ class Puzzle_hex extends Puzzle{
                 this.ctx.fill();
               break;
             default:
-              set_font_style(this.ctx,0.8*this.size.toString(10),this[pu].number[i][1]);
+              set_font_style(this.ctx,0.7*this.size.toString(10),this[pu].number[i][1]);
               this.ctx.text(this[pu].number[i][0],this.point[i].x,this.point[i].y+0.06*this.size,this.size*0.8);
               break;
           }

@@ -40,12 +40,15 @@ function onDown(e) {
       var event = e.changedTouches[0];
       //e.preventDefault();
   }
-  var num = coord_point(event);
+  var {x,y,num} = coord_point(event);
   if(pu.point[num].use===1){
     if (event.button === 2){
-        pu.drawonDownR(num);
+      pu.mouse_mode = "down_right";
+      pu.mouseevent(x,y,num);
     }else{  //左クリックorタップ
-        pu.drawonDown(num);
+      pu.mouse_mode = "down_left";
+      pu.mouseevent(x,y,num);
+      //pu.drawonDown(num);
     }
   }
 }
@@ -57,8 +60,9 @@ function onUp(e) {
       var event = e.changedTouches[0];
       //e.preventDefault();
   }
-  var num = coord_point(event);
-  pu.drawonUp(num);
+  var {x,y,num} = coord_point(event);
+  pu.mouse_mode = "up";
+  pu.mouseevent(x,y,num);
 }
 
 function onMove(e) {
@@ -68,9 +72,10 @@ function onMove(e) {
       var event = e.changedTouches[0];
   }
   e.preventDefault();
-  var num = coord_point(event);
+  var {x,y,num} = coord_point(event);
   if(pu.point[num].use===1){
-    pu.drawonMove(num);
+    pu.mouse_mode = "move";
+    pu.mouseevent(x,y,num);
   }
 }
 
@@ -79,7 +84,8 @@ function onOver(e) {
 }
 
 function onOut() {
-  pu.drawonOut();
+  pu.mouse_mode = "out";
+  pu.mouseevent(0,0,0);
   return;
 }
 
@@ -156,7 +162,8 @@ function coord_point(e){
   var y = e.pageY - canvas.offsetTop;
   var min0,min = 10e6;
   var num = 0;
-  for (var i in pu.point){
+  //const startTime = performance.now();
+  for (var i=0;i<pu.point.length;i++){
     if(pu.type.indexOf(pu.point[i].type) != -1){
       min0 = (x-pu.point[i].x)**2+(y-pu.point[i].y)**2;
       if(min0<min){
@@ -165,9 +172,11 @@ function coord_point(e){
       }
     }
   }
-  return parseInt(num);
+  //const endTime = performance.now();
+  //console.log(endTime - startTime);
+  num = parseInt(num)
+  return {x,y,num};
 }
-
 
 let count = 0;
 let timer;

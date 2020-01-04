@@ -59,46 +59,46 @@ function make_class(gridtype){
       var space2 = parseInt(document.getElementById("nb_space2").value,10);
       var space3 = parseInt(document.getElementById("nb_space3").value,10);
       var space4 = parseInt(document.getElementById("nb_space4").value,10);
-      if(nx<=25 && nx>0 && ny<=25 && ny>0 && 15<=size && size<=60 && space1+space2<ny && space3+space4<nx){
+      if(nx<=30 && nx>0 && ny<=30 && ny>0 && 12<=size && size<=60 && space1+space2<ny && space3+space4<nx){
         pu = new Puzzle_square(nx,ny,size);
       }else{
-        alert("一辺:1~25 表示サイズ:15~60");
+        alert("一辺:1~30 表示サイズ:12~60");
       }
       break;
     case "hex":
       var n0 = parseInt(document.getElementById("nb_size1").value,10);
       var space1 = parseInt(document.getElementById("nb_space1").value,10);
-      if(n0<=10 && n0>0 && 15<=size && size<=60 && space1<n0){
+      if(n0<=10 && n0>0 && 12<=size && size<=60 && space1<n0){
         pu = new Puzzle_hex(n0,n0,size);
       }else{
-        alert("一辺:1~10 表示サイズ:15~60");
+        alert("一辺:1~10 表示サイズ:12~60");
       }
       break;
     case "tri":
       var n0 = parseInt(document.getElementById("nb_size1").value,10);
       var space1 = parseInt(document.getElementById("nb_space1").value,10);
-      if(n0<=20 && n0>0 && 15<=size && size<=60 && space1<n0/3){
+      if(n0<=20 && n0>0 && 12<=size && size<=60 && space1<n0/3){
         pu = new Puzzle_tri(n0,n0,size);
       }else{
-        alert("一辺:1~20 表示サイズ:15~60");
+        alert("一辺:1~20 表示サイズ:12~60");
       }
       break;
     case "pyramid":
       var n0 = parseInt(document.getElementById("nb_size1").value,10);
       var space1 = parseInt(document.getElementById("nb_space1").value,10);
-      if(n0<=20 && n0>0 && 15<=size && size<=60 && space1<n0/3){
+      if(n0<=20 && n0>0 && 12<=size && size<=60 && space1<n0/3){
         pu = new Puzzle_pyramid(n0,n0,size);
       }else{
-        alert("一辺:1~20 表示サイズ:15~60");
+        alert("一辺:1~20 表示サイズ:12~60");
       }
       break;
     case "iso":
       var n0 = parseInt(document.getElementById("nb_size1").value,10);
       var space1 = parseInt(document.getElementById("nb_space1").value,10);
-      if(n0<=20 && n0>0 && 15<=size && size<=60 && space1<n0/3){
+      if(n0<=20 && n0>0 && 12<=size && size<=60 && space1<n0/3){
         pu = new Puzzle_iso(n0,n0,size);
       }else{
-        alert("一辺:1~20 表示サイズ:15~60");
+        alert("一辺:1~20 表示サイズ:12~60");
       }
       break;
   }
@@ -407,6 +407,9 @@ function load(urlParam){
     var plain = inflate.decompress();
     var rtext = new TextDecoder().decode(plain);
     rtext = rtext.split("\n");
+
+    rtext[0] = rtext[0].split("zO").join("null");
+    rtext[1] = rtext[1].split("zO").join("null");
 
     if(!isNaN(rtext[0][0])){
       loadver1(paramArray,rtext)
