@@ -94,13 +94,45 @@ function make_class(gridtype){
       break;
     case "iso":
       var n0 = parseInt(document.getElementById("nb_size1").value,10);
-      var space1 = parseInt(document.getElementById("nb_space1").value,10);
-      if(n0<=20 && n0>0 && 12<=size && size<=60 && space1<n0/3){
+      if(n0<=15 && n0>0 && 12<=size && size<=60){
         pu = new Puzzle_iso(n0,n0,size);
       }else{
-        alert("一辺:1~20 表示サイズ:12~60");
+        alert("一辺:1~15 表示サイズ:12~60");
       }
       break;
+    case "truncated_square":
+      var n0 = parseInt(document.getElementById("nb_size1").value,10);
+      if(n0<=10 && n0>0 && 12<=size && size<=60){
+        pu = new Puzzle_truncated_square(n0,n0,size);
+      }else{
+        alert("一辺:1~10 表示サイズ:12~60");
+      }
+      break;
+    case "tetrakis_square":
+      var n0 = parseInt(document.getElementById("nb_size1").value,10);
+      if(n0<=10 && n0>0 && 12<=size && size<=60){
+        pu = new Puzzle_tetrakis_square(n0,n0,size);
+      }else{
+        alert("一辺:1~10 表示サイズ:12~60");
+      }
+      break;
+    case "snub_square":
+      var n0 = parseInt(document.getElementById("nb_size1").value,10);
+      if(n0<=10 && n0>0 && 12<=size && size<=60){
+        pu = new Puzzle_snub_square(n0,n0,size);
+      }else{
+        alert("一辺:1~10 表示サイズ:12~60");
+      }
+      break;
+    case "cairo_pentagonal":
+      var n0 = parseInt(document.getElementById("nb_size1").value,10);
+      if(n0<=10 && n0>0 && 12<=size && size<=60){
+        pu = new Puzzle_cairo_pentagonal(n0,n0,size);
+      }else{
+        alert("一辺:1~10 表示サイズ:12~60");
+      }
+      break;
+
   }
   return pu;
 }
@@ -152,6 +184,56 @@ function changetype(){
       document.getElementById("nb_size1").value = 6;
       document.getElementById("nb_size3").value = 50;
       document.getElementById("nb_space1").value = 0;
+      break;
+    case "iso":
+      type.push("name_space1");
+      type.push("nb_space1");
+      for (var i of type){
+        document.getElementById(i).style.display = "none";
+      }
+      document.getElementById("name_size1").innerHTML = "一辺：";
+      document.getElementById("nb_size1").value = 5;
+      document.getElementById("nb_size3").value = 34;
+      break;
+    case "truncated_square":
+      type.push("name_space1");
+      type.push("nb_space1");
+      for (var i of type){
+        document.getElementById(i).style.display = "none";
+      }
+      document.getElementById("name_size1").innerHTML = "一辺：";
+      document.getElementById("nb_size1").value = 5;
+      document.getElementById("nb_size3").value = 32;
+      break;
+    case "tetrakis_square":
+      type.push("name_space1");
+      type.push("nb_space1");
+      for (var i of type){
+        document.getElementById(i).style.display = "none";
+      }
+      document.getElementById("name_size1").innerHTML = "一辺：";
+      document.getElementById("nb_size1").value = 4;
+      document.getElementById("nb_size3").value = 32;
+      break;
+    case "snub_square":
+      type.push("name_space1");
+      type.push("nb_space1");
+      for (var i of type){
+        document.getElementById(i).style.display = "none";
+      }
+      document.getElementById("name_size1").innerHTML = "一辺：";
+      document.getElementById("nb_size1").value = 4;
+      document.getElementById("nb_size3").value = 38;
+      break;
+    case "cairo_pentagonal":
+      type.push("name_space1");
+      type.push("nb_space1");
+      for (var i of type){
+        document.getElementById(i).style.display = "none";
+      }
+      document.getElementById("name_size1").innerHTML = "一辺：";
+      document.getElementById("nb_size1").value = 4;
+      document.getElementById("nb_size3").value = 38;
       break;
   }
 }

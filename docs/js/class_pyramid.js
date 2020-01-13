@@ -4,7 +4,6 @@ class Puzzle_pyramid extends Puzzle{
     super('pyramid');
     this.nx = nx;
     this.ny = ny;
-    this.corner = 6;
     this.nx0 = this.nx+4;
     this.ny0 = this.ny+4;
     this.margin = -1; //for arrow of number pointing outside of the grid
@@ -48,6 +47,9 @@ class Puzzle_pyramid extends Puzzle{
     }
     for (var i of this.group4){
       document.getElementById(i).style.display = "none";
+    }
+    for (var i of this.group5){
+      document.getElementById(i).style.display = "inline-block";
     }
   }
 

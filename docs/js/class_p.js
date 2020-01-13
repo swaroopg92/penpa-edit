@@ -1,8 +1,9 @@
 class Point{
-  constructor(x,y,type,adjacent,surround,use,neighbor = [],adjacent_dia = []){
+  constructor(x,y,type,adjacent,surround,use,neighbor = [],adjacent_dia = [],type2 = 0){
     this.x = x;
     this.y = y;
     this.type = type;
+    this.type2 = type2;
     this.adjacent = adjacent;
     this.adjacent_dia = adjacent_dia;
     this.surround = surround;
@@ -56,11 +57,13 @@ class Puzzle{
     //square
     this.group1 = ["sub_line2_lb","sub_lineE2_lb","sub_number9_lb","ms_tri","ms_pencils","ms_arrow_fourtip","ms0_arrow_fouredge","combili_shaka","combili_battleship","combili_arrowS"];
     //square,pyramid,hex
-    this.group2 = ["mo_wall_lb","sub_number3_lb","sub_number6_lb","ms4","ms5","subc4"];
+    this.group2 = ["mo_wall_lb","sub_number3_lb","ms4","ms5","subc4"];
     //square,tri,hex
     this.group3 = ["sub_line5_lb"];
     //square,hex
     this.group4 = ["mo_cage_lb"];
+    //square,tri,hex,pyramid,
+    this.group5 = ["sub_specialthermo_lb","sub_specialarrows_lb","sub_specialdirection_lb","sub_specialsquareframe_lb"];
 
     //描画位置
     this.mouse_mode = "";
@@ -274,12 +277,13 @@ class Puzzle{
     if (this.mode.grid[2]==="2"){ //枠なし
       ot = gr;　//枠は内部と同じ線
     }
-    var max,min,key;
+    var max,min,key,corner;
     this.frame = {};
     for (var j=0;j<this.centerlist.length;j++){
-      for (var i=0;i<this.corner;i++){
-        max = Math.max(this.point[this.centerlist[j]].surround[i],this.point[this.centerlist[j]].surround[(i+1)%this.corner]);
-        min = Math.min(this.point[this.centerlist[j]].surround[i],this.point[this.centerlist[j]].surround[(i+1)%this.corner]);
+      corner = this.point[this.centerlist[j]].surround.length;
+      for (var i=0;i<corner;i++){
+        max = Math.max(this.point[this.centerlist[j]].surround[i],this.point[this.centerlist[j]].surround[(i+1)%corner]);
+        min = Math.min(this.point[this.centerlist[j]].surround[i],this.point[this.centerlist[j]].surround[(i+1)%corner]);
         key = min.toString()+","+max.toString();
         if(this.frame[key]){
           this.frame[key]=gr;
@@ -684,6 +688,8 @@ class Puzzle{
       for (var i=0;i<this.replace.length;i++){
         text = text.split(this.replace[i][0]).join(this.replace[i][1]);
       }
+
+
 
       var u8text = new TextEncoder().encode(text);
       var deflate = new Zlib.RawDeflate(u8text);
@@ -1611,7 +1617,12 @@ class Puzzle{
   //マウスイベント
   //
   /////////////////////////////
+  recalculate_num(x,y,num){
+    return num;
+  }
+
   mouseevent(x,y,num){
+    num = this.recalculate_num(x,y,num); //for uniform tiling
     switch(this.mode[this.mode.qa].edit_mode){
       case "surface":
         this.mouse_surface(x,y,num);
@@ -1876,7 +1887,7 @@ class Puzzle{
       this.drawing_mode = 100;
       this.last = num;
     }else if(this.mouse_mode === "move"){
-      if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "2" || this.point[num].type === 0){ //対角線でないor対角線で内側
+      if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "2" || this.point[num].type === 1){ //対角線でないor対角線で内側
         this.re_linemoveE(num);
         this.last = num;
       }

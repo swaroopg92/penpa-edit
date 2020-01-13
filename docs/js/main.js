@@ -164,7 +164,7 @@ function coord_point(e){
   var num = 0;
   //const startTime = performance.now();
   for (var i=0;i<pu.point.length;i++){
-    if(pu.type.indexOf(pu.point[i].type) != -1){
+    if(pu.point[i] && pu.type.indexOf(pu.point[i].type) != -1){
       min0 = (x-pu.point[i].x)**2+(y-pu.point[i].y)**2;
       if(min0<min){
         min = min0;

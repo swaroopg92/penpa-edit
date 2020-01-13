@@ -6,7 +6,6 @@ class Puzzle_tri extends Puzzle{
     this.ny = ny;
     this.n0 = parseInt(this.nx*4/3+4);
     this.margin = 10;
-    this.corner = 3;
     this.size = size;
     this.space = [parseInt(document.getElementById("nb_space1").value,10)];
 
@@ -46,6 +45,9 @@ class Puzzle_tri extends Puzzle{
     }
     for (var i of this.group4){
       document.getElementById(i).style.display = "none";
+    }
+    for (var i of this.group5){
+      document.getElementById(i).style.display = "inline-block";
     }
   }
 
@@ -937,6 +939,11 @@ class Puzzle_tri extends Puzzle{
         case "5"://small
           this.draw_numbercircle(pu,i,0.17);
           set_font_style(this.ctx,0.28*this.size.toString(10),this[pu].number[i][1]);
+          this.ctx.text(this[pu].number[i][0],this.point[i].x,this.point[i].y+0.02*this.size,this.size*0.8);
+          break;
+        case "6"://middle
+          this.draw_numbercircle(pu,i,0.22);
+          set_font_style(this.ctx,0.32*this.size.toString(10),this[pu].number[i][1]);
           this.ctx.text(this[pu].number[i][0],this.point[i].x,this.point[i].y+0.02*this.size,this.size*0.8);
           break;
         case "7"://sudoku

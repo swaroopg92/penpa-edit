@@ -15,7 +15,6 @@ class Puzzle_hex extends Puzzle{
     this.center_n = parseInt((this.nx*3+1)**2*0.5+(this.nx*3)*0.5*(this.nx%2));
     this.center_n0 = this.center_n;
 
-    this.corner = 6;
     this.size = size;
     this.space = [parseInt(document.getElementById("nb_space1").value,10)];
     this.onoff_symbolmode_list = {
@@ -42,6 +41,9 @@ class Puzzle_hex extends Puzzle{
       document.getElementById(i).style.display = "inline-block";
     }
     for (var i of this.group4){
+      document.getElementById(i).style.display = "inline-block";
+    }
+    for (var i of this.group5){
       document.getElementById(i).style.display = "inline-block";
     }
   }
@@ -173,7 +175,7 @@ class Puzzle_hex extends Puzzle{
   listappend(centerlist){
     var n = centerlist.length;
     for (var j=0;j<n;j++){
-      for (var i=0;i<this.corner;i++){
+      for (var i=0;i<6;i++){
         if(centerlist.indexOf(this.point[centerlist[j]].adjacent[i]) === -1){
           centerlist.push(this.point[centerlist[j]].adjacent[i]);
         }
