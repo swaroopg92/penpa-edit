@@ -1484,6 +1484,9 @@ class Puzzle_square extends Puzzle{
       case "pencils":
         this.draw_pencils(ctx,num,x,y);
         break;
+      case "slovak":
+        this.draw_slovak(ctx,num,x,y);
+        break;
     }
   }
 
@@ -2541,6 +2544,38 @@ class Puzzle_square extends Puzzle{
         ctx.lineTo((x+Math.sqrt(2)*0.25*pu.size*Math.cos(th-Math.PI*0.25)),(y+Math.sqrt(2)*0.25*pu.size*Math.sin(th-Math.PI*0.25)));
         ctx.closePath();
         ctx.fill();
+        break;
+    }
+  }
+
+  draw_slovak(ctx,num,x,y){
+    var r = 0.09,h = 0.37;
+    switch(num){
+      case 1:
+        set_circle_style(ctx,1);
+        this.draw_circle(ctx,x,y+h*pu.size,r);
+        break;
+      case 2:
+        set_circle_style(ctx,1);
+        this.draw_circle(ctx,x-0.2*pu.size,y+h*pu.size,r);
+        this.draw_circle(ctx,x+0.2*pu.size,y+h*pu.size,r);
+        break;
+      case 3:
+        set_circle_style(ctx,1);
+        this.draw_circle(ctx,x-0.25*pu.size,y+h*pu.size,r);
+        this.draw_circle(ctx,x+0.0*pu.size,y+h*pu.size,r);
+        this.draw_circle(ctx,x+0.25*pu.size,y+h*pu.size,r);
+        break;
+      case 4:
+        set_circle_style(ctx,1);
+        this.draw_circle(ctx,x-0.36*pu.size,y+h*pu.size,r);
+        this.draw_circle(ctx,x-0.12*pu.size,y+h*pu.size,r);
+        this.draw_circle(ctx,x+0.12*pu.size,y+h*pu.size,r);
+        this.draw_circle(ctx,x+0.36*pu.size,y+h*pu.size,r);
+        break;
+      case 5:
+        set_font_style(ctx,0.35*pu.size.toString(10),1);
+        ctx.text("?",x,y+h*pu.size);
         break;
     }
   }

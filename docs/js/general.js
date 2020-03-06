@@ -741,12 +741,13 @@ function loadqa_arrayver1(qa,rtext_qa){
     key = pu.centerlist[i1]+","+pu.centerlist[i2];
     pu[qa].line[key]=rtext_qa[qa][4][i];
   }
+
   //lineE
   for (var i in rtext_qa[qa][5]){//lineEH
     if(rtext_qa[qa][5][i]!=98){
       i1 = i%pu.nx+parseInt(i/pu.nx)*(pu.nx);
       if(parseInt(i/pu.nx)===pu.ny){
-        i2 = pu.centerlist[i1]+pu.nx;
+        i2 = pu.centerlist[i1-pu.nx]+pu.nx+4;
       }else{
         i2 = pu.centerlist[i1];
       }
@@ -755,18 +756,19 @@ function loadqa_arrayver1(qa,rtext_qa){
     }else{
       i1 = i%pu.nx+parseInt(i/pu.nx)*(pu.nx);
       if(parseInt(i/pu.nx)===pu.ny){
-        i2 = pu.centerlist[i1]+pu.nx;
+        i2 = pu.centerlist[i1-pu.nx]+pu.nx+4;
       }else{
         i2 = pu.centerlist[i1];
       }
       pu[qa].lineE[pu.point[i2].neighbor[0]]=rtext_qa[qa][5][i];
     }
   }
+
   for (var i in rtext_qa[qa][6]){//lineEV
     if(rtext_qa[qa][6][i]!=98){
       i1 = i%(pu.nx+1)+parseInt(i/(pu.nx+1))*(pu.nx);
       if(i%(pu.nx+1)===pu.nx){
-        i2 = pu.centerlist[i1]+1;
+        i2 = pu.centerlist[i1-1]+1;
       }else{
         i2 = pu.centerlist[i1];
       }
@@ -775,7 +777,7 @@ function loadqa_arrayver1(qa,rtext_qa){
     }else{
       i1 = i%(pu.nx+1)+parseInt(i/(pu.nx+1))*(pu.nx);
       if(i%(pu.nx+1)===pu.nx){
-        i2 = pu.centerlist[i1]+1;
+        i2 = pu.centerlist[i1-1]+1;
       }else{
         i2 = pu.centerlist[i1];
       }

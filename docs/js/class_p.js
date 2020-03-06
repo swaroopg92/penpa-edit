@@ -55,7 +55,7 @@ class Puzzle{
     this.ctx = this.canvas.getContext("2d");
     this.obj = document.getElementById("dvique");
     //square
-    this.group1 = ["sub_line2_lb","sub_lineE2_lb","sub_number9_lb","ms_tri","ms_pencils","ms_arrow_fourtip","ms0_arrow_fouredge","combili_shaka","combili_battleship","combili_arrowS"];
+    this.group1 = ["sub_line2_lb","sub_lineE2_lb","sub_number9_lb","ms_tri","ms_pencils","ms_slovak","ms_arrow_fourtip","ms0_arrow_fouredge","combili_shaka","combili_battleship","combili_arrowS"];
     //square,pyramid,hex
     this.group2 = ["mo_wall_lb","sub_number3_lb","ms4","ms5","subc4"];
     //square,tri,hex
@@ -1298,30 +1298,36 @@ class Puzzle{
 
 
   undo(){
-    var a = this[this.mode.qa].command_undo.pop();/*a[0]:list_name,a[1]:point_number,a[2]:value*/
+    var a = this.pu_q.command_undo.pop();/*a[0]:list_name,a[1]:point_number,a[2]:value*/
+    var pu_mode;
     if(a){
+      if(a[3]){
+        pu_mode = a[3];
+      }else{
+        pu_mode = "pu_q";
+      }
       if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe"||a[0]==="polygon") && a[1] === -1){
-        if(this[this.mode.qa][a[0]].length > 0){
-          this[this.mode.qa].command_redo.push([a[0],a[1],this[this.mode.qa][a[0]].pop()]);
+        if(this[pu_mode][a[0]].length > 0){
+          this.pu_q.command_redo.push([a[0],a[1],this[pu_mode][a[0]].pop(),pu_mode]);
         }
       }else if(a[0]==="move"){//a[0]:move a[1]:point_from a[2]:point_to
         for (var i in a[1]){
           if(a[1][i]!=a[2]){
-            this[this.mode.qa][i][a[1][i]] = this[this.mode.qa][i][a[2]];
-            delete this[this.mode.qa][i][a[2]];
+            this[pu_mode][i][a[1][i]] = this[pu_mode][i][a[2]];
+            delete this[pu_mode][i][a[2]];
           }
         }
-        this[this.mode.qa].command_redo.push([a[0],a[1],a[2]]);
+        this.pu_q.command_redo.push([a[0],a[1],a[2],pu_mode]);
       }else{
-        if(this[this.mode.qa][a[0]][a[1]]){//symbol etc
-          this[this.mode.qa].command_redo.push([a[0],a[1],this[this.mode.qa][a[0]][a[1]]]);
+        if(this[pu_mode][a[0]][a[1]]){//symbol etc
+          this.pu_q.command_redo.push([a[0],a[1],this[pu_mode][a[0]][a[1]],pu_mode]);
         }else{
-          this[this.mode.qa].command_redo.push([a[0],a[1],null]);
+          this.pu_q.command_redo.push([a[0],a[1],null,pu_mode]);
         }
         if(a[2]){
-          this[this.mode.qa][a[0]][a[1]] = JSON.parse(a[2]);  //JSON.parseでdecode
+          this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]);  //JSON.parseでdecode
         }else{
-          delete this[this.mode.qa][a[0]][a[1]];
+          delete this[pu_mode][a[0]][a[1]];
         }
       }
       this.redraw();
@@ -1329,29 +1335,35 @@ class Puzzle{
   }
 
   redo(){
-    var a = this[this.mode.qa].command_redo.pop();
+    var a = this.pu_q.command_redo.pop();
+        var pu_mode;
     if(a){
+      if(a[3]){
+        pu_mode = a[3];
+      }else{
+        pu_mode = "pu_q";
+      }
       if((a[0]==="thermo"||a[0]==="arrows"||a[0]==="direction"||a[0]==="squareframe"||a[0]==="polygon") && a[1] === -1){
-          this[this.mode.qa].command_undo.push([a[0],a[1],null]);
-          this[this.mode.qa][a[0]].push(a[2]);
+          this.pu_q.command_undo.push([a[0],a[1],null,pu_mode]);
+          this[pu_mode][a[0]].push(a[2]);
       }else if(a[0]==="move"){//a[0]:move a[1]:point_from a[2]:point_to
         for (var i in a[1]){
           if(a[1][i]!=a[2]){
-            this[this.mode.qa][i][a[2]] = this[this.mode.qa][i][a[1][i]];
-            delete this[this.mode.qa][i][a[1][i]];
+            this[pu_mode][i][a[2]] = this[pu_mode][i][a[1][i]];
+            delete this[pu_mode][i][a[1][i]];
           }
         }
-        this[this.mode.qa].command_undo.push([a[0],a[1],a[2]]);
+        this.pu_q.command_undo.push([a[0],a[1],a[2],pu_mode]);
       }else{
-        if(this[this.mode.qa][a[0]][a[1]]){
-          this[this.mode.qa].command_undo.push([a[0],a[1],JSON.stringify(this[this.mode.qa][a[0]][a[1]])]);
+        if(this[pu_mode][a[0]][a[1]]){
+          this.pu_q.command_undo.push([a[0],a[1],JSON.stringify(this[pu_mode][a[0]][a[1]]),pu_mode]);
         }else{
-          this[this.mode.qa].command_undo.push([a[0],a[1],null]);
+          this.pu_q.command_undo.push([a[0],a[1],null,pu_mode]);
         }
         if(a[2]){
-          this[this.mode.qa][a[0]][a[1]] = a[2];
+          this[pu_mode][a[0]][a[1]] = a[2];
         }else{
-          delete this[this.mode.qa][a[0]][a[1]];
+          delete this[pu_mode][a[0]][a[1]];
         }
       }
       this.redraw();
@@ -1360,17 +1372,17 @@ class Puzzle{
 
   record(arr,num){
     if((arr === "thermo"||arr === "arrows"||arr==="direction"||arr==="squareframe") && num===-1){
-      this[this.mode.qa].command_undo.push([arr,num,null]);
+      this.pu_q.command_undo.push([arr,num,null,this.mode.qa]);
     }else if(arr === "move"){
-      this[this.mode.qa].command_undo.push([arr,num[0],num[1]]);//num[0]:start_point num[1]:to_point
+      this.pu_q.command_undo.push([arr,num[0],num[1],this.mode.qa]);//num[0]:start_point num[1]:to_point
     }else{
-      if (this[this.mode.qa][arr][num]){
-        this[this.mode.qa].command_undo.push([arr,num,JSON.stringify(this[this.mode.qa][arr][num])]);   //配列もまとめてJSONで記録
+      if (this.pu_q[arr][num]){
+        this.pu_q.command_undo.push([arr,num,JSON.stringify(this.pu_q[arr][num]),this.mode.qa]);   //配列もまとめてJSONで記録
       }else{
-        this[this.mode.qa].command_undo.push([arr,num,null]);
+        this.pu_q.command_undo.push([arr,num,null,this.mode.qa]);
       }
     }
-    this[this.mode.qa].command_redo = new Stack();
+    this.pu_q.command_redo = new Stack();
   }
 
 
@@ -3121,12 +3133,12 @@ class Puzzle{
 */
 
   set_redoundocolor(){
-    if(this[this.mode.qa].command_redo.__a.length===0){
+    if(this.pu_q.command_redo.__a.length===0){
       document.getElementById('tb_redo').style.color = '#ccc';
     }else{
       document.getElementById('tb_redo').style.color = '#000';
     }
-    if(this[this.mode.qa].command_undo.__a.length===0){
+    if(this.pu_q.command_undo.__a.length===0){
       document.getElementById('tb_undo').style.color = '#ccc';
     }else{
       document.getElementById('tb_undo').style.color = '#000';
