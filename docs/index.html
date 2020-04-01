@@ -24,12 +24,12 @@
 
   <body>
     <header>
-      <h3 id="title">編集モード</h3>
+      <h3 id="title">Edit mode</h3>
 
       <div id="top_button">
         <input type="button" id="newboard" value="New grid / frame" class="button"/>
         <input type="button" id="rotation" value="Rotate / Move" class="button"/>
-        <input type="button" id="newsize" value="サイズ変更" class="button" style="display:none;"/>
+        <input type="button" id="newsize" value="Resize" class="button" style="display:none;"/>
         <input type="button" id="saveimage" value="Screenshot" class="button"/>
         <input type="button" id="savetext" value="Share" class="button"/>
         <a id="download_link"></a>
@@ -600,16 +600,16 @@
     <div id="modal-newsize" class="modal">
       <div id="modal-newsize-content">
         <div id="modal-header">
-          <h3>　サイズ変更</h3>
+          <h3>Resize</h3>
         </div>
         <span id="modal-sizeA">
-          <span><label class="label_nb">表示サイズ：</label></span>
+          <span><label class="label_nb">Display size:</label></span>
           <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="36" min="10" max="60" step="2">
         </span>
         <br>
         <div class="nb_button">
-          <input type="button" id="closeBtn_size1" value="枠変更"/>
-          <input type="button" id="closeBtn_size2" value="キャンセル"/>
+          <input type="button" id="closeBtn_size1" value="Apply changes"/>
+          <input type="button" id="closeBtn_size2" value="Cancel"/>
         </div>
       </div>
     </div>
