@@ -66,6 +66,7 @@ h3 {
 .mode_button{
   position: relative;
   text-align: left;
+  padding-bottom: 5px;
 }
 
 .submode_button{
@@ -98,10 +99,12 @@ line-height: 28px;
 display: inline-block;
 margin: 0px;
 text-align: left;
-width: 45px;
+
 height: 25px;
 padding-left: 5px;
 padding-right: 5px;
+margin-left: 5px;
+margin-bottom: 5px;
 color: #000000;
 font-size: 14px;
 text-align: center;
@@ -114,10 +117,11 @@ border-radius: 3px;
 display: inline-block;
 margin: 0px;
 text-align: left;
-width: 45px;
 height: 25px;
 padding-left: 5px;
 padding-right: 5px;
+margin-left: 5px;
+margin-bottom: 5px;
 color: #000000;
 font-size: 14px;
 text-align: center;
@@ -140,10 +144,11 @@ border-radius: 3px;
 display: inline-block;
 margin: 0px;
 text-align: left;
-width: 30px;
 height: 25px;
 padding-left: 5px;
 padding-right: 5px;
+margin-left: 5px;
+margin-bottom: 5px;
 color: #000000;
 font-size: 14px;
 text-align: center;
@@ -202,7 +207,8 @@ color: #000000;
   display: inline-block;
   margin-left: 0px;
   text-align: left;
-  width: 45px;
+  margin-left: 5px;
+  margin-bottom: 5px;
   height: 25px;
   padding-left: 5px;
   padding-right: 5px;
