@@ -1055,7 +1055,7 @@ function set_solvemode(){
   document.getElementById("mo_special_lb").style.display = "none";
   document.getElementById("mo_board_lb").style.display = "none";
   document.getElementById("sub_lineE5_lb").style.display = "none";
-  document.getElementById("tb_delete").value = "解答消去"
+  document.getElementById("tb_delete").value = "Delete"
 }
 
 function isEmpty(obj){
