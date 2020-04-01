@@ -508,9 +508,9 @@ class Puzzle{
   mode_set(mode){
     this.mode[this.mode.qa].edit_mode = mode;
     if(mode === "number"){
-      document.getElementById("sub_txt").innerHTML = "サブ";
+      document.getElementById("sub_txt").innerHTML = "Sub";
     }else{
-      document.getElementById("sub_txt").innerHTML = "　サブ：";
+      document.getElementById("sub_txt").innerHTML = " Sub:";
     }
     this.submode_reset();
     if(document.getElementById('mode_'+mode)){
