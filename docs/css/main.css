@@ -69,18 +69,32 @@ h3 {
   padding-bottom: 5px;
 }
 
+#sub_txt, #style_txt {
+  font-size: 12px;
+}
+
 .submode_button{
   position: relative;
   text-align: left;
   padding-top: 5px;
-  height:95px;
+  font-size:12px;
+  height: 35px;
+}
+
+.submode_button label {
+  font-size: 10px;
 }
 
 .stylemode_button{
   position: relative;
   text-align: left;
   padding-bottom:-5px;
-  height: 95px;
+  font-size: 12px;
+  height: 35px;
+}
+
+.stylemode_button label {
+  font-size: 10px;
 }
 
 .label_mode {
@@ -110,7 +124,6 @@ text-align: left;
 height: 25px;
 padding-left: 5px;
 padding-right: 5px;
-margin-left: 5px;
 margin-bottom: 5px;
 color: #000000;
 font-size: 14px;
@@ -154,7 +167,6 @@ text-align: left;
 height: 25px;
 padding-left: 5px;
 padding-right: 5px;
-margin-left: 5px;
 margin-bottom: 5px;
 color: #000000;
 font-size: 14px;
