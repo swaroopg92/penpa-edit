@@ -73,12 +73,14 @@ h3 {
   position: relative;
   text-align: left;
   padding-top: 5px;
+  height:95px;
 }
 
 .stylemode_button{
   position: relative;
   text-align: left;
   padding-bottom:-5px;
+  height: 95px;
 }
 
 .label_mode {
