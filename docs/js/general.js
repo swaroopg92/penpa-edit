@@ -356,7 +356,7 @@ function saveimage_download(){
           downloadLink.click();
       }
     }else{
-      alert("ファイル名に使えない文字列\\/:*?\"<>|が含まれています。")
+      alert("The character string \\/:*?\"<>| that cannot be used in the file name is included.")
     }
 }
 
@@ -418,7 +418,7 @@ function savetext_copy() {
   sel.removeAllRanges();
   sel.addRange(range);
   textarea.setSelectionRange(0, 1e5);
-  alert("コピーしました。");
+  alert("URL copied");
   document.execCommand("copy");
 }
 
@@ -452,7 +452,7 @@ function savetext_download(){
       downloadLink.click();
     }
   }else{
-    alert("ファイル名に使えない文字列\\/:*?\"<>|が含まれています。");
+    alert("The character string \\/:*?\"<>| that cannot be used in the file name is included.");
   }
 }
 
