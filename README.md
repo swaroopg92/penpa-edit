@@ -127,10 +127,10 @@ Although it depends on the browser, you can update the page without using the ca
 * Adjust the margin of the board with the "Move the board to the center" and "Match screen size to the board" buttons.
 
 ### save image
-*　Image quality: The higher the quality, the better the image quality, but the larger the image size.
-*　Grid: Selection of internal linetypes. Solid line, dotted line, erase.
-*　Lattice points: Presence or absence of lattice points. (Slither link etc.)
-*　Outer frame: Presence or absence of grid outer frame.
+* Image quality: The higher the quality, the better the image quality, but the larger the image size.
+* Grid: Selection of internal linetypes. Solid line, dotted line, erase.
+* Lattice points: Presence or absence of lattice points. (Slither link etc.)
+* Outer frame: Presence or absence of grid outer frame.
 
 ## History
 * 2020/01/05 ver2.12 Adjusted mouse judgment.
