@@ -1,142 +1,124 @@
 # penpa-editor
-万能ペンシルパズルエディタ。
-あらゆるペンシルパズルを作図するためのソフトです。ソフト上で問題を解くこともできます。
 
-画像保存とテキスト保存が行えます。「アドレス出力」で出力されたテキストをアドレスバーに入力することでロードされます。
+Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. You can also solve problems in the software.
 
-※対応ブラウザで「不正なアドレスです」と表示されるときは、キャッシュのクリアを試してください。
+You can save images and text in the form of URLs than be loaded in a browser.
 
-ブラウザで異なりますが、「Ctrl」＋「R」、「Ctrl」＋「F5」、「Shift」＋「F5」などでキャッシュを使わないページの更新ができます。
+*If the message "Invalid address" is displayed on a supported browser, try clearing the cache.
 
-## 対応ブラウザ
+Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
+
+## Compatible browsers
 * Google Chrome
 * Safari
 * Firefox
 * Microsoft Edge
 
-## ショートカットキー
-* Ctrl + z : 一手戻る
-* Ctrl + y : 一手進む
-* Ctrl + d : 盤面を複製
-* Ctrl + space : 数字と記号を同時に削除
-* F2 : 問題モード
-* F3 : 解答モード
+## Shortcut keys
+* Ctrl + z: Undo
+* Ctrl + y: Redo
+* Ctrl + d: Copy the board
+* Ctrl + space: Delete numbers and symbols at the same time
+* F2: Problem mode
+* F3: Answer mode
 
 ## Tips
-* 数字：パネルの「1」タブでBackSpace、「A」タブで半角スペースが入力可能。
-* 数字>矢印 : マスをドラッグした方向に矢印が入力。
-* 記号：数字キーの1-9,0によって入力。パネルをONにすると入力できる記号の一覧を表示、左上から1,2,...と対応。パネルの入力方法は、パネル記号にカーソルを合わせ、盤面をクリック。二回クリックで消去。
-* 記号>図形>十字など、いくつかの記号はonoffの入力形式。パネルをクリックすると直接入力される。特殊例：デジタル（枠）で同じキーを二回押せば枠だけ表示される。
-* 特殊：入力した記号の１マス目をクリックすることで削除。
-* 特殊：入力中に通った道を戻ることで先端の位置を一手前に戻せる。
+* Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
+* Number>Arrow: Enter an arrow in the direction you dragged the square.
+* Symbol: Input with the numeric keys 1-9,0. When the panel is turned on, a list of symbols that can be entered is displayed, and it corresponds to 1, 2, ... from the upper left. To use the panel place the cursor on the panel symbol and click the board. Erase with two clicks.
+* Some symbols such as symbol> figure> cross are onoff input formats. Click the panel to enter directly. Special example: Digital (frame) with the same key. If you press it twice, only the frame will be displayed.
+* Special: Delete by clicking the first square of the entered symbol.
+* Special: The tip position can be returned to the front by returning to the path that was used during input.
 
-## 現在の機能
-### 黒マス
-* 黒マス。スタイルで色を選択。（ぬりかべ、アイスバーン、シャカシャカ etc.）
-* 濃灰のみ、二回クリックすると緑マスに。
-* 隠灰は、灰色の文字や記号に重ねて隠す時に用いる。
-* 右クリックで緑マスを入力。
-### 線
-* 通常：マスの中央をタテヨコに結ぶ線。（ましゅ、橋をかけろ、回文数独etc.）
-* 対角線：マスの中央をナナメに結ぶ線。（Zigzag etc.)
-* 自由線：任意のマス同士を結ぶ線。（ナイトツアー etc.)
-* 中線：マスの中央と辺の中央を結ぶ線。
-* 補助x：辺に置く補助用のバツ記号。
-* スタイルで線の色や太さを選択。
-### 辺
-* 通常：マスの頂点をタテヨコに結ぶ線。（へやわけ、スリザーリンクetc.）
-* 対角線：マスの頂点をナナメに結ぶ線。（対角線数独etc.）
-* 自由線：任意のマスの頂点同士を結ぶ線。（鋭直鈍ループetc.）
-* 補助x：辺に置く補助用のバツ記号。
-* 枠消：盤面の枠線の削除。
-* スタイルで線の色や太さを選択。
-### 壁
-* マスの内部にタテヨコで描かれる線。（縦横さん、スラローム etc.）
-* スタイルで線の色や太さを選択。
-### 数字
-* 通常：数字、アルファベット、一部の記号文字をキーボードから入力。パネルを使うと記号・カタカナ・ひらがな・漢字などの入力も可能。（ぬりかべ etc.）
-* 矢印：矢印付き文字。（ヤジリン、CastleWall etc.）
-* Tapa：Tapa用文字。4文字まで。
-* 1/4：四隅の文字。（カックロ、ヘヤジリン、キラー数独 etc.）
-* ｺﾝﾊﾟ：コンパス用文字。上下左右によった、小さい数字を入力することが可能。
-* 中、小：小さいサイズの数字。
-* 長文：長い文章。シークワーズなどのリストが作成可能。
-* 候補：数独など、ラテンスクエア用の候補数字。1-9に対応。onoff入力。
-* 白丸、黒丸は数字の裏に丸が書かれる。
-* 白背景は、数字の裏に白丸を描画。裏の線に隠れて数字が見えにくい時。
-* 辺入力をONにすると、文字を辺上・頂点に配置。
-### 記号
-* 多数の記号。パネルを開くことで入力可能な記号を閲覧可能。〇や□などの図形、不等号、デジタル数字、その他パズル固有の記号など。
-* スタイルで、図形を線の手前側に置くか、奥側に置くかを選択可能。（ましゅの〇は線の奥、ごきげんななめの〇は線の手前）
-* 辺入力をONにすると、文字を辺上・頂点に配置。
-### 特殊
-* 複数マスにまたがる特殊記号。（アロー数独、サーモ数独、移動用矢印、四角のエリア）
-* 入力した最初のマスをクリックすると消去。
-* 多角形の塗りつぶし。クリックした順番に頂点が選ばれる。最後にクリックした頂点か、最初にクリックした頂点をもう一度クリックすると選択終了。
-### 枠
-* 複数のマスを囲む線。（キラー数独 etc.）
-* スタイルは黒色の点線・黒色の実線・灰色の点線、灰色の実線の４種類。
-* 正方形と正六角形で使用可能。
-### マス
-* 盤面の枠を描くマスをクリックで選択。
-### 移動
-* 数字、記号をドラッグで移動可能。もともと数字or記号のあるマスには移動不可。
-* 全は数字と記号を両方、数字、記号のどちらか一方を動かす設定も可能。
-### 複合
-* 複数の入力方法を同時に使う機能。
-* 複合モード一覧
-1. 黒・点　　　　黒マス、点をドラッグ入力
-2. 白丸黒丸　　　白丸、黒丸をドラッグ入力
-3. シャカシャカ　三角形を引っ張り入力
-4. 線・ｘ　　　　線と補助x（キャッスルウォール）
-5. 線・OX　　　  線とマスに〇×（カントリーロード）
-6. 辺・x・内外　辺と、補助ｘと、内外の塗り分け黄色と緑。（スリリン、Cave)
-7. ヤジリン　　　黒マス・点と、線
-8. 橋をかけろ　　線をもう一度引くと二重線に
-9. 辺・補助線　　辺と、マスの連結を表す補助線
-10. バトルシップ　戦艦。二回クリックすると周りの船の状態に応じて形が変化。
-11. スターバトル　星と×
-12. テント　　　　テントと点、辺の補助ｘ、テントと木を結ぶ線。
-13. 数字フリック　数字をフリック入力。左上から右下へ123456789。
-14. 英字フリック　アルファベットをフリック入力。左上から右下へABCDEFGH-。右下で-を入力。
+## Current functions
+### Surface
+* Fill cells. Select a color by style. (Nurekabe, Iceburn, Shakashaka etc.)
+* In Dark grey mode only, click twice to get a green square.
+* Light grey is used when hiding gray letters and symbols.
+* Right click to enter the green square.
+### Line
+* Normal: A line connecting the center of the square to the horizontal and vertical. (Mashu, bridge over, palindrome Sudoku, etc.)
+* Diagonal line: A line connecting the center of the square to the namame. (Zigzag etc.)
+* Free line: A line that connects arbitrary squares. (Night tour etc.)
+* Midline: A line connecting the center of the square and the center of the side.
+* Auxiliary x: An auxiliary cross mark placed on the side.
+* Select the color and thickness of the line by style.
+### Edge
+* Normal: A line that connects the top of the square to the horizontal and vertical. (Heyawake, Slither link etc.)
+* Diagonal line: A line connecting the vertices of a square to a namame. (Diagonal Sudoku etc.)
+* Free line: A line that connects the vertices of any square. (Sharp and blunt loop etc.)
+* Auxiliary x: An auxiliary cross mark placed on the side.
+* Border erase: Delete the border of the board.
+* Select the color and thickness of the line by style.
+### Wall
+* A vertical line drawn inside the square. (Vertical and horizontal, slalom etc.)
+* Select the color and thickness of the line by style.
+### Number
+* Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. You can use the panel to input symbols, katakana, hiragana, kanji, etc.\\
+.. (Coloring etc.)
+* Arrows: Characters with arrows. (Yagirin, CastleWall etc.)
+* Tapa: Characters for Tapa. Up to 4 characters.
+* 1/4: Characters at the four corners. (Kakuro, Hairyrin, Killer Sudoku etc.)
+* Comp: Characters for compass. It is possible to enter small numbers depending on the vertical and horizontal directions.
+* Medium/Small: Small size numbers.
+* Long sentence: Long sentence. It is possible to create a list such as seekers.
+* Candidates: Candidate numbers for Latin Square such as Sudoku. Compatible with 1-9. onoff input.
+* White circles and black circles have a circle on the back of the numbers.
+* For the white background, draw a white circle behind the numbers. When you can't see the numbers because they are hidden behind the lines.
+* When the boundary input is turned on, the character is placed on the side/vertex.
+### Frame
+* A line that surrounds multiple squares. (Killer Sudoku etc.)
+* There are 4 styles: black dotted line, black solid line, gray dotted line, and gray solid line.
+* Available in square and regular hexagon.
+### Box
+* Click to select the square that draws the frame of the board.
+### Move
+* You can move numbers and symbols by dragging. Originally, you cannot move to a square with a number or sign.
+* All can be set to move both numbers and symbols, or either numbers or symbols.
+### Composite
+* Ability to use multiple input methods simultaneously.
+* Composite mode list
+1. Black/dot: Drag the black square and dot
+2. White/circle Black circle Drag input white circle and black circle
+3. Shakashaka pull the triangle to input
+4. Line/x line and auxiliary x (Castle wall)
+5. Line/OX 〇× (Country road) on line and square
+6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Suririn, Cave)
+7. Yajirin: Black square/dot and line
+8. Hashi: draw the line again to make a double line
+9. Edge/Auxiliary line: An auxiliary line that represents the connection between the edge and the square
+10. Battleship: Click twice to change the shape according to the condition of the surrounding ships.
+11. Star Battle x Star
+12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree.
+13. Numerical flick Input the numerical flick. 123456789 from top left to bottom right.
+14. Alphabet flick Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter-in the lower right corner.
 
-### 変形盤面
-* 「新規作成・枠変更」メニューから正方形、正六角形、正三角形、ピラミッドを選択可能。正方形以外では機能制限あり。
-* 「マス」モードで盤面形状を調整。「回転・移動」メニューから、「盤面を中央に移動」、「画面サイズを盤面に合わせる」ボタンで盤面の余白を調整。
-### グリッド
-* 「新規作成・枠変更」メニューから盤面の枠線を変更可能。
-* グリッド：枠線の種類
-* 格子点：頂点に点を置くかどうか
-* 外枠：盤面の周囲に太線を書くかどうか
-* 余白：盤面のグリッドの外側に数字を置く場合などに使用。（ビルディングパズルetc.）
-* 「作成」ボタンは盤面をリセット。「枠変更」ボタンは盤面をリセットしない代わりに、表示サイズ以下の項目のみ更新。
-### 回転
-* 「回転・移動」メニューから盤面の回転・反転が可能。正方形、ピラミッドでは90°回転。正六角形、正三角形盤面では30°回転。
-*　「盤面を中央に移動」、「画面サイズを盤面に合わせる」ボタンで盤面の余白を調整。
-### 画像保存
-* 画質：高にすると画質は良くなるが、画像サイズが大きくなるので用途に応じて。
+### Irregular board shapes
+* You can select square, regular hexagon, regular triangle, and pyramid from the "New/Change frame" menu. Functions other than square are limited.
+* Adjust the board shape in "mass" mode. From the "Rotate/Move" menu, press the "Move board to center" and "Match screen size to board" buttons to adjust margins.
 
+### Grid
+* You can change the border of the board from the "New/Change frame" menu.
+* Grid: Border type
+* Gridpoints: whether to place points at vertices
+* Outside frame: Whether to draw a line around the board
+* White space: Used when placing numbers outside the grid on the board. (Sandwich puzzle etc.)
+* "Create" button resets the board. The "Change grid" button does not reset the board surface, but updates only display size and frame type.
 
-* グリッド：内部の線種の選択。実線、点線、消去。
-* 格子点：格子点の有無。（スリザーリンクetc.）
-* 外枠：グリッド外枠の有無。
+### Rotation
+* You can rotate and flip the board from the "Rotate/Move" menu. Square and pyramid rotate 90°. Regular hexagon, regular triangle Rotate 30° on the board surface.
+* Adjust the margin of the board with the "Move the board to the center" and "Match screen size to the board" buttons.
 
+### Save image
+* Image quality: The higher the quality, the better the image quality, but the larger the image size.
 
-
-## 履歴
-* 2020/01/05 ver2.12 マウス判定を調整。
-* 2019/12/21 ver2.11 複合モードなどを実装。
-* 2019/12/07 ver2.10 別アドレスで開発を行っていたver.2を旧アドレスと統合。
-* 2019/09/07 ver2.00 変形盤面対応など
-* 2019/08/16 ver1.05 Microsoft Edge対応
-* 2019/08/04 ver1.04 白フチの仕様変更、記号の入力方法を変更
-* 2019/07/29 ver1.03 点線の描画を修正など
-* 2019/07/18 ver1.02 iPhone対応
+## History
+* 2020/01/05 ver2.12 Adjusted mouse judgment.
+* 2019/12/21 ver2.11 Implemented composite mode.
+* 2019/12/07 ver2.10 Ver.2, which was being developed at another address, is integrated with the old address.
+* 2019/09/07 ver2.00 Deformation board support etc.
+* 2019/08/16 ver1.05 Microsoft Edge compatible
+* 2019/08/04 ver1.04 Changed the specifications of white border and changed the input method of symbols
+* 2019/07/29 ver1.03 Fixed drawing of dotted line etc.
+* 2019/07/18 ver1.02 iPhone compatible
 * 2019/07/14 ver1.01
-* 2019/07/13 ver1.00
-* 2019/07/07 β版
-
-## 免責事項
-コードの二次配布は禁止です。
-当ソフトを使用して作成した画像は、自由に使用して構いません。
-当ソフトを使用したことによって生じた損害等の一切の責任を負いかねます。
