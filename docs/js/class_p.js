@@ -778,7 +778,14 @@ class Puzzle {
         var pu = "pu_a";
 
         for (var i in this[pu].surface) {
-            if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
+            if (this[pu].surface[i] === 1 ||
+                this[pu].surface[i] === 2 ||
+                this[pu].surface[i] === 3 ||
+                this[pu].surface[i] === 4 ||
+                this[pu].surface[i] === 5 ||
+                this[pu].surface[i] === 6 ||
+                this[pu].surface[i] === 7 ||
+                this[pu].surface[i] === 8) {
                 sol[0].push(i);
             }
         }
