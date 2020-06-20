@@ -2,9 +2,9 @@
 
 Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. You can also solve problems in the software.
 
-You can save images and text in the form of URLs than be loaded in a browser.
+You can save images and text in the form of URLs that can be loaded in a browser.
 
-*If the message "Invalid address" is displayed on a supported browser, try clearing the cache.
+If the message "Invalid address" is displayed on a supported browser, try clearing the cache.
 
 Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
 
@@ -75,9 +75,6 @@ Depending on the browser you can update the page without using the cache with "C
 * Numerous symbols.You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
 * Depending on the style, you can select whether to place the figure on the front side or the back side of the line. (Mashu's 〇 is the back of the line, and “Oh, I'm sorry” is the front of the line )
 * When the boundary input is turned ON, the character is placed on the side/vertex.	  
-																																														   
-																																																			 
-																			   
 
 ### special
 * A special symbol that spans multiple squares. (Arrow Sudoku, Thermo Sudoku, moving arrows, square area)
@@ -95,8 +92,8 @@ Depending on the browser you can update the page without using the cache with "C
 ### Move
 * You can move numbers and symbols by dragging. Originally, you cannot move to a square with a number or sign.
 * All can be set to move both numbers and symbols, or either numbers or symbols.
+
 ### Composite
-			 
 * Ability to use multiple input methods simultaneously.
 * Composite mode list
 1. Black/dot: Drag the black square and dot
@@ -130,13 +127,45 @@ Depending on the browser you can update the page without using the cache with "C
 * You can rotate and flip the board from the "Rotate/Move" menu. Square and pyramid rotate 90°. Regular hexagon, regular triangle Rotate 30° on the board surface.
 * Adjust the margin of the board with the "Move the board to the center" and "Match screen size to the board" buttons.
 
-### Save image
-* Image quality: The higher the quality, the better the image quality, but the larger the image size.
-* Grid: Selection of internal linetypes. Solid line, dotted line, erase.
-* Lattice points: Presence or absence of lattice points. (Slither link etc.)
-* Outer frame: Presence or absence of grid outer frame.															
+### Save image (Screenshot button)
+* Settings:
+1. Image quality: The higher the quality, the better the image quality, but the larger the image size.
+2. White Border: Setting NO will remove the extra white space around the grid.
+* Options:
+1. Open in new window: Opens the image in the new TAB
+2. Download: .png image will be downloaded
+3. Cancel: close the window
+
+### Share
+* URL for editing
+1. Complete creating puzzle in Edit mode "Problem".
+2. If you need to save your puzzle creation progress and come back later to edit then click on this button
+
+* URL for solving
+1. Complete creating puzzle in Edit mode "Problem".
+2. If you want to share your puzzle for others to solve then click on this button
+
+* URL for solving with Solution
+1. Complete creating puzzle in Edit mode "Problem".
+2. Select Edit mode "Solution" and complete the solution.
+3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new small window will appear.
+4. Click on "Generate URL with answer check"
+5. Click anywhere on the screen outside the small window.
+
+* Options
+1. Copy: copies the URL to the clipboard
+2. Download: downloads a .txt file with the url
+3. Open: opens a new TAB with the same url
+4. URL_short:
+	1. First create an URL using one of the three methods described above.
+	2. Click on "Copy".
+	3. Click on "URL_short" (It will open a new TAB).
+	4. Paste the URL (CTRL + V on windows).
+	5. Click "Shorten"
+4. Cancel: close the window
 
 ## History
+* 2020/06/19 ver2.13 English Translations, Short URL, Readme instructions
 * 2020/01/05 ver2.12 Adjusted mouse judgment.
 * 2019/12/21 ver2.11 Implemented composite mode.
 * 2019/12/07 ver2.10 Ver.2, which was being developed at another address, is integrated with the old address.

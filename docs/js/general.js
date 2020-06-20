@@ -463,6 +463,10 @@ function savetext_window() {
     }
 }
 
+function shorturl_tab() {
+    window.open('https://git.io', '_blank');
+}
+
 function duplicate() {
     var address = pu.maketext();
     if (pu.mmode === "solve") {
