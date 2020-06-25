@@ -13,31 +13,31 @@ function set_surface_style(ctx, type) {
             ctx.fillStyle = "rgba(255,255,255,0)";
             break;
         case 1:
-            ctx.fillStyle = "#444";
+            ctx.fillStyle = "#444"; // dark grey
             break;
         case 2:
-            ctx.fillStyle = "#b3ffb3"; //緑
+            ctx.fillStyle = "#b3ffb3"; // Green
             break;
         case 3:
-            ctx.fillStyle = "#ccc";
+            ctx.fillStyle = "#ccc"; // light grey
             break;
         case 4:
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = "#000"; // black
             break;
         case 5:
-            ctx.fillStyle = "#c0e0ff"; //水
+            ctx.fillStyle = "#c0e0ff"; // very pale blue (water)
             break;
         case 6:
-            ctx.fillStyle = "#ffa3a3"; //赤
+            ctx.fillStyle = "#ffa3a3"; // Red
             break;
         case 7:
-            ctx.fillStyle = "#ffffa3"; //黄
+            ctx.fillStyle = "#ffffa3"; // Yellow
             break;
         case 8:
-            ctx.fillStyle = "#999"; //隠灰
+            ctx.fillStyle = "#999"; // between light and dark grey
             break;
         case 99:
-            ctx.fillStyle = "#f0f0f0"; //黄
+            ctx.fillStyle = "#f0f0f0"; // very light grey
             break;
     }
     ctx.strokeStyle = ctx.fillStyle;
@@ -222,7 +222,7 @@ function set_font_style(ctx, size, type) {
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 2:
-            ctx.fillStyle = "rgba(36,160,36,1)";
+            ctx.fillStyle = "#0000FF"; // blue
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 3:
