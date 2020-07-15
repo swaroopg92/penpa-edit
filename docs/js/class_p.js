@@ -782,6 +782,7 @@ class Puzzle {
                 sol[0].push(i);
             }
         }
+
         for (var i in this[pu].symbol) {
             if (this[pu].symbol[i][0] === 2 && this[pu].symbol[i][1] === "square_LL") {
                 if (sol[0].indexOf(i) === -1) {
@@ -3337,7 +3338,7 @@ class Puzzle {
                     alert("Correct Answer")
                 }, 10)
                 this.sol_flag = 1;
-            } else if (text != this.solution && this.sol_flag === 1) { //答えが変わったら改めて判定
+            } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
                 this.sol_flag = 0;
             }
         }
