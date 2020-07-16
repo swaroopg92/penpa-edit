@@ -455,7 +455,15 @@
         <input type="button" id="tb_reset" value="Erase current selection" class="button" />
         <input type="button" id="tb_delete" value="Delete" class="button" />
         <br><br><br>
-        <p>Forked from <a href="https://github.com/rjrudman/penpa-edit">rjrudman</a> for further enhancements.</p>
+        <div id="stop_watch">
+            <h1 class="values">00:00:00:00</h1>
+            <div>
+                <button id="sw_start" class="button sw">Start</button>
+                <button id="sw_pause" class="button sw">Pause</button>
+                <button id="sw_stop" class="button sw">Stop</button>
+                <button id="sw_reset" class="button sw">Reset</button>
+            </div>
+        </div>
         <p>Any suggestions or improvements, create an issue/pull-request <a href="https://github.com/swaroopg92/penpa-edit">here</a></p>
     </div>
     <div id="float-key">
@@ -713,6 +721,9 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="./js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="./js/easytimer.min.js"></script>
+    <script type="text/javascript" src="./js/timer.js"></script>
 </body>
 
 </html>

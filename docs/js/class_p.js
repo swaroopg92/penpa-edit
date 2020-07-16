@@ -3337,6 +3337,7 @@ class Puzzle {
                 setTimeout(() => {
                     alert("Correct Answer")
                 }, 10)
+                sw_timer.stop();
                 this.sol_flag = 1;
             } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
                 this.sol_flag = 0;

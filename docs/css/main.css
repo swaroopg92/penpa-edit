@@ -55,6 +55,12 @@ h3 {
     border-radius: 4px;
 }
 
+.sw {
+    margin: 5px;
+    background-color: #42a5f5;  /* Blue Berry*/
+    color: white;
+}
+
 #buttons {
     font-size: 0;
     border: 1px solid #000;
