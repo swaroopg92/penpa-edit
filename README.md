@@ -19,6 +19,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + y: Redo
 * Ctrl + d: Copy the board
 * Ctrl + space: Delete numbers and symbols at the same time
+* Shift + space: Enter a space
 * F2: Problem mode
 * F3: Answer mode
 
@@ -164,7 +165,14 @@ Depending on the browser you can update the page without using the cache with "C
 	5. Click "Shorten"
 4. Cancel: close the window
 
+### Stop Watch
+* start - starts the timer. Lowest precision is 1/10th of a second.
+* pause - pauses the timer. click on start again to continue.
+* stop - stops the timer. click on start again to restart the timer. click on reset to set the timer back to 00:00.
+* reset - resets the timer to 00:00.
+
 ## History
+* 2020/07/16 ver2.14 Stop watch, Shortcut to enter space in the text, updated readme
 * 2020/06/19 ver2.13 English Translations, Short URL, Readme instructions
 * 2020/01/05 ver2.12 Adjusted mouse judgment.
 * 2019/12/21 ver2.11 Implemented composite mode.
@@ -179,4 +187,4 @@ Depending on the browser you can update the page without using the cache with "C
 * 2019/07/07 beta version
 
 ## Disclaimer
-Secondary distribution of code is prohibited.Images created using this software can be used freely.We are not responsible for any damages caused by using this software.
+Secondary distribution of code is prohibited. Images created using this software can be used freely. We are not responsible for any damages caused by using this software.
