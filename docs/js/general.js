@@ -59,10 +59,10 @@ function make_class(gridtype) {
             var space2 = parseInt(document.getElementById("nb_space2").value, 10);
             var space3 = parseInt(document.getElementById("nb_space3").value, 10);
             var space4 = parseInt(document.getElementById("nb_space4").value, 10);
-            if (nx <= 30 && nx > 0 && ny <= 30 && ny > 0 && 12 <= size && size <= 60 && space1 + space2 < ny && space3 + space4 < nx) {
+            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && 12 <= size && size <= 60 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
-                alert("Sides must be in the range 1-30, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-40, display size must be in the range 12-60");
             }
             break;
         case "hex":
