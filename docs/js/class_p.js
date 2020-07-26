@@ -1780,17 +1780,11 @@ class Puzzle {
                                 break;
                             }
                         }
-                        console.log(segA);
-                        console.log(segB);
                         for (var i = 0; i < segB.length; i++) {
-                            console.log(i);
-                            console.log(next_seg);
-                            console.log(direction);
                             pointA_x = (segA[next_seg] % (this.nx0)) - 1;
                             pointA_y = parseInt(segA[next_seg] / this.nx0) - 1;
                             pointB_x = (segB[next_seg] % (this.nx0)) - 1;
                             pointB_y = parseInt(segB[next_seg] / this.nx0) - 1;
-                            console.log(pointA_x, pointA_y, pointB_x, pointB_y)
                             if (direction === 'RD') {
                                 if (pointB_x > pointA_x) {
                                     matrix[pointA_y - 1][pointA_x - 1] = 'R';
@@ -1838,7 +1832,6 @@ class Puzzle {
                                 }
                             }
                         }
-                        console.log(matrix);
                     }
                 }
 
