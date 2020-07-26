@@ -168,15 +168,18 @@ Depending on the browser you can update the page without using the cache with "C
 * Extra Options (puzzle_output_file -> GMPuzzle output:)
 1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
 2. It currently supports (this list will constantly be updated):
-	* classicsudoku
-	* thermosudoku
-	* arrowsudoku
-	* evenoddsudoku
-	* kurotto
-	* balanceloop
+	* Sudoku
+		* classicsudoku
+		* thermosudoku
+		* arrowsudoku
+		* evenoddsudoku
+	* Shading Puzzles
+		* kurotto
+	* Loop/ Path Puzzles
+		* balanceloop
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode.
-	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering).
+	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering, green loop).
 	3. click on Share -> Extra Options -> puzzle_output_file.
 	4. In the "Header" area, type the puzzle type you are creating.
 	5. click on "GMPUzzle output" button and then click anywhere outside to close this window.
@@ -191,6 +194,7 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
+* 2020/07/25 ver2.15 Initiated output text file feature with GMPuzzles formatting requirements.
 * 2020/07/16 ver2.14 Stop watch, Shortcut to enter space in the text, updated readme
 * 2020/06/19 ver2.13 English Translations, Short URL, Readme instructions
 * 2020/01/05 ver2.12 Adjusted mouse judgment.
