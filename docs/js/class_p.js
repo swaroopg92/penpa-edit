@@ -1427,7 +1427,7 @@ class Puzzle {
                 }
 
                 //Shading Solution
-                if (!isEmpty(this.pu_q.surface)) {
+                if (!isEmpty(this.pu_a.surface)) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
