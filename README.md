@@ -19,7 +19,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + y: Redo
 * Ctrl + d: Copy the board
 * Ctrl + space: Delete numbers and symbols at the same time
-* Shift + space: Enter a space
+* Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
 * F3: Answer mode
 
@@ -173,6 +173,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* arrowsudoku
 	* evenoddsudoku
 	* kurotto
+	* balanceloop
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode.
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering).
