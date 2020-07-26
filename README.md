@@ -170,6 +170,7 @@ Depending on the browser you can update the page without using the cache with "C
 2. It currently supports (this list will constantly be updated):
 	* classicsudoku
 	* thermosudoku
+	* arrowsudoku
 	* kurotto
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode.

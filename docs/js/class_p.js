@@ -1511,6 +1511,148 @@ class Puzzle {
                         }
                     }
                 }
+            } else if (header === "arrowsudoku") {
+                text += 'Author:\n' +
+                    'Genre: Arrow Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + ' 1' + '\n';
+
+                text += 'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n';
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Arrows
+                text += 'Arrows:\n';
+
+                if (!isEmpty(this.pu_q.arrows)) {
+                    for (var i = 0; i < this.pu_q.arrows.length; i++) {
+                        for (var j = 0; j < this.pu_q.arrows[i].length; j++) {
+                            var col_num = (this.pu_q.arrows[i][j] % (this.nx0)) - 1;
+                            var row_num = parseInt(this.pu_q.arrows[i][j] / this.nx0) - 1;
+                            text += 'R' + row_num + 'C' + col_num;
+                            if (j < this.pu_q.arrows[i].length - 1) {
+                                text += ',';
+                            }
+                        }
+                        if (i < this.pu_q.arrows.length - 1) {
+                            text += '\n';
+                        }
+                    }
+                }
+            } else if (header === "evenoddsudoku") {
+                text += 'Author:\n' +
+                    'Genre: Even/Odd Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + ' 1' + '\n';
+
+                text += 'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n';
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Even Odd Shapes
+
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
                     'Currently it supports only: classicsudoku, kurotto\n' +
