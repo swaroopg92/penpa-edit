@@ -1379,7 +1379,9 @@ class Puzzle {
                                 text += ".";
                             }
                         }
-                        text += "\n";
+                        if (j < this.ny0 - 3) {
+                            text += "\n";
+                        }
                     }
                 }
 
@@ -1404,9 +1406,14 @@ class Puzzle {
                 if (!isEmptycontent("pu_q", "number", 2, "1")) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
-                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                            if (this.pu_q.number[i + j * (this.nx0)] &&
+                                this.pu_q.number[i + j * (this.nx0)][2] === "1" &&
+                                !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
                                 text += this.pu_q.number[i + j * (this.nx0)][0];
-                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][2] === 2 && !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) && this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] &&
+                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
+                                !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
+                                this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
                                 text += "x";
                             } else {
                                 text += ".";
@@ -1429,7 +1436,9 @@ class Puzzle {
                                 text += ".";
                             }
                         }
-                        text += "\n";
+                        if (j < this.ny0 - 3) {
+                            text += "\n";
+                        }
                     }
                 }
             } else if (header === "thermosudoku") {
@@ -1652,15 +1661,36 @@ class Puzzle {
                 }
 
                 // Even Odd Shapes
-
+                if (!isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] &&
+                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
+                                !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
+                                this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
+                                text += "O";
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] &&
+                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
+                                !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
+                                this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
+                                text += "E";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        if (j < this.ny0 - 3) {
+                            text += "\n";
+                        }
+                    }
+                }
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Currently it supports only: classicsudoku, kurotto\n' +
-                    'For additional support please submit your request to swaroop.guggilam@gmail.com';
+                    'Please see instructions (link in the bottom) for supported puzzle types\n' +
+                    'For additional genre support please submit your request to swaroop.guggilam@gmail.com';
             }
         } else {
             text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Currently it supports: classicsudoku, kurotto\n';
+                'Please see instructions (link in the bottom) for supported puzzle types\n';
         }
 
         return text;
