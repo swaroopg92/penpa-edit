@@ -1045,9 +1045,9 @@ class Puzzle {
         text += "%%盤面マス%%\n";
         text += "--------\n";
 
-        //解答数字
+        //Answer Digits
         if (!isEmptycontent("pu_a", "number", 2, "1")) {
-            text += '#解答数字:3,True\n' +
+            text += '#AnswerDigits:3,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -1248,9 +1248,9 @@ class Puzzle {
             text += "--------\n";
         }
 
-        //解答黒マス
+        //Answer Shading
         if (!isEmpty(this.pu_a.surface)) {
-            text += '#解答黒マス:0,True\n' +
+            text += '#ShadingDataAnsMode:0,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -1321,6 +1321,125 @@ class Puzzle {
         return text;
     }
 
+    maketext_gmpfile() {
+        var text = "";
+        var gridsize = "19.842";
+        var fontsize = "16";
+        var header = document.getElementById("savetextarea_pp").value;
+
+        // Puzzle Choice
+        if (header != "") {
+            if (header === "classicsudoku") {
+                text += 'Author:\n' +
+                    'Genre: Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n' +
+                    '9 9 1\n' +
+                    'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n';
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+            } else if (header === "kurotto") {
+                text += 'Author:\n' +
+                    'Genre: Kurotto\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][2] === 2 && !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) && this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
+                                text += "x";
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                //Shading Solution
+                for (var j = 2; j < this.ny0 - 2; j++) {
+                    for (var i = 2; i < this.nx0 - 2; i++) {
+                        if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                            text += "X";
+                        } else {
+                            text += ".";
+                        }
+                    }
+                    text += "\n";
+                }
+            } else {
+                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
+                    'Currently it supports only: classicsudoku, kurotto\n' +
+                    'For additional support please submit your request to swaroop.guggilam@gmail.com';
+            }
+        } else {
+            text += 'Error - Enter the Puzzle type in Header area\n' +
+                'Currently it supports: classicsudoku, kurotto\n';
+        }
+
+        return text;
+    }
 
     undo() {
         var a = this.pu_q.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value*/

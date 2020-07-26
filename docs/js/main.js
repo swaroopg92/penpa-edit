@@ -383,6 +383,10 @@ onload = function() {
                 make_ppfile();
                 e.preventDefault();
                 break;
+            case "gmp_file":
+                make_gmpfile();
+                e.preventDefault();
+                break;
             case "savetextarea":
                 return;
             case "savetextname":

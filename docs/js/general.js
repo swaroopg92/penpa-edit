@@ -409,6 +409,12 @@ function make_ppfile() {
     document.getElementById("savetextarea").value = text;
 }
 
+function make_gmpfile() {
+    var text = pu.maketext_gmpfile();
+    //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
+    document.getElementById("savetextarea").value = text;
+}
+
 function savetext_copy() {
     var textarea = document.getElementById("savetextarea");
     textarea.select();
