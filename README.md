@@ -151,7 +151,7 @@ Depending on the browser you can update the page without using the cache with "C
 2. Select Edit mode "Solution" and complete the solution.
 3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new small window will appear.
 4. Click on "Generate URL with answer check"
-5. Click anywhere on the screen outside the small window.
+5. Click anywhere on the screen outside the small window to close it.
 
 * Options
 1. Copy: copies the URL to the clipboard
@@ -164,6 +164,22 @@ Depending on the browser you can update the page without using the cache with "C
 	4. Paste the URL (CTRL + V on windows).
 	5. Click "Shorten"
 4. Cancel: close the window
+
+* Extra Options (puzzle_output_file -> GMPuzzle output:)
+1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
+2. It currently supports (this list will constantly be updated):
+	* classicsudoku
+	* thermosudoku
+	* kurotto
+3. How to use it?
+	1. Create a Puzzle in "Edit: Problem" mode.
+	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering).
+	3. click on Share -> Extra Options -> puzzle_output_file.
+	4. In the "Header" area, type the puzzle type you are creating.
+	5. click on "GMPUzzle output" button and then click anywhere outside to close this window.
+	6. Specify your required filename and click "Download" button.
+		* Template: [Constructor Initials]-[SubmissionID]-[Genre]-[ShortTitle].txt
+		* Example: SG-012-kurottu-pairs.txt
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.

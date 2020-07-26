@@ -981,7 +981,7 @@ class Puzzle {
             text += "--------\n";
         }
 
-        //NumberData
+        //Line Data
         if (!isEmpty(this.pu_q.lineE)) {
             text += '#NumberData:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
@@ -1001,7 +1001,7 @@ class Puzzle {
             text += "--------\n";
         }
 
-        //Answer
+        //Line Data in Answer Mode
         if (!isEmpty(this.pu_a.lineE)) {
             text += '#AnswerNumber:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
@@ -1335,6 +1335,7 @@ class Puzzle {
                     'Variation: Standard\n' +
                     'Theme:\n' +
                     'Entry:\n' +
+                    'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n' +
                     '9 9 1\n' +
@@ -1388,6 +1389,7 @@ class Puzzle {
                     'Variation: Standard\n' +
                     'Theme:\n' +
                     'Entry:\n' +
+                    'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
                 var row_size = this.ny0;
@@ -1418,15 +1420,96 @@ class Puzzle {
                 }
 
                 //Shading Solution
-                for (var j = 2; j < this.ny0 - 2; j++) {
-                    for (var i = 2; i < this.nx0 - 2; i++) {
-                        if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
-                            text += "X";
-                        } else {
-                            text += ".";
+                if (!isEmpty(this.pu_q.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "X";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+            } else if (header === "thermosudoku") {
+                text += 'Author:\n' +
+                    'Genre: Thermo-Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + ' 1' + '\n';
+
+                text += 'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n';
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Thermometers
+                text += 'Thermometers:\n';
+
+                if (!isEmpty(this.pu_q.thermo)) {
+                    for (var i = 0; i < this.pu_q.thermo.length; i++) {
+                        for (var j = 0; j < this.pu_q.thermo[i].length; j++) {
+                            var col_num = (this.pu_q.thermo[i][j] % (this.nx0)) - 1;
+                            var row_num = parseInt(this.pu_q.thermo[i][j] / this.nx0) - 1;
+                            text += 'R' + row_num + 'C' + col_num;
+                            if (j < this.pu_q.thermo[i].length - 1) {
+                                text += ',';
+                            }
+                        }
+                        if (i < this.pu_q.thermo.length - 1) {
+                            text += '\n';
                         }
                     }
-                    text += "\n";
                 }
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
