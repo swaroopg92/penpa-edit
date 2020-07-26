@@ -888,7 +888,7 @@ class Puzzle {
         //セット
         if (header != "") {
             if (header === "Tromino") {
-                text += '#リスト:0,True\n' +
+                text += '#Shapes:0,True\n' +
                     '*Grid:11.9052,-11.9052\n' +
                     '*Skew:0,0\n' +
                     '*Offset:11.9052,-11.9052\n' +
@@ -904,7 +904,7 @@ class Puzzle {
             } else if (header === "LITS") {
 
             } else if (header === "LITSO") {
-                text += '#リスト:0,True\n' +
+                text += '#Shapes:0,True\n' +
                     '*Grid:11.9052,-11.9052\n' +
                     '*Skew:0,0\n' +
                     '*Offset:11.9052,-11.9052\n' +
@@ -922,7 +922,7 @@ class Puzzle {
                     '1 . . 1 . . . 1 .\n' +
                     '--------\n';
             } else if (header === "Pentomino") {
-                text += '#リスト:0,True\n' +
+                text += '#Shapes:0,True\n' +
                     '*Grid:11.9052,-11.9052\n' +
                     '*Skew:0,0\n' +
                     '*Offset:11.9052,-11.9052\n' +
@@ -946,7 +946,7 @@ class Puzzle {
                     '. . . . 1 . 1 . . . 1 . . . .\n' +
                     '--------\n';
             } else {
-                text += '#セット:7,True\n' +
+                text += '#Settings:7,True\n' +
                     '*Grid:' + gridsize + ',' + gridsize + '\n' +
                     '*Skew:0,0\n' +
                     '*Offset:' + 0 + ',' + (-gridsize) + '\n' +
@@ -961,9 +961,9 @@ class Puzzle {
             }
         }
 
-        //解答線
+        //Board/Frame
         if (!isEmpty(this.pu_a.line)) {
-            text += '#解答線:2,True\n' +
+            text += '#Frame:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:9.921,9.921\n' +
@@ -981,9 +981,9 @@ class Puzzle {
             text += "--------\n";
         }
 
-        //問題辺
+        //NumberData
         if (!isEmpty(this.pu_q.lineE)) {
-            text += '#問題辺:2,True\n' +
+            text += '#NumberData:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -1001,9 +1001,9 @@ class Puzzle {
             text += "--------\n";
         }
 
-        //解答辺
+        //Answer
         if (!isEmpty(this.pu_a.lineE)) {
-            text += '#解答辺:2,True\n' +
+            text += '#AnswerNumber:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -1150,9 +1150,9 @@ class Puzzle {
 
         }
 
-        //問題文字
+        //Text related data
         if (!isEmptycontent("pu_q", "number", 2, "1")) {
-            text += '#問題文字:7,True\n' +
+            text += '#TextData:7,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -1272,9 +1272,9 @@ class Puzzle {
             text += "--------\n";
         }
 
-        //問題黒マス
+        //Shading related information
         if (!isEmpty(this.pu_q.surface)) {
-            text += '#問題黒マス:0,True\n' +
+            text += '#ShadingData:0,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
