@@ -2127,6 +2127,9 @@ class Puzzle {
                         text += "\n";
                     }
                 }
+            } else if (header === "testing") {
+                console.log(this.pu_q);
+                console.log(this.pu_a);
             } else {
                 text += 'Error - It doesnt supporqt puzzle type ' + header + '\n' +
                     'Please see instructions (link in the bottom) for supported puzzle types\n' +

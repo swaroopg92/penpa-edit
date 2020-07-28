@@ -222,7 +222,7 @@ function set_font_style(ctx, size, type) {
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 2:
-            ctx.fillStyle = "#0000FF"; // blue
+            ctx.fillStyle = "#4C9900"; // green
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 3:
