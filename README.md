@@ -174,9 +174,9 @@ Depending on the browser you can update the page without using the cache with "C
 		* arrowsudoku
 		* evenoddsudoku
 	* Shading Puzzles
-		* kurotto
-		* kuromasu
-		* tapa
+		* kurotto (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace])
+		* kuromasu (Use Number + White circle mode)
+		* tapa (Number + Tapa mode)
 		* nurikabe
 	* Loop/ Path Puzzles
 		* balanceloop
