@@ -174,13 +174,13 @@ Depending on the browser you can update the page without using the cache with "C
 		* arrowsudoku
 		* evenoddsudoku
 	* Shading Puzzles
-		* kurotto (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace])
+		* kurotto (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 		* kuromasu (Use Number + White circle mode)
 		* tapa (Number + Tapa mode)
 		* nurikabe
 	* Loop/ Path Puzzles
-		* balanceloop
-		* masyu
+		* balanceloop (Use Number + White circle mode / Black circle mode [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
+		* masyu (Use Shape + Shape/Circle Mode [Panel: ON])
 		* tapalikeloop
 		* slitherlink
 		* yajilin (use grey square, Number-Arrow mode for direction and clues)

@@ -1536,7 +1536,6 @@ class Puzzle {
                                 this.pu_q.number[i + j * (this.nx0)][1] === 6 &&
                                 !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
                                 var digit = this.pu_q.number[i + j * (this.nx0)][0];
-                                console.log(digit);
                                 if (digit !== "") {
                                     text += digit
                                 } else {
@@ -1826,14 +1825,10 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if (header === "balanceloop" || header === "masyu") {
-                text += 'Author:\n';
-                if (header === "balanceloop") {
-                    text += 'Genre: Balance Loop\n';
-                } else if (header === "masyu") {
-                    text += 'Genre: Masyu\n';
-                }
-                text += 'Variation: Standard\n' +
+            } else if (header === "masyu") {
+                text += 'Author:\n' +
+                    'Genre: Masyu\n' +
+                    'Variation: Standard\n' +
                     'Theme:\n' +
                     'Entry:\n' +
                     'Solution:\n' +
@@ -1855,34 +1850,67 @@ class Puzzle {
                                 this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
-                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8) {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8 ||
+                                    this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
                                     text += "W";
-                                    // If number exists on the shape
-                                    if (!isEmptycontent("pu_q", "number", 2, "1")) {
-                                        if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
-                                            text += this.pu_q.number[i + j * (this.nx0)][0];
-                                        }
-                                    }
-                                    if ((header === "balanceloop") && (i < this.nx0 - 3)) {
-                                        text += " ";
-                                    }
-                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2 ||
+                                    this.pu_q.symbol[i + j * (this.nx0)][0] === 9) {
                                     text += "B";
-                                    // If number exists on the shape
-                                    if (!isEmptycontent("pu_q", "number", 2, "1")) {
-                                        if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
-                                            text += this.pu_q.number[i + j * (this.nx0)][0];
-                                        }
-                                    }
-                                    if ((header === "balanceloop") && (i < this.nx0 - 3)) {
-                                        text += " ";
-                                    }
                                 }
                             } else {
                                 text += ".";
-                                if ((header === "balanceloop") && (i < this.nx0 - 3)) {
-                                    text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Answer - Loop
+                var matrix = this.getloopdata(row_size, col_size, header);
+
+                // Write Answer to Text
+                for (var i = 0; i < parseInt(row_size); i++) {
+                    for (var j = 0; j < parseInt(col_size); j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
+
+                }
+            } else if (header === "balanceloop") {
+                text += 'Author:\n' +
+                    'Genre: Balance Loop\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                // Given Digits
+                // Simplified implementation
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] &&
+                                this.pu_q.number[i + j * (this.nx0)][2] === "1" &&
+                                !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                if (this.pu_q.number[i + j * (this.nx0)][1] === 6) {
+                                    text += 'W' + this.pu_q.number[i + j * (this.nx0)][0];
+                                } else if (this.pu_q.number[i + j * (this.nx0)][1] === 7) {
+                                    text += 'B' + this.pu_q.number[i + j * (this.nx0)][0];
                                 }
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
                             }
                         }
                         text += "\n";
