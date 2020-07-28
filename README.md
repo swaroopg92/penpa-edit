@@ -177,6 +177,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* kurotto
 	* Loop/ Path Puzzles
 		* balanceloop
+		* masyu
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode.
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering, green loop).

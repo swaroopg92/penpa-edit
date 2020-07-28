@@ -1684,10 +1684,14 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if (header === "balanceloop") {
-                text += 'Author:\n' +
-                    'Genre: Balance Loop\n' +
-                    'Variation: Standard\n' +
+            } else if (header === "balanceloop" || header === "masyu") {
+                text += 'Author:\n';
+                if (header === "balanceloop") {
+                    text += 'Genre: Balance Loop\n';
+                } else if (header === "masyu") {
+                    text += 'Genre: Masyu\n';
+                }
+                text += 'Variation: Standard\n' +
                     'Theme:\n' +
                     'Entry:\n' +
                     'Solution:\n' +
@@ -1717,10 +1721,10 @@ class Puzzle {
                                             text += this.pu_q.number[i + j * (this.nx0)][0];
                                         }
                                     }
-                                    if (i < this.nx0 - 3) {
+                                    if ((header === "balanceloop") && (i < this.nx0 - 3)) {
                                         text += " ";
                                     }
-                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 9) {
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
                                     text += "B";
                                     // If number exists on the shape
                                     if (!isEmptycontent("pu_q", "number", 2, "1")) {
@@ -1728,13 +1732,13 @@ class Puzzle {
                                             text += this.pu_q.number[i + j * (this.nx0)][0];
                                         }
                                     }
-                                    if (i < this.nx0 - 3) {
+                                    if ((header === "balanceloop") && (i < this.nx0 - 3)) {
                                         text += " ";
                                     }
                                 }
                             } else {
                                 text += ".";
-                                if (i < this.nx0 - 3) {
+                                if ((header === "balanceloop") && (i < this.nx0 - 3)) {
                                     text += " ";
                                 }
                             }
