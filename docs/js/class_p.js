@@ -1337,7 +1337,8 @@ class Puzzle {
     getloopdata(row_size, col_size, type) {
         // There is a difference of 1 in indexing between Line and LinE and hence an
         // auxillary variable subtract is used
-        if (type === "balanceloop" || type === "tapalikeloop" || type === "masyu") {
+        if (type === "balanceloop" || type === "tapalikeloop" || type === "masyu" ||
+            type === "yajilin" || type === "doubleyajilin") {
             var line_data = this.pu_a.line;
             var subtract = 1;
         } else if (type === "slitherlink") {
@@ -1949,6 +1950,81 @@ class Puzzle {
                 // Write Answer to Text
                 for (var i = 0; i < (parseInt(row_size) + 1); i++) {
                     for (var j = 0; j < (parseInt(col_size) + 1); j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
+                }
+            } else if (header === "yajilin" || header === "doubleyajilin") {
+                text += 'Author:\n' +
+                    'Genre: Yajilin\n';
+                if (header === "yajilin") {
+                    text += 'Variation: Standard\n';
+                } else if (header === "doubleyajilin") {
+                    text += 'Variation: Double\n';
+                }
+                text += 'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                // Yajilin Clues
+                var direction;
+                if (!isEmptycontent("pu_q", "number", 2, "2")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "2") {
+                                var cell_data = this.pu_q.number[i + j * (this.nx0)][0].split('');
+                                // 3 is down, 1 is left, 0 is up, 2 is right
+                                if (cell_data[2] === "0") {
+                                    direction = 'u';
+                                } else if (cell_data[2] === "1") {
+                                    direction = 'l';
+                                } else if (cell_data[2] === "2") {
+                                    direction = 'r';
+                                } else if (cell_data[2] === "3") {
+                                    direction = 'd';
+                                }
+                                text += cell_data[0] + direction;
+                            } else if (!isEmpty(this.pu_q.symbol) &&
+                                this.pu_q.symbol[i + j * (this.nx0)] &&
+                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
+                                !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
+                                this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
+                                text += "x";
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Answer - Loop
+                var matrix = this.getloopdata(parseInt(row_size), parseInt(col_size), header);
+
+                // Answer - shading
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var i in this.pu_a.surface) {
+                        var pointA_x = (i % (this.nx0)) - 2;
+                        var pointA_y = parseInt(i / this.nx0) - 2;
+                        matrix[pointA_y][pointA_x] = 'X';
+                    }
+                }
+
+                // Write Answer to Text
+                for (var i = 0; i < parseInt(row_size); i++) {
+                    for (var j = 0; j < parseInt(col_size); j++) {
                         text += matrix[i][j];
                     }
                     text += '\n';
