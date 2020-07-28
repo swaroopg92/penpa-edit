@@ -1334,17 +1334,27 @@ class Puzzle {
         }
     }
 
-    getloopdata(row_size, col_size) {
+    getloopdata(row_size, col_size, type) {
+        // There is a difference of 1 in indexing between Line and LinE and hence an
+        // auxillary variable subtract is used
+        if (type === "balanceloop" || type === "tapalikeloop" || type === "masyu") {
+            var line_data = this.pu_a.line;
+            var subtract = 1;
+        } else if (type === "slitherlink") {
+            var line_data = this.pu_a.lineE;
+            var subtract = 0;
+        }
+
         var matrix_local = [];
         for (var i = 0; i < parseInt(row_size); i++) {
             matrix_local[i] = new Array(parseInt(col_size)).fill('.');
         }
 
-        if (!isEmpty(this.pu_a.line)) {
+        if (!isEmpty(line_data)) {
             var segA = [];
             var segB = [];
             var direction = 'RD'; // RD - Right/Down, LU - Left/Up
-            var loop_segments = Object.entries(this.pu_a.line);
+            var loop_segments = Object.entries(line_data);
             var pointA_x, pointA_y; // x is column, y is row
             var pointB_x, pointB_y;
             var points, loop_type;
@@ -1354,8 +1364,13 @@ class Puzzle {
                 loop_type = loop_segments[i][1];
                 if (loop_type === 3) {
                     points = loop_segments[i][0].split(',');
-                    segA.push(parseInt(points[0]));
-                    segB.push(parseInt(points[1]));
+                    if (type === "slitherlink") {
+                        segA.push(Number(points[0]) - (this.nx0 * this.ny0));
+                        segB.push(Number(points[1]) - (this.nx0 * this.ny0));
+                    } else {
+                        segA.push(parseInt(points[0]));
+                        segB.push(parseInt(points[1]));
+                    }
                 }
             }
 
@@ -1372,10 +1387,11 @@ class Puzzle {
                     }
                 }
                 for (var i = 0; i < segB.length; i++) {
-                    pointA_x = (segA[next_seg] % (this.nx0)) - 1;
-                    pointA_y = parseInt(segA[next_seg] / this.nx0) - 1;
-                    pointB_x = (segB[next_seg] % (this.nx0)) - 1;
-                    pointB_y = parseInt(segB[next_seg] / this.nx0) - 1;
+                    pointA_x = (segA[next_seg] % (this.nx0)) - subtract;
+                    pointA_y = parseInt(segA[next_seg] / this.nx0) - subtract;
+                    pointB_x = (segB[next_seg] % (this.nx0)) - subtract;
+                    pointB_y = parseInt(segB[next_seg] / this.nx0) - subtract;
+
                     if (direction === 'RD') {
                         if (pointB_x > pointA_x) {
                             matrix_local[pointA_y - 1][pointA_x - 1] = 'R';
@@ -1842,7 +1858,7 @@ class Puzzle {
                 }
 
                 // Answer - Loop
-                var matrix = this.getloopdata(row_size, col_size);
+                var matrix = this.getloopdata(row_size, col_size, header);
 
                 // Write Answer to Text
                 for (var i = 0; i < parseInt(row_size); i++) {
@@ -1887,7 +1903,7 @@ class Puzzle {
                 }
 
                 // Answer - Loop
-                var matrix = this.getloopdata(row_size, col_size);
+                var matrix = this.getloopdata(row_size, col_size, header);
 
                 // Write Answer to Text
                 for (var i = 0; i < parseInt(row_size); i++) {
@@ -1896,8 +1912,49 @@ class Puzzle {
                     }
                     text += '\n';
                 }
+            } else if (header === "slitherlink") {
+                text += 'Author:\n' +
+                    'Genre: Slitherlink\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                // Slitherlink clues
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Answer - Loop (As on edges, increased the row and col size by 1)
+                var matrix = this.getloopdata((parseInt(row_size) + 1), (parseInt(col_size) + 1), header);
+
+                // Write Answer to Text
+                for (var i = 0; i < (parseInt(row_size) + 1); i++) {
+                    for (var j = 0; j < (parseInt(col_size) + 1); j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
+                }
             } else {
-                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
+                text += 'Error - It doesnt supporqt puzzle type ' + header + '\n' +
                     'Please see instructions (link in the bottom) for supported puzzle types\n' +
                     'For additional genre support please submit your request to swaroop.guggilam@gmail.com';
             }
