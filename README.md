@@ -177,6 +177,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* kurotto
 		* kuromasu
 		* tapa
+		* nurikabe
 	* Loop/ Path Puzzles
 		* balanceloop
 		* masyu

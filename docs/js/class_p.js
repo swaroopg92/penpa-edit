@@ -2078,6 +2078,55 @@ class Puzzle {
                     }
                     text += '\n';
                 }
+            } else if (header === "nurikabe") {
+                text += 'Author:\n';
+                if (header === "nurikabe") {
+                    text += 'Genre: Nurikabe\n';
+                }
+                text += 'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                //Nurikabe clues
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Answer - Shading
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "X";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
             } else {
                 text += 'Error - It doesnt supporqt puzzle type ' + header + '\n' +
                     'Please see instructions (link in the bottom) for supported puzzle types\n' +
