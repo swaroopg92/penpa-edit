@@ -1338,7 +1338,7 @@ class Puzzle {
         // There is a difference of 1 in indexing between Line and LinE and hence an
         // auxillary variable subtract is used
         if (type === "balanceloop" || type === "tapalikeloop" || type === "masyu" ||
-            type === "yajilin" || type === "doubleyajilin") {
+            type === "yajilin" || type === "doubleyajilin" || type === "castlewall") {
             var line_data = this.pu_a.line;
             var subtract = 1;
         } else if (type === "slitherlink") {
@@ -1505,10 +1505,14 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "kurotto") {
-                text += 'Author:\n' +
-                    'Genre: Kurotto\n' +
-                    'Variation: Standard\n' +
+            } else if (header === "kurotto" || header === "kuromasu") {
+                text += 'Author:\n';
+                if (header === "kurotto") {
+                    text += 'Genre: Kurotto\n';
+                } else if (header === "kuromasu") {
+                    text += 'Genre: Kuromasu\n';
+                }
+                text += 'Variation: Standard\n' +
                     'Theme:\n' +
                     'Entry:\n' +
                     'Solution:\n' +
@@ -1869,10 +1873,14 @@ class Puzzle {
                     text += '\n';
 
                 }
-            } else if (header === "tapalikeloop") {
-                text += 'Author:\n' +
-                    'Genre: Tapa-Like Loop\n' +
-                    'Variation: Standard\n' +
+            } else if (header === "tapalikeloop" || header === "tapa") {
+                text += 'Author:\n';
+                if (header === "tapalikeloop") {
+                    text += 'Genre: Tapa-Like Loop\n';
+                } else if (header === "tapa") {
+                    text += 'Genre: Tapa\n';
+                }
+                text += 'Variation: Standard\n' +
                     'Theme:\n' +
                     'Entry:\n' +
                     'Solution:\n' +
@@ -1903,15 +1911,31 @@ class Puzzle {
                     }
                 }
 
-                // Answer - Loop
-                var matrix = this.getloopdata(row_size, col_size, header);
+                if (header === "tapalikeloop") {
+                    // Answer - Loop
+                    var matrix = this.getloopdata(row_size, col_size, header);
 
-                // Write Answer to Text
-                for (var i = 0; i < parseInt(row_size); i++) {
-                    for (var j = 0; j < parseInt(col_size); j++) {
-                        text += matrix[i][j];
+                    // Write Answer to Text
+                    for (var i = 0; i < parseInt(row_size); i++) {
+                        for (var j = 0; j < parseInt(col_size); j++) {
+                            text += matrix[i][j];
+                        }
+                        text += '\n';
                     }
-                    text += '\n';
+                } else if (header === "tapa") {
+                    // Answer - Shading
+                    if (!isEmpty(this.pu_a.surface)) {
+                        for (var j = 2; j < this.ny0 - 2; j++) {
+                            for (var i = 2; i < this.nx0 - 2; i++) {
+                                if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                    text += "X";
+                                } else {
+                                    text += ".";
+                                }
+                            }
+                            text += "\n";
+                        }
+                    }
                 }
             } else if (header === "slitherlink") {
                 text += 'Author:\n' +
@@ -1954,13 +1978,19 @@ class Puzzle {
                     }
                     text += '\n';
                 }
-            } else if (header === "yajilin" || header === "doubleyajilin") {
-                text += 'Author:\n' +
-                    'Genre: Yajilin\n';
+            } else if (header === "yajilin" || header === "doubleyajilin" || header === "castlewall") {
                 if (header === "yajilin") {
-                    text += 'Variation: Standard\n';
+                    text += 'Author:\n' +
+                        'Genre: Yajilin\n' +
+                        'Variation: Standard\n';
                 } else if (header === "doubleyajilin") {
-                    text += 'Variation: Double\n';
+                    text += 'Author:\n' +
+                        'Genre: Yajilin\n' +
+                        'Variation: Double\n';
+                } else if (header === "castlewall") {
+                    text += 'Author:\n' +
+                        'Genre: Castle Wall\n' +
+                        'Variation: Standard\n';
                 }
                 text += 'Theme:\n' +
                     'Entry:\n' +
@@ -1977,9 +2007,24 @@ class Puzzle {
 
                 // Yajilin Clues
                 var direction;
+                var clueshade = ''; // White/Black for Castle Wall, Grey for Yajilin
                 if (!isEmptycontent("pu_q", "number", 2, "2")) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
+                            // For Castle Wall
+                            if (!isEmpty(this.pu_q.symbol) &&
+                                this.pu_q.symbol[i + j * (this.nx0)] &&
+                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
+                                !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
+                                this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2 || this.pu_q.symbol[i + j * (this.nx0)][0] === 9) {
+                                    clueshade = 'b';
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8) {
+                                    clueshade = 'w';
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 3 || this.pu_q.symbol[i + j * (this.nx0)][0] === 5) {
+                                    clueshade = '';
+                                }
+                            }
                             if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "2") {
                                 var cell_data = this.pu_q.number[i + j * (this.nx0)][0].split('');
                                 // 3 is down, 1 is left, 0 is up, 2 is right
@@ -1992,13 +2037,17 @@ class Puzzle {
                                 } else if (cell_data[2] === "3") {
                                     direction = 'd';
                                 }
-                                text += cell_data[0] + direction;
+                                text += clueshade + cell_data[0] + direction;
                             } else if (!isEmpty(this.pu_q.symbol) &&
                                 this.pu_q.symbol[i + j * (this.nx0)] &&
                                 this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
-                                text += "x";
+                                if (header !== "castlewall") {
+                                    text += "x";
+                                } else {
+                                    text += clueshade;
+                                }
                             } else {
                                 text += ".";
                             }

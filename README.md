@@ -175,16 +175,19 @@ Depending on the browser you can update the page without using the cache with "C
 		* evenoddsudoku
 	* Shading Puzzles
 		* kurotto
+		* kuromasu
+		* tapa
 	* Loop/ Path Puzzles
 		* balanceloop
 		* masyu
 		* tapalikeloop
 		* slitherlink
-		* yajilin
-		* doubleyajilin
+		* yajilin (use grey square, Number-Arrow mode for direction and clues)
+		* doubleyajilin (use grey square, Number-Arrow mode for direction and clues)
+		* castlewall (use black and white squares, Number-Arrow mode for direction and clues, white color for arrow and clue on black square)
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode.
-	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering, green loop).
+	2. Select "Solution Mode" and fill in the solution (Grey shading, Blue numbering, green loop, green edge).
 	3. click on Share -> Extra Options -> puzzle_output_file.
 	4. In the "Header" area, type the puzzle type you are creating.
 	5. click on "GMPUzzle output" button and then click anywhere outside to close this window.
