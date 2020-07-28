@@ -1334,6 +1334,100 @@ class Puzzle {
         }
     }
 
+    getloopdata(row_size, col_size) {
+        var matrix_local = [];
+        for (var i = 0; i < parseInt(row_size); i++) {
+            matrix_local[i] = new Array(parseInt(col_size)).fill('.');
+        }
+
+        if (!isEmpty(this.pu_a.line)) {
+            var segA = [];
+            var segB = [];
+            var direction = 'RD'; // RD - Right/Down, LU - Left/Up
+            var loop_segments = Object.entries(this.pu_a.line);
+            var pointA_x, pointA_y; // x is column, y is row
+            var pointB_x, pointB_y;
+            var points, loop_type;
+
+            // create lists
+            for (var i = 0; i < loop_segments.length; i++) {
+                loop_type = loop_segments[i][1];
+                if (loop_type === 3) {
+                    points = loop_segments[i][0].split(',');
+                    segA.push(parseInt(points[0]));
+                    segB.push(parseInt(points[1]));
+                }
+            }
+
+            if (!isEmpty(segA)) {
+                // Find index of first starting cell
+                var minA = Math.min(...segA);
+                var poss_loc = this.getAllIndexes(segA, minA);
+                for (var i = 0; i < poss_loc.length; i++) {
+                    pointA_y = parseInt(segA[poss_loc[i]] / this.nx0) - 1;
+                    pointB_y = parseInt(segB[poss_loc[i]] / this.nx0) - 1;
+                    if (pointA_y - pointB_y === 0) {
+                        var next_seg = poss_loc[i];
+                        break;
+                    }
+                }
+                for (var i = 0; i < segB.length; i++) {
+                    pointA_x = (segA[next_seg] % (this.nx0)) - 1;
+                    pointA_y = parseInt(segA[next_seg] / this.nx0) - 1;
+                    pointB_x = (segB[next_seg] % (this.nx0)) - 1;
+                    pointB_y = parseInt(segB[next_seg] / this.nx0) - 1;
+                    if (direction === 'RD') {
+                        if (pointB_x > pointA_x) {
+                            matrix_local[pointA_y - 1][pointA_x - 1] = 'R';
+                        } else if (pointB_y > pointA_y) {
+                            matrix_local[pointA_y - 1][pointA_x - 1] = 'D';
+                        }
+                    } else if (direction === 'LU') {
+                        if (pointB_x > pointA_x) {
+                            matrix_local[pointB_y - 1][pointB_x - 1] = 'L';
+                        } else if (pointB_y > pointA_y) {
+                            matrix_local[pointB_y - 1][pointB_x - 1] = 'U';
+                        }
+                    }
+                    // Choose next segment except the last turn (where the loop will close)
+                    if (i !== (segB.length - 1)) {
+                        if (direction === 'RD') {
+                            poss_loc = this.getAllIndexes(segA, segB[next_seg]);
+                            direction = 'RD';
+                            if (poss_loc === -1) {
+                                poss_loc = this.getAllIndexes(segB, segB[next_seg]);
+                                direction = 'LU';
+                            }
+                        } else if (direction === 'LU') {
+                            poss_loc = this.getAllIndexes(segB, segA[next_seg]);
+                            direction = 'LU';
+                            if (poss_loc === -1) {
+                                poss_loc = this.getAllIndexes(segA, segA[next_seg]);
+                                direction = 'RD';
+                            }
+                        }
+                        if (direction === 'RD') {
+                            for (var j = 0; j < poss_loc.length; j++) {
+                                if (segB[poss_loc[j]] !== segB[next_seg]) {
+                                    var next_seg = poss_loc[j];
+                                    break;
+                                }
+                            }
+                        } else if (direction === 'LU') {
+                            for (var j = 0; j < poss_loc.length; j++) {
+                                if (segA[poss_loc[j]] !== segA[next_seg]) {
+                                    var next_seg = poss_loc[j];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return matrix_local;
+    }
+
     maketext_gmpfile() {
         var text = "";
         var header = document.getElementById("savetextarea_pp").value;
@@ -1748,105 +1842,59 @@ class Puzzle {
                 }
 
                 // Answer - Loop
-                var matrix = [];
-                for (var i = 0; i < parseInt(row_size); i++) {
-                    matrix[i] = new Array(parseInt(col_size)).fill('.');
-                }
-
-                if (!isEmpty(this.pu_a.line)) {
-                    var segA = [];
-                    var segB = [];
-                    var direction = 'RD'; // RD - Right/Down, LU - Left/Up
-                    var loop_segments = Object.entries(this.pu_a.line);
-                    var pointA_x, pointA_y; // x is column, y is row
-                    var pointB_x, pointB_y;
-                    var points, loop_type;
-
-                    // create lists
-                    for (var i = 0; i < loop_segments.length; i++) {
-                        loop_type = loop_segments[i][1];
-                        if (loop_type === 3) {
-                            points = loop_segments[i][0].split(',');
-                            segA.push(parseInt(points[0]));
-                            segB.push(parseInt(points[1]));
-                        }
-                    }
-
-                    if (!isEmpty(segA)) {
-                        // Find index of first starting cell
-                        var minA = Math.min(...segA);
-                        var poss_loc = this.getAllIndexes(segA, minA);
-                        for (var i = 0; i < poss_loc.length; i++) {
-                            pointA_y = parseInt(segA[poss_loc[i]] / this.nx0) - 1;
-                            pointB_y = parseInt(segB[poss_loc[i]] / this.nx0) - 1;
-                            if (pointA_y - pointB_y === 0) {
-                                var next_seg = poss_loc[i];
-                                break;
-                            }
-                        }
-                        for (var i = 0; i < segB.length; i++) {
-                            pointA_x = (segA[next_seg] % (this.nx0)) - 1;
-                            pointA_y = parseInt(segA[next_seg] / this.nx0) - 1;
-                            pointB_x = (segB[next_seg] % (this.nx0)) - 1;
-                            pointB_y = parseInt(segB[next_seg] / this.nx0) - 1;
-                            if (direction === 'RD') {
-                                if (pointB_x > pointA_x) {
-                                    matrix[pointA_y - 1][pointA_x - 1] = 'R';
-                                } else if (pointB_y > pointA_y) {
-                                    matrix[pointA_y - 1][pointA_x - 1] = 'D';
-                                }
-                            } else if (direction === 'LU') {
-                                if (pointB_x > pointA_x) {
-                                    matrix[pointB_y - 1][pointB_x - 1] = 'L';
-                                } else if (pointB_y > pointA_y) {
-                                    matrix[pointB_y - 1][pointB_x - 1] = 'U';
-                                }
-                            }
-                            // Choose next segment except the last turn (where the loop will close)
-                            if (i !== (segB.length - 1)) {
-                                if (direction === 'RD') {
-                                    poss_loc = this.getAllIndexes(segA, segB[next_seg]);
-                                    direction = 'RD';
-                                    if (poss_loc === -1) {
-                                        poss_loc = this.getAllIndexes(segB, segB[next_seg]);
-                                        direction = 'LU';
-                                    }
-                                } else if (direction === 'LU') {
-                                    poss_loc = this.getAllIndexes(segB, segA[next_seg]);
-                                    direction = 'LU';
-                                    if (poss_loc === -1) {
-                                        poss_loc = this.getAllIndexes(segA, segA[next_seg]);
-                                        direction = 'RD';
-                                    }
-                                }
-                                if (direction === 'RD') {
-                                    for (var j = 0; j < poss_loc.length; j++) {
-                                        if (segB[poss_loc[j]] !== segB[next_seg]) {
-                                            var next_seg = poss_loc[j];
-                                            break;
-                                        }
-                                    }
-                                } else if (direction === 'LU') {
-                                    for (var j = 0; j < poss_loc.length; j++) {
-                                        if (segA[poss_loc[j]] !== segA[next_seg]) {
-                                            var next_seg = poss_loc[j];
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                var matrix = this.getloopdata(row_size, col_size);
 
                 // Write Answer to Text
                 for (var i = 0; i < parseInt(row_size); i++) {
                     for (var j = 0; j < parseInt(col_size); j++) {
                         text += matrix[i][j];
                     }
-                    if (i < parseInt(row_size) - 1) {
-                        text += '\n';
+                    text += '\n';
+
+                }
+            } else if (header === "tapalikeloop") {
+                text += 'Author:\n' +
+                    'Genre: Tapa-Like Loop\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                //Tapa clues
+                if (!isEmptycontent("pu_q", "number", 2, "4")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "4" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0].split('').sort().join('');
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
                     }
+                }
+
+                // Answer - Loop
+                var matrix = this.getloopdata(row_size, col_size);
+
+                // Write Answer to Text
+                for (var i = 0; i < parseInt(row_size); i++) {
+                    for (var j = 0; j < parseInt(col_size); j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
                 }
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
