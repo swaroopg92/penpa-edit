@@ -178,6 +178,9 @@ Depending on the browser you can update the page without using the cache with "C
 		* kuromasu (Use Number + White circle mode)
 		* tapa (Number + Tapa mode)
 		* nurikabe
+	* Region Division Puzzles
+		* cave
+		* snakepit (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 	* Loop/ Path Puzzles
 		* balanceloop (Use Number + White circle mode / Black circle mode [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
 		* masyu (Use Shape + Shape/Circle Mode [Panel: ON])

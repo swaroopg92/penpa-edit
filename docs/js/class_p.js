@@ -2240,6 +2240,69 @@ class Puzzle {
                     }
                     text += "\n";
                 }
+            } else if (header === "snakepit") {
+                text += 'Author:\n' +
+                    'Genre: Snake Pit\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                // Given Digits
+                // Simplified implementation
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] &&
+                                this.pu_q.number[i + j * (this.nx0)][2] === "1" &&
+                                !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                if (this.pu_q.number[i + j * (this.nx0)][1] === 6) {
+                                    text += 'O' + this.pu_q.number[i + j * (this.nx0)][0];
+                                } else if (this.pu_q.number[i + j * (this.nx0)][1] === 1) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                }
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Answer digits
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
