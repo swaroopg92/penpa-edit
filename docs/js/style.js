@@ -281,7 +281,7 @@ function set_circle_style(ctx, num) {
         case 5:
             ctx.fillStyle = "#ccc";
             ctx.strokeStyle = "rgba(0,0,0,1)";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             break;
         case 6:
             ctx.fillStyle = "#fff";
