@@ -173,6 +173,8 @@ Depending on the browser you can update the page without using the cache with "C
 		* thermosudoku
 		* arrowsudoku
 		* evenoddsudoku
+	* Object Placement
+		* Statue Park (Use Shape + Shape/Circle Mode [Panel: ON])
 	* Shading Puzzles
 		* kurotto (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 		* kuromasu (Use Number + White circle mode)

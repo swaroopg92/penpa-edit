@@ -1842,7 +1842,7 @@ class Puzzle {
                 col_size = document.getElementById("nb_size1").value;
                 text += col_size + ' ' + row_size + '\n';
 
-                // Black and White Circles with numbers
+                // Black and White Circles
                 if (!isEmpty(this.pu_q.symbol)) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
@@ -2421,6 +2421,59 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "statuepark") {
+                text += 'Author:\n' +
+                    'Genre: Statue Park\n' +
+                    'Variation: Standard (Pentomino Set)\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size = this.ny0;
+                var col_size = this.nx0;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                // Black and White Circles
+                if (!isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] &&
+                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
+                                !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
+                                this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8 ||
+                                    this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "W";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2 ||
+                                    this.pu_q.symbol[i + j * (this.nx0)][0] === 9) {
+                                    text += "B";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                //Shading Solution
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "X";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
