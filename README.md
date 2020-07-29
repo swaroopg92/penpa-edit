@@ -179,6 +179,8 @@ Depending on the browser you can update the page without using the cache with "C
 		* tapa (Number + Tapa mode)
 		* nurikabe
 	* Region Division Puzzles
+		* fillomino
+		* pentominous
 		* cave
 		* snakepit (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 	* Loop/ Path Puzzles
