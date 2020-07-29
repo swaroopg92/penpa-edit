@@ -167,7 +167,7 @@ Depending on the browser you can update the page without using the cache with "C
 
 * Extra Options (puzzle_output_file -> GMPuzzle output:)
 1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
-2. It currently supports (this list will constantly be updated):
+2. It currently supports (this list is frequently updated):
 	* Sudoku
 		* classicsudoku
 		* thermosudoku

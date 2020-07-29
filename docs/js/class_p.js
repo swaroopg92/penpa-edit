@@ -1561,7 +1561,6 @@ class Puzzle {
                 //                 !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
                 //                 text += this.pu_q.number[i + j * (this.nx0)][0];
                 //             } else if (this.pu_q.symbol[i + j * (this.nx0)] &&
-                //                 this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                 //                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                 //                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
                 //                 text += "x";
@@ -1809,12 +1808,10 @@ class Puzzle {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             if (this.pu_q.symbol[i + j * (this.nx0)] &&
-                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
                                 text += "O";
                             } else if (this.pu_q.symbol[i + j * (this.nx0)] &&
-                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
                                 text += "E";
@@ -1847,7 +1844,6 @@ class Puzzle {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             if (this.pu_q.symbol[i + j * (this.nx0)] &&
-                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
                                 if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8 ||
@@ -2069,7 +2065,6 @@ class Puzzle {
                             // For Castle Wall
                             if (!isEmpty(this.pu_q.symbol) &&
                                 this.pu_q.symbol[i + j * (this.nx0)] &&
-                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
                                 if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2 || this.pu_q.symbol[i + j * (this.nx0)][0] === 9) {
@@ -2095,7 +2090,6 @@ class Puzzle {
                                 text += clueshade + cell_data[0] + direction;
                             } else if (!isEmpty(this.pu_q.symbol) &&
                                 this.pu_q.symbol[i + j * (this.nx0)] &&
-                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
                                 if (header !== "castlewall") {
@@ -2443,7 +2437,6 @@ class Puzzle {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             if (this.pu_q.symbol[i + j * (this.nx0)] &&
-                                this.pu_q.symbol[i + j * (this.nx0)][2] === 2 &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "circle") {
                                 if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8 ||
