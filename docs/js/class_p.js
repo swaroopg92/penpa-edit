@@ -814,7 +814,7 @@ class Puzzle {
         }
 
         for (var i in this[pu].number) {
-            if (this[pu].number[i][1] === 2 && this[pu].number[i][2] === "7") {
+            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && this[pu].number[i][2] === "7") {
                 var sum = 0,
                     a;
                 for (var j = 0; j < 10; j++) {
@@ -827,7 +827,7 @@ class Puzzle {
                     sol[4].push(i + "," + a);
                 }
             } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                if (this[pu].number[i][1] === 2 && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6")) {
+                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6")) {
                     sol[4].push(i + "," + this[pu].number[i][0]);
                 }
             }

@@ -64,11 +64,12 @@ h3 {
 #buttons {
     font-size: 0;
     border: 1px solid #000;
-    width: 440px;
+    width: 460px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 5px;
+    padding-right: 10px;
 }
 
 .mode_button {
