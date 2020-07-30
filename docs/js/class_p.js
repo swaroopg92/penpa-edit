@@ -2194,7 +2194,6 @@ class Puzzle {
                 text += col_size + ' ' + row_size + '\n';
 
                 //Cave clues
-                console.log(this.pu_q);
                 if (!isEmptycontent("pu_q", "number", 2, "1")) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {

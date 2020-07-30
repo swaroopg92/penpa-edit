@@ -303,8 +303,8 @@ function set_circle_style(ctx, num) {
             ctx.lineWidth = 2;
             break;
         case 9:
-            ctx.fillStyle = "#000";
-            ctx.strokeStyle = "#000";
+            ctx.fillStyle = "#ccc";
+            ctx.strokeStyle = "rgba(0,0,0,1)";
             ctx.lineWidth = 2;
             break;
         case 10:
