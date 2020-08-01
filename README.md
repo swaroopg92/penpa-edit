@@ -173,6 +173,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* thermosudoku
 		* arrowsudoku
 		* evenoddsudoku
+		* consecutivepairssudoku (cps)
 	* Object Placement
 		* Statue Park (Use Shape + Shape/Circle Mode [Panel: ON])
 		* minesweeper (Use 1 to represent mine in the Solution)

@@ -543,32 +543,32 @@ onload = function() {
                 e.preventDefault();
                 break;
         }
-        //メインモード
+        // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {
             pu.mode_set(e.target.id.slice(3, -3));
             e.preventDefault();
         }
-        //サブモード
+        // Sub mode
         if (e.target.id.slice(0, 4) === "sub_") {
             pu.submode_check(e.target.id.slice(0, -3));
             e.preventDefault();
         }
-        //スタイルモード
+        // Style mode
         if (e.target.id.slice(0, 3) === "st_") {
             pu.stylemode_check(e.target.id.slice(0, -3));
             e.preventDefault();
         }
-        //コンビモード
+        // Combination mode
         if (e.target.id.slice(0, 9) === "combisub_") {
             pu.subcombimode(e.target.id.slice(9));
             e.preventDefault();
         }
-        //シンボル
+        // symbol
         if (e.target.id.slice(0, 3) === "ms_") {
             checkms = 1;
             pu.subsymbolmode(e.target.id.slice(3));
             e.preventDefault();
-            //シンボルホバーetc
+            //Symbol hover etc
         } else if (e.target.id.slice(0, 2) === "ms") {
             checkms = 1;
             return;
@@ -631,7 +631,7 @@ onload = function() {
     }
 
 
-    //パネル入力設定
+    // Panel input settings
     var float_canvas = document.getElementById("float-canvas");
 
     function f_mdown(e) {

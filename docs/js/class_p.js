@@ -1518,8 +1518,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1597,8 +1597,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1674,8 +1674,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1751,8 +1751,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1831,8 +1831,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1881,8 +1881,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1937,8 +1937,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -1997,8 +1997,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2048,8 +2048,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2138,8 +2138,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2185,8 +2185,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2242,8 +2242,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2305,8 +2305,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2362,8 +2362,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2423,8 +2423,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2481,8 +2481,8 @@ class Puzzle {
                     'Solution:\n' +
                     'Solving Times:\n' +
                     'Status:\n';
-                var row_size = this.ny0;
-                var col_size = this.nx0;
+                var row_size;
+                var col_size;
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -2518,6 +2518,113 @@ class Puzzle {
                         }
                         text += "\n";
                     }
+                }
+
+            } else if (header === "consecutivepairssudoku" || header === "cps") {
+                text += 'Author:\n' +
+                    'Genre: Consecutive Pairs Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + ' 1' + '\n';
+
+                text += 'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'aaabbbccc\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'dddeeefff\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n' +
+                    'ggghhhiii\n';
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Consecutive circles
+                var matrix = [];
+                var new_row_size = (2 * parseInt(row_size) - 1);
+                var new_col_size = (2 * parseInt(col_size) - 1);
+
+                // initialize
+                for (var i = 0; i < new_row_size; i++) {
+                    matrix[i] = new Array(parseInt(new_col_size)).fill('.');
+                }
+
+                // convert odd columns to |
+                for (var i = 0; i < new_row_size; i++) {
+                    for (var j = 0; j < new_col_size; j++) {
+                        if (i % 2 == 0) {
+                            if (j % 2 != 0) {
+                                matrix[i][j] = '|';
+                            }
+                        } else {
+                            if (j % 2 == 0) {
+                                matrix[i][j] = '-';
+                            } else {
+                                matrix[i][j] = '+';
+                            }
+                        }
+                    }
+                }
+                if (!isEmpty(this.pu_q.symbol)) {
+                    var pointA_x, pointA_y, greycircle;
+                    for (greycircle in this.pu_q.symbol) {
+                        var factor = Math.floor(greycircle / (this.nx0 * this.ny0));
+                        pointA_x = ((greycircle - (factor * this.nx0 * this.ny0)) % (this.nx0)) - 1; // column
+                        pointA_y = parseInt((greycircle - (factor * this.nx0 * this.ny0)) / (this.nx0)) - 1; // row
+                        if (factor === 2) {
+                            matrix[(2 * pointA_y) - 1][(2 * (pointA_x - 1))] = 'G';
+                        } else if (factor === 3) {
+                            matrix[(2 * (pointA_y - 1))][(2 * pointA_x) - 1] = 'G';
+                        }
+                    }
+                }
+                for (var i = 0; i < new_row_size; i++) {
+                    for (var j = 0; j < new_col_size; j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
                 }
 
             } else if (header === "testing") {
@@ -2760,7 +2867,7 @@ class Puzzle {
             if (str_num.indexOf(key) != -1) {
                 if (this[this.mode.qa].symbol[this.cursol]) {
                     if (this[this.mode.qa].symbol[this.cursol][0] === parseInt(key, 10) && this[this.mode.qa].symbol[this.cursol][1] === this.mode[this.mode.qa].symbol[0]) {
-                        this.key_space(); //内容が同じなら削除
+                        this.key_space(); // Delete if the contents are the same
                         return;
                     } else {
                         con = this[this.mode.qa].symbol[this.cursol][0];
@@ -2865,7 +2972,7 @@ class Puzzle {
     }
 
     /////////////////////////////
-    //マウスイベント
+    // Mouse Event
     //
     /////////////////////////////
     recalculate_num(x, y, num) {

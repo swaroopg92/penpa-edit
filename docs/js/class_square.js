@@ -170,7 +170,7 @@ class Puzzle_square extends Puzzle {
 
         this.centerlist = []
         for (var j = 2; j < this.ny0 - 2; j++) {
-            for (var i = 2; i < this.nx0 - 2; i++) { //上と左端は未使用
+            for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
                 this.centerlist.push(i + j * (this.nx0));
             }
         }
@@ -180,9 +180,9 @@ class Puzzle_square extends Puzzle {
         this.canvas_size_setting();
         this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
 
-        this.centerlist = [] //centerlistを余白に合わせて再設定
+        this.centerlist = [] //reset centerlist to match the margins
         for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
-            for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { //上と左端は未使用
+            for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
                 this.centerlist.push(i + j * (this.nx0));
             }
         }
