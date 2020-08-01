@@ -213,9 +213,9 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
-* 2020/07/25 ver2.15 Initiated output text file feature with GMPuzzles formatting requirements.
-* 2020/07/16 ver2.14 Stop watch, Shortcut to enter space in the text, updated readme
-* 2020/06/19 ver2.13 English Translations, Short URL, Readme instructions
+* 2020/07/25 ver2.12.3 Initiated output text file feature with GMPuzzles formatting requirements.
+* 2020/07/16 ver2.12.2 Stop watch, Shortcut to enter space in the text, updated readme
+* 2020/06/19 ver2.12.1 English Translations, Short URL, Readme instructions
 * 2020/01/05 ver2.12 Adjusted mouse judgment.
 * 2019/12/21 ver2.11 Implemented composite mode.
 * 2019/12/07 ver2.10 Ver.2, which was being developed at another address, is integrated with the old address.
