@@ -523,11 +523,11 @@ class Puzzle {
 
     mode_set(mode) {
         this.mode[this.mode.qa].edit_mode = mode;
-        if (mode === "number") {
-            document.getElementById("sub_txt").innerHTML = "";
-        } else {
-            document.getElementById("sub_txt").innerHTML = "";
-        }
+        // if (mode === "number") {
+        //     document.getElementById("sub_txt").innerHTML = "Sub:";
+        // } else {
+        //     document.getElementById("sub_txt").innerHTML = "Sub:";
+        // }
         this.submode_reset();
         if (document.getElementById('mode_' + mode)) {
             document.getElementById('mode_' + mode).style.display = 'inline-block';

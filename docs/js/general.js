@@ -62,7 +62,7 @@ function make_class(gridtype) {
             if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && 12 <= size && size <= 60 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
-                alert("Sides must be in the range 1-40, display size must be in the range 12-60");
+                alert("Size must be in the range 1-40, display size must be in the range 12-60");
             }
             break;
         case "hex":
