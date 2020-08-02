@@ -140,9 +140,13 @@ function make_class(gridtype) {
 function changetype() {
     var gridtype = document.getElementById("gridtype").value;
     var type = ["name_size2", "nb_size2", "name_space2", "name_space3", "name_space4", "nb_space2", "nb_space3", "nb_space4"];
+    var type2 = ["name_space1", "nb_space1"];
     switch (gridtype) {
         case "square":
             for (var i of type) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type2) {
                 document.getElementById(i).style.display = "inline";
             }
             document.getElementById("name_size1").innerHTML = "Width：";
@@ -159,6 +163,9 @@ function changetype() {
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Side: ";
             document.getElementById("nb_size1").value = 5;
@@ -168,6 +175,9 @@ function changetype() {
         case "tri":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Border: ";
@@ -179,6 +189,9 @@ function changetype() {
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Border：";
             document.getElementById("nb_size1").value = 6;
@@ -186,9 +199,10 @@ function changetype() {
             document.getElementById("nb_space1").value = 0;
             break;
         case "iso":
-            type.push("name_space1");
-            type.push("nb_space1");
             for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
@@ -196,9 +210,10 @@ function changetype() {
             document.getElementById("nb_size3").value = 34;
             break;
         case "truncated_square":
-            type.push("name_space1");
-            type.push("nb_space1");
             for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
@@ -206,9 +221,10 @@ function changetype() {
             document.getElementById("nb_size3").value = 32;
             break;
         case "tetrakis_square":
-            type.push("name_space1");
-            type.push("nb_space1");
             for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
@@ -216,9 +232,10 @@ function changetype() {
             document.getElementById("nb_size3").value = 32;
             break;
         case "snub_square":
-            type.push("name_space1");
-            type.push("nb_space1");
             for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
@@ -226,9 +243,10 @@ function changetype() {
             document.getElementById("nb_size3").value = 38;
             break;
         case "cairo_pentagonal":
-            type.push("name_space1");
-            type.push("nb_space1");
             for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
@@ -567,12 +585,16 @@ function load(urlParam) {
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
         pu.mode.qa = "pu_a";
+
+        // mode initialization
+        var rtext_mode = rtext[2].split('~');
+        pu.mode.grid = JSON.parse(rtext_mode[0]);
         pu.mode_set("surface");
-        pu.mode.grid = JSON.parse(rtext[2]);
         pu.pu_q = JSON.parse(rtext[3]);
         if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; }
         pu.centerlist = rtext[5];
-        //classがコピーできないので別
+
+        // Because class cannot be copied, its set in different way
         for (var i of ["pu_q"]) {
             for (var j of ["command_redo", "command_undo"]) {
                 var t = pu[i][j].__a;
@@ -581,7 +603,7 @@ function load(urlParam) {
             }
         }
 
-        //aを復号
+        // Decrypt a
         if (paramArray.a) {
             var ab = atob(paramArray.a);
             ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
@@ -600,7 +622,7 @@ function load(urlParam) {
     document.getElementById("nb_lat" + pu.mode.grid[1]).checked = true;
     document.getElementById("nb_out" + pu.mode.grid[2]).checked = true;
 
-    //描画
+    // Drawing
     pu.create_point();
     pu.point_move((pu.canvasx * 0.5 - pu.point[pu.center_n].x + 0.5), (pu.canvasy * 0.5 - pu.point[pu.center_n].y + 0.5), pu.theta);
     pu.canvas_size_setting();
@@ -611,13 +633,22 @@ function load(urlParam) {
     if (pu.reflect[1] === -1) {
         pu.point_reflect_UD();
     }
-    pu.make_frameline(); //盤面描画
+    pu.make_frameline(); // Draw Board
     panel_pu.draw_panel();
     pu.mode_qa(pu.mode.qa); //include redraw
+    if (paramArray.m === "solve") {
+        // Saving the solve mode
+        var rtext_mode = rtext[2].split('~');
+        pu.mode.grid = JSON.parse(rtext_mode[0]);
+        if (rtext_mode[1]) {
+            var amode = JSON.parse(rtext_mode[1]);
+            if (amode != "board" && amode != "cage" && amode != "special") { // Excluding the mode which are not part of answer mode
+                pu.mode[pu.mode.qa].edit_mode = amode;
+                pu.mode[pu.mode.qa][amode] = JSON.parse(rtext_mode[2]);
+            }
+        }
+    }
     pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
-    //}catch(error){
-    //  alert("不正なアドレスです");
-    //}
 }
 
 function loadver1(paramArray, rtext) {

@@ -3,7 +3,7 @@ onload = function() {
     boot();
 
     document.addEventListener("beforeunload", function(eve) {
-        eve.returnValue = "ページを移動します";
+        eve.returnValue = "Move page.";
     }, { passive: false });
 
     var ua = navigator.userAgent;
@@ -181,15 +181,18 @@ onload = function() {
         return { x, y, num };
     }
 
-    let count = 0;
+    let count_undo = 0;
+    let count_redo = 0;
     let timer;
     var undo_button = document.getElementById("tb_undo")
     var redo_button = document.getElementById("tb_redo")
     undo_button.addEventListener(ondown_key, e => {
         e.preventDefault();
+        undo_button.classList.add('active');
+        count_redo = 0;
         timer = setInterval(() => {
-            count++;
-            if (count > 20) {
+            count_undo++;
+            if (count_undo > 20) {
                 pu.undo();
             }
         }, 20);
@@ -197,23 +200,27 @@ onload = function() {
 
     undo_button.addEventListener(onup_key, e => {
         e.preventDefault();
-        if (count) {
+        if (count_undo) {
+            undo_button.classList.remove('active');
             clearInterval(timer);
-            count = 0;
+            count_undo = 0;
         }
     }, { passive: false });
 
     undo_button.addEventListener(onleave_key, e => {
         e.preventDefault();
+        undo_button.classList.remove('active');
         clearInterval(timer);
-        count = 0;
+        count_undo = 0;
     });
 
     redo_button.addEventListener(ondown_key, e => {
         e.preventDefault();
+        redo_button.classList.add('active');
+        count_undo = 0;
         timer = setInterval(() => {
-            count++;
-            if (count > 20) {
+            count_redo++;
+            if (count_redo > 20) {
                 pu.redo();
             }
         }, 20);
@@ -221,20 +228,21 @@ onload = function() {
 
     redo_button.addEventListener(onup_key, e => {
         e.preventDefault();
-        if (count) {
+        if (count_redo) {
+            redo_button.classList.remove('active');
             clearInterval(timer);
-            count = 0;
+            count_redo = 0;
         }
     }, { passive: false });
 
     redo_button.addEventListener(onleave_key, e => {
         e.preventDefault();
+        redo_button.classList.remove('active');
         clearInterval(timer);
-        count = 0;
+        count_redo = 0;
     });
 
-
-    //クリックイベント
+    // Click Event
     document.addEventListener(ondown_key, window_click, { passive: false });
 
     function window_click(e) {

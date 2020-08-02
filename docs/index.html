@@ -39,12 +39,9 @@
                 <label for="pu_q" class="label" id="pu_q_label">Problem</label>
                 <input type="radio" name="mode_qa" id="pu_a" value=2 />
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
-                <!--<input type="radio" name="mode_qa" id="pu_m" value=3 />
-          <label for="pu_m" class="label" id="pu_m_label">Move</label>-->
-                <!--<span id="panel_button0" class="label">　　　</span>-->
                 <span id="panel_button0" class="label">Panel:</span>
                 <span id="panel_button" class="label">OFF</span>
-                <span id="panel_button0" class="label">Boundary input:</span>
+                <span id="edge_button0" class="label">Boundary input:</span>
                 <span id="edge_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -62,7 +59,7 @@
                 <input type="radio" name="mode" id="mo_move" />
                 <label for="mo_move" class="label_option" id="mo_move_lb">Move</label>
                 <br>
-                <label class="label_mode_2"></label>
+                <label class="label_mode" id="mode_txt_space">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
                 <input type="radio" name="mode" id="mo_number" />
                 <label for="mo_number" class="label" id="mo_number_lb">Number</label>
                 <input type="radio" name="mode" id="mo_symbol" />
@@ -77,8 +74,8 @@
             </div>
             <hr size=1 noshade>
             <div id="submode_button" class="submode_button">
-                <span id="div_all">
-                    <label class="label_mode" id="sub_txt">Sub:</label>
+                <span id="div_sub">
+                    <label class="label_mode" id="sub_txt"></label>
                 </span>
                 <span id="mode_line" style="display:none;">
                     <input type="radio" name="mode_line" value="1" id="sub_line1" checked="checked">
@@ -107,6 +104,14 @@
                 <span id="mode_number" style="display:none;">
                     <input type="radio" name="mode_number" value="1" id="sub_number1" checked="checked">
                     <label for="sub_number1" class="labelL" id="sub_number1_lb">Normal</label>
+                    <input type="radio" name="mode_number" value="10" id="sub_number10">
+                    <label for="sub_number10" class="label" id="sub_number10_lb">Big</label>
+                    <input type="radio" name="mode_number" value="6" id="sub_number6">
+                    <label for="sub_number6" class="labelL" id="sub_number6_lb">M</label>
+                    <input type="radio" name="mode_number" value="5" id="sub_number5">
+                    <label for="sub_number5" class="labelL" id="sub_number5_lb">S</label>
+                    <input type="radio" name="mode_number" value="7" id="sub_number7">
+                    <label for="sub_number7" class="labelL" id="sub_number7_lb">Candidates</label>
                     <input type="radio" name="mode_number" value="2" id="sub_number2">
                     <label for="sub_number2" class="labelL" id="sub_number2_lb">Arrow</label>
                     <input type="radio" name="mode_number" value="4" id="sub_number4">
@@ -115,14 +120,8 @@
                     <label for="sub_number3" class="labelL" id="sub_number3_lb">1/4</label>
                     <input type="radio" name="mode_number" value="9" id="sub_number9">
                     <label for="sub_number9" class="labelL" id="sub_number9_lb">Side</label>
-                    <input type="radio" name="mode_number" value="6" id="sub_number6">
-                    <label for="sub_number6" class="labelL" id="sub_number6_lb">Middle</label>
-                    <input type="radio" name="mode_number" value="5" id="sub_number5">
-                    <label for="sub_number5" class="labelL" id="sub_number5_lb">Small</label>
                     <input type="radio" name="mode_number" value="8" id="sub_number8">
                     <label for="sub_number8" class="labelL" id="sub_number8_lb">Long</label>
-                    <input type="radio" name="mode_number" value="7" id="sub_number7">
-                    <label for="sub_number7" class="labelL" id="sub_number7_lb">Candidates</label>
                 </span>
                 <span id="mode_symbol" class="mode_symbol" style="display:none;">
                     <ul class="nav">
@@ -180,10 +179,15 @@
                         </li>
                         <li><span id="ms2">Number</span>
                             <ul id="mode_symbolul2">
+                                <li><span id="ms3_math">Math</span>
+                                    <ul>
+                                        <li><span id="ms_math">Black</span></li>
+                                        <li><span id="ms_math_G">Green</span></li>
+                                    </ul>
+                                </li>
                                 <li><span id="ms_inequality">Inequality</span></li>
-                                <li><span id="ms_math">Math</span></li>
-                                <li><span id="ms_degital">Digital numbrs</span></li>
-                                <li><span id="ms_degital_f">Digital numbers (empty frame)</span></li>
+                                <li><span id="ms_degital">Digital parts</span></li>
+                                <li><span id="ms_degital_f">Digital Frame</span></li>
                                 <li><span id="ms_dice">Dice</span></li>
                                 <li><span id="ms_pills">Pills</span></li>
                             </ul>
@@ -218,6 +222,12 @@
                                         <li><span id="ms_arrow_fouredge_E">White</span></li>
                                     </ul>
                                 </li>
+                                <li><span id="ms3_arrow_GP">GP</span>
+                                    <ul>
+                                        <li><span id="ms_arrow_GP">Normal</span></li>
+                                        <li><span id="ms_arrow_GP_C">With circle</span></li>
+                                    </ul>
+                                </li>
                                 <li><span id="ms_arrow_Short">Short and fat</span></li>
                                 <li><span id="ms_arrow_S">Small</span></li>
                                 <li><span id="ms_arrow_cross">Cross</span></li>
@@ -249,7 +259,9 @@
                                 <li><span id="ms_sun_moon">Sun & Moon</span></li>
                                 <li><span id="ms_pencils">Pencils</span></li>
                                 <li><span id="ms_slovak">Slovak Sums</span></li>
-                                <!--<li><span id="ms_Ondo-K">Ondo-K</span></li>-->
+                                <li><span id="ms_arc">Arc</span></li>
+                                <li><span id="ms_spans">Spans</span></li>
+                                <li><span id="ms_neighbors">Neighbors</span></li>
                             </ul>
                         </li>
                     </ul>
@@ -319,7 +331,7 @@
             </div>
             <div id="stylemode_button" class="stylemode_button">
                 <span id="div_all">
-                    <label class="label_mode" id="style_txt">Style:</label>
+                    <label class="label_mode" id="style_txt"></label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
                     <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
@@ -354,8 +366,8 @@
                     <label for="st_line5" class="labelL" id="st_line5_lb">Grey</label>
                     <input type="radio" name="style_line" value="40" id="st_line40">
                     <label for="st_line40" class="labelL" id="st_line40_lb">Short</label>
-                    <input type="radio" name="style_line" value="30" id="st_line8">
-                    <label for="st_line8" class="labelL" id="st_line8_lb">Double</label>
+                    <input type="radio" name="style_line" value="30" id="st_line30">
+                    <label for="st_line30" class="labelL" id="st_line30_lb">Double</label>
                 </span>
                 <span id="style_lineE" style="display:none;">
                     <input type="radio" name="style_lineE" value="3" id="st_lineE3" checked="checked">
@@ -370,12 +382,8 @@
                     <label for="st_lineE13" class="labelL" id="st_lineE13_lb">Fat</label>
                     <input type="radio" name="style_lineE" value="5" id="st_lineE5">
                     <label for="st_lineE5" class="labelL" id="st_lineE5_lb">Grey</label>
-                    <input type="radio" name="style_lineE" value="30" id="st_lineE8">
-                    <label for="st_lineE8" class="labelL" id="st_lineE8_lb">Double</label>
-                    <!--
-            <input type="radio" name="style_lineE" value="40" id="st_lineE9">
-            <label for="st_lineE9" class="labelL" id="st_lineE9_lb">短</label>
-          -->
+                    <input type="radio" name="style_lineE" value="30" id="st_lineE30">
+                    <label for="st_lineE30" class="labelL" id="st_lineE30_lb">Double</label>
                 </span>
                 <span id="style_wall" style="display:none;">
                     <input type="radio" name="style_wall" value="3" id="st_wall3" checked="checked">
@@ -392,10 +400,6 @@
                     <label for="st_wall14" class="labelL" id="st_wall14_lb">Grey dot</label>
                     <input type="radio" name="style_wall" value="5" id="st_wall5">
                     <label for="st_wall5" class="labelL" id="st_wall5_lb">Grey</label>
-                    <!--
-            <input type="radio" name="style_wall" value="30" id="st_wall8">
-            <label for="st_wall8" class="labelL" id="st_wall8_lb">二重</label>
-          -->
                 </span>
                 <span id="style_number" style="display:none;">
                     <input type="radio" name="style_number" value="1" id="st_number1" checked="checked">
@@ -422,18 +426,14 @@
                     <label for="st_symbol1" class="label" id="st_symbol1_lb">Behind Lines</label>
                     <input type="radio" name="style_symbol" value="2" id="st_symbol2" checked="checked">
                     <label for="st_symbol2" class="label" id="st_symbol2_lb">In front of lines</label>
-                    <!--<input type="radio" name="style_symbol2" value="0" id="st_symbol0">
-            <label for="st_symbol0" class="label" id="st_symbol0_lb">ﾚｲﾔｰ1</label>
-            <input type="radio" name="style_symbol2" value="10" id="st_symbol10">
-            <label for="st_symbol10" class="label" id="st_symbol10_lb">ﾚｲﾔｰ2</label>-->
                     <span class="symbolmode_display">
-                        <span id="panel_button0" class="label">Current selection:</span>
+                        <span id="panel_buttons0" class="label">Current selection:</span>
                         <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
                     </span>
                 </span>
                 <span id="style_combi" style="display:none;">
                     <span class="combimode_display">
-                        <span id="panel_button0" class="label">Current selection:</span>
+                        <span id="panel_buttonc0" class="label">Current selection:</span>
                         <b><span id="combimode_content" class="combimode_content">blpo</span></b>
                     </span>
                 </span>
@@ -494,7 +494,7 @@
                         <div id="panel_Kan"><label for="panel_Kan" id="panel_Kan_lbmenu" class="label_menu">Kanji</label></div>
                     </li><br>
                     <li>
-                        <div id="panel_Rome"><label for="panel_Rome" id="panel_Rome_lbmenu" class="label_menu">Roman Numerals</label></div>
+                        <div id="panel_Rome"><label for="panel_Rome" id="panel_Rome_lbmenu" class="label_menu">XIV</label></div>
                     </li><br>
                     <li>
                         <div id="panel_Greek"><label for="panel_Greek" id="panel_Greek_lbmenu" class="label_menu">α</label></div>
@@ -521,37 +521,28 @@
     <div id="modal" class="modal">
         <div id="modal-content">
             <div id="modal-header">
-                <h3>New grid</h3>
+                <h3 id="modal_lb">New grid</h3>
             </div>
             <span id="modal-grid">
-                <h4 id="div_all"><label class="label_nb">Board type:</label></h4>
+                <h4 id="div_all"><label class="label_nb" id="nb_type_lb">Board type:</label></h4>
                 <select id="gridtype" onchange="changetype()">
-                    <option value="square" selected="selected">Square</option>
-                    <option value="hex">Hexagon</option>
-                    <option value="tri">Triangle</option>
-                    <option value="pyramid">Pyramid</option>
-                    <option value="iso">Cube</option>
-                    <!--<option value="truncated_square">Truncated square</option>
-              <option value="tetrakis_square">Tetrakis square</option>
-              <option value="snub_square">Snub square</option>
-              <option value="cairo_pentagonal">Cairo pentagonal</option>-->
+                    <option value="square" id="nb_type1_lb" selected="selected">Square</option>
+                    <option value="hex" id="nb_type2_lb">Hexagon</option>
+                    <option value="tri" id="nb_type3_lb">Triangle</option>
+                    <option value="pyramid" id="nb_type4_lb">Pyramid</option>
+                    <option value="iso" id="nb_type5_lb">Cube</option>
                 </select>
             </span><br>
-            <!--
-      -->
-            <h4 id="div_all"><label class="label_nb">Size:</label></h4>
-            <!--
-      --><span>
+            <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
+            <span>
                 <span id="div_all"><label class="label_nb" id="name_size1">Width:</label></span>
-                <!--
-       --><input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="50" step="1">
+                <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="50" step="1">
                 <span id="div_all"><label class="label_nb" id="name_size2">Height:</label></span>
-                <!--
-       --><input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="50" step="1">
+                <input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="50" step="1">
             </span>
             <br>
-            <h4 id="div_all"><label class="label_nb">White space:</label></h4>
-            <!--「マス」モードで設定-->
+            <h4 id="div_all"><label class="label_nb" id="nb_space_lb">White space:</label></h4>
+            <!--Mode Setting-->
             <span id="modal-spaceud" style="display:inline;">
                 <span id="div_all"><label class="label_nb" id="name_space1">Over:</label></span>
                 <input type="number" pattern="\d*" name="nb_space1" id="nb_space1" value="0" min="0" max="10" step="1">
@@ -567,15 +558,15 @@
                 <input type="number" pattern="\d*" name="nb_space4" id="nb_space4" value="0" min="0" max="10" step="1">
             </span>
             <br>
-            <hr size=1 noshade>
+            <hr size=1 noshade class="newgridhrline">
+            <h5><label id="nb_note">Change grid button only affects the following properties:</label></h5>
             <br>
             <h4 id="div_all"><label class="label_nb">Display size:</label></h4>
-            <!--
-        --><span id="">
+            <span id="">
                 <input type="number" pattern="\d*" name="nb_size3" id="nb_size3" value="38" min="10" max="60" step="2">
             </span>
             <br>
-            <h4 id="div_all"><label class="label_nb">Grid:</label></h4>
+            <h4 id="div_all"><label class="label_nb" id="nb_grid_lb">Grid:</label></h4>
             <input type="radio" name="nb_grid" value="1" id="nb_grid1" checked="checked">
             <label for="nb_grid1" class="label" id="nb_grid1_lb">Solid line</label>
             <input type="radio" name="nb_grid" value="2" id="nb_grid2">
@@ -583,13 +574,13 @@
             <input type="radio" name="nb_grid" value="3" id="nb_grid3">
             <label for="nb_grid3" class="label" id="nb_grid3_lb">None</label>
             <br>
-            <h4 id="div_all"><label class="label_nb">Gridpoints:</label></h4>
+            <h4 id="div_all"><label class="label_nb" id="nb_lat_lb">Gridpoints:</label></h4>
             <input type="radio" name="nb_lat" value="1" id="nb_lat1">
             <label for="nb_lat1" class="label" id="nb_lat1_lb">Yes</label>
             <input type="radio" name="nb_lat" value="2" id="nb_lat2" checked="checked">
             <label for="nb_lat2" class="label" id="nb_lat2_lb">No</label>
             <br>
-            <h4 id="div_all"><label class="label_nb">Outside frame:</label></h4>
+            <h4 id="div_all"><label class="label_nb" id="nb_out_lb">Outside frame:</label></h4>
             <input type="radio" name="nb_out" value="1" id="nb_out1" checked="checked">
             <label for="nb_out1" class="label" id="nb_out1_lb">Yes</label>
             <input type="radio" name="nb_out" value="2" id="nb_out2">
@@ -605,10 +596,10 @@
     <div id="modal-newsize" class="modal">
         <div id="modal-newsize-content">
             <div id="modal-header">
-                <h3>Resize</h3>
+                <h3 id="modal-newsize_lb">Resize</h3>
             </div>
             <span id="modal-sizeA">
-                <span><label class="label_nb">Display size:</label></span>
+                <span><label class="label_nb" id="modal-newsize_size_lb">Display size:</label></span>
                 <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="36" min="10" max="60" step="2">
             </span>
             <br>
@@ -624,19 +615,19 @@
                 <h3 id="saveimagetitle">Save screenshot</h3>
             </div>
             <div id="modal-image-body">
-                <h4 id="div_all"><label class="label_imagespace">White border:</label></h4>
+                <h4 id="div_all"><label class="label_imagespace" id="nb_margin_lb">White border:</label></h4>
                 <input type="radio" name="nb_margin" value="1" id="nb_margin1" checked="checked">
                 <label for="nb_margin1" class="label" id="nb_margin1_lb">Yes</label>
                 <input type="radio" name="nb_margin" value="2" id="nb_margin2">
                 <label for="nb_margin2" class="label" id="nb_margin2_lb">No</label>
                 <br>
-                <h4 id="div_all"><label class="label_imagespace">Image quality:</label></h4>
+                <h4 id="div_all"><label class="label_imagespace" id="nb_quality_lb">Image quality:</label></h4>
                 <input type="radio" name="nb_quality" value="1" id="nb_quality1" checked="checked">
                 <label for="nb_quality1" class="label" id="nb_quality1_lb">High</label>
                 <input type="radio" name="nb_quality" value="2" id="nb_quality2">
                 <label for="nb_quality2" class="label" id="nb_quality2_lb">Low</label>
                 <br><br>
-                <span>File name:<input type="text" value="Image.png" id="saveimagename"></span>
+                <span id="saveimagename_lb">File name:<input type="text" value="Image.png" id="saveimagename"></span>
             </div>
             <br>
             <div class="nb_button">
@@ -652,18 +643,18 @@
                 <h3 id="savetexttitle">Rotate / Move</h3>
             </div>
             <div class="nb_button">
-                <h4 id="div_all"><label>Rotate:</label></h4>
+                <h4 id="div_all"><label id="rt1_lb">Rotate:</label></h4>
                 <input type="button" id="rt_left" value="&larr;" />
                 <input type="button" id="rt_right" value="&rarr;" />
             </div>
             <div class="nb_button">
-                <h4 id="div_all"><label>Flip:</label></h4>
+                <h4 id="div_all"><label id="rt2_lb">Flip:</label></h4>
                 <input type="button" id="rt_LR" value="&harr;" />
                 <input type="button" id="rt_UD" value="&#8597;" />
             </div>
             <br>
             <div class="nb_button">
-                <h4 id="div_all"><label>Move:</label></h4>
+                <h4 id="div_all"><label id="rt3_lb">Move:</label></h4>
                 <br>
                 <input type="button" id="rt_center" value="Move board to centre" /><br>
                 <input type="button" id="rt_size" value="Fit window to board" /><br>
@@ -684,7 +675,6 @@
                 <input type="button" id="address_edit" value="URL for editing" />
                 <input type="button" id="address_solve" value="URL for solving" />
                 <input type="button" id="expansion" value="Extra options" />
-                <!-- <input type="button" id="pp_file" value="pp_file"/> -->
             </div>
             <div id="modal-save-body">
                 <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
