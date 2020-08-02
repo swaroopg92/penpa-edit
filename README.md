@@ -213,7 +213,7 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
-* 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator)
+* 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator), includes adding new symbols, records the selection status of the buttons in the answer mode
 * 2020/07/25 ver2.12.3 Initiated output text file feature with GMPuzzles formatting requirements.
 * 2020/07/16 ver2.12.2 Stop watch, Shortcut to enter space in the text, updated readme
 * 2020/06/19 ver2.12.1 English Translations, Short URL, Readme instructions
