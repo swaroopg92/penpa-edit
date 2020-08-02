@@ -948,6 +948,11 @@ class Puzzle_tri extends Puzzle {
                     set_font_style(this.ctx, 0.32 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
                     break;
+                case "10": //big
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
+                    set_font_style(this.ctx, 0.6 * this.size.toString(10), this[pu].number[i][1]);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * this.size, this.size * 0.8);
+                    break;
                 case "7": //sudoku
                     this.draw_numbercircle(pu, i, 0.25);
                     var sum = 0,
@@ -1039,20 +1044,44 @@ class Puzzle_tri extends Puzzle {
         switch (sym) {
             /* figure */
             case "circle_L":
-                set_circle_style(ctx, num);
-                this.draw_circle(ctx, x, y, 0.25);
+                if (num === 0) {
+                    set_circle_style(ctx, 1);
+                    this.draw_circle(ctx, x, y, 0.25);
+                    this.draw_circle(ctx, x, y, 0.2);
+                } else {
+                    set_circle_style(ctx, num);
+                    this.draw_circle(ctx, x, y, 0.25);
+                }
                 break;
             case "circle_M":
-                set_circle_style(ctx, num);
-                this.draw_circle(ctx, x, y, 0.2);
+                if (num === 0) {
+                    set_circle_style(ctx, 1);
+                    this.draw_circle(ctx, x, y, 0.2);
+                    this.draw_circle(ctx, x, y, 0.15);
+                } else {
+                    set_circle_style(ctx, num);
+                    this.draw_circle(ctx, x, y, 0.2);
+                }
                 break;
             case "circle_S":
-                set_circle_style(ctx, num);
-                this.draw_circle(ctx, x, y, 0.13);
+                if (num === 0) {
+                    set_circle_style(ctx, 1);
+                    this.draw_circle(ctx, x, y, 0.13);
+                    this.draw_circle(ctx, x, y, 0.09);
+                } else {
+                    set_circle_style(ctx, num);
+                    this.draw_circle(ctx, x, y, 0.13);
+                }
                 break;
             case "circle_SS":
-                set_circle_style(ctx, num);
-                this.draw_circle(ctx, x, y, 0.1);
+                if (num === 0) {
+                    set_circle_style(ctx, 1);
+                    this.draw_circle(ctx, x, y, 0.1);
+                    this.draw_circle(ctx, x, y, 0.06);
+                } else {
+                    set_circle_style(ctx, num);
+                    this.draw_circle(ctx, x, y, 0.1);
+                }
                 break;
             case "square_LL":
                 set_circle_style(ctx, num);
@@ -1158,6 +1187,10 @@ class Puzzle_tri extends Puzzle {
                 set_font_style(ctx, 0.4 * pu.size.toString(10), 1);
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
+            case "math_G":
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 2);
+                this.draw_math(ctx, num, x, y + 0.05 * pu.size);
+                break;
             case "degital":
                 this.draw_degital(ctx, num, x, y);
                 break;
@@ -1202,6 +1235,14 @@ class Puzzle_tri extends Puzzle {
             case "arrow_S":
                 set_circle_style(ctx, 2);
                 this.draw_arrowS(ctx, num, x, y);
+                break;
+            case "arrow_GP":
+                set_circle_style(ctx, 2);
+                this.draw_arrowGP(ctx, num, x, y);
+                break;
+            case "arrow_GP_C":
+                set_circle_style(ctx, 2);
+                this.draw_arrowGP_C(ctx, num, x, y);
                 break;
             case "arrow_Short":
                 set_circle_style(ctx, 2);
@@ -1795,6 +1836,43 @@ class Puzzle_tri extends Puzzle {
         this.draw_arrow(ctx, num, x, y, len1, len2, w1, w2, ri);
     }
 
+    draw_arrowGP(ctx, num, x, y) {
+        var len1 = 0.35; //nemoto
+        var len2 = 0.35; //tip
+        var w1 = 0.12;
+        var w2 = 0.23;
+        var w3 = 0.34;
+        var r1 = -0.33;
+        var r2 = -0.44;
+        var r3 = -0.32;
+        var th;
+        if (num > 0 && num <= 8) {
+            if (num <= 6) {
+                th = this.rotate_theta((num - 1) * 60 - 180);
+            } else {
+                th = this.rotate_theta((num - 7) * 180 - 90);
+            }
+            ctx.beginPath();
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
+                [0, w1 * pu.size, r1 * pu.size, w1 * pu.size, r2 * pu.size, w2 * pu.size, r3 * pu.size, w3 * pu.size]);
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+
+    draw_arrowGP_C(ctx, num, x, y) {
+        if (num > 0 && num <= 8) {
+            var th;
+            if (num <= 6) {
+                th = this.rotate_theta((num - 1) * 60 - 180);
+            } else {
+                th = this.rotate_theta((num - 7) * 180 - 90);
+            }
+            this.draw_circle(ctx, x, y, 0.3);
+            this.draw_arrowGP(ctx, num, x + 0.5 * pu.size * Math.cos(th), y + 0.5 * pu.size * Math.sin(th));
+        }
+    }
+
     draw_arrowShort(ctx, num, x, y) {
         var len1 = 0.2; //nemoto
         var len2 = 0.2; //tip
@@ -1822,8 +1900,16 @@ class Puzzle_tri extends Puzzle {
                 [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
             ctx.fill();
             ctx.stroke();
+        } else if (num >= 7 && num <= 8) {
+            th = this.rotate_theta((num - 7) * 180 - 90);
+            ctx.beginPath();
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
+                [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+            ctx.fill();
+            ctx.stroke();
         }
     }
+
 
     draw_arrowcross(ctx, num, x, y) {
         var w1 = 0.025;

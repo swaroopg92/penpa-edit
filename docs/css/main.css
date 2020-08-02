@@ -30,6 +30,11 @@ h3 {
     text-align: center;
 }
 
+hr.newgridhrline {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 #top_button,
 #bottom_button {
     position: relative;
@@ -50,14 +55,14 @@ h3 {
     padding: 2px 5px;
     text-decoration: none;
     background: #fff;
-    /*ボタン色*/
     color: #000;
     border-radius: 4px;
 }
 
 .sw {
     margin: 5px;
-    background-color: #42a5f5;  /* Blue Berry*/
+    background-color: #42a5f5;
+    /* Blue Berry*/
     color: white;
 }
 
@@ -69,7 +74,6 @@ h3 {
     padding-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 5px;
-    padding-right: 10px;
 }
 
 .mode_button {
@@ -131,7 +135,6 @@ h3 {
     display: inline-block;
     margin: 0px;
     text-align: left;
-
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -193,7 +196,7 @@ h3 {
 
 input[type=radio] {
     display: none;
-    /* ラジオボタンを非表示にする */
+    /* Hide radio buttons */
 }
 
 input[type="radio"]:checked+label {
@@ -201,7 +204,10 @@ input[type="radio"]:checked+label {
     color: #000000;
 }
 
-#panel_button0 {
+#panel_button0,
+#edge_button0,
+#panel_buttons0,
+#panel_buttonc0 {
     width: auto;
     border: none;
     background: none;
@@ -439,7 +445,7 @@ input[type="radio"]:checked+label {
     z-index: 1;
     left: 0px;
     top: 0px;
-    width: 120px;
+    width: 50px;
     height: 20px;
     text-align: center;
     padding-top: 20px;
@@ -685,7 +691,7 @@ input[type=number] {
 }
 
 /* ============================================================= */
-/* メニュー領域 */
+/* Menu Area */
 #menupanel {
     display: block;
     position: relative;

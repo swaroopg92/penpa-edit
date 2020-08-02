@@ -74,13 +74,13 @@ Depending on the browser you can update the page without using the cache with "C
 
 ### symbol
 * Numerous symbols.You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
-* Depending on the style, you can select whether to place the figure on the front side or the back side of the line. (Mashu's 〇 is the back of the line, and “Oh, I'm sorry” is the front of the line )
+* Depending on the style, you can select whether to place the figure on the front side or the back side of the line.
 * When the boundary input is turned ON, the character is placed on the side/vertex.	  
 
 ### special
 * A special symbol that spans multiple squares. (Arrow Sudoku, Thermo Sudoku, moving arrows, square area)
 * Click the first cell you entered to erase it.
-* Polygonal fill.The vertices are selected in the order in which they are clicked.Click the last clicked vertex or the first clicked vertex again to end selection.
+* Polygonal fill.The vertices are selected in the order in which they are clicked. Click the last clicked vertex or the first clicked vertex again to end selection.
 
 ### Frame
 * A line that surrounds multiple squares. (Killer Sudoku etc.)
@@ -213,6 +213,7 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
+* 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator)
 * 2020/07/25 ver2.12.3 Initiated output text file feature with GMPuzzles formatting requirements.
 * 2020/07/16 ver2.12.2 Stop watch, Shortcut to enter space in the text, updated readme
 * 2020/06/19 ver2.12.1 English Translations, Short URL, Readme instructions

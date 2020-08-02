@@ -154,7 +154,7 @@ class Panel {
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
                     this.str = "黒白灰緑赤青黄水数独偶奇大中小上下左右　同違長短縦横行列遠近高低以央最各交差方向" +
-                        "一二三四五六七八九十壁領域部屋点線輪　　書含入出通切曲直進　丸角形例題解答正誤図計算言葉文字盤面矢印"
+                        "一二三四五六七八九十壁領域部屋点線輪　　書含入出通切曲直進問丸角形例題解答正誤図計算言葉文字盤面矢印"
                     this.cont = this.str.split("");
                     this.draw_number();
                     break;
@@ -208,13 +208,13 @@ class Panel {
                     break;
                 case "Chess":
                     this.nxf = 6;
-                    this.nyf = 5;
+                    this.nyf = 8;
                     this.sizef = 32;
                     this.canvas_size_setting(45);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
-                    this.str = "♔♕♖♗♘♙♚♛♜♝♞♟☖☗歩角飛香桂銀金王玉と龍馬杏圭全成";
+                    this.str = "♔♕♖♗♘♙♚♛♜♝♞♟☖☗歩角飛香桂銀金王玉と龍馬杏圭全成帥俥傌炮仕相兵將車馬砲士象卒　　　　";
                     this.cont = this.str.split("");
                     this.draw_unicodesymbol();
                     break;

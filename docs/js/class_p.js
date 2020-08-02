@@ -55,9 +55,9 @@ class Puzzle {
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
         //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils", "ms_slovak", "ms_arrow_fourtip", "ms0_arrow_fouredge", "combili_shaka", "combili_battleship", "combili_arrowS"];
+        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils", "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge", "combili_shaka", "combili_battleship", "combili_arrowS"];
         //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number3_lb", "ms4", "ms5", "subc4"];
+        this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
         //square,tri,hex
         this.group3 = ["sub_line5_lb"];
         //square,hex
@@ -141,6 +141,7 @@ class Puzzle {
             ["\"arrows\"", "z3"],
             ["\"direction\"", "zD"],
             ["\"squareframe\"", "z0"],
+            ["\"polygon\"", "z5"],
             ["\"deletelineE\"", "z4"],
             ["\"__a\"", "z_"],
             ["null", "zO"],
@@ -545,6 +546,8 @@ class Puzzle {
         }
         if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.subsymbolmode(this.mode[this.mode.qa].symbol[0]);
+        } else if (this.mode[this.mode.qa].edit_mode === "combi") {
+            this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
         this.redraw();
     }
@@ -553,12 +556,13 @@ class Puzzle {
         if (document.getElementById(name)) {
             document.getElementById(name).checked = true;
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] = document.getElementById(name).value;
-            this.cursolcheck();
-            this.redraw(); //盤面カーソル更新
+            this.cursolcheck(); // override
+            this.redraw(); // Board cursor update
         }
-        this.type = this.type_set(); //選択する座標タイプ
+        this.type = this.type_set(); // Coordinate type to select
     }
 
+    // override
     cursolcheck() {
         return;
     }
@@ -566,14 +570,14 @@ class Puzzle {
     stylemode_check(name) {
         if (document.getElementById(name)) {
             document.getElementById(name).checked = true;
-            if (name === "st_symbol0") {
-                this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10;
-            } else if (name === "st_symbol10") {
-                this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10 + 10;
-            } else {
-                this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = parseInt(document.getElementById(name).value);
-            }
-            panel_pu.draw_panel(); //パネル更新
+            // if (name === "st_symbol0") {
+            //     this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10;
+            // } else if (name === "st_symbol10") {
+            //     this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10 + 10;
+            // } else {
+            this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = parseInt(document.getElementById(name).value);
+            // }
+            panel_pu.draw_panel(); // Panel update
         }
     }
 
@@ -722,7 +726,7 @@ class Puzzle {
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "\n";
         text += JSON.stringify(this.space) + "\n";
-        text += JSON.stringify(this.mode.grid) + "\n";
+        text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
 
         var r = this.pu_q.command_redo.__a;
         var u = this.pu_q.command_undo.__a;
@@ -814,20 +818,22 @@ class Puzzle {
         }
 
         for (var i in this[pu].number) {
-            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && this[pu].number[i][2] === "7") {
-                var sum = 0,
-                    a;
-                for (var j = 0; j < 10; j++) {
-                    if (this[pu].number[i][0][j] === 1) {
-                        sum += 1;
-                        a = j + 1;
-                    }
-                }
-                if (sum === 1) {
-                    sol[4].push(i + "," + a);
-                }
-            } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6")) {
+            // Sudoku only one number and multiple digits in same cell should not be considered
+            // if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && this[pu].number[i][2] === "7") {
+            //     var sum = 0,
+            //         a;
+            //     for (var j = 0; j < 10; j++) {
+            //         if (this[pu].number[i][0][j] === 1) {
+            //             sum += 1;
+            //             a = j + 1;
+            //         }
+            //     }
+            //     if (sum === 1) {
+            //         sol[4].push(i + "," + a);
+            //     }
+            // } else 
+            if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
                     sol[4].push(i + "," + this[pu].number[i][0]);
                 }
             }
@@ -866,6 +872,7 @@ class Puzzle {
                     }
                     break;
                 case "math":
+                case "math_G":
                     if (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
                         sol[5].push(i + "," + this[pu].symbol[i][0] + "G");
                     }
@@ -2840,6 +2847,18 @@ class Puzzle {
                         this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
                     break;
+                case "10": //big
+                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
+                        con = this[this.mode.qa].number[this.cursol][0];
+                    } else {
+                        con = "";
+                    }
+                    if (con.length < 10) {
+                        this.record("number", this.cursol);
+                        number = con + key;
+                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
+                    }
+                    break;
                 case "7":
                     this.record("number", this.cursol);
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
@@ -4331,18 +4350,20 @@ class Puzzle {
     }
 
     re_combi_magnets(num) {
-        if (!this[this.mode.qa].symbol[num]) {
+        if (!this[this.mode.qa].symbol[num] && !this[this.mode.qa].surface[num]) {
             this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "math", 2];
-        } else if (this[this.mode.qa].symbol[num][0] === 2) {
+            this[this.mode.qa].symbol[num] = [2, "math_G", 2];
+        } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 2) {
             this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [3, "math", 2];
-        } else if (this[this.mode.qa].symbol[num][0] === 3) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [8, "ox_B", 2];
-        } else {
+            this[this.mode.qa].symbol[num] = [3, "math_G", 2];
+        } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 3) {
             this.record("symbol", num);
             delete this[this.mode.qa].symbol[num];
+            this.record("surface", num);
+            this[this.mode.qa].surface[num] = 1;
+        } else if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] == 1) {
+            this.record("surface", num);
+            delete this[this.mode.qa].surface[num];
         }
         this.redraw();
     }

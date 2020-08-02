@@ -1,5 +1,5 @@
 ////////////////////////////
-//スタイル
+//Style
 //
 /////////////////////////////
 
@@ -44,7 +44,7 @@ function set_surface_style(ctx, type) {
 }
 
 function set_line_style(ctx, type) {
-    //初期化
+    //Initialization
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
     ctx.lineCap = "square";
