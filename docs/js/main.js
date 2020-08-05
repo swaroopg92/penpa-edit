@@ -157,6 +157,20 @@ onload = function() {
                         break;
                 }
             }
+
+            if (key === 'Tab') {
+                var present_mode = document.getElementById("mo_number").checked;
+                var present_submode1 = document.getElementById("sub_number1").checked;
+                var present_submode7 = document.getElementById("sub_number7").checked;
+                if (present_mode && present_submode1) {
+                    pu.submode_check("sub_number7");
+                    e.preventDefault();
+                } else if (present_mode && present_submode7) {
+                    pu.submode_check("sub_number1");
+                    e.preventDefault();
+                }
+                event.returnValue = false;
+            }
         }
     }
 
