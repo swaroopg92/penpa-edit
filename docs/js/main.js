@@ -159,9 +159,7 @@ onload = function() {
                     case "x":
                     case "X":
                         var present_mode = document.getElementById("mo_surface").checked;
-                        console.log(present_mode);
                         if (!present_mode) {
-                            console.log('code enters here')
                             pu.mode_set("surface");
                             e.preventDefault();
                         }
