@@ -25,28 +25,31 @@ function boot_parameters() {
 }
 
 function create() {
-    //盤面サイズ取得
     var gridtype = document.getElementById("gridtype").value;
     pu = make_class(gridtype);
-    pu.reset_frame(); //盤面描画
-    //描画パネル
+    pu.reset_frame();
+    // Drawing Panel
     panel_pu = new Panel();
     panel_pu.draw_panel();
     pu.mode_set("surface"); //include redraw
 }
 
 function create_newboard() {
-    //盤面サイズ取得
-    var mode = pu.mode;
-    var gridtype = document.getElementById("gridtype").value;
-    pu = make_class(gridtype);
-    pu.mode = mode;
 
-    pu.reset_frame(); //盤面描画
-    //描画
-    panel_pu.draw_panel();
-    document.getElementById('modal').style.display = 'none';
-    pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
+    var size = parseInt(document.getElementById("nb_size3").value);
+    if (12 <= size && size <= 80) {
+        var mode = pu.mode;
+        var gridtype = document.getElementById("gridtype").value;
+        pu = make_class(gridtype);
+        pu.mode = mode;
+
+        pu.reset_frame(); // Draw the board
+        panel_pu.draw_panel();
+        document.getElementById('modal').style.display = 'none';
+        pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
+    } else {
+        alert("Display size must be in the range 12-80");
+    }
 }
 
 function make_class(gridtype) {
@@ -59,77 +62,77 @@ function make_class(gridtype) {
             var space2 = parseInt(document.getElementById("nb_space2").value, 10);
             var space3 = parseInt(document.getElementById("nb_space3").value, 10);
             var space4 = parseInt(document.getElementById("nb_space4").value, 10);
-            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && 12 <= size && size <= 60 && space1 + space2 < ny && space3 + space4 < nx) {
+            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
-                alert("Size must be in the range 1-40, display size must be in the range 12-60");
+                alert("Size must be in the range 1-40");
             }
             break;
         case "hex":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
-            if (n0 <= 10 && n0 > 0 && 12 <= size && size <= 60 && space1 < n0) {
+            if (n0 <= 10 && n0 > 0 && space1 < n0) {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-10");
             }
             break;
         case "tri":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
-            if (n0 <= 20 && n0 > 0 && 12 <= size && size <= 60 && space1 < n0 / 3) {
+            if (n0 <= 20 && n0 > 0 && space1 < n0 / 3) {
                 pu = new Puzzle_tri(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-20, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-20");
             }
             break;
         case "pyramid":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
-            if (n0 <= 20 && n0 > 0 && 12 <= size && size <= 60 && space1 < n0 / 3) {
+            if (n0 <= 20 && n0 > 0 && space1 < n0 / 3) {
                 pu = new Puzzle_pyramid(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-20, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-20");
             }
             break;
         case "iso":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 15 && n0 > 0 && 12 <= size && size <= 60) {
+            if (n0 <= 15 && n0 > 0) {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-15, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-15");
             }
             break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0 && 12 <= size && size <= 60) {
+            if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-10");
             }
             break;
         case "tetrakis_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0 && 12 <= size && size <= 60) {
+            if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-10");
             }
             break;
         case "snub_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0 && 12 <= size && size <= 60) {
+            if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-10");
             }
             break;
         case "cairo_pentagonal":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0 && 12 <= size && size <= 60) {
+            if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10, display size must be in the range 12-60");
+                alert("Sides must be in the range 1-10");
             }
             break;
 
@@ -273,27 +276,27 @@ function CreateCheck() {
 
 function newgrid() {
     var size = parseInt(document.getElementById("nb_size3").value);
-    if (15 <= size && size <= 60) {
+    if (15 <= size && size <= 80) {
         pu.reset_frame_newgrid();
         pu.redraw();
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
     } else {
-        alert("Display size must be in the range 15-60");
+        alert("Display size must be in the range 12-80");
     }
 }
 
 function newgrid_r() {
     var sizer = parseInt(document.getElementById("nb_size3_r").value, 10);
     document.getElementById("nb_size3").value = sizer;
-    if (15 <= sizer && sizer <= 60) {
+    if (15 <= sizer && sizer <= 80) {
         pu.reset_frame_newgrid();
         pu.size = sizer;
         pu.redraw();
         panel_pu.draw_panel();
         document.getElementById('modal-newsize').style.display = 'none';
     } else {
-        alert("Display size must be in the range 15-60");
+        alert("Display size must be in the range 12-80");
     }
 }
 

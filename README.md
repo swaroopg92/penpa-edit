@@ -17,7 +17,7 @@ Depending on the browser you can update the page without using the cache with "C
 ## Shortcut keys
 * Ctrl + z: Undo
 * Ctrl + y: Redo
-* Ctrl + d: Copy the board
+* Ctrl + d: Clone
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
