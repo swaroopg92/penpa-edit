@@ -18,6 +18,10 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + z: Undo
 * Ctrl + y: Redo
 * Ctrl + d: Clone
+* Ctrl + a: Number Mode
+* Ctrl + x: Surface Mode
+* Ctrl + c: Line Mode
+* Ctrl + v: Edge Mode
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
@@ -214,6 +218,7 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
+* 2020/08/07 ver2.19.3 Added shortcuts, Normal candidates overwrites corner/edge digits, display size upto 80
 * 2020/08/04 ver2.19.2 Improved buttons and Numbers display, Added "TAB" to switch between normal and candidates submode.
 * 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator), includes adding new symbols, records the selection status of the buttons in the answer mode
 * 2020/07/25 ver2.12.3 Initiated output text file feature with GMPuzzles formatting requirements.
