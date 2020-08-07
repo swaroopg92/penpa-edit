@@ -114,6 +114,7 @@ onload = function() {
                 pu.mode_qa("pu_a");
                 event.returnValue = false;
             }
+
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
                 pu.key_arrow(key);
                 event.returnValue = false;
@@ -155,10 +156,48 @@ onload = function() {
                         pu.key_shiftspace();
                         event.returnValue = false;
                         break;
+                    case "x":
+                    case "X":
+                        var present_mode = document.getElementById("mo_surface").checked;
+                        console.log(present_mode);
+                        if (!present_mode) {
+                            console.log('code enters here')
+                            pu.mode_set("surface");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "c":
+                    case "C":
+                        var present_mode = document.getElementById("mo_line").checked;
+                        if (!present_mode) {
+                            pu.mode_set("line");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "v":
+                    case "V":
+                        var present_mode = document.getElementById("mo_lineE").checked;
+                        if (!present_mode) {
+                            pu.mode_set("lineE");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "a":
+                    case "A":
+                        var present_mode = document.getElementById("mo_number").checked;
+                        if (!present_mode) {
+                            pu.mode_set("number");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
                 }
             }
 
-            if (key === 'Tab') {
+            if (key === "Tab") {
                 var present_mode = document.getElementById("mo_number").checked;
                 var present_submode1 = document.getElementById("sub_number1").checked;
                 var present_submode7 = document.getElementById("sub_number7").checked;
