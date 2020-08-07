@@ -2753,15 +2753,35 @@ class Puzzle {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1":
+                    // If the there are corner or sides present then get rid of them
+                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                    var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+
+                    for (var j = 0; j < 4; j++) {
+                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                            this.record("numberS", corner_cursor + j);
+                            delete this[this.mode.qa].numberS[corner_cursor + j];
+                        }
+                    }
+
+                    for (var j = 0; j < 4; j++) {
+                        if (this[this.mode.qa].numberS[side_cursor + j]) {
+                            this.record("numberS", side_cursor + j);
+                            delete this[this.mode.qa].numberS[side_cursor + j];
+                        }
+                    }
+
                     this.record("number", this.cursol);
                     if (str_num.indexOf(key) != -1 && this[this.mode.qa].number[this.cursol]) {
-                        con = parseInt(this[this.mode.qa].number[this.cursol][0], 10); //数字に変換
-                        if (con >= 1 && con <= 9 && this[this.mode.qa].number[this.cursol][2] != "7") { //1~9だったら2桁目へ
+                        con = parseInt(this[this.mode.qa].number[this.cursol][0], 10); // Convert to number
+                        if (con >= 1 && con <= 9 && this[this.mode.qa].number[this.cursol][2] != "7") { // If already 1-9 exist, go to 2nd digit
                             number = con.toString() + key;
                         } else {
+                            // It enters here when the cell already contains 2 digits.
                             number = key;
                         }
                     } else {
+                        // It enters for first entry in a cell and then for alphabets or special characters i.e. non numbers
                         number = key;
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
