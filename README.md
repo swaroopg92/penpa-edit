@@ -26,7 +26,9 @@ Depending on the browser you can update the page without using the cache with "C
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
 * F3: Answer mode
-* TAB: During "Number" Mode --> Switch betwen "Normal" and "Candidates" sub-modes.
+* TAB: During "Number" Mode (One of the following will apply)--> 
+	* Switches to "Normal" sub-mode from "L", "M", "S", "Candidates", "1/4" and "Side" sub-modes.
+	* Once in "Normal" sub-mode, it will only switch betwen "Normal" and "Candidates" sub-modes.
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -218,6 +220,7 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
+* 2020/08/07 ver2.19.4 Upgraded TAB shortcut, Improved buttons displayed in sub-modes, Cleaned up the code, updated readme and some other minor improvements.
 * 2020/08/07 ver2.19.3 Added shortcuts, Normal candidates overwrites corner/edge digits, display size upto 80
 * 2020/08/04 ver2.19.2 Improved buttons and Numbers display, Added "TAB" to switch between normal and candidates submode.
 * 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator), includes adding new symbols, records the selection status of the buttons in the answer mode
