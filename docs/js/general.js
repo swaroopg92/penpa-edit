@@ -152,7 +152,7 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "inline";
             }
-            document.getElementById("name_size1").innerHTML = "Width：";
+            document.getElementById("name_size1").innerHTML = "Columns：";
             document.getElementById("name_space1").innerHTML = "Over：";
             document.getElementById("nb_size1").value = 10;
             document.getElementById("nb_size2").value = 10;

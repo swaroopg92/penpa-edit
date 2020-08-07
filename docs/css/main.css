@@ -307,6 +307,27 @@ hr.newgridhrline {
     font-size: 12px;
 }
 
+#st_line3_lb, #st_lineE3_lb, #st_wall3_lb {
+    /* Green */
+    background-color: rgba(32,128,32,1);
+    color: #000;
+    font-size: 16px;
+}
+
+#st_line2_lb, #st_lineE2_lb, #st_wall2_lb {
+    /* Black */
+    background-color: #000;
+    color: #fff;
+    font-size: 16px;
+}
+
+#st_line5_lb, #st_lineE5_lb, #st_wall5_lb {
+    /* Grey */
+    background-color: #777;
+    color: #000;
+    font-size: 16px;
+}
+
 input[type=radio] {
     display: none;
     /* Hide radio buttons */

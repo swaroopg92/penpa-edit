@@ -42,10 +42,10 @@ onload = function() {
         }
         var { x, y, num } = coord_point(event);
         if (pu.point[num].use === 1) {
-            if (event.button === 2) {
+            if (event.button === 2) { // right click
                 pu.mouse_mode = "down_right";
                 pu.mouseevent(x, y, num);
-            } else { //左クリックorタップ
+            } else { // Left click or tap
                 pu.mouse_mode = "down_left";
                 pu.mouseevent(x, y, num);
                 //pu.drawonDown(num);
@@ -197,14 +197,22 @@ onload = function() {
 
             if (key === "Tab") {
                 var present_mode = document.getElementById("mo_number").checked;
-                var present_submode1 = document.getElementById("sub_number1").checked;
-                var present_submode7 = document.getElementById("sub_number7").checked;
-                if (present_mode && present_submode1) {
-                    pu.submode_check("sub_number7");
-                    e.preventDefault();
-                } else if (present_mode && present_submode7) {
-                    pu.submode_check("sub_number1");
-                    e.preventDefault();
+                if (present_mode) {
+                    var present_submode = pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0];
+                    switch (present_submode) {
+                        case "3":
+                        case "5":
+                        case "6":
+                        case "7":
+                        case "9":
+                        case "10":
+                            pu.submode_check("sub_number1");
+                            e.preventDefault();
+                            break;
+                        case "1":
+                            pu.submode_check("sub_number7");
+                            e.preventDefault();
+                    }
                 }
                 event.returnValue = false;
             }

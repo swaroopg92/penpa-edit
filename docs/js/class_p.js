@@ -4078,10 +4078,10 @@ class Puzzle {
 
     re_combi_edgexoi(num) {
         if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { //xがない
+            if (!this[this.mode.qa].line[num]) { // Insert cross
                 this.record("line", num);
                 this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { //×印
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
                 this.record("line", num);
                 delete this[this.mode.qa].line[num];
             }
