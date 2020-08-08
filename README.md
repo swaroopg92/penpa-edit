@@ -18,10 +18,10 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + z: Undo
 * Ctrl + y: Redo
 * Ctrl + d: Clone
-* Ctrl + a: Number Mode
-* Ctrl + x: Surface Mode
-* Ctrl + c: Line Mode
-* Ctrl + v: Edge Mode
+* Alt + a: Number Mode
+* Alt + x: Surface Mode
+* Alt + c: Line Mode
+* Alt + v: Edge Mode
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode

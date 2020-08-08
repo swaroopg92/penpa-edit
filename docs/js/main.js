@@ -156,6 +156,11 @@ onload = function() {
                         pu.key_shiftspace();
                         event.returnValue = false;
                         break;
+                }
+            }
+
+            if (alt_key) {
+                switch (key) {
                     case "x":
                     case "X":
                         var present_mode = document.getElementById("mo_surface").checked;
