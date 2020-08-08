@@ -260,7 +260,7 @@ hr.newgridhrline {
 
 #st_surface3_lb {
     /* Light Grey */
-    background-color: #ccc;
+    background-color: #f0f0f0;
     color: #000;
     font-size: 12px;
 }
@@ -302,7 +302,7 @@ hr.newgridhrline {
 
 #st_surface8_lb {
     /* Grey */
-    background-color: #f0f0f0;
+    background-color: #ccc;
     color: #000;
     font-size: 12px;
 }
