@@ -107,15 +107,15 @@ Depending on the browser you can update the page without using the cache with "C
 1. Black/dot: Drag the black square and dot
 2. White/circle Black circle Drag input white circle and black circle
 3. Shakashaka pull the triangle to input
-4. Line/x line and auxiliary x (Castle wall)
+4. Line/x line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
 5. Line/OX 〇× (Country road) on line and square
-6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Suririn, Cave)
+6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
 7. Yajirin: Black square/dot and line
 8. Hashi: draw the line again to make a double line
 9. Edge/Auxiliary line: An auxiliary line that represents the connection between the edge and the square
 10. Battleship: Click twice to change the shape according to the condition of the surrounding ships.
 11. Star Battle x Star
-12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree.
+12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 13. Numerical flick Input the numerical flick. 123456789 from top left to bottom right.
 14. Alphabet flick Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter-in the lower right corner.
 
@@ -220,7 +220,7 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## History
-* 2020/08/07 ver2.19.4 Upgraded TAB shortcut, Improved buttons displayed in sub-modes, Cleaned up the code, updated readme and some other minor improvements.
+* 2020/08/07 ver2.19.4 Upgraded TAB shortcut, Improved buttons displayed in sub-modes, Cleaned up the code, right click feature implemented in the composite mode, updated readme and some other minor improvements.
 * 2020/08/07 ver2.19.3 Added shortcuts, Normal candidates overwrites corner/edge digits, display size upto 80
 * 2020/08/04 ver2.19.2 Improved buttons and Numbers display, Added "TAB" to switch between normal and candidates submode.
 * 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator), includes adding new symbols, records the selection status of the buttons in the answer mode

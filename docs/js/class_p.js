@@ -3729,7 +3729,11 @@ class Puzzle {
             case "linex":
             case "edgexoi":
             case "tents":
-                num = this.coord_p_edgex(x, y);
+                if (this.mouse_mode === "down_right" || ondown_key === "touchstart") {
+                    num = this.coord_p_edgex(x, y, 0.3);
+                } else {
+                    num = this.coord_p_edgex(x, y, 0.01);
+                }
                 break;
         }
         if (this.mouse_mode === "down_left") {
@@ -3744,13 +3748,21 @@ class Puzzle {
                     this.re_combi_shaka(x, y, num);
                     break;
                 case "linex":
-                    this.re_combi_linex(num);
+                    if (ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num);
+                    } else {
+                        this.re_combi_linex(num);
+                    }
                     break;
                 case "lineox":
                     this.re_combi_lineox(num);
                     break;
                 case "edgexoi":
-                    this.re_combi_edgexoi(num);
+                    if (ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num);
+                    } else {
+                        this.re_combi_edgexoi(num);
+                    }
                     break;
                 case "yajilin":
                     this.re_combi_yajilin(num);
@@ -3768,7 +3780,11 @@ class Puzzle {
                     this.re_combi_star(num);
                     break;
                 case "tents":
-                    this.re_combi_tents(num);
+                    if (ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num);
+                    } else {
+                        this.re_combi_tents(num);
+                    }
                     break;
                 case "magnets":
                     this.re_combi_magnets(num);
@@ -3781,6 +3797,14 @@ class Puzzle {
                     break;
                 case "alfl":
                     this.re_combi_alfl(x, y, num);
+                    break;
+            }
+        } else if (this.mouse_mode === "down_right") {
+            switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+                case "linex":
+                case "edgexoi":
+                case "tents":
+                    this.re_combi_cross_downright(num);
                     break;
             }
         } else if (this.mouse_mode === "move") {
@@ -4007,19 +4031,9 @@ class Puzzle {
     }
 
     re_combi_linex(num) {
-        if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { //xがない
-                this.record("line", num);
-                this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { //×印
-                this.record("line", num);
-                delete this[this.mode.qa].line[num];
-            }
-        } else {
-            this.drawing_mode = 100;
-            this.first = num;
-            this.last = num;
-        }
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
         this.redraw();
     }
 
@@ -4076,7 +4090,7 @@ class Puzzle {
         this.redraw();
     }
 
-    re_combi_edgexoi(num) {
+    re_combi_cross_downright(num) {
         if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
             if (!this[this.mode.qa].line[num]) { // Insert cross
                 this.record("line", num);
@@ -4090,6 +4104,13 @@ class Puzzle {
             this.first = num;
             this.last = num;
         }
+        this.redraw();
+    }
+
+    re_combi_edgexoi(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
         this.redraw();
     }
 
@@ -4315,19 +4336,9 @@ class Puzzle {
     }
 
     re_combi_tents(num) {
-        if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { //xがない
-                this.record("line", num);
-                this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { //×印
-                this.record("line", num);
-                delete this[this.mode.qa].line[num];
-            }
-        } else {
-            this.drawing_mode = 100;
-            this.first = num;
-            this.last = num;
-        }
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
         this.redraw();
     }
 
