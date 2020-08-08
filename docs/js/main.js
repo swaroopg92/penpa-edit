@@ -120,7 +120,7 @@ onload = function() {
                 event.returnValue = false;
             }
 
-            if (!ctrl_key) {
+            if (!ctrl_key && !alt_key) {
                 if (shift_key && key === " ") {
                     pu.key_number(key);
                     event.returnValue = false;

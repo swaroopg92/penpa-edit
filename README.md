@@ -39,8 +39,8 @@ Depending on the browser you can update the page without using the cache with "C
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
 
 ## Current functions
+
 ### Surface
-			   
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
 * In Dark grey mode only, click twice to get a green square.
 * Light grey is used when hiding gray letters and symbols.
