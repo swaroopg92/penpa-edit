@@ -432,56 +432,39 @@ class Puzzle_pyramid extends Puzzle {
     ////////////////draw/////////////////////
 
     draw() {
-        var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q") {
-            this.draw_surface("pu_q");
-            this.draw_surface("pu_a");
-            this.draw_squareframe("pu_q");
-            this.draw_squareframe("pu_a");
-            this.draw_thermo("pu_q");
-            this.draw_thermo("pu_a");
-            this.draw_arrowsp("pu_q");
-            this.draw_arrowsp("pu_a");
-            this.draw_symbol("pu_q", 1);
-            this.draw_symbol("pu_a", 1);
-            this.draw_wall("pu_q");
-            this.draw_wall("pu_a");
-            this.draw_frame();
-            this.draw_polygonsp("pu_q");
-            this.draw_polygonsp("pu_a");
-            this.draw_freeline("pu_q");
-            this.draw_freeline("pu_a");
-            this.draw_line("pu_q");
-            this.draw_line("pu_a");
-            this.draw_direction("pu_q");
-            this.draw_direction("pu_a");
-            this.draw_lattice();
-            this.draw_frameBold();
-            this.draw_symbol("pu_q", 2);
-            this.draw_symbol("pu_a", 2);
-            this.draw_number("pu_q");
-            this.draw_number("pu_a");
-            this.draw_cursol();
-            this.draw_freecircle();
-        } else {
-            this.draw_surface("pu_q");
-            this.draw_squareframe("pu_q");
-            this.draw_thermo("pu_q");
-            this.draw_arrowsp("pu_q");
-            this.draw_symbol("pu_q", 1);
-            this.draw_wall("pu_q");
-            this.draw_frame();
-            this.draw_polygonsp("pu_q");
-            this.draw_freeline("pu_q");
-            this.draw_line("pu_q");
-            this.draw_direction("pu_q");
-            this.draw_lattice();
-            this.draw_frameBold();
-            this.draw_symbol("pu_q", 2);
-            this.draw_number("pu_q");
-            this.draw_cursol();
-            this.draw_freecircle();
-        }
+        this.draw_surface("pu_q");
+        this.draw_surface("pu_a");
+        this.draw_squareframe("pu_q");
+        this.draw_squareframe("pu_a");
+        this.draw_thermo("pu_q");
+        this.draw_thermo("pu_a");
+        this.draw_arrowsp("pu_q");
+        this.draw_arrowsp("pu_a");
+        this.draw_symbol("pu_q", 1);
+        this.draw_symbol("pu_a", 1);
+        this.draw_wall("pu_q");
+        this.draw_wall("pu_a");
+        this.draw_frame();
+        this.draw_polygonsp("pu_q");
+        this.draw_polygonsp("pu_a");
+        this.draw_freeline("pu_q");
+        this.draw_freeline("pu_a");
+        this.draw_line("pu_q");
+        this.draw_line("pu_a");
+        this.draw_direction("pu_q");
+        this.draw_direction("pu_a");
+        this.draw_lattice();
+        this.draw_frameBold();
+        this.draw_symbol("pu_q", 2);
+        this.draw_symbol("pu_a", 2);
+        //this.draw_cage("pu_q");
+        //this.draw_cage("pu_a");
+        this.draw_number("pu_q");
+        this.draw_number("pu_a");
+        this.draw_cursol();
+        this.draw_freecircle();
+
+        //this.draw_point();
     }
 
     draw_point() {

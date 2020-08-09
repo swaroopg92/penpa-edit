@@ -474,60 +474,141 @@ class Puzzle_square extends Puzzle {
     ////////////////draw/////////////////////
 
     draw() {
-        var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q") {
-            this.draw_surface("pu_q");
-            this.draw_surface("pu_a");
-            this.draw_squareframe("pu_q");
-            this.draw_squareframe("pu_a");
-            this.draw_thermo("pu_q");
-            this.draw_thermo("pu_a");
-            this.draw_arrowsp("pu_q");
-            this.draw_arrowsp("pu_a");
-            this.draw_symbol("pu_q", 1);
-            this.draw_symbol("pu_a", 1);
-            this.draw_wall("pu_q");
-            this.draw_wall("pu_a");
-            this.draw_frame();
-            this.draw_polygonsp("pu_q");
-            this.draw_polygonsp("pu_a");
-            this.draw_freeline("pu_q");
-            this.draw_freeline("pu_a");
-            this.draw_line("pu_q");
-            this.draw_line("pu_a");
-            this.draw_direction("pu_q");
-            this.draw_direction("pu_a");
-            this.draw_lattice();
-            this.draw_frameBold();
-            this.draw_symbol("pu_q", 2);
-            this.draw_symbol("pu_a", 2);
-            this.draw_cage("pu_q");
-            this.draw_cage("pu_a");
-            this.draw_number("pu_q");
-            this.draw_number("pu_a");
-            this.draw_cursol();
-            this.draw_freecircle();
-        } else {
-            this.draw_surface("pu_q");
-            this.draw_squareframe("pu_q");
-            this.draw_thermo("pu_q");
-            this.draw_arrowsp("pu_q");
-            this.draw_symbol("pu_q", 1);
-            this.draw_wall("pu_q");
-            this.draw_frame();
-            this.draw_polygonsp("pu_q");
-            this.draw_freeline("pu_q");
-            this.draw_line("pu_q");
-            this.draw_direction("pu_q");
-            this.draw_lattice();
-            this.draw_frameBold();
-            this.draw_symbol("pu_q", 2);
-            this.draw_cage("pu_q");
-            this.draw_number("pu_q");
-            this.draw_cursol();
-            this.draw_freecircle();
-        }
+        this.draw_surface("pu_q");
+        this.draw_surface("pu_a");
+        this.draw_squareframe("pu_q");
+        this.draw_squareframe("pu_a");
+        this.draw_thermo("pu_q");
+        this.draw_thermo("pu_a");
+        this.draw_arrowsp("pu_q");
+        this.draw_arrowsp("pu_a");
+        this.draw_symbol("pu_q", 1);
+        this.draw_symbol("pu_a", 1);
+        this.draw_wall("pu_q");
+        this.draw_wall("pu_a");
+        this.draw_frame();
+        this.draw_polygonsp("pu_q");
+        this.draw_polygonsp("pu_a");
+        this.draw_freeline("pu_q");
+        this.draw_freeline("pu_a");
+        this.draw_line("pu_q");
+        this.draw_line("pu_a");
+        this.draw_direction("pu_q");
+        this.draw_direction("pu_a");
+        this.draw_lattice();
+        this.draw_frameBold();
+        this.draw_symbol("pu_q", 2);
+        this.draw_symbol("pu_a", 2);
+        this.draw_cage("pu_q");
+        this.draw_cage("pu_a");
+        this.draw_number("pu_q");
+        this.draw_number("pu_a");
+        this.draw_cursol();
+        this.draw_freecircle();
+
+        //this.draw_point();
     }
+
+    /*
+      draw_clip(num){
+        this.ctx.fillStyle = "white";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.draw_surface("pu_q",num);
+        this.draw_surface("pu_a",num);
+        this.draw_squareframe("pu_q");
+        this.draw_squareframe("pu_a");
+        this.draw_thermo("pu_q");
+        this.draw_thermo("pu_a");
+        this.draw_arrowsp("pu_q");
+        this.draw_arrowsp("pu_a");
+        this.draw_symbol("pu_q",1);
+        this.draw_symbol("pu_a",1);
+        this.draw_wall("pu_q");
+        this.draw_wall("pu_a");
+        this.draw_frame(num);
+        this.draw_polygonsp("pu_q");
+        this.draw_polygonsp("pu_a");
+        this.draw_freeline("pu_q");
+        this.draw_freeline("pu_a");
+        this.draw_line("pu_q");
+        this.draw_line("pu_a");
+        this.draw_direction("pu_q");
+        this.draw_direction("pu_a");
+        this.draw_lattice();
+        this.draw_frameBold(num);
+        this.draw_symbol("pu_q",2);
+        this.draw_symbol("pu_a",2);
+        this.draw_cage("pu_q");
+        this.draw_cage("pu_a");
+        this.draw_number("pu_q");
+        this.draw_number("pu_a");
+        this.draw_cursol();
+        this.draw_freecircle();
+
+        //this.draw_point();
+      }
+
+      draw_frame(num="") {
+        if(num){
+          var keys=[],i1,i2,key0;
+          for(var i=0;i<this.point[num].surround.length;i++){
+            for(var j=0;j<this.point[this.point[num].surround[i]].adjacent.length-4;j++){//-4 for square diagonal
+              i1 = this.point[num].surround[i];
+              i2 = this.point[this.point[num].surround[i]].adjacent[j];
+              key0 = Math.min(i1,i2)+","+Math.max(i1,i2);
+              if(keys.indexOf(key0)===-1){
+                keys.push(key0);
+              }
+            }
+          }
+        }else{
+          var keys = Object.keys(this.frame);
+        }
+        for(var k = 0;k<keys.length;k++){
+          var i = keys[k];
+          if(this.frame[i]&&!this.pu_q.deletelineE[i]){
+            set_line_style(this.ctx,this.frame[i]);
+             var i1 = i.split(",")[0];
+             var i2 = i.split(",")[1];
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[i1].x,this.point[i1].y);
+            this.ctx.lineTo(this.point[i2].x,this.point[i2].y);
+            this.ctx.stroke();
+          }
+        }
+      }
+
+      draw_frameBold(num=""){
+        if(num){
+          var keys=[],i1,i2,key0;
+          for(var i=0;i<this.point[num].surround.length;i++){
+            for(var j=0;j<this.point[this.point[num].surround[i]].adjacent.length-4;j++){//-4 for square diagonal
+              i1 = this.point[num].surround[i];
+              i2 = this.point[this.point[num].surround[i]].adjacent[j];
+              key0 = Math.min(i1,i2)+","+Math.max(i1,i2);
+              if(keys.indexOf(key0)===-1){
+                keys.push(key0);
+              }
+            }
+          }
+        }else{
+          var keys = Object.keys(this.frame);
+        }
+        for(var k = 0;k<keys.length;k++){
+          var i = keys[k];
+          if(this.frame[i]===2&&!this.pu_q.deletelineE[i]){
+            set_line_style(this.ctx,this.frame[i]);
+            var i1 = i.split(",")[0];
+            var i2 = i.split(",")[1];
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[i1].x,this.point[i1].y);
+            this.ctx.lineTo(this.point[i2].x,this.point[i2].y);
+            this.ctx.stroke();
+          }
+        }
+      }
+      */
 
     draw_point() {
         set_font_style(this.ctx, (0.2 * this.size).toString(), 1);
