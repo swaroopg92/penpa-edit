@@ -38,7 +38,7 @@ onload = function() {
             var event = e;
         } else {
             var event = e.changedTouches[0];
-            //e.preventDefault();
+            e.preventDefault();
         }
         var { x, y, num } = coord_point(event);
         if (pu.point[num].use === 1) {
