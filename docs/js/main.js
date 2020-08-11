@@ -38,14 +38,14 @@ onload = function() {
             var event = e;
         } else {
             var event = e.changedTouches[0];
-            //e.preventDefault();
+            // e.preventDefault();
         }
         var { x, y, num } = coord_point(event);
         if (pu.point[num].use === 1) {
-            if (event.button === 2) {
+            if (event.button === 2) { // right click
                 pu.mouse_mode = "down_right";
                 pu.mouseevent(x, y, num);
-            } else { //左クリックorタップ
+            } else { // Left click or tap
                 pu.mouse_mode = "down_left";
                 pu.mouseevent(x, y, num);
                 //pu.drawonDown(num);
@@ -114,12 +114,13 @@ onload = function() {
                 pu.mode_qa("pu_a");
                 event.returnValue = false;
             }
+
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
                 pu.key_arrow(key);
                 event.returnValue = false;
             }
 
-            if (!ctrl_key) {
+            if (!ctrl_key && !alt_key) {
                 if (shift_key && key === " ") {
                     pu.key_number(key);
                     event.returnValue = false;
@@ -156,6 +157,69 @@ onload = function() {
                         event.returnValue = false;
                         break;
                 }
+            }
+
+            if (alt_key) {
+                switch (key) {
+                    case "x":
+                    case "X":
+                        var present_mode = document.getElementById("mo_surface").checked;
+                        if (!present_mode) {
+                            pu.mode_set("surface");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "c":
+                    case "C":
+                        var present_mode = document.getElementById("mo_line").checked;
+                        if (!present_mode) {
+                            pu.mode_set("line");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "v":
+                    case "V":
+                        var present_mode = document.getElementById("mo_lineE").checked;
+                        if (!present_mode) {
+                            pu.mode_set("lineE");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "a":
+                    case "A":
+                        var present_mode = document.getElementById("mo_number").checked;
+                        if (!present_mode) {
+                            pu.mode_set("number");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                }
+            }
+
+            if (key === "Tab") {
+                var present_mode = document.getElementById("mo_number").checked;
+                if (present_mode) {
+                    var present_submode = pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0];
+                    switch (present_submode) {
+                        case "3":
+                        case "5":
+                        case "6":
+                        case "7":
+                        case "9":
+                        case "10":
+                            pu.submode_check("sub_number1");
+                            e.preventDefault();
+                            break;
+                        case "1":
+                            pu.submode_check("sub_number7");
+                            e.preventDefault();
+                    }
+                }
+                event.returnValue = false;
             }
         }
     }

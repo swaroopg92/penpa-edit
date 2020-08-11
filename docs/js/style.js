@@ -226,11 +226,11 @@ function set_font_style(ctx, size, type) {
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 3:
-            ctx.fillStyle = "#999999";
+            ctx.fillStyle = "#999999"; // grey
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 4:
-            ctx.fillStyle = "#fff";
+            ctx.fillStyle = "#fff"; // white
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 5:
@@ -248,7 +248,11 @@ function set_font_style(ctx, size, type) {
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
         case 8:
-            ctx.fillStyle = "#187bcd"; // blue
+            ctx.fillStyle = "#187bcd"; // light blue
+            ctx.strokeStyle = "rgba(255,255,255,0)";
+            break;
+        case 9:
+            ctx.fillStyle = "#0000FF"; // dark blue
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
     }

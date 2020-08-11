@@ -41,7 +41,7 @@
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
                 <span id="panel_button0" class="label">Panel:</span>
                 <span id="panel_button" class="label">OFF</span>
-                <span id="edge_button0" class="label">Boundary input:</span>
+                <span id="edge_button0" class="label">Border input:</span>
                 <span id="edge_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -75,7 +75,7 @@
             <hr size=1 noshade>
             <div id="submode_button" class="submode_button">
                 <span id="div_sub">
-                    <label class="label_mode" id="sub_txt"></label>
+                    <label class="label_mode" id="sub_txt">Sub:&nbsp&nbsp</label>
                 </span>
                 <span id="mode_line" style="display:none;">
                     <input type="radio" name="mode_line" value="1" id="sub_line1" checked="checked">
@@ -105,21 +105,21 @@
                     <input type="radio" name="mode_number" value="1" id="sub_number1" checked="checked">
                     <label for="sub_number1" class="labelL" id="sub_number1_lb">Normal</label>
                     <input type="radio" name="mode_number" value="10" id="sub_number10">
-                    <label for="sub_number10" class="label" id="sub_number10_lb">Big</label>
+                    <label for="sub_number10" class="label" id="sub_number10_lb">L</label>
                     <input type="radio" name="mode_number" value="6" id="sub_number6">
                     <label for="sub_number6" class="labelL" id="sub_number6_lb">M</label>
                     <input type="radio" name="mode_number" value="5" id="sub_number5">
                     <label for="sub_number5" class="labelL" id="sub_number5_lb">S</label>
                     <input type="radio" name="mode_number" value="7" id="sub_number7">
                     <label for="sub_number7" class="labelL" id="sub_number7_lb">Candidates</label>
-                    <input type="radio" name="mode_number" value="2" id="sub_number2">
-                    <label for="sub_number2" class="labelL" id="sub_number2_lb">Arrow</label>
-                    <input type="radio" name="mode_number" value="4" id="sub_number4">
-                    <label for="sub_number4" class="labelL" id="sub_number4_lb">Tapa</label>
                     <input type="radio" name="mode_number" value="3" id="sub_number3">
                     <label for="sub_number3" class="labelL" id="sub_number3_lb">1/4</label>
                     <input type="radio" name="mode_number" value="9" id="sub_number9">
                     <label for="sub_number9" class="labelL" id="sub_number9_lb">Side</label>
+                    <input type="radio" name="mode_number" value="4" id="sub_number4">
+                    <label for="sub_number4" class="labelL" id="sub_number4_lb">Tapa</label>
+                    <input type="radio" name="mode_number" value="2" id="sub_number2">
+                    <label for="sub_number2" class="labelL" id="sub_number2_lb">Arrow</label>
                     <input type="radio" name="mode_number" value="8" id="sub_number8">
                     <label for="sub_number8" class="labelL" id="sub_number8_lb">Long</label>
                 </span>
@@ -331,39 +331,39 @@
             </div>
             <div id="stylemode_button" class="stylemode_button">
                 <span id="div_all">
-                    <label class="label_mode" id="style_txt"></label>
+                    <label class="label_mode" id="style_txt">Style:</label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
                     <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
-                    <label for="st_surface1" class="labelL" id="st_surface1_lb">Dark grey</label>
+                    <label for="st_surface1" class="labelL" id="st_surface1_lb">Dark Grey</label>
+                    <input type="radio" name="style_surface" value="8" id="st_surface8">
+                    <label for="st_surface8" class="labelL" id="st_surface8_lb">Grey</label>
                     <input type="radio" name="style_surface" value="3" id="st_surface3">
-                    <label for="st_surface3" class="labelL" id="st_surface3_lb">Light grey</label>
+                    <label for="st_surface3" class="labelL" id="st_surface3_lb">Light Grey</label>
                     <input type="radio" name="style_surface" value="4" id="st_surface4">
                     <label for="st_surface4" class="labelL" id="st_surface4_lb">Black</label>
                     <input type="radio" name="style_surface" value="2" id="st_surface2">
                     <label for="st_surface2" class="labelL" id="st_surface2_lb">Green</label>
                     <input type="radio" name="style_surface" value="5" id="st_surface5">
-                    <label for="st_surface5" class="labelL" id="st_surface5_lb">Light blue</label>
+                    <label for="st_surface5" class="labelL" id="st_surface5_lb">Blue</label>
                     <input type="radio" name="style_surface" value="6" id="st_surface6">
                     <label for="st_surface6" class="labelL" id="st_surface6_lb">Red</label>
                     <input type="radio" name="style_surface" value="7" id="st_surface7">
                     <label for="st_surface7" class="labelL" id="st_surface7_lb">Yellow</label>
-                    <input type="radio" name="style_surface" value="8" id="st_surface8">
-                    <label for="st_surface8" class="labelL" id="st_surface8_lb">Grey</label>
                 </span>
                 <span id="style_line" style="display:none;">
                     <input type="radio" name="style_line" value="3" id="st_line3" checked="checked">
-                    <label for="st_line3" class="labelL" id="st_line3_lb">Green</label>
+                    <label for="st_line3" class="labelL" id="st_line3_lb">G</label>
+                    <input type="radio" name="style_line" value="2" id="st_line2">
+                    <label for="st_line2" class="labelL" id="st_line2_lb">B</label>
+                    <input type="radio" name="style_line" value="5" id="st_line5">
+                    <label for="st_line5" class="labelL" id="st_line5_lb">G</label>
                     <input type="radio" name="style_line" value="80" id="st_line80">
                     <label for="st_line80" class="labelL" id="st_line80_lb">Thin</label>
-                    <input type="radio" name="style_line" value="2" id="st_line2">
-                    <label for="st_line2" class="labelL" id="st_line2_lb">Fat</label>
                     <input type="radio" name="style_line" value="12" id="st_line12">
                     <label for="st_line12" class="labelL" id="st_line12_lb">Dotted</label>
                     <input type="radio" name="style_line" value="13" id="st_line13">
                     <label for="st_line13" class="labelL" id="st_line13_lb">Fat</label>
-                    <input type="radio" name="style_line" value="5" id="st_line5">
-                    <label for="st_line5" class="labelL" id="st_line5_lb">Grey</label>
                     <input type="radio" name="style_line" value="40" id="st_line40">
                     <label for="st_line40" class="labelL" id="st_line40_lb">Short</label>
                     <input type="radio" name="style_line" value="30" id="st_line30">
@@ -371,55 +371,57 @@
                 </span>
                 <span id="style_lineE" style="display:none;">
                     <input type="radio" name="style_lineE" value="3" id="st_lineE3" checked="checked">
-                    <label for="st_lineE3" class="labelL" id="st_lineE3_lb">Green</label>
+                    <label for="st_lineE3" class="labelL" id="st_lineE3_lb">G </label>
+                    <input type="radio" name="style_lineE" value="2" id="st_lineE2">
+                    <label for="st_lineE2" class="labelL" id="st_lineE2_lb">B</label>
+                    <input type="radio" name="style_lineE" value="5" id="st_lineE5">
+                    <label for="st_lineE5" class="labelL" id="st_lineE5_lb">G</label>
                     <input type="radio" name="style_lineE" value="80" id="st_lineE80">
                     <label for="st_lineE80" class="labelL" id="st_lineE80_lb">Thin</label>
-                    <input type="radio" name="style_lineE" value="2" id="st_lineE2">
-                    <label for="st_lineE2" class="labelL" id="st_lineE2_lb">Fat</label>
                     <input type="radio" name="style_lineE" value="12" id="st_lineE12">
                     <label for="st_lineE12" class="labelL" id="st_lineE12_lb">Dotted</label>
                     <input type="radio" name="style_lineE" value="13" id="st_lineE13">
                     <label for="st_lineE13" class="labelL" id="st_lineE13_lb">Fat</label>
-                    <input type="radio" name="style_lineE" value="5" id="st_lineE5">
-                    <label for="st_lineE5" class="labelL" id="st_lineE5_lb">Grey</label>
                     <input type="radio" name="style_lineE" value="30" id="st_lineE30">
                     <label for="st_lineE30" class="labelL" id="st_lineE30_lb">Double</label>
                 </span>
                 <span id="style_wall" style="display:none;">
                     <input type="radio" name="style_wall" value="3" id="st_wall3" checked="checked">
-                    <label for="st_wall3" class="labelL" id="st_wall3_lb">Green</label>
+                    <label for="st_wall3" class="labelL" id="st_wall3_lb">G</label>
+                    <input type="radio" name="style_wall" value="2" id="st_wall2">
+                    <label for="st_wall2" class="labelL" id="st_wall2_lb">B</label>
+                    <input type="radio" name="style_wall" value="5" id="st_wall5">
+                    <label for="st_wall5" class="labelL" id="st_wall5_lb">G</label>
                     <input type="radio" name="style_wall" value="1" id="st_wall1">
                     <label for="st_wall1" class="labelL" id="st_wall1_lb">Thin</label>
-                    <input type="radio" name="style_wall" value="2" id="st_wall2">
-                    <label for="st_wall2" class="labelL" id="st_wall2_lb">Fat</label>
                     <input type="radio" name="style_wall" value="12" id="st_wall12">
                     <label for="st_wall12" class="labelL" id="st_wall12_lb">Dotted</label>
                     <input type="radio" name="style_wall" value="17" id="st_wall17">
                     <label for="st_wall17" class="labelL" id="st_wall17_lb">Fat</label>
                     <input type="radio" name="style_wall" value="14" id="st_wall14">
                     <label for="st_wall14" class="labelL" id="st_wall14_lb">Grey dot</label>
-                    <input type="radio" name="style_wall" value="5" id="st_wall5">
-                    <label for="st_wall5" class="labelL" id="st_wall5_lb">Grey</label>
                 </span>
                 <span id="style_number" style="display:none;">
                     <input type="radio" name="style_number" value="1" id="st_number1" checked="checked">
-                    <label for="st_number1" class="labelL" id="st_number1_lb">Black</label>
+                    <label for="st_number1" class="labelL" id="st_number1_lb">B</label>
                     <input type="radio" name="style_number" value="2" id="st_number2">
-                    <label for="st_number2" class="labelL" id="st_number2_lb">Green</label>
+                    <label for="st_number2" class="labelL" id="st_number2_lb">G</label>
                     <input type="radio" name="style_number" value="8" id="st_number8">
-                    <label for="st_number8" class="labelL" id="st_number8_lb">Blue</label>
+                    <label for="st_number8" class="labelL" id="st_number8_lb">B</label>
                     <input type="radio" name="style_number" value="3" id="st_number3">
-                    <label for="st_number3" class="labelL" id="st_number3_lb">Grey</label>
+                    <label for="st_number3" class="labelL" id="st_number3_lb">G</label>
+                    <input type="radio" name="style_number" value="9" id="st_number9">
+                    <label for="st_number9" class="labelL" id="st_number9_lb">B</label>
                     <input type="radio" name="style_number" value="4" id="st_number4">
-                    <label for="st_number4" class="labelL" id="st_number4_lb">White</label>
+                    <label for="st_number4" class="labelL" id="st_number4_lb">W</label>
                     <input type="radio" name="style_number" value="0" id="st_number0">
-                    <label for="st_number0" class="labelL" id="st_number0_lb">Outlined</label>
+                    <label for="st_number0" class="labelL" id="st_number0_lb"></label>
                     <input type="radio" name="style_number" value="6" id="st_number6">
-                    <label for="st_number6" class="labelL" id="st_number6_lb">W circle</label>
+                    <label for="st_number6" class="labelL" id="st_number6_lb"></label>
                     <input type="radio" name="style_number" value="7" id="st_number7">
-                    <label for="st_number7" class="labelL" id="st_number7_lb">B circle</label>
+                    <label for="st_number7" class="labelL" id="st_number7_lb"></label>
                     <input type="radio" name="style_number" value="5" id="st_number5">
-                    <label for="st_number5" class="label" id="st_number5_lb">W background</label>
+                    <label for="st_number5" class="label" id="st_number5_lb">White Background</label>
                 </span>
                 <span id="style_symbol" style="display:none;">
                     <input type="radio" name="style_symbol" value="1" id="st_symbol1">
@@ -427,13 +429,13 @@
                     <input type="radio" name="style_symbol" value="2" id="st_symbol2" checked="checked">
                     <label for="st_symbol2" class="label" id="st_symbol2_lb">In front of lines</label>
                     <span class="symbolmode_display">
-                        <span id="panel_buttons0" class="label">Current selection:</span>
+                        <span id="panel_buttons0" class="label">Selection:</span>
                         <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
                     </span>
                 </span>
                 <span id="style_combi" style="display:none;">
                     <span class="combimode_display">
-                        <span id="panel_buttonc0" class="label">Current selection:</span>
+                        <span id="panel_buttonc0" class="label">Selection:</span>
                         <b><span id="combimode_content" class="combimode_content">blpo</span></b>
                     </span>
                 </span>
@@ -456,7 +458,7 @@
         <input type="button" id="tb_redo" value="Redo" class="button" />
         <input type="button" id="tb_reset" value="Erase current selection" class="button" />
         <input type="button" id="tb_delete" value="Delete" class="button" />
-        <br><br><br>
+        <br><br>
         <div id="stop_watch">
             <h1 class="values">00:00:00:00</h1>
             <div>
@@ -468,7 +470,7 @@
         </div>
         <p style="margin-top: 5px;">Any suggestions or improvements, send an email to <b>swaroop.guggilam@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues">here</a>.</p>
         <p>Insructions to use the tool can be found <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md">here</a>.</p>
-        <p>Version 2.19.1, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/credits.txt">Credits</a></p>
+        <p>Penpa+ Version 2.19.4, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/credits.md">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -535,10 +537,10 @@
             </span><br>
             <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
             <span>
-                <span id="div_all"><label class="label_nb" id="name_size1">Width:</label></span>
-                <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="50" step="1">
-                <span id="div_all"><label class="label_nb" id="name_size2">Height:</label></span>
+                <span id="div_all"><label class="label_nb" id="name_size2">Rows:</label></span>
                 <input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="50" step="1">
+                <span id="div_all"><label class="label_nb" id="name_size1">Columns:</label></span>
+                <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="50" step="1">
             </span>
             <br>
             <h4 id="div_all"><label class="label_nb" id="nb_space_lb">White space:</label></h4>
@@ -563,7 +565,7 @@
             <br>
             <h4 id="div_all"><label class="label_nb">Display size:</label></h4>
             <span id="">
-                <input type="number" pattern="\d*" name="nb_size3" id="nb_size3" value="38" min="10" max="60" step="2">
+                <input type="number" pattern="\d*" name="nb_size3" id="nb_size3" value="38" min="10" max="80" step="2">
             </span>
             <br>
             <h4 id="div_all"><label class="label_nb" id="nb_grid_lb">Grid:</label></h4>
@@ -600,7 +602,7 @@
             </div>
             <span id="modal-sizeA">
                 <span><label class="label_nb" id="modal-newsize_size_lb">Display size:</label></span>
-                <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="36" min="10" max="60" step="2">
+                <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="38" min="10" max="80" step="2">
             </span>
             <br>
             <div class="nb_button">
@@ -703,7 +705,7 @@
                 <div class="nb_button">
                     <div align="left" id="solutiontext">
                         <p id="solutiontext1">Shading - Dark Grey, Black</p>
-                        <p id="solutiontext2">Number - Normal, Big, Middle, Small - Green</p>
+                        <p id="solutiontext2">Number - Normal, Big, Middle, Small - Green, Blue</p>
                         <p id="solutiontext3">Line/Edge - Green, Double</p>
                         <p id="solutiontext4">Wall - Green</p>
                         <p id="solutiontext5">Shape - Shape - Square - Option 2</p>

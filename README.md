@@ -17,11 +17,18 @@ Depending on the browser you can update the page without using the cache with "C
 ## Shortcut keys
 * Ctrl + z: Undo
 * Ctrl + y: Redo
-* Ctrl + d: Copy the board
+* Ctrl + d: Clone
+* Alt + a: Number Mode
+* Alt + x: Surface Mode
+* Alt + c: Line Mode
+* Alt + v: Edge Mode
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
 * F3: Answer mode
+* TAB: During "Number" Mode (One of the following will apply)--> 
+	* Switches to "Normal" sub-mode from "L", "M", "S", "Candidates", "1/4" and "Side" sub-modes.
+	* Once in "Normal" sub-mode, it will only switch betwen "Normal" and "Candidates" sub-modes.
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -32,8 +39,8 @@ Depending on the browser you can update the page without using the cache with "C
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
 
 ## Current functions
+
 ### Surface
-			   
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
 * In Dark grey mode only, click twice to get a green square.
 * Light grey is used when hiding gray letters and symbols.
@@ -100,15 +107,15 @@ Depending on the browser you can update the page without using the cache with "C
 1. Black/dot: Drag the black square and dot
 2. White/circle Black circle Drag input white circle and black circle
 3. Shakashaka pull the triangle to input
-4. Line/x line and auxiliary x (Castle wall)
+4. Line/x line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
 5. Line/OX 〇× (Country road) on line and square
-6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Suririn, Cave)
+6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
 7. Yajirin: Black square/dot and line
 8. Hashi: draw the line again to make a double line
 9. Edge/Auxiliary line: An auxiliary line that represents the connection between the edge and the square
 10. Battleship: Click twice to change the shape according to the condition of the surrounding ships.
 11. Star Battle x Star
-12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree.
+12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 13. Numerical flick Input the numerical flick. 123456789 from top left to bottom right.
 14. Alphabet flick Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter-in the lower right corner.
 
@@ -211,23 +218,6 @@ Depending on the browser you can update the page without using the cache with "C
 * pause - pauses the timer. click on start again to continue.
 * stop - stops the timer. click on start again to restart the timer. click on reset to set the timer back to 00:00.
 * reset - resets the timer to 00:00.
-
-## History
-* 2020/08/02 ver2.19.1 Integrated all the new features from the Upstream Branch Opt-pan (creator)
-* 2020/07/25 ver2.12.3 Initiated output text file feature with GMPuzzles formatting requirements.
-* 2020/07/16 ver2.12.2 Stop watch, Shortcut to enter space in the text, updated readme
-* 2020/06/19 ver2.12.1 English Translations, Short URL, Readme instructions
-* 2020/01/05 ver2.12 Adjusted mouse judgment.
-* 2019/12/21 ver2.11 Implemented composite mode.
-* 2019/12/07 ver2.10 Ver.2, which was being developed at another address, is integrated with the old address.
-* 2019/09/07 ver2.00 Deformation board support etc.
-* 2019/08/16 ver1.05 Microsoft Edge compatible
-* 2019/08/04 ver1.04 Changed the specifications of white border and changed the input method of symbols
-* 2019/07/29 ver1.03 Fixed drawing of dotted line etc.
-* 2019/07/18 ver1.02 iPhone compatible
-* 2019/07/14 ver1.01
-* 2019/07/13 ver1.00
-* 2019/07/07 beta version
 
 ## Disclaimer
 Secondary distribution of code is prohibited. Images created using this software can be used freely. We are not responsible for any damages caused by using this software.

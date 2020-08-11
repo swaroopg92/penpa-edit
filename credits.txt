@@ -1,3 +1,0 @@
-1) This tool is forked from https://github.com/rjrudman/penpa-edit for further enhancements and to add new features.
-2) https://github.com/rjrudman/penpa-edit is forked from https://github.com/opt-pan/penpa-edit (original creator)
-3) Some of the translations on https://github.com/rjrudman/penpa-edit were provided by kamikazegargoyle (https://www.youtube.com/channel/UCNmuf8BQzXqgVl4PJFHCL0A)

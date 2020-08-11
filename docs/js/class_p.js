@@ -524,11 +524,6 @@ class Puzzle {
 
     mode_set(mode) {
         this.mode[this.mode.qa].edit_mode = mode;
-        // if (mode === "number") {
-        //     document.getElementById("sub_txt").innerHTML = "Sub:";
-        // } else {
-        //     document.getElementById("sub_txt").innerHTML = "Sub:";
-        // }
         this.submode_reset();
         if (document.getElementById('mode_' + mode)) {
             document.getElementById('mode_' + mode).style.display = 'inline-block';
@@ -819,7 +814,7 @@ class Puzzle {
 
         for (var i in this[pu].number) {
             // Sudoku only one number and multiple digits in same cell should not be considered
-            // if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && this[pu].number[i][2] === "7") {
+            // if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9) && this[pu].number[i][2] === "7") {
             //     var sum = 0,
             //         a;
             //     for (var j = 0; j < 10; j++) {
@@ -833,7 +828,7 @@ class Puzzle {
             //     }
             // } else 
             if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
                     sol[4].push(i + "," + this[pu].number[i][0]);
                 }
             }
@@ -2753,15 +2748,35 @@ class Puzzle {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1":
+                    // If the there are corner or sides present then get rid of them
+                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                    var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+
+                    for (var j = 0; j < 4; j++) {
+                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                            this.record("numberS", corner_cursor + j);
+                            delete this[this.mode.qa].numberS[corner_cursor + j];
+                        }
+                    }
+
+                    for (var j = 0; j < 4; j++) {
+                        if (this[this.mode.qa].numberS[side_cursor + j]) {
+                            this.record("numberS", side_cursor + j);
+                            delete this[this.mode.qa].numberS[side_cursor + j];
+                        }
+                    }
+
                     this.record("number", this.cursol);
                     if (str_num.indexOf(key) != -1 && this[this.mode.qa].number[this.cursol]) {
-                        con = parseInt(this[this.mode.qa].number[this.cursol][0], 10); //数字に変換
-                        if (con >= 1 && con <= 9 && this[this.mode.qa].number[this.cursol][2] != "7") { //1~9だったら2桁目へ
+                        con = parseInt(this[this.mode.qa].number[this.cursol][0], 10); // Convert to number
+                        if (con >= 1 && con <= 9 && this[this.mode.qa].number[this.cursol][2] != "7") { // If already 1-9 exist, go to 2nd digit
                             number = con.toString() + key;
                         } else {
+                            // It enters here when the cell already contains 2 digits.
                             number = key;
                         }
                     } else {
+                        // It enters for first entry in a cell and then for alphabets or special characters i.e. non numbers
                         number = key;
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
@@ -3714,7 +3729,11 @@ class Puzzle {
             case "linex":
             case "edgexoi":
             case "tents":
-                num = this.coord_p_edgex(x, y);
+                if (this.mouse_mode === "down_right" || ondown_key === "touchstart") {
+                    num = this.coord_p_edgex(x, y, 0.3);
+                } else {
+                    num = this.coord_p_edgex(x, y, 0.01);
+                }
                 break;
         }
         if (this.mouse_mode === "down_left") {
@@ -3729,13 +3748,21 @@ class Puzzle {
                     this.re_combi_shaka(x, y, num);
                     break;
                 case "linex":
-                    this.re_combi_linex(num);
+                    if (ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num);
+                    } else {
+                        this.re_combi_linex(num);
+                    }
                     break;
                 case "lineox":
                     this.re_combi_lineox(num);
                     break;
                 case "edgexoi":
-                    this.re_combi_edgexoi(num);
+                    if (ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num);
+                    } else {
+                        this.re_combi_edgexoi(num);
+                    }
                     break;
                 case "yajilin":
                     this.re_combi_yajilin(num);
@@ -3753,7 +3780,11 @@ class Puzzle {
                     this.re_combi_star(num);
                     break;
                 case "tents":
-                    this.re_combi_tents(num);
+                    if (ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num);
+                    } else {
+                        this.re_combi_tents(num);
+                    }
                     break;
                 case "magnets":
                     this.re_combi_magnets(num);
@@ -3766,6 +3797,14 @@ class Puzzle {
                     break;
                 case "alfl":
                     this.re_combi_alfl(x, y, num);
+                    break;
+            }
+        } else if (this.mouse_mode === "down_right") {
+            switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+                case "linex":
+                case "edgexoi":
+                case "tents":
+                    this.re_combi_cross_downright(num);
                     break;
             }
         } else if (this.mouse_mode === "move") {
@@ -3992,19 +4031,9 @@ class Puzzle {
     }
 
     re_combi_linex(num) {
-        if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { //xがない
-                this.record("line", num);
-                this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { //×印
-                this.record("line", num);
-                delete this[this.mode.qa].line[num];
-            }
-        } else {
-            this.drawing_mode = 100;
-            this.first = num;
-            this.last = num;
-        }
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
         this.redraw();
     }
 
@@ -4061,12 +4090,12 @@ class Puzzle {
         this.redraw();
     }
 
-    re_combi_edgexoi(num) {
+    re_combi_cross_downright(num) {
         if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { //xがない
+            if (!this[this.mode.qa].line[num]) { // Insert cross
                 this.record("line", num);
                 this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { //×印
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
                 this.record("line", num);
                 delete this[this.mode.qa].line[num];
             }
@@ -4075,6 +4104,13 @@ class Puzzle {
             this.first = num;
             this.last = num;
         }
+        this.redraw();
+    }
+
+    re_combi_edgexoi(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
         this.redraw();
     }
 
@@ -4300,19 +4336,9 @@ class Puzzle {
     }
 
     re_combi_tents(num) {
-        if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { //xがない
-                this.record("line", num);
-                this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { //×印
-                this.record("line", num);
-                delete this[this.mode.qa].line[num];
-            }
-        } else {
-            this.drawing_mode = 100;
-            this.first = num;
-            this.last = num;
-        }
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
         this.redraw();
     }
 

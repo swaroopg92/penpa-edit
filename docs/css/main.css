@@ -69,7 +69,7 @@ hr.newgridhrline {
 #buttons {
     font-size: 0;
     border: 1px solid #000;
-    width: 460px;
+    width: 475px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -109,7 +109,7 @@ hr.newgridhrline {
 }
 
 .stylemode_button label {
-    font-size: 10px;
+    font-size: 14px;
 }
 
 .label_mode {
@@ -194,6 +194,140 @@ hr.newgridhrline {
     background: #eeeeee;
 }
 
+#st_number1_lb {
+    /* Black */
+    background-color: #000;
+    color: #FFF;
+}
+
+#st_number2_lb {
+    /* Green */
+    background-color: #4C9900;
+}
+
+#st_number8_lb {
+    /* Light Blue */
+    background-color: #187bcd;
+}
+
+#st_number3_lb {
+    /* Grey */
+    background-color: #999999;
+}
+
+#st_number9_lb {
+    /* Dark Blue */
+    background-color: #00F;
+    color: #FFF;
+}
+
+#st_number6_lb {
+    /* White Circle */
+    background: url(white_circle.png);
+    background-repeat: no-repeat;
+    background-size: 90% 90%;
+    background-position: center;
+    vertical-align: top;
+    width: 20px;
+}
+
+#st_number0_lb {
+    /* Outlined */
+    background: url(outlined.png);
+    background-repeat: no-repeat;
+    background-size: 90% 90%;
+    background-position: center;
+    vertical-align: top;
+    width: 20px;
+}
+
+#st_number7_lb {
+    /* Black Circle */
+    background: url(black_circle.png);
+    background-repeat: no-repeat;
+    background-size: 90% 90%;
+    background-position: center;
+    vertical-align: top;
+    width: 20px;
+}
+
+#st_surface1_lb {
+    /* Dark Grey */
+    background-color: #444;
+    color: #FFF;
+    font-size: 12px;
+}
+
+#st_surface3_lb {
+    /* Light Grey */
+    background-color: #f0f0f0;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface4_lb {
+    /* Black */
+    background-color: #000;
+    color: #FFF;
+    font-size: 12px;
+}
+
+#st_surface2_lb {
+    /* Green */
+    background-color: #b3ffb3;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface5_lb {
+    /* Light Blue */
+    background-color: #c0e0ff;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface6_lb {
+    /* Red */
+    background-color: #ffa3a3;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface7_lb {
+    /* Yellow */
+    background-color: #ffffa3;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface8_lb {
+    /* Grey */
+    background-color: #ccc;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_line3_lb, #st_lineE3_lb, #st_wall3_lb {
+    /* Green */
+    background-color: rgba(32,128,32,1);
+    color: #000;
+    font-size: 16px;
+}
+
+#st_line2_lb, #st_lineE2_lb, #st_wall2_lb {
+    /* Black */
+    background-color: #000;
+    color: #fff;
+    font-size: 16px;
+}
+
+#st_line5_lb, #st_lineE5_lb, #st_wall5_lb {
+    /* Grey */
+    background-color: #777;
+    color: #000;
+    font-size: 16px;
+}
+
 input[type=radio] {
     display: none;
     /* Hide radio buttons */
@@ -202,6 +336,7 @@ input[type=radio] {
 input[type="radio"]:checked+label {
     background: #cccccc;
     color: #000000;
+    box-shadow: 0 0 0 1px orange;
 }
 
 #panel_button0,
