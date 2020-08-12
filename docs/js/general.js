@@ -330,6 +330,15 @@ function edge_onoff() {
     pu.redraw();
 }
 
+function solutionvisible_onoff(){
+     if (document.getElementById('visibility_button').textContent === "ON") {
+        document.getElementById('visibility_button').textContent = "OFF";
+    } else {
+        document.getElementById('visibility_button').textContent = "ON";
+    }
+    pu.redraw();
+}
+
 function ResetCheck() {
     if (confirm("Erase the selected symbol?")) {
         pu.reset_selectedmode();

@@ -340,16 +340,18 @@ input[type="radio"]:checked+label {
 }
 
 #panel_button0,
+#visibility_button0,
 #edge_button0,
 #panel_buttons0,
 #panel_buttonc0 {
     width: auto;
     border: none;
     background: none;
-    padding-left: 10px;
+    padding-left: 5px;
 }
 
 #panel_button,
+#visibility_button,
 #edge_button {
     width: 25px;
     border: 1px solid #ccc;
@@ -359,6 +361,7 @@ input[type="radio"]:checked+label {
 }
 
 #panel_button:hover,
+#visibility_button:hover,
 #edge_button:hover {
     background: #ccc;
 }
@@ -805,6 +808,8 @@ input[type=number] {
 
 .nb_button {
     text-align: center;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 #modal-size {

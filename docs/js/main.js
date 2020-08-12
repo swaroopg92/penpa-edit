@@ -606,6 +606,10 @@ onload = function() {
                 edge_onoff();
                 e.preventDefault();
                 break;
+            case "visibility_button":
+                solutionvisible_onoff();
+                e.preventDefault();
+                break;
             case "pu_q_label":
                 pu.mode_qa("pu_q");
                 e.preventDefault();
