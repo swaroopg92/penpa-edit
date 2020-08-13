@@ -523,7 +523,6 @@ class Puzzle {
     }
 
     mode_set(mode) {
-        // console.log(getValues('mode_choices'));
         this.mode[this.mode.qa].edit_mode = mode;
         this.submode_reset();
         if (document.getElementById('mode_' + mode)) {
