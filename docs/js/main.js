@@ -201,6 +201,7 @@ onload = function() {
             }
 
             if (key === "Tab") {
+                console.log(getValues('mode_choices'));
                 var present_mode = document.getElementById("mo_number").checked;
                 if (present_mode) {
                     var present_submode = pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0];
@@ -770,4 +771,19 @@ onload = function() {
         }
     }
 
+    let brands = ["Surface", "Line", "Edge", "Number", ""];
+    let select = document.getElementById("mode_choices");
+    for (var i = 0; i < brands.length; i++) {
+        var option = document.createElement("option");
+        option.value = brands[i];
+        option.text = brands[i];
+        if (i == 0) {
+            option.setAttribute("selected", true);
+        }
+        select.appendChild(option);
+    }
+    selectBox = new vanillaSelectBox("#mode_choices", {
+        "maxHeight": 100,        
+        "search": true
+    }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140,
 };

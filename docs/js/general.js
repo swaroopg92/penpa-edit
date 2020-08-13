@@ -330,8 +330,8 @@ function edge_onoff() {
     pu.redraw();
 }
 
-function solutionvisible_onoff(){
-     if (document.getElementById('visibility_button').textContent === "ON") {
+function solutionvisible_onoff() {
+    if (document.getElementById('visibility_button').textContent === "ON") {
         document.getElementById('visibility_button').textContent = "OFF";
     } else {
         document.getElementById('visibility_button').textContent = "ON";
@@ -501,6 +501,17 @@ function savetext_window() {
 
 function shorturl_tab() {
     window.open('https://git.io', '_blank');
+}
+
+function getValues(id) {
+    let result = [];
+    let collection = document.querySelectorAll("#" + id + " option");
+    collection.forEach(function(x) {
+        if (x.selected) {
+            result.push(x.value);
+        }
+    });
+    return result;
 }
 
 function duplicate() {
