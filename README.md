@@ -96,6 +96,12 @@ Depending on the browser you can update the page without using the cache with "C
 ### Box
 * Click to select the square that draws the frame of the board.
 
+### Tab
+* This is tab selector button.
+* User can now select which modes/sub-modes they wan't to rotate when pressing TAB key.
+	* There is search option available. Search is case-insensitive.
+* Default selection is "Surface" + "Number Normal".
+
 ### Move
 * You can move numbers and symbols by dragging. Originally, you cannot move to a square with a number or sign.
 * All can be set to move both numbers and symbols, or either numbers or symbols.

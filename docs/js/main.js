@@ -94,12 +94,12 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface", "Line", "Edge", "Wall", "Number",
+    let modes = ["Surface", "Wall",
         "Line Normal", "Line Helper",
         "Edge Normal", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
     ];
-    let modes_mapping = ["surface", "line", "lineE", "wall", "number",
+    let modes_mapping = ["surface", "wall",
         "sub_line1", "sub_line4",
         "sub_lineE1", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
@@ -216,7 +216,7 @@ onload = function() {
                 }
             }
 
-            if (key === "Tab") {                
+            if (key === "Tab") {
                 let user_choices = getValues('mode_choices');
                 if (previous_length != user_choices.length) {
                     previous_length = user_choices.length;
@@ -800,7 +800,7 @@ onload = function() {
         var option = document.createElement("option");
         option.value = modes[i];
         option.text = modes[i];
-        if (i == 0 || i == 4) { // Default selection Surface and Number Mode
+        if (i == 0 || i == 6) { // Default selection Surface and Number-Normal Mode
             option.setAttribute("selected", true);
         }
         select.appendChild(option);
