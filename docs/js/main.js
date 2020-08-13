@@ -227,7 +227,7 @@ onload = function() {
                     counter_index = 0; // reset the counter
                 }
                 let mode_loc = modes.indexOf(user_choices[counter_index]);
-                if (mode_loc < 5) {
+                if (mode_loc < 2) { // Hard coded, '2' since we have only Surface and Wall Modes, remaining choices are related to submodes
                     pu.mode_set(modes_mapping[mode_loc])
                     e.preventDefault();
                 } else {
