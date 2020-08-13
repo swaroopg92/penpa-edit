@@ -93,6 +93,22 @@ onload = function() {
         e.preventDefault();
     }
 
+    // Variables for Tab selector
+    let modes = ["Surface", "Wall",
+        "Line Normal", "Line Helper",
+        "Edge Normal", "Edge Helper",
+        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
+    ];
+    let modes_mapping = ["surface", "wall",
+        "sub_line1", "sub_line4",
+        "sub_lineE1", "sub_lineE4",
+        "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
+    ];
+    let previous_mode = "surface";
+    let previous_submode = 1;
+    let previous_length = 2;
+    let counter_index = 0;
+
     function onKeyDown(e) {
         if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp") {
             //入力フォーム用
@@ -201,23 +217,32 @@ onload = function() {
             }
 
             if (key === "Tab") {
-                var present_mode = document.getElementById("mo_number").checked;
-                if (present_mode) {
-                    var present_submode = pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0];
-                    switch (present_submode) {
-                        case "3":
-                        case "5":
-                        case "6":
-                        case "7":
-                        case "9":
-                        case "10":
-                            pu.submode_check("sub_number1");
-                            e.preventDefault();
-                            break;
-                        case "1":
-                            pu.submode_check("sub_number7");
-                            e.preventDefault();
+                let user_choices = getValues('mode_choices');
+                if (previous_length != user_choices.length) {
+                    previous_length = user_choices.length;
+                    counter_index = 0; // reset the counter
+                } else if (counter_index < (previous_length - 1)) {
+                    counter_index++;
+                } else {
+                    counter_index = 0; // reset the counter
+                }
+                let mode_loc = modes.indexOf(user_choices[counter_index]);
+                if (mode_loc < 5) {
+                    pu.mode_set(modes_mapping[mode_loc])
+                    e.preventDefault();
+                } else {
+                    if (modes_mapping[mode_loc].includes("number")) {
+                        pu.mode_set('number')
+                        e.preventDefault();
+                    } else if (modes_mapping[mode_loc].includes("lineE")) {
+                        pu.mode_set('lineE')
+                        e.preventDefault();
+                    } else {
+                        pu.mode_set('line')
+                        e.preventDefault();
                     }
+                    pu.submode_check(modes_mapping[mode_loc]);
+                    e.preventDefault();
                 }
                 event.returnValue = false;
             }
@@ -606,6 +631,10 @@ onload = function() {
                 edge_onoff();
                 e.preventDefault();
                 break;
+            case "visibility_button":
+                solutionvisible_onoff();
+                e.preventDefault();
+                break;
             case "pu_q_label":
                 pu.mode_qa("pu_q");
                 e.preventDefault();
@@ -766,4 +795,18 @@ onload = function() {
         }
     }
 
+    let select = document.getElementById("mode_choices");
+    for (var i = 0; i < modes.length; i++) {
+        var option = document.createElement("option");
+        option.value = modes[i];
+        option.text = modes[i];
+        if (i == 0 || i == 6) { // Default selection Surface and Number-Normal Mode
+            option.setAttribute("selected", true);
+        }
+        select.appendChild(option);
+    }
+    selectBox = new vanillaSelectBox("#mode_choices", {
+        "maxHeight": 110,
+        "search": true
+    }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140,
 };

@@ -1,0 +1,199 @@
+.hide {
+    display: none !important;
+}
+
+.vsb-menu {
+    cursor: pointer;
+    z-index: 1000;
+    display: none;
+    position: absolute;
+    /*Don't change*/
+    border: 1px solid #B2B2B2;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.vsb-js-search-zone {
+    position: relative;
+    /*Don't change*/
+    z-index: 1001;
+    width: 80%;
+    min-height: 1.8em;
+    padding: 2px;
+    background-color: #fff;
+}
+
+.vsb-js-search-zone input {
+    border: 1px solid grey;
+    margin-left: 2px;
+    width: 96%;
+    padding: 1px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.vsb-main {
+    position: relative;
+    /*Don't change*/
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.vsb-menu li {
+    display: list-item;
+    font-size: 12px;
+    background-color: #fff;
+    min-height: 1.4em;
+    padding: 0.2em;
+}
+
+.vsb-menu li:hover {
+    background: linear-gradient(#f5f5f5, #e8e8e8);
+}
+
+.vsb-menu ul {
+    user-select: none;
+    list-style: none;
+    white-space: nowrap;
+    margin: 0px;
+    margin-top: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 3px;
+    color: #333;
+    cursor: pointer;
+    overflow-y: auto;
+}
+
+li.disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+    background-color: #999;
+}
+
+.vsb-main button {
+    display: block;
+    min-width: 80px;
+    background: white !important;
+    /*border-radius: 0;
+	width: 100%;
+	text-align: left;
+	z-index: 1;
+	color: #333;
+	background: white !important;
+	border: 1px solid #999 !important;
+	line-height:20px;
+	font-size:14px;
+	padding:6px 12px;
+    margin: 0px;*/
+    text-align: left;
+    height: 29px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    color: #000000;
+    font-size: 14px;
+    text-align: center;
+    line-height: 28px;
+    border: 2px solid #dd0000;
+    border-radius: 3px;
+}
+
+.vsb-main button.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.vsb-main .title {
+    margin-right: 6px;
+    user-select: none;
+}
+
+.vsb-main li:hover {
+    background: linear-gradient(#f5f5f5, #e8e8e8);
+}
+
+.vsb-main ul {
+    white-space: nowrap;
+}
+
+.vsb-menu li {
+    font-size: 14px;
+    background-color: #fff;
+    min-height: 1.4em;
+    padding: 0.2em 2em 0.2em 1em;
+}
+
+
+.vsb-menu :not(.multi) li.active::before {
+    content: "";
+    display: inline-block;
+    font-size: inherit;
+    float: left;
+    margin-left: -16px;
+    display: inline-block;
+    transform: rotate(45deg);
+    height: 10px;
+    width: 5px;
+    border-bottom: 3px solid black;
+    border-right: 3px solid black;
+    border-radius: 2px;
+}
+
+
+.vsb-menu .multi li {
+    font-size: 14px;
+    background-color: #fff;
+    min-height: 1.4em;
+    padding: 0.2em 2em 0.2em 26px;
+}
+
+.vsb-menu .multi li::before {
+    content: "";
+    display: inline-block;
+    font-size: inherit;
+    float: left;
+    font-weight: bold;
+    margin-left: -22px;
+    margin-right: 2px;
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 7px;
+    margin-top: 0px;
+    color: black;
+}
+
+
+.vsb-menu .multi li.active::after {
+    content: "";
+    display: inline-block;
+    font-size: inherit;
+    color: #333;
+    float: left;
+    margin-left: -18px;
+    display: inline-block;
+    transform: rotate(45deg);
+    margin-top: 2px;
+    height: 8px;
+    width: 4px;
+    border-bottom: 3px solid black;
+    border-right: 3px solid black;
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}

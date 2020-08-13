@@ -7,6 +7,8 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <link href="./css/main.css" rel="stylesheet" type="text/css">
+    <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./js/vanillaSelectBox.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/class_p.js"></script>
     <script type="text/javascript" src="./js/class_square.js"></script>
@@ -39,9 +41,11 @@
                 <label for="pu_q" class="label" id="pu_q_label">Problem</label>
                 <input type="radio" name="mode_qa" id="pu_a" value=2 />
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
+                <span id="visibility_button0" class="label">V:</span>
+                <span id="visibility_button" class="label">ON</span>
                 <span id="panel_button0" class="label">Panel:</span>
                 <span id="panel_button" class="label">OFF</span>
-                <span id="edge_button0" class="label">Border input:</span>
+                <span id="edge_button0" class="label">Border:</span>
                 <span id="edge_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -56,6 +60,9 @@
                 <label for="mo_wall" class="label" id="mo_wall_lb">Wall</label>
                 <input type="radio" name="mode" id="mo_board" />
                 <label for="mo_board" class="label_option" id="mo_board_lb">Box</label>
+                <span class="tab" id="tab_selection">
+                    <select id="mode_choices" multiple size="0"></select>
+                </span>
                 <input type="radio" name="mode" id="mo_move" />
                 <label for="mo_move" class="label_option" id="mo_move_lb">Move</label>
                 <br>
@@ -325,8 +332,6 @@
                             </ul>
                         </li>
                     </ul>
-                    <!--<input type="radio" name="mode_combi" value="battleship" id="sub_combibattleship" checked="checked">
-            <label for="sub_combibattleship" class="label" id="sub_combibattleship_lb">船</label>-->
                 </span>
             </div>
             <div id="stylemode_button" class="stylemode_button">
@@ -363,7 +368,7 @@
                     <input type="radio" name="style_line" value="12" id="st_line12">
                     <label for="st_line12" class="labelL" id="st_line12_lb">Dotted</label>
                     <input type="radio" name="style_line" value="13" id="st_line13">
-                    <label for="st_line13" class="labelL" id="st_line13_lb">Fat</label>
+                    <label for="st_line13" class="labelL" id="st_line13_lb">Fat dots</label>
                     <input type="radio" name="style_line" value="40" id="st_line40">
                     <label for="st_line40" class="labelL" id="st_line40_lb">Short</label>
                     <input type="radio" name="style_line" value="30" id="st_line30">
@@ -381,7 +386,7 @@
                     <input type="radio" name="style_lineE" value="12" id="st_lineE12">
                     <label for="st_lineE12" class="labelL" id="st_lineE12_lb">Dotted</label>
                     <input type="radio" name="style_lineE" value="13" id="st_lineE13">
-                    <label for="st_lineE13" class="labelL" id="st_lineE13_lb">Fat</label>
+                    <label for="st_lineE13" class="labelL" id="st_lineE13_lb">Fat dots</label>
                     <input type="radio" name="style_lineE" value="30" id="st_lineE30">
                     <label for="st_lineE30" class="labelL" id="st_lineE30_lb">Double</label>
                 </span>
@@ -397,7 +402,7 @@
                     <input type="radio" name="style_wall" value="12" id="st_wall12">
                     <label for="st_wall12" class="labelL" id="st_wall12_lb">Dotted</label>
                     <input type="radio" name="style_wall" value="17" id="st_wall17">
-                    <label for="st_wall17" class="labelL" id="st_wall17_lb">Fat</label>
+                    <label for="st_wall17" class="labelL" id="st_wall17_lb">Fat dots</label>
                     <input type="radio" name="style_wall" value="14" id="st_wall14">
                     <label for="st_wall14" class="labelL" id="st_wall14_lb">Grey dot</label>
                 </span>
@@ -470,7 +475,7 @@
         </div>
         <p style="margin-top: 5px;">Any suggestions or improvements, send an email to <b>swaroop.guggilam@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues">here</a>.</p>
         <p>Insructions to use the tool can be found <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md">here</a>.</p>
-        <p>Penpa+ Version 2.19.4, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/credits.md">Credits</a></p>
+        <p>Penpa+ Version 2.19.5, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/credits.md">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -735,6 +740,7 @@
     <script type="text/javascript" src="./js/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="./js/easytimer.min.js"></script>
     <script type="text/javascript" src="./js/timer.js"></script>
+    <script type="text/javascript" src="./js/tab.js"></script>
 </body>
 
 </html>

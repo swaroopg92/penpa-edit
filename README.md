@@ -26,9 +26,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
 * F3: Answer mode
-* TAB: During "Number" Mode (One of the following will apply)--> 
-	* Switches to "Normal" sub-mode from "L", "M", "S", "Candidates", "1/4" and "Side" sub-modes.
-	* Once in "Normal" sub-mode, it will only switch betwen "Normal" and "Candidates" sub-modes.
+* TAB: checkout the TAB section below in "Current functions"
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -37,6 +35,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Some symbols such as symbol> figure> cross are onoff input formats. Click the panel to enter directly. Special example: Digital (frame) with the same key. If you press it twice, only the frame will be displayed.
 * Special: Delete by clicking the first square of the entered symbol.
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
+* V: Visibility Button. Users can now choose if they dont want the solution visible in the "Problem" mode. Default is "ON". In "Solution" mode everything will be visible.
 
 ## Current functions
 
@@ -96,6 +95,12 @@ Depending on the browser you can update the page without using the cache with "C
 
 ### Box
 * Click to select the square that draws the frame of the board.
+
+### Tab
+* This is tab selector button.
+* User can now select which modes/sub-modes they wan't to rotate when pressing TAB key.
+	* There is search option available. Search is case-insensitive.
+* Default selection is "Surface" + "Number Normal".
 
 ### Move
 * You can move numbers and symbols by dragging. Originally, you cannot move to a square with a number or sign.
