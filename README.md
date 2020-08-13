@@ -26,9 +26,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
 * F3: Answer mode
-* TAB: During "Number" Mode (One of the following will apply)--> 
-	* Switches to "Normal" sub-mode from "L", "M", "S", "Candidates", "1/4" and "Side" sub-modes.
-	* Once in "Normal" sub-mode, it will only switch betwen "Normal" and "Candidates" sub-modes.
+* TAB: checkout the TAB section below in "Current functions"
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -37,10 +35,11 @@ Depending on the browser you can update the page without using the cache with "C
 * Some symbols such as symbol> figure> cross are onoff input formats. Click the panel to enter directly. Special example: Digital (frame) with the same key. If you press it twice, only the frame will be displayed.
 * Special: Delete by clicking the first square of the entered symbol.
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
+* V: Visibility Button. Users can now choose if they dont want the solution visible in the "Problem" mode. Default is "ON". In "Solution" mode everything will be visible.
 
 ## Current functions
 
-### Surface
+### Surfaces
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
 * In Dark grey mode only, click twice to get a green square.
 * Light grey is used when hiding gray letters and symbols.
