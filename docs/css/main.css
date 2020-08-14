@@ -1120,6 +1120,16 @@ input[type=number] {
     margin-left: -15px;
 }
 
+#sub_text.tooltiptext {
+    width: 230px;
+    margin-left: -15px;
+}
+
+#style_text.tooltiptext {
+    width: 90px;
+    margin-left: -15px;
+}
+
 #undo_text.tooltiptext {
     width: 70px;
     margin-left: -35px;
@@ -1153,6 +1163,14 @@ input[type=number] {
 
 #border_text.tooltiptext::after {
     left: 75%;
+}
+
+#sub_text.tooltiptext::after {
+    left: 5%;
+}
+
+#style_text.tooltiptext::after {
+    left: 15%;
 }
 
 .tooltip:hover .tooltiptext {

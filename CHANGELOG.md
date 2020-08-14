@@ -1,9 +1,11 @@
 ## History
 
 * 2020/08/15 ver2.19.5
-	* Added TAB feature, User can now select their choice of tabs to rotate between
+	* Added TAB feature, User can now select their own choice of modes/submodes to rotate when pressing TAB
 	* Visibility button if someone doesn't want to see solution on Problem
-	* Improved buttons
+	* Added tool tips to some elements (e.g. hover over Panel, Border, Undo etc)
+	* Added "Thicker" option to Edge Mode
+	* Improved buttons display and fixed some other bugs
 * 2020/08/07 ver2.19.4
 	* Upgraded TAB shortcut
 	* Improved buttons displayed in sub-modes

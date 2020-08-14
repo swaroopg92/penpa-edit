@@ -82,7 +82,7 @@
             <hr size=1 noshade>
             <div id="submode_button" class="submode_button">
                 <span id="div_sub">
-                    <label class="label_mode" id="sub_txt">Sub:&nbsp&nbsp</label>
+                    <label class="label_mode tooltip" id="sub_txt">Sub:&nbsp&nbsp<span id="sub_text" class="tooltiptext">Choose one sub-mode wherever applicable</span></label>
                 </span>
                 <span id="mode_line" style="display:none;">
                     <input type="radio" name="mode_line" value="1" id="sub_line1" checked="checked">
@@ -336,7 +336,7 @@
             </div>
             <div id="stylemode_button" class="stylemode_button">
                 <span id="div_all">
-                    <label class="label_mode" id="style_txt">Style:</label>
+                    <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
                     <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
@@ -381,6 +381,8 @@
                     <label for="st_lineE2" class="labelL" id="st_lineE2_lb">B</label>
                     <input type="radio" name="style_lineE" value="5" id="st_lineE5">
                     <label for="st_lineE5" class="labelL" id="st_lineE5_lb">G</label>
+                    <input type="radio" name="style_lineE" value="21" id="st_lineE21">
+                    <label for="st_lineE21" class="labelL" id="st_lineE21_lb">Thicker</label>
                     <input type="radio" name="style_lineE" value="80" id="st_lineE80">
                     <label for="st_lineE80" class="labelL" id="st_lineE80_lb">Thin</label>
                     <input type="radio" name="style_lineE" value="12" id="st_lineE12">
