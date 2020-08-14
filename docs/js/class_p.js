@@ -2781,7 +2781,7 @@ class Puzzle {
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     break;
-                case "2":
+                case "2": // Arrow
                     this.record("number", this.cursol);
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "7") {
                         con = this[this.mode.qa].number[this.cursol][0];
@@ -2806,8 +2806,8 @@ class Puzzle {
                     }
                     this[this.mode.qa].number[this.cursol] = [number + arrow, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     break;
-                case "3": //4 place
-                case "9":
+                case "3": // 1/4, corner
+                case "9": // Sides
                     this.record("numberS", this.cursolS);
                     if (this[this.mode.qa].numberS[this.cursolS]) {
                         con = this[this.mode.qa].numberS[this.cursolS][0];
@@ -2838,7 +2838,7 @@ class Puzzle {
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     break;
-                case "5":
+                case "5": // Small
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
                         con = this[this.mode.qa].number[this.cursol][0];
                     } else {
@@ -2850,7 +2850,7 @@ class Puzzle {
                         this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
                     break;
-                case "6":
+                case "6": // Medium
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
                         con = this[this.mode.qa].number[this.cursol][0];
                     } else {
@@ -2874,7 +2874,7 @@ class Puzzle {
                         this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
                     break;
-                case "7":
+                case "7": // Candidates
                     this.record("number", this.cursol);
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
                         con = this[this.mode.qa].number[this.cursol][0];
@@ -2884,7 +2884,7 @@ class Puzzle {
                     number = this.onofftext(9, key, con);
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     break;
-                case "8":
+                case "8": // Long
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
                         con = this[this.mode.qa].number[this.cursol][0];
                     } else {

@@ -340,7 +340,7 @@ function solutionvisible_onoff() {
 }
 
 function ResetCheck() {
-    if (confirm("Erase the selected symbol?")) {
+    if (confirm("Erase the selected Mode elements?")) {
         pu.reset_selectedmode();
     }
 }
@@ -355,6 +355,9 @@ function DeleteCheck() {
     if (confirm("Delete everything in " + text + "?")) {
         pu.reset_board();
         pu.redraw();
+        // reset undo/redo
+        pu.command_undo = new Stack();
+        pu.command_redo = new Stack();
     }
 }
 
