@@ -41,11 +41,11 @@
                 <label for="pu_q" class="label" id="pu_q_label">Problem</label>
                 <input type="radio" name="mode_qa" id="pu_a" value=2 />
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
-                <span id="visibility_button0" class="label">V:</span>
+                <span id="visibility_button0" class="label tooltip">V:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
                 <span id="visibility_button" class="label">ON</span>
-                <span id="panel_button0" class="label">Panel:</span>
+                <span id="panel_button0" class="label tooltip">Panel:<span id="panel_text" class="tooltiptext">Panel for Shape and Number Mode</span></span>
                 <span id="panel_button" class="label">OFF</span>
-                <span id="edge_button0" class="label">Border:</span>
+                <span id="edge_button0" class="label tooltip">Border:<span id="border_text" class="tooltiptext">To enter numbers/symbols on edges/corners of the grid</span></span>
                 <span id="edge_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -450,7 +450,7 @@
                     <input type="radio" name="style_cage" value="7" id="st_cage7">
                     <label for="st_cage7" class="label" id="st_cage7_lb">Grey line</label>
                     <input type="radio" name="style_cage" value="15" id="st_cage15">
-                    <label for="st_cage15" class="label" id="st_cage15_lb">Grey dot</label>
+                    <label for="st_cage15" class="label" id="st_cage15_lb">Grey dots</label>
                     <input type="radio" name="style_cage" value="16" id="st_cage16">
                     <label for="st_cage16" class="label" id="st_cage16_lb">Solid line</label>
                 </span>
@@ -459,10 +459,22 @@
     </header>
     <div id="dvique" class="dvique"></div>
     <div id="bottom_button">
-        <input type="button" id="tb_undo" value="Undo" class="button" />
-        <input type="button" id="tb_redo" value="Redo" class="button" />
-        <input type="button" id="tb_reset" value="Erase current selection" class="button" />
-        <input type="button" id="tb_delete" value="Delete" class="button" />
+        <span class="tooltip">
+            <input type="button" id="tb_undo" value="Undo" class="button" />
+            <span id="undo_text" class="tooltiptext">CTRL + z</span>
+        </span>
+        <span class="tooltip">
+            <input type="button" id="tb_redo" value="Redo" class="button" />
+            <span id="redo_text" class="tooltiptext">CTRL + y</span>
+        </span>
+        <span class="tooltip">
+            <input type="button" id="tb_reset" value="Erase current selection" class="button" />
+            <span id="eraseselect_text" class="tooltiptext">Erase everything that belongs to the selected mode</span>
+        </span>
+        <span class="tooltip">
+            <input type="button" id="tb_delete" value="Delete" class="button" />
+            <span id="erase_text" class="tooltiptext">Erase everything</span>
+        </span>
         <br><br>
         <div id="stop_watch">
             <h1 class="values">00:00:00:00</h1>

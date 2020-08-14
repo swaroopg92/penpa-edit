@@ -1084,4 +1084,78 @@ input[type=number] {
     font-size: 0.9em;
 }
 
-/* Tab shortcut */
+/* Tool tips */
+.tooltip {
+    position: relative;
+    display: inline;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#visibility_text.tooltiptext {
+    width: 150px;
+    margin-left: -40px;
+}
+
+#border_text.tooltiptext {
+    width: 160px;
+    margin-left: -70px;
+}
+
+#panel_text.tooltiptext {
+    width: 120px;
+    margin-left: -15px;
+}
+
+#undo_text.tooltiptext {
+    width: 70px;
+    margin-left: -35px;
+}
+
+#redo_text.tooltiptext {
+    width: 70px;
+    margin-left: -35px;
+}
+
+#eraseselect_text.tooltiptext {
+    width: 200px;
+    margin-left: -100px;
+}
+
+#erase_text.tooltiptext {
+    width: 90px;
+    margin-left: -45px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+#border_text.tooltiptext::after {
+    left: 75%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
