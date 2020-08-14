@@ -256,9 +256,10 @@ class Puzzle {
     }
 
     reset_frame_newgrid() {
+        this.center_n = this.center_n0;
         this.canvasxy_update();
         this.create_point();
-        this.search_center();
+        // this.search_center();
         this.canvas_size_setting();
         this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
         if (this.reflect[0] === -1) {
@@ -299,7 +300,7 @@ class Puzzle {
     }
 
     point_move(x, y, theta) {
-        var x0 = this.canvasx * 0.5 + 0.5; //canvasの中心+0.5で回転させる、平行移動時にはx,yを+0.5で入力
+        var x0 = this.canvasx * 0.5 + 0.5; // Rotate the canvas center +0.5, enter x,y +0.5 when moving in parallel
         var y0 = this.canvasy * 0.5 + 0.5;
         var x1, y1, x2, y2;
         theta = theta / 180 * Math.PI;

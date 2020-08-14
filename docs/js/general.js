@@ -37,7 +37,7 @@ function create() {
 function create_newboard() {
 
     var size = parseInt(document.getElementById("nb_size3").value);
-    if (12 <= size && size <= 80) {
+    if (15 <= size && size <= 80) {
         var mode = pu.mode;
         var gridtype = document.getElementById("gridtype").value;
         pu = make_class(gridtype);
@@ -48,7 +48,7 @@ function create_newboard() {
         document.getElementById('modal').style.display = 'none';
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
     } else {
-        alert("Display size must be in the range 12-80");
+        alert("Display size must be in the range 15-80");
     }
 }
 
@@ -282,7 +282,7 @@ function newgrid() {
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
     } else {
-        alert("Display size must be in the range 12-80");
+        alert("Display size must be in the range 15-80");
     }
 }
 
@@ -296,7 +296,7 @@ function newgrid_r() {
         panel_pu.draw_panel();
         document.getElementById('modal-newsize').style.display = 'none';
     } else {
-        alert("Display size must be in the range 12-80");
+        alert("Display size must be in the range 15-80");
     }
 }
 
