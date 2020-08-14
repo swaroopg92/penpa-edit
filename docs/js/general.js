@@ -340,7 +340,7 @@ function solutionvisible_onoff() {
 }
 
 function ResetCheck() {
-    if (confirm("Erase the selected Mode elements?")) {
+    if (confirm("Erase all " + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + " mode elements?")) {
         pu.reset_selectedmode();
     }
 }
