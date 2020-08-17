@@ -566,13 +566,7 @@ class Puzzle {
     stylemode_check(name) {
         if (document.getElementById(name)) {
             document.getElementById(name).checked = true;
-            // if (name === "st_symbol0") {
-            //     this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10;
-            // } else if (name === "st_symbol10") {
-            //     this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10 + 10;
-            // } else {
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = parseInt(document.getElementById(name).value);
-            // }
             panel_pu.draw_panel(); // Panel update
         }
     }

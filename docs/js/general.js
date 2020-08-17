@@ -340,8 +340,26 @@ function solutionvisible_onoff() {
 }
 
 function ResetCheck() {
-    if (confirm("Erase all " + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + " mode elements?")) {
-        pu.reset_selectedmode();
+    if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "LINEE") {
+        if (confirm("Erase all EDGE mode elements?")) {
+            pu.reset_selectedmode();
+        }
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "SYMBOL") {
+        if (confirm("Erase all SHAPE mode elements?")) {
+            pu.reset_selectedmode();
+        }
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "CAGE") {
+        if (confirm("Erase all FRAME mode elements?")) {
+            pu.reset_selectedmode();
+        }
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "COMBI") {
+        if (confirm("Erase all COMPOSITE mode elements?")) {
+            pu.reset_selectedmode();
+        }
+    } else {
+        if (confirm("Erase all " + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + " mode elements?")) {
+            pu.reset_selectedmode();
+        }
     }
 }
 
