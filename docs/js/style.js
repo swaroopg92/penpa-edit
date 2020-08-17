@@ -94,6 +94,14 @@ function set_line_style(ctx, type) {
             ctx.strokeStyle = "#777";
             ctx.lineWidth = 1;
             break;
+        case 8: // Red
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 3;
+            break;
+        case 9: // Blue
+            ctx.strokeStyle = "#187bcd";
+            ctx.lineWidth = 3;
+            break;
         case 10: //cage
             var b = pu.size * 0.1;
             var w = pu.size * 0.1;

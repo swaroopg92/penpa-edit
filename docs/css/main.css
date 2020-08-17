@@ -203,16 +203,19 @@ hr.newgridhrline {
 #st_number2_lb {
     /* Green */
     background-color: #4C9900;
+    color: #fff;
 }
 
 #st_number8_lb {
     /* Light Blue */
     background-color: #187bcd;
+    color: #fff;
 }
 
 #st_number3_lb {
     /* Grey */
     background-color: #999999;
+    color: #fff;
 }
 
 #st_number9_lb {
@@ -313,7 +316,7 @@ hr.newgridhrline {
 #st_wall3_lb {
     /* Green */
     background-color: rgba(32, 128, 32, 1);
-    color: #000;
+    color: #fff;
     font-size: 16px;
 }
 
@@ -331,7 +334,25 @@ hr.newgridhrline {
 #st_wall5_lb {
     /* Grey */
     background-color: #777;
-    color: #000;
+    color: #fff;
+    font-size: 16px;
+}
+
+#st_line8_lb,
+#st_lineE8_lb,
+#st_wall8_lb {
+    /* Red */
+    background-color: red;
+    color: #fff;
+    font-size: 16px;
+}
+
+#st_line9_lb,
+#st_lineE9_lb,
+#st_wall9_lb {
+    /* Blue */
+    background-color: #187bcd;
+    color: #fff;
     font-size: 16px;
 }
 
