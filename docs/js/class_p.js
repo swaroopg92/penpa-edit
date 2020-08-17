@@ -3033,7 +3033,7 @@ class Puzzle {
     key_backspace() {
         var number;
         if (this.mode[this.mode.qa].edit_mode === "number") {
-            if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") { //1/4
+            if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") { // 1/4 and side
                 if (this[this.mode.qa].numberS[this.cursolS]) {
                     this.record("numberS", this.cursolS);
                     number = this[this.mode.qa].numberS[this.cursolS][0].slice(0, -1);
@@ -3050,8 +3050,6 @@ class Puzzle {
                             } else {
                                 number = number.slice(0, -1);
                             }
-                        } else if (this[this.mode.qa].number[this.cursol][2] === "7") {
-                            key_space();
                         } else {
                             number = number.slice(0, -1);
                         }
