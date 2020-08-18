@@ -2803,6 +2803,163 @@ class Puzzle {
                         text += "\n";
                     }
                 }
+            } else if (header.search("starbattle") !== -1) {
+                if (header.search("starbattle") !== -1) {
+                    text += 'Author:\n' +
+                        'Genre: Star Battle\n' +
+                        'Variation: Standard\n';
+                }
+                text += 'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+                var stars = header.replace(/^.*(\d+).*$/i, '$1');
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + stars + '\n';
+
+                // Regions
+                var counter = 0;
+                var cell_matrix = [];
+                var up_matrix = [];
+                var right_matrix = [];
+
+                for (var i = 0; i < row_size; i++) {
+                    cell_matrix[i] = new Array(parseInt(col_size)).fill(0);
+                }
+                for (var i = 0; i < (parseInt(row_size) + 1); i++) {
+                    up_matrix[i] = new Array(parseInt(col_size)).fill(0);
+                }
+                for (var i = 0; i < (row_size); i++) {
+                    right_matrix[i] = new Array(parseInt(col_size) + 1).fill(0);
+                }
+
+                // Setup Edge Matrices
+                if (!isEmpty(this.pu_q.lineE)) {
+                    var pointA, pointA_x, pointA_y, edge, points;
+                    for (edge in this.pu_q.lineE) {
+                        points = edge.split(',');
+                        pointA = Number(points[0]) - (this.nx0 * this.ny0);
+                        pointA_x = (pointA % this.nx0); //column
+                        pointA_y = parseInt(pointA / this.nx0); //row
+                        if ((Number(points[1]) - Number(points[0])) === 1) {
+                            // data for up matrix
+                            up_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                        } else {
+                            right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                        }
+                    }
+                }
+
+                // Define regions using numbers
+                // Loop through each cell
+                for (var i = 0; i < row_size; i++) {
+                    for (var j = 0; j < col_size; j++) {
+                        // first row doesnt have up
+                        if (i === 0) {
+                            // 0,0 is starting reference
+                            if (j > 0) {
+                                if (right_matrix[i][j] === 0) {
+                                    cell_matrix[i][j] = cell_matrix[i][j - 1];
+                                } else {
+                                    counter++;
+                                    cell_matrix[i][j] = counter;
+                                }
+                            }
+                        } else {
+                            // UP
+                            if (up_matrix[i][j] === 0) {
+                                if (j > 0) {
+                                    // Change all connected cells to this new value
+                                    for (var k = 0; k <= i; k++) {
+                                        for (var m = 0; m < col_size; m++) {
+                                            if (cell_matrix[k][m] === cell_matrix[i][j]) {
+                                                cell_matrix[k][m] = cell_matrix[i - 1][j];
+                                            }
+                                        }
+                                    }
+                                }
+                                cell_matrix[i][j] = cell_matrix[i - 1][j];
+                            } else {
+                                counter++;
+                                if (j > 0) {
+                                    // Change all connected cells to this new value
+                                    for (var k = 0; k <= i; k++) {
+                                        for (var m = 0; m < col_size; m++) {
+                                            if (cell_matrix[k][m] === cell_matrix[i][j]) {
+                                                cell_matrix[k][m] = counter;
+                                            }
+                                        }
+                                    }
+                                }
+                                cell_matrix[i][j] = counter;
+                            }
+                            // RIGHT
+                            if (j < (col_size) - 1) {
+                                if (right_matrix[i][j + 1] === 0) {
+                                    cell_matrix[i][j + 1] = cell_matrix[i][j];
+                                } else {
+                                    counter++;
+                                    cell_matrix[i][j + 1] = counter;
+                                }
+                            }
+                        }
+                        // console.log(JSON.parse(JSON.stringify(cell_matrix))); // To avoid passing by reference
+                    }
+                }
+
+                // Find unique numbers
+                var unique_nums = [];
+                for (var i = 0; i < row_size; i++) {
+                    for (var j = 0; j < col_size; j++) {
+                        if (unique_nums.indexOf(cell_matrix[i][j]) === -1) {
+                            unique_nums.push(cell_matrix[i][j]);
+                        }
+                    }
+                }
+                var size_unique_nums = unique_nums.length;
+                var cell_char;
+
+                // Loop through each region to convert to Alphabet
+                // Temporary solution, but later find efficient way
+                for (var k = 0; k < size_unique_nums; k++) {
+                    cell_char = String.fromCharCode(65 + (k % 26));
+                    for (var i = 0; i < row_size; i++) {
+                        for (var j = 0; j < col_size; j++) {
+                            if (cell_matrix[i][j] === unique_nums[k]) {
+                                cell_matrix[i][j] = cell_char; // 26 alphabets and then cycle
+                            }
+                        }
+                    }
+                }
+
+                // write to text
+                for (var i = 0; i < row_size; i++) {
+                    for (var j = 0; j < col_size; j++) {
+                        text += cell_matrix[i][j];
+                    }
+                    text += '\n';
+                }
+
+                // Star - Shading Solution
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "X";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);

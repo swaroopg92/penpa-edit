@@ -190,6 +190,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Statue Park (Use Shape + Shape/Circle Mode [Panel: ON])
 		* minesweeper (Use 1 to represent mine in the Solution)
 		* doubleminesweeper (Use 1 and 2 to represent mines in the Solution)
+		* starbattle (specify number of stars after puzzle type [e.g starbattle2 or starbattle3], use grey shading in solution mode for stars, it is assumed rows=columns as per GMPuzzles formatting)
 	* Shading Puzzles
 		* kurotto (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 		* kuromasu (Use Number + White circle style)
