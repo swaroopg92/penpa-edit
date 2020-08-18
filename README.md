@@ -197,6 +197,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* tapa (Number + Tapa mode)
 		* nurikabe
 		* nanro
+		* lits
 	* Region Division Puzzles
 		* fillomino
 		* pentominous
