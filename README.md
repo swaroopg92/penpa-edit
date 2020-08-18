@@ -203,6 +203,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* pentominous
 		* cave
 		* snakepit (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
+		* araf (Use Number + White circle style, green edge in solution mode for regions)
 	* Loop/ Path Puzzles
 		* balanceloop (Use Number + White circle style / Black circle style [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
 		* masyu (Use Shape + Shape/Circle Mode [Panel: ON])

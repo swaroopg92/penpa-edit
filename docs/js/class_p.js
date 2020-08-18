@@ -1440,7 +1440,7 @@ class Puzzle {
         return matrix_local;
     }
 
-    getregiondata(row_size, col_size) {
+    getregiondata(row_size, col_size, mode = "pu_q") {
         // Regions
         var counter = 0;
         var cell_matrix = [];
@@ -1457,9 +1457,15 @@ class Puzzle {
             right_matrix[i] = new Array(parseInt(col_size) + 1).fill(0);
         }
 
+        if (mode === "pu_q") {
+            var edge_elements = this.pu_q.lineE;
+        } else if (mode === "pu_a") {
+            var edge_elements = this.pu_a.lineE;
+        }
+
         // Setup Edge Matrices
         var pointA, pointA_x, pointA_y, edge, points;
-        for (edge in this.pu_q.lineE) {
+        for (edge in edge_elements) {
             points = edge.split(',');
             pointA = Number(points[0]) - (this.nx0 * this.ny0);
             pointA_x = (pointA % this.nx0); //column
@@ -2757,8 +2763,9 @@ class Puzzle {
                 col_size = document.getElementById("nb_size1").value;
                 text += col_size + ' ' + row_size + ' 0' + '\n';
 
+                // Regions
                 if (!isEmpty(this.pu_q.lineE)) {
-                    var matrix = this.getregiondata(row_size, col_size);
+                    var matrix = this.getregiondata(row_size, col_size, "pu_q");
 
                     // write to text
                     for (var i = 0; i < row_size; i++) {
@@ -2837,8 +2844,9 @@ class Puzzle {
                     text += col_size + ' ' + stars + '\n';
                 }
 
+                // Regions
                 if (!isEmpty(this.pu_q.lineE)) {
-                    var matrix = this.getregiondata(row_size, col_size);
+                    var matrix = this.getregiondata(row_size, col_size, "pu_q");
 
                     // write to text
                     for (var i = 0; i < row_size; i++) {
@@ -2860,6 +2868,63 @@ class Puzzle {
                             }
                         }
                         text += "\n";
+                    }
+                }
+
+            } else if (header === "araf") {
+                text += 'Author:\n' +
+                    'Genre: Araf\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+
+                text += col_size + ' ' + row_size + '\n';
+
+                // Given Digits
+                // Simplified implementation
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] &&
+                                this.pu_q.number[i + j * (this.nx0)][2] === "1" &&
+                                this.pu_q.number[i + j * (this.nx0)][1] === 6 &&
+                                !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                var digit = this.pu_q.number[i + j * (this.nx0)][0];
+                                if (digit !== "") {
+                                    text += digit
+                                } else {
+                                    text += 'x';
+                                }
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Regions
+                if (!isEmpty(this.pu_a.lineE)) {
+                    var matrix = this.getregiondata(row_size, col_size, "pu_a");
+
+                    // write to text
+                    for (var i = 0; i < row_size; i++) {
+                        for (var j = 0; j < col_size; j++) {
+                            text += matrix[i][j];
+                        }
+                        text += '\n';
                     }
                 }
 

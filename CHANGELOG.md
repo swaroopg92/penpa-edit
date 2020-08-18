@@ -1,6 +1,6 @@
 ## History
 * 2020/08/23 ver2.19.6
-	* Added nanro, starbattle, lits to GMPuzzles output list
+	* Added nanro, starbattle, lits, araf to GMPuzzles output list
 	* Single digit in Candidate mode is now treated as Normal
 	* Fixed the resize Bug
 	* Improved response messages for erase selection method
