@@ -191,17 +191,18 @@ Depending on the browser you can update the page without using the cache with "C
 		* minesweeper (Use 1 to represent mine in the Solution)
 		* doubleminesweeper (Use 1 and 2 to represent mines in the Solution)
 	* Shading Puzzles
-		* kurotto (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
-		* kuromasu (Use Number + White circle mode)
+		* kurotto (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
+		* kuromasu (Use Number + White circle style)
 		* tapa (Number + Tapa mode)
 		* nurikabe
+		* nanro
 	* Region Division Puzzles
 		* fillomino
 		* pentominous
 		* cave
-		* snakepit (Use Number + White circle mode [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
+		* snakepit (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 	* Loop/ Path Puzzles
-		* balanceloop (Use Number + White circle mode / Black circle mode [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
+		* balanceloop (Use Number + White circle style / Black circle style [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
 		* masyu (Use Shape + Shape/Circle Mode [Panel: ON])
 		* tapalikeloop
 		* slitherlink
