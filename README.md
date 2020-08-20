@@ -99,7 +99,8 @@ Depending on the browser you can update the page without using the cache with "C
 ### Tab
 * This is tab selector button.
 * User can now select which modes/sub-modes they wan't to rotate when pressing TAB key.
-	* There is search option available. Search is case-insensitive.
+	* There is search option available.
+	* Search is case-insensitive.
 * Default selection is "Surface" + "Number Normal".
 
 ### Move
@@ -160,8 +161,11 @@ Depending on the browser you can update the page without using the cache with "C
 
 * URL for solving with Solution
 1. Complete creating puzzle in Edit mode "Problem".
-2. Select Edit mode "Solution" and complete the solution.
+2. Select Edit mode "Solution" and complete the solution. (Check part of Step 3 before doing this step)
 3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new small window will appear.
+	i. Please note that the solution will check only for a certain elements with a certain color and style.
+	ii. The small window that appeared will show you all the possibilities.
+	iii. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
 4. Click on "Generate URL with answer check"
 5. Click anywhere on the screen outside the small window to close it.
 

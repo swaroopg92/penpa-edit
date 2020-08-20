@@ -3343,7 +3343,11 @@ class Puzzle {
                 if (this[this.mode.qa].numberS[this.cursolS]) {
                     this.record("numberS", this.cursolS);
                     number = this[this.mode.qa].numberS[this.cursolS][0].slice(0, -1);
-                    this[this.mode.qa].numberS[this.cursolS][0] = number;
+                    if (number) {
+                        this[this.mode.qa].numberS[this.cursolS][0] = number;
+                    } else {
+                        delete this[this.mode.qa].numberS[this.cursolS];
+                    }
                 }
             } else {
                 if (this[this.mode.qa].number[this.cursol]) {
@@ -3359,8 +3363,12 @@ class Puzzle {
                         } else {
                             number = number.slice(0, -1);
                         }
+                        if (number) {
+                            this[this.mode.qa].number[this.cursol][0] = number;
+                        } else {
+                            delete this[this.mode.qa].number[this.cursol];
+                        }
                     }
-                    this[this.mode.qa].number[this.cursol][0] = number;
                 }
             }
         }
