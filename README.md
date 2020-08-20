@@ -190,6 +190,8 @@ Depending on the browser you can update the page without using the cache with "C
 		* arrowsudoku
 		* evenoddsudoku
 		* consecutivepairssudoku (cps)
+	* Number Placement
+		* tomtom (Use +, -, x, /) [Number mode + 1/4 sub-mode]
 	* Object Placement
 		* Statue Park (Use Shape + Shape/Circle Mode [Panel: ON])
 		* minesweeper (Use 1 to represent mine in the Solution)

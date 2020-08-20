@@ -2928,6 +2928,98 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "tomtom") {
+                text += 'Author:\n' +
+                    'Genre: TomTom\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+
+                text += col_size + '\n';
+
+                // Regions
+                if (!isEmpty(this.pu_q.lineE)) {
+                    var matrix = this.getregiondata(row_size, col_size, "pu_q");
+
+                    // write to text
+                    for (var i = 0; i < row_size; i++) {
+                        for (var j = 0; j < col_size; j++) {
+                            text += matrix[i][j];
+                        }
+                        text += '\n';
+                    }
+                }
+
+                // TomTom clues
+                for (var j = 2; j < this.ny0 - 2; j++) {
+                    for (var i = 2; i < this.nx0 - 2; i++) {
+                        var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                        if (this[this.mode.qa].numberS[corner_cursor]) {
+                            // If there is clue in the corner
+                            var tomtom_clue = this[this.mode.qa].numberS[corner_cursor][0];
+                            if (tomtom_clue.includes("+")) {
+                                tomtom_clue = tomtom_clue.replace("+", "\\053");
+                                text += tomtom_clue;
+                            } else if (tomtom_clue.includes("-")) {
+                                tomtom_clue = tomtom_clue.replace("-", "\\055");
+                                text += tomtom_clue;
+                            } else if (tomtom_clue.includes("x")) {
+                                tomtom_clue = tomtom_clue.replace("x", "\\327");
+                                text += tomtom_clue;
+                            } else if (tomtom_clue.includes("/")) {
+                                tomtom_clue = tomtom_clue.replace("/", "\\367");
+                                text += tomtom_clue;
+                            } else {
+                                text += tomtom_clue;
+                            }
+                        } else {
+                            text += ".";
+                        }
+                        if (i < this.nx0 - 3) {
+                            text += " ";
+                        }
+                    }
+                    text += "\n";
+                }
+
+                // Range
+                text += "{1-" + col_size + "}" + '\n';
+
+                // Solution digits
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // unicode entries
+                text += "#\\053 = plus" + "\n" + "#\\055 = minus" + "\n" + "#\\327 = times" + "\n" + "#\\367 = divide" + "\n";
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
