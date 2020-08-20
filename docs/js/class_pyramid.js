@@ -769,6 +769,27 @@ class Puzzle_pyramid extends Puzzle {
             }
             this.ctx.stroke();
         }
+        for (var i in this[pu].freelineE) {
+            set_line_style(this.ctx, this[pu].freelineE[i]);
+            var i1 = i.split(",")[0];
+            var i2 = i.split(",")[1];
+            this.ctx.beginPath();
+            if (this[pu].freelineE[i] === 30) {
+                var r = 0.15 * this.size;
+                var dx = this.point[i1].x - this.point[i2].x;
+                var dy = this.point[i1].y - this.point[i2].y;
+                var d = Math.sqrt(dx ** 2 + dy ** 2);
+                this.ctx.moveTo(this.point[i1].x - r / d * dy, this.point[i1].y + r / d * dx);
+                this.ctx.lineTo(this.point[i2].x - r / d * dy, this.point[i2].y + r / d * dx);
+                this.ctx.stroke();
+                this.ctx.moveTo(this.point[i1].x + r / d * dy, this.point[i1].y - r / d * dx);
+                this.ctx.lineTo(this.point[i2].x + r / d * dy, this.point[i2].y - r / d * dx);
+            } else {
+                this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
+                this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
+            }
+            this.ctx.stroke();
+        }
     }
 
     draw_wall(pu) {

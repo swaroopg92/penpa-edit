@@ -210,7 +210,7 @@ class Puzzle {
                     this[this.mode.qa].line = {};
                     this[this.mode.qa].freeline = {};
                 } else {
-                    for (i in this[this.mode.qa].line) {
+                    for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] === 98) {
                             delete this[this.mode.qa].line[i];
                         }
@@ -219,7 +219,7 @@ class Puzzle {
                 break;
             case "lineE":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
-                    for (i in this[this.mode.qa].lineE) {
+                    for (var i in this[this.mode.qa].lineE) {
                         if (this[this.mode.qa].lineE[i] === 98) {
                             delete this[this.mode.qa].lineE[i];
                         }
@@ -632,7 +632,7 @@ class Puzzle {
                     this[this.mode.qa].line = {};
                     this[this.mode.qa].freeline = {};
                 } else {
-                    for (i in this[this.mode.qa].line) {
+                    for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] === 98) {
                             delete this[this.mode.qa].line[i];
                         }
@@ -641,7 +641,7 @@ class Puzzle {
                 break;
             case "lineE":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
-                    for (i in this[this.mode.qa].lineE) {
+                    for (var i in this[this.mode.qa].lineE) {
                         if (this[this.mode.qa].lineE[i] === 98) {
                             delete this[this.mode.qa].lineE[i];
                         }
@@ -3492,9 +3492,9 @@ class Puzzle {
                 break;
             case "lineE":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-                    this.mouse_linefree(x, y, num);
+                    this.mouse_lineEfree(x, y, num);
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
-                    this.mouse_lineX(x, y, num);
+                    this.mouse_lineEX(x, y, num);
                 } else {
                     this.mouse_lineE(x, y, num);
                 }
@@ -3779,6 +3779,61 @@ class Puzzle {
             }
             this.redraw();
         }
+    }
+
+    mouse_lineEfree(x, y, num) {
+        if (this.mouse_mode === "down_left") {
+            this.drawing = true;
+            this.drawing_mode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+            this.last = num;
+            this.freelinecircle_g[0] = num;
+            this.redraw();
+        } else if (this.mouse_mode === "move") {
+            if (this.drawing && this.last != num) {
+                this.freelinecircle_g[1] = num;
+                this.redraw();
+            }
+        } else if (this.mouse_mode === "up") {
+            this.re_lineEup_free(num);
+            this.drawing = false;
+            this.freelinecircle_g = [-1, -1];
+            this.last = -1;
+            this.redraw();
+        } else if (this.mouse_mode === "out") {
+            this.drawing = false;
+            this.freelinecircle_g = [-1, -1];
+            this.last = -1;
+            this.redraw();
+        }
+    }
+
+    re_lineEup_free(num) {
+        if (num != this.last && this.last != -1) {
+            var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+            this.record("freelineE", key);
+            if (this[this.mode.qa].freelineE[key]) {
+                delete this[this.mode.qa].freelineE[key];
+            } else {
+                this[this.mode.qa].freelineE[key] = this.drawing_mode;
+            }
+        }
+    }
+
+    mouse_lineEX(x, y, num) {
+        if (this.mouse_mode === "down_left") {
+            this.re_lineEX(num);
+        }
+    }
+
+    re_lineEX(num) {
+        if (this[this.mode.qa].lineE[num] && this[this.mode.qa].lineE[num] === 98) { //×印
+            this.record("lineE", num);
+            delete this[this.mode.qa].lineE[num];
+        } else {
+            this.record("lineE", num);
+            this[this.mode.qa].lineE[num] = 98;
+        }
+        this.redraw();
     }
 
     //////////////////////////
