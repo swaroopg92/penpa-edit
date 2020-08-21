@@ -116,7 +116,7 @@ Depending on the browser you can update the page without using the cache with "C
 4. Line/x line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
 5. Line/OX 〇× (Country road) on line and square
 6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
-7. Yajirin: Black square/dot and line
+7. Yajirin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot
 8. Hashi: draw the line again to make a double line
 9. Edge/Auxiliary line: An auxiliary line that represents the connection between the edge and the square
 10. Battleship: Click twice to change the shape according to the condition of the surrounding ships.

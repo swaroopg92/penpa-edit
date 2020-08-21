@@ -2,10 +2,12 @@
 * 2020/08/23 ver2.19.6
 	* Added nanro, starbattle, lits, araf, tomtom to GMPuzzles output list
 	* Single digit in Candidate mode is now treated as Normal
-	* Fixed the resize Bug
+	* Fixed the resize bug
 	* Improved response messages for erase selection method
 	* Added Red/Blue colors to Edge/Line/Wall modes
 	* Fixed the backspace bug (it won't work in candidate mode)
+	* Fixed the helper(x) bug
+	* Improved yajirin (yajilin) composite mode
 * 2020/08/15 ver2.19.5
 	* Added TAB feature, User can now select their own choice of modes/submodes to rotate when pressing TAB
 	* Visibility button if someone doesn't want to see solution on Problem
