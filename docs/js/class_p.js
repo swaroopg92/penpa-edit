@@ -4323,6 +4323,9 @@ class Puzzle {
                 case "tents":
                     this.re_combi_cross_downright(num);
                     break;
+                case "yajilin":
+                    this.re_combi_yajilin_downright(num);
+                    break;
             }
         } else if (this.mouse_mode === "move") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
@@ -4395,7 +4398,11 @@ class Puzzle {
                     this.re_combi_edgexoi_up(num);
                     break;
                 case "yajilin":
-                    this.re_combi_yajilin_up(num);
+                    if (ondown_key === "mousedown") {
+                        this.re_combi_yajilin_up_reduced(num); // moved the dot to right click
+                    } else {
+                        this.re_combi_yajilin_up(num); // on ipad/mobile behave as usual
+                    }
                     break;
                 case "tents":
                     this.re_combi_tents_up(num);
@@ -4690,6 +4697,48 @@ class Puzzle {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
                 this.record("surface", num);
                 this[this.mode.qa].surface[num] = 1;
+            } else if (this[this.mode.qa].surface[num] === 1) {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
+    re_combi_yajilin_up_reduced(num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 1;
+            } else if (this[this.mode.qa].surface[num] === 1) {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 1;
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
+    re_combi_yajilin_downright(num) {
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
             } else if (this[this.mode.qa].surface[num] === 1) {
                 this.record("surface", num);
                 delete this[this.mode.qa].surface[num];
