@@ -272,19 +272,24 @@ onload = function() {
 
     let count_undo = 0;
     let count_redo = 0;
-    let timer;
+    let timer, new_timer;
     var undo_button = document.getElementById("tb_undo")
     var redo_button = document.getElementById("tb_redo")
     undo_button.addEventListener(ondown_key, e => {
         e.preventDefault();
         undo_button.classList.add('active');
         count_redo = 0;
-        timer = setInterval(() => {
+        new_timer = setInterval(() => {
             count_undo++;
-            if (count_undo > 20) {
+            if (count_undo > 5) {
                 pu.undo();
             }
-        }, 20);
+        }, 80);
+        if (new_timer !== timer) {
+            clearInterval(timer);
+            count = 0;
+        }
+        timer = new_timer;
     }, { passive: false });
 
     undo_button.addEventListener(onup_key, e => {
@@ -307,12 +312,17 @@ onload = function() {
         e.preventDefault();
         redo_button.classList.add('active');
         count_undo = 0;
-        timer = setInterval(() => {
+        new_timer = setInterval(() => {
             count_redo++;
-            if (count_redo > 20) {
+            if (count_redo > 5) {
                 pu.redo();
             }
-        }, 20);
+        }, 80);
+        if (new_timer !== timer) {
+            clearInterval(timer);
+            count = 0;
+        }
+        timer = new_timer;
     }, { passive: false });
 
     redo_button.addEventListener(onup_key, e => {
