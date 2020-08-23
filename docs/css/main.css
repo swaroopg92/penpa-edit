@@ -310,6 +310,33 @@ hr.newgridhrline {
     font-size: 12px;
 }
 
+#st_surface9_lb {
+    /* pink */
+    background-color: #ff66ff;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface10_lb {
+    /* orange */
+    background-color: #ffcc80;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface11_lb {
+    /* Purple */
+    background-color: #cc99ff;
+    color: #000;
+    font-size: 12px;
+}
+
+#st_surface12_lb {
+    /* Brown */
+    background-color: #eecab1;
+    color: #000;
+    font-size: 12px;
+}
 
 #st_line3_lb,
 #st_lineE3_lb,

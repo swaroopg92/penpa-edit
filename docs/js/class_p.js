@@ -705,7 +705,7 @@ class Puzzle {
         var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
         var ba = window.btoa(char8);
         var url = location.href.split('?')[0];
-        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
         return url + "?m=edit&p=" + ba;
     }
 

@@ -36,6 +36,18 @@ function set_surface_style(ctx, type) {
         case 8:
             ctx.fillStyle = "#999"; // between light and dark grey
             break;
+        case 9:
+            ctx.fillStyle = "#ffb3ff"; // light pink
+            break;
+        case 10:
+            ctx.fillStyle = "#ffcc80"; // light orange
+            break;
+        case 11:
+            ctx.fillStyle = "#cc99ff"; // light violet
+            break;
+        case 12:
+            ctx.fillStyle = "#eecab1"; // light brown
+            break;
         case 99:
             ctx.fillStyle = "#f0f0f0"; // very light grey
             break;
