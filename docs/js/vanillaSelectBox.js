@@ -58,7 +58,7 @@ function vanillaSelectBox(domSelector, options) {
     this.searchZone = null;
     this.inputBox = null;
     this.disabledItems = [];
-    this.ulminWidth = 120;
+    this.ulminWidth = 160;
     this.ulminHeight = 25;
     this.userOptions = {
         maxWidth: 500,
