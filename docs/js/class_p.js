@@ -3442,7 +3442,7 @@ class Puzzle {
                     }
                 }
             } else {
-                if (this[this.mode.qa].number[this.cursol]) {
+                if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != 7) {
                     this.record("number", this.cursol);
                     number = this[this.mode.qa].number[this.cursol][0];
                     if (number) {
@@ -3455,7 +3455,7 @@ class Puzzle {
                         } else {
                             number = number.slice(0, -1);
                         }
-                        if (number) {
+                        if (number || this[this.mode.qa].number[this.cursol][1] === 6 || this[this.mode.qa].number[this.cursol][1] === 7) {
                             this[this.mode.qa].number[this.cursol][0] = number;
                         } else {
                             delete this[this.mode.qa].number[this.cursol];
