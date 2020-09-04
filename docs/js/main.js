@@ -297,10 +297,10 @@ onload = function() {
         if (e.button != 2) {
             timer = setInterval(() => {
                 count_undo++;
-                if (count_undo > 20) {
+                if (count_undo > 5) {
                     pu.undo();
                 }
-            }, 20);
+            }, 80);
         }
     }
 
@@ -327,10 +327,10 @@ onload = function() {
         if (e.button != 2) {
             timer = setInterval(() => {
                 count_redo++;
-                if (count_redo > 20) {
+                if (count_redo > 5) {
                     pu.redo();
                 }
-            }, 20);
+            }, 80);
         }
     }
 

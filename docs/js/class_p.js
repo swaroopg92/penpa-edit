@@ -709,7 +709,6 @@ class Puzzle {
                 break;
             case "symbol":
                 this[this.mode.qa].symbol = {};
-                //this[this.mode.qa].symbol2 = {};
                 break;
             case "cage":
                 this[this.mode.qa].cage = {};
