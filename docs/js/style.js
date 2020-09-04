@@ -157,8 +157,8 @@ function set_line_style(ctx, type) {
             ctx.lineWidth = (pu.size * 0.1) | 0;
             break;
         case 14: //gray dash
-            var b = pu.size * 0.08;
-            var w = pu.size * 0.17;
+            var b = pu.size * 0.11;
+            var w = pu.size * 0.14;
             ctx.setLineDash([b, w]);
             ctx.lineDashOffset = b * 0.5;
             ctx.strokeStyle = "#777";

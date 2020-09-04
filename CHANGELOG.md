@@ -1,9 +1,11 @@
 ## History
-* 2020/09/03 ver2.22.1
+* 2020/09/03 ver2.23.1
 	* Improved rotation functions
 	* Increased the "long" sub-mode (under "Number" mode) limit to 50
-	* fixed some bugs
-	* increased hex and iso size limit to 20
+	* Fixed some bugs
+	* Increased hex and iso size limit to 20
+	* Ipad Support added
+	* Updated the changes from upupstream branch
 * 2020/08/23 ver2.19.6
 	* Added nanro, starbattle, lits, araf, tomtom to GMPuzzles output list
 	* Single digit in Candidate mode is now treated as Normal
@@ -70,4 +72,4 @@
 
 ## Disclaimer
 
-Secondary distribution of code is prohibited. Images created using this software can be used freely. We are not responsible for any damages caused by using this software.
+Secondary distribution of code is prohibited. Images created using this software can be used freely with due credit to Penpa. We are not responsible for any damages caused by using this software.

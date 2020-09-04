@@ -444,25 +444,21 @@ function savetext_edit() {
 
 function savetext_solve() {
     var text = pu.maketext_solve();
-    //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
     document.getElementById("savetextarea").value = text;
 }
 
 function savetext_withsolution() {
     var text = pu.maketext_solve_solution();
-    //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
     document.getElementById("savetextarea").value = text;
 }
 
 function make_ppfile() {
     var text = pu.maketext_ppfile();
-    //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
     document.getElementById("savetextarea").value = text;
 }
 
 function make_gmpfile() {
     var text = pu.maketext_gmpfile();
-    //text = text.split("?")[0]+"?m=solve&"+text.split("?")[1];
     document.getElementById("savetextarea").value = text;
 }
 
@@ -698,7 +694,7 @@ function load(urlParam) {
 }
 
 function loadver1(paramArray, rtext) {
-    //初期設定を読み込み
+    // Load initial settings
     var rtext_para = rtext[0].split(',');
 
     document.getElementById("gridtype").value = "square";
@@ -719,7 +715,6 @@ function loadver1(paramArray, rtext) {
 
     pu.canvasx = (parseInt(rtext_para[1]) + 1) * parseInt(rtext_para[3]);
     pu.canvasy = (parseInt(rtext_para[2]) + 1) * parseInt(rtext_para[3]);
-    //pu.center_n = parseInt(rtext_para[9]);
     pu.search_center();
     pu.center_n0 = pu.center;
 
@@ -772,14 +767,14 @@ function loadver1(paramArray, rtext) {
     document.getElementById(rtext_para[9]).checked = true;
     pu.mode.grid[2] = rtext_para[9].slice(-1);
 
-    //描画
+    // Drawing
     pu.create_point();
     pu.point_move((pu.canvasx * 0.5 - pu.point[pu.center_n].x + 0.5), (pu.canvasy * 0.5 - pu.point[pu.center_n].y + 0.5), pu.theta);
     pu.canvas_size_setting();
     pu.cursol = pu.centerlist[0];
 
     pu.centerlist = pre_centerlist;
-    pu.make_frameline(); //盤面描画
+    pu.make_frameline(); // Board drawing
     panel_pu.draw_panel();
     pu.mode_qa(pu.mode.qa); //include redraw
     pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
@@ -1134,11 +1129,9 @@ function set_solvemode() {
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
     document.getElementById("pu_q_label").style.display = "none";
-    //document.getElementById("savetext").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
     document.getElementById("mo_cage_lb").style.display = "none";
-    //document.getElementById("mo_move_lb").style.display = "none";
     document.getElementById("mo_special_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
     document.getElementById("sub_lineE5_lb").style.display = "none";
@@ -1396,7 +1389,8 @@ function isEmptycontent(pu_qa, array, num, value) {
                     D, A, H = new(C ? Uint8Array : Array)(19);
                 for (r = G = 0; r < wa; r++) F[G++] = W[r];
                 for (r = 0; r < xa; r++) F[G++] = X[r];
-                if (!C) { r = 0; for (Y = H.length; r < Y; ++r) H[r] = 0 } r = D = 0;
+                if (!C) { r = 0; for (Y = H.length; r < Y; ++r) H[r] = 0 }
+                r = D = 0;
                 for (Y = F.length; r < Y; r += G) {
                     for (G = 1; r + G < Y && F[r + G] === F[r]; ++G);
                     s = G;
@@ -1439,7 +1433,8 @@ function isEmptycontent(pu_qa, array, num, value) {
                                 throw "invalid code: " + Q;
                         }
                         B.a(e[y], fa, u)
-                    } var ya = [sa, W],
+                    }
+                var ya = [sa, W],
                     za = [ta, X],
                     I, Aa, Z, la, Ba, Ca, Da, Ea;
                 Ba = ya[0];
@@ -1666,7 +1661,8 @@ function isEmptycontent(pu_qa, array, num, value) {
             w = new(C ? Uint32Array : Array)(30),
             da = e.f,
             z;
-        if (!C) { for (b = 0; 285 >= b;) t[b++] = 0; for (b = 0; 29 >= b;) w[b++] = 0 } t[256] = 1;
+        if (!C) { for (b = 0; 285 >= b;) t[b++] = 0; for (b = 0; 29 >= b;) w[b++] = 0 }
+        t[256] = 1;
         f = 0;
         for (a = d.length; f < a; ++f) {
             b =
@@ -1921,7 +1917,8 @@ function isEmptycontent(pu_qa, array, num, value) {
                 case 2:
                     for (var m = B(this, 5) + 257, p = B(this, 5) + 1, s = B(this, 4) + 4, x = new(t ? Uint8Array : Array)(C.length), Q = k, R = k, S = k, v = k, M = k, F = k, z = k, q = k, T = k, q = 0; q < s; ++q) x[C[q]] =
                         B(this, 3);
-                    if (!t) { q = s; for (s = x.length; q < s; ++q) x[C[q]] = 0 } Q = u(x);
+                    if (!t) { q = s; for (s = x.length; q < s; ++q) x[C[q]] = 0 }
+                    Q = u(x);
                     v = new(t ? Uint8Array : Array)(m + p);
                     q = 0;
                     for (T = m + p; q < T;) switch (M = D(this, Q), M) {
@@ -2010,7 +2007,8 @@ function isEmptycontent(pu_qa, array, num, value) {
                 0 < O[f] && (h += B(this, O[f]));
                 b >= e && (this.a = b, a = this.e(), b = this.a);
                 for (; l--;) a[b] = a[b++ - h]
-            } for (; 8 <= this.c;) this.c -= 8, this.d--;
+            }
+        for (; 8 <= this.c;) this.c -= 8, this.d--;
         this.a = b
     };
     w.prototype.s = function(c, d) {
@@ -2028,7 +2026,8 @@ function isEmptycontent(pu_qa, array, num, value) {
                 0 < O[f] && (h += B(this, O[f]));
                 b + l > e && (a = this.e(), e = a.length);
                 for (; l--;) a[b] = a[b++ - h]
-            } for (; 8 <= this.c;) this.c -= 8, this.d--;
+            }
+        for (; 8 <= this.c;) this.c -= 8, this.d--;
         this.a = b
     };
     w.prototype.e = function() {
@@ -2036,7 +2035,8 @@ function isEmptycontent(pu_qa, array, num, value) {
             d = this.a - 32768,
             a, b, e = this.b;
         if (t) c.set(e.subarray(32768, c.length));
-        else { a = 0; for (b = c.length; a < b; ++a) c[a] = e[a + 32768] } this.g.push(c);
+        else { a = 0; for (b = c.length; a < b; ++a) c[a] = e[a + 32768] }
+        this.g.push(c);
         this.k += c.length;
         if (t) e.set(e.subarray(d, d + 32768));
         else
