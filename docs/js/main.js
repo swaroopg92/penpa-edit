@@ -285,7 +285,7 @@ onload = function() {
 
     let count_undo = 0;
     let count_redo = 0;
-    let timer;
+    let timer, new_timer;
     var undo_button = document.getElementById("tb_undo");
     var redo_button = document.getElementById("tb_redo");
 
@@ -312,14 +312,17 @@ onload = function() {
         e.preventDefault();
         undo_button.classList.add('active');
         count_redo = 0;
-        if (e.button != 2) {
-            timer = setInterval(() => {
-                count_undo++;
-                if (count_undo > 5) {
-                    pu.undo();
-                }
-            }, 80);
+        new_timer = setInterval(() => {
+            count_undo++;
+            if (count_undo > 5) {
+                pu.undo();
+            }
+        }, 80);
+        if (new_timer !== timer) {
+            clearInterval(timer);
+            count = 0;
         }
+        timer = new_timer;
     }
 
     function undoUp(e) {
@@ -342,14 +345,17 @@ onload = function() {
         e.preventDefault();
         redo_button.classList.add('active');
         count_undo = 0;
-        if (e.button != 2) {
-            timer = setInterval(() => {
-                count_redo++;
-                if (count_redo > 5) {
-                    pu.redo();
-                }
-            }, 80);
+        new_timer = setInterval(() => {
+            count_redo++;
+            if (count_redo > 5) {
+                pu.redo();
+            }
+        }, 80);
+        if (new_timer !== timer) {
+            clearInterval(timer);
+            count = 0;
         }
+        timer = new_timer;
     }
 
     function redoUp(e) {
