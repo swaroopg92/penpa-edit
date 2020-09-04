@@ -6,32 +6,16 @@ onload = function() {
         eve.returnValue = "Move page.";
     }, { passive: false });
 
-    var ua = navigator.userAgent;
-    if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
-        ondown_key = "touchstart";
-        onup_key = "touchend";
-        onmove_key = "touchmove";
-        onleave_key = "touchmove";
-    } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0) {
-        ondown_key = "touchstart";
-        onup_key = "touchend";
-        onmove_key = "touchmove";
-        onleave_key = "touchmove";
-    } else {
-        ondown_key = "mousedown";
-        onup_key = "mouseup";
-        onmove_key = "mousemove";
-        onleave_key = "mouseleave";
-    }
-
-    var checkms = 0; //hover event用一時変数
+    var checkms = 0; // Temporary variable for hover event
 
     //canvas
-    canvas.addEventListener(onup_key, onUp, { passive: false });
-    canvas.addEventListener(onmove_key, onMove, { passive: false });
-    canvas.addEventListener('mouseout', onOut, { passive: false });
-    canvas.addEventListener('contextmenu', onContextmenu, { passive: false });
-    document.addEventListener('keydown', onKeyDown, { passive: false });
+    canvas.addEventListener("mouseup", onUp, { passive: false });
+    canvas.addEventListener("touchend", onUp, { passive: false });
+    canvas.addEventListener("mousemove", onMove, { passive: false });
+    canvas.addEventListener("touchmove", onMove, { passive: false });
+    canvas.addEventListener("mouseout", onOut, { passive: false });
+    canvas.addEventListener("contextmenu", onContextmenu, { passive: false });
+    document.addEventListener("keydown", onKeyDown, { passive: false });
 
     function onDown(e) {
         if (e.type === "mousedown") {
@@ -40,7 +24,10 @@ onload = function() {
             var event = e.changedTouches[0];
             // e.preventDefault();
         }
-        var { x, y, num } = coord_point(event);
+        var obj = coord_point(event);
+        var x = obj.x,
+            y = obj.y,
+            num = obj.num;
         if (pu.point[num].use === 1) {
             if (event.button === 2) { // right click
                 pu.mouse_mode = "down_right";
@@ -48,7 +35,6 @@ onload = function() {
             } else { // Left click or tap
                 pu.mouse_mode = "down_left";
                 pu.mouseevent(x, y, num);
-                //pu.drawonDown(num);
             }
         }
     }
@@ -58,9 +44,11 @@ onload = function() {
             var event = e;
         } else {
             var event = e.changedTouches[0];
-            //e.preventDefault();
         }
-        var { x, y, num } = coord_point(event);
+        var obj = coord_point(event);
+        var x = obj.x,
+            y = obj.y,
+            num = obj.num;
         pu.mouse_mode = "up";
         pu.mouseevent(x, y, num);
     }
@@ -72,7 +60,10 @@ onload = function() {
             var event = e.changedTouches[0];
         }
         e.preventDefault();
-        var { x, y, num } = coord_point(event);
+        var obj = coord_point(event);
+        var x = obj.x,
+            y = obj.y,
+            num = obj.num;
         if (pu.point[num].use === 1) {
             pu.mouse_mode = "move";
             pu.mouseevent(x, y, num);
@@ -266,83 +257,102 @@ onload = function() {
         }
         //const endTime = performance.now();
         //console.log(endTime - startTime);
-        num = parseInt(num)
-        return { x, y, num };
+        num = parseInt(num);
+        var obj = new Object();
+        obj.x = x;
+        obj.y = y;
+        obj.num = num;
+        return obj;
     }
 
     let count_undo = 0;
     let count_redo = 0;
-    let timer, new_timer;
-    var undo_button = document.getElementById("tb_undo")
-    var redo_button = document.getElementById("tb_redo")
-    undo_button.addEventListener(ondown_key, e => {
+    let timer;
+    var undo_button = document.getElementById("tb_undo");
+    var redo_button = document.getElementById("tb_redo");
+
+    undo_button.addEventListener("mousedown", undoDown, { passive: false });
+    undo_button.addEventListener("touchstart", undoDown, { passive: false });
+    undo_button.addEventListener("mouseup", undoUp, { passive: false });
+    undo_button.addEventListener("touchend", undoUp, { passive: false });
+    undo_button.addEventListener("mouseleave", undoLeave, { passive: false });
+    undo_button.addEventListener("touchend", undoLeave, { passive: false });
+    undo_button.addEventListener("contextmenu", offcontext, { passive: false });
+    redo_button.addEventListener("mousedown", redoDown, { passive: false });
+    redo_button.addEventListener("touchstart", redoDown, { passive: false });
+    redo_button.addEventListener("mouseup", redoUp, { passive: false });
+    redo_button.addEventListener("touchend", redoUp, { passive: false });
+    redo_button.addEventListener("mouseleave", redoLeave, { passive: false });
+    redo_button.addEventListener("touchend", redoLeave, { passive: false });
+    redo_button.addEventListener("contextmenu", offcontext, { passive: false });
+
+    function offcontext(e) {
+        e.preventDefault();
+    }
+
+    function undoDown(e) {
         e.preventDefault();
         undo_button.classList.add('active');
         count_redo = 0;
-        new_timer = setInterval(() => {
-            count_undo++;
-            if (count_undo > 5) {
-                pu.undo();
-            }
-        }, 80);
-        if (new_timer !== timer) {
-            clearInterval(timer);
-            count = 0;
+        if (e.button != 2) {
+            timer = setInterval(() => {
+                count_undo++;
+                if (count_undo > 20) {
+                    pu.undo();
+                }
+            }, 20);
         }
-        timer = new_timer;
-    }, { passive: false });
+    }
 
-    undo_button.addEventListener(onup_key, e => {
+    function undoUp(e) {
         e.preventDefault();
+        undo_button.classList.remove('active');
         if (count_undo) {
-            undo_button.classList.remove('active');
             clearInterval(timer);
             count_undo = 0;
         }
-    }, { passive: false });
+    }
 
-    undo_button.addEventListener(onleave_key, e => {
+    function undoLeave(e) {
         e.preventDefault();
         undo_button.classList.remove('active');
         clearInterval(timer);
         count_undo = 0;
-    });
+    }
 
-    redo_button.addEventListener(ondown_key, e => {
+    function redoDown(e) {
         e.preventDefault();
         redo_button.classList.add('active');
         count_undo = 0;
-        new_timer = setInterval(() => {
-            count_redo++;
-            if (count_redo > 5) {
-                pu.redo();
-            }
-        }, 80);
-        if (new_timer !== timer) {
-            clearInterval(timer);
-            count = 0;
+        if (e.button != 2) {
+            timer = setInterval(() => {
+                count_redo++;
+                if (count_redo > 20) {
+                    pu.redo();
+                }
+            }, 20);
         }
-        timer = new_timer;
-    }, { passive: false });
+    }
 
-    redo_button.addEventListener(onup_key, e => {
+    function redoUp(e) {
         e.preventDefault();
         if (count_redo) {
             redo_button.classList.remove('active');
             clearInterval(timer);
             count_redo = 0;
         }
-    }, { passive: false });
+    }
 
-    redo_button.addEventListener(onleave_key, e => {
+    function redoLeave(e) {
         e.preventDefault();
         redo_button.classList.remove('active');
         clearInterval(timer);
         count_redo = 0;
-    });
+    }
 
-    // Click Event
-    document.addEventListener(ondown_key, window_click, { passive: false });
+    // Click event
+    document.addEventListener("mousedown", window_click, { passive: false });
+    document.addEventListener("touchstart", window_click, { passive: false });
 
     function window_click(e) {
         //modalwindow
@@ -706,7 +716,8 @@ onload = function() {
         x_window = event.pageX - elements.offsetLeft;
         y_window = event.pageY - elements.offsetTop;
         var drag = document.getElementsByClassName("drag")[0];
-        document.body.addEventListener(onmove_key, mmove, { passive: false });
+        document.body.addEventListener("mousemove", mmove, { passive: false });
+        document.body.addEventListener("touchmove", mmove, { passive: false });
     }
 
     function mmove(e) {
@@ -725,7 +736,8 @@ onload = function() {
         body.style.top = event.pageY - y_window + "px";
         body.style.left = event.pageX - x_window + "px";
 
-        drag.addEventListener(onup_key, mup, { passive: false });
+        drag.addEventListener("mouseup", mup, { passive: false });
+        drag.addEventListener("touchend", mup, { passive: false });
         document.body.addEventListener("mouseleave", mup, { passive: false });
         document.body.addEventListener("touchleave", mup, { passive: false });
 
@@ -734,8 +746,10 @@ onload = function() {
     function mup(e) {
         var drag = document.getElementsByClassName("drag")[0];
         if (drag) {
-            document.body.removeEventListener(onmove_key, mmove, { passive: false });
-            drag.removeEventListener(onup_key, mup, { passive: false });
+            document.body.removeEventListener("mousemove", mmove, { passive: false });
+            document.body.removeEventListener("touchmove", mmove, { passive: false });
+            drag.removeEventListener("mouseup", mup, { passive: false });
+            drag.removeEventListener("touchend", mup, { passive: false });
 
             drag.classList.remove("drag");
         }

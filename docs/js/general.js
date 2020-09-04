@@ -71,10 +71,10 @@ function make_class(gridtype) {
         case "hex":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
-            if (n0 <= 10 && n0 > 0 && space1 < n0) {
+            if (n0 <= 20 && n0 > 0 && space1 < n0) {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10");
+                alert("Sides must be in the range 1-20");
             }
             break;
         case "tri":
@@ -97,10 +97,10 @@ function make_class(gridtype) {
             break;
         case "iso":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 15 && n0 > 0) {
+            if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-15");
+                alert("Sides must be in the range 1-20");
             }
             break;
         case "truncated_square":
