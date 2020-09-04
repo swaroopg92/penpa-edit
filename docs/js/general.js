@@ -590,6 +590,8 @@ function load(urlParam) {
 
     pu.canvasx = parseInt(rtext_para[7]);
     pu.canvasy = parseInt(rtext_para[8]);
+    pu.width_c = pu.canvasx / rtext_para[3];
+    pu.height_c = pu.canvasy / rtext_para[3]; // When updating newgrid, use width_c with canvasxyupdate, so record it.
     pu.center_n = parseInt(rtext_para[9]);
     pu.center_n0 = parseInt(rtext_para[10]);
 

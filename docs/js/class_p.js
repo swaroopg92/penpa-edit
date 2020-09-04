@@ -252,7 +252,7 @@ class Puzzle {
                 this[this.mode.qa][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
                 break;
         }
-        redraw();
+        this.redraw();
     }
 
     reset_frame_newgrid() {
@@ -3390,7 +3390,7 @@ class Puzzle {
                     } else {
                         con = "";
                     }
-                    if (con.length < 30) {
+                    if (con.length < 50) {
                         this.record("number", this.cursol);
                         number = con + key;
                         this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
