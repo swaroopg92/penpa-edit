@@ -343,6 +343,35 @@ class Puzzle {
         this.center_n = parseInt(num);
     }
 
+    search_center_pixel() {
+        var obj = this.gridspace_calculate();
+        var yu = obj.yu,
+            yd = obj.yd,
+            xl = obj.xl,
+            xr = obj.xr;
+        var x = (xl + xr) / 2;
+        var y = (yu + yd) / 2;
+        this.width = (xr - xl) / this.size + 1;
+        this.height = (yd - yu) / this.size + 1;
+
+        var min0, min = 10e6;
+        var num = 0;
+        for (var i in this.point) {
+            min0 = (x - this.point[i].x) ** 2 + (y - this.point[i].y) ** 2;
+            if (min0 < min) {
+                min = min0;
+                num = i;
+            }
+        }
+        this.center_n = parseInt(num);
+
+        var out = 1;
+        if (yu <= 0 || yd >= this.canvasy || xl <= 0 || xr >= this.canvasx) {
+            out = 0;
+        }
+        return out;
+    }
+
     rotate_UD() {
         this.point_reflect_UD();
         this.reflect[1] *= -1;
@@ -372,21 +401,27 @@ class Puzzle {
     }
 
     rotate_center() {
-        this.search_center();
+        var out = this.search_center_pixel(); // Calculate center coordinates from pixel data
         this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), 0);
         this.point_usecheck();
         this.redraw();
     }
 
     rotate_size() {
-        this.search_center();
-        this.width_c = this.width;
-        this.height_c = this.height;
-        this.canvasxy_update();
-        this.canvas_size_setting();
-        this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), 0);
-        this.point_usecheck();
-        this.redraw();
+        var out = 0;
+        var i = 0;
+        while (out === 0 && i < 10) { // If the image sticks out, try again 5 times
+            out = this.search_center_pixel();
+            this.width_c = this.width;
+            this.height_c = this.height;
+            this.canvasxy_update();
+            this.canvas_size_setting();
+            this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), 0);
+            this.point_usecheck();
+            this.redraw();
+            i++;
+        }
+
     }
 
     rotate_reset() {
@@ -434,9 +469,13 @@ class Puzzle {
         var cx = this.canvasx;
         var cy = this.canvasy;
 
-        this.mode[this.mode.qa].edit_mode = "surface"; //選択枠削除用
+        this.mode[this.mode.qa].edit_mode = "surface"; // For deleting selection frame
         if (document.getElementById("nb_margin2").checked) {
-            var { yu, yd, xl, xr } = this.gridspace_calculate();
+            var obj = this.gridspace_calculate();
+            var yu = obj.yu,
+                yd = obj.yd,
+                xl = obj.xl,
+                xr = obj.xr;
             this.canvasx = xr - xl;
             this.canvasy = yd - yu;
             this.point_move(-xl, -yu, 0);
@@ -520,7 +559,12 @@ class Puzzle {
             }
         }
 
-        return { yu, yd, xl, xr };
+        var obj = new Object();
+        obj.yu = yu;
+        obj.yd = yd;
+        obj.xl = xl;
+        obj.xr = xr;
+        return obj;
     }
 
     mode_set(mode) {
