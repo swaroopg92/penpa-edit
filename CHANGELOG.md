@@ -1,11 +1,11 @@
 ## History
 * 2020/09/03 ver2.23.1
+	* Ipad Support added
 	* Improved rotation functions
 	* Increased the "long" sub-mode (under "Number" mode) limit to 50
-	* Fixed some bugs
 	* Increased hex and iso size limit to 20
-	* Ipad Support added
 	* Updated the changes from upupstream branch
+	* Some bug fixes
 * 2020/08/23 ver2.19.6
 	* Added nanro, starbattle, lits, araf, tomtom to GMPuzzles output list
 	* Single digit in Candidate mode is now treated as Normal

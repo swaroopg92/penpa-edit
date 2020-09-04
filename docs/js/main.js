@@ -6,6 +6,24 @@ onload = function() {
         eve.returnValue = "Move page.";
     }, { passive: false });
 
+    var ua = navigator.userAgent;
+    if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
+        ondown_key = "touchstart";
+        onup_key = "touchend";
+        onmove_key = "touchmove";
+        onleave_key = "touchmove";
+    } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0) {
+        ondown_key = "touchstart";
+        onup_key = "touchend";
+        onmove_key = "touchmove";
+        onleave_key = "touchmove";
+    } else {
+        ondown_key = "mousedown";
+        onup_key = "mouseup";
+        onmove_key = "mousemove";
+        onleave_key = "mouseleave";
+    }
+
     var checkms = 0; // Temporary variable for hover event
 
     //canvas
