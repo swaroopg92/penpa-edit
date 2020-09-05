@@ -7,9 +7,12 @@ onload = function() {
     }, { passive: false });
 
     var ua = navigator.userAgent;
+    let is_iPad = (!(ua.toLowerCase().match("iphone")) && ua.maxTouchPoints > 1);
+    let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
+    let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
-    } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0) {
+    } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0 || is_iPad || is_iPad2 || is_iPad3) {
         ondown_key = "touchstart";
     } else {
         ondown_key = "mousedown";
