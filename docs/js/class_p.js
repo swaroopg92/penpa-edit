@@ -3063,6 +3063,84 @@ class Puzzle {
                 // unicode entries
                 text += "#\\053 = plus" + "\n" + "#\\055 = minus" + "\n" + "#\\327 = times" + "\n" + "#\\367 = divide" + "\n";
 
+            } else if (header === "skyscrapers") {
+                text += 'Author:\n' +
+                    'Genre: Skyscrapers\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+
+                text += (parseInt(col_size) - 2) + '\n';
+
+                // Skyscraper and given clues
+                var matrix = [];
+
+                // initialize
+                for (var i = 0; i < row_size; i++) {
+                    matrix[i] = new Array(parseInt(col_size)).fill('-');
+                }
+
+                // Replace first/last row/column with dots
+                for (var i = 0; i < row_size; i++) {
+                    matrix[i][0] = '.';
+                    matrix[i][col_size - 1] = '.';
+                }
+
+                for (var i = 0; i < col_size; i++) {
+                    matrix[0][i] = '.';
+                    matrix[row_size - 1][i] = '.';
+                }
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var i in this.pu_q.number) {
+                        var pointA_x = (i % (this.nx0)) - 2;
+                        var pointA_y = parseInt(i / this.nx0) - 2;
+                        matrix[pointA_y][pointA_x] = this.pu_q.number[i][0];
+                    }
+                }
+
+                // Write given clues
+                for (var i = 0; i < row_size; i++) {
+                    for (var j = 0; j < col_size; j++) {
+                        text += matrix[i][j];
+                        if (j < col_size - 1) {
+                            text += " ";
+                        }
+                    }
+                    text += "\n";
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var i in this.pu_a.number) {
+                        var pointA_x = (i % (this.nx0)) - 2;
+                        var pointA_y = parseInt(i / this.nx0) - 2;
+                        matrix[pointA_y][pointA_x] = this.pu_a.number[i][0];
+                    }
+                }
+
+                // Write solution
+                for (var i = 1; i < row_size - 1; i++) {
+                    for (var j = 1; j < col_size - 1; j++) {
+                        text += matrix[i][j];
+                        if (j < col_size - 2) {
+                            text += " ";
+                        }
+                    }
+                    text += "\n";
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
