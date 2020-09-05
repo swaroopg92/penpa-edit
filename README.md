@@ -192,6 +192,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* consecutivepairssudoku (cps)
 	* Number Placement
 		* tomtom (Use +, -, x, /) [Number mode + 1/4 sub-mode]
+		* skyscrapers (ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings)
 	* Object Placement
 		* Statue Park (Use Shape + Shape/Circle Mode [Panel: ON])
 		* minesweeper (Use 1 to represent mine in the Solution)
@@ -210,6 +211,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* cave
 		* snakepit (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 		* araf (Use Number + White circle style, green edge in solution mode for regions)
+		* spiralgalaxies (sg) [(Panel: ON) use 2nd or 8th or 9th position circles for Black, White and Grey circle respectively in the Shape -> Shape -> Circle (Border: ON for placing circles on edges and corners), green edge in solution mode for regions]
 	* Loop/ Path Puzzles
 		* balanceloop (Use Number + White circle style / Black circle style [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
 		* masyu (Use Shape + Shape/Circle Mode [Panel: ON])

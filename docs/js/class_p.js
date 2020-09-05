@@ -3141,6 +3141,126 @@ class Puzzle {
                     text += "\n";
                 }
 
+            } else if (header === "spiralgalaxies" || header === "sg") {
+                text += 'Author:\n' +
+                    'Genre: Spiral Galaxies\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + '\n';
+
+                // Given clues
+                var matrix = [];
+                var new_row_size = (2 * parseInt(row_size) - 1);
+                var new_col_size = (2 * parseInt(col_size) - 1);
+
+                // initialize
+                for (var i = 0; i < new_row_size; i++) {
+                    matrix[i] = new Array(parseInt(new_col_size)).fill('.');
+                }
+
+                // convert odd columns to |
+                for (var i = 0; i < new_row_size; i++) {
+                    for (var j = 0; j < new_col_size; j++) {
+                        if (i % 2 == 0) {
+                            if (j % 2 != 0) {
+                                matrix[i][j] = '|';
+                            }
+                        } else {
+                            if (j % 2 == 0) {
+                                matrix[i][j] = '-';
+                            } else {
+                                matrix[i][j] = '+';
+                            }
+                        }
+                    }
+                }
+
+                // read the circles
+                if (!isEmpty(this.pu_q.symbol)) {
+                    var pointA_x, pointA_y, greycircle;
+                    for (greycircle in this.pu_q.symbol) {
+                        var factor = Math.floor(greycircle / (this.nx0 * this.ny0));
+                        pointA_x = ((greycircle - (factor * this.nx0 * this.ny0)) % (this.nx0)) - 1; // column
+                        pointA_y = parseInt((greycircle - (factor * this.nx0 * this.ny0)) / (this.nx0)) - 1; // row
+                        if (factor === 0) {
+                            if (this.pu_q.symbol[greycircle][0] === 2) {
+                                matrix[(2 * (pointA_y - 1))][(2 * (pointA_x - 1))] = 'B';
+                            } else if (this.pu_q.symbol[greycircle][0] === 8) {
+                                matrix[(2 * (pointA_y - 1))][(2 * (pointA_x - 1))] = 'W';
+                            } else if (this.pu_q.symbol[greycircle][0] === 9) {
+                                matrix[(2 * (pointA_y - 1))][(2 * (pointA_x - 1))] = 'G';
+                            } else {
+                                text = "You are using wrong symbols for galaxies, please check README.md file";
+                                return text;
+                            }
+                        } else if (factor === 1) {
+                            if (this.pu_q.symbol[greycircle][0] === 2) {
+                                matrix[(2 * pointA_y) - 1][(2 * pointA_x) - 1] = 'B';
+                            } else if (this.pu_q.symbol[greycircle][0] === 8) {
+                                matrix[(2 * pointA_y) - 1][(2 * pointA_x) - 1] = 'W';
+                            } else if (this.pu_q.symbol[greycircle][0] === 9) {
+                                matrix[(2 * pointA_y) - 1][(2 * pointA_x) - 1] = 'G';
+                            } else {
+                                text = "You are using wrong symbols for galaxies, please check README.md file";
+                                return text;
+                            }
+                        } else if (factor === 2) {
+                            if (this.pu_q.symbol[greycircle][0] === 2) {
+                                matrix[(2 * pointA_y) - 1][(2 * (pointA_x - 1))] = 'B';
+                            } else if (this.pu_q.symbol[greycircle][0] === 8) {
+                                matrix[(2 * pointA_y) - 1][(2 * (pointA_x - 1))] = 'W';
+                            } else if (this.pu_q.symbol[greycircle][0] === 9) {
+                                matrix[(2 * pointA_y) - 1][(2 * (pointA_x - 1))] = 'G';
+                            } else {
+                                text = "You are using wrong symbols for galaxies, please check README.md file";
+                                return text;
+                            }
+                        } else if (factor === 3) {
+                            if (this.pu_q.symbol[greycircle][0] === 2) {
+                                matrix[(2 * (pointA_y - 1))][(2 * pointA_x) - 1] = 'B';
+                            } else if (this.pu_q.symbol[greycircle][0] === 8) {
+                                matrix[(2 * (pointA_y - 1))][(2 * pointA_x) - 1] = 'W';
+                            } else if (this.pu_q.symbol[greycircle][0] === 9) {
+                                matrix[(2 * (pointA_y - 1))][(2 * pointA_x) - 1] = 'G';
+                            } else {
+                                text = "You are using wrong symbols for galaxies, please check README.md file";
+                                return text;
+                            }
+                        }
+                    }
+                }
+
+                // Write given clues
+                for (var i = 0; i < new_row_size; i++) {
+                    for (var j = 0; j < new_col_size; j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
+                }
+
+                // Regions
+                if (!isEmpty(this.pu_a.lineE)) {
+                    var matrix = this.getregiondata(row_size, col_size, "pu_a");
+
+                    // write to text
+                    for (var i = 0; i < row_size; i++) {
+                        for (var j = 0; j < col_size; j++) {
+                            text += matrix[i][j];
+                        }
+                        text += '\n';
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);

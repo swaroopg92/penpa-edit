@@ -1,9 +1,10 @@
 ## History
-* 2020/09/03 ver2.23.1
+* 2020/09/04 ver2.23.1
 	* Ipad Support added
-	* Improved rotation functions
+	* Spiral Galaxies, Skyscrapers support added to GMPuzzles output list
 	* Increased the "long" sub-mode (under "Number" mode) limit to 50
 	* Increased hex and iso size limit to 20
+	* Improved rotation functions
 	* Updated the changes from upupstream branch
 	* Some bug fixes
 * 2020/08/23 ver2.19.6
