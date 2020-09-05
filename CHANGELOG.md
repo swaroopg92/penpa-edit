@@ -4,6 +4,7 @@
 	* Spiral Galaxies, Skyscrapers support added to GMPuzzles output list
 	* Increased the "long" sub-mode (under "Number" mode) limit to 50
 	* Increased hex and iso size limit to 20
+	* Four colors (Pink, Orange, Purple, Brown) added to Surface mode
 	* Improved rotation functions
 	* Updated the changes from upupstream branch
 	* Some bug fixes
