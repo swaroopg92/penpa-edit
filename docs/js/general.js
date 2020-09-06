@@ -1124,7 +1124,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
 function set_solvemode() {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
-    document.getElementById("title").innerHTML = "Answer mode"
+    document.getElementById("title").innerHTML = "Solver mode"
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;

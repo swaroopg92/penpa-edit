@@ -25,7 +25,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
-* F3: Answer mode
+* F3: Solution mode
 * TAB: checkout the TAB section below in "Current functions"
 
 ## Tips

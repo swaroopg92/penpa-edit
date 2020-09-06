@@ -1,5 +1,5 @@
 ## History
-* 2020/09/04 ver2.23.1
+* 2020/09/11 ver2.23.2
 	* Added Red color to Number mode
 	* Fixed Generate_URL_answer_check bug
 * 2020/09/04 ver2.23.1
@@ -43,7 +43,7 @@
 * 2020/08/02 ver2.19.1
 	* Integrated all the new features from the Upstream Branch Opt-pan (creator)
 	* includes adding new symbols
-	* retails the selection status of the buttons in the answer mode
+	* retains the selection status of the buttons in the Solution mode
 * 2020/07/25 ver2.12.3
 	* Initiated output text file feature with GMPuzzles formatting requirements.
 * 2020/07/16 ver2.12.2
