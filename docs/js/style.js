@@ -280,6 +280,10 @@ function set_font_style(ctx, size, type) {
             ctx.fillStyle = "#0000FF"; // dark blue
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
+        case 10:
+            ctx.fillStyle = "red";
+            ctx.strokeStyle = "rgba(255,255,255,0)";
+            break;
     }
 }
 
