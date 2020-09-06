@@ -3268,7 +3268,7 @@ class Puzzle {
                 console.log(this.pu_a);
                 console.log(this);
             } else {
-                text += 'Error - It doesnt supporqt puzzle type ' + header + '\n' +
+                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
                     'Please see instructions (link in the bottom) for supported puzzle types\n' +
                     'For additional genre support please submit your request to swaroop.guggilam@gmail.com';
             }
