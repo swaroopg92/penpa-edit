@@ -235,7 +235,6 @@ function set_font_style(ctx, size, type) {
     ctx.setLineDash([]);
     var fontfamily = "Helvetica,Arial";
     ctx.font = size + "px " + fontfamily;
-    //var size = 0.8*pu.size.toString(10);
     switch (type) {
         case 0:
             ctx.fillStyle = "rgba(255,255,255,0)";
