@@ -216,6 +216,10 @@ Depending on the browser you can update the page without using the cache with "C
 		* nurikabe
 		* nanro
 		* lits
+		* crossthestreams (cts)
+			* ensure enough white row/column on top and left - e.g. If your puzzle is 10x10 size and has 4 rows of clues above and 3 columns of clues in the left, then set the Rows = 14, Columns = 13, White Space: Over = 4, Under = 0, Left = 3, Right = 0 in the New Grid settings
+			* enter clues using Number mode -> Normal submode (use the multiplication character on digit 8 from the keyboard for star)
+			* use grey shading in solution (Surface mode)
 	* Region Division Puzzles
 		* fillomino
 		* pentominous

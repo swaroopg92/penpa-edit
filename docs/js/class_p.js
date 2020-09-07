@@ -3456,6 +3456,90 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "crossthestreams" || header === "cts") {
+                text += 'Author:\n' +
+                    'Genre: Cross the Streams\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+                var aboveclues;
+                var leftclues;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                aboveclues = document.getElementById("nb_space1").value; // over space
+                leftclues = document.getElementById("nb_space3").value; // left space
+                text += (parseInt(col_size - leftclues)) + ' ' + (parseInt(row_size - aboveclues)) + '\n';
+
+                // Row clues
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2 + parseInt(aboveclues); j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2 - parseInt(col_size - leftclues); i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                                if (i < this.nx0 - 2 - parseInt(col_size - leftclues) - 1) {
+                                    text += ' ';
+                                }
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Col clues
+                var matrix = [];
+
+                // initialize
+                for (var i = 0; i < parseInt(aboveclues); i++) {
+                    matrix[i] = new Array(parseInt(col_size - leftclues)).fill(0);
+                }
+
+                // store the col clues
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2; j < this.ny0 - 2 - parseInt(row_size - aboveclues); j++) {
+                        for (var i = 2 + parseInt(leftclues); i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                matrix[j - 2][i - 2] = this.pu_q.number[i + j * (this.nx0)][0];
+                            }
+                        }
+                    }
+                }
+
+                // Output the col clues
+                for (var i = 2 + parseInt(leftclues); i < this.nx0 - 2; i++) {
+                    for (var j = 2; j < this.ny0 - 2 - parseInt(row_size - aboveclues); j++) {
+                        if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                            if (matrix[j - 2][i - 2] !== 0) {
+                                text += matrix[j - 2][i - 2];
+                                if (j < this.ny0 - 2 - parseInt(row_size - aboveclues) - 1) {
+                                    text += ' ';
+                                }
+                            }
+                        }
+                    }
+                    text += "\n";
+                }
+
+                //Shading Solution
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2 + parseInt(aboveclues); j < this.ny0 - 2; j++) {
+                        for (var i = 2 + parseInt(leftclues); i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "X";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
