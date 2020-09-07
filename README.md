@@ -199,6 +199,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* minesweeper (Use 1 to represent mine in the Solution)
 		* doubleminesweeper (Use 1 and 2 to represent mines in the Solution)
 		* starbattle (specify number of stars after puzzle type [e.g starbattle2 or starbattle3], use grey shading in solution mode for stars, it is assumed rows=columns as per GMPuzzles formatting)
+		* battleships (ensure 1 white row/column on bottom and right - e.g. If your puzzle is 10x10 size, then set the Rows = 11, Columns = 11, White Space: Over = 0, Under = 1, Left = 0, Right = 1 in the New Grid settings) (For numbers: use Normal submode, For Shapes: use Shape Mode -> Specal 1 submode -> Battleship from dropdown list (PANEL: ON)) (Note - Unfortunately there is no good way to ask the fleet from user, this output will come with standard fleet, you need to manually modify the [# of types of ships] and [fleet description] if your puzzle has a different set)
 	* Shading Puzzles
 		* kurotto (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
 		* kuromasu (Use Number + White circle style)

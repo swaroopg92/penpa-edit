@@ -1,11 +1,11 @@
 ## History
 * 2020/09/11 ver2.23.2
-	* Tight fit sudoku support added to the GMPuzles output list
+	* tightfitsudoku and battleships support added to the GMPuzles output list
 	* Added Red color to Number mode
 	* Fixed Generate_URL_answer_check bug
 * 2020/09/04 ver2.23.1
 	* Ipad Support added
-	* Spiral Galaxies, Skyscrapers support added to the GMPuzzles output list
+	* spiralgalaxies, skyscrapers support added to the GMPuzzles output list
 	* Increased the "long" sub-mode (under "Number" mode) limit to 50
 	* Increased hex and iso size limit to 20
 	* Four colors (Pink, Orange, Purple, Brown) added to the Surface mode

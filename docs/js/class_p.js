@@ -3359,6 +3359,103 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "battleships") {
+                text += 'Author:\n' +
+                    'Genre: Battleships\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += (parseInt(col_size) - 1) + ' ' + (parseInt(row_size) - 1) + ' 4' + '\n';
+
+                // Given clues
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] < 8) {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "C";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                    text += "Q";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 3) {
+                                    text += "R";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 4) {
+                                    text += "D";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 5) {
+                                    text += "L";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                    text += "U";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 7) {
+                                    text += "S";
+                                }
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Standard Fleet
+                text += 'C.C.C.C\n' +
+                    'RL.RL.RL\n' +
+                    'RQL.RQL\n' +
+                    'RQQL\n';
+
+                // Solution
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.symbol)) {
+                    for (var j = 2; j < this.ny0 - 3; j++) {
+                        for (var i = 2; i < this.nx0 - 3; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] < 8) {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "C";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                    text += "Q";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 3) {
+                                    text += "R";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 4) {
+                                    text += "D";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 5) {
+                                    text += "L";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                    text += "U";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 7) {
+                                    text += "S";
+                                }
+                            } else if (this.pu_a.symbol[i + j * (this.nx0)] && this.pu_a.symbol[i + j * (this.nx0)][0] < 8) {
+                                if (this.pu_a.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "C";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 2) {
+                                    text += "Q";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 3) {
+                                    text += "R";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 4) {
+                                    text += "D";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 5) {
+                                    text += "L";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 6) {
+                                    text += "U";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 7) {
+                                    text += "S";
+                                }
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
