@@ -185,16 +185,19 @@ Depending on the browser you can update the page without using the cache with "C
 1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
 2. It currently supports (this list is frequently updated):
 	* Sudoku
-		* classicsudoku
-		* thermosudoku
-		* arrowsudoku
-		* evenoddsudoku
+		* classicsudoku (cs)
+		* thermosudoku (ts)
+		* arrowsudoku (as)
+		* evenoddsudoku (eos)
 		* consecutivepairssudoku (cps)
 		* tightfitsudoku (tfs)
 			* (Panel: ON) For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape* For numbers: Use "1/4" submode to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
 	* Number Placement
-		* tomtom (Use +, -, x, /) [Number mode + 1/4 sub-mode]
-		* skyscrapers (ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings)
+		* tomtom (tt)
+			* Use +, -, x, / from keyboard for mathematical operator
+			* For numbers: Number mode -> 1/4 submode
+		* skyscrapers (ss)
+			* Ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings
 		* kakuro
 			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape
 			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
@@ -204,13 +207,16 @@ Depending on the browser you can update the page without using the cache with "C
 			* For 2x2 regions: Use Surface mode and shade the upper-left corner of a 2x2 region with grey color and remaining 3 cells with green color.
 			* Solution: Use Number mode --> Normal submode. Fill in all the white and grey shaded cells with appropriate numbers and ignore the green shaded cells. This is similar to as it's described in the document. They grey shaded cell contains the number that belongs to corresponding 2x2 region.
 	* Object Placement
-		* Statue Park (Use Shape mode -> Shape/Circle submode [Panel: ON])
-		* minesweeper (Use 1 to represent mine in the Solution)
-		* doubleminesweeper (Use 1 and 2 to represent mines in the Solution)
-		* starbattle
+		* Statue Park (sp)
+			* [Panel: ON] Use Shape mode -> Shape/Circle submode
+		* minesweeper (ms)
+			* Use 1 to represent mine in the Solution
+		* doubleminesweeper (dms)
+			* Use 1 and 2 to represent mines in the Solution
+		* starbattle (sb)
 			* specify number of stars after puzzle type [e.g starbattle2 or starbattle3]
 			* use grey shading in solution mode for stars, it is assumed rows=columns as per GMPuzzles formatting
-		* battleships
+		* battleships (bs)
 			* ensure 1 white row/column on bottom and right - e.g. If your puzzle is 10x10 size, then set the Rows = 11, Columns = 11, White Space: Over = 0, Under = 1, Left = 0, Right = 1 in the New Grid settings
 			* For numbers: use Normal submode
 			* (Panel: ON) For Shapes: use Shape Mode -> Specal 1 submode -> Battleship from dropdown list

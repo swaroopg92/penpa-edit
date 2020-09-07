@@ -3,6 +3,7 @@
 	* crossthestreams, tightfitsudoku, battleships, kakuro and doublekakuro support added to the GMPuzles output list
 	* Added Red color to Number mode
 	* Fixed Generate_URL_answer_check bug
+	* Improved readme for GMPuzzles section
 * 2020/09/04 ver2.23.1
 	* Ipad Support added
 	* spiralgalaxies, skyscrapers support added to the GMPuzzles output list

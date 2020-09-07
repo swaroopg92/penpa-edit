@@ -1613,7 +1613,7 @@ class Puzzle {
 
         // Puzzle Choice
         if (header != "") {
-            if (header === "classicsudoku") {
+            if (header === "classicsudoku" || header === "cs") {
                 text += 'Author:\n' +
                     'Genre: Sudoku\n' +
                     'Variation: Standard\n' +
@@ -1750,7 +1750,7 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if (header === "thermosudoku") {
+            } else if (header === "thermosudoku" || header === "ts") {
                 text += 'Author:\n' +
                     'Genre: Thermo-Sudoku\n' +
                     'Variation: Standard\n' +
@@ -1827,7 +1827,7 @@ class Puzzle {
                         text += '\n';
                     }
                 }
-            } else if (header === "arrowsudoku") {
+            } else if (header === "arrowsudoku" || header === "as") {
                 text += 'Author:\n' +
                     'Genre: Arrow Sudoku\n' +
                     'Variation: Standard\n' +
@@ -1904,7 +1904,7 @@ class Puzzle {
                         text += '\n';
                     }
                 }
-            } else if (header === "evenoddsudoku" || header ==="eos") {
+            } else if (header === "evenoddsudoku" || header === "eos") {
                 text += 'Author:\n' +
                     'Genre: Even/Odd Sudoku\n' +
                     'Variation: Standard\n' +
@@ -2576,7 +2576,7 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "statuepark") {
+            } else if (header === "statuepark" || header === "sp") {
                 text += 'Author:\n' +
                     'Genre: Statue Park\n' +
                     'Variation: Standard (Pentomino Set)\n' +
@@ -2628,12 +2628,12 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if (header === "minesweeper" || header === "doubleminesweeper") {
-                if (header === "minesweeper") {
+            } else if (header === "minesweeper" || header === "doubleminesweeper" || header === "ms" || header === "dms") {
+                if (header === "minesweeper" || header === "ms") {
                     text += 'Author:\n' +
                         'Genre: Minesweeper\n' +
                         'Variation: Standard\n';
-                } else if (header === "doubleminesweeper") {
+                } else if (header === "doubleminesweeper" || header === "dms") {
                     text += 'Author:\n' +
                         'Genre: Minesweeper\n' +
                         'Variation: Double\n';
@@ -2860,8 +2860,8 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if ((header.search("starbattle") !== -1) || (header === "lits")) {
-                if (header.search("starbattle") !== -1) {
+            } else if ((header.search("starbattle") !== -1) || (header === "lits") || (header.search("sb") !== -1)) {
+                if (header.search("starbattle") !== -1 || (header.search("sb") !== -1)) {
                     text += 'Author:\n' +
                         'Genre: Star Battle\n' +
                         'Variation: Standard\n';
@@ -2973,7 +2973,7 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "tomtom") {
+            } else if (header === "tomtom" || header === "tt") {
                 text += 'Author:\n' +
                     'Genre: TomTom\n' +
                     'Variation: Standard\n' +
@@ -3065,7 +3065,7 @@ class Puzzle {
                 // unicode entries
                 text += "#\\053 = plus" + "\n" + "#\\055 = minus" + "\n" + "#\\327 = times" + "\n" + "#\\367 = divide" + "\n";
 
-            } else if (header === "skyscrapers") {
+            } else if (header === "skyscrapers" || header === "ss") {
                 text += 'Author:\n' +
                     'Genre: Skyscrapers\n' +
                     'Variation: Standard\n' +
@@ -3359,7 +3359,7 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "battleships") {
+            } else if (header === "battleships" || header === "bs") {
                 text += 'Author:\n' +
                     'Genre: Battleships\n' +
                     'Variation: Standard\n' +
