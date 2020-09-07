@@ -190,6 +190,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* arrowsudoku
 		* evenoddsudoku
 		* consecutivepairssudoku (cps)
+		* tightfitsudoku (tfs) (For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape (PANEL: ON), For numbers: Use "1/4" submode to enter in top left or bottom right corner of the cell, Normal submode for numbers in the cells without split)
 	* Number Placement
 		* tomtom (Use +, -, x, /) [Number mode + 1/4 sub-mode]
 		* skyscrapers (ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings)

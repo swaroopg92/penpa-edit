@@ -1,5 +1,6 @@
 ## History
 * 2020/09/11 ver2.23.2
+	* Tight fit sudoku support added to the GMPuzles output list
 	* Added Red color to Number mode
 	* Fixed Generate_URL_answer_check bug
 * 2020/09/04 ver2.23.1

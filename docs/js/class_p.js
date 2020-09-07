@@ -3263,6 +3263,102 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "tightfitsudoku" || header === "tfs") {
+                text += 'Author:\n' +
+                    'Genre: Tight Fit Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + ' 1' + '\n';
+
+                // Regions
+                if (!isEmpty(this.pu_q.lineE)) {
+                    var matrix = this.getregiondata(row_size, col_size, "pu_q");
+
+                    // write to text
+                    for (var i = 0; i < row_size; i++) {
+                        for (var j = 0; j < col_size; j++) {
+                            text += matrix[i][j];
+                        }
+                        text += '\n';
+                    }
+                }
+
+                // Given Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor]) { // top left corner
+                                    text += this.pu_q.numberS[corner_cursor][0];
+                                } else {
+                                    text += '.';
+                                }
+                                text += '/';
+                                if (this.pu_q.numberS[corner_cursor + 3]) { // bottom right corner
+                                    text += this.pu_q.numberS[corner_cursor + 3][0];
+                                } else {
+                                    text += '.';
+                                }
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.number) || !isEmpty(this.pu_a.numberS)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor]) { // top left corner
+                                    text += this.pu_q.numberS[corner_cursor][0];
+                                } else if (this.pu_a.numberS[corner_cursor]) { // top left corner
+                                    text += this.pu_a.numberS[corner_cursor][0];
+                                } else {
+                                    text += '.';
+                                }
+                                text += '/';
+                                if (this.pu_q.numberS[corner_cursor + 3]) { // bottom right corner
+                                    text += this.pu_q.numberS[corner_cursor + 3][0];
+                                } else if (this.pu_a.numberS[corner_cursor + 3]) { // bottom right corner
+                                    text += this.pu_a.numberS[corner_cursor + 3][0];
+                                } else {
+                                    text += '.';
+                                }
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
