@@ -195,6 +195,9 @@ Depending on the browser you can update the page without using the cache with "C
 	* Number Placement
 		* tomtom (Use +, -, x, /) [Number mode + 1/4 sub-mode]
 		* skyscrapers (ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings)
+		* kakuro
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape
+			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
 	* Object Placement
 		* Statue Park (Use Shape mode -> Shape/Circle submode [Panel: ON])
 		* minesweeper (Use 1 to represent mine in the Solution)

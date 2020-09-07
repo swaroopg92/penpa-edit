@@ -3540,6 +3540,71 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "kakuro") {
+                text += 'Author:\n' +
+                    'Genre: Kakuro\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += (parseInt(col_size) - 1) + ' ' + (parseInt(row_size) - 1) + '\n';
+
+                // Given Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor + 2]) { // bottom left corner
+                                    text += this.pu_q.numberS[corner_cursor + 2][0];
+                                }
+                                text += '\\';
+                                if (this.pu_q.numberS[corner_cursor + 1]) { // top right corner
+                                    text += this.pu_q.numberS[corner_cursor + 1][0];
+                                }
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                text += '\\';
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.number)) {
+                    for (var j = 3; j < this.ny0 - 2; j++) {
+                        for (var i = 3; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                text += '.';
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                text += '.';
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
