@@ -25,7 +25,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
-* F3: Answer mode
+* F3: Solution mode
 * TAB: checkout the TAB section below in "Current functions"
 
 ## Tips
@@ -185,41 +185,84 @@ Depending on the browser you can update the page without using the cache with "C
 1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
 2. It currently supports (this list is frequently updated):
 	* Sudoku
-		* classicsudoku
-		* thermosudoku
-		* arrowsudoku
-		* evenoddsudoku
+		* classicsudoku (cs)
+		* thermosudoku (ts)
+		* arrowsudoku (as)
+		* evenoddsudoku (eos)
 		* consecutivepairssudoku (cps)
+		* tightfitsudoku (tfs)
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape* For numbers: Use "1/4" submode to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
 	* Number Placement
-		* tomtom (Use +, -, x, /) [Number mode + 1/4 sub-mode]
-		* skyscrapers (ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings)
+		* tomtom (tt)
+			* Use +, -, x, / from keyboard for mathematical operator
+			* For numbers: Number mode -> 1/4 submode
+		* skyscrapers (ss)
+			* Ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings
+		* kakuro
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape
+			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
+		* doublekakuro (dk)
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape
+			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
+			* For 2x2 regions: Use Surface mode and shade the upper-left corner of a 2x2 region with grey color and remaining 3 cells with green color.
+			* Solution: Use Number mode --> Normal submode. Fill in all the white and grey shaded cells with appropriate numbers and ignore the green shaded cells. This is similar to as it's described in the document. They grey shaded cell contains the number that belongs to corresponding 2x2 region.
 	* Object Placement
-		* Statue Park (Use Shape + Shape/Circle Mode [Panel: ON])
-		* minesweeper (Use 1 to represent mine in the Solution)
-		* doubleminesweeper (Use 1 and 2 to represent mines in the Solution)
-		* starbattle (specify number of stars after puzzle type [e.g starbattle2 or starbattle3], use grey shading in solution mode for stars, it is assumed rows=columns as per GMPuzzles formatting)
+		* Statue Park (sp)
+			* [Panel: ON] Use Shape mode -> Shape/Circle submode
+		* minesweeper (ms)
+			* Use 1 to represent mine in the Solution
+		* doubleminesweeper (dms)
+			* Use 1 and 2 to represent mines in the Solution
+		* starbattle (sb)
+			* specify number of stars after puzzle type [e.g starbattle2 or starbattle3]
+			* use grey shading in solution mode for stars, it is assumed rows=columns as per GMPuzzles formatting
+		* battleships (bs)
+			* ensure 1 white row/column on bottom and right - e.g. If your puzzle is 10x10 size, then set the Rows = 11, Columns = 11, White Space: Over = 0, Under = 1, Left = 0, Right = 1 in the New Grid settings
+			* For numbers: use Normal submode
+			* (Panel: ON) For Shapes: use Shape Mode -> Specal 1 submode -> Battleship from dropdown list
+			* Unfortunately there is no good way to ask the fleet from user, this output will come with standard fleet, you need to manually modify the [# of types of ships] and [fleet description] if your puzzle has a different set
 	* Shading Puzzles
-		* kurotto (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
-		* kuromasu (Use Number + White circle style)
-		* tapa (Number + Tapa mode)
+		* kurotto
+			* Use Number mode -> White circle Style
+			* for empty circle - just place white circle with any digit and then press backspace to remove the digit
+		* kuromasu (Use Number mode -> White circle Style)
+		* tapa (Number mode -> Tapa submode)
 		* nurikabe
 		* nanro
 		* lits
+		* crossthestreams (cts)
+			* ensure enough white row/column on top and left - e.g. If your puzzle is 10x10 size and has 4 rows of clues above and 3 columns of clues in the left, then set the Rows = 14, Columns = 13, White Space: Over = 4, Under = 0, Left = 3, Right = 0 in the New Grid settings
+			* enter clues using Number mode -> Normal submode (use the multiplication character on digit 8 from the keyboard for star)
+			* use grey shading in solution (Surface mode)
 	* Region Division Puzzles
 		* fillomino
 		* pentominous
 		* cave
-		* snakepit (Use Number + White circle style [for empty circle, just place white circle with any digit and then press backspace to remove the digit])
-		* araf (Use Number + White circle style, green edge in solution mode for regions)
-		* spiralgalaxies (sg) [(Panel: ON) use 2nd or 8th or 9th position circles for Black, White and Grey circle respectively in the Shape -> Shape -> Circle (Border: ON for placing circles on edges and corners), green edge in solution mode for regions]
+		* snakepit
+			* Use Number mode -> White circle Style
+			* for empty circle - just place white circle with any digit and then press backspace to remove the digit
+		* araf (Use Number mode -> White circle Style, green edge in solution mode for regions)
+		* spiralgalaxies (sg)
+			* (Panel: ON) use 2nd or 8th or 9th position circles for Black, White and Grey circle respectively in the Shape -> Shape -> Circle
+			* (Border: ON) for placing circles on edges and corners
+			* green edge in solution mode for regions
 	* Loop/ Path Puzzles
-		* balanceloop (Use Number + White circle style / Black circle style [for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit])
-		* masyu (Use Shape + Shape/Circle Mode [Panel: ON])
+		* balanceloop
+			* Use Number mode -> White circle style / Black circle style
+			* for empty circle, just place white / Black circle with any digit and then press backspace to remove the digit
+		* masyu (Use Shape mode -> Shape/Circle submode [Panel: ON])
 		* tapalikeloop
 		* slitherlink
-		* yajilin (use grey square, Number-Arrow mode for direction and clues)
-		* doubleyajilin (use grey square, Number-Arrow mode for direction and clues)
-		* castlewall (use black and white squares, Number-Arrow mode for direction and clues, white color for arrow and clue on black square)
+		* yajilin
+			* (Panel: ON) For square - Shape mode -> Shape submode -> Square (from dropdown list - XL size will occupy entire cell), use grey square (9th shape in the panel)
+			* For Number and Arrow: use Number mode -> Arrow submode (drag the mouse in the cell for the arrow, type in the number from keyboard or select from panel)
+		* doubleyajilin
+			* (Panel: ON) For square - Shape mode -> Shape submode -> Square (from dropdown list - XL size will occupy entire cell), use grey square (9th shape in the panel)
+			* For Number and Arrow: use Number mode -> Arrow submode (drag the mouse in the cell for the arrow, type in the number from keyboard or select from panel)
+		* castlewall
+			* (Panel: ON) For square - Shape mode -> Shape submode -> Square (from dropdown list - XL size will occupy entire cell), use black and white square respectively (2nd and 8th shape in the panel)
+			* For Number and Arrow: use Number mode -> Arrow submode (drag the mouse in the cell for the arrow, type in the number from keyboard or select from panel)
+			* Use white color style for arrow and clue on black square
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode.
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Green numbering, Green loop, Green edge).

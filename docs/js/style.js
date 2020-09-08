@@ -235,7 +235,6 @@ function set_font_style(ctx, size, type) {
     ctx.setLineDash([]);
     var fontfamily = "Helvetica,Arial";
     ctx.font = size + "px " + fontfamily;
-    //var size = 0.8*pu.size.toString(10);
     switch (type) {
         case 0:
             ctx.fillStyle = "rgba(255,255,255,0)";
@@ -278,6 +277,10 @@ function set_font_style(ctx, size, type) {
             break;
         case 9:
             ctx.fillStyle = "#0000FF"; // dark blue
+            ctx.strokeStyle = "rgba(255,255,255,0)";
+            break;
+        case 10:
+            ctx.fillStyle = "red";
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
     }

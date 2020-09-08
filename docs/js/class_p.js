@@ -850,17 +850,19 @@ class Puzzle {
 
         for (var i in this[pu].number) {
             // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9) && this[pu].number[i][2] === "7") {
-                var sum = 0,
-                    a;
-                for (var j = 0; j < 10; j++) {
-                    if (this[pu].number[i][0][j] === 1) {
-                        sum += 1;
-                        a = j + 1;
+            if (this[pu].number[i][2] === "7") {
+                if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9) {
+                    var sum = 0,
+                        a;
+                    for (var j = 0; j < 10; j++) {
+                        if (this[pu].number[i][0][j] === 1) {
+                            sum += 1;
+                            a = j + 1;
+                        }
                     }
-                }
-                if (sum === 1) {
-                    sol[4].push(i + "," + a);
+                    if (sum === 1) {
+                        sol[4].push(i + "," + a);
+                    }
                 }
             } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
                 // ((Green or light blue or dark blue) and (Normal, M, S, L))
@@ -1611,7 +1613,7 @@ class Puzzle {
 
         // Puzzle Choice
         if (header != "") {
-            if (header === "classicsudoku") {
+            if (header === "classicsudoku" || header === "cs") {
                 text += 'Author:\n' +
                     'Genre: Sudoku\n' +
                     'Variation: Standard\n' +
@@ -1748,7 +1750,7 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if (header === "thermosudoku") {
+            } else if (header === "thermosudoku" || header === "ts") {
                 text += 'Author:\n' +
                     'Genre: Thermo-Sudoku\n' +
                     'Variation: Standard\n' +
@@ -1825,7 +1827,7 @@ class Puzzle {
                         text += '\n';
                     }
                 }
-            } else if (header === "arrowsudoku") {
+            } else if (header === "arrowsudoku" || header === "as") {
                 text += 'Author:\n' +
                     'Genre: Arrow Sudoku\n' +
                     'Variation: Standard\n' +
@@ -1902,7 +1904,7 @@ class Puzzle {
                         text += '\n';
                     }
                 }
-            } else if (header === "evenoddsudoku") {
+            } else if (header === "evenoddsudoku" || header === "eos") {
                 text += 'Author:\n' +
                     'Genre: Even/Odd Sudoku\n' +
                     'Variation: Standard\n' +
@@ -2574,7 +2576,7 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "statuepark") {
+            } else if (header === "statuepark" || header === "sp") {
                 text += 'Author:\n' +
                     'Genre: Statue Park\n' +
                     'Variation: Standard (Pentomino Set)\n' +
@@ -2626,12 +2628,12 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if (header === "minesweeper" || header === "doubleminesweeper") {
-                if (header === "minesweeper") {
+            } else if (header === "minesweeper" || header === "doubleminesweeper" || header === "ms" || header === "dms") {
+                if (header === "minesweeper" || header === "ms") {
                     text += 'Author:\n' +
                         'Genre: Minesweeper\n' +
                         'Variation: Standard\n';
-                } else if (header === "doubleminesweeper") {
+                } else if (header === "doubleminesweeper" || header === "dms") {
                     text += 'Author:\n' +
                         'Genre: Minesweeper\n' +
                         'Variation: Double\n';
@@ -2858,8 +2860,8 @@ class Puzzle {
                         text += "\n";
                     }
                 }
-            } else if ((header.search("starbattle") !== -1) || (header === "lits")) {
-                if (header.search("starbattle") !== -1) {
+            } else if ((header.search("starbattle") !== -1) || (header === "lits") || (header.search("sb") !== -1)) {
+                if (header.search("starbattle") !== -1 || (header.search("sb") !== -1)) {
                     text += 'Author:\n' +
                         'Genre: Star Battle\n' +
                         'Variation: Standard\n';
@@ -2971,7 +2973,7 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "tomtom") {
+            } else if (header === "tomtom" || header === "tt") {
                 text += 'Author:\n' +
                     'Genre: TomTom\n' +
                     'Variation: Standard\n' +
@@ -3063,7 +3065,7 @@ class Puzzle {
                 // unicode entries
                 text += "#\\053 = plus" + "\n" + "#\\055 = minus" + "\n" + "#\\327 = times" + "\n" + "#\\367 = divide" + "\n";
 
-            } else if (header === "skyscrapers") {
+            } else if (header === "skyscrapers" || header === "ss") {
                 text += 'Author:\n' +
                     'Genre: Skyscrapers\n' +
                     'Variation: Standard\n' +
@@ -3261,12 +3263,448 @@ class Puzzle {
                     }
                 }
 
+            } else if (header === "tightfitsudoku" || header === "tfs") {
+                text += 'Author:\n' +
+                    'Genre: Tight Fit Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += col_size + ' ' + row_size + ' 1' + '\n';
+
+                // Regions
+                if (!isEmpty(this.pu_q.lineE)) {
+                    var matrix = this.getregiondata(row_size, col_size, "pu_q");
+
+                    // write to text
+                    for (var i = 0; i < row_size; i++) {
+                        for (var j = 0; j < col_size; j++) {
+                            text += matrix[i][j];
+                        }
+                        text += '\n';
+                    }
+                }
+
+                // Given Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor]) { // top left corner
+                                    text += this.pu_q.numberS[corner_cursor][0];
+                                } else {
+                                    text += '.';
+                                }
+                                text += '/';
+                                if (this.pu_q.numberS[corner_cursor + 3]) { // bottom right corner
+                                    text += this.pu_q.numberS[corner_cursor + 3][0];
+                                } else {
+                                    text += '.';
+                                }
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.number) || !isEmpty(this.pu_a.numberS)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor]) { // top left corner
+                                    text += this.pu_q.numberS[corner_cursor][0];
+                                } else if (this.pu_a.numberS[corner_cursor]) { // top left corner
+                                    text += this.pu_a.numberS[corner_cursor][0];
+                                } else {
+                                    text += '.';
+                                }
+                                text += '/';
+                                if (this.pu_q.numberS[corner_cursor + 3]) { // bottom right corner
+                                    text += this.pu_q.numberS[corner_cursor + 3][0];
+                                } else if (this.pu_a.numberS[corner_cursor + 3]) { // bottom right corner
+                                    text += this.pu_a.numberS[corner_cursor + 3][0];
+                                } else {
+                                    text += '.';
+                                }
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+            } else if (header === "battleships" || header === "bs") {
+                text += 'Author:\n' +
+                    'Genre: Battleships\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += (parseInt(col_size) - 1) + ' ' + (parseInt(row_size) - 1) + ' 4' + '\n';
+
+                // Given clues
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] < 8) {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "C";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                    text += "Q";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 3) {
+                                    text += "R";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 4) {
+                                    text += "D";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 5) {
+                                    text += "L";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                    text += "U";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 7) {
+                                    text += "S";
+                                }
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Standard Fleet
+                text += 'C.C.C.C\n' +
+                    'RL.RL.RL\n' +
+                    'RQL.RQL\n' +
+                    'RQQL\n';
+
+                // Solution
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.symbol)) {
+                    for (var j = 2; j < this.ny0 - 3; j++) {
+                        for (var i = 2; i < this.nx0 - 3; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] < 8) {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "C";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                    text += "Q";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 3) {
+                                    text += "R";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 4) {
+                                    text += "D";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 5) {
+                                    text += "L";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 6) {
+                                    text += "U";
+                                } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 7) {
+                                    text += "S";
+                                }
+                            } else if (this.pu_a.symbol[i + j * (this.nx0)] && this.pu_a.symbol[i + j * (this.nx0)][0] < 8) {
+                                if (this.pu_a.symbol[i + j * (this.nx0)][0] === 1) {
+                                    text += "C";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 2) {
+                                    text += "Q";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 3) {
+                                    text += "R";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 4) {
+                                    text += "D";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 5) {
+                                    text += "L";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 6) {
+                                    text += "U";
+                                } else if (this.pu_a.symbol[i + j * (this.nx0)][0] === 7) {
+                                    text += "S";
+                                }
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+            } else if (header === "crossthestreams" || header === "cts") {
+                text += 'Author:\n' +
+                    'Genre: Cross the Streams\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+                var aboveclues;
+                var leftclues;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                aboveclues = document.getElementById("nb_space1").value; // over space
+                leftclues = document.getElementById("nb_space3").value; // left space
+                text += (parseInt(col_size - leftclues)) + ' ' + (parseInt(row_size - aboveclues)) + '\n';
+
+                // Row clues
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2 + parseInt(aboveclues); j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2 - parseInt(col_size - leftclues); i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                                if (i < this.nx0 - 2 - parseInt(col_size - leftclues) - 1) {
+                                    text += ' ';
+                                }
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Col clues
+                var matrix = [];
+
+                // initialize
+                for (var i = 0; i < parseInt(aboveclues); i++) {
+                    matrix[i] = new Array(parseInt(col_size - leftclues)).fill(0);
+                }
+
+                // store the col clues
+                if (!isEmpty(this.pu_q.number)) {
+                    for (var j = 2; j < this.ny0 - 2 - parseInt(row_size - aboveclues); j++) {
+                        for (var i = 2 + parseInt(leftclues); i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                matrix[j - 2][i - 2] = this.pu_q.number[i + j * (this.nx0)][0];
+                            }
+                        }
+                    }
+                }
+
+                // Output the col clues
+                for (var i = 2 + parseInt(leftclues); i < this.nx0 - 2; i++) {
+                    for (var j = 2; j < this.ny0 - 2 - parseInt(row_size - aboveclues); j++) {
+                        if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                            if (matrix[j - 2][i - 2] !== 0) {
+                                text += matrix[j - 2][i - 2];
+                                if (j < this.ny0 - 2 - parseInt(row_size - aboveclues) - 1) {
+                                    text += ' ';
+                                }
+                            }
+                        }
+                    }
+                    text += "\n";
+                }
+
+                //Shading Solution
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2 + parseInt(aboveclues); j < this.ny0 - 2; j++) {
+                        for (var i = 2 + parseInt(leftclues); i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "X";
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+            } else if (header === "kakuro") {
+                text += 'Author:\n' +
+                    'Genre: Kakuro\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += (parseInt(col_size) - 1) + ' ' + (parseInt(row_size) - 1) + '\n';
+
+                // Given Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor + 2]) { // bottom left corner
+                                    text += this.pu_q.numberS[corner_cursor + 2][0];
+                                }
+                                text += '\\';
+                                if (this.pu_q.numberS[corner_cursor + 1]) { // top right corner
+                                    text += this.pu_q.numberS[corner_cursor + 1][0];
+                                }
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                text += '\\';
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.number)) {
+                    for (var j = 3; j < this.ny0 - 2; j++) {
+                        for (var i = 3; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                text += '.';
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                text += '.';
+                            } else if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+            } else if (header === "doublekakuro" || header === "dk") {
+                text += 'Author:\n' +
+                    'Genre: Kakuro\n' +
+                    'Variation: Double\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                var row_size;
+                var col_size;
+
+                // Grid Size
+                row_size = document.getElementById("nb_size2").value;
+                col_size = document.getElementById("nb_size1").value;
+                text += (parseInt(col_size) - 1) + ' ' + (parseInt(row_size) - 1) + '\n';
+
+                // Given Digits
+                if (!isEmpty(this.pu_q.number) || !isEmpty(this.pu_q.numberS) || !isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_q.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                var corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+                                if (this.pu_q.numberS[corner_cursor + 2]) { // bottom left corner
+                                    text += this.pu_q.numberS[corner_cursor + 2][0];
+                                }
+                                text += '\\';
+                                if (this.pu_q.numberS[corner_cursor + 1]) { // top right corner
+                                    text += this.pu_q.numberS[corner_cursor + 1][0];
+                                }
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                text += '\\';
+                            } else if (this.pu_q.surface[i + j * (this.nx0)] === 1 || this.pu_q.surface[i + j * (this.nx0)] === 8 || this.pu_q.surface[i + j * (this.nx0)] === 3) { //Dark Grey, Grey and Light grey
+                                text += 'x';
+                            } else {
+                                text += '.';
+                            }
+                            if (i < this.nx0 - 3) {
+                                text += '\t';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution Digits
+                if (!isEmpty(this.pu_q.symbol) || !isEmpty(this.pu_a.number) || !isEmpty(this.pu_q.surface)) {
+                    for (var j = 3; j < this.ny0 - 2; j++) {
+                        for (var i = 3; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 1) {
+                                text += '.';
+                            } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
+                                text += '.';
+                            } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7" && (this.pu_q.surface[i + j * (this.nx0)] === 1 ||
+                                    this.pu_q.surface[i + j * (this.nx0)] === 8 || this.pu_q.surface[i + j * (this.nx0)] === 3)) { //Dark Grey, Grey and Light grey
+                                switch (parseInt(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                    case 1:
+                                        text += 'a';
+                                        break;
+                                    case 2:
+                                        text += 'b';
+                                        break;
+                                    case 3:
+                                        text += 'c';
+                                        break;
+                                    case 4:
+                                        text += 'd';
+                                        break;
+                                    case 5:
+                                        text += 'e';
+                                        break;
+                                    case 6:
+                                        text += 'f';
+                                        break;
+                                    case 7:
+                                        text += 'g';
+                                        break;
+                                    case 8:
+                                        text += 'h';
+                                        break;
+                                    case 9:
+                                        text += 'i';
+                                        break;
+                                }
+                            } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7") {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += '.';
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
                 console.log(this);
             } else {
-                text += 'Error - It doesnt supporqt puzzle type ' + header + '\n' +
+                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
                     'Please see instructions (link in the bottom) for supported puzzle types\n' +
                     'For additional genre support please submit your request to swaroop.guggilam@gmail.com';
             }

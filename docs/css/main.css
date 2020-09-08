@@ -224,6 +224,12 @@ hr.newgridhrline {
     color: #FFF;
 }
 
+#st_number10_lb {
+    /* Dark Red */
+    background-color: #F00;
+    color: #FFF;
+}
+
 #st_number6_lb {
     /* White Circle */
     background: url(white_circle.png);

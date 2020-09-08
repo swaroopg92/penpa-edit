@@ -1,7 +1,12 @@
 ## History
+* 2020/09/11 ver2.23.2
+	* crossthestreams, tightfitsudoku, battleships, kakuro and doublekakuro support added to the GMPuzles output list
+	* Added Red color to Number mode
+	* Fixed Generate_URL_answer_check bug
+	* Improved readme for GMPuzzles section
 * 2020/09/04 ver2.23.1
 	* Ipad Support added
-	* Spiral Galaxies, Skyscrapers support added to the GMPuzzles output list
+	* spiralgalaxies, skyscrapers support added to the GMPuzzles output list
 	* Increased the "long" sub-mode (under "Number" mode) limit to 50
 	* Increased hex and iso size limit to 20
 	* Four colors (Pink, Orange, Purple, Brown) added to the Surface mode
@@ -40,7 +45,7 @@
 * 2020/08/02 ver2.19.1
 	* Integrated all the new features from the Upstream Branch Opt-pan (creator)
 	* includes adding new symbols
-	* retails the selection status of the buttons in the answer mode
+	* retains the selection status of the buttons in the Solution mode
 * 2020/07/25 ver2.12.3
 	* Initiated output text file feature with GMPuzzles formatting requirements.
 * 2020/07/16 ver2.12.2
