@@ -1,6 +1,7 @@
 ## History
 * 2020/09/11 ver2.23.2
-	* crossthestreams, tightfitsudoku, battleships, kakuro and doublekakuro support added to the GMPuzles output list
+	* crossthestreams, tightfitsudoku, battleships, kakuro and doublekakuro support added to the GMPuzzles output list
+	* Added keyboard arrow keys movement to "Cube" board type
 	* Added Red color to Number mode
 	* Fixed Generate_URL_answer_check bug
 	* Improved readme for GMPuzzles section
@@ -34,20 +35,20 @@
 	* Cleaned up the code
 	* right click feature implemented in the composite mode
 	* updated readme
-	* some other minor improvements.
+	* some other minor improvements
 * 2020/08/07 ver2.19.3
 	* Added shortcuts
 	* Normal candidates overwrites corner/edge digits
 	* display size upto 80
 * 2020/08/04 ver2.19.2
 	* Improved buttons and Numbers display
-	* Added "TAB" to switch between normal and candidates submode.
+	* Added "TAB" to switch between normal and candidates submode
 * 2020/08/02 ver2.19.1
 	* Integrated all the new features from the Upstream Branch Opt-pan (creator)
 	* includes adding new symbols
 	* retains the selection status of the buttons in the Solution mode
 * 2020/07/25 ver2.12.3
-	* Initiated output text file feature with GMPuzzles formatting requirements.
+	* Initiated output text file feature with GMPuzzles formatting requirements
 * 2020/07/16 ver2.12.2
 	* Stop watch
 	* Shortcut to enter space in the text
@@ -59,18 +60,18 @@
 * 2020/01/05 ver2.12
 	* Adjusted mouse judgment.
 * 2019/12/21 ver2.11
-	* Implemented composite mode.
+	* Implemented composite mode
 * 2019/12/07 ver2.10
 	* Ver.2 which was being developed at another address, is integrated with the old address.
 * 2019/09/07 ver2.00
-	* Deformation board support etc.
+	* Deformation board support etc
 * 2019/08/16 ver1.05
 	* Microsoft Edge compatible
 * 2019/08/04 ver1.04 
 	* changed the specifications of white border
 	* changed the input method of symbols
 * 2019/07/29 ver1.03
-	* Fixed drawing of dotted line etc.
+	* Fixed drawing of dotted line etc
 * 2019/07/18 ver1.02
 	* iPhone compatible
 * 2019/07/14 ver1.01

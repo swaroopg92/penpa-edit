@@ -355,20 +355,6 @@ class Puzzle_hex extends Puzzle {
         }
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
             if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-                /*switch(key_code){
-                  case "ArrowLeft":
-                    if (this.cursolSx > 0){this.cursolSx -= 1;}
-                    break;
-                  case "ArrowUp":
-                    if (this.cursolSy > 0){this.cursolSy -= 1;}
-                    break;
-                  case "ArrowRight":
-                    if (this.cursolSx < 2*this.nx-1){this.cursolSx += 1;}
-                    break;
-                  case "ArrowDown":
-                    if (this.cursolSy < 2*this.ny-1){this.cursolSy += 1;}
-                    break;
-                }*/
             } else {
                 switch (c) {
                     case 0:

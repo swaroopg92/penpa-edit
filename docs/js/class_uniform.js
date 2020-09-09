@@ -396,7 +396,132 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    key_arrow(key_code) {}
+    key_arrow(key_code) {
+        var a, b, c;
+        b = [0, 1, 2, 3];
+        if (this.reflect[0] === -1) {
+            c = b[0];
+            b[0] = b[2];
+            b[2] = c;
+        }
+        if (this.reflect[1] === -1) {
+            c = b[1];
+            b[1] = b[3];
+            b[3] = c;
+        }
+        switch (key_code) {
+            case "ArrowLeft":
+                c = b[0];
+                break;
+            case "ArrowUp":
+                c = b[1];
+                break;
+            case "ArrowRight":
+                c = b[2];
+                break;
+            case "ArrowDown":
+                c = b[3];
+                break;
+        }
+        var quotient = parseInt(this.cursol / 27);
+        if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
+            if (this.cursol % 27 === 0) { // top side
+                switch (c) {
+                    case 0: //left
+                        // if cursor already on the left border
+                        if (quotient % this.nx0 === 0) {
+                            a = this.cursol + 1;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        } else {
+                            a = this.cursol - 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        }
+                        break;
+                    case 1: //up
+                        a = this.cursol + 27 * this.nx0;
+                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                    case 2: //right
+                        a = this.cursol + 27;
+                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                    case 3: //down
+                        // if cursor already on the bottom border
+                        if (quotient < this.nx0) {
+                            a = this.cursol * this.nx0 + 2;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        } else {
+                            a = this.cursol - 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        }
+                        break;
+                }
+            } else if (this.cursol % 27 === 1) { // left side
+                switch (c) {
+                    case 0: //left
+                        a = this.cursol + 27 * this.nx0;
+                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                    case 1: //up
+                        // if cursor already on the up border
+                        if (quotient % this.nx0 === 0) {
+                            a = this.cursol - 1;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        } else {
+                            a = this.cursol - 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        }
+                        break;
+                    case 2: //right
+                        // if cursor already on the right border
+                        if (quotient < this.nx0) {
+                            a = this.cursol + 1;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        } else {
+                            a = this.cursol - 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        }
+                        break;
+                    case 3: //down
+                        a = this.cursol + 27;
+                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                }
+            } else if (this.cursol % 27 === 2) { // right side
+                switch (c) {
+                    case 0: //left
+                        // if cursor already on the left border
+                        if (quotient < this.nx0) {
+                            a = this.cursol - 1;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        } else {
+                            a = this.cursol - 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        }
+                        break;
+                    case 1: //up
+                        // if cursor already on the up border
+                        if (quotient % this.nx0 === 0) {
+                            a = parseInt((this.cursol - 2) / this.nx0);
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        } else {
+                            a = this.cursol - 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        }
+                        break;
+                    case 2: //right
+                        a = this.cursol + 27 * this.nx0;
+                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                    case 3: //down
+                        a = this.cursol + 27;
+                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                }
+            }
+        }
+        this.redraw();
+    }
 
     direction_arrow8(x, y, x0, y0) {
         var angle = Math.atan2(y - y0, x - x0) * 360 / 2 / Math.PI + 180;
