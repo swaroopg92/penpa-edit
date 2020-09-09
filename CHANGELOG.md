@@ -1,7 +1,7 @@
 ## History
 * 2020/09/11 ver2.23.2
 	* crossthestreams, tightfitsudoku, battleships, kakuro and doublekakuro support added to the GMPuzzles output list
-	* Added keyboard arrow keys movement to "Cube" board type
+	* Added keyboard arrow keys movement to "Cube" board type (Top side direction reference is as seen from the right side of the cube)
 	* Added Red color to Number mode
 	* Fixed Generate_URL_answer_check bug
 	* Improved readme for GMPuzzles section
