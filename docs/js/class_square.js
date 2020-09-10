@@ -622,6 +622,19 @@ class Puzzle_square extends Puzzle {
         ctx.stroke();
     }
 
+    draw_rectbar(ctx, x, y, rx, ry, n, th) {
+        ctx.LineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(x - rx * Math.cos(th * (Math.PI / 180)) * this.size, y - ry * Math.sin(th * (Math.PI / 180)) * this.size);
+        for (var i = 0; i < n - 1; i++) {
+            th += 360 / n;
+            ctx.lineTo(x - rx * Math.cos(th * (Math.PI / 180)) * this.size, y - ry * Math.sin(th * (Math.PI / 180)) * this.size);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
+
     draw_squareframe(pu) {
         for (var i = 0; i < this[pu].squareframe.length; i++) {
             if (this[pu].squareframe[i][0]) {
@@ -938,7 +951,7 @@ class Puzzle_square extends Puzzle {
         /*symbol_layer*/
         var p_x, p_y;
         for (var i in this[pu].symbol) {
-            if (i.slice(-1) === "E") { //辺モードでの重ね書き
+            if (i.slice(-1) === "E") { // Overwriting in Edge Mode
                 p_x = this.point[i.slice(0, -1)].x;
                 p_y = this.point[i.slice(0, -1)].y;
             } else {
@@ -955,7 +968,7 @@ class Puzzle_square extends Puzzle {
         /*number*/
         var p_x, p_y;
         for (var i in this[pu].number) {
-            if (i.slice(-1) === "E") { //辺モードでの重ね書き
+            if (i.slice(-1) === "E") { // Overwriting in Edge Mode
                 p_x = this.point[i.slice(0, -1)].x;
                 p_y = this.point[i.slice(0, -1)].y;
             } else {
@@ -1310,7 +1323,30 @@ class Puzzle_square extends Puzzle {
             case "line":
                 this.draw_linesym(ctx, num, x, y);
                 break;
-
+            case "bars_B":
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.fillStyle = "#000";
+                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.lineWidth = 1;
+                this.draw_bars(ctx, num, x, y);
+                break;
+            case "bars_G":
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.fillStyle = "#ccc";
+                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.lineWidth = 1;
+                this.draw_bars(ctx, num, x, y);
+                break;
+            case "bars_W":
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.fillStyle = "#fff";
+                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.lineWidth = 1;
+                this.draw_bars(ctx, num, x, y);
+                break;
                 //number
             case "inequality":
                 set_circle_style(ctx, 10);
@@ -1692,6 +1728,17 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x - r * pu.size, y + r * pu.size);
                 ctx.closePath();
                 ctx.stroke();
+                break;
+        }
+    }
+
+    draw_bars(ctx, num, x, y) {
+        switch (num) {
+            case 1:
+                this.draw_rectbar(ctx, x, y, 0.1, 0.5, 4, 45);
+                break;
+            case 2:
+                this.draw_rectbar(ctx, x, y, 0.5, 0.1, 4, 45);
                 break;
         }
     }
