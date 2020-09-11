@@ -80,12 +80,13 @@ Depending on the browser you can update the page without using the cache with "C
 
 #### Any Unicode Symbol
 * Select "Number" mode.
-* Then select "Long" submode.
-* Panel: ON
+* Then select "Long" or "L" or "M" submode. (Preferrable is Long submode, although it should also work in some other Number submodes (i.e. 1/4, side, arrow, L, M, S)).
+* Panel: ON.
 * Select "Text" tab in the Panel.
-* One can copy unicode symbol (supports most of them although rendering might be different based on browser) from the websites https://unicode-table.com/en/ or https://www.alt-codes.net/ and paste in the textbox available. (You can click on the symbol/shape on those website, it will allow copying)
-* Then click "Insert"
+* One can copy unicode symbol (supports most (not all) of them although rendering might be different based on browser) from the websites https://unicode-table.com/en/ or https://www.alt-codes.net/ and paste in the textbox available. (You can click on the symbol/shape in the website, it will allow copying).
+* Then click "Insert".
 * One can also type in the sentence of words and "Insert".
+* Clear button to clear the text area.
 
 ### symbol
 * Numerous symbols.You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
