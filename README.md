@@ -66,7 +66,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Select the color and thickness of the line by style.
 
 ### Number		  
-* Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. You can use the panel to input symbols, katakana, hiragana, kanji, etc. (Coloring etc.)
+* Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. In addition to symbols, the panel allows you to enter Unicode Strings from the "text" tab.
 * Arrows: Characters with arrows. (Yagirin, CastleWall etc.)
 * Tapa: Characters for Tapa. Up to 4 characters.
 * 1/4: Characters at the four corners. (Kakuro, Hairyrin, Killer Sudoku etc.)

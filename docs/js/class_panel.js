@@ -66,10 +66,36 @@ class Panel {
         }
     }
 
+    inputtext() {
+        var input_text = "";
+        input_text = document.getElementById("inputtext").value;
+        pu.key_space();
+        for (var i = 0; i < input_text.length; i++) {
+            pu.key_number(input_text[i]);
+        }
+    }
+
+    cleartext() {
+        var input_message = document.getElementById("inputtext").value = "";
+    }
+
     draw_panel() {
         this.select_close();
+        document.getElementById("float-key-board").style.display = "inline";
+        document.getElementById("float-key-text").style.display = "none";
         if (pu.mode[pu.mode.qa].edit_mode === "number") {
             switch (this.panelmode) {
+                case "Text":
+                    this.nxf = 4;
+                    this.nyf = 3;
+                    this.sizef = 36;
+                    this.canvas_size_setting(45);
+                    this.fkb.style.paddingTop = "0px";
+                    this.fkb.style.display = "block";
+                    this.fkm.style.display = "flex";
+                    document.getElementById("float-key-text").style.display = "inline";
+                    document.getElementById("float-key-board").style.display = "none";
+                    break;
                 case "number":
                     this.nxf = 4;
                     this.nyf = 3;

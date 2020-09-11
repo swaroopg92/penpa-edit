@@ -21,10 +21,10 @@ onload = function() {
     var checkms = 0; // Temporary variable for hover event
 
     //canvas
-    canvas.addEventListener("mouseup", onUp, { passive: false });
     canvas.addEventListener("touchend", onUp, { passive: false });
-    canvas.addEventListener("mousemove", onMove, { passive: false });
+    canvas.addEventListener("mouseup", onUp, { passive: false });
     canvas.addEventListener("touchmove", onMove, { passive: false });
+    canvas.addEventListener("mousemove", onMove, { passive: false });
     canvas.addEventListener("mouseout", onOut, { passive: false });
     canvas.addEventListener("contextmenu", onContextmenu, { passive: false });
     document.addEventListener("keydown", onKeyDown, { passive: false });
@@ -34,7 +34,7 @@ onload = function() {
             var event = e;
         } else {
             var event = e.changedTouches[0];
-            // e.preventDefault();
+            e.preventDefault(); // When both mouse and touch start, only touch
         }
         var obj = coord_point(event);
         var x = obj.x,
@@ -56,6 +56,7 @@ onload = function() {
             var event = e;
         } else {
             var event = e.changedTouches[0];
+            e.preventDefault(); // When both mouse and touch start, only touch
         }
         var obj = coord_point(event);
         var x = obj.x,
@@ -113,8 +114,8 @@ onload = function() {
     let counter_index = 0;
 
     function onKeyDown(e) {
-        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp") {
-            //入力フォーム用
+        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "inputtext") {
+            // For input form
         } else {
             var key = e.key;
             var shift_key = e.shiftKey;
@@ -283,19 +284,20 @@ onload = function() {
     var undo_button = document.getElementById("tb_undo");
     var redo_button = document.getElementById("tb_redo");
 
-    undo_button.addEventListener("mousedown", undoDown, { passive: false });
     undo_button.addEventListener("touchstart", undoDown, { passive: false });
-    undo_button.addEventListener("mouseup", undoUp, { passive: false });
+    undo_button.addEventListener("mousedown", undoDown, { passive: false });
     undo_button.addEventListener("touchend", undoUp, { passive: false });
-    undo_button.addEventListener("mouseleave", undoLeave, { passive: false });
+    undo_button.addEventListener("mouseup", undoUp, { passive: false });
     undo_button.addEventListener("touchend", undoLeave, { passive: false });
+    undo_button.addEventListener("mouseleave", undoLeave, { passive: false });
     undo_button.addEventListener("contextmenu", offcontext, { passive: false });
-    redo_button.addEventListener("mousedown", redoDown, { passive: false });
+
     redo_button.addEventListener("touchstart", redoDown, { passive: false });
-    redo_button.addEventListener("mouseup", redoUp, { passive: false });
+    redo_button.addEventListener("mousedown", redoDown, { passive: false });
     redo_button.addEventListener("touchend", redoUp, { passive: false });
-    redo_button.addEventListener("mouseleave", redoLeave, { passive: false });
+    redo_button.addEventListener("mouseup", redoUp, { passive: false });
     redo_button.addEventListener("touchend", redoLeave, { passive: false });
+    redo_button.addEventListener("mouseleave", redoLeave, { passive: false });
     redo_button.addEventListener("contextmenu", offcontext, { passive: false });
 
     function offcontext(e) {
@@ -369,8 +371,8 @@ onload = function() {
     }
 
     // Click event
-    document.addEventListener("mousedown", window_click, { passive: false });
     document.addEventListener("touchstart", window_click, { passive: false });
+    document.addEventListener("mousedown", window_click, { passive: false });
 
     function window_click(e) {
         //modalwindow
@@ -381,6 +383,7 @@ onload = function() {
         switch (e.target.id) {
             //canvas
             case "canvas":
+                document.getElementById("inputtext").blur(); // Remove focus from text box
                 onDown(e);
                 if (checkms === 0) {
                     e.preventDefault();
@@ -456,6 +459,11 @@ onload = function() {
                 panel_pu.select_close();
                 e.preventDefault();
                 break;
+            case "panel_Text_lbmenu":
+                panel_pu.mode_set('Text');
+                panel_pu.select_close();
+                e.preventDefault();
+                break;
             case "panel_Kan_lbmenu":
                 panel_pu.mode_set('Kan');
                 panel_pu.select_close();
@@ -493,6 +501,14 @@ onload = function() {
                 break;
             case "panel_select_lbmenu":
                 panel_pu.select_open();
+                e.preventDefault();
+                break;
+            case "closeBtn_input1":
+                panel_pu.inputtext();
+                e.preventDefault();
+                break;
+            case "closeBtn_input2":
+                panel_pu.cleartext();
                 e.preventDefault();
                 break;
             case "float-canvas":
@@ -734,8 +750,8 @@ onload = function() {
         x_window = event.pageX - elements.offsetLeft;
         y_window = event.pageY - elements.offsetTop;
         var drag = document.getElementsByClassName("drag")[0];
-        document.body.addEventListener("mousemove", mmove, { passive: false });
         document.body.addEventListener("touchmove", mmove, { passive: false });
+        document.body.addEventListener("mousemove", mmove, { passive: false });
     }
 
     function mmove(e) {
@@ -754,21 +770,20 @@ onload = function() {
         body.style.top = event.pageY - y_window + "px";
         body.style.left = event.pageX - x_window + "px";
 
-        drag.addEventListener("mouseup", mup, { passive: false });
         drag.addEventListener("touchend", mup, { passive: false });
-        document.body.addEventListener("mouseleave", mup, { passive: false });
+        drag.addEventListener("mouseup", mup, { passive: false });
         document.body.addEventListener("touchleave", mup, { passive: false });
+        document.body.addEventListener("mouseleave", mup, { passive: false });
 
     }
 
     function mup(e) {
         var drag = document.getElementsByClassName("drag")[0];
         if (drag) {
-            document.body.removeEventListener("mousemove", mmove, { passive: false });
             document.body.removeEventListener("touchmove", mmove, { passive: false });
-            drag.removeEventListener("mouseup", mup, { passive: false });
+            document.body.removeEventListener("mousemove", mmove, { passive: false });
             drag.removeEventListener("touchend", mup, { passive: false });
-
+            drag.removeEventListener("mouseup", mup, { passive: false });
             drag.classList.remove("drag");
         }
     }

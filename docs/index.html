@@ -518,7 +518,7 @@
         </div>
         <p style="margin-top: 5px;">Any suggestions or improvements, send an email to <b>swaroop.guggilam@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues">here</a>.</p>
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md">here</a>. Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit">here</a>. Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md">here</a>.</p>
-        <p>Penpa+ Version 2.23.2, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md">Credits</a></p>
+        <p>Penpa+ Version 2.24.1, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -530,13 +530,18 @@
                     <li><span id="panel_1"><label for="panel_1" id="panel_1_lbmenu" class="label_menu"> 1 </label></span></li>
                     <li><span id="panel_A"><label for="panel_A" id="panel_A_lbmenu" class="label_menu">A</label></span></li>
                     <li><span id="panel_a"><label for="panel_a" id="panel_a_lbmenu" class="label_menu">a</label></span></li>
-                    <li><span id="panel_ja_K"><label for="panel_ja_K" id="panel_ja_K_lbmenu" class="label_menu">ア</label></span></li>
-                    <li><span id="panel_ja_H"><label for="panel_ja_H" id="panel_ja_H_lbmenu" class="label_menu">あ</label></span></li>
+                    <li><span id="panel_Text"><label for="panel_Text" id="panel_Text_lbmenu" class="label_menu">Text</label></span></li>
                     <li><span id="panel_select"><label for="panel_select" id="panel_select_lbmenu" class="label_select">▶</label></span></li>
                 </ul>
             </div>
             <div id="float-key-select" style="display:none;">
                 <ul class="panel_menu_select">
+                    <li>
+                        <div id="panel_ja_K"><label for="panel_ja_K" id="panel_ja_K_lbmenu" class="label_menu">ア</label></div>
+                    </li><br>
+                    <li>
+                        <div id="panel_ja_H"><label for="panel_ja_H" id="panel_ja_H_lbmenu" class="label_menu">あ</label></div>
+                    </li><br>
                     <li>
                         <div id="panel_!"><label for="panel_!" id="panel_!_lbmenu" class="label_menu">!</label></div>
                     </li><br>
@@ -544,7 +549,7 @@
                         <div id="panel_Kan"><label for="panel_Kan" id="panel_Kan_lbmenu" class="label_menu">Kanji</label></div>
                     </li><br>
                     <li>
-                        <div id="panel_Rome"><label for="panel_Rome" id="panel_Rome_lbmenu" class="label_menu">XIV</label></div>
+                        <div id="panel_Rome"><label for="panel_Rome" id="panel_Rome_lbmenu" class="label_menu">XVI</label></div>
                     </li><br>
                     <li>
                         <div id="panel_Greek"><label for="panel_Greek" id="panel_Greek_lbmenu" class="label_menu">α</label></div>
@@ -565,6 +570,11 @@
             </div>
             <div id="float-key-board">
                 <canvas id="float-canvas" class="float-canvas"></canvas>
+            </div>
+            <div id="float-key-text">
+                <textarea rows="1" cols="20" maxlength="100" id="inputtext"></textarea>
+                <input type="button" id="closeBtn_input1" value="Insert" />
+                <input type="button" id="closeBtn_input2" value="Clear" />
             </div>
         </div>
     </div>

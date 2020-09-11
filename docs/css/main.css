@@ -820,6 +820,13 @@ textarea {
     max-height: 60px;
 }
 
+#inputtext {
+    min-width: 150px;
+    min-height: 80px;
+    max-width: 150px;
+    max-height: 80px;
+}
+
 #modal-save2 {
     display: none;
     position: fixed;

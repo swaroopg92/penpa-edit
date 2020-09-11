@@ -1,5 +1,12 @@
 ## History
-* 2020/09/11 ver2.23.2
+* 2020/09/09 ver2.24.1
+	* Bars added in the Shape submode
+	* Improved buttons display
+	* Text input option added to Number mode in Panel
+	* Android bug fixes
+	* Corrected notation of symbols
+	* Updated the changes from upupstream branch
+* 2020/09/09 ver2.23.2
 	* crossthestreams, tightfitsudoku, battleships, kakuro and doublekakuro support added to the GMPuzzles output list. This completes all the types mentioned in the GMPuzzles document.
 	* Added keyboard arrow keys movement to "Cube" board type (Top side direction reference is as seen from the right side of the cube) (Note - This will not work properly if the cube is rotated)
 	* Added Red color to Number mode
