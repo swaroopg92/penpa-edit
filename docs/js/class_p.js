@@ -3880,6 +3880,8 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
+        var str_replace = ["+-=*", "＋－＝＊"];
+        if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
         if (this.mode[this.mode.qa].edit_mode === "number") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1":

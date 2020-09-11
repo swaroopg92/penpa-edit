@@ -354,8 +354,7 @@ class Puzzle_hex extends Puzzle {
                 break;
         }
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
-            if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-            } else {
+            if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {} else {
                 switch (c) {
                     case 0:
                         a = this.cursol - 1;
@@ -1728,21 +1727,25 @@ class Puzzle_hex extends Puzzle {
                 ctx.text("\u{221E}", x, y);
                 break;
             case 2:
+                ctx.font = 0.7 * pu.size + "px Helvetica,Arial";
                 ctx.text("＋", x, y);
                 break;
             case 3:
+                ctx.font = 0.7 * pu.size + "px Helvetica,Arial";
                 ctx.text("－", x, y);
                 break;
             case 4:
                 ctx.text("×", x, y);
                 break;
             case 5:
+                ctx.font = 0.7 * pu.size + "px Helvetica,Arial";
                 ctx.text("＊", x, y);
                 break;
             case 6:
                 ctx.text("÷", x, y);
                 break;
             case 7:
+                ctx.font = 0.7 * pu.size + "px Helvetica,Arial";
                 ctx.text("＝", x, y);
                 break;
             case 8:
