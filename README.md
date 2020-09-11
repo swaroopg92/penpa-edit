@@ -66,7 +66,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Select the color and thickness of the line by style.
 
 ### Number		  
-* Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. In addition to symbols, the panel allows you to enter Unicode Strings from the "text" tab.
+* Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. Some other special symbols are allowed through Panel: ON mode. It also allows custom symbols in the "text" tab (checkout next section for more details)
 * Arrows: Characters with arrows. (Yagirin, CastleWall etc.)
 * Tapa: Characters for Tapa. Up to 4 characters.
 * 1/4: Characters at the four corners. (Kakuro, Hairyrin, Killer Sudoku etc.)
@@ -77,6 +77,14 @@ Depending on the browser you can update the page without using the cache with "C
 * White circles and black circles have a circle on the back of the numbers.
 * For the white background, draw a white circle behind the numbers. When you can't see the numbers because they are hidden behind the lines.
 * When the boundary input is turned on, the character is placed on the side/vertex.
+
+#### Any Unicode Symbol
+* Select "Number" mode.
+* Then select "Long" submode.
+* Panel: ON
+* Select "Text" tab in the Panel.
+* One can copy any unicode symbol from the websites https://unicode-table.com/en/ or https://www.alt-codes.net/ and paste in the textbox available. (You can click on the symbol/shape on those website, it will allow copying)
+* Then click "Insert"
 
 ### symbol
 * Numerous symbols.You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
