@@ -1740,6 +1740,12 @@ class Puzzle_square extends Puzzle {
             case 2:
                 this.draw_rectbar(ctx, x, y, 0.5, 0.1, 4, 45);
                 break;
+            case 3:
+                this.draw_rectbar(ctx, x, y, 0.2, 0.5, 4, 45);
+                break;
+            case 4:
+                this.draw_rectbar(ctx, x, y, 0.5, 0.2, 4, 45);
+                break;
         }
     }
 
