@@ -1,6 +1,6 @@
 ## History
 * 2020/09/09 ver2.24.2
-	* Reload button "R": ON/OFF - Ask for confirmation on accidental reload or closing of the page. Default is "ON".
+	* Reload button "R": ON/OFF - Ask for confirmation on accidental reload or closing of the page. Default is "OFF".
 * 2020/09/09 ver2.24.1
 	* Bars added in the Shape submode
 	* Improved buttons display of Shape -> Shape submode

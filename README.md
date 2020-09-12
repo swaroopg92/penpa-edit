@@ -36,7 +36,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Special: Delete by clicking the first square of the entered symbol.
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
 * V: Visibility Button. Users can now choose if they dont want the solution visible in the "Problem" mode. Default is "ON". In "Solution" mode everything will be visible.
-* R: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "ON".
+* R: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
 
 ## Current functions
 

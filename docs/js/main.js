@@ -220,7 +220,7 @@ onload = function() {
                 }
             }
 
-            if (key === "Tab") {
+            if (key === "Tab" || key === "Enter") {
                 let user_choices = getValues('mode_choices');
                 if (previous_length != user_choices.length) {
                     previous_length = user_choices.length;
