@@ -865,5 +865,12 @@ onload = function() {
     selectBox = new vanillaSelectBox("#mode_choices", {
         "maxHeight": 110,
         "search": true
-    }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140,
+    }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
+
+    window.addEventListener('beforeunload', function(e) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+        e.returnValue = '';
+    });
 };

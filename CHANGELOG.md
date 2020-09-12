@@ -1,4 +1,6 @@
 ## History
+* 2020/09/09 ver2.24.2
+	* Ask for user confirmation on accidental reload or leaving of the page
 * 2020/09/09 ver2.24.1
 	* Bars added in the Shape submode
 	* Improved buttons display of Shape -> Shape submode
