@@ -806,7 +806,7 @@ input[type="radio"]:checked+label {
     border-radius: 20px;
 }
 
-textarea {
+#textarea {
     min-width: 200px;
     min-height: 80px;
     max-width: 280px;
@@ -825,6 +825,10 @@ textarea {
     min-height: 80px;
     max-width: 150px;
     max-height: 80px;
+}
+
+#closeBtn_input1, #closeBtn_input2{
+    width: 40px;
 }
 
 #modal-save2 {
