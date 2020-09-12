@@ -339,6 +339,14 @@ function solutionvisible_onoff() {
     pu.redraw();
 }
 
+function reloadcheck_onoff() {
+    if (document.getElementById('reload_button').textContent === "ON") {
+        document.getElementById('reload_button').textContent = "OFF";
+    } else {
+        document.getElementById('reload_button').textContent = "ON";
+    }
+}
+
 function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "LINEE") {
         if (confirm("Erase all EDGE mode elements?")) {

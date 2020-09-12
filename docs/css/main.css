@@ -69,7 +69,7 @@ hr.newgridhrline {
 #buttons {
     font-size: 0;
     border: 1px solid #000;
-    width: 475px;
+    width: 500px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -403,6 +403,7 @@ input[type="radio"]:checked+label {
 #panel_button0,
 #visibility_button0,
 #edge_button0,
+#reload_button0,
 #panel_buttons0,
 #panel_buttonc0 {
     width: auto;
@@ -413,6 +414,7 @@ input[type="radio"]:checked+label {
 
 #panel_button,
 #visibility_button,
+#reload_button,
 #edge_button {
     width: 25px;
     border: 1px solid #ccc;
@@ -423,6 +425,7 @@ input[type="radio"]:checked+label {
 
 #panel_button:hover,
 #visibility_button:hover,
+#reload_button:hover,
 #edge_button:hover {
     background: #ccc;
 }
@@ -827,7 +830,8 @@ input[type="radio"]:checked+label {
     max-height: 80px;
 }
 
-#closeBtn_input1, #closeBtn_input2{
+#closeBtn_input1,
+#closeBtn_input2 {
     width: 40px;
 }
 
@@ -1185,6 +1189,11 @@ input[type=number] {
     margin-left: -15px;
 }
 
+#reload_text.tooltiptext {
+    width: 160px;
+    margin-left: -110px;
+}
+
 #sub_text.tooltiptext {
     width: 230px;
     margin-left: -15px;
@@ -1228,6 +1237,10 @@ input[type=number] {
 
 #border_text.tooltiptext::after {
     left: 75%;
+}
+
+#reload_text.tooltiptext::after {
+    left: 90%;
 }
 
 #sub_text.tooltiptext::after {

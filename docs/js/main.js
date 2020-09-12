@@ -689,6 +689,10 @@ onload = function() {
                 solutionvisible_onoff();
                 e.preventDefault();
                 break;
+            case "reload_button":
+                reloadcheck_onoff();
+                e.preventDefault();
+                break;
             case "pu_q_label":
                 pu.mode_qa("pu_q");
                 e.preventDefault();
@@ -867,10 +871,13 @@ onload = function() {
         "search": true
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
+
     window.addEventListener('beforeunload', function(e) {
-        // Cancel the event
-        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-        // Chrome requires returnValue to be set
-        e.returnValue = '';
+        if (document.getElementById('reload_button').textContent === "ON") {
+            // Cancel the event
+            e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+            // Chrome requires returnValue to be set
+            e.returnValue = '';
+        }
     });
 };
