@@ -202,7 +202,8 @@ Depending on the browser you can update the page without using the cache with "C
 		* evenoddsudoku (eos)
 		* consecutivepairssudoku (cps)
 		* tightfitsudoku (tfs)
-			* (Panel: ON) For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape* For numbers: Use "1/4" submode to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape in the Panel
+			* For numbers: Use "1/4" submode to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
 	* Number Placement
 		* tomtom (tt)
 			* Use +, -, x, / from keyboard for mathematical operator
@@ -210,10 +211,10 @@ Depending on the browser you can update the page without using the cache with "C
 		* skyscrapers (ss)
 			* Ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings
 		* kakuro
-			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape in the Panel
 			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
 		* doublekakuro (dk)
-			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape
+			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape in the Panel
 			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
 			* For 2x2 regions: Use Surface mode and shade the upper-left corner of a 2x2 region with grey color and remaining 3 cells with green color.
 			* Solution: Use Number mode --> Normal submode. Fill in all the white and grey shaded cells with appropriate numbers and ignore the green shaded cells. This is similar to as it's described in the document. They grey shaded cell contains the number that belongs to corresponding 2x2 region.
@@ -291,4 +292,4 @@ Depending on the browser you can update the page without using the cache with "C
 * reset - resets the timer to 00:00.
 
 ## Disclaimer
-Secondary distribution of code is prohibited. Images created using this software can be used freely. We are not responsible for any damages caused by using this software.
+Secondary distribution of code is prohibited. Images created using this software can be used freely with proper due credit. We are not responsible for any damages caused by using this software.
