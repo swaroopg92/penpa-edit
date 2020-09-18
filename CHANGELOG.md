@@ -2,6 +2,7 @@
 * 2020/09/17 ver2.24.2
 	* Reload button "R": ON/OFF - Ask for confirmation on accidental reload or closing of the page. Default is "OFF".
 	* "Enter" will also work like "Tab" key. More comfortable to switch modes as it's closer to the numpad.
+	* href links now open in new tab and preserving the same page
 * 2020/09/12 ver2.24.1
 	* Bars added in the Shape submode
 	* Improved buttons display of Shape -> Shape submode
