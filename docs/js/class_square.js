@@ -1183,6 +1183,9 @@ class Puzzle_square extends Puzzle {
         } else if (this[pu].number[i][1] === 7) {
             set_circle_style(this.ctx, 2);
             this.draw_circle(this.ctx, p_x, p_y, size);
+        } else if (this[pu].number[i][1] === 11) {
+            set_circle_style(this.ctx, 11);
+            this.draw_circle(this.ctx, p_x, p_y, size);
         }
     }
 

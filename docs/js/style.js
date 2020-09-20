@@ -283,6 +283,10 @@ function set_font_style(ctx, size, type) {
             ctx.fillStyle = "red";
             ctx.strokeStyle = "rgba(255,255,255,0)";
             break;
+        case 11:
+            ctx.fillStyle = "#fff";
+            ctx.strokeStyle = "rgba(255,255,255,0)";
+            break;
     }
 }
 
@@ -343,6 +347,11 @@ function set_circle_style(ctx, num) {
             ctx.fillStyle = "#fff";
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 2;
+            break;
+        case 11:
+            ctx.fillStyle = "#f00";
+            ctx.strokeStyle = "rgba(255,255,255,0)";
+            ctx.lineWidth = 1;
             break;
         default:
             ctx.fillStyle = "rgba(255,255,255,0)";

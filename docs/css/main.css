@@ -260,6 +260,16 @@ hr.newgridhrline {
     width: 20px;
 }
 
+#st_number11_lb {
+    /* Red Circle */
+    background: url(red_circle.png);
+    background-repeat: no-repeat;
+    background-size: 90% 90%;
+    background-position: center;
+    vertical-align: top;
+    width: 20px;
+}
+
 #st_surface1_lb {
     /* Dark Grey */
     background-color: #444;
