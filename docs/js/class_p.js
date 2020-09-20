@@ -495,7 +495,11 @@ class Puzzle {
         resizedCanvas.height = (width * this.canvas.height / this.canvas.width).toString();
 
         resizedContext.drawImage(this.canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
-        var canvastext = resizedCanvas.toDataURL("image/png")
+        if (document.getElementById("nb_type1").checked) {
+            var canvastext = resizedCanvas.toDataURL("image/png");
+        } else {
+            var canvastext = resizedCanvas.toDataURL("image/jpeg");
+        }
         this.mode[this.mode.qa].edit_mode = mode;
 
         if (document.getElementById("nb_margin2").checked) {
