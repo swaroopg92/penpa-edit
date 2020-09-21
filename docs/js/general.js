@@ -394,14 +394,8 @@ function saveimage() {
 function saveimage_download() {
     var downloadLink = document.getElementById('download_link');
     var filename = document.getElementById('saveimagename').value;
-    if (document.getElementById("nb_type1").checked) {
-        if (filename.slice(-4) != ".png") {
-            filename += ".png";
-        }
-    } else if (document.getElementById("nb_type2").checked) {
-        if (filename.slice(-4) != ".jpg") {
-            filename += ".jpg";
-        }
+    if (filename.slice(-4) != ".png") {
+        filename += ".png";
     }
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
@@ -412,10 +406,10 @@ function saveimage_download() {
     }
 
     if (valid_name) {
-        if (pu.canvas.msToBlob) { // For IE
+        if (pu.canvas.msToBlob) {
             var blob = pu.canvas.msToBlob();
             window.navigator.msSaveBlob(blob, filename);
-        } else { // Other browsers
+        } else {
             downloadLink.href = pu.resizecanvas();
             downloadLink.download = filename;
             downloadLink.click();
