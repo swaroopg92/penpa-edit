@@ -2,6 +2,7 @@
 * 2020/09/17 ver2.24.3
 	* Display size range changed to 12~90
 	* Red Circle with white text style added to the Number mode
+	* Added Jpeg file type support to Screenshot/Download Image.
 * 2020/09/17 ver2.24.2
 	* Reload button "R": ON/OFF - Ask for confirmation on accidental reload or closing of the page. Default is "OFF".
 	* "Enter" will also work like "Tab" key. More comfortable to switch modes as it's closer to the numpad.
