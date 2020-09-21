@@ -3707,6 +3707,12 @@ class Puzzle {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
                 console.log(this);
+                const gitio = require('gitio');
+                var text = document.getElementById("savetextarea").value;
+                gitio(text).then(result => {
+                    document.getElementById("savetextarea").value = result;
+                });
+                // alert("Short URL generated in the display area");
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
                     'Please see instructions (link in the bottom) for supported puzzle types\n' +
