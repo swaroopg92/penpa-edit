@@ -5855,6 +5855,7 @@ class Puzzle {
             }
         }
     }
+
     draw_frameBold() {
         /*frame-B*/
         for (var i in this.frame) {

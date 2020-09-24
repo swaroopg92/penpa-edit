@@ -1326,7 +1326,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_cross(ctx, num, x, y);
                 break;
             case "line":
-                this.draw_linesym(ctx, num, x, y);
+                if (num === 0) {
+                    this.draw_linesym(ctx, num + 10, x, y);
+                } else {
+                    this.draw_linesym(ctx, num, x, y);
+                }
                 break;
             case "bars_B":
                 ctx.setLineDash([]);
@@ -1737,6 +1741,42 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x + r * pu.size, y + r * pu.size);
                 ctx.closePath();
                 ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 7:
+                set_line_style(ctx, 115)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 8:
+                set_line_style(ctx, 15)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 9:
+                set_line_style(ctx, 16)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 10:
+                set_line_style(ctx, 110)
+                r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x + r * pu.size, y - r * pu.size);
                 ctx.lineTo(x - r * pu.size, y + r * pu.size);
