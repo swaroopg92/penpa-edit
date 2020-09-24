@@ -27,7 +27,9 @@ class Puzzle_square extends Puzzle {
             "cross": 4,
             "arrow_cross": 4,
             "arrow_fourtip": 4,
-            "degital": 7,
+            "degital_B": 7,
+            "degital_G": 7,
+            "degital_E": 7,
             "degital_f": 7,
             "arrow_eight": 8,
             "arrow_fouredge_B": 8,
@@ -1363,7 +1365,16 @@ class Puzzle_square extends Puzzle {
                 set_font_style(ctx, 0.8 * pu.size.toString(10), 2);
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
-            case "degital":
+            case "degital_B":
+                set_circle_style(ctx, 2);
+                this.draw_degital(ctx, num, x, y);
+                break;
+            case "degital_E":
+                set_circle_style(ctx, 12);
+                this.draw_degital(ctx, num, x, y);
+                break;
+            case "degital_G":
+                set_circle_style(ctx, 3);
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_f":
@@ -1831,7 +1842,6 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_degital(ctx, num, x, y) {
-        set_circle_style(ctx, 2);
         var w1, w2, w3, w4, z1, z2;
         z1 = 0.17;
         z2 = 0.015;

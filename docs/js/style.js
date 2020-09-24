@@ -302,12 +302,12 @@ function set_circle_style(ctx, num) {
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 1;
             break;
-        case 2:
+        case 2: // black
             ctx.fillStyle = "#000";
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 1;
             break;
-        case 3:
+        case 3: // grey
             ctx.fillStyle = "#ccc";
             ctx.strokeStyle = "rgba(0,0,0,0)";
             ctx.lineWidth = 1;
@@ -348,9 +348,14 @@ function set_circle_style(ctx, num) {
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 2;
             break;
-        case 11:
+        case 11: // red
             ctx.fillStyle = "#f00";
             ctx.strokeStyle = "#f00";
+            ctx.lineWidth = 1;
+            break;
+        case 12: // green
+            ctx.fillStyle = "rgba(32,128,32,1)";
+            ctx.strokeStyle = "rgba(32,128,32,1)";
             ctx.lineWidth = 1;
             break;
         default:
