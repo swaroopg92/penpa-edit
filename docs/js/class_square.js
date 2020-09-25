@@ -1369,6 +1369,10 @@ class Puzzle_square extends Puzzle {
                 set_font_style(ctx, 0.8 * pu.size.toString(10), 2);
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
+            case "degital":
+                set_circle_style(ctx, 2);
+                this.draw_degital(ctx, num, x, y);
+                break;
             case "degital_B":
                 set_circle_style(ctx, 2);
                 this.draw_degital(ctx, num, x, y);

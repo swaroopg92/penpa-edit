@@ -399,6 +399,22 @@ hr.newgridhrline {
     font-size: 16px;
 }
 
+#ms1_degital{
+    font-size: 18px;
+}
+
+#ms_dice {
+    font-size: 25px;
+}
+
+#ms_star {
+    font-size: 22px;
+}
+
+#ms_tents {
+    font-size: 15px;
+}
+
 input[type=radio] {
     display: none;
     /* Hide radio buttons */
