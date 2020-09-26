@@ -1,11 +1,12 @@
 ## History
-* 2020/09/25 ver2.24.4
+* 2020/09/26 ver2.24.4
 	* Display size range changed to 12~90
 	* Red Circle with white text style added to the Number mode
 	* Added Jpeg file type support to Screenshot/Download Image.
 	* Grey and Green color added to digital parts in Shape (mode) -> Number (submode)
 	* Added short diagonal lines of 4 types to Shape (mode) --> Shape (submode) --> Line option (This is to assist diagonal cages) - The styles are similar to Frame (mode).
 	* Replaced few more display button text with shapes
+	* Some bug fixes
 * 2020/09/17 ver2.24.3
 	* Some minor fixes
 * 2020/09/17 ver2.24.2
