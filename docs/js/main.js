@@ -423,6 +423,7 @@ onload = function() {
                 break;
             case "tb_reset":
                 ResetCheck();
+                e.preventDefault();
                 break;
             case "tb_delete":
                 DeleteCheck();
@@ -552,9 +553,6 @@ onload = function() {
                 savetext_download();
                 e.preventDefault();
                 break;
-                //case "closeBtn_save3":
-                //  savetext_window();
-                //  break;
             case "closeBtn_save4":
                 document.getElementById('modal-save').style.display = 'none';
                 e.preventDefault();
@@ -614,9 +612,6 @@ onload = function() {
                 break;
             case "saveimagename":
                 return;
-                //case "closeBtn_image1":
-                //  saveimage_window();
-                //  break;
             case "closeBtn_image2":
                 saveimage_download();
                 e.preventDefault();
