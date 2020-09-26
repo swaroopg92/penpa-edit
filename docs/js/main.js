@@ -862,7 +862,7 @@ onload = function() {
         select.appendChild(option);
     }
     selectBox = new vanillaSelectBox("#mode_choices", {
-        "maxHeight": 110,
+        "maxHeight": 130,
         "search": true
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
