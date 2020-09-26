@@ -2010,6 +2010,7 @@ class Puzzle_square extends Puzzle {
         ctx.fill();
 
         //contents
+        set_circle_style(ctx,2);
         this.draw_degital(ctx, num, x, y);
     }
 
