@@ -427,6 +427,7 @@ onload = function() {
                 break;
             case "tb_delete":
                 DeleteCheck();
+                e.preventDefault();
                 break;
 
                 //panel_menu
