@@ -1326,11 +1326,10 @@ class Puzzle_square extends Puzzle {
                 this.draw_cross(ctx, num, x, y);
                 break;
             case "line":
-                if (num === 0) {
-                    this.draw_linesym(ctx, num + 10, x, y);
-                } else {
-                    this.draw_linesym(ctx, num, x, y);
-                }
+                this.draw_linesym(ctx, num, x, y);
+                break;
+            case "frameline":
+                this.draw_framelinesym(ctx, num, x, y);
                 break;
             case "bars_B":
                 ctx.setLineDash([]);
@@ -1751,7 +1750,18 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.stroke();
                 break;
-            case 7:
+        }
+    }
+
+    draw_framelinesym(ctx, num, x, y) {
+        var r = 0.32;
+        ctx.setLineDash([]);
+        ctx.lineCap = "round";
+        ctx.fillStyle = "rgba(0,0,0,0)";
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.lineWidth = 3;
+        switch (num) {
+            case 1:
                 set_line_style(ctx, 115)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
@@ -1760,7 +1770,7 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.stroke();
                 break;
-            case 8:
+            case 2:
                 set_line_style(ctx, 15)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
@@ -1769,7 +1779,7 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.stroke();
                 break;
-            case 9:
+            case 3:
                 set_line_style(ctx, 16)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
@@ -1778,12 +1788,48 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.stroke();
                 break;
-            case 10:
+            case 4:
                 set_line_style(ctx, 110)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x + r * pu.size, y - r * pu.size);
                 ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 5:
+                set_line_style(ctx, 115)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 6:
+                set_line_style(ctx, 15)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 7:
+                set_line_style(ctx, 16)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 8:
+                set_line_style(ctx, 110)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2010,7 +2056,7 @@ class Puzzle_square extends Puzzle {
         ctx.fill();
 
         //contents
-        set_circle_style(ctx,2);
+        set_circle_style(ctx, 2);
         this.draw_degital(ctx, num, x, y);
     }
 

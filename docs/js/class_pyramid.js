@@ -1195,6 +1195,9 @@ class Puzzle_pyramid extends Puzzle {
             case "line":
                 this.draw_linesym(ctx, num, x, y);
                 break;
+            case "frameline":
+                this.draw_framelinesym(ctx, num, x, y);
+                break;
 
                 //number
             case "inequality":
@@ -1590,6 +1593,90 @@ class Puzzle_pyramid extends Puzzle {
                 break;
         }
     }
+
+    draw_framelinesym(ctx, num, x, y) {
+        var r = 0.32;
+        ctx.setLineDash([]);
+        ctx.lineCap = "round";
+        ctx.fillStyle = "rgba(0,0,0,0)";
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.lineWidth = 3;
+        switch (num) {
+            case 1:
+                set_line_style(ctx, 115)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 2:
+                set_line_style(ctx, 15)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 3:
+                set_line_style(ctx, 16)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 4:
+                set_line_style(ctx, 110)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 5:
+                set_line_style(ctx, 115)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 6:
+                set_line_style(ctx, 15)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 7:
+                set_line_style(ctx, 16)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 8:
+                set_line_style(ctx, 110)
+                r = r / Math.sqrt(2);
+                ctx.beginPath();
+                ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+        }
+    }
+
 
     draw_inequality(ctx, num, x, y) {
         var th;

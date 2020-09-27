@@ -1,4 +1,6 @@
 ## History
+* 2020/09/27 ver2.24.5
+	* Seperated lines for the diagonals into frameline option. Added this to all supported shapes (square, hex, cube, pyramid, etc)
 * 2020/09/26 ver2.24.4
 	* Display size range changed to 12~90
 	* Red Circle with white text style added to the Number mode
