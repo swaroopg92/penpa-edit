@@ -1156,6 +1156,9 @@ class Puzzle_hex extends Puzzle {
         } else if (this[pu].number[i][1] === 7) {
             set_circle_style(this.ctx, 2);
             this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
+        } else if (this[pu].number[i][1] === 11) {
+            set_circle_style(this.ctx, 11);
+            this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
         }
     }
 

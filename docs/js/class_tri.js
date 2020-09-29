@@ -49,6 +49,9 @@ class Puzzle_tri extends Puzzle {
         for (var i of this.group5) {
             document.getElementById(i).style.display = "inline-block";
         }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {
@@ -979,14 +982,14 @@ class Puzzle_tri extends Puzzle {
                     this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
                     break;
                 case "6": //middle
-                    this.draw_numbercircle(pu, i, 0.22);
+                    this.draw_numbercircle(pu, i, 0.20);
                     set_font_style(this.ctx, 0.32 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
                     break;
                 case "10": //big
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
-                    set_font_style(this.ctx, 0.6 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * this.size, this.size * 0.8);
+                    this.draw_numbercircle(pu, i, 0.23);
+                    set_font_style(this.ctx, 0.36 * this.size.toString(10), this[pu].number[i][1]);
+                    this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
                     break;
                 case "7": //sudoku
                     this.draw_numbercircle(pu, i, 0.25);
@@ -1055,6 +1058,9 @@ class Puzzle_tri extends Puzzle {
             this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
         } else if (this[pu].number[i][1] === 7) {
             set_circle_style(this.ctx, 2);
+            this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
+        } else if (this[pu].number[i][1] === 11) {
+            set_circle_style(this.ctx, 11);
             this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
         }
     }

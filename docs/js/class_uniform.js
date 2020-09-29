@@ -51,6 +51,9 @@ class Puzzle_truncated_square extends Puzzle {
         for (var i of this.group5) {
             document.getElementById(i).style.display = "none";
         }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {
@@ -889,7 +892,7 @@ class Puzzle_truncated_square extends Puzzle {
         /*number*/
         var p_x, p_y;
         for (var i in this[pu].number) {
-            if (i.slice(-1) === "E") { //辺モードでの重ね書き
+            if (i.slice(-1) === "E") { // Overwriting in edge mode
                 p_x = this.point[i.slice(0, -1)].x;
                 p_y = this.point[i.slice(0, -1)].y;
             } else {
@@ -1104,6 +1107,25 @@ class Puzzle_truncated_square extends Puzzle {
         } else if (this[pu].number[i][1] === 7) {
             set_circle_style(this.ctx, 2);
             this.draw_circle(this.ctx, p_x, p_y, size);
+        } else if (this[pu].number[i][1] === 11) {
+            set_circle_style(this.ctx, 11);
+            this.draw_circle(this.ctx, p_x, p_y, size);
+        }
+    }
+
+    draw_numbercircle_iso(pu, i, size) {
+        if (this[pu].number[i][1] === 5) {
+            set_circle_style(this.ctx, 7);
+            this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
+        } else if (this[pu].number[i][1] === 6) {
+            set_circle_style(this.ctx, 1);
+            this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
+        } else if (this[pu].number[i][1] === 7) {
+            set_circle_style(this.ctx, 2);
+            this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
+        } else if (this[pu].number[i][1] === 11) {
+            set_circle_style(this.ctx, 11);
+            this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, size);
         }
     }
 
@@ -4737,13 +4759,13 @@ class Puzzle_iso extends Puzzle_truncated_square {
         for (var i in this[pu].number) {
             switch (this[pu].number[i][2]) {
                 case "1": //normal
-                    this.draw_numbercircle(pu, i, 0.42);
+                    this.draw_numbercircle_iso(pu, i, 0.41);
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.06 * this.size, this.size * 0.8);
                     break;
                 case "2": //arrow
                     var arrowlength = 0.7;
-                    this.draw_numbercircle(pu, i, 0.42);
+                    this.draw_numbercircle_iso(pu, i, 0.42);
                     set_font_style(this.ctx, 0.65 * this.size.toString(10), this[pu].number[i][1]);
                     var direction = {
                         "_0": 150,
@@ -4872,7 +4894,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                     }
                     break;
                 case "4": //tapa
-                    this.draw_numbercircle(pu, i, 0.44);
+                    this.draw_numbercircle_iso(pu, i, 0.44);
                     if (this[pu].number[i][0].length === 1) {
                         set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
                         this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.06 * this.size, this.size * 0.8);
@@ -4894,17 +4916,22 @@ class Puzzle_iso extends Puzzle_truncated_square {
                     }
                     break;
                 case "5": //small
-                    this.draw_numbercircle(pu, i, 0.17);
+                    this.draw_numbercircle_iso(pu, i, 0.17);
                     set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
                     break;
                 case "6": //medium
-                    this.draw_numbercircle(pu, i, 0.25);
+                    this.draw_numbercircle_iso(pu, i, 0.25);
                     set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size, this.size * 0.8);
                     break;
+                case "10": //big
+                    this.draw_numbercircle_iso(pu, i, 0.33);
+                    set_font_style(this.ctx, 0.55 * this.size.toString(10), this[pu].number[i][1]);
+                    this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size, this.size * 0.8);
+                    break;
                 case "7": //sudoku
-                    this.draw_numbercircle(pu, i, 0.42);
+                    this.draw_numbercircle_iso(pu, i, 0.41);
                     var sum = 0,
                         pos = 0;
                     for (var j = 0; j < 9; j++) {
