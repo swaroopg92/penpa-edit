@@ -4,6 +4,8 @@
 	* Added Large number submode to Triangle and Cubic/Iso board
 	* Fixed the Number with Circle style for other boards
 	* Fixed Mac Safari Tab Checkmark misplaced bug
+	* Fixed white space around mathematical operators
+	* Fixed backspace bug for red circle
 * 2020/09/26 ver2.24.4
 	* Display size range changed to 12~90
 	* Red Circle with white text style added to the Number mode
