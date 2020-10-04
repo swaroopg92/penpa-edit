@@ -52,7 +52,7 @@ function create_newboard() {
     }
 }
 
-function make_class(gridtype) {
+function make_class(gridtype, loadtype = 'new') {
     var size = parseInt(document.getElementById("nb_size3").value);
     switch (gridtype) {
         case "square":
@@ -62,6 +62,14 @@ function make_class(gridtype) {
             var space2 = parseInt(document.getElementById("nb_space2").value, 10);
             var space3 = parseInt(document.getElementById("nb_space3").value, 10);
             var space4 = parseInt(document.getElementById("nb_space4").value, 10);
+            var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
+                "nb_sudoku2_lb", "nb_sudoku2",
+                "nb_sudoku3_lb", "nb_sudoku3",
+                "nb_sudoku4_lb", "nb_sudoku4"
+            ]; // of sudoku
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
@@ -102,6 +110,24 @@ function make_class(gridtype) {
             } else {
                 alert("Sides must be in the range 1-20");
             }
+            break;
+        case "sudoku":
+            if (loadtype === 'new') {
+                if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
+                    var nx = 11;
+                    var ny = 11;
+                } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
+                    var nx = 10;
+                    var ny = 10;
+                } else {
+                    var nx = 9;
+                    var ny = 9;
+                }
+            } else if (loadtype === 'url') {
+                var nx = parseInt(document.getElementById("nb_size1").value, 10);
+                var ny = parseInt(document.getElementById("nb_size2").value, 10);
+            }
+            pu = new Puzzle_sudoku(nx, ny, size);
             break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
@@ -144,6 +170,12 @@ function changetype() {
     var gridtype = document.getElementById("gridtype").value;
     var type = ["name_size2", "nb_size2", "name_space2", "name_space3", "name_space4", "nb_space2", "nb_space3", "nb_space4"];
     var type2 = ["name_space1", "nb_space1"];
+    var type3 = ["nb_size_lb", "nb_space_lb", "name_size1", "nb_size1"]; // off - for sudoku
+    var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
+        "nb_sudoku2_lb", "nb_sudoku2",
+        "nb_sudoku3_lb", "nb_sudoku3",
+        "nb_sudoku4_lb", "nb_sudoku4"
+    ]; // on - for sudoku
     switch (gridtype) {
         case "square":
             for (var i of type) {
@@ -151,6 +183,12 @@ function changetype() {
             }
             for (var i of type2) {
                 document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Columns：";
             document.getElementById("name_space1").innerHTML = "Over：";
@@ -169,6 +207,12 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "inline";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Side: ";
             document.getElementById("nb_size1").value = 5;
@@ -181,6 +225,12 @@ function changetype() {
             }
             for (var i of type2) {
                 document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Border: ";
@@ -195,6 +245,12 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "inline";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Border：";
             document.getElementById("nb_size1").value = 6;
@@ -208,9 +264,33 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("nb_size1").value = 5;
             document.getElementById("nb_size3").value = 34;
+            break;
+        case "sudoku":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "inline";
+            }
+            document.getElementById("nb_sudoku1").checked = false;
+            document.getElementById("nb_sudoku2").checked = false;
+            document.getElementById("nb_sudoku3").checked = false;
+            document.getElementById("nb_sudoku4").checked = false;
             break;
         case "truncated_square":
             for (var i of type) {
@@ -558,41 +638,44 @@ function load(urlParam) {
     var param = urlParam.split('&');
     var paramArray = [];
 
-    //アドレスを要素に分解
+    // Decompose address into elements
     for (var i = 0; i < param.length; i++) {
         var paramItem = param[i].split('=');
         paramArray[paramItem[0]] = paramItem[1];
     }
 
-    //pを復号
+    // Decrypt P
     var ab = atob(paramArray.p);
     ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
     var inflate = new Zlib.RawInflate(ab);
     var plain = inflate.decompress();
     var rtext = new TextDecoder().decode(plain);
     rtext = rtext.split("\n");
-
     rtext[0] = rtext[0].split("zO").join("null");
     rtext[1] = rtext[1].split("zO").join("null");
-
     if (!isNaN(rtext[0][0])) {
         loadver1(paramArray, rtext)
         return;
     }
 
-    //初期設定を読み込み
+    // load default settings
     var rtext_para = rtext[0].split(',');
     document.getElementById("gridtype").value = rtext_para[0];
     changetype();
     document.getElementById("nb_size1").value = rtext_para[1];
     document.getElementById("nb_size2").value = rtext_para[2];
     document.getElementById("nb_size3").value = rtext_para[3];
+
     document.getElementById("nb_space1").value = JSON.parse(rtext[1])[0];
     document.getElementById("nb_space2").value = JSON.parse(rtext[1])[1];
     document.getElementById("nb_space3").value = JSON.parse(rtext[1])[2];
     document.getElementById("nb_space4").value = JSON.parse(rtext[1])[3];
+    if (!rtext_para[11] === 'undefined' && rtext_para[11] == "1") { document.getElementById("nb_sudoku1").checked = true; }
+    if (!rtext_para[12] === 'undefined' && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
+    if (!rtext_para[13] === 'undefined' && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
+    if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
 
-    make_class(rtext_para[0]);
+    make_class(rtext_para[0], 'url');
 
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);
