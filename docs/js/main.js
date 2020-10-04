@@ -868,7 +868,7 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
 
-    window.addEventListener('beforeunload pagehide', function(e) {
+    window.addEventListener('beforeunload', function(e) {
         if (document.getElementById('reload_button').textContent === "ON") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
