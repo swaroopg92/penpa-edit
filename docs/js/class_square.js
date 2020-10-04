@@ -1,13 +1,13 @@
 class Puzzle_square extends Puzzle {
     constructor(nx, ny, size) {
-        //盤面情報
+        // Board information
         super('square');
         this.nx = nx;
         this.ny = ny;
         this.nx0 = this.nx + 4;
         this.ny0 = this.ny + 4;
         this.margin = -1; //for arrow of number pointing outside of the grid
-
+        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.width0 = this.nx + 1;
         this.height0 = this.ny + 1;
         this.width_c = this.width0;
@@ -2998,5 +2998,166 @@ class Puzzle_square extends Puzzle {
         if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
         th = th / 180 * Math.PI;
         return th;
+    }
+}
+
+class Puzzle_sudoku extends Puzzle_square {
+    constructor(nx, ny, size) {
+        // Board information
+        super('sudoku');
+        this.gridtype = "sudoku";
+        this.nx = nx;
+        this.ny = ny;
+        this.nx0 = this.nx + 4;
+        this.ny0 = this.ny + 4;
+        this.margin = -1; //for arrow of number pointing outside of the grid
+
+        this.width0 = this.nx + 1;
+        this.height0 = this.ny + 1;
+        this.width_c = this.width0;
+        this.height_c = this.height0;
+        this.width = this.width_c;
+        this.height = this.height_c;
+        this.canvasx = this.width_c * this.size;
+        this.canvasy = this.height_c * this.size;
+        this.sudoku = [Number(document.getElementById("nb_sudoku1").checked),
+            Number(document.getElementById("nb_sudoku2").checked),
+            Number(document.getElementById("nb_sudoku3").checked),
+            Number(document.getElementById("nb_sudoku4").checked)
+        ];
+
+        // Set the size of the grid
+        if (document.getElementById("nb_sudoku2").checked) { // Outside, little killer
+            this.space = [1, 1, 1, 1];
+            document.getElementById("nb_space1").value = 1;
+            document.getElementById("nb_space2").value = 1;
+            document.getElementById("nb_space3").value = 1;
+            document.getElementById("nb_space4").value = 1;
+        } else if (document.getElementById("nb_sudoku3").checked) { // sandwich
+            this.space = [1, 0, 1, 0];
+            document.getElementById("nb_space1").value = 1;
+            document.getElementById("nb_space2").value = 0;
+            document.getElementById("nb_space3").value = 1;
+            document.getElementById("nb_space4").value = 0;
+        } else {
+            this.space = [0, 0, 0, 0];
+            document.getElementById("nb_space1").value = 0;
+            document.getElementById("nb_space2").value = 0;
+            document.getElementById("nb_space3").value = 0;
+            document.getElementById("nb_space4").value = 0;
+        }
+        this.size = size;
+        this.onoff_symbolmode_list = {
+            "cross": 4,
+            "arrow_cross": 4,
+            "arrow_fourtip": 4,
+            "degital_B": 7,
+            "degital_G": 7,
+            "degital_E": 7,
+            "degital_f": 7,
+            "arrow_eight": 8,
+            "arrow_fouredge_B": 8,
+            "arrow_fouredge_G": 8,
+            "arrow_fouredge_E": 8,
+            "dice": 9,
+            "polyomino": 9
+        };
+        this.reset();
+        this.erase_buttons();
+        if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
+            let rows = [5, 8];
+            let cols = [5, 8];
+            let start = 2;
+            let end = this.nx - 1;
+            let linestyle = 2;
+
+            this.draw_sudokugrid(rows, cols, start, end, linestyle);
+
+            if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
+                linestyle = 12;
+                this.draw_N(start, end, linestyle);
+            }
+
+            if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
+                linestyle = 12;
+                this.draw_Z(start, end, end + 1, linestyle);
+            }
+        } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
+            let rows = [5, 8];
+            let cols = [5, 8];
+            let start = 2;
+            let end = this.nx;
+            let linestyle = 2;
+
+            this.draw_sudokugrid(rows, cols, start, end, linestyle);
+
+            if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
+                linestyle = 12;
+                this.draw_N(start, end, linestyle);
+            }
+
+            if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
+                linestyle = 12;
+                this.draw_Z(start, end, end + 1, linestyle);
+            }
+        } else {
+            let rows = [4, 7];
+            let cols = [4, 7];
+            let start = 1;
+            let end = this.nx;
+            let linestyle = 2;
+
+            this.draw_sudokugrid(rows, cols, start, end, linestyle);
+
+            if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
+                linestyle = 12;
+                this.draw_N(start, end, linestyle);
+            }
+
+            if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
+                linestyle = 12;
+                this.draw_Z(start, end, end, linestyle);
+            }
+        }
+    }
+
+    draw_sudokugrid(rows, cols, start, end, linestyle) {
+        let x, y, key;
+        for (var j = 0; j < cols.length; j++) { //  column
+            for (var i = start; i <= end; i++) { // row
+                x = this.nx0 * i + cols[j] + this.nx0 * this.nx0;
+                y = this.nx0 * (i + 1) + cols[j] + this.nx0 * this.nx0;
+                key = x.toString() + "," + y.toString();
+                this["pu_q"]["lineE"][key] = linestyle;
+            }
+        }
+        for (var j = 0; j < rows.length; j++) { //  row
+            for (var i = start; i <= end; i++) { // column
+                x = this.nx0 * rows[j] + i + this.nx0 * this.nx0;
+                y = this.nx0 * rows[j] + i + 1 + this.nx0 * this.nx0;
+                key = x.toString() + "," + y.toString();
+                this["pu_q"]["lineE"][key] = linestyle;
+            }
+        }
+    }
+
+    draw_N(start, end, linestyle) {
+        let x, y, key;
+        for (var i = start; i <= end; i++) {
+            x = this.nx0 * i + i + this.nx0 * this.nx0;
+            y = this.nx0 * (i + 1) + (i + 1) + this.nx0 * this.nx0;
+            key = x.toString() + "," + y.toString();
+            this["pu_q"]["lineE"][key] = linestyle;
+        }
+    }
+
+    draw_Z(start, endloop, endsize, linestyle) {
+        let x, y, key;
+        for (var i = start; i <= endloop; i++) {
+            x = this.nx0 * i + endsize + 2 - i + this.nx0 * this.nx0;
+            y = this.nx0 * (i + 1) + (endsize + 1 - i) + this.nx0 * this.nx0;
+            key = y.toString() + "," + x.toString();
+            this["pu_q"]["lineE"][key] = linestyle;
+        }
     }
 }

@@ -527,11 +527,12 @@
                 <button id="sw_reset" class="button sw">Reset</button>
             </div>
         </div>
-        <p style="margin-top: 5px;">Any suggestions or improvements, send an email to <b>penpaplus@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a>.</p>
+        <p style="margin-top: 5px;"> <a id="channel" href="https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos" target="_blank">Youtube tutorials</a> & <a id="tutorials" href="https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md" target="_blank">Complete list</a></p>
+        <p>Any suggestions or improvements, send an email to <b>penpaplus@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a>.</p>
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.24.5, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.24.6, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -604,6 +605,7 @@
                     <option value="tri" id="nb_type3_lb">Triangle</option>
                     <option value="pyramid" id="nb_type4_lb">Pyramid</option>
                     <option value="iso" id="nb_type5_lb">Cube</option>
+                    <option value="sudoku" id="nb_type6_lb">Sudoku</option>
                 </select>
             </span><br>
             <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -612,6 +614,15 @@
                 <input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="50" step="1">
                 <span id="div_all"><label class="label_nb" id="name_size1">Columns:</label></span>
                 <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="50" step="1">
+                <span id="div_all"><label class="label_nb" id="nb_sudoku1_lb">Diagonal &#x27CD;</label></span>
+                <input type="checkbox" name="nb_sudoku1" id="nb_sudoku1">
+                <span id="div_all"><label class="label_nb" id="nb_sudoku4_lb">Diagonal &#x27CB;</label></span>
+                <input type="checkbox" name="nb_sudoku4" id="nb_sudoku4">
+                <br>
+                <span id="div_all"><label class="label_nb" id="nb_sudoku2_lb">Skyscraper/Little Killer</label></span>
+                <input type="checkbox" name="nb_sudoku2" id="nb_sudoku2">
+                <span id="div_all"><label class="label_nb" id="nb_sudoku3_lb">Sandwich</label></span>
+                <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
             </span>
             <br>
             <h4 id="div_all"><label class="label_nb" id="nb_space_lb">White space:</label></h4>

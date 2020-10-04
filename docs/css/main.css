@@ -399,7 +399,7 @@ hr.newgridhrline {
     font-size: 16px;
 }
 
-#ms1_degital{
+#ms1_degital {
     font-size: 18px;
 }
 
@@ -1280,4 +1280,11 @@ input[type=number] {
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+/* Information area*/
+#channel,
+#tutorials {
+    color: blue;
+    background-color: #c0e0ff;
 }
