@@ -112,7 +112,7 @@ Depending on the browser you can update the page without using the cache with "C
 * User can now select which modes/sub-modes they wan't to rotate when pressing TAB/Enter key.
 	* There is search option available.
 	* Search is case-insensitive.
-* Default selection is "Surface" + "Number Normal".
+* Default selection is "Surface".
 * Then you can either press Tab or Enter (closer to the numpad) to rotate between the selected modes.
 
 ### Move

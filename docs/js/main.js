@@ -99,13 +99,13 @@ onload = function() {
 
     // Variables for Tab selector
     let modes = ["Surface", "Wall",
-        "Line Normal", "Line Helper",
-        "Edge Normal", "Edge Helper",
+        "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
+        "Edge Normal", "Edge Diagonal", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
     ];
     let modes_mapping = ["surface", "wall",
-        "sub_line1", "sub_line4",
-        "sub_lineE1", "sub_lineE4",
+        "sub_line1", "sub_line2", "sub_line5", "sub_line4",
+        "sub_lineE1", "sub_lineE2", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
     ];
     let previous_mode = "surface";
@@ -857,7 +857,7 @@ onload = function() {
         var option = document.createElement("option");
         option.value = modes[i];
         option.text = modes[i];
-        if (i == 0 || i == 6) { // Default selection Surface and Number-Normal Mode
+        if (i == 0) { // Default selection Surface Mode
             option.setAttribute("selected", true);
         }
         select.appendChild(option);
@@ -868,7 +868,7 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
 
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload pagehide', function(e) {
         if (document.getElementById('reload_button').textContent === "ON") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown

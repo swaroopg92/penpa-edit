@@ -2,6 +2,8 @@
 * 2020/10/04 ver2.24.6
 	* Added Sudoku Board
 	* Penpa plus youtube channel started, video list template added
+	* Added few more modes to Tab selector and changed default mode to "Surface"
+	* fix for Reload prevention on iPad
 * 2020/10/02 ver2.24.5
 	* Seperated lines for the diagonals into frameline option. Added this to all supported shapes (square, hex, cube, pyramid, etc)
 	* Added Large number submode to Triangle and Cubic/Iso board
