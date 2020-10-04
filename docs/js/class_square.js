@@ -3025,27 +3025,12 @@ class Puzzle_sudoku extends Puzzle_square {
             Number(document.getElementById("nb_sudoku3").checked),
             Number(document.getElementById("nb_sudoku4").checked)
         ];
-
-        // Set the size of the grid
-        if (document.getElementById("nb_sudoku2").checked) { // Outside, little killer
-            this.space = [1, 1, 1, 1];
-            document.getElementById("nb_space1").value = 1;
-            document.getElementById("nb_space2").value = 1;
-            document.getElementById("nb_space3").value = 1;
-            document.getElementById("nb_space4").value = 1;
-        } else if (document.getElementById("nb_sudoku3").checked) { // sandwich
-            this.space = [1, 0, 1, 0];
-            document.getElementById("nb_space1").value = 1;
-            document.getElementById("nb_space2").value = 0;
-            document.getElementById("nb_space3").value = 1;
-            document.getElementById("nb_space4").value = 0;
-        } else {
-            this.space = [0, 0, 0, 0];
-            document.getElementById("nb_space1").value = 0;
-            document.getElementById("nb_space2").value = 0;
-            document.getElementById("nb_space3").value = 0;
-            document.getElementById("nb_space4").value = 0;
-        }
+        this.space = [
+            parseInt(document.getElementById("nb_space1").value, 10),
+            parseInt(document.getElementById("nb_space2").value, 10),
+            parseInt(document.getElementById("nb_space3").value, 10),
+            parseInt(document.getElementById("nb_space4").value, 10)
+        ];
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
@@ -3064,61 +3049,6 @@ class Puzzle_sudoku extends Puzzle_square {
         };
         this.reset();
         this.erase_buttons();
-        if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
-            let rows = [5, 8];
-            let cols = [5, 8];
-            let start = 2;
-            let end = this.nx - 1;
-            let linestyle = 2;
-
-            this.draw_sudokugrid(rows, cols, start, end, linestyle);
-
-            if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
-                linestyle = 12;
-                this.draw_N(start, end, linestyle);
-            }
-
-            if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
-                linestyle = 12;
-                this.draw_Z(start, end, end + 1, linestyle);
-            }
-        } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
-            let rows = [5, 8];
-            let cols = [5, 8];
-            let start = 2;
-            let end = this.nx;
-            let linestyle = 2;
-
-            this.draw_sudokugrid(rows, cols, start, end, linestyle);
-
-            if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
-                linestyle = 12;
-                this.draw_N(start, end, linestyle);
-            }
-
-            if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
-                linestyle = 12;
-                this.draw_Z(start, end, end + 1, linestyle);
-            }
-        } else {
-            let rows = [4, 7];
-            let cols = [4, 7];
-            let start = 1;
-            let end = this.nx;
-            let linestyle = 2;
-
-            this.draw_sudokugrid(rows, cols, start, end, linestyle);
-
-            if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
-                linestyle = 12;
-                this.draw_N(start, end, linestyle);
-            }
-
-            if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
-                linestyle = 12;
-                this.draw_Z(start, end, end, linestyle);
-            }
-        }
     }
 
     draw_sudokugrid(rows, cols, start, end, linestyle) {

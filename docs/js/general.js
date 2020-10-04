@@ -116,18 +116,90 @@ function make_class(gridtype, loadtype = 'new') {
                 if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
                     var nx = 11;
                     var ny = 11;
+                    document.getElementById("nb_space1").value = 1;
+                    document.getElementById("nb_space2").value = 1;
+                    document.getElementById("nb_space3").value = 1;
+                    document.getElementById("nb_space4").value = 1;
                 } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
                     var nx = 10;
                     var ny = 10;
+                    document.getElementById("nb_space1").value = 1;
+                    document.getElementById("nb_space2").value = 0;
+                    document.getElementById("nb_space3").value = 1;
+                    document.getElementById("nb_space4").value = 0;
                 } else {
                     var nx = 9;
                     var ny = 9;
+                    document.getElementById("nb_space1").value = 0;
+                    document.getElementById("nb_space2").value = 0;
+                    document.getElementById("nb_space3").value = 0;
+                    document.getElementById("nb_space4").value = 0;
                 }
             } else if (loadtype === 'url') {
                 var nx = parseInt(document.getElementById("nb_size1").value, 10);
                 var ny = parseInt(document.getElementById("nb_size2").value, 10);
             }
+
+            // Create Sudoku object
             pu = new Puzzle_sudoku(nx, ny, size);
+
+            if (loadtype === 'new') {
+                if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
+                    let rows = [5, 8];
+                    let cols = [5, 8];
+                    let start = 2;
+                    let end = pu.nx - 1;
+                    let linestyle = 2;
+
+                    pu.draw_sudokugrid(rows, cols, start, end, linestyle);
+
+                    if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
+                        linestyle = 12;
+                        pu.draw_N(start, end, linestyle);
+                    }
+
+                    if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
+                        linestyle = 12;
+                        pu.draw_Z(start, end, end + 1, linestyle);
+                    }
+                } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
+                    let rows = [5, 8];
+                    let cols = [5, 8];
+                    let start = 2;
+                    let end = pu.nx;
+                    let linestyle = 2;
+
+                    pu.draw_sudokugrid(rows, cols, start, end, linestyle);
+
+                    if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
+                        linestyle = 12;
+                        pu.draw_N(start, end, linestyle);
+                    }
+
+                    if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
+                        linestyle = 12;
+                        pu.draw_Z(start, end, end + 1, linestyle);
+                    }
+                } else {
+                    let rows = [4, 7];
+                    let cols = [4, 7];
+                    let start = 1;
+                    let end = pu.nx;
+                    let linestyle = 2;
+
+                    pu.draw_sudokugrid(rows, cols, start, end, linestyle);
+
+                    if (document.getElementById("nb_sudoku1").checked === true) { // Top left to bottom right diagonal
+                        linestyle = 12;
+                        pu.draw_N(start, end, linestyle);
+                    }
+
+                    if (document.getElementById("nb_sudoku4").checked === true) { // Top Right to bottom left diagonal
+                        linestyle = 12;
+                        pu.draw_Z(start, end, end, linestyle);
+                    }
+                }
+            }
             break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
