@@ -176,6 +176,48 @@ onload = function() {
                         pu.key_shiftspace();
                         event.returnValue = false;
                         break;
+                    case "i": //Ctrl+i
+                    case "I":
+                        if ((document.getElementById('panel_button').textContent === "ON") &&
+                            (typeof panel_select !== "undefined") &&
+                            (panel_select < panel_pu.cont.length) &&
+                            pu.mode[pu.mode.qa].edit_mode !== "symbol") {
+                            var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
+
+                            if (panel_pu.panelmode === "number") {
+                                if (0 <= panel_select && panel_select <= 9) {
+                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                } else if (panel_select === 10) {
+                                    pu.key_backspace();
+                                } else if (panel_select === 11) {
+                                    pu.key_space();
+                                }
+                            } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
+                                if (0 <= panel_select && panel_select <= 27) {
+                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                } else if (panel_select === 28) {
+                                    pu.key_number(" ");
+                                } else if (panel_select >= 29) {
+                                    pu.key_space();
+                                }
+                            } else if (panel_pu.panelmode === "Text") {
+                                panel_pu.inputtext();
+                            } else if (panel_pu.panelmode === "key_symbol") {
+                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != " ") {
+                                    pu.key_number(panel_pu.cont[panel_select]);
+                                } else if (panel_pu.cont[panel_select] === " ") {
+                                    pu.key_space();
+                                }
+                            } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
+                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != "　") {
+                                    pu.key_number(panel_pu.cont[panel_select]);
+                                } else if (panel_pu.cont[panel_select] === "　") {
+                                    pu.key_space();
+                                }
+                            }
+                        }
+                        event.returnValue = false;
+                        break;
                 }
             }
 
@@ -788,9 +830,9 @@ onload = function() {
         }
     }
 
-
     // Panel input settings
     var float_canvas = document.getElementById("float-canvas");
+    var panel_select;
 
     function f_mdown(e) {
         if (e.type === "mousedown") {
@@ -807,6 +849,7 @@ onload = function() {
         var numxf = Math.floor(xf / (sizef + 3));
         var numyf = Math.floor(yf / (sizef + 3));
         var n = numxf + numyf * panel_pu.nxf;
+        panel_select = n;
         var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
