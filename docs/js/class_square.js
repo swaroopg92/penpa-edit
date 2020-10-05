@@ -655,6 +655,9 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_thermo(pu) {
+        let xdirection, ydirection, findpoint; // x is column, y is row
+        let reduce_straight = 0.394 * this.size,
+            reduce_diagonal = 0.316 * this.size;
         for (var i = 0; i < this[pu].thermo.length; i++) {
             if (this[pu].thermo[i][0]) {
                 this.ctx.strokeStyle = "rgba(0,0,0,0)";
@@ -667,7 +670,29 @@ class Puzzle_square extends Puzzle {
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y);
                 for (var j = 1; j < this[pu].thermo[i].length; j++) {
-                    this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y);
+                    if (j < (this[pu].thermo[i].length - 1)) {
+                        this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y);
+                    } else {
+                        xdirection = this.point[this[pu].thermo[i][j]].x - this.point[this[pu].thermo[i][j - 1]].x;
+                        ydirection = this.point[this[pu].thermo[i][j]].y - this.point[this[pu].thermo[i][j - 1]].y;
+                        if (xdirection == 0 && ydirection < 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y + reduce_straight);
+                        } else if (xdirection < 0 && ydirection > 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x + reduce_diagonal, this.point[this[pu].thermo[i][j]].y - reduce_diagonal);
+                        } else if (xdirection > 0 && ydirection == 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x - reduce_straight, this.point[this[pu].thermo[i][j]].y);
+                        } else if (xdirection > 0 && ydirection > 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x - reduce_diagonal, this.point[this[pu].thermo[i][j]].y - reduce_diagonal);
+                        } else if (xdirection == 0 && ydirection > 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y - reduce_straight);
+                        } else if (xdirection > 0 && ydirection < 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x - reduce_diagonal, this.point[this[pu].thermo[i][j]].y + reduce_diagonal);
+                        } else if (xdirection < 0 && ydirection == 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x + reduce_straight, this.point[this[pu].thermo[i][j]].y);
+                        } else if (xdirection < 0 && ydirection < 0) {
+                            this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x + reduce_diagonal, this.point[this[pu].thermo[i][j]].y + reduce_diagonal);
+                        }
+                    }
                 }
                 this.ctx.stroke();
             }

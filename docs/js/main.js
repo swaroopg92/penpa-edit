@@ -155,7 +155,7 @@ onload = function() {
                 }
             }
 
-            if (ctrl_key) {
+            if (ctrl_key && !shift_key && !alt_key) {
                 switch (key) {
                     case "d": //Ctrl+d
                     case "D":
@@ -221,7 +221,7 @@ onload = function() {
                 }
             }
 
-            if (alt_key) {
+            if (alt_key && !shift_key && !ctrl_key) {
                 switch (key) {
                     case "x":
                     case "X":
