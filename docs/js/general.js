@@ -501,23 +501,23 @@ function reloadcheck_onoff() {
 
 function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "LINEE") {
-        if (confirm("Erase all EDGE mode elements?")) {
+        if (confirm("Erase all EDGE mode elements? (Note - This action cannot be undone)")) {
             pu.reset_selectedmode();
         }
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "SYMBOL") {
-        if (confirm("Erase all SHAPE mode elements?")) {
+        if (confirm("Erase all SHAPE mode elements? (Note - This action cannot be undone)")) {
             pu.reset_selectedmode();
         }
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "CAGE") {
-        if (confirm("Erase all FRAME mode elements?")) {
+        if (confirm("Erase all FRAME mode elements? (Note - This action cannot be undone)")) {
             pu.reset_selectedmode();
         }
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "COMBI") {
-        if (confirm("Erase all COMPOSITE mode elements?")) {
+        if (confirm("Erase all COMPOSITE mode elements? (Note - This action cannot be undone)")) {
             pu.reset_selectedmode();
         }
     } else {
-        if (confirm("Erase all " + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + " mode elements?")) {
+        if (confirm("Erase all " + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + " mode elements? (Note - This action cannot be undone)")) {
             pu.reset_selectedmode();
         }
     }
@@ -530,7 +530,7 @@ function DeleteCheck() {
     } else if (document.getElementById("pu_a").checked) {
         text = "solution";
     }
-    if (confirm("Delete everything in " + text + "?")) {
+    if (confirm("Erase/Clear all the elements in " + text + "mode? (Note - This action cannot be undone)")) {
         pu.reset_board();
         pu.redraw();
         // reset undo/redo
