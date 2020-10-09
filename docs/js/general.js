@@ -530,7 +530,7 @@ function DeleteCheck() {
     } else if (document.getElementById("pu_a").checked) {
         text = "solution";
     }
-    if (confirm("Erase/Clear all the elements in " + text + "mode? (Note - This action cannot be undone)")) {
+    if (confirm("Erase/Clear all the elements in " + text + " mode? (Note - This action cannot be undone)")) {
         pu.reset_board();
         pu.redraw();
         // reset undo/redo
