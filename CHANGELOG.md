@@ -1,4 +1,8 @@
 ## History
+* 2020/10/10 ver2.24.8
+	* Improved display messages and tool tips for the Delete button
+	* Unmerge the arrows ending on same cell
+	* Fixed bug with helper(x) delete function in composite mode
 * 2020/10/05 ver2.24.7
 	* Unmerge the thermos ending on same cell
 	* Added new youtube video to the list

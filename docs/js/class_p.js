@@ -679,7 +679,11 @@ class Puzzle {
                 break;
             case "line":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "4") {
-                    this[this.mode.qa].line = {};
+                    for (var i in this[this.mode.qa].line) {
+                        if (this[this.mode.qa].line[i] !== 98) {
+                            delete this[this.mode.qa].line[i];
+                        }
+                    }
                     this[this.mode.qa].freeline = {};
                 } else {
                     for (var i in this[this.mode.qa].line) {
@@ -699,7 +703,11 @@ class Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") {
                     this[this.mode.qa].deletelineE = {};
                 } else {
-                    this[this.mode.qa].lineE = {};
+                    for (var i in this[this.mode.qa].lineE) {
+                        if (this[this.mode.qa].lineE[i] !== 98) {
+                            delete this[this.mode.qa].lineE[i];
+                        }
+                    }
                     this[this.mode.qa].freelineE = {};
                 }
                 break;
@@ -4740,7 +4748,7 @@ class Puzzle {
     }
 
     re_special(num, arr) {
-        if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1 || this.point[num].adjacent_dia.indexOf(parseInt(this.last)) != -1) { //隣接していたら
+        if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1 || this.point[num].adjacent_dia.indexOf(parseInt(this.last)) != -1) { // If they are adjacent
             if (this[this.mode.qa][arr].slice(-1)[0].slice(-2)[0] === num) {
                 this[this.mode.qa][arr].slice(-1)[0].pop();
             } else {
@@ -4968,7 +4976,7 @@ class Puzzle {
                     break;
                 case "edgexoi":
                     if (ondown_key === "touchstart") {
-                        this.re_combi_cross_downright(num);
+                        this.re_combi_cross_downright(num, "lineE");
                     } else {
                         this.re_combi_edgexoi(num);
                     }
@@ -5011,7 +5019,11 @@ class Puzzle {
         } else if (this.mouse_mode === "down_right") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "linex":
+                    this.re_combi_cross_downright(num);
+                    break;
                 case "edgexoi":
+                    this.re_combi_cross_downright(num, "lineE");
+                    break;
                 case "tents":
                     this.re_combi_cross_downright(num);
                     break;
@@ -5306,14 +5318,24 @@ class Puzzle {
         this.redraw();
     }
 
-    re_combi_cross_downright(num) {
+    re_combi_cross_downright(num, symboltype = "line") {
         if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { // Insert cross
-                this.record("line", num);
-                this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
-                this.record("line", num);
-                delete this[this.mode.qa].line[num];
+            if (symboltype === "line") {
+                if (!this[this.mode.qa].line[num]) { // Insert cross
+                    this.record(symboltype, num);
+                    this[this.mode.qa].line[num] = 98;
+                } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                    this.record(symboltype, num);
+                    delete this[this.mode.qa].line[num];
+                }
+            } else {
+                if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                    this.record(symboltype, num);
+                    this[this.mode.qa].lineE[num] = 98;
+                } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                    this.record(symboltype, num);
+                    delete this[this.mode.qa].lineE[num];
+                }
             }
         } else {
             this.drawing_mode = 100;

@@ -673,7 +673,7 @@ class Puzzle_square extends Puzzle {
                     if (j < (this[pu].thermo[i].length - 1)) {
                         this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y);
                     } else {
-                        commonend = this.find_common(pu, i, this[pu].thermo[i][j]);
+                        commonend = this.find_common(pu, i, this[pu].thermo[i][j], "thermo");
                         if (commonend) {
                             xdirection = this.point[this[pu].thermo[i][j]].x - this.point[this[pu].thermo[i][j - 1]].x;
                             ydirection = this.point[this[pu].thermo[i][j]].y - this.point[this[pu].thermo[i][j - 1]].y;
@@ -704,12 +704,24 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    find_common(pu, i, endpoint) {
-        for (var k = 0; k < this[pu].thermo.length; k++) {
-            if (k != i) {
-                for (var m = 1; m < this[pu].thermo[k].length; m++) {
-                    if (this[pu].thermo[k][m] === endpoint) {
-                        return 1;
+    find_common(pu, i, endpoint, symboltype) {
+        if (symboltype === "thermo") {
+            for (var k = 0; k < this[pu].thermo.length; k++) {
+                if (k != i) {
+                    for (var m = 1; m < this[pu].thermo[k].length; m++) {
+                        if (this[pu].thermo[k][m] === endpoint) {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        } else if (symboltype === "arrows") {
+            for (var k = 0; k < this[pu].arrows.length; k++) {
+                if (k != i) {
+                    for (var m = 1; m < this[pu].arrows[k].length; m++) {
+                        if (this[pu].arrows[k][m] === endpoint) {
+                            return 1;
+                        }
                     }
                 }
             }
@@ -718,6 +730,7 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_arrowsp(pu) {
+        let commonend;
         for (var i = 0; i < this[pu].arrows.length; i++) {
             if (this[pu].arrows[i][0]) {
                 this.ctx.setLineDash([]);
@@ -732,19 +745,32 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
 
                 j = this[pu].arrows[i].length - 1;
-                this.ctx.lineJoin = "bevel";
-                this.ctx.beginPath();
-                this.ctx.arrow(this.point[this[pu].arrows[i][j - 1]].x, this.point[this[pu].arrows[i][j - 1]].y,
-                    this.point[this[pu].arrows[i][j]].x + (this.point[this[pu].arrows[i][j]].x - this.point[this[pu].arrows[i][j - 1]].x) * 0.2, this.point[this[pu].arrows[i][j]].y + (this.point[this[pu].arrows[i][j]].y - this.point[this[pu].arrows[i][j - 1]].y) * 0.2,
-                    [-0.00001, 0, -0.3 * this.size, 0.3 * this.size]);
-                this.ctx.stroke();
-                this.ctx.setLineDash([]);
-                this.ctx.lineJoin = "miter";
-                this.ctx.strokeStyle = "rgba(192,192,192,1)";
-                this.ctx.fillStyle = "rgba(255,255,255,1)";
-                this.ctx.lineWidth = 3;
+                if (j) {
+                    this.ctx.lineJoin = "bevel";
+                    this.ctx.beginPath();
+                    commonend = this.find_common(pu, i, this[pu].arrows[i][j], "arrows");
+                    if (commonend) {
+                        this.ctx.arrow(this.point[this[pu].arrows[i][j - 1]].x,
+                            this.point[this[pu].arrows[i][j - 1]].y,
+                            this.point[this[pu].arrows[i][j]].x - (this.point[this[pu].arrows[i][j]].x - this.point[this[pu].arrows[i][j - 1]].x) * 0.1,
+                            this.point[this[pu].arrows[i][j]].y - (this.point[this[pu].arrows[i][j]].y - this.point[this[pu].arrows[i][j - 1]].y) * 0.1,
+                            [-0.00001, 0, -0.3 * this.size, 0.3 * this.size]);
+                    } else {
+                        this.ctx.arrow(this.point[this[pu].arrows[i][j - 1]].x,
+                            this.point[this[pu].arrows[i][j - 1]].y,
+                            this.point[this[pu].arrows[i][j]].x + (this.point[this[pu].arrows[i][j]].x - this.point[this[pu].arrows[i][j - 1]].x) * 0.2,
+                            this.point[this[pu].arrows[i][j]].y + (this.point[this[pu].arrows[i][j]].y - this.point[this[pu].arrows[i][j - 1]].y) * 0.2,
+                            [-0.00001, 0, -0.3 * this.size, 0.3 * this.size]);
+                    }
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineJoin = "miter";
+                    this.ctx.strokeStyle = "rgba(192,192,192,1)";
+                    this.ctx.fillStyle = "rgba(255,255,255,1)";
+                    this.ctx.lineWidth = 3;
 
-                this.draw_circle(this.ctx, this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y, 0.4);
+                    this.draw_circle(this.ctx, this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y, 0.4);
+                }
             }
         }
     }
