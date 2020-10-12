@@ -145,6 +145,7 @@ onload = function() {
                     pu.key_number(key);
                     event.returnValue = false;
                 } else if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 || str_alph_up.indexOf(key) != -1 || str_sym.indexOf(key) != -1) {
+                    event.preventDefault();
                     pu.key_number(key);
                 } else if (key === " ") {
                     pu.key_space();
