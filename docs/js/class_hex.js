@@ -14,7 +14,7 @@ class Puzzle_hex extends Puzzle {
         this.canvasy = this.height_c * this.size;
         this.center_n = parseInt((this.nx * 3 + 1) ** 2 * 0.5 + (this.nx * 3) * 0.5 * (this.nx % 2));
         this.center_n0 = this.center_n;
-
+        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.size = size;
         this.space = [parseInt(document.getElementById("nb_space1").value, 10)];
         this.onoff_symbolmode_list = {
