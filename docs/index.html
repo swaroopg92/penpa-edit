@@ -33,6 +33,7 @@
             <input type="button" id="savetext" value="Share" class="button" />
             <a id="download_link"></a>
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
+            <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -515,7 +516,7 @@
         </span>
         <span class="tooltip">
             <input type="button" id="tb_delete" value="Delete" class="button" />
-            <span id="erase_text" class="tooltiptext">Erase problem or soltuion grid</span>
+            <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
         </span>
         <br><br>
         <div id="stop_watch">
@@ -532,7 +533,7 @@
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.24.8, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.24.9, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -817,6 +818,20 @@
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-input" class="modal">
+        <div id="modal-input-content">
+            <div id="modal-header">
+                <h3 id="save4texttitle">Input/Output sudoku string</h3>
+            </div>
+            <div id="modal-save-body">
+                <textarea rows="1" cols="81" id="iostring"></textarea>
+            </div>
+            <div class="nb_button">
+                <input type="button" id="load_input" value="Load Sudoku" onclick="load_sudoku();" />
+                <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();" />
             </div>
         </div>
     </div>

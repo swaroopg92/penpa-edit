@@ -589,6 +589,11 @@ function savetext() {
     document.getElementById("savetextarea").value = "";
 }
 
+function io_sudoku() {
+    document.getElementById("modal-input").style.display = 'block';
+    document.getElementById("iostring").value = "Enter 81 digits (0-9, 0 for an empty cell, no spaces)";
+}
+
 function expansion() {
     document.getElementById("modal-save2").style.display = 'block';
 }
@@ -703,6 +708,38 @@ function duplicate() {
         address = address + "&l=solvedup";
     }
     window.open(address);
+}
+
+function load_sudoku() {
+    let flag;
+    if (document.getElementById("gridtype").value === "sudoku") {
+        flag = pu.load_clues();
+    } else if (document.getElementById("gridtype").value === "square") {
+        if ((parseInt(document.getElementById("nb_size2").value, 10) - parseInt(document.getElementById("nb_space1").value, 10) - parseInt(document.getElementById("nb_space2").value, 10) === 9) &&
+            (parseInt(document.getElementById("nb_size1").value, 10) - parseInt(document.getElementById("nb_space3").value, 10) - parseInt(document.getElementById("nb_space4").value, 10) === 9)) {
+            flag = pu.load_clues();
+        } else {
+            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+        }
+    } else {
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+    }
+}
+
+function export_sudoku() {
+    let flag;
+    if (document.getElementById("gridtype").value === "sudoku") {
+        flag = pu.export_clues();
+    } else if (document.getElementById("gridtype").value === "square") {
+        if ((parseInt(document.getElementById("nb_size2").value, 10) - parseInt(document.getElementById("nb_space1").value, 10) - parseInt(document.getElementById("nb_space2").value, 10) === 9) &&
+            (parseInt(document.getElementById("nb_size1").value, 10) - parseInt(document.getElementById("nb_space3").value, 10) - parseInt(document.getElementById("nb_space4").value, 10) === 9)) {
+            flag = pu.export_clues();
+        } else {
+            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+        }
+    } else {
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+    }
 }
 
 function load(urlParam) {

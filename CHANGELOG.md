@@ -1,10 +1,16 @@
 ## History
+* 2020/10/16 ver2.24.9
+	* I/O Sudoku Button - Input/Output 81 digit string for Sudoku grids. This allows user to import/export the sudoku from sudokuwiki.org and vice-versa.
+	* Normal numbers won't overwrite corner and side pencil marks in Problem mode
+	* Spacebar will now automatically remove corner/side pencil marks along with center number
+	* Fixed clone bug for other grid types
+	* Some bug fixes
 * 2020/10/10 ver2.24.8
 	* Improved display messages and tool tips for the Delete button
 	* Unmerge the arrows ending on same cell
 	* Fixed bug with helper(x) delete function in composite mode
 	* Added few more videos
-	* some bug fixes
+	* Some bug fixes
 * 2020/10/05 ver2.24.7
 	* Unmerge the thermos ending on same cell
 	* Added new youtube video to the list

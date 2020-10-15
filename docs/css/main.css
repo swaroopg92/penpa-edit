@@ -38,7 +38,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 440px;
+    max-width: 500px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -827,6 +827,27 @@ input[type="radio"]:checked+label {
 }
 
 #modal-save-content {
+    background-color: white;
+    width: 300px;
+    height: 270px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 20px;
+}
+
+#modal-input {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#modal-input-content {
     background-color: white;
     width: 300px;
     height: 270px;

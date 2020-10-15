@@ -114,7 +114,7 @@ onload = function() {
     let counter_index = 0;
 
     function onKeyDown(e) {
-        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "inputtext") {
+        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "iostring" || e.target.id == "inputtext") {
             // For input form
         } else {
             var key = e.key;
@@ -456,6 +456,10 @@ onload = function() {
                 //case "duplicate":
                 //duplicate();
                 //  break;
+            case "input_sudoku":
+                io_sudoku();
+                e.preventDefault();
+                break;
             case "tb_undo":
                 pu.undo();
                 e.preventDefault();
@@ -588,6 +592,8 @@ onload = function() {
             case "savetextname":
                 return;
             case "savetextarea_pp":
+                return;
+            case "iostring":
                 return;
             case "closeBtn_save1":
                 savetext_copy();

@@ -1340,14 +1340,18 @@ class Puzzle {
                 '*Stroke:-1,0,0,1\n' +
                 '*Border:-1,0,0,1\n';
             for (var j = 2; j < this.ny0 - 2; j++) {
+                // text += "\"";
                 for (var i = 2; i < this.nx0 - 2; i++) {
                     if (this.pu_q.surface[i + j * (this.nx0)] && (this.pu_q.surface[i + j * (this.nx0)] === 1 || this.pu_q.surface[i + j * (this.nx0)] === 4)) {
+                        // text += "1";
                         text += "1 ";
                     } else {
+                        // text += ".";
                         text += ". ";
                     }
                 }
                 text += "\n";
+                // text += "\"\n";
             }
             text += "--------\n";
         }
@@ -3902,20 +3906,23 @@ class Puzzle {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1":
                     // If the there are corner or sides present then get rid of them
-                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                    var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+                    // Only in Answer mode
+                    if (this.mode.qa === "pu_a") {
+                        var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                        var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
 
-                    for (var j = 0; j < 4; j++) {
-                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                            this.record("numberS", corner_cursor + j);
-                            delete this[this.mode.qa].numberS[corner_cursor + j];
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                this.record("numberS", corner_cursor + j);
+                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                            }
                         }
-                    }
 
-                    for (var j = 0; j < 4; j++) {
-                        if (this[this.mode.qa].numberS[side_cursor + j]) {
-                            this.record("numberS", side_cursor + j);
-                            delete this[this.mode.qa].numberS[side_cursor + j];
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                this.record("numberS", side_cursor + j);
+                                delete this[this.mode.qa].numberS[side_cursor + j];
+                            }
                         }
                     }
 
@@ -4064,7 +4071,7 @@ class Puzzle {
                 }
                 this.record("symbol", this.cursol);
 
-                if (this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) { //onoffモードならリスト
+                if (this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) { // List in ON-OFF mode
                     number = this.onofftext(this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]], key, con);
                 } else {
                     number = parseInt(key, 10);
@@ -4100,6 +4107,25 @@ class Puzzle {
                 this.record("numberS", this.cursolS);
                 delete this[this.mode.qa].numberS[this.cursolS];
             } else {
+
+                // Remove the corner and side numbers
+                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+
+                for (var j = 0; j < 4; j++) {
+                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                        this.record("numberS", corner_cursor + j);
+                        delete this[this.mode.qa].numberS[corner_cursor + j];
+                    }
+                }
+
+                for (var j = 0; j < 4; j++) {
+                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                        this.record("numberS", side_cursor + j);
+                        delete this[this.mode.qa].numberS[side_cursor + j];
+                    }
+                }
+
                 this.record("number", this.cursol);
                 delete this[this.mode.qa].number[this.cursol];
             }
@@ -5975,5 +6001,68 @@ class Puzzle {
                 this.sol_flag = 0;
             }
         }
+    }
+
+    load_clues() {
+        let iostring = document.getElementById("iostring").value;
+        let pcolor = 1; //black
+        let scolor = 9; //blue, 2 for green
+
+        // Data checking
+        if (iostring.length !== 81) {
+            document.getElementById("iostring").value = "Error: Less/greater than 81 numbers";
+        } else {
+            let digits = iostring.split("");
+
+            // check all are digits
+            for (var i = 0; i < digits.length; i++) {
+                if (isNaN(parseInt(digits[i], 10))) {
+                    document.getElementById("iostring").value = "Error: it contains non-numeric characters";
+                    return "failed";
+                }
+            }
+
+            // Data check passed, proceed
+            let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
+            let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+            if (this.mode.qa === "pu_q") {
+                for (var j = r_start; j < (9 + r_start); j++) { //  row
+                    for (var i = c_start; i < (9 + c_start); i++) { // column
+                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * 8], 10) !== 0) {
+                            this.record("number", (i + 2) + ((j + 2) * this.nx0));
+                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * 8], pcolor, "1"];
+                        }
+                    }
+                }
+            } else if (this.mode.qa === "pu_a") {
+                for (var j = r_start; j < (9 + r_start); j++) { //  row
+                    for (var i = c_start; i < (9 + c_start); i++) { // column
+                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * 8], 10) !== 0) {
+                            this.record("number", (i + 2) + ((j + 2) * this.nx0));
+                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (this.nx - 1)], scolor, "1"];
+                        }
+                    }
+                }
+            }
+        }
+        this.redraw();
+    }
+
+    export_clues() {
+        let outputstring = "";
+        let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
+        let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+        for (var j = r_start; j < (9 + r_start); j++) { //  row
+            for (var i = c_start; i < (9 + c_start); i++) { // column
+                if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]) {
+                    outputstring += this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                } else if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)]) {
+                    outputstring += this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                } else {
+                    outputstring += '0';
+                }
+            }
+        }
+        document.getElementById("iostring").value = outputstring;
     }
 }
