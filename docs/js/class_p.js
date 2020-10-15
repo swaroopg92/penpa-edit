@@ -55,7 +55,10 @@ class Puzzle {
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
         //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils", "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge", "combili_shaka", "combili_battleship", "combili_arrowS"];
+        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils",
+            "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
+            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb"
+        ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
         //square,tri,hex
@@ -4055,6 +4058,17 @@ class Puzzle {
                         number = con + key;
                         this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
+                    break;
+                case "11": // Killer Sum
+                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                    this.record("numberS", corner_cursor);
+                    if (this[this.mode.qa].numberS[corner_cursor]) {
+                        con = " " + this[this.mode.qa].numberS[corner_cursor][0];
+                    } else {
+                        con = "";
+                    }
+                    number = con + key;
+                    this[this.mode.qa].numberS[corner_cursor] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                     break;
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
