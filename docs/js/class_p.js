@@ -6009,8 +6009,10 @@ class Puzzle {
         let scolor = 9; //blue, 2 for green
 
         // Data checking
-        if (iostring.length !== 81) {
-            document.getElementById("iostring").value = "Error: Less/greater than 81 numbers";
+        if (iostring.length < 81) {
+            document.getElementById("iostring").value = "Error: Less than 81 digits";
+        } else if (iostring.length > 81) {
+            document.getElementById("iostring").value = "Error: Greater than 81 digits";
         } else {
             let digits = iostring.split("");
 
@@ -6054,15 +6056,57 @@ class Puzzle {
         let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
         for (var j = r_start; j < (9 + r_start); j++) { //  row
             for (var i = c_start; i < (9 + c_start); i++) { // column
-                if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]) {
-                    outputstring += this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0];
-                } else if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)]) {
-                    outputstring += this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                    (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                    (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                    if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                        var sum = 0,
+                            a;
+                        for (var k = 0; k < 10; k++) {
+                            if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                                sum += 1;
+                                a = k + 1;
+                            }
+                        }
+                        if (sum === 1) {
+                            outputstring += a.toString();
+                        } else {
+                            outputstring += '0';
+                        }
+                    } else {
+                        outputstring += this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                    }
+                } else if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                    (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                    (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                    if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                        var sum = 0,
+                            a;
+                        for (var k = 0; k < 10; k++) {
+                            if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                                sum += 1;
+                                a = k + 1;
+                            }
+                        }
+                        if (sum === 1) {
+                            outputstring += a.toString();
+                        } else {
+                            outputstring += '0';
+                        }
+                    } else {
+                        outputstring += this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                    }
                 } else {
                     outputstring += '0';
                 }
             }
         }
-        document.getElementById("iostring").value = outputstring;
+
+        // Sanity check
+        if (outputstring.length === 81) {
+            document.getElementById("iostring").value = outputstring;
+        } else {
+            document.getElementById("iostring").value = "Error: Some cells have more than 1 digit";
+        }
     }
 }
