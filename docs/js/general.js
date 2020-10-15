@@ -710,7 +710,7 @@ function duplicate() {
     window.open(address);
 }
 
-function load_sudoku() {
+function import_sudoku() {
     let flag;
     if (document.getElementById("gridtype").value === "sudoku") {
         flag = pu.load_clues();
