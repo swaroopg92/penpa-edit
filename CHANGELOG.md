@@ -1,7 +1,8 @@
 ## History
-* 2020/10/16 ver2.24.9
+* 2020/10/14 ver2.24.9
 	* I/O Sudoku Button - Input/Output 81 digit string for Sudoku grids. This allows user to import/export the sudoku from sudokuwiki.org and vice-versa.
-	* Normal numbers won't overwrite corner and side pencil marks in Problem mode
+	* Killer button added to Number mode - User can now select this option to enter killer sums in the cages while creating the killer sudoku. Killer cages can be drawn using "Frame" mode. Then select "Killer" submode under "Number" mode. Select the cell where you wan't to insert the cage total and type in the number.
+	* Normal numbers won't overwrite corner and side pencil marks in Problem mode.
 	* Spacebar will now automatically remove corner/side pencil marks along with center number
 	* Fixed clone bug for other grid types
 	* Some bug fixes
