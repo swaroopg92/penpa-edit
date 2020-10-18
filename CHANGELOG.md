@@ -1,4 +1,7 @@
 ## History
+* 2020/xx/xx ver2.24.10
+	* URL for editing will save the UNDO/REDO. "Clone" will not save the UNDO/REDO.
+	* Clicking URL_short now automatically copies the URL
 * 2020/10/15 ver2.24.9
 	* I/O Sudoku Button - Input/Output 81 digit string for Sudoku grids. This allows user to import/export the sudoku from sudokuwiki.org and vice-versa.
 	* Killer button added to Number mode - User can now select this option to enter killer sums in the cages while creating the killer sudoku. Killer cages can be drawn using "Frame" mode. Then select "Killer" submode under "Number" mode. Select the cell where you wan't to insert the cage total and type in the number.

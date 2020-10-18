@@ -688,6 +688,15 @@ function savetext_window() {
 }
 
 function shorturl_tab() {
+    var textarea = document.getElementById("savetextarea");
+    textarea.select();
+    var range = document.createRange();
+    range.selectNodeContents(textarea);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    textarea.setSelectionRange(0, 1e5);
+    document.execCommand("copy");
     window.open('https://git.io', '_blank');
 }
 
@@ -703,7 +712,7 @@ function getValues(id) {
 }
 
 function duplicate() {
-    var address = pu.maketext();
+    var address = pu.maketext_duplicate();
     if (pu.mmode === "solve") {
         address = address + "&l=solvedup";
     }

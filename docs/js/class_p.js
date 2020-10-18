@@ -770,6 +770,51 @@ class Puzzle {
         return url + "?m=edit&p=" + ba;
     }
 
+    maketext_duplicate() {
+        var text = "";
+        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
+            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString() + "\n";
+
+        text += JSON.stringify(this.space) + "\n";
+        text += JSON.stringify(this.mode) + "\n";
+
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
+        this.pu_q.command_redo.__a = [];
+        this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q) + "\n";
+        text += JSON.stringify(this.pu_a) + "\n";
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
+
+        var list = [this.centerlist[0]];
+        for (var i = 1; i < this.centerlist.length; i++) {
+            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        }
+
+        text += JSON.stringify(list);
+
+        for (var i = 0; i < this.replace.length; i++) {
+            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        }
+
+        var u8text = new TextEncoder().encode(text);
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        var ba = window.btoa(char8);
+        var url = location.href.split('?')[0];
+        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        return url + "?m=edit&p=" + ba;
+    }
+
     maketext_solve() {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
@@ -778,13 +823,19 @@ class Puzzle {
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
 
-        var r = this.pu_q.command_redo.__a;
-        var u = this.pu_q.command_undo.__a;
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
-        this.pu_q.command_redo.__a = r;
-        this.pu_q.command_undo.__a = u;
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
