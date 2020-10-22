@@ -103,6 +103,7 @@ onload = function() {
         "Edge Normal", "Edge Diagonal", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
     ];
+
     let modes_mapping = ["surface", "wall",
         "sub_line1", "sub_line2", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE4",
