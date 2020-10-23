@@ -3172,3 +3172,70 @@ class Puzzle_sudoku extends Puzzle_square {
         }
     }
 }
+
+class Puzzle_kakuro extends Puzzle_square {
+    constructor(nx, ny, size) {
+        // Board information
+        super('kakuro');
+        this.gridtype = "kakuro";
+        this.nx = nx;
+        this.ny = ny;
+        this.nx0 = this.nx + 4;
+        this.ny0 = this.ny + 4;
+        this.margin = -1; //for arrow of number pointing outside of the grid
+
+        this.width0 = this.nx + 1;
+        this.height0 = this.ny + 1;
+        this.width_c = this.width0;
+        this.height_c = this.height0;
+        this.width = this.width_c;
+        this.height = this.height_c;
+        this.canvasx = this.width_c * this.size;
+        this.canvasy = this.height_c * this.size;
+        this.space = [
+            parseInt(document.getElementById("nb_space1").value, 10),
+            parseInt(document.getElementById("nb_space2").value, 10),
+            parseInt(document.getElementById("nb_space3").value, 10),
+            parseInt(document.getElementById("nb_space4").value, 10)
+        ];
+        this.size = size;
+        this.onoff_symbolmode_list = {
+            "cross": 4,
+            "arrow_cross": 4,
+            "arrow_fourtip": 4,
+            "degital_B": 7,
+            "degital_G": 7,
+            "degital_E": 7,
+            "degital_f": 7,
+            "arrow_eight": 8,
+            "arrow_fouredge_B": 8,
+            "arrow_fouredge_G": 8,
+            "arrow_fouredge_E": 8,
+            "dice": 9,
+            "polyomino": 9
+        };
+        this.reset();
+        this.erase_buttons();
+    }
+
+    draw_kakurogrid() {
+        let rows = this.ny;
+        let cols = this.nx;
+
+        // R1C1 as black
+        let i = 0,
+            j = 0;
+        this[this.mode.qa].symbol[(i + 2) + ((j + 2) * this.nx0)] = [2, "kakuro", 2];
+
+        // Row 1 Blacks
+        for (i = 1; i < cols; i++) { // column
+            this[this.mode.qa].symbol[(i + 2) + ((j + 2) * this.nx0)] = [1, "kakuro", 2];
+        }
+
+        // Col 1 Blacks
+        i = 0;
+        for (j = 1; j < cols; j++) { // column
+            this[this.mode.qa].symbol[(i + 2) + ((j + 2) * this.nx0)] = [1, "kakuro", 2];
+        }
+    }
+}
