@@ -923,6 +923,7 @@ h4 {
 
 #solutiontext {
     font-size: 12px;
+    text-align: left;
 }
 
 input[type=number] {
