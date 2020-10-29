@@ -1,9 +1,40 @@
+:root {
+    /* Colors: should be the same as in style.js */
+    --black: #000000;
+    --blackLight: #232323;
+    --blue: #0000ff;
+    --blueDark: #1e50a2;
+    --blueLight: #187bcd;
+    --blueLightVery: #c0e0ff;
+    --brownLight: #eecab1;
+    --green: #208020;
+    --greenLight: #4c9900;
+    --greenLightVery: #b3ffb3;
+    --grey: #999999;
+    --greyDark: #777777;
+    --greyDarkVery: #444444;
+    --greyLight: #cccccc;
+    --greyLightVery: #f0f0f0;
+    --orange: #ffa500;
+    --orangeLight: #ffcc80;
+    --pinkLight: #ffb3ff;
+    --purpleLight: #cc99ff;
+    --red: #ff0000;
+    --redLight: #ffa3a3;
+    --transparent: rgba(0, 0, 0, 0);
+    --transparent40: rgba(0, 0, 0, 0.6);
+    --transparent50: rgba(0, 0, 0, 0.5);
+    --transparent70: rgba(0, 0, 0, 0.3);
+    --white: #ffffff;
+    --yellow: #ffffa3;
+}
+
 * {
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: var(--transparent);
     touch-action: manipulation;
     /*user-select: none;*/
     margin: 0;
@@ -15,13 +46,13 @@ input {
 }
 
 body {
-    background: #fff;
+    background: var(--white);
 }
 
 header {
     width: 100%;
     margin: 0 auto;
-    background: #fff;
+    background: var(--white);
     padding-top: 15px;
 }
 
@@ -46,28 +77,27 @@ hr.newgridhrline {
 
 #tb_undo,
 #tb_redo {
-    color: #ccc;
+    color: var(--greyLight);
 }
 
 .button {
     display: inline-block;
     padding: 2px 5px;
     text-decoration: none;
-    background: #fff;
-    color: #000;
+    background: var(--white);
+    color: var(--black);
     border-radius: 4px;
 }
 
 .sw {
     margin: 5px;
-    background-color: #42a5f5;
-    /* Blue Berry*/
-    color: white;
+    background-color: var(--blueLight);
+    color: var(--white);
 }
 
 #buttons {
     font-size: 0;
-    border: 1px solid #000;
+    border: 1px solid var(--black);
     width: 520px;
     margin: 0 auto;
     padding-top: 10px;
@@ -119,7 +149,7 @@ hr.newgridhrline {
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
-    color: #000000;
+    color: var(--black);
     font-size: 14px;
     text-align: center;
     line-height: 28px;
@@ -138,11 +168,11 @@ hr.newgridhrline {
     padding-left: 5px;
     padding-right: 5px;
     margin-bottom: 5px;
-    color: #000000;
+    color: var(--black);
     font-size: 14px;
     text-align: center;
     line-height: 28px;
-    border: 1px solid #1e50a2;
+    border: 1px solid var(--blueDark);
     border-radius: 3px;
 }
 
@@ -155,21 +185,21 @@ hr.newgridhrline {
     padding-right: 5px;
     margin-left: 5px;
     margin-bottom: 5px;
-    color: #000000;
+    color: var(--black);
     font-size: 14px;
     text-align: center;
     line-height: 28px;
-    border: 2px solid #dd0000;
+    border: 2px solid var(--red);
     border-radius: 3px;
 }
 
 .label:hover {
-    background: #eeeeee;
+    background: var(--greyLightVery);;
 }
 
 
 .label_option:hover {
-    background: #eeeeee;
+    background: var(--greyLightVery);;
 }
 
 
@@ -181,52 +211,52 @@ hr.newgridhrline {
     padding-left: 5px;
     padding-right: 5px;
     margin-bottom: 5px;
-    color: #000000;
+    color: var(--black);
     font-size: 14px;
     text-align: center;
     line-height: 28px;
-    border: 1px solid #1e50a2;
+    border: 1px solid var(--blueDark);
     border-radius: 3px;
 }
 
 .labelL:hover {
-    background: #eeeeee;
+    background: var(--greyLightVery);;
 }
 
 #st_number1_lb {
     /* Black */
-    background-color: #000;
-    color: #FFF;
+    background-color: var(--black);
+    color: var(--white);
 }
 
 #st_number2_lb {
     /* Green */
-    background-color: #4C9900;
-    color: #fff;
+    background-color: var(--greenLight);
+    color: var(--white);
 }
 
 #st_number8_lb {
     /* Light Blue */
-    background-color: #187bcd;
-    color: #fff;
+    background-color: var(--blueLight);
+    color: var(--white);
 }
 
 #st_number3_lb {
     /* Grey */
-    background-color: #999999;
-    color: #fff;
+    background-color:var(--grey);
+    color: var(--white);
 }
 
 #st_number9_lb {
-    /* Dark Blue */
-    background-color: #00F;
-    color: #FFF;
+    /* Blue */
+    background-color: var(--blue);
+    color: var(--white);
 }
 
 #st_number10_lb {
-    /* Dark Red */
-    background-color: #F00;
-    color: #FFF;
+    /* Red */
+    background-color: var(--red);
+    color: var(--white);
 }
 
 #st_number6_lb {
@@ -271,85 +301,85 @@ hr.newgridhrline {
 
 #st_surface1_lb {
     /* Dark Grey */
-    background-color: #444;
-    color: #FFF;
+    background-color: var(--greyDarkVery);
+    color: var(--white);
     font-size: 12px;
 }
 
 #st_surface3_lb {
     /* Light Grey */
-    background-color: #f0f0f0;
-    color: #000;
+    background-color: var(--greyLightVery);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface4_lb {
     /* Black */
-    background-color: #000;
-    color: #FFF;
+    background-color: var(--black);
+    color: var(--white);
     font-size: 12px;
 }
 
 #st_surface2_lb {
     /* Green */
-    background-color: #b3ffb3;
-    color: #000;
+    background-color: var(--greenLightVery);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface5_lb {
     /* Light Blue */
-    background-color: #c0e0ff;
-    color: #000;
+    background-color: var(--blueLightVery);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface6_lb {
     /* Red */
-    background-color: #ffa3a3;
-    color: #000;
+    background-color: var(--redLight);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface7_lb {
     /* Yellow */
-    background-color: #ffffa3;
-    color: #000;
+    background-color: var(--yellow);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface8_lb {
     /* Grey */
-    background-color: #ccc;
-    color: #000;
+    background-color: var(--greyLight);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface9_lb {
     /* pink */
-    background-color: #ffb3ff;
-    color: #000;
+    background-color: var(--pinkLight);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface10_lb {
     /* orange */
-    background-color: #ffcc80;
-    color: #000;
+    background-color: var(--orangeLight);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface11_lb {
     /* Purple */
-    background-color: #cc99ff;
-    color: #000;
+    background-color: var(--purpleLight);
+    color: var(--black);
     font-size: 12px;
 }
 
 #st_surface12_lb {
     /* Brown */
-    background-color: #eecab1;
-    color: #000;
+    background-color: var(--brownLight);
+    color: var(--black);
     font-size: 12px;
 }
 
@@ -357,8 +387,8 @@ hr.newgridhrline {
 #st_lineE3_lb,
 #st_wall3_lb {
     /* Green */
-    background-color: rgba(32, 128, 32, 1);
-    color: #fff;
+    background-color: var(--green);
+    color: var(--white);
     font-size: 16px;
 }
 
@@ -366,8 +396,8 @@ hr.newgridhrline {
 #st_lineE2_lb,
 #st_wall2_lb {
     /* Black */
-    background-color: #000;
-    color: #fff;
+    background-color: var(--black);
+    color: var(--white);
     font-size: 16px;
 }
 
@@ -375,8 +405,8 @@ hr.newgridhrline {
 #st_lineE5_lb,
 #st_wall5_lb {
     /* Grey */
-    background-color: #777;
-    color: #fff;
+    background-color:var(--greyDark);
+    color: var(--white);
     font-size: 16px;
 }
 
@@ -384,8 +414,8 @@ hr.newgridhrline {
 #st_lineE8_lb,
 #st_wall8_lb {
     /* Red */
-    background-color: red;
-    color: #fff;
+    background-color: var(--red);
+    color: var(--white);
     font-size: 16px;
 }
 
@@ -393,8 +423,8 @@ hr.newgridhrline {
 #st_lineE9_lb,
 #st_wall9_lb {
     /* Blue */
-    background-color: #187bcd;
-    color: #fff;
+    background-color: var(--blueLight);
+    color: var(--white);
     font-size: 16px;
 }
 
@@ -420,9 +450,9 @@ input[type=radio] {
 }
 
 input[type="radio"]:checked+label {
-    background: #cccccc;
-    color: #000000;
-    box-shadow: 0 0 0 1px orange;
+    background: var(--greyLight);
+    color: var(--black);
+    box-shadow: 0 0 0 1px var(--orange);
 }
 
 #panel_button0,
@@ -442,7 +472,7 @@ input[type="radio"]:checked+label {
 #reload_button,
 #edge_button {
     width: 25px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--greyLight);
     background: none;
     margin-left: 0px;
     border-radius: 1px;
@@ -452,7 +482,7 @@ input[type="radio"]:checked+label {
 #visibility_button:hover,
 #reload_button:hover,
 #edge_button:hover {
-    background: #ccc;
+    background: var(--greyLight);
 }
 
 .nav {
@@ -481,25 +511,25 @@ input[type="radio"]:checked+label {
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
-    color: #000000;
+    color: var(--black);
     font-size: 14px;
-    background: #ffffff;
+    background: var(--white);
     text-align: center;
     line-height: 28px;
-    border: 1px solid #1e50a2;
+    border: 1px solid var(--blueDark);;
     border-radius: 3px;
 }
 
 .nav>li:hover>span {
     /*layer-1*/
-    color: black;
-    background: #cccccc;
+    color: var(--black);
+    background: var(--greyLight);
 }
 
 .nav>li li:hover>span {
     /*layer-2*/
-    color: black;
-    background: #cccccc;
+    color: var(--black);
+    background: var(--greyLight);
 }
 
 .nav li ul {
@@ -526,12 +556,12 @@ input[type="radio"]:checked+label {
     padding-left: 0px;
     padding-right: 0px;
     margin-top: 0px;
-    color: #000000;
+    color: var(--black);
     font-size: 12px;
-    background: #ffffff;
+    background: var(--white);
     text-align: center;
     line-height: 28px;
-    border: 1px solid #1e50a2;
+    border: 1px solid var(--blueDark);;
     border-radius: 0px;
 }
 
@@ -548,23 +578,14 @@ input[type="radio"]:checked+label {
 }
 
 .nav li ul li ul:before {
-    /*layer-2▷*/
+    /*layer-2*/
     position: absolute;
     content: "";
     top: 9px;
     left: 0px;
     border: 5px solid transparent;
-    border-left: 5px solid #000;
+    border-left: 5px solid var(--black);
 }
-
-/*
-  .nav li ul hr{
-    margin  : 0px;
-    padding : 0px;
-    border  : none;
-    height  : 1px;
-    color   : lime;
-  }*/
 
 .nav li.symbolmode_display span {
     width: auto;
@@ -578,7 +599,7 @@ input[type="radio"]:checked+label {
 
 .nav>li.symbolmode_display:hover>span {
     /*layer-1*/
-    color: black;
+    color: var(--black);
     background: none;
 }
 
@@ -591,15 +612,15 @@ input[type="radio"]:checked+label {
 }
 
 #dvique {
-    background: #fff;
-    border: 1px solid #232323;
+    background: var(--white);
+    border: 1px solid var(--blackLight);
     width: 400px;
     margin: 0 auto;
     padding: 10px;
 }
 
 #canvas {
-    background: #fff;
+    background: var(--white);
 }
 
 #float-key {
@@ -610,7 +631,7 @@ input[type="radio"]:checked+label {
     top: 250px;
     width: 0px;
     height: 0px;
-    background-color: #fff;
+    background-color: var(--white);
     border-radius: 20px;
 }
 
@@ -618,7 +639,7 @@ input[type="radio"]:checked+label {
     width: 200px;
     height: 20px;
     text-align: center;
-    background: #aaa;
+    background: var(--grey);
     padding-top: 0px;
     border-radius: 5px 5px 0px 0px;
     cursor: move;
@@ -630,10 +651,10 @@ input[type="radio"]:checked+label {
     height: 140px;
     margin-top: 0px;
     text-align: center;
-    background: #ddd;
+    background: var(--greyLight);
     padding-top: 0px;
     border-radius: 5px 5px 5px 5px;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: 4px 4px 4px var(--transparent40);
 }
 
 #float-key-menu {
@@ -641,7 +662,7 @@ input[type="radio"]:checked+label {
     width: 100%;
     height: 20px;
     text-align: center;
-    background: #ccc;
+    background: var(--greyLight);
     padding-top: 20px;
     border-radius: 5px 5px 0px 0px;
 }
@@ -654,10 +675,11 @@ input[type="radio"]:checked+label {
 }
 
 .panel_menu li {
-    border-right: 1px solid #fff;
+    border-bottom: 1px solid var(--white);
+    border-right: 1px solid var(--white);
     list-style: none;
     vertical-align: middle;
-    background-color: #ccc;
+    background-color: var(--greyLight);
     width: 100%;
     height: 100%;
 }
@@ -686,18 +708,18 @@ input[type="radio"]:checked+label {
 }
 
 .panel_menu_select li {
-    border-left: 1px solid #fff;
-    border-top: 1px solid #fff;
+    border-left: 1px solid var(--white);
+    border-top: 1px solid var(--white);
     list-style: none;
     vertical-align: middle;
-    background-color: #ccc;
+    background-color: var(--greyLight);
     width: 100%;
     height: 0px;
 }
 
 
 .label_menu {
-    background-color: #ccc;
+    background-color: var(--greyLight);
     display: flex;
     justify-content: center;
     width: 100%;
@@ -728,11 +750,11 @@ input[type="radio"]:checked+label {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--transparent70);
 }
 
 #modal-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 360px;
     margin: 0 auto;
@@ -749,11 +771,11 @@ input[type="radio"]:checked+label {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--transparent70);
 }
 
 #modal-newsize-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 100px;
     margin: 0 auto;
@@ -770,7 +792,7 @@ input[type="radio"]:checked+label {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--transparent70);
 }
 
 #modal-image-body {
@@ -779,7 +801,7 @@ input[type="radio"]:checked+label {
 }
 
 #modal-image-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 230px;
     margin: 0 auto;
@@ -796,7 +818,7 @@ input[type="radio"]:checked+label {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--transparent70);
 }
 
 #modal-rotate {
@@ -808,11 +830,11 @@ input[type="radio"]:checked+label {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--transparent70);
 }
 
 #modal-rotate-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 270px;
     margin: 0 auto;
@@ -826,7 +848,7 @@ input[type="radio"]:checked+label {
 }
 
 #modal-save-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 270px;
     margin: 0 auto;
@@ -843,11 +865,11 @@ input[type="radio"]:checked+label {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--transparent70);
 }
 
 #modal-input-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 270px;
     margin: 0 auto;
@@ -890,11 +912,11 @@ textarea {
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--transparent50);
 }
 
 #modal-save2-content {
-    background-color: white;
+    background-color: var(--white);
     width: 300px;
     height: 320px;
     margin: 0 auto;
@@ -911,7 +933,7 @@ textarea {
     width: 300px;
     height: 30px;
     text-align: center;
-    background: #ddd;
+    background: var(--greyLight);
     padding-top: 0px;
     border-radius: 20px 20px 0px 0px;
 }
@@ -952,254 +974,6 @@ input[type=number] {
     text-align: center;
 }
 
-/* ============================================================= */
-/* Menu Area */
-#menupanel {
-    display: block;
-    position: relative;
-    top: 0px;
-    left: 0px;
-    height: 1.5em;
-    margin: 0;
-    padding: 0 0 0 2pt;
-    background: #efefef;
-    font-size: 0.95em;
-    border-bottom: silver 1px solid;
-
-    user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-}
-
-@media screen and (max-device-width: 1024px) {
-    #menupanel {
-        height: 1.8em;
-    }
-}
-
-/* main-menu items */
-#menupanel>li {
-    position: relative;
-    float: left;
-    margin: 0;
-    padding: 0pt 4pt;
-    height: 100%;
-    list-style: none;
-    cursor: pointer;
-}
-
-#menupanel>li:hover {
-    background: #ffcccc;
-}
-
-#menupanel>li>span {
-    color: blue;
-    line-height: 1.5;
-    font-size: 110%;
-    vertical-align: middle;
-}
-
-@media screen and (max-device-width: 1024px) {
-    #menupanel>li>span {
-        line-height: 1.8;
-    }
-}
-
-#menupanel>li:hover>span {
-    color: maroon;
-    font-weight: 900;
-}
-
-/* submenu popup (any level) */
-#menupanel li:hover>menu {
-    display: block;
-}
-
-/* for all level1+ submenus */
-#menupanel>li>menu {
-    font-size: 0.9em;
-}
-
-#menupanel menu {
-    display: none;
-    position: absolute;
-    list-style-type: none;
-    background: gray;
-    background: #cccccc linear-gradient(to right bottom, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0));
-    margin: 0pt;
-    padding: 3px;
-    border-radius: 8px;
-    box-shadow: 6px 6px 6px rgba(64, 64, 64, .5);
-    /* box-shadow : 6px 6px 6px rgba(64,64,64,.5), inset 32px 32px 48px -16px rgba(0,0,0,.5); */
-
-    text-align: left;
-    cursor: default;
-}
-
-#menupanel menu[label]:before {
-    margin: 0pt;
-    padding: 4pt 8pt 4pt 4pt;
-    line-height: 140%;
-    white-space: nowrap;
-    color: white;
-    content: attr(label);
-
-    text-shadow: 0px 0px 1px black;
-}
-
-#menupanel menu li:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-#menupanel menu li:last-child {
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-/* level1, level2+ submenus */
-#menupanel menu {
-    left: 0px;
-    top: 1.5em;
-    min-width: 132px;
-    z-index: 22;
-}
-
-@media screen and (max-device-width: 1024px) {
-    #menupanel menu {
-        top: 2.0em;
-    }
-}
-
-#menupanel menu menu[label] {
-    left: 120px;
-    top: -1.5em;
-    min-width: 80px;
-    z-index: 23;
-}
-
-#menupanel menu menu {
-    left: 120px;
-    top: -0.2em;
-    min-width: 80px;
-    z-index: 23;
-}
-
-#menupanel menu menu[label] menu {
-    left: 72px;
-    top: -1.5em;
-    min-width: 80px;
-    z-index: 24;
-}
-
-/* submenu items */
-#menupanel menu li {
-    display: block;
-    position: relative;
-    line-height: 1.1;
-    float: none;
-    list-style: none;
-    margin: 0pt;
-    padding: 0.2em 2pt 0.2em 4pt;
-    color: black;
-    background: white;
-    cursor: pointer;
-}
-
-@media screen and (max-device-width: 1024px) {
-    #menupanel menu li {
-        line-height: 1.8;
-    }
-}
-
-#menupanel menu li:hover {
-    background: #ffcccc;
-}
-
-#menupanel menu li:hover>span {
-    font-weight: 900;
-    text-decoration: underline;
-}
-
-@media screen and (max-device-width: 1024px) {
-    #menupanel menu li+li {
-        margin-top: 1px;
-    }
-}
-
-#menupanel menu hr {
-    margin: 0px;
-    padding: 0px;
-    border: none;
-    height: 3px;
-    color: lime;
-}
-
-@media screen and (max-device-width: 1024px) {
-    #menupanel menu hr {
-        height: 4px;
-    }
-}
-
-#menupanel menu span {
-    white-space: nowrap;
-}
-
-#menupanel menu a {
-    color: black;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-/* disabled submenu items */
-#menupanel menu li.disabled {
-    background: #dfdfdf;
-    color: gray;
-    cursor: default;
-}
-
-/* (cancel hover, for unsupporting :not(.disabled)) */
-#menupanel menu li.disabled:hover {
-    background: #dfdfdf;
-}
-
-#menupanel menu li.disabled:hover>span {
-    font-weight: 100;
-    text-decoration: none;
-}
-
-/* toggle submenu items */
-#menupanel menu li.check>span,
-#menupanel menu li[data-value]>span {
-    font-size: small;
-    color: gray;
-}
-
-#menupanel menu li.checked>span {
-    font-size: small;
-    color: black;
-}
-
-#menupanel menu li.check>span:before,
-#menupanel menu li[data-value]>span:before {
-    padding: 0pt 2pt;
-    color: white;
-    content: "_";
-    font-size: small;
-}
-
-#menupanel menu li.checked>span:before {
-    padding: 0pt 2pt;
-    color: black;
-    content: "+";
-    font-size: small;
-}
-
-#menu_link li {
-    font-size: 0.9em;
-}
-
 /* Tool tips */
 .tooltip {
     position: relative;
@@ -1208,8 +982,8 @@ input[type=number] {
 
 .tooltip .tooltiptext {
     visibility: hidden;
-    background-color: #555;
-    color: #fff;
+    background-color: var(--greyDarkVery);
+    color: var(--white);
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
@@ -1279,7 +1053,7 @@ input[type=number] {
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: var(--greyDarkVery) transparent transparent transparent;
 }
 
 #border_text.tooltiptext::after {
@@ -1306,6 +1080,6 @@ input[type=number] {
 /* Information area*/
 #channel,
 #tutorials {
-    color: blue;
-    background-color: #c0e0ff;
+    color: var(--blue);
+    background-color: var(--blueLightVery);
 }
