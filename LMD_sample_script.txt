@@ -1,0 +1,17 @@
+<p> Diagonally Miracle Sudoku</p>
+<p> After several tries, I was finally able to create this variant, inspired from miracle sudoku of course </p>
+<p> Rules:</p>
+<p>1. Normal classic rules apply</p>
+<p>2. Same digits cannot touch each other diagonally (Antiking) </p>
+<p>3. Consecutive digits don't touch diagonally (Diagonally nonconsecutive)</p>
+<p>4. Same digits cannot be at diagonally knight positions (Diagonally Antiknight) </p>
+<p> Note: Diagonally knight - Also known as monkey step - 3 cells in one direction and one to the side</p>
+<div style="clear:both;text-align:center">
+<img:0006EB>
+</div>
+<p><a href="https://git.io/JUNO2">Solve Online</a> : Answer check is also enabled if you use blue or green color digits</p>
+<p> Puzzle:</p>
+<div style="clear:both;text-align:center;width:60%;height:60%">
+<img:0006EA>
+</div>
+<p>Happy Solving !!!</p>
