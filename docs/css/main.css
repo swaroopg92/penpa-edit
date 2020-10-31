@@ -20,7 +20,6 @@ body {
 
 header {
     width: 100%;
-    image height: auto;
     margin: 0 auto;
     background: #fff;
     padding-top: 15px;
@@ -923,6 +922,7 @@ h4 {
 
 #solutiontext {
     font-size: 12px;
+    text-align: left;
 }
 
 input[type=number] {
