@@ -20,6 +20,16 @@
     <script type="text/javascript" src="./js/style.js"></script>
     <script type="text/javascript" src="./js/general.js"></script>
     <script type="text/javascript" src="./js/encoding.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180924087-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+    function gtag(){
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-180924087-1');
+    </script>
 </head>
 
 <body>
@@ -535,7 +545,7 @@
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.24.9, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.24.10, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -609,6 +619,7 @@
                     <option value="pyramid" id="nb_type4_lb">Pyramid</option>
                     <option value="iso" id="nb_type5_lb">Cube</option>
                     <option value="sudoku" id="nb_type6_lb">Sudoku</option>
+                    <option value="kakuro" id="nb_type7_lb">Kakuro</option>
                 </select>
             </span><br>
             <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -832,7 +843,7 @@
                 <textarea rows="1" cols="81" id="iostring"></textarea>
             </div>
             <div class="nb_button">
-                <input type="button" id="load_input" value="Load Sudoku" onclick="load_sudoku();" />
+                <input type="button" id="load_input" value="Import Sudoku" onclick="import_sudoku();" />
                 <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();" />
             </div>
         </div>

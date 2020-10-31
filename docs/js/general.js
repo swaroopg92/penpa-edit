@@ -201,6 +201,21 @@ function make_class(gridtype, loadtype = 'new') {
                 }
             }
             break;
+        case "kakuro":
+            var nx = parseInt(document.getElementById("nb_size1").value, 10);
+            var ny = parseInt(document.getElementById("nb_size2").value, 10);
+
+            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0) {
+                // Create Kakuro object
+                pu = new Puzzle_kakuro(nx, ny, size);
+
+                if (loadtype === "new") {
+                    pu.draw_kakurogrid();
+                }
+            } else {
+                alert("Size must be in the range 1-40");
+            }
+            break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             if (n0 <= 10 && n0 > 0) {
@@ -248,6 +263,7 @@ function changetype() {
         "nb_sudoku3_lb", "nb_sudoku3",
         "nb_sudoku4_lb", "nb_sudoku4"
     ]; // on - for sudoku
+    var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     switch (gridtype) {
         case "square":
             for (var i of type) {
@@ -363,6 +379,26 @@ function changetype() {
             document.getElementById("nb_sudoku2").checked = false;
             document.getElementById("nb_sudoku3").checked = false;
             document.getElementById("nb_sudoku4").checked = false;
+            break;
+        case "kakuro":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type5) {
+                document.getElementById(i).style.display = "inline";
+            }
+            document.getElementById("name_size1").innerHTML = "Columns：";
+            document.getElementById("nb_size1").value = 10;
+            document.getElementById("nb_size2").value = 10;
             break;
         case "truncated_square":
             for (var i of type) {
@@ -688,6 +724,15 @@ function savetext_window() {
 }
 
 function shorturl_tab() {
+    var textarea = document.getElementById("savetextarea");
+    textarea.select();
+    var range = document.createRange();
+    range.selectNodeContents(textarea);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    textarea.setSelectionRange(0, 1e5);
+    document.execCommand("copy");
     window.open('https://git.io', '_blank');
 }
 
@@ -703,14 +748,14 @@ function getValues(id) {
 }
 
 function duplicate() {
-    var address = pu.maketext();
+    var address = pu.maketext_duplicate();
     if (pu.mmode === "solve") {
         address = address + "&l=solvedup";
     }
     window.open(address);
 }
 
-function load_sudoku() {
+function import_sudoku() {
     let flag;
     if (document.getElementById("gridtype").value === "sudoku") {
         flag = pu.load_clues();
