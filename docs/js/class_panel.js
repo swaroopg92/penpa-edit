@@ -104,7 +104,7 @@ class Panel {
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
-                    this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "\u{21B2}", ""];
+                    this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "\u{232B}", ""];
                     this.draw_number();
                     break;
                 case "alphabet":
