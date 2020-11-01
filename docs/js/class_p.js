@@ -6079,6 +6079,9 @@ class Puzzle {
         } else if (iostring.length > 81) {
             document.getElementById("iostring").value = "Error: Greater than 81 digits";
         } else {
+
+            // Replace dots with zeros
+            iostring = iostring.replace(/\./g, 0);
             let digits = iostring.split("");
 
             // check all are digits
