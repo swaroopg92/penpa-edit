@@ -766,14 +766,21 @@ function import_sudoku() {
     if (document.getElementById("gridtype").value === "sudoku") {
         flag = pu.load_clues();
     } else if (document.getElementById("gridtype").value === "square") {
-        if ((parseInt(document.getElementById("nb_size2").value, 10) - parseInt(document.getElementById("nb_space1").value, 10) - parseInt(document.getElementById("nb_space2").value, 10) === 9) &&
-            (parseInt(document.getElementById("nb_size1").value, 10) - parseInt(document.getElementById("nb_space3").value, 10) - parseInt(document.getElementById("nb_space4").value, 10) === 9)) {
+        let rsize = parseInt(document.getElementById("nb_size2").value, 10);
+        let csize = parseInt(document.getElementById("nb_size1").value, 10);
+        let over = parseInt(document.getElementById("nb_space1").value, 10);
+        let under = parseInt(document.getElementById("nb_space2").value, 10);
+        let left = parseInt(document.getElementById("nb_space3").value, 10);
+        let right = parseInt(document.getElementById("nb_space4").value, 10);
+        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
+            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
+            ((rsize - over - under === 6) && (csize - left - right === 6))) {
             flag = pu.load_clues();
         } else {
-            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
         }
     } else {
-        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
     }
 }
 
@@ -782,14 +789,22 @@ function export_sudoku() {
     if (document.getElementById("gridtype").value === "sudoku") {
         flag = pu.export_clues();
     } else if (document.getElementById("gridtype").value === "square") {
-        if ((parseInt(document.getElementById("nb_size2").value, 10) - parseInt(document.getElementById("nb_space1").value, 10) - parseInt(document.getElementById("nb_space2").value, 10) === 9) &&
-            (parseInt(document.getElementById("nb_size1").value, 10) - parseInt(document.getElementById("nb_space3").value, 10) - parseInt(document.getElementById("nb_space4").value, 10) === 9)) {
-            flag = pu.export_clues();
+        let rsize = parseInt(document.getElementById("nb_size2").value, 10);
+        let csize = parseInt(document.getElementById("nb_size1").value, 10);
+        let over = parseInt(document.getElementById("nb_space1").value, 10);
+        let under = parseInt(document.getElementById("nb_space2").value, 10);
+        let left = parseInt(document.getElementById("nb_space3").value, 10);
+        let right = parseInt(document.getElementById("nb_space4").value, 10);
+        let size = rsize - over - under;
+        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
+            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
+            ((rsize - over - under === 6) && (csize - left - right === 6))) {
+            flag = pu.export_clues(size);
         } else {
-            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
         }
     } else {
-        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
     }
 }
 

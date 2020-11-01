@@ -734,7 +734,7 @@ input[type="radio"]:checked+label {
 #modal-content {
     background-color: white;
     width: 300px;
-    height: 360px;
+    height: 370px;
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;
