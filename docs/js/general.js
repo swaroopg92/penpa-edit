@@ -70,10 +70,12 @@ function make_class(gridtype, loadtype = 'new') {
             for (var i of type4) {
                 document.getElementById(i).style.display = "none";
             }
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the row/column size";
             if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
-                alert("Size must be in the range 1-40");
+                alert("Rows/Columns Size must be in the range 1-40");
             }
             break;
         case "hex":
@@ -213,7 +215,7 @@ function make_class(gridtype, loadtype = 'new') {
                     pu.draw_kakurogrid();
                 }
             } else {
-                alert("Size must be in the range 1-40");
+                alert("Rows/Columns Size must be in the range 1-40");
             }
             break;
         case "truncated_square":
@@ -280,6 +282,8 @@ function changetype() {
             }
             document.getElementById("name_size1").innerHTML = "Columns：";
             document.getElementById("name_space1").innerHTML = "Over：";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the row/column size";
             document.getElementById("nb_size1").value = 10;
             document.getElementById("nb_size2").value = 10;
             document.getElementById("nb_size3").value = 38;
@@ -359,6 +363,7 @@ function changetype() {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_size1").value = 5;
             document.getElementById("nb_size3").value = 34;
             break;
@@ -375,6 +380,7 @@ function changetype() {
             for (var i of type4) {
                 document.getElementById(i).style.display = "inline";
             }
+            document.getElementById("nb_sudoku3_lb").innerHTML = "Sandwich";
             document.getElementById("nb_sudoku1").checked = false;
             document.getElementById("nb_sudoku2").checked = false;
             document.getElementById("nb_sudoku3").checked = false;
