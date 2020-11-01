@@ -98,12 +98,12 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface", "Wall",
+    let modes = ["Surface", "Wall", "Shape",
         "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
     ];
-    let modes_mapping = ["surface", "wall",
+    let modes_mapping = ["surface", "wall", "symbol",
         "sub_line1", "sub_line2", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
@@ -222,46 +222,46 @@ onload = function() {
                 }
             }
 
-            if (alt_key && !shift_key && !ctrl_key) {
-                switch (key) {
-                    case "x":
-                    case "X":
-                        var present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "c":
-                    case "C":
-                        var present_mode = document.getElementById("mo_line").checked;
-                        if (!present_mode) {
-                            pu.mode_set("line");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "v":
-                    case "V":
-                        var present_mode = document.getElementById("mo_lineE").checked;
-                        if (!present_mode) {
-                            pu.mode_set("lineE");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "a":
-                    case "A":
-                        var present_mode = document.getElementById("mo_number").checked;
-                        if (!present_mode) {
-                            pu.mode_set("number");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                }
-            }
+            // if (alt_key && !shift_key && !ctrl_key) {
+            //     switch (key) {
+            //         case "x":
+            //         case "X":
+            //             var present_mode = document.getElementById("mo_surface").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("surface");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //         case "c":
+            //         case "C":
+            //             var present_mode = document.getElementById("mo_line").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("line");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //         case "v":
+            //         case "V":
+            //             var present_mode = document.getElementById("mo_lineE").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("lineE");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //         case "a":
+            //         case "A":
+            //             var present_mode = document.getElementById("mo_number").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("number");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //     }
+            // }
 
             if (key === "Tab" || key === "Enter") {
                 let user_choices = getValues('mode_choices');
@@ -274,7 +274,7 @@ onload = function() {
                     counter_index = 0; // reset the counter
                 }
                 let mode_loc = modes.indexOf(user_choices[counter_index]);
-                if (mode_loc < 2) { // Hard coded, '2' since we have only Surface and Wall Modes, remaining choices are related to submodes
+                if (mode_loc < 3) { // Hard coded, '3', Surface, Shape, Wall Modes, remaining choices are related to submodes
                     pu.mode_set(modes_mapping[mode_loc])
                     e.preventDefault();
                 } else {
