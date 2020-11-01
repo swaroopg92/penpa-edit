@@ -12,3 +12,6 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 ## Puzzles
 * How to Create Thermo Sudoku? - https://youtu.be/ynZOz057mKA
 * How to Create Killer Sudoku? - https://youtu.be/yagyJbQD_gs
+
+## Bonus
+* How to post a puzzle on Logic Masters Germany website - https://www.youtube.com/watch?v=9vhpo2B9qrM&t=1124s
