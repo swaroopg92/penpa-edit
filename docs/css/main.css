@@ -425,6 +425,13 @@ input[type="radio"]:checked+label {
     box-shadow: 0 0 0 1px orange;
 }
 
+body input,
+body textarea {
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 #panel_button0,
 #visibility_button0,
 #edge_button0,
