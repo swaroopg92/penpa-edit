@@ -744,8 +744,8 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        this.ctx.strokeStyle = "rgba(192,192,192,1)";
-                        this.ctx.fillStyle = "rgba(255,255,255,1)";
+                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                        this.ctx.fillStyle = Color.WHITE;
                         this.ctx.lineWidth = 3;
 
                         this.draw_circle(this.ctx, this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y, 0.4);

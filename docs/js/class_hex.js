@@ -563,8 +563,8 @@ class Puzzle_hex extends Puzzle {
                 this.ctx.stroke();
                 this.ctx.setLineDash([]);
                 this.ctx.lineJoin = "miter";
-                this.ctx.strokeStyle = "rgba(192,192,192,1)";
-                this.ctx.fillStyle = "rgba(255,255,255,1)";
+                this.ctx.strokeStyle = Color.GREY_LIGHT;
+                this.ctx.fillStyle = Color.WHITE;
                 this.ctx.lineWidth = 3;
 
                 this.draw_circle(this.ctx, this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y, 0.4);
@@ -1227,7 +1227,7 @@ class Puzzle_hex extends Puzzle {
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(255,255,255,0)";
+                ctx.fillStyle = Color.TRANSPARENT;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1235,16 +1235,16 @@ class Puzzle_hex extends Puzzle {
             case "ox_E":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(255,255,255,0)";
-                ctx.strokeStyle = "rgba(32,128,32,1)";
+                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.GREEN;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
                 break;
             case "ox_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(255,255,255,0)";
-                ctx.strokeStyle = "rgba(153,153,153,1)";
+                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.GREY;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
                 break;
@@ -2121,7 +2121,7 @@ class Puzzle_hex extends Puzzle {
         switch (num) {
             case 1:
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = "rgba(255,255,255,0)";
+                ctx.strokeStyle = Color.TRANSPARENT;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * 2 / Math.sqrt(3), 6, th);
                 ctx.setLineDash([]);
@@ -2132,7 +2132,7 @@ class Puzzle_hex extends Puzzle {
                 break;
             case 2:
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = "rgba(255,255,255,0)";
+                ctx.strokeStyle = Color.TRANSPARENT;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * 2 / Math.sqrt(3), 6, th);
                 break;
@@ -2671,7 +2671,7 @@ class Puzzle_hex extends Puzzle {
 
     draw_polyomino(ctx, num, x, y) {
         ctx.setLineDash([]);
-        ctx.fillStyle = "rgba(200,200,200,1)";
+        ctx.fillStyle = Color.GREY_LIGHT;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 1.2;
         ctx.lineCap = "butt";
