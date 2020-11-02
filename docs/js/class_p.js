@@ -770,6 +770,51 @@ class Puzzle {
         return url + "?m=edit&p=" + ba;
     }
 
+    maketext_duplicate() {
+        var text = "";
+        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
+            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString() + "\n";
+
+        text += JSON.stringify(this.space) + "\n";
+        text += JSON.stringify(this.mode) + "\n";
+
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
+        this.pu_q.command_redo.__a = [];
+        this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q) + "\n";
+        text += JSON.stringify(this.pu_a) + "\n";
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
+
+        var list = [this.centerlist[0]];
+        for (var i = 1; i < this.centerlist.length; i++) {
+            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        }
+
+        text += JSON.stringify(list);
+
+        for (var i = 0; i < this.replace.length; i++) {
+            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        }
+
+        var u8text = new TextEncoder().encode(text);
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        var ba = window.btoa(char8);
+        var url = location.href.split('?')[0];
+        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        return url + "?m=edit&p=" + ba;
+    }
+
     maketext_solve() {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
@@ -778,13 +823,19 @@ class Puzzle {
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
 
-        var r = this.pu_q.command_redo.__a;
-        var u = this.pu_q.command_undo.__a;
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
-        this.pu_q.command_redo.__a = r;
-        this.pu_q.command_undo.__a = u;
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
@@ -6023,12 +6074,13 @@ class Puzzle {
         let scolor = 9; //blue, 2 for green
 
         // Data checking
-        if (iostring.length < 81) {
-            document.getElementById("iostring").value = "Error: Less than 81 digits";
-        } else if (iostring.length > 81) {
-            document.getElementById("iostring").value = "Error: Greater than 81 digits";
-        } else {
+        if ((iostring.length == 81) || (iostring.length == 64) || (iostring.length == 36)) {
+
+            // Replace dots with zeros
+            iostring = iostring.replace(/\./g, 0);
+
             let digits = iostring.split("");
+            let size = Math.sqrt(iostring.length);
 
             // check all are digits
             for (var i = 0; i < digits.length; i++) {
@@ -6042,34 +6094,37 @@ class Puzzle {
             let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
             let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
             if (this.mode.qa === "pu_q") {
-                for (var j = r_start; j < (9 + r_start); j++) { //  row
-                    for (var i = c_start; i < (9 + c_start); i++) { // column
-                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * 8], 10) !== 0) {
+                for (var j = r_start; j < (size + r_start); j++) { //  row
+                    for (var i = c_start; i < (size + c_start); i++) { // column
+                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
                             this.record("number", (i + 2) + ((j + 2) * this.nx0));
-                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * 8], pcolor, "1"];
+                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], pcolor, "1"];
                         }
                     }
                 }
             } else if (this.mode.qa === "pu_a") {
-                for (var j = r_start; j < (9 + r_start); j++) { //  row
-                    for (var i = c_start; i < (9 + c_start); i++) { // column
-                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * 8], 10) !== 0) {
+                for (var j = r_start; j < (size + r_start); j++) { //  row
+                    for (var i = c_start; i < (size + c_start); i++) { // column
+                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
                             this.record("number", (i + 2) + ((j + 2) * this.nx0));
                             this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (this.nx - 1)], scolor, "1"];
                         }
                     }
                 }
             }
+        } else {
+            document.getElementById("iostring").value = "Error: Number of digits not equal to 36 (6x6 grid) or 64 (8x8 grid) or 81 (9x9 grid)";
+            return "failed";
         }
         this.redraw();
     }
 
-    export_clues() {
+    export_clues(size) {
         let outputstring = "";
         let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
         let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
-        for (var j = r_start; j < (9 + r_start); j++) { //  row
-            for (var i = c_start; i < (9 + c_start); i++) { // column
+        for (var j = r_start; j < (size + r_start); j++) { //  row
+            for (var i = c_start; i < (size + c_start); i++) { // column
                 if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)] &&
                     (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
                     (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
@@ -6096,7 +6151,7 @@ class Puzzle {
                     if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
                         var sum = 0,
                             a;
-                        for (var k = 0; k < 10; k++) {
+                        for (var k = 0; k < (size + 1); k++) {
                             if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
@@ -6117,7 +6172,7 @@ class Puzzle {
         }
 
         // Sanity check
-        if (outputstring.length === 81) {
+        if ((outputstring.length === 81) || (outputstring.length === 64) || (outputstring.length === 36)) {
             document.getElementById("iostring").value = outputstring;
         } else {
             document.getElementById("iostring").value = "Error: Some cells have more than 1 digit";

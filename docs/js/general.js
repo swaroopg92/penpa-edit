@@ -70,10 +70,12 @@ function make_class(gridtype, loadtype = 'new') {
             for (var i of type4) {
                 document.getElementById(i).style.display = "none";
             }
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the row/column size";
             if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
-                alert("Size must be in the range 1-40");
+                alert("Rows/Columns Size must be in the range 1-40");
             }
             break;
         case "hex":
@@ -201,6 +203,21 @@ function make_class(gridtype, loadtype = 'new') {
                 }
             }
             break;
+        case "kakuro":
+            var nx = parseInt(document.getElementById("nb_size1").value, 10);
+            var ny = parseInt(document.getElementById("nb_size2").value, 10);
+
+            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0) {
+                // Create Kakuro object
+                pu = new Puzzle_kakuro(nx, ny, size);
+
+                if (loadtype === "new") {
+                    pu.draw_kakurogrid();
+                }
+            } else {
+                alert("Rows/Columns Size must be in the range 1-40");
+            }
+            break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             if (n0 <= 10 && n0 > 0) {
@@ -248,6 +265,7 @@ function changetype() {
         "nb_sudoku3_lb", "nb_sudoku3",
         "nb_sudoku4_lb", "nb_sudoku4"
     ]; // on - for sudoku
+    var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     switch (gridtype) {
         case "square":
             for (var i of type) {
@@ -264,6 +282,8 @@ function changetype() {
             }
             document.getElementById("name_size1").innerHTML = "Columns：";
             document.getElementById("name_space1").innerHTML = "Over：";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the row/column size";
             document.getElementById("nb_size1").value = 10;
             document.getElementById("nb_size2").value = 10;
             document.getElementById("nb_size3").value = 38;
@@ -343,6 +363,7 @@ function changetype() {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_size1").value = 5;
             document.getElementById("nb_size3").value = 34;
             break;
@@ -359,10 +380,31 @@ function changetype() {
             for (var i of type4) {
                 document.getElementById(i).style.display = "inline";
             }
+            document.getElementById("nb_sudoku3_lb").innerHTML = "Sandwich";
             document.getElementById("nb_sudoku1").checked = false;
             document.getElementById("nb_sudoku2").checked = false;
             document.getElementById("nb_sudoku3").checked = false;
             document.getElementById("nb_sudoku4").checked = false;
+            break;
+        case "kakuro":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type5) {
+                document.getElementById(i).style.display = "inline";
+            }
+            document.getElementById("name_size1").innerHTML = "Columns：";
+            document.getElementById("nb_size1").value = 10;
+            document.getElementById("nb_size2").value = 10;
             break;
         case "truncated_square":
             for (var i of type) {
@@ -591,7 +633,7 @@ function savetext() {
 
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
-    document.getElementById("iostring").value = "Enter 81 digits (0-9, 0 for an empty cell, no spaces)";
+    document.getElementById("iostring").value = "Enter 81 digits (0-9, 0 or . for an empty cell, no spaces)";
 }
 
 function expansion() {
@@ -688,6 +730,15 @@ function savetext_window() {
 }
 
 function shorturl_tab() {
+    var textarea = document.getElementById("savetextarea");
+    textarea.select();
+    var range = document.createRange();
+    range.selectNodeContents(textarea);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    textarea.setSelectionRange(0, 1e5);
+    document.execCommand("copy");
     window.open('https://git.io', '_blank');
 }
 
@@ -703,26 +754,33 @@ function getValues(id) {
 }
 
 function duplicate() {
-    var address = pu.maketext();
+    var address = pu.maketext_duplicate();
     if (pu.mmode === "solve") {
         address = address + "&l=solvedup";
     }
     window.open(address);
 }
 
-function load_sudoku() {
+function import_sudoku() {
     let flag;
     if (document.getElementById("gridtype").value === "sudoku") {
         flag = pu.load_clues();
     } else if (document.getElementById("gridtype").value === "square") {
-        if ((parseInt(document.getElementById("nb_size2").value, 10) - parseInt(document.getElementById("nb_space1").value, 10) - parseInt(document.getElementById("nb_space2").value, 10) === 9) &&
-            (parseInt(document.getElementById("nb_size1").value, 10) - parseInt(document.getElementById("nb_space3").value, 10) - parseInt(document.getElementById("nb_space4").value, 10) === 9)) {
+        let rsize = parseInt(document.getElementById("nb_size2").value, 10);
+        let csize = parseInt(document.getElementById("nb_size1").value, 10);
+        let over = parseInt(document.getElementById("nb_space1").value, 10);
+        let under = parseInt(document.getElementById("nb_space2").value, 10);
+        let left = parseInt(document.getElementById("nb_space3").value, 10);
+        let right = parseInt(document.getElementById("nb_space4").value, 10);
+        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
+            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
+            ((rsize - over - under === 6) && (csize - left - right === 6))) {
             flag = pu.load_clues();
         } else {
-            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
         }
     } else {
-        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
     }
 }
 
@@ -731,14 +789,22 @@ function export_sudoku() {
     if (document.getElementById("gridtype").value === "sudoku") {
         flag = pu.export_clues();
     } else if (document.getElementById("gridtype").value === "square") {
-        if ((parseInt(document.getElementById("nb_size2").value, 10) - parseInt(document.getElementById("nb_space1").value, 10) - parseInt(document.getElementById("nb_space2").value, 10) === 9) &&
-            (parseInt(document.getElementById("nb_size1").value, 10) - parseInt(document.getElementById("nb_space3").value, 10) - parseInt(document.getElementById("nb_space4").value, 10) === 9)) {
-            flag = pu.export_clues();
+        let rsize = parseInt(document.getElementById("nb_size2").value, 10);
+        let csize = parseInt(document.getElementById("nb_size1").value, 10);
+        let over = parseInt(document.getElementById("nb_space1").value, 10);
+        let under = parseInt(document.getElementById("nb_space2").value, 10);
+        let left = parseInt(document.getElementById("nb_space3").value, 10);
+        let right = parseInt(document.getElementById("nb_space4").value, 10);
+        let size = rsize - over - under;
+        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
+            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
+            ((rsize - over - under === 6) && (csize - left - right === 6))) {
+            flag = pu.export_clues(size);
         } else {
-            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
         }
     } else {
-        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 9x9";
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
     }
 }
 
