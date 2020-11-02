@@ -14,6 +14,7 @@
     --greyDark: #777777;
     --greyDarkVery: #444444;
     --greyLight: #cccccc;
+    --greyLightMedium: #dddddd;
     --greyLightVery: #f0f0f0;
     --orange: #ffa500;
     --orangeLight: #ffcc80;
@@ -658,7 +659,7 @@ body textarea {
     height: 140px;
     margin-top: 0px;
     text-align: center;
-    background: var(--greyLight);
+    background: var(--greyLightMedium);
     padding-top: 0px;
     border-radius: 5px 5px 5px 5px;
     box-shadow: 4px 4px 4px var(--transparent40);
@@ -682,7 +683,6 @@ body textarea {
 }
 
 .panel_menu li {
-    border-bottom: 1px solid var(--white);
     border-right: 1px solid var(--white);
     list-style: none;
     vertical-align: middle;
