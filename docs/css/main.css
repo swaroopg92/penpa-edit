@@ -941,6 +941,10 @@ input[type=number] {
     margin-top: 1px;
 }
 
+#nb_size3 {
+    margin-bottom: 5px;
+}
+
 #modal-size {
     text-align: center;
     margin-left: 40px;
