@@ -633,7 +633,7 @@ function savetext() {
 
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
-    document.getElementById("iostring").value = "Enter 81 digits (0-9, 0 or . for an empty cell, no spaces)";
+    document.getElementById("iostring").value = "Enter 36 or 64 or 81 digits (0-9, 0 or . for an empty cell, no spaces)";
 }
 
 function expansion() {
