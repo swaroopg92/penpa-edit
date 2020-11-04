@@ -19,10 +19,6 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + y: Redo
 * Ctrl + d: Clone
 * Ctrl + i: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON
-* Alt + a: Number Mode
-* Alt + x: Surface Mode
-* Alt + c: Line Mode
-* Alt + v: Edge Mode
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
