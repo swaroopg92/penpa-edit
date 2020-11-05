@@ -764,7 +764,7 @@ function saveimage_download() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'The characters <h2 style="color:red;">\ \/ : * ? \" <> |</h2> cannot be used in filename',
+            html: 'The characters <h2 style="color:red;">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'You, got this !!!',
         })
@@ -876,7 +876,7 @@ function savetext_download() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'The characters <h2 style="color:red;">\ \/ : * ? \" <> |</h2> cannot be used in filename',
+            html: 'The characters <h2 style="color:red;">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'You, got this !!!',
         })
