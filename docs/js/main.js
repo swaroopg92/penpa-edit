@@ -98,12 +98,12 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface", "Wall", "Shape",
+    let modes = ["Surface", "Wall", "Shape", "Composite",
         "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
     ];
-    let modes_mapping = ["surface", "wall", "symbol",
+    let modes_mapping = ["surface", "wall", "symbol", "combi",
         "sub_line1", "sub_line2", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
@@ -274,7 +274,7 @@ onload = function() {
                     counter_index = 0; // reset the counter
                 }
                 let mode_loc = modes.indexOf(user_choices[counter_index]);
-                if (mode_loc < 3) { // Hard coded, '3', Surface, Shape, Wall Modes, remaining choices are related to submodes
+                if (mode_loc < 4) { // Hard coded, '4', Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
                     pu.mode_set(modes_mapping[mode_loc])
                     e.preventDefault();
                 } else {
