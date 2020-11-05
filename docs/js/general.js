@@ -48,7 +48,12 @@ function create_newboard() {
         document.getElementById('modal').style.display = 'none';
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
     } else {
-        alert("Display size must be in the range 12-90");
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'Display size must be in the range <h2 style="color:red;">12-90</h2>',
+            icon: 'error',
+            confirmButtonText: 'You, got this !!!',
+        })
     }
 }
 
@@ -75,34 +80,60 @@ function make_class(gridtype, loadtype = 'new') {
             if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
-                alert("Rows/Columns Size must be in the range 1-40");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Rows/Columns Size must be in the range <h2 style="color:red;">1-40</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "hex":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
             if (n0 <= 20 && n0 > 0 && space1 < n0) {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-20");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "tri":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
             if (n0 <= 20 && n0 > 0 && space1 < n0 / 3) {
                 pu = new Puzzle_tri(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-20");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "pyramid":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
             if (n0 <= 20 && n0 > 0 && space1 < n0 / 3) {
                 pu = new Puzzle_pyramid(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-20");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "iso":
@@ -110,7 +141,12 @@ function make_class(gridtype, loadtype = 'new') {
             if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-20");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "sudoku":
@@ -215,7 +251,12 @@ function make_class(gridtype, loadtype = 'new') {
                     pu.draw_kakurogrid();
                 }
             } else {
-                alert("Rows/Columns Size must be in the range 1-40");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Rows/Columns Size must be in the range <h2 style="color:red;">1-40</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "truncated_square":
@@ -223,7 +264,12 @@ function make_class(gridtype, loadtype = 'new') {
             if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "tetrakis_square":
@@ -231,7 +277,12 @@ function make_class(gridtype, loadtype = 'new') {
             if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "snub_square":
@@ -239,7 +290,12 @@ function make_class(gridtype, loadtype = 'new') {
             if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
         case "cairo_pentagonal":
@@ -247,7 +303,12 @@ function make_class(gridtype, loadtype = 'new') {
             if (n0 <= 10 && n0 > 0) {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
-                alert("Sides must be in the range 1-10");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this !!!',
+                })
             }
             break;
 
@@ -307,6 +368,8 @@ function changetype() {
             }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Side: ";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
             document.getElementById("nb_size1").value = 5;
             document.getElementById("nb_size3").value = 40;
             document.getElementById("nb_space1").value = 0;
@@ -326,6 +389,8 @@ function changetype() {
             }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Border: ";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
             document.getElementById("nb_size1").value = 6;
             document.getElementById("nb_size3").value = 60;
             document.getElementById("nb_space1").value = 0;
@@ -345,6 +410,8 @@ function changetype() {
             }
             document.getElementById("name_size1").innerHTML = "Side：";
             document.getElementById("name_space1").innerHTML = "Border：";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
             document.getElementById("nb_size1").value = 6;
             document.getElementById("nb_size3").value = 50;
             document.getElementById("nb_space1").value = 0;
@@ -462,10 +529,20 @@ function rotation() {
 }
 
 function CreateCheck() {
-    if (confirm("Are you sure want to reset the current board? To only change display size and grid lines use 'Change grid'")) {
-        create_newboard();
-        pu.redraw();
-    }
+    Swal.fire({
+        title: 'Are you sure want to reset the current board? To only change display size and grid lines use "Change grid" button',
+        html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Reset it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            create_newboard();
+            pu.redraw();
+        }
+    })
 }
 
 function newgrid() {
@@ -476,7 +553,12 @@ function newgrid() {
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
     } else {
-        alert("Display size must be in the range 12-90");
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'Display Size must be in the range <h2 style="color:red;">12-90</h2>',
+            icon: 'error',
+            confirmButtonText: 'You, got this !!!',
+        })
     }
 }
 
@@ -490,7 +572,12 @@ function newgrid_r() {
         panel_pu.draw_panel();
         document.getElementById('modal-newsize').style.display = 'none';
     } else {
-        alert("Display size must be in the range 12-90");
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'Display Size must be in the range <h2 style="color:red;">12-90</h2>',
+            icon: 'error',
+            confirmButtonText: 'You, got this !!!',
+        })
     }
 }
 
@@ -543,25 +630,75 @@ function reloadcheck_onoff() {
 
 function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "LINEE") {
-        if (confirm("Erase all EDGE mode elements? (Note - This action cannot be undone)")) {
-            pu.reset_selectedmode();
-        }
+        Swal.fire({
+            title: 'Erase/Clear all EDGE mode elements?',
+            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Erase it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                pu.reset_selectedmode();
+            }
+        })
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "SYMBOL") {
-        if (confirm("Erase all SHAPE mode elements? (Note - This action cannot be undone)")) {
-            pu.reset_selectedmode();
-        }
+        Swal.fire({
+            title: 'Erase/Clear all SHAPE mode elements?',
+            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Erase it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                pu.reset_selectedmode();
+            }
+        })
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "CAGE") {
-        if (confirm("Erase all FRAME mode elements? (Note - This action cannot be undone)")) {
-            pu.reset_selectedmode();
-        }
+        Swal.fire({
+            title: 'Erase/Clear all FRAME mode elements?',
+            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Erase it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                pu.reset_selectedmode();
+            }
+        })
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "COMBI") {
-        if (confirm("Erase all COMPOSITE mode elements? (Note - This action cannot be undone)")) {
-            pu.reset_selectedmode();
-        }
+        Swal.fire({
+            title: 'Erase/Clear all selected COMPOSITE mode elements?',
+            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Erase it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                pu.reset_selectedmode();
+            }
+        })
     } else {
-        if (confirm("Erase all " + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + " mode elements? (Note - This action cannot be undone)")) {
-            pu.reset_selectedmode();
-        }
+        Swal.fire({
+            title: 'Erase/Clear all ' + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + ' mode elements?',
+            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Erase it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                pu.reset_selectedmode();
+            }
+        })
     }
 }
 
@@ -572,13 +709,23 @@ function DeleteCheck() {
     } else if (document.getElementById("pu_a").checked) {
         text = "solution";
     }
-    if (confirm("Erase/Clear all the elements in " + text + " mode? (Note - This action cannot be undone)")) {
-        pu.reset_board();
-        pu.redraw();
-        // reset undo/redo
-        pu.command_undo = new Stack();
-        pu.command_redo = new Stack();
-    }
+    Swal.fire({
+        title: 'Erase/Clear all the elements in ' + text.toUpperCase() + ' mode?',
+        html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Erase it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            pu.reset_board();
+            pu.redraw();
+            // reset undo/redo
+            pu.command_undo = new Stack();
+            pu.command_redo = new Stack();
+        }
+    })
 }
 
 function saveimage() {
@@ -615,7 +762,12 @@ function saveimage_download() {
             downloadLink.click();
         }
     } else {
-        alert("The characters \\/:*?\"<>| cannot be used in filename")
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'The characters <h2 style="color:red;">\ \/ : * ? \" <> |</h2> cannot be used in filename',
+            icon: 'error',
+            confirmButtonText: 'You, got this !!!',
+        })
     }
 }
 
@@ -684,7 +836,11 @@ function savetext_copy() {
     sel.removeAllRanges();
     sel.addRange(range);
     textarea.setSelectionRange(0, 1e5);
-    alert("URL is copied to clipboard");
+    Swal.fire({
+        title: 'Swaroop says:',
+        html: '<h2 style="color:blue;">URL is copied to clipboard</h2>',
+        icon: 'info'
+    })
     document.execCommand("copy");
 }
 
@@ -718,7 +874,12 @@ function savetext_download() {
             downloadLink.click();
         }
     } else {
-        alert("The characters \\/:*?\"<>| cannot be used in filename");
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'The characters <h2 style="color:red;">\ \/ : * ? \" <> |</h2> cannot be used in filename',
+            icon: 'error',
+            confirmButtonText: 'You, got this !!!',
+        })
     }
 }
 
