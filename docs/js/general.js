@@ -828,6 +828,11 @@ function make_gmpfile() {
 }
 
 function savetext_copy() {
+    Swal.fire({
+        title: 'Swaroop says:',
+        html: '<h2 style="color:blue;">URL is copied to clipboard</h2>',
+        icon: 'info'
+    })
     var textarea = document.getElementById("savetextarea");
     textarea.select();
     var range = document.createRange();
@@ -836,11 +841,6 @@ function savetext_copy() {
     sel.removeAllRanges();
     sel.addRange(range);
     textarea.setSelectionRange(0, 1e5);
-    Swal.fire({
-        title: 'Swaroop says:',
-        html: '<h2 style="color:blue;">URL is copied to clipboard</h2>',
-        icon: 'info'
-    })
     document.execCommand("copy");
 }
 
