@@ -689,7 +689,7 @@ class Puzzle_square extends Puzzle {
                     }
                 }
             }
-        } else if (symboltype === "arrows") {
+        } else if (symboltype === "arrows" || symboltype === "direction") {
             if (this[pu].arrows) {
                 for (var k = 0; k < this[pu].arrows.length; k++) {
                     if (k != i) {
@@ -703,7 +703,6 @@ class Puzzle_square extends Puzzle {
                     }
                 }
             }
-        } else if (symboltype === "direction") {
             if (this[pu].direction) {
                 for (var k = 0; k < this[pu].direction.length; k++) {
                     if (k != i) {
@@ -747,13 +746,13 @@ class Puzzle_square extends Puzzle {
                                 this.point[this[pu].arrows[i][j - 1]].y,
                                 this.point[this[pu].arrows[i][j]].x - (this.point[this[pu].arrows[i][j]].x - this.point[this[pu].arrows[i][j - 1]].x) * 0.1,
                                 this.point[this[pu].arrows[i][j]].y - (this.point[this[pu].arrows[i][j]].y - this.point[this[pu].arrows[i][j - 1]].y) * 0.1,
-                                [-0.00001, 0, -0.3 * this.size, 0.3 * this.size]);
+                                [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
                         } else {
                             this.ctx.arrow(this.point[this[pu].arrows[i][j - 1]].x,
                                 this.point[this[pu].arrows[i][j - 1]].y,
                                 this.point[this[pu].arrows[i][j]].x + (this.point[this[pu].arrows[i][j]].x - this.point[this[pu].arrows[i][j - 1]].x) * 0.2,
                                 this.point[this[pu].arrows[i][j]].y + (this.point[this[pu].arrows[i][j]].y - this.point[this[pu].arrows[i][j - 1]].y) * 0.2,
-                                [-0.00001, 0, -0.3 * this.size, 0.3 * this.size]);
+                                [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
                         }
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
