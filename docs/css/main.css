@@ -763,11 +763,7 @@ body textarea {
 #modal-content {
     background-color: var(--white);
     width: 300px;
-<<<<<<< HEAD
-    height: 380px;
-=======
     height: 390px;
->>>>>>> dev
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;
