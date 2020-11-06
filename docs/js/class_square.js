@@ -629,7 +629,7 @@ class Puzzle_square extends Puzzle {
         if (this[pu].thermo) {
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
-                    this.ctx.strokeStyle = Color.TRANSPARENT;
+                    this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
                     this.ctx.fillStyle = Color.GREY_LIGHT;
                     this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                     this.ctx.setLineDash([]);
@@ -1344,7 +1344,7 @@ class Puzzle_square extends Puzzle {
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1352,7 +1352,7 @@ class Puzzle_square extends Puzzle {
             case "ox_E":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
                 ctx.strokeStyle = Color.GREEN;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1360,7 +1360,7 @@ class Puzzle_square extends Puzzle {
             case "ox_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
                 ctx.strokeStyle = Color.GREY;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1371,7 +1371,7 @@ class Puzzle_square extends Puzzle {
             case "cross":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 3;
                 this.draw_cross(ctx, num, x, y);
@@ -1406,7 +1406,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineWidth = 1;
                 this.draw_bars(ctx, num, x, y);
                 break;
-            //number
+                //number
             case "inequality":
                 set_circle_style(ctx, 10);
                 this.draw_inequality(ctx, num, x, y);
@@ -1447,7 +1447,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_pills(ctx, num, x, y);
                 break;
 
-            /* arrow */
+                /* arrow */
             case "arrow_B_B":
                 set_circle_style(ctx, 2);
                 this.draw_arrowB(ctx, num, x, y);
@@ -1514,23 +1514,23 @@ class Puzzle_square extends Puzzle {
                 break;
             case "arrow_fouredge_B":
                 set_circle_style(ctx, 2);
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
             case "arrow_fouredge_G":
                 set_circle_style(ctx, 2);
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.fillStyle = Color.GREY;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
             case "arrow_fouredge_E":
                 set_circle_style(ctx, 2);
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.fillStyle = Color.GREEN_LIGHT;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
 
-            /* special */
+                /* special */
             case "kakuro":
                 this.draw_kakuro(ctx, num, x, y);
                 break;
@@ -1555,7 +1555,7 @@ class Puzzle_square extends Puzzle {
             case "battleship_W":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_battleship(ctx, num, x, y);
@@ -1671,7 +1671,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = ctx.strokeStyle;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x, y, r);
                 break;
@@ -1742,7 +1742,7 @@ class Puzzle_square extends Puzzle {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
-        ctx.fillStyle = Color.TRANSPARENT;
+        ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
         switch (num) {
@@ -1808,7 +1808,7 @@ class Puzzle_square extends Puzzle {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
-        ctx.fillStyle = Color.TRANSPARENT;
+        ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
         switch (num) {
@@ -1922,7 +1922,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fill();
                 ctx.stroke();
                 break;
-            //for square
+                //for square
             case 5:
             case 6:
             case 7:
@@ -2347,7 +2347,7 @@ class Puzzle_square extends Puzzle {
         switch (num) {
             case 1:
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTWHITE;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, th);
                 ctx.setLineDash([]);
@@ -2358,7 +2358,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case 2:
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTWHITE;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, th);
                 break;
@@ -2490,7 +2490,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(x - 0.35 * pu.size, y);
@@ -2506,34 +2506,6 @@ class Puzzle_square extends Puzzle {
                 ctx.text("～", x, y + 0.09 * pu.size);
                 ctx.text("～", x, y + 0.29 * pu.size);
                 break;
-            /*
-            case 4: //cactus
-              ctx.setLineDash([]);
-              ctx.lineCap = "butt";
-              ctx.strokeStyle = Color.TRANSPARENT;
-              ctx.fillStyle = Color.BLACK;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(x-0.1*pu.size,y+0.4*pu.size);
-              ctx.lineTo(x-0.1*pu.size,y+0.2*pu.size);
-              ctx.lineTo(x-0.35*pu.size,y+0.2*pu.size);
-              ctx.lineTo(x-0.35*pu.size,y-0.2*pu.size);
-              ctx.lineTo(x-0.2*pu.size,y-0.2*pu.size);
-              ctx.lineTo(x-0.2*pu.size,y+0.05*pu.size);
-              ctx.lineTo(x-0.1*pu.size,y+0.05*pu.size);
-              ctx.lineTo(x-0.1*pu.size,y-0.45*pu.size);
-              ctx.lineTo(x+0.1*pu.size,y-0.45*pu.size);
-              ctx.lineTo(x+0.1*pu.size,y-0.1*pu.size);
-              ctx.lineTo(x+0.2*pu.size,y-0.1*pu.size);
-              ctx.lineTo(x+0.2*pu.size,y-0.3*pu.size);
-              ctx.lineTo(x+0.35*pu.size,y-0.3*pu.size);
-              ctx.lineTo(x+0.35*pu.size,y+0.05*pu.size);
-              ctx.lineTo(x+0.1*pu.size,y+0.05*pu.size);
-              ctx.lineTo(x+0.1*pu.size,y+0.4*pu.size);
-              ctx.stroke();
-              ctx.fill();
-              break;
-              */
         }
     }
 
@@ -2553,7 +2525,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
@@ -2561,7 +2533,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
@@ -2577,7 +2549,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
@@ -2585,7 +2557,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
@@ -2601,7 +2573,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
@@ -2609,7 +2581,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
@@ -2678,7 +2650,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x, y, r);
                 break;
@@ -2741,7 +2713,7 @@ class Puzzle_square extends Puzzle {
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
@@ -2838,7 +2810,7 @@ class Puzzle_square extends Puzzle {
         switch (num) {
             case 1:
                 var r = 0.14;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.fillStyle = Color.GREY_LIGHT;
                 this.draw_polygon(ctx, x - r * pu.size, y + r * pu.size, r * Math.sqrt(2), 4, 45);
                 this.draw_polygon(ctx, x + r * pu.size, y - r * pu.size, r * Math.sqrt(2), 4, 45);
@@ -2849,7 +2821,7 @@ class Puzzle_square extends Puzzle {
             case 2:
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.GREY_LIGHT;
                 ctx.lineWidth = 4;
                 this.draw_circle(ctx, x, y, 0.71);
@@ -2874,7 +2846,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -2898,7 +2870,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -2922,7 +2894,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -2946,7 +2918,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3072,9 +3044,9 @@ class Puzzle_sudoku extends Puzzle_square {
         this.canvasx = this.width_c * this.size;
         this.canvasy = this.height_c * this.size;
         this.sudoku = [Number(document.getElementById("nb_sudoku1").checked),
-        Number(document.getElementById("nb_sudoku2").checked),
-        Number(document.getElementById("nb_sudoku3").checked),
-        Number(document.getElementById("nb_sudoku4").checked)
+            Number(document.getElementById("nb_sudoku2").checked),
+            Number(document.getElementById("nb_sudoku3").checked),
+            Number(document.getElementById("nb_sudoku4").checked)
         ];
         this.space = [
             parseInt(document.getElementById("nb_space1").value, 10),
