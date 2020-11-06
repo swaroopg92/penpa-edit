@@ -6094,7 +6094,7 @@ class Puzzle {
                 setTimeout(() => {
                     Swal.fire({
                         title: 'Swaroop says:',
-                        html: '<h2 style="color:blue;">Congratulations!!! Well done!!!</h2>',
+                        html: '<h2 style="color:blue;">Congratulations 🙂 Well done 🙂</h2>',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',
                         // timer: 5000
