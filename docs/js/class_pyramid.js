@@ -556,7 +556,7 @@ class Puzzle_pyramid extends Puzzle {
     draw_thermo(pu) {
         for (var i = 0; i < this[pu].thermo.length; i++) {
             if (this[pu].thermo[i][0]) {
-                this.ctx.strokeStyle = Color.TRANSPARENT;
+                this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 this.ctx.fillStyle = Color.GREY_LIGHT;
                 this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                 this.ctx.setLineDash([]);
@@ -1131,7 +1131,7 @@ class Puzzle_pyramid extends Puzzle {
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1139,7 +1139,7 @@ class Puzzle_pyramid extends Puzzle {
             case "ox_E":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
                 ctx.strokeStyle = Color.GREEN;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1147,7 +1147,7 @@ class Puzzle_pyramid extends Puzzle {
             case "ox_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
                 ctx.strokeStyle = Color.GREY;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
@@ -1158,7 +1158,7 @@ class Puzzle_pyramid extends Puzzle {
             case "cross":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 3;
                 this.draw_cross(ctx, num, x, y);
@@ -1285,7 +1285,7 @@ class Puzzle_pyramid extends Puzzle {
             case "battleship_W":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_battleship(ctx, num, x, y);
@@ -1389,7 +1389,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = ctx.strokeStyle;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x, y, r);
                 break;
@@ -1503,7 +1503,7 @@ class Puzzle_pyramid extends Puzzle {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
-        ctx.fillStyle = Color.TRANSPARENT;
+        ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
         switch (num) {
@@ -1569,7 +1569,7 @@ class Puzzle_pyramid extends Puzzle {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
-        ctx.fillStyle = Color.TRANSPARENT;
+        ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
         switch (num) {
@@ -2042,7 +2042,7 @@ class Puzzle_pyramid extends Puzzle {
         switch (num) {
             case 1:
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTWHITE;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, th);
                 ctx.setLineDash([]);
@@ -2053,7 +2053,7 @@ class Puzzle_pyramid extends Puzzle {
                 break;
             case 2:
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTWHITE;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, th);
                 break;
@@ -2185,7 +2185,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(x - 0.35 * pu.size, y);
@@ -2220,7 +2220,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
@@ -2228,7 +2228,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
@@ -2244,7 +2244,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
@@ -2252,7 +2252,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
@@ -2268,7 +2268,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
@@ -2276,7 +2276,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
@@ -2409,7 +2409,7 @@ class Puzzle_pyramid extends Puzzle {
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
@@ -2511,7 +2511,7 @@ class Puzzle_pyramid extends Puzzle {
         switch (num) {
             case 1:
                 var r = 0.14;
-                ctx.strokeStyle = Color.TRANSPARENT;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.fillStyle = Color.GREY_LIGHT;
                 this.draw_polygon(ctx, x - r * pu.size, y + r * pu.size, r * Math.sqrt(2), 4, 45);
                 this.draw_polygon(ctx, x + r * pu.size, y - r * pu.size, r * Math.sqrt(2), 4, 45);
@@ -2522,7 +2522,7 @@ class Puzzle_pyramid extends Puzzle {
             case 2:
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.GREY_LIGHT;
                 ctx.lineWidth = 4;
                 this.draw_circle(ctx, x, y, 0.71);
@@ -2547,7 +2547,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -2571,7 +2571,7 @@ class Puzzle_pyramid extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENT;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
