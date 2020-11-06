@@ -788,27 +788,31 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_direction(pu) {
-        for (var i = 0; i < this[pu].direction.length; i++) {
-            if (this[pu].direction[i][0]) {
-                this.ctx.setLineDash([]);
-                this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = "#999";
-                this.ctx.lineWidth = 3;
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y);
-                for (var j = 1; j < this[pu].direction[i].length - 1; j++) {
-                    this.ctx.lineTo(this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y);
-                }
-                this.ctx.stroke();
+        if (this[pu].direction) {
+            for (var i = 0; i < this[pu].direction.length; i++) {
+                if (this[pu].direction[i][0]) {
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineCap = "square";
+                    this.ctx.strokeStyle = "#999";
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y);
+                    for (var j = 1; j < this[pu].direction[i].length - 1; j++) {
+                        this.ctx.lineTo(this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y);
+                    }
+                    this.ctx.stroke();
 
-                j = this[pu].direction[i].length - 1;
-                this.ctx.lineJoin = "bevel";
-                this.ctx.beginPath();
-                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
-                    this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y,
-                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
-                this.ctx.stroke();
-                this.ctx.lineJoin = "miter";
+                    j = this[pu].direction[i].length - 1;
+                    if (j) {
+                        this.ctx.lineJoin = "bevel";
+                        this.ctx.beginPath();
+                        this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                            this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y,
+                            [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                        this.ctx.stroke();
+                        this.ctx.lineJoin = "miter";
+                    }
+                }
             }
         }
     }
@@ -1603,6 +1607,9 @@ class Puzzle_square extends Puzzle {
                 break;
             case "sudokuetc":
                 this.draw_sudokuetc(ctx, num, x, y);
+                break;
+            case "sudokumore":
+                this.draw_sudokumore(ctx, num, x, y);
                 break;
             case "polyomino":
                 this.draw_polyomino(ctx, num, x, y);
@@ -2980,6 +2987,107 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.fillStyle = "rgba(0,0,0,0)";
                 ctx.strokeStyle = "#000";
+                ctx.beginPath()
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + w - r, y);
+                ctx.arcTo(x + w, y, x + w, y + r, r);
+                ctx.lineTo(x + w, y + h - r);
+                ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+                ctx.lineTo(x + r, y + h);
+                ctx.arcTo(x, y + h, x, y + h - r, r);
+                ctx.lineTo(x, y + r);
+                ctx.arcTo(x, y, x + r, y, r);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+        }
+    }
+
+    draw_sudokumore(ctx, num, x, y) {
+        switch (num) {
+            case 1:
+                var r = 0.2 * pu.size;
+                var w = 1.8 * pu.size;
+                var h = 0.8 * pu.size;
+                x = x - 0.40 * pu.size;
+                y = y - 0.40 * pu.size;
+                ctx.lineCap = "round";
+                ctx.lineWidth = 3;
+                ctx.setLineDash([]);
+                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = "#999";
+                ctx.beginPath()
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + w - r, y);
+                ctx.arcTo(x + w, y, x + w, y + r, r);
+                ctx.lineTo(x + w, y + h - r);
+                ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+                ctx.lineTo(x + r, y + h);
+                ctx.arcTo(x, y + h, x, y + h - r, r);
+                ctx.lineTo(x, y + r);
+                ctx.arcTo(x, y, x + r, y, r);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 2:
+                var r = 0.2 * pu.size;
+                var w = 0.8 * pu.size;
+                var h = 1.8 * pu.size;
+                x = x - 0.40 * pu.size;
+                y = y - 0.40 * pu.size;
+                ctx.lineCap = "butt";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([]);
+                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = "#ccc";
+                ctx.beginPath()
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + w - r, y);
+                ctx.arcTo(x + w, y, x + w, y + r, r);
+                ctx.lineTo(x + w, y + h - r);
+                ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+                ctx.lineTo(x + r, y + h);
+                ctx.arcTo(x, y + h, x, y + h - r, r);
+                ctx.lineTo(x, y + r);
+                ctx.arcTo(x, y, x + r, y, r);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 3:
+                var r = 0.2 * pu.size;
+                var w = 2.8 * pu.size;
+                var h = 0.8 * pu.size;
+                x = x - 0.40 * pu.size;
+                y = y - 0.40 * pu.size;
+                ctx.lineCap = "butt";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([]);
+                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = "#ccc";
+                ctx.beginPath()
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + w - r, y);
+                ctx.arcTo(x + w, y, x + w, y + r, r);
+                ctx.lineTo(x + w, y + h - r);
+                ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+                ctx.lineTo(x + r, y + h);
+                ctx.arcTo(x, y + h, x, y + h - r, r);
+                ctx.lineTo(x, y + r);
+                ctx.arcTo(x, y, x + r, y, r);
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 4:
+                var r = 0.2 * pu.size;
+                var w = 0.8 * pu.size;
+                var h = 2.8 * pu.size;
+                x = x - 0.40 * pu.size;
+                y = y - 0.40 * pu.size;
+                ctx.lineCap = "butt";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([]);
+                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = "#ccc";
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
