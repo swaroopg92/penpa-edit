@@ -1,4 +1,7 @@
 ## History
+* 2020/10/01 ver2.24.12
+	* Personalized alert messages.
+	* Added Composite mode to Tab selector.
 * 2020/10/01 ver2.24.11
 	* Fixed backspace symbol display in the PANEL.
 	* Fixed number mode bug when user enters invalid unicode symbol.
