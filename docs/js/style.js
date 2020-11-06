@@ -22,9 +22,10 @@ const Color = {
     ORANGE_LIGHT: "#ffcc80",
     PINK_LIGHT: "#ffb3ff",
     PURPLE_LIGHT: "#cc99ff",
-    RED: "#ff0000",
+    RED: "#dd0000",
     RED_LIGHT: "#ffa3a3",
-    TRANSPARENT: "rgba(0,0,0,0)",
+    TRANSPARENTBLACK: "rgba(0,0,0,0)",
+    TRANSPARENTWHITE: "rgba(255,255,255,0)",
     WHITE: "#ffffff",
     YELLOW: "#ffffa3"
 };
@@ -36,7 +37,7 @@ function set_surface_style(ctx, type) {
     ctx.lineWidth = 0.5;
     switch (type) {
         case 0:
-            ctx.fillStyle = Color.TRANSPARENT;
+            ctx.fillStyle = Color.TRANSPARENTWHITE;
             break;
         case 1:
             ctx.fillStyle = Color.GREY_DARK_VERY;
@@ -90,7 +91,7 @@ function set_line_style(ctx, type) {
     ctx.lineWidth = 2;
     switch (type) {
         case 0:
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             ctx.lineWidth = 0;
             break;
         case 1: //grid
@@ -263,25 +264,25 @@ function set_font_style(ctx, size, type) {
     ctx.font = size + "px " + fontfamily;
     switch (type) {
         case 0:
-            ctx.fillStyle = Color.TRANSPARENT;
+            ctx.fillStyle = Color.TRANSPARENTWHITE;
             ctx.strokeStyle = Color.BLACK;
             ctx.lineWidth = 0.5;
             break;
         case 1:
             ctx.fillStyle = Color.BLACK;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 2:
             ctx.fillStyle = Color.GREEN_LIGHT;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 3:
             ctx.fillStyle = Color.GREY;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 4:
             ctx.fillStyle = Color.WHITE;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 5:
             ctx.fillStyle = Color.BLACK;
@@ -290,28 +291,28 @@ function set_font_style(ctx, size, type) {
             break;
         case 6:
             ctx.fillStyle = Color.BLACK;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             ctx.lineWidth = 2;
             break;
         case 7:
             ctx.fillStyle = Color.WHITE;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 8:
             ctx.fillStyle = Color.BLUE_LIGHT;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 9:
             ctx.fillStyle = Color.BLUE;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 10:
             ctx.fillStyle = Color.RED;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 11:
             ctx.fillStyle = Color.WHITE;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
     }
 }
@@ -335,12 +336,12 @@ function set_circle_style(ctx, num) {
             break;
         case 3:
             ctx.fillStyle = Color.GREY_LIGHT;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTBLACK;
             ctx.lineWidth = 1;
             break;
         case 4:
             ctx.setLineDash([4, 4]);
-            ctx.fillStyle = Color.TRANSPARENT;
+            ctx.fillStyle = Color.TRANSPARENTWHITE;
             ctx.strokeStyle = Color.BLACK;
             ctx.lineWidth = 1;
             break;
@@ -356,7 +357,7 @@ function set_circle_style(ctx, num) {
             break;
         case 7:
             ctx.fillStyle = Color.WHITE;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             ctx.lineWidth = 1;
             break;
         case 8:
@@ -385,8 +386,8 @@ function set_circle_style(ctx, num) {
             ctx.lineWidth = 1;
             break;
         default:
-            ctx.fillStyle = Color.TRANSPARENT;
-            ctx.strokeStyle = Color.TRANSPARENT;
+            ctx.fillStyle = Color.TRANSPARENTWHITE;
+            ctx.strokeStyle = Color.TRANSPARENTWHITE;
             ctx.lineWidth = 1;
             break;
     }
