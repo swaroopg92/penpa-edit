@@ -16,6 +16,7 @@ const Color = {
     GREEN_LIGHT_VERY: "#b3ffb3",
     GREY: "#999999",
     GREY_DARK: "#777777",
+    GREY_DARK_LIGHT: "#b3b3b3",
     GREY_DARK_VERY: "#444444",
     GREY_LIGHT: "#cccccc",
     GREY_LIGHT_VERY: "#f0f0f0",

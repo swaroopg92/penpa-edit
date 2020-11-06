@@ -623,10 +623,10 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_thermo(pu) {
-        let xdirection, ydirection, commonend; // x is column, y is row
-        let reduce_straight = 0.44 * this.size,
-            reduce_diagonal = 0.316 * this.size;
         if (this[pu].thermo) {
+            let xdirection, ydirection, commonend; // x is column, y is row
+            let reduce_straight = 0.44 * this.size,
+                reduce_diagonal = 0.316 * this.size;
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
@@ -703,18 +703,32 @@ class Puzzle_square extends Puzzle {
                     }
                 }
             }
+        } else if (symboltype === "direction") {
+            if (this[pu].direction) {
+                for (var k = 0; k < this[pu].direction.length; k++) {
+                    if (k != i) {
+                        if (this[pu].direction[k]) {
+                            for (var m = 1; m < this[pu].direction[k].length; m++) {
+                                if (this[pu].direction[k][m] === endpoint) {
+                                    return 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         return 0;
     }
 
     draw_arrowsp(pu) {
-        let commonend;
         if (this[pu].arrows) {
+            let commonend;
             for (var i = 0; i < this[pu].arrows.length; i++) {
                 if (this[pu].arrows[i] && this[pu].arrows[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y);
@@ -744,7 +758,7 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                         this.ctx.fillStyle = Color.WHITE;
                         this.ctx.lineWidth = 3;
 
@@ -757,14 +771,82 @@ class Puzzle_square extends Puzzle {
 
     draw_direction(pu) {
         if (this[pu].direction) {
+            let xdirection, ydirection, commonend, shape, arrowsum_present; // x is column, y is row
+            let reduce_straight = 0.1 * this.size,
+                reduce_diagonal = 0.1 * this.size,
+                reduce_straight2 = -1 * 0.4 * this.size,
+                reduce_diagonal2 = -1 * 0.3 * this.size;
             for (var i = 0; i < this[pu].direction.length; i++) {
                 if (this[pu].direction[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = "#999";
+                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y);
+
+                    // Check if there is double or triple arrow sum
+                    arrowsum_present = false;
+                    if (this[pu].symbol) {
+                        for (shape in this[pu].symbol) {
+                            if (this[pu].symbol[shape][1] === "sudokumore") {
+                                switch (this[pu].symbol[shape][0]) {
+                                    case 1:
+                                        // 2 cell sum row
+                                        if ((this[pu].direction[i][0] == parseInt(shape)) || (this[pu].direction[i][0] == (parseInt(shape) - 1))) {
+                                            arrowsum_present = true;
+                                        }
+                                        break;
+                                    case 2:
+                                        // 2 cell sum column
+                                        if ((this[pu].direction[i][0] == parseInt(shape)) || ((this[pu].direction[i][0] - this.nx0) == parseInt(shape))) {
+                                            arrowsum_present = true;
+                                        }
+                                        break;
+                                    case 3:
+                                        // 3 cell sum row
+                                        if ((this[pu].direction[i][0] == parseInt(shape)) || ((this[pu].direction[i][0] - 1) == parseInt(shape)) || ((this[pu].direction[i][0] - 2) == parseInt(shape))) {
+                                            arrowsum_present = true;
+                                        }
+                                        break;
+                                    case 4:
+                                        // 3 cell sum column
+                                        if ((this[pu].direction[i][0] == parseInt(shape)) || ((this[pu].direction[i][0] - this.nx0) == parseInt(shape)) || ((this[pu].direction[i][0] - (2 * this.nx0)) == parseInt(shape))) {
+                                            arrowsum_present = true;
+                                        }
+                                        break;
+                                }
+                            }
+                            if (arrowsum_present) {
+                                break;
+                            }
+                        }
+                    }
+                    if (arrowsum_present) {
+                        if (this.point[this[pu].direction[i][1]]) {
+                            xdirection = this.point[this[pu].direction[i][1]].x - this.point[this[pu].direction[i][0]].x;
+                            ydirection = this.point[this[pu].direction[i][1]].y - this.point[this[pu].direction[i][0]].y;
+                            if (xdirection == 0 && ydirection < 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y + reduce_straight2);
+                            } else if (xdirection < 0 && ydirection > 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x + reduce_diagonal2, this.point[this[pu].direction[i][0]].y - reduce_diagonal2);
+                            } else if (xdirection > 0 && ydirection == 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x - reduce_straight2, this.point[this[pu].direction[i][0]].y);
+                            } else if (xdirection > 0 && ydirection > 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x - reduce_diagonal2, this.point[this[pu].direction[i][0]].y - reduce_diagonal2);
+                            } else if (xdirection == 0 && ydirection > 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y - reduce_straight2);
+                            } else if (xdirection > 0 && ydirection < 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x - reduce_diagonal2, this.point[this[pu].direction[i][0]].y + reduce_diagonal2);
+                            } else if (xdirection < 0 && ydirection == 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x + reduce_straight2, this.point[this[pu].direction[i][0]].y);
+                            } else if (xdirection < 0 && ydirection < 0) {
+                                this.ctx.moveTo(this.point[this[pu].direction[i][0]].x + reduce_diagonal2, this.point[this[pu].direction[i][0]].y + reduce_diagonal2);
+                            }
+                        }
+                    } else {
+                        this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y);
+                    }
+
                     for (var j = 1; j < this[pu].direction[i].length - 1; j++) {
                         this.ctx.lineTo(this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y);
                     }
@@ -774,9 +856,48 @@ class Puzzle_square extends Puzzle {
                     if (j) {
                         this.ctx.lineJoin = "bevel";
                         this.ctx.beginPath();
-                        this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
-                            this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y,
-                            [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                        commonend = this.find_common(pu, i, this[pu].direction[i][j], "direction");
+                        if (commonend) {
+                            xdirection = this.point[this[pu].direction[i][j]].x - this.point[this[pu].direction[i][j - 1]].x;
+                            ydirection = this.point[this[pu].direction[i][j]].y - this.point[this[pu].direction[i][j - 1]].y;
+                            if (xdirection == 0 && ydirection < 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y + reduce_straight,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection < 0 && ydirection > 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x + reduce_diagonal, this.point[this[pu].direction[i][j]].y - reduce_diagonal,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection > 0 && ydirection == 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x - reduce_straight, this.point[this[pu].direction[i][j]].y,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection > 0 && ydirection > 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x - reduce_diagonal, this.point[this[pu].direction[i][j]].y - reduce_diagonal,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection == 0 && ydirection > 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y - reduce_straight,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection > 0 && ydirection < 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x - reduce_diagonal, this.point[this[pu].direction[i][j]].y + reduce_diagonal,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection < 0 && ydirection == 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x + reduce_straight, this.point[this[pu].direction[i][j]].y,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            } else if (xdirection < 0 && ydirection < 0) {
+                                this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                    this.point[this[pu].direction[i][j]].x + reduce_diagonal, this.point[this[pu].direction[i][j]].y + reduce_diagonal,
+                                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                            }
+                        } else {
+                            this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
+                                this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y,
+                                [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                        }
                         this.ctx.stroke();
                         this.ctx.lineJoin = "miter";
                     }
@@ -2946,7 +3067,7 @@ class Puzzle_square extends Puzzle {
     draw_sudokumore(ctx, num, x, y) {
         switch (num) {
             case 1:
-                var r = 0.2 * pu.size;
+                var r = 0.4 * pu.size;
                 var w = 1.8 * pu.size;
                 var h = 0.8 * pu.size;
                 x = x - 0.40 * pu.size;
@@ -2954,8 +3075,8 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#999";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -2970,16 +3091,16 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 2:
-                var r = 0.2 * pu.size;
+                var r = 0.4 * pu.size;
                 var w = 0.8 * pu.size;
                 var h = 1.8 * pu.size;
                 x = x - 0.40 * pu.size;
                 y = y - 0.40 * pu.size;
-                ctx.lineCap = "butt";
-                ctx.lineWidth = 2;
+                ctx.lineCap = "round";
+                ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#ccc";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -2994,16 +3115,16 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 3:
-                var r = 0.2 * pu.size;
+                var r = 0.4 * pu.size;
                 var w = 2.8 * pu.size;
                 var h = 0.8 * pu.size;
                 x = x - 0.40 * pu.size;
                 y = y - 0.40 * pu.size;
-                ctx.lineCap = "butt";
-                ctx.lineWidth = 2;
+                ctx.lineCap = "round";
+                ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#ccc";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3018,16 +3139,16 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 4:
-                var r = 0.2 * pu.size;
+                var r = 0.4 * pu.size;
                 var w = 0.8 * pu.size;
                 var h = 2.8 * pu.size;
                 x = x - 0.40 * pu.size;
                 y = y - 0.40 * pu.size;
-                ctx.lineCap = "butt";
-                ctx.lineWidth = 2;
+                ctx.lineCap = "round";
+                ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#ccc";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
