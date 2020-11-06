@@ -22,7 +22,8 @@
     --purpleLight: #cc99ff;
     --red: #dd0000;
     --redLight: #ffa3a3;
-    --transparent: rgba(0, 0, 0, 0);
+    --transparentBlack: rgba(0, 0, 0, 0);
+    --transparentWhite: rgba(255, 255, 255, 0);
     --transparent40: rgba(0, 0, 0, 0.6);
     --transparent50: rgba(0, 0, 0, 0.5);
     --transparent70: rgba(0, 0, 0, 0.3);
@@ -35,7 +36,7 @@
     -ms-user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: var(--transparent);
+    -webkit-tap-highlight-color: var(--transparentBlack);
     touch-action: manipulation;
     /*user-select: none;*/
     margin: 0;
@@ -195,12 +196,12 @@ hr.newgridhrline {
 }
 
 .label:hover {
-    background: var(--greyLightVery);;
+    background: var(--greyLightVery);
 }
 
 
 .label_option:hover {
-    background: var(--greyLightVery);;
+    background: var(--greyLightVery);
 }
 
 
@@ -221,7 +222,7 @@ hr.newgridhrline {
 }
 
 .labelL:hover {
-    background: var(--greyLightVery);;
+    background: var(--greyLightVery);
 }
 
 #st_number1_lb {
@@ -244,7 +245,7 @@ hr.newgridhrline {
 
 #st_number3_lb {
     /* Grey */
-    background-color:var(--grey);
+    background-color: var(--grey);
     color: var(--white);
 }
 
@@ -406,7 +407,7 @@ hr.newgridhrline {
 #st_lineE5_lb,
 #st_wall5_lb {
     /* Grey */
-    background-color:var(--greyDark);
+    background-color: var(--greyDark);
     color: var(--white);
     font-size: 16px;
 }
@@ -524,7 +525,7 @@ body textarea {
     background: var(--white);
     text-align: center;
     line-height: 28px;
-    border: 1px solid var(--blueDark);;
+    border: 1px solid var(--blueDark);
     border-radius: 3px;
 }
 
@@ -569,7 +570,7 @@ body textarea {
     background: var(--white);
     text-align: center;
     line-height: 28px;
-    border: 1px solid var(--blueDark);;
+    border: 1px solid var(--blueDark);
     border-radius: 0px;
 }
 
