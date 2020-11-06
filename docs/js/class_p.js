@@ -5954,7 +5954,7 @@ class Puzzle {
     }
 
     flushcanvas() {
-        this.ctx.fillStyle = "white";
+        this.ctx.fillStyle = Color.WHITE;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -6014,7 +6014,7 @@ class Puzzle {
         /*free_circle*/
         if (((this.mode[this.mode.qa].edit_mode === "line" || this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
             this.ctx.setLineDash([]);
-            this.ctx.fillStyle = Color.TRANSPARENT;
+            this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             this.ctx.strokeStyle = Color.BLUE_LIGHT;
             this.ctx.lineWidth = 4;
             if (this.freelinecircle_g[0] != -1) {
@@ -6033,7 +6033,7 @@ class Puzzle {
             if (this.mode[this.mode.qa].edit_mode === "symbol" && document.getElementById('panel_button').textContent === "ON" && !pu.onoff_symbolmode_list[pu.mode[this.mode.qa].symbol[0]]) {
                 this.ctx.strokeStyle = Color.BLUE_DARK_VERY;
             }
-            this.ctx.fillStyle = Color.TRANSPARENT;
+            this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             if (this.mode[this.mode.qa].edit_mode === "number" && (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9")) {
                 this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
             } else if (document.getElementById('edge_button').textContent === "ON") {
