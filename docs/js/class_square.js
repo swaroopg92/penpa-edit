@@ -791,7 +791,7 @@ class Puzzle_square extends Puzzle {
                                 switch (this[pu].symbol[shape][0]) {
                                     case 1:
                                         // 2 cell sum row
-                                        if ((this[pu].direction[i][0] == parseInt(shape)) || (this[pu].direction[i][0] == (parseInt(shape) - 1))) {
+                                        if ((this[pu].direction[i][0] == parseInt(shape)) || ((this[pu].direction[i][0] - 1) == parseInt(shape))) {
                                             arrowsum_present = true;
                                         }
                                         break;
