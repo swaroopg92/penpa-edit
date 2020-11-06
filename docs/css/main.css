@@ -37,7 +37,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 515px;
+    max-width: 520px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -741,7 +741,7 @@ body textarea {
 #modal-content {
     background-color: white;
     width: 300px;
-    height: 370px;
+    height: 380px;
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;
