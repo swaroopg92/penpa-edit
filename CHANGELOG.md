@@ -2,6 +2,8 @@
 * 2020/10/01 ver2.24.12
 	* Personalized alert messages.
 	* Added Composite mode to Tab selector.
+	* Rearranged all colors and improved CODE visibility
+	* Fixed display of some buttons
 * 2020/10/01 ver2.24.11
 	* Fixed backspace symbol display in the PANEL.
 	* Fixed number mode bug when user enters invalid unicode symbol.
