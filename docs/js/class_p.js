@@ -413,6 +413,7 @@ class Puzzle {
     }
 
     rotate_size() {
+        console.log(this.nx0, this.)
         var out = 0;
         var i = 0;
         while (out === 0 && i < 10) { // If the image sticks out, try again 5 times
@@ -428,6 +429,14 @@ class Puzzle {
         }
 
     }
+
+    resize_top() {}
+
+    resize_bottom() {}
+
+    resize_left() {}
+
+    resize_right() {}
 
     rotate_reset() {
         this.width_c = this.width0;

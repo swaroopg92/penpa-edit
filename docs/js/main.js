@@ -643,6 +643,22 @@ onload = function() {
                 pu.rotate_size();
                 e.preventDefault();
                 break;
+            case "rt_addtop":
+                pu.resize_top();
+                e.preventDefault();
+                break;
+            case "rt_addbottom":
+                pu.resize_bottom();
+                e.preventDefault();
+                break;
+            case "rt_addleft":
+                pu.resize_left();
+                e.preventDefault();
+                break;
+            case "rt_addright":
+                pu.resize_right();
+                e.preventDefault();
+                break;
             case "rt_reset":
                 pu.rotate_reset();
                 e.preventDefault();

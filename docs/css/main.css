@@ -225,6 +225,17 @@ hr.newgridhrline {
     background: var(--greyLightVery);
 }
 
+#rt_center,
+#rt_size,
+#rt_reset,
+#rt_addtop,
+#rt_addbottom,
+#rt_addleft,
+#rt_addright {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
 #st_number1_lb {
     /* Black */
     background-color: var(--black);
@@ -844,7 +855,7 @@ body textarea {
 #modal-rotate-content {
     background-color: var(--white);
     width: 300px;
-    height: 270px;
+    height: 340px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
