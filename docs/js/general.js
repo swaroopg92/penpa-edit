@@ -65,7 +65,9 @@ function make_class(gridtype, loadtype = 'new') {
             var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
                 "nb_sudoku2_lb", "nb_sudoku2",
                 "nb_sudoku3_lb", "nb_sudoku3",
-                "nb_sudoku4_lb", "nb_sudoku4"
+                "nb_sudoku4_lb", "nb_sudoku4",
+                "nb_sudoku5_lb", "nb_sudoku5",
+                "nb_sudoku6_lb", "nb_sudoku6"
             ]; // of sudoku
             for (var i of type4) {
                 document.getElementById(i).style.display = "none";
@@ -246,7 +248,9 @@ function changetype() {
     var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
         "nb_sudoku2_lb", "nb_sudoku2",
         "nb_sudoku3_lb", "nb_sudoku3",
-        "nb_sudoku4_lb", "nb_sudoku4"
+        "nb_sudoku4_lb", "nb_sudoku4",
+        "nb_sudoku5_lb", "nb_sudoku5",
+        "nb_sudoku6_lb", "nb_sudoku6"
     ]; // on - for sudoku
     switch (gridtype) {
         case "square":
@@ -363,6 +367,8 @@ function changetype() {
             document.getElementById("nb_sudoku2").checked = false;
             document.getElementById("nb_sudoku3").checked = false;
             document.getElementById("nb_sudoku4").checked = false;
+            document.getElementById("nb_sudoku5").checked = false;
+            document.getElementById("nb_sudoku6").checked = false;
             break;
         case "truncated_square":
             for (var i of type) {
