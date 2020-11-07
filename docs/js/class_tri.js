@@ -8,7 +8,7 @@ class Puzzle_tri extends Puzzle {
         this.margin = 10;
         this.size = size;
         this.space = [parseInt(document.getElementById("nb_space1").value, 10)];
-
+        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.top_n = parseInt(this.n0 ** 2 + this.n0 * 2.5) - 1;
         this.width0 = this.nx + 1;
         this.height0 = this.ny * Math.sqrt(3) * 0.5 + 1;

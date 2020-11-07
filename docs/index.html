@@ -20,6 +20,17 @@
     <script type="text/javascript" src="./js/style.js"></script>
     <script type="text/javascript" src="./js/general.js"></script>
     <script type="text/javascript" src="./js/encoding.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180924087-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+    function gtag(){
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-180924087-1');
+    </script>
 </head>
 
 <body>
@@ -33,6 +44,7 @@
             <input type="button" id="savetext" value="Share" class="button" />
             <a id="download_link"></a>
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
+            <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -131,6 +143,8 @@
                     <label for="sub_number2" class="labelL" id="sub_number2_lb">Arrow</label>
                     <input type="radio" name="mode_number" value="8" id="sub_number8">
                     <label for="sub_number8" class="labelL" id="sub_number8_lb">Long</label>
+                    <input type="radio" name="mode_number" value="11" id="sub_number11">
+                    <label for="sub_number11" class="labelL" id="sub_number11_lb">Killer</label>
                 </span>
                 <span id="mode_symbol" class="mode_symbol" style="display:none;">
                     <ul class="nav">
@@ -511,11 +525,11 @@
         </span>
         <span class="tooltip">
             <input type="button" id="tb_reset" value="Erase current selection" class="button" />
-            <span id="eraseselect_text" class="tooltiptext">Erase everything that belongs to the selected mode</span>
+            <span id="eraseselect_text" class="tooltiptext">Erase elements that belongs to the selected mode</span>
         </span>
         <span class="tooltip">
             <input type="button" id="tb_delete" value="Delete" class="button" />
-            <span id="erase_text" class="tooltiptext">Erase everything</span>
+            <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
         </span>
         <br><br>
         <div id="stop_watch">
@@ -527,12 +541,12 @@
                 <button id="sw_reset" class="button sw">Reset</button>
             </div>
         </div>
-        <p style="margin-top: 5px;"> <a id="channel" href="https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos" target="_blank">Youtube tutorials</a> & <a id="tutorials" href="https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md" target="_blank">Complete list</a></p>
+        <p style="margin-top: 5px;"> <a id="channel" href="https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos" target="_blank">Youtube tutorials</a> & <a id="tutorials" href="https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md" target="_blank">List of tutorials</a></p>
         <p>Any suggestions or improvements, send an email to <b>penpaplus@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a>.</p>
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.24.6, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.24.11, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -606,6 +620,7 @@
                     <option value="pyramid" id="nb_type4_lb">Pyramid</option>
                     <option value="iso" id="nb_type5_lb">Cube</option>
                     <option value="sudoku" id="nb_type6_lb">Sudoku</option>
+                    <option value="kakuro" id="nb_type7_lb">Kakuro</option>
                 </select>
             </span><br>
             <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -796,7 +811,7 @@
             <div id="modal-save2-solution">
                 <h3 id="save3texttitle">Solution will check only following:</h3>
                 <div class="nb_button">
-                    <div align="left" id="solutiontext">
+                    <div id="solutiontext">
                         <p id="solutiontext1">Shading - Dark Grey, Black</p>
                         <p id="solutiontext2">Number - Normal, Big, Middle, Small - Green, Blue</p>
                         <p id="solutiontext3">Line/Edge - Green, Double</p>
@@ -822,6 +837,20 @@
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-input" class="modal">
+        <div id="modal-input-content">
+            <div id="modal-header">
+                <h3 id="save4texttitle">Input/Output sudoku string</h3>
+            </div>
+            <div id="modal-save-body">
+                <textarea rows="1" cols="81" id="iostring"></textarea>
+            </div>
+            <div class="nb_button">
+                <input type="button" id="load_input" value="Import Sudoku" onclick="import_sudoku();" />
+                <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();" />
             </div>
         </div>
     </div>

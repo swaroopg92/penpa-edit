@@ -9,7 +9,7 @@ class Puzzle_pyramid extends Puzzle {
         this.margin = -1; //for arrow of number pointing outside of the grid
 
         this.top_n = parseInt(this.nx0 * 2.5);
-
+        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.width0 = this.nx + 1;
         this.height0 = this.ny + 1;
         this.width_c = this.width0;

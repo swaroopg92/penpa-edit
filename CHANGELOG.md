@@ -1,4 +1,38 @@
 ## History
+* 2020/10/01 ver2.24.11
+	* Fixed backspace symbol display in the PANEL.
+	* Fixed number mode bug when user enters invalid unicode symbol.
+	* Added Shape mode to the Tab Selector.
+	* Removed un-necessary shortcut keys.
+	* Improved error message display and added info about white space while setting new grid.
+	* I/O Sudoku now allows 6x6 and 8x8 grids as well. Import Sudoku also accepts dots instead of zeros for blank cells.
+	* Fixed text area input in ioS (iPhone, iPad).
+	* Slowed down bulk UNDO, possibly improved UNDO bug.
+	* Added Arrow Key movements to the Hex grid for all rotations.
+* 2020/10/22 ver2.24.10
+	* Kakuro grid type added.
+	* URL for editing will save the UNDO/REDO. "Clone" will not save the UNDO/REDO.
+	* Clicking URL_short now automatically copies the URL.
+	* Fixed bug in arrow and thermo shapes while using UNDO.
+	* Added few more videos to the list.
+* 2020/10/15 ver2.24.9
+	* I/O Sudoku Button - Input/Output 81 digit string for Sudoku grids. This allows user to import/export the sudoku from sudokuwiki.org and vice-versa.
+	* Killer button added to Number mode - User can now select this option to enter killer sums in the cages while creating the killer sudoku. Killer cages can be drawn using "Frame" mode. Then select "Killer" submode under "Number" mode. Select the cell where you wan't to insert the cage total and type in the number.
+	* Normal numbers won't overwrite corner and side pencil marks in Problem mode.
+	* Spacebar will now automatically remove corner/side pencil marks along with center number
+	* Fixed clone bug for other grid types
+	* Some bug fixes
+* 2020/10/10 ver2.24.8
+	* Improved display messages and tool tips for the Delete button
+	* Unmerge the arrows ending on same cell
+	* Fixed bug with helper(x) delete function in composite mode
+	* Added few more videos
+	* Some bug fixes
+* 2020/10/05 ver2.24.7
+	* Unmerge the thermos ending on same cell
+	* Added new youtube video to the list
+	* Added few more modes to Tab selector and changed default mode to "Surface"
+	* CTRL + i shortcut to copy the previous number/alphabet/text/symbols from the Number mode with PANEL: ON
 * 2020/10/04 ver2.24.6
 	* Added Sudoku Board
 	* Penpa plus youtube channel started, video list template added

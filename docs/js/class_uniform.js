@@ -7,7 +7,7 @@ class Puzzle_truncated_square extends Puzzle {
         this.nx0 = this.nx + 2;
         this.ny0 = this.ny * 2 + 2;
         this.margin = -1; //for arrow of number pointing outside of the grid
-
+        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.width0 = this.nx + 6;
         this.height0 = this.ny;
         this.width_c = this.width0;

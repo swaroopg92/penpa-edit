@@ -55,7 +55,10 @@ class Puzzle {
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
         //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils", "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge", "combili_shaka", "combili_battleship", "combili_arrowS"];
+        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils",
+            "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
+            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb"
+        ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
         //square,tri,hex
@@ -679,7 +682,11 @@ class Puzzle {
                 break;
             case "line":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "4") {
-                    this[this.mode.qa].line = {};
+                    for (var i in this[this.mode.qa].line) {
+                        if (this[this.mode.qa].line[i] !== 98) {
+                            delete this[this.mode.qa].line[i];
+                        }
+                    }
                     this[this.mode.qa].freeline = {};
                 } else {
                     for (var i in this[this.mode.qa].line) {
@@ -699,7 +706,11 @@ class Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") {
                     this[this.mode.qa].deletelineE = {};
                 } else {
-                    this[this.mode.qa].lineE = {};
+                    for (var i in this[this.mode.qa].lineE) {
+                        if (this[this.mode.qa].lineE[i] !== 98) {
+                            delete this[this.mode.qa].lineE[i];
+                        }
+                    }
                     this[this.mode.qa].freelineE = {};
                 }
                 break;
@@ -721,6 +732,42 @@ class Puzzle {
                 break;
             case "special":
                 this[this.mode.qa][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
+                break;
+            case "combi":
+                switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+                    case "tents":
+                        break;
+                    case "linex":
+                        break;
+                    case "edgexoi":
+                        break;
+                    case "blpo":
+                        break;
+                    case "blwh":
+                        break;
+                    case "battleship":
+                        break;
+                    case "star":
+                        break;
+                    case "magnets":
+                        break;
+                    case "lineox":
+                        break;
+                    case "yajilin":
+                        break;
+                    case "hashi":
+                        break;
+                    case "arrowS":
+                        break;
+                    case "shaka":
+                        break;
+                    case "numfl":
+                        break;
+                    case "alfl":
+                        break;
+                    case "edgesub":
+                        break;
+                }
                 break;
         }
         this.redraw();
@@ -759,6 +806,51 @@ class Puzzle {
         return url + "?m=edit&p=" + ba;
     }
 
+    maketext_duplicate() {
+        var text = "";
+        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
+            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString() + "\n";
+
+        text += JSON.stringify(this.space) + "\n";
+        text += JSON.stringify(this.mode) + "\n";
+
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
+        this.pu_q.command_redo.__a = [];
+        this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q) + "\n";
+        text += JSON.stringify(this.pu_a) + "\n";
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
+
+        var list = [this.centerlist[0]];
+        for (var i = 1; i < this.centerlist.length; i++) {
+            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        }
+
+        text += JSON.stringify(list);
+
+        for (var i = 0; i < this.replace.length; i++) {
+            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        }
+
+        var u8text = new TextEncoder().encode(text);
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        var ba = window.btoa(char8);
+        var url = location.href.split('?')[0];
+        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        return url + "?m=edit&p=" + ba;
+    }
+
     maketext_solve() {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
@@ -767,13 +859,19 @@ class Puzzle {
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
 
-        var r = this.pu_q.command_redo.__a;
-        var u = this.pu_q.command_undo.__a;
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
-        this.pu_q.command_redo.__a = r;
-        this.pu_q.command_undo.__a = u;
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
@@ -1332,14 +1430,18 @@ class Puzzle {
                 '*Stroke:-1,0,0,1\n' +
                 '*Border:-1,0,0,1\n';
             for (var j = 2; j < this.ny0 - 2; j++) {
+                // text += "\"";
                 for (var i = 2; i < this.nx0 - 2; i++) {
                     if (this.pu_q.surface[i + j * (this.nx0)] && (this.pu_q.surface[i + j * (this.nx0)] === 1 || this.pu_q.surface[i + j * (this.nx0)] === 4)) {
+                        // text += "1";
                         text += "1 ";
                     } else {
+                        // text += ".";
                         text += ". ";
                     }
                 }
                 text += "\n";
+                // text += "\"\n";
             }
             text += "--------\n";
         }
@@ -3894,20 +3996,23 @@ class Puzzle {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1":
                     // If the there are corner or sides present then get rid of them
-                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                    var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+                    // Only in Answer mode
+                    if (this.mode.qa === "pu_a") {
+                        var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                        var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
 
-                    for (var j = 0; j < 4; j++) {
-                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                            this.record("numberS", corner_cursor + j);
-                            delete this[this.mode.qa].numberS[corner_cursor + j];
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                this.record("numberS", corner_cursor + j);
+                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                            }
                         }
-                    }
 
-                    for (var j = 0; j < 4; j++) {
-                        if (this[this.mode.qa].numberS[side_cursor + j]) {
-                            this.record("numberS", side_cursor + j);
-                            delete this[this.mode.qa].numberS[side_cursor + j];
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                this.record("numberS", side_cursor + j);
+                                delete this[this.mode.qa].numberS[side_cursor + j];
+                            }
                         }
                     }
 
@@ -4041,6 +4146,17 @@ class Puzzle {
                         this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
                     break;
+                case "11": // Killer Sum
+                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                    this.record("numberS", corner_cursor);
+                    if (this[this.mode.qa].numberS[corner_cursor]) {
+                        con = " " + this[this.mode.qa].numberS[corner_cursor][0];
+                    } else {
+                        con = "";
+                    }
+                    number = con + key;
+                    this[this.mode.qa].numberS[corner_cursor] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                    break;
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             if (str_num.indexOf(key) != -1) {
@@ -4056,7 +4172,7 @@ class Puzzle {
                 }
                 this.record("symbol", this.cursol);
 
-                if (this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) { //onoffモードならリスト
+                if (this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) { // List in ON-OFF mode
                     number = this.onofftext(this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]], key, con);
                 } else {
                     number = parseInt(key, 10);
@@ -4092,6 +4208,25 @@ class Puzzle {
                 this.record("numberS", this.cursolS);
                 delete this[this.mode.qa].numberS[this.cursolS];
             } else {
+
+                // Remove the corner and side numbers
+                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+
+                for (var j = 0; j < 4; j++) {
+                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                        this.record("numberS", corner_cursor + j);
+                        delete this[this.mode.qa].numberS[corner_cursor + j];
+                    }
+                }
+
+                for (var j = 0; j < 4; j++) {
+                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                        this.record("numberS", side_cursor + j);
+                        delete this[this.mode.qa].numberS[side_cursor + j];
+                    }
+                }
+
                 this.record("number", this.cursol);
                 delete this[this.mode.qa].number[this.cursol];
             }
@@ -4740,7 +4875,7 @@ class Puzzle {
     }
 
     re_special(num, arr) {
-        if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1 || this.point[num].adjacent_dia.indexOf(parseInt(this.last)) != -1) { //隣接していたら
+        if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1 || this.point[num].adjacent_dia.indexOf(parseInt(this.last)) != -1) { // If they are adjacent
             if (this[this.mode.qa][arr].slice(-1)[0].slice(-2)[0] === num) {
                 this[this.mode.qa][arr].slice(-1)[0].pop();
             } else {
@@ -4968,7 +5103,7 @@ class Puzzle {
                     break;
                 case "edgexoi":
                     if (ondown_key === "touchstart") {
-                        this.re_combi_cross_downright(num);
+                        this.re_combi_cross_downright(num, "lineE");
                     } else {
                         this.re_combi_edgexoi(num);
                     }
@@ -5011,7 +5146,11 @@ class Puzzle {
         } else if (this.mouse_mode === "down_right") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "linex":
+                    this.re_combi_cross_downright(num);
+                    break;
                 case "edgexoi":
+                    this.re_combi_cross_downright(num, "lineE");
+                    break;
                 case "tents":
                     this.re_combi_cross_downright(num);
                     break;
@@ -5306,14 +5445,24 @@ class Puzzle {
         this.redraw();
     }
 
-    re_combi_cross_downright(num) {
+    re_combi_cross_downright(num, symboltype = "line") {
         if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-            if (!this[this.mode.qa].line[num]) { // Insert cross
-                this.record("line", num);
-                this[this.mode.qa].line[num] = 98;
-            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
-                this.record("line", num);
-                delete this[this.mode.qa].line[num];
+            if (symboltype === "line") {
+                if (!this[this.mode.qa].line[num]) { // Insert cross
+                    this.record(symboltype, num);
+                    this[this.mode.qa].line[num] = 98;
+                } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                    this.record(symboltype, num);
+                    delete this[this.mode.qa].line[num];
+                }
+            } else {
+                if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                    this.record(symboltype, num);
+                    this[this.mode.qa].lineE[num] = 98;
+                } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                    this.record(symboltype, num);
+                    delete this[this.mode.qa].lineE[num];
+                }
             }
         } else {
             this.drawing_mode = 100;
@@ -5943,8 +6092,14 @@ class Puzzle {
             var text = JSON.stringify(this.make_solution());
             if (text === this.solution && this.sol_flag === 0) {
                 setTimeout(() => {
-                    alert("Correct Answer")
-                }, 10)
+                    Swal.fire({
+                        title: 'Swaroop says:',
+                        html: '<h2 style="color:blue;">Congratulations 🙂 Well done 🙂</h2>',
+                        icon: 'success',
+                        confirmButtonText: 'Hurray!',
+                        // timer: 5000
+                    })
+                }, 20)
                 sw_timer.stop();
                 this.mouse_mode = "out";
                 this.mouseevent(0, 0, 0);
@@ -5952,6 +6107,117 @@ class Puzzle {
             } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
                 this.sol_flag = 0;
             }
+        }
+    }
+
+    load_clues() {
+        let iostring = document.getElementById("iostring").value;
+        let pcolor = 1; //black
+        let scolor = 9; //blue, 2 for green
+
+        // Data checking
+        if ((iostring.length == 81) || (iostring.length == 64) || (iostring.length == 36)) {
+
+            // Replace dots with zeros
+            iostring = iostring.replace(/\./g, 0);
+
+            let digits = iostring.split("");
+            let size = Math.sqrt(iostring.length);
+
+            // check all are digits
+            for (var i = 0; i < digits.length; i++) {
+                if (isNaN(parseInt(digits[i], 10))) {
+                    document.getElementById("iostring").value = "Error: it contains non-numeric characters";
+                    return "failed";
+                }
+            }
+
+            // Data check passed, proceed
+            let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
+            let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+            if (this.mode.qa === "pu_q") {
+                for (var j = r_start; j < (size + r_start); j++) { //  row
+                    for (var i = c_start; i < (size + c_start); i++) { // column
+                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
+                            this.record("number", (i + 2) + ((j + 2) * this.nx0));
+                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], pcolor, "1"];
+                        }
+                    }
+                }
+            } else if (this.mode.qa === "pu_a") {
+                for (var j = r_start; j < (size + r_start); j++) { //  row
+                    for (var i = c_start; i < (size + c_start); i++) { // column
+                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
+                            this.record("number", (i + 2) + ((j + 2) * this.nx0));
+                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (this.nx - 1)], scolor, "1"];
+                        }
+                    }
+                }
+            }
+        } else {
+            document.getElementById("iostring").value = "Error: Number of digits not equal to 36 (6x6 grid) or 64 (8x8 grid) or 81 (9x9 grid)";
+            return "failed";
+        }
+        this.redraw();
+    }
+
+    export_clues(size) {
+        let outputstring = "";
+        let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
+        let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+        for (var j = r_start; j < (size + r_start); j++) { //  row
+            for (var i = c_start; i < (size + c_start); i++) { // column
+                if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                    (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                    (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                    if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                        var sum = 0,
+                            a;
+                        for (var k = 0; k < 10; k++) {
+                            if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                                sum += 1;
+                                a = k + 1;
+                            }
+                        }
+                        if (sum === 1) {
+                            outputstring += a.toString();
+                        } else {
+                            outputstring += '0';
+                        }
+                    } else {
+                        outputstring += this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                    }
+                } else if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                    (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                    (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                    if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                        var sum = 0,
+                            a;
+                        for (var k = 0; k < (size + 1); k++) {
+                            if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                                sum += 1;
+                                a = k + 1;
+                            }
+                        }
+                        if (sum === 1) {
+                            outputstring += a.toString();
+                        } else {
+                            outputstring += '0';
+                        }
+                    } else {
+                        outputstring += this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                    }
+                } else {
+                    outputstring += '0';
+                }
+            }
+        }
+
+        // Sanity check
+        if ((outputstring.length === 81) || (outputstring.length === 64) || (outputstring.length === 36)) {
+            document.getElementById("iostring").value = outputstring;
+        } else {
+            document.getElementById("iostring").value = "Error: Some cells have more than 1 digit";
         }
     }
 }

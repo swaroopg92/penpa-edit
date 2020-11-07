@@ -14,7 +14,7 @@ class Puzzle_hex extends Puzzle {
         this.canvasy = this.height_c * this.size;
         this.center_n = parseInt((this.nx * 3 + 1) ** 2 * 0.5 + (this.nx * 3) * 0.5 * (this.nx % 2));
         this.center_n0 = this.center_n;
-
+        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.size = size;
         this.space = [parseInt(document.getElementById("nb_space1").value, 10)];
         this.onoff_symbolmode_list = {
@@ -328,7 +328,21 @@ class Puzzle_hex extends Puzzle {
 
     key_arrow(key_code) {
         var a, b, c;
-        if (parseInt(this.theta / 60) === 0) { b = [0, 1, 2, 3]; } else if (parseInt(this.theta / 60) === 1) { b = [3, 0, 1, 2]; } else if (parseInt(this.theta / 60) === 2) { b = [2, 3, 0, 1]; } else if (parseInt(this.theta / 60) === 3) { b = [2, 3, 0, 1]; } else if (parseInt(this.theta / 60) === 4) { b = [1, 2, 3, 0]; } else if (parseInt(this.theta / 60) === 5) { b = [1, 2, 3, 0]; }
+        console.log(this.theta);
+        if (parseInt(this.theta / 60) === 0) { // 0, 30
+            b = [0, 1, 2, 3];
+        } else if (parseInt(this.theta / 60) === 1) { // 60, 90
+            b = [4, 0, 5, 2];
+        } else if (parseInt(this.theta / 60) === 2) { // 120, 150
+            b = [3, 4, 1, 5];
+        } else if (parseInt(this.theta / 60) === 3) { // 180, 210
+            b = [2, 3, 0, 1];
+        } else if (parseInt(this.theta / 60) === 4) { // 240, 270
+            b = [5, 2, 4, 0];
+        } else if (parseInt(this.theta / 60) === 5) { // 300, 330
+            b = [1, 5, 3, 4];
+        }
+
         if (this.reflect[0] === -1) {
             c = b[0];
             b[0] = b[2];
@@ -353,23 +367,97 @@ class Puzzle_hex extends Puzzle {
                 c = b[3];
                 break;
         }
+
+        // Calculate 1st cell
+        let first_gridcell = Math.min(...this.centerlist);
+        let first_canvascell;
+        if ((this.nx % 2) === 1) {
+            first_canvascell = first_gridcell - (this.nx * 3 + 2) - Math.ceil(this.nx / 2) + 1;
+        } else {
+            first_canvascell = first_gridcell - (this.nx * 3 + 1) - Math.ceil(this.nx / 2) + 1;
+        }
+
+        // Find the row of cursol
+        let count = 1;
+        let cursorpos = this.cursol;
+        while ((cursorpos - 3 * this.nx) > first_canvascell) {
+            count = count + 1;
+            cursorpos = cursorpos - 3 * this.nx - 1;
+        }
+
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
             if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {} else {
                 switch (c) {
-                    case 0:
+                    case 0: // right to left for theta = 0
                         a = this.cursol - 1;
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
-                    case 1:
-                        a = this.cursol - (this.nx * 3 + 1);
+                    case 1: // bottom right to top left for theta = 0
+                        if ((this.nx % 2) === 0) {
+                            if ((count % 2) === 0) {
+                                a = this.cursol - (this.nx * 3 + 1);
+                            } else {
+                                a = this.cursol - (this.nx * 3 + 2);
+                            }
+                        } else {
+                            if ((count % 2) === 0) {
+                                a = this.cursol - (this.nx * 3 + 2);
+                            } else {
+                                a = this.cursol - (this.nx * 3 + 1);
+                            }
+                        }
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
-                    case 2:
+                    case 2: // left to right for theta = 0
                         a = this.cursol + 1;
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
-                    case 3:
-                        a = this.cursol + (this.nx * 3 + 1);
+                    case 3: // top left to bottom right for theta = 0
+                        if ((this.nx % 2) === 0) {
+                            if ((count % 2) === 1) {
+                                a = this.cursol + (this.nx * 3 + 1);
+                            } else {
+                                a = this.cursol + (this.nx * 3 + 2);
+                            }
+                        } else {
+                            if ((count % 2) === 1) {
+                                a = this.cursol + (this.nx * 3 + 2);
+                            } else {
+                                a = this.cursol + (this.nx * 3 + 1);
+                            }
+                        }
+                        if (this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                    case 4: // top right to bottom left for theta = 0
+                        if ((this.nx % 2) === 0) {
+                            if ((count % 2) === 1) {
+                                a = this.cursol + (this.nx * 3);
+                            } else {
+                                a = this.cursol + (this.nx * 3 + 1);
+                            }
+                        } else {
+                            if ((count % 2) === 1) {
+                                a = this.cursol + (this.nx * 3 + 1);
+                            } else {
+                                a = this.cursol + (this.nx * 3);
+                            }
+                        }
+                        if (this.point[a].use === 1) { this.cursol = a; }
+                        break;
+                    case 5: // bottom left to top right for theta = 0
+                        if ((this.nx % 2) === 0) {
+                            if ((count % 2) === 0) {
+                                a = this.cursol - (this.nx * 3);
+                            } else {
+                                a = this.cursol - (this.nx * 3 + 1);
+                            }
+                        } else {
+                            if ((count % 2) === 0) {
+                                a = this.cursol - (this.nx * 3 + 1);
+                            } else {
+                                a = this.cursol - (this.nx * 3);
+                            }
+                        }
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                 }

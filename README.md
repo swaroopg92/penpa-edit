@@ -18,10 +18,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + z: Undo
 * Ctrl + y: Redo
 * Ctrl + d: Clone
-* Alt + a: Number Mode
-* Alt + x: Surface Mode
-* Alt + c: Line Mode
-* Alt + v: Edge Mode
+* Ctrl + i: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
@@ -39,6 +36,36 @@ Depending on the browser you can update the page without using the cache with "C
 * R: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
 
 ## Current functions
+
+### Board types
+* Square
+	* Rows: Row size, Number of rows in your puzzle
+	* Columns: Column size, Number of columns in your puzzle
+	* White Space:
+		* Over: Number of empty rows from the top. They are removed from the Row Size.
+		* Under: Number of empty rows from the bottom. They are removed from the Row Size.
+		* Left: Number of empty columns from the left. They are removed from the Column Size.
+		* Right: Number of empty columns from the right. They are removed from the Column Size.
+	* Example: If you want grid size of 9x9 and 3 empty rows and columns on either side. Then you neet set Rows - 15, Columns - 15, Over - 3, Under - 3, Left - 3, Right -3
+* Hexagon
+	* Side
+	* White Space: Side
+* Triangle
+	* Side
+	* White Space: Border
+* Pyramid
+	* Side
+	* White Space: Border
+* Cube
+	* Side
+* Sudoku
+	* Diagonal \
+	* Diagonal /
+	* Skyscraper/Little Killer
+	* Sandwich
+* Kakuro
+	* Rows
+	* Columns
 
 ### Surface
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
@@ -112,7 +139,7 @@ Depending on the browser you can update the page without using the cache with "C
 * User can now select which modes/sub-modes they wan't to rotate when pressing TAB/Enter key.
 	* There is search option available.
 	* Search is case-insensitive.
-* Default selection is "Surface" + "Number Normal".
+* Default selection is "Surface".
 * Then you can either press Tab or Enter (closer to the numpad) to rotate between the selected modes.
 
 ### Move
@@ -136,10 +163,6 @@ Depending on the browser you can update the page without using the cache with "C
 12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 13. Numerical flick Input the numerical flick. 123456789 from top left to bottom right.
 14. Alphabet flick Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter-in the lower right corner.
-
-### Irregular board shapes
-* You can select square, regular hexagon, regular triangle, and pyramid from the "New/Change frame" menu. Functions other than square are limited.
-* Adjust the board shape in "mass" mode. From the "Rotate/Move" menu, press the "Move board to center" and "Match screen size to board" buttons to adjust margins.
 
 ### Grid
 * You can change the border of the board from the "New/Change frame" menu.

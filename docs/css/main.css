@@ -20,7 +20,6 @@ body {
 
 header {
     width: 100%;
-    image height: auto;
     margin: 0 auto;
     background: #fff;
     padding-top: 15px;
@@ -38,7 +37,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 440px;
+    max-width: 515px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -426,6 +425,13 @@ input[type="radio"]:checked+label {
     box-shadow: 0 0 0 1px orange;
 }
 
+body input,
+body textarea {
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 #panel_button0,
 #visibility_button0,
 #edge_button0,
@@ -735,7 +741,7 @@ input[type="radio"]:checked+label {
 #modal-content {
     background-color: white;
     width: 300px;
-    height: 350px;
+    height: 370px;
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;
@@ -835,6 +841,27 @@ input[type="radio"]:checked+label {
     border-radius: 20px;
 }
 
+#modal-input {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#modal-input-content {
+    background-color: white;
+    width: 300px;
+    height: 270px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 20px;
+}
+
 textarea {
     min-width: 200px;
     min-height: 80px;
@@ -902,6 +929,7 @@ h4 {
 
 #solutiontext {
     font-size: 12px;
+    text-align: left;
 }
 
 input[type=number] {
@@ -911,6 +939,10 @@ input[type=number] {
 .nb_button {
     text-align: center;
     margin-top: 1px;
+}
+
+#nb_size3 {
+    margin-bottom: 5px;
 }
 
 #modal-size {

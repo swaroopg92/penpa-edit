@@ -98,14 +98,14 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface", "Wall",
-        "Line Normal", "Line Helper",
-        "Edge Normal", "Edge Helper",
+    let modes = ["Surface", "Wall", "Shape", "Composite",
+        "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
+        "Edge Normal", "Edge Diagonal", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
     ];
-    let modes_mapping = ["surface", "wall",
-        "sub_line1", "sub_line4",
-        "sub_lineE1", "sub_lineE4",
+    let modes_mapping = ["surface", "wall", "symbol", "combi",
+        "sub_line1", "sub_line2", "sub_line5", "sub_line4",
+        "sub_lineE1", "sub_lineE2", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
     ];
     let previous_mode = "surface";
@@ -114,7 +114,7 @@ onload = function() {
     let counter_index = 0;
 
     function onKeyDown(e) {
-        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "inputtext") {
+        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "iostring" || e.target.id == "inputtext") {
             // For input form
         } else {
             var key = e.key;
@@ -145,6 +145,7 @@ onload = function() {
                     pu.key_number(key);
                     event.returnValue = false;
                 } else if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 || str_alph_up.indexOf(key) != -1 || str_sym.indexOf(key) != -1) {
+                    event.preventDefault();
                     pu.key_number(key);
                 } else if (key === " ") {
                     pu.key_space();
@@ -155,7 +156,7 @@ onload = function() {
                 }
             }
 
-            if (ctrl_key) {
+            if (ctrl_key && !shift_key && !alt_key) {
                 switch (key) {
                     case "d": //Ctrl+d
                     case "D":
@@ -176,49 +177,91 @@ onload = function() {
                         pu.key_shiftspace();
                         event.returnValue = false;
                         break;
+                    case "i": //Ctrl+i
+                    case "I":
+                        if ((document.getElementById('panel_button').textContent === "ON") &&
+                            (typeof panel_select !== "undefined") &&
+                            (panel_select < panel_pu.cont.length) &&
+                            pu.mode[pu.mode.qa].edit_mode !== "symbol") {
+                            var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
+
+                            if (panel_pu.panelmode === "number") {
+                                if (0 <= panel_select && panel_select <= 9) {
+                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                } else if (panel_select === 10) {
+                                    pu.key_backspace();
+                                } else if (panel_select === 11) {
+                                    pu.key_space();
+                                }
+                            } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
+                                if (0 <= panel_select && panel_select <= 27) {
+                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                } else if (panel_select === 28) {
+                                    pu.key_number(" ");
+                                } else if (panel_select >= 29) {
+                                    pu.key_space();
+                                }
+                            } else if (panel_pu.panelmode === "Text") {
+                                panel_pu.inputtext();
+                            } else if (panel_pu.panelmode === "key_symbol") {
+                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != " ") {
+                                    pu.key_number(panel_pu.cont[panel_select]);
+                                } else if (panel_pu.cont[panel_select] === " ") {
+                                    pu.key_space();
+                                }
+                            } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
+                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != "　") {
+                                    pu.key_number(panel_pu.cont[panel_select]);
+                                } else if (panel_pu.cont[panel_select] === "　") {
+                                    pu.key_space();
+                                }
+                            }
+                        }
+                        event.returnValue = false;
+                        break;
                 }
             }
 
-            if (alt_key) {
-                switch (key) {
-                    case "x":
-                    case "X":
-                        var present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "c":
-                    case "C":
-                        var present_mode = document.getElementById("mo_line").checked;
-                        if (!present_mode) {
-                            pu.mode_set("line");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "v":
-                    case "V":
-                        var present_mode = document.getElementById("mo_lineE").checked;
-                        if (!present_mode) {
-                            pu.mode_set("lineE");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "a":
-                    case "A":
-                        var present_mode = document.getElementById("mo_number").checked;
-                        if (!present_mode) {
-                            pu.mode_set("number");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                }
-            }
+            // if (alt_key && !shift_key && !ctrl_key) {
+            //     switch (key) {
+            //         case "x":
+            //         case "X":
+            //             var present_mode = document.getElementById("mo_surface").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("surface");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //         case "c":
+            //         case "C":
+            //             var present_mode = document.getElementById("mo_line").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("line");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //         case "v":
+            //         case "V":
+            //             var present_mode = document.getElementById("mo_lineE").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("lineE");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //         case "a":
+            //         case "A":
+            //             var present_mode = document.getElementById("mo_number").checked;
+            //             if (!present_mode) {
+            //                 pu.mode_set("number");
+            //                 e.preventDefault();
+            //             }
+            //             event.returnValue = false;
+            //             break;
+            //     }
+            // }
 
             if (key === "Tab" || key === "Enter") {
                 let user_choices = getValues('mode_choices');
@@ -231,7 +274,7 @@ onload = function() {
                     counter_index = 0; // reset the counter
                 }
                 let mode_loc = modes.indexOf(user_choices[counter_index]);
-                if (mode_loc < 2) { // Hard coded, '2' since we have only Surface and Wall Modes, remaining choices are related to submodes
+                if (mode_loc < 4) { // Hard coded, '4', Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
                     pu.mode_set(modes_mapping[mode_loc])
                     e.preventDefault();
                 } else {
@@ -310,10 +353,10 @@ onload = function() {
         count_redo = 0;
         new_timer = setInterval(() => {
             count_undo++;
-            if (count_undo > 5) {
+            if (count_undo > 2) {
                 pu.undo();
             }
-        }, 80);
+        }, 200);
         if (new_timer !== timer) {
             clearInterval(timer);
             count = 0;
@@ -343,10 +386,10 @@ onload = function() {
         count_undo = 0;
         new_timer = setInterval(() => {
             count_redo++;
-            if (count_redo > 5) {
+            if (count_redo > 2) {
                 pu.redo();
             }
-        }, 80);
+        }, 200);
         if (new_timer !== timer) {
             clearInterval(timer);
             count = 0;
@@ -413,6 +456,10 @@ onload = function() {
                 //case "duplicate":
                 //duplicate();
                 //  break;
+            case "input_sudoku":
+                io_sudoku();
+                e.preventDefault();
+                break;
             case "tb_undo":
                 pu.undo();
                 e.preventDefault();
@@ -545,6 +592,8 @@ onload = function() {
             case "savetextname":
                 return;
             case "savetextarea_pp":
+                return;
+            case "iostring":
                 return;
             case "closeBtn_save1":
                 savetext_copy();
@@ -788,9 +837,9 @@ onload = function() {
         }
     }
 
-
     // Panel input settings
     var float_canvas = document.getElementById("float-canvas");
+    var panel_select;
 
     function f_mdown(e) {
         if (e.type === "mousedown") {
@@ -807,6 +856,7 @@ onload = function() {
         var numxf = Math.floor(xf / (sizef + 3));
         var numyf = Math.floor(yf / (sizef + 3));
         var n = numxf + numyf * panel_pu.nxf;
+        panel_select = n;
         var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
@@ -857,7 +907,7 @@ onload = function() {
         var option = document.createElement("option");
         option.value = modes[i];
         option.text = modes[i];
-        if (i == 0 || i == 6) { // Default selection Surface and Number-Normal Mode
+        if (i == 0) { // Default selection Surface Mode
             option.setAttribute("selected", true);
         }
         select.appendChild(option);
