@@ -114,6 +114,10 @@ hr.newgridhrline {
     font-size: 12px;
 }
 
+#nb_sudoku7_lb{
+    font-weight: bold;
+}
+
 #sub_txt,
 #style_txt {
     font-size: 12px;
@@ -764,7 +768,7 @@ body textarea {
 #modal-content {
     background-color: var(--white);
     width: 300px;
-    height: 390px;
+    height: 410px;
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;

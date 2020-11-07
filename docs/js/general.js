@@ -72,7 +72,8 @@ function make_class(gridtype, loadtype = 'new') {
                 "nb_sudoku3_lb", "nb_sudoku3",
                 "nb_sudoku4_lb", "nb_sudoku4",
                 "nb_sudoku5_lb", "nb_sudoku5",
-                "nb_sudoku6_lb", "nb_sudoku6"
+                "nb_sudoku6_lb", "nb_sudoku6",
+                "nb_sudoku7_lb"
             ]; // of sudoku
             for (var i of type4) {
                 document.getElementById(i).style.display = "none";
@@ -154,22 +155,46 @@ function make_class(gridtype, loadtype = 'new') {
         case "sudoku":
             if (loadtype === 'new') {
                 if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
-                    var nx = 11;
-                    var ny = 11;
+                    if (document.getElementById("nb_sudoku6").checked === true) { // 8x8 grid
+                        var nx = 10;
+                        var ny = 10;
+                    } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
+                        var nx = 8;
+                        var ny = 8;
+                    } else { // Default 9x9 grid
+                        var nx = 11;
+                        var ny = 11;
+                    }
                     document.getElementById("nb_space1").value = 1;
                     document.getElementById("nb_space2").value = 1;
                     document.getElementById("nb_space3").value = 1;
                     document.getElementById("nb_space4").value = 1;
                 } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
-                    var nx = 10;
-                    var ny = 10;
+                    if (document.getElementById("nb_sudoku6").checked === true) { // 8x8 grid
+                        var nx = 9;
+                        var ny = 9;
+                    } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
+                        var nx = 7;
+                        var ny = 7;
+                    } else { // Default 9x9 grid
+                        var nx = 10;
+                        var ny = 10;
+                    }
                     document.getElementById("nb_space1").value = 1;
                     document.getElementById("nb_space2").value = 0;
                     document.getElementById("nb_space3").value = 1;
                     document.getElementById("nb_space4").value = 0;
                 } else {
-                    var nx = 9;
-                    var ny = 9;
+                    if (document.getElementById("nb_sudoku6").checked === true) { // 8x8 grid
+                        var nx = 8;
+                        var ny = 8;
+                    } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
+                        var nx = 6;
+                        var ny = 6;
+                    } else { // Default 9x9 grid
+                        var nx = 9;
+                        var ny = 9;
+                    }
                     document.getElementById("nb_space1").value = 0;
                     document.getElementById("nb_space2").value = 0;
                     document.getElementById("nb_space3").value = 0;
@@ -184,9 +209,18 @@ function make_class(gridtype, loadtype = 'new') {
             pu = new Puzzle_sudoku(nx, ny, size);
 
             if (loadtype === 'new') {
+                let rows, cols;
                 if (document.getElementById("nb_sudoku2").checked === true) { // Outside, little killer
-                    let rows = [5, 8];
-                    let cols = [5, 8];
+                    if (document.getElementById("nb_sudoku6").checked === true) { // 8x8 grid
+                        rows = [4, 6, 8];
+                        cols = [6];
+                    } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
+                        rows = [4, 6];
+                        cols = [5];
+                    } else { // Default 9x9 grid
+                        rows = [5, 8];
+                        cols = [5, 8];
+                    }
                     let start = 2;
                     let end = pu.nx - 1;
                     let linestyle = 2;
@@ -203,8 +237,16 @@ function make_class(gridtype, loadtype = 'new') {
                         pu.draw_Z(start, end, end + 1, linestyle);
                     }
                 } else if (document.getElementById("nb_sudoku3").checked === true) { // sandwich
-                    let rows = [5, 8];
-                    let cols = [5, 8];
+                    if (document.getElementById("nb_sudoku6").checked === true) { // 8x8 grid
+                        rows = [4, 6, 8];
+                        cols = [6];
+                    } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
+                        rows = [4, 6];
+                        cols = [5];
+                    } else { // Default 9x9 grid
+                        rows = [5, 8];
+                        cols = [5, 8];
+                    }
                     let start = 2;
                     let end = pu.nx;
                     let linestyle = 2;
@@ -221,8 +263,16 @@ function make_class(gridtype, loadtype = 'new') {
                         pu.draw_Z(start, end, end + 1, linestyle);
                     }
                 } else {
-                    let rows = [4, 7];
-                    let cols = [4, 7];
+                    if (document.getElementById("nb_sudoku6").checked === true) { // 8x8 grid
+                        rows = [3, 5, 7];
+                        cols = [5];
+                    } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
+                        rows = [3, 5];
+                        cols = [4];
+                    } else { // Default 9x9 grid
+                        rows = [4, 7];
+                        cols = [4, 7];
+                    }
                     let start = 1;
                     let end = pu.nx;
                     let linestyle = 2;
@@ -328,7 +378,8 @@ function changetype() {
         "nb_sudoku3_lb", "nb_sudoku3",
         "nb_sudoku4_lb", "nb_sudoku4",
         "nb_sudoku5_lb", "nb_sudoku5",
-        "nb_sudoku6_lb", "nb_sudoku6"
+        "nb_sudoku6_lb", "nb_sudoku6",
+        "nb_sudoku7_lb"
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     switch (gridtype) {
@@ -452,6 +503,7 @@ function changetype() {
                 document.getElementById(i).style.display = "inline";
             }
             document.getElementById("nb_sudoku3_lb").innerHTML = "Sandwich";
+            document.getElementById("nb_sudoku7_lb").innerHTML = "*Default size is 9x9";
             document.getElementById("nb_sudoku1").checked = false;
             document.getElementById("nb_sudoku2").checked = false;
             document.getElementById("nb_sudoku3").checked = false;
