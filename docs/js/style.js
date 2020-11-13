@@ -23,7 +23,7 @@ const Color = {
     ORANGE_LIGHT: "#ffcc80",
     PINK_LIGHT: "#ffb3ff",
     PURPLE_LIGHT: "#cc99ff",
-    RED: "#dd0000",
+    RED: "#ff0000",
     RED_LIGHT: "#ffa3a3",
     TRANSPARENTBLACK: "rgba(0,0,0,0)",
     TRANSPARENTWHITE: "rgba(255,255,255,0)",

@@ -1,11 +1,13 @@
 ## History
-* 2020/10/01 ver2.24.12
+* 2020/11/07 ver2.24.12
 	* Double and Triple sum arrows now possible. (Use Shape [Mode] -> Special1 [Submode]-> ArrowSums for sums and Special [Mode] -> Arrow [Submode] to draw arrow path).
+	* Added Sudoku 6x6 and 8x8 boards option to Sudoku Grid type.
 	* Personalized alert messages.
 	* Added Composite mode to Tab selector.
 	* Rearranged all colors and improved CODE readability.
 	* Fixed display of some buttons.
-* 2020/10/01 ver2.24.11
+	* Fixed export sudoku bug and improved import sudoku to not overwrite the Problem digits.
+* 2020/11/01 ver2.24.11
 	* Fixed backspace symbol display in the PANEL.
 	* Fixed number mode bug when user enters invalid unicode symbol.
 	* Added Shape mode to the Tab Selector.

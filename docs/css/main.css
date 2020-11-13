@@ -20,7 +20,7 @@
     --orangeLight: #ffcc80;
     --pinkLight: #ffb3ff;
     --purpleLight: #cc99ff;
-    --red: #dd0000;
+    --red: #ff0000;
     --redLight: #ffa3a3;
     --transparentBlack: rgba(0, 0, 0, 0);
     --transparentWhite: rgba(255, 255, 255, 0);
@@ -112,6 +112,10 @@ hr.newgridhrline {
     text-align: left;
     padding-bottom: 5px;
     font-size: 12px;
+}
+
+#nb_sudoku7_lb{
+    font-weight: bold;
 }
 
 #sub_txt,
@@ -775,7 +779,7 @@ body textarea {
 #modal-content {
     background-color: var(--white);
     width: 300px;
-    height: 390px;
+    height: 410px;
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;
