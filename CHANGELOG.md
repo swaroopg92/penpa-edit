@@ -6,6 +6,7 @@
 	* Added Composite mode to Tab selector.
 	* Rearranged all colors and improved CODE readability.
 	* Fixed display of some buttons.
+	* Fixed export sudoku bug and improved import sudoku to not overwrite the Problem digits.
 * 2020/11/01 ver2.24.11
 	* Fixed backspace symbol display in the PANEL.
 	* Fixed number mode bug when user enters invalid unicode symbol.
