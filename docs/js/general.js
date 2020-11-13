@@ -1006,7 +1006,18 @@ function import_sudoku() {
 function export_sudoku() {
     let flag;
     if (document.getElementById("gridtype").value === "sudoku") {
-        flag = pu.export_clues();
+        let rsize = pu.ny;
+        let csize = pu.nx;
+        let over = parseInt(document.getElementById("nb_space1").value, 10);
+        let under = parseInt(document.getElementById("nb_space2").value, 10);
+        let left = parseInt(document.getElementById("nb_space3").value, 10);
+        let right = parseInt(document.getElementById("nb_space4").value, 10);
+        let size = rsize - over - under;
+        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
+            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
+            ((rsize - over - under === 6) && (csize - left - right === 6))) {
+            flag = pu.export_clues(size);
+        }
     } else if (document.getElementById("gridtype").value === "square") {
         let rsize = parseInt(document.getElementById("nb_size2").value, 10);
         let csize = parseInt(document.getElementById("nb_size1").value, 10);
