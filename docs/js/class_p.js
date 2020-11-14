@@ -578,7 +578,6 @@ class Puzzle {
 
             // shift DeleteEdge elements to next row            
             if (this[i].deletelineE) {
-                let m;
                 let temp = this[i].deletelineE;
                 this[i].deletelineE = {};
                 for (var k in temp) {
@@ -590,11 +589,74 @@ class Puzzle {
                 }
             }
 
-            // this[i].freeline = {};
-            // this[i].freelineE = {};
-            // this[i].thermo = [];
-            // this[i].arrows = [];
-            // this[i].direction = [];
+            // shift FreeLine elements to next row
+            if (this[i].freeline) {
+                let temp = this[i].freeline;
+                this[i].freeline = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freeline", key);
+                    this[this.mode.qa].freeline[key] = temp[k];
+                }
+            }
+
+            // shift FreeEdge elements to next row
+            if (this[i].freelineE) {
+                let temp = this[i].freelineE;
+                this[i].freelineE = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freelineE", key);
+                    this[this.mode.qa].freelineE[key] = temp[k];
+                }
+            }
+
+            // shift Thermo elements to next row
+            if (this[i].thermo) {
+                let temp = this[i].thermo;
+                this[i].thermo = {};
+                this[i].thermo = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("thermo", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[this.mode.qa].thermo[k] = temp[k];
+                }
+            }
+
+            // shift Arrow elements to next row
+            if (this[i].arrows) {
+                let temp = this[i].arrows;
+                this[i].arrows = {};
+                this[i].arrows = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("arrows", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[this.mode.qa].arrows[k] = temp[k];
+                }
+            }
+
+            // shift Direction elements to next row
+            if (this[i].direction) {
+                let temp = this[i].direction;
+                this[i].direction = {};
+                this[i].direction = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("direction", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[this.mode.qa].direction[k] = temp[k];
+                }
+            }
+
             // this[i].squareframe = [];
             // this[i].polygon = [];
             // this[i].wall = {};
@@ -734,6 +796,20 @@ class Puzzle {
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("deletelineE", key);
                     this[this.mode.qa].deletelineE[key] = temp[k];
+                }
+            }
+
+            // Maintain FreeEdge elements in the same place
+            if (this[i].freelineE) {
+                let m;
+                let temp = this[i].freelineE;
+                this[i].freelineE = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freelineE", key);
+                    this[this.mode.qa].freelineE[key] = temp[k];
                 }
             }
         }
