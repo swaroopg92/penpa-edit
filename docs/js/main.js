@@ -644,19 +644,19 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "rt_addtop":
-                pu.resize_top();
+                pu.resize_top_add();
                 e.preventDefault();
                 break;
             case "rt_addbottom":
-                pu.resize_bottom();
+                pu.resize_bottom_add();
                 e.preventDefault();
                 break;
             case "rt_addleft":
-                pu.resize_left();
+                pu.resize_left_add();
                 e.preventDefault();
                 break;
             case "rt_addright":
-                pu.resize_right();
+                pu.resize_right_add();
                 e.preventDefault();
                 break;
             case "rt_reset":
