@@ -1048,12 +1048,12 @@ class Puzzle {
                 for (var k in temp) {
                     if (temp[k] === 98) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
                         this.record("lineE", m);
                         this[i].lineE[m] = temp[k];
                     } else {
-                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                        var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("lineE", key);
                         this[i].lineE[key] = temp[k];
@@ -1067,8 +1067,8 @@ class Puzzle {
                 let temp = this[i].deletelineE;
                 this[i].deletelineE = {};
                 for (var k in temp) {
-                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("deletelineE", key);
                     this[i].deletelineE[key] = temp[k];
@@ -1339,12 +1339,12 @@ class Puzzle {
                 for (var k in temp) {
                     if (temp[k] === 98) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
                         this.record("lineE", m);
                         this[i].lineE[m] = temp[k];
                     } else {
-                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                        var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("lineE", key);
                         this[i].lineE[key] = temp[k];
@@ -1358,8 +1358,8 @@ class Puzzle {
                 let temp = this[i].deletelineE;
                 this[i].deletelineE = {};
                 for (var k in temp) {
-                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("deletelineE", key);
                     this[i].deletelineE[key] = temp[k];
