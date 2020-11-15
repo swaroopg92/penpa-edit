@@ -1108,7 +1108,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("thermo", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
                     }
                     this[i].thermo[k] = temp[k];
                 }
@@ -1122,7 +1122,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("arrows", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
                     }
                     this[i].arrows[k] = temp[k];
                 }
@@ -1136,7 +1136,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("direction", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
                     }
                     this[i].direction[k] = temp[k];
                 }
@@ -1150,7 +1150,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("squareframe", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
                     }
                     this[i].squareframe[k] = temp[k];
                 }
@@ -1398,7 +1398,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("thermo", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
                     }
                     this[i].thermo[k] = temp[k];
                 }
@@ -1412,7 +1412,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("arrows", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
                     }
                     this[i].arrows[k] = temp[k];
                 }
@@ -1426,7 +1426,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("direction", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
                     }
                     this[i].direction[k] = temp[k];
                 }
@@ -1440,7 +1440,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("squareframe", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
                     }
                     this[i].squareframe[k] = temp[k];
                 }
