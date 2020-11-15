@@ -1009,7 +1009,6 @@ class Puzzle {
                 for (var k = 0; k < keys.length; k++) {
                     let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
                     m = parseInt(keys[k]) + (parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
-                    console.log(factor, m);
                     this.record("symbol", m);
                     this[i].symbol[m] = temp[keys[k]];
                 }
@@ -1023,13 +1022,17 @@ class Puzzle {
                 for (var k in temp) {
                     if (temp[k] === 98) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
                         this.record("line", m);
                         this[i].line[m] = temp[k];
                     } else {
                         let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k) / originalnx0) - 2) + 3;
+                        if (factor == 0) {
+                            var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3;
+                        } else {
+                            var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                        }
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("line", key);
                         this[i].line[key] = temp[k];
@@ -1310,13 +1313,17 @@ class Puzzle {
                 for (var k in temp) {
                     if (temp[k] === 98) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
                         this.record("line", m);
                         this[i].line[m] = temp[k];
                     } else {
                         let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k) / originalnx0) - 2) + 2;
+                        if (factor == 0) {
+                            var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2;
+                        } else {
+                            var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                        }
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("line", key);
                         this[i].line[key] = temp[k];
