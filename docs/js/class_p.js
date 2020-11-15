@@ -1027,7 +1027,7 @@ class Puzzle {
                         this[i].line[m] = temp[k];
                     } else {
                         let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k) / originalnx0) - 2) + 3;
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3;
                         if (factor == 0) {
                             var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3;
                         } else {
@@ -1061,7 +1061,6 @@ class Puzzle {
                 }
             }
 
-
             // shift DeleteEdge elements to next column           
             if (this[i].deletelineE) {
                 let temp = this[i].deletelineE;
@@ -1080,8 +1079,8 @@ class Puzzle {
                 let temp = this[i].freeline;
                 this[i].freeline = {};
                 for (var k in temp) {
-                    var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                    var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                    var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3;
+                    var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3;
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freeline", key);
                     this[i].freeline[key] = temp[k];
@@ -1093,8 +1092,8 @@ class Puzzle {
                 let temp = this[i].freelineE;
                 this[i].freelineE = {};
                 for (var k in temp) {
-                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freelineE", key);
                     this[i].freelineE[key] = temp[k];
@@ -1318,7 +1317,7 @@ class Puzzle {
                         this[i].line[m] = temp[k];
                     } else {
                         let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k) / originalnx0) - 2) + 2;
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2;
                         if (factor == 0) {
                             var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2;
                         } else {
@@ -1352,7 +1351,6 @@ class Puzzle {
                 }
             }
 
-
             // Maintain DeleteEdge elements in the same column           
             if (this[i].deletelineE) {
                 let temp = this[i].deletelineE;
@@ -1371,8 +1369,8 @@ class Puzzle {
                 let temp = this[i].freeline;
                 this[i].freeline = {};
                 for (var k in temp) {
-                    var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                    var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                    var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2;
+                    var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2;
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freeline", key);
                     this[i].freeline[key] = temp[k];
@@ -1384,8 +1382,8 @@ class Puzzle {
                 let temp = this[i].freelineE;
                 this[i].freelineE = {};
                 for (var k in temp) {
-                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freelineE", key);
                     this[i].freelineE[key] = temp[k];
