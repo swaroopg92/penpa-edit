@@ -441,7 +441,7 @@ class Puzzle {
         let originalny0 = this.ny0;
 
         // this.nx = nx; // Columns
-        this.ny = this.ny + 1; // Rows
+        this.ny = this.ny + 1; // Rows, Adding 1 row
         // this.nx0 = this.nx + 4;
         this.ny0 = this.ny + 4;
         // this.width0 = this.nx + 1;
@@ -657,10 +657,60 @@ class Puzzle {
                 }
             }
 
-            // this[i].squareframe = [];
-            // this[i].polygon = [];
-            // this[i].wall = {};
-            // this[i].cage = {};
+            // shift RectangleFrame elements to next row
+            if (this[i].squareframe) {
+                let temp = this[i].squareframe;
+                this[i].squareframe = {};
+                this[i].squareframe = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("squareframe", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[this.mode.qa].squareframe[k] = temp[k];
+                }
+            }
+
+            // shift Wall elements to next row
+            if (this[i].wall) {
+                let temp = this[i].wall;
+                this[i].wall = {};
+                for (var k in temp) {
+                    let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                    var k1 = parseInt(k.split(",")[0]) + (factor + 1) * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("wall", key);
+                    this[this.mode.qa].wall[key] = temp[k];
+                }
+            }
+
+            // shift Cage elements to next row
+            if (this[i].cage) {
+                let temp = this[i].cage;
+                this[i].cage = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 8 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("cage", key);
+                    this[this.mode.qa].cage[key] = temp[k];
+                }
+            }
+
+            // shift Polygon elements to next row
+            if (this[i].polygon) {
+                let temp = this[i].polygon;
+                this[i].polygon = {};
+                this[i].polygon = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("polygon", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
+                    }
+                    this[this.mode.qa].polygon[k] = temp[k];
+                }
+            }
         }
         this.redraw();
     }
@@ -677,7 +727,7 @@ class Puzzle {
         let originalny0 = this.ny0;
 
         // this.nx = nx; // Columns
-        this.ny = this.ny + 1; // Rows
+        this.ny = this.ny + 1; // Rows, Adding 1 row
         // this.nx0 = this.nx + 4;
         this.ny0 = this.ny + 4;
         // this.width0 = this.nx + 1;
@@ -784,7 +834,6 @@ class Puzzle {
                 }
             }
 
-
             // Maintain DeleteEdge elements in the same row     
             if (this[i].deletelineE) {
                 let m;
@@ -812,8 +861,48 @@ class Puzzle {
                     this[this.mode.qa].freelineE[key] = temp[k];
                 }
             }
-        }
 
+            // Maintain Wall elements in the same row
+            if (this[i].wall) {
+                let temp = this[i].wall;
+                this[i].wall = {};
+                for (var k in temp) {
+                    let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                    var k1 = parseInt(k.split(",")[0]) + factor * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("wall", key);
+                    this[this.mode.qa].wall[key] = temp[k];
+                }
+            }
+
+            // Maintain Cage elements in the same row
+            if (this[i].cage) {
+                let temp = this[i].cage;
+                this[i].cage = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 4 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 4 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("cage", key);
+                    this[this.mode.qa].cage[key] = temp[k];
+                }
+            }
+
+            // Maintain Polygon elements in the same row
+            if (this[i].polygon) {
+                let temp = this[i].polygon;
+                this[i].polygon = {};
+                this[i].polygon = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("polygon", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[this.mode.qa].polygon[k] = temp[k];
+                }
+            }
+        }
         this.redraw();
     }
 
