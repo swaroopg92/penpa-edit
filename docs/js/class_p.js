@@ -1193,7 +1193,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("polygon", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
                     }
                     this[i].polygon[k] = temp[k];
                 }
@@ -1485,7 +1485,7 @@ class Puzzle {
                 for (var k in temp) {
                     this.record("polygon", k);
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
-                        temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
                     }
                     this[i].polygon[k] = temp[k];
                 }
