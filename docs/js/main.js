@@ -659,6 +659,22 @@ onload = function() {
                 pu.resize_right_add();
                 e.preventDefault();
                 break;
+            case "rt_subtop":
+                pu.resize_top_add();
+                e.preventDefault();
+                break;
+            case "rt_subbottom":
+                pu.resize_bottom_add();
+                e.preventDefault();
+                break;
+            case "rt_subleft":
+                pu.resize_left_add();
+                e.preventDefault();
+                break;
+            case "rt_subright":
+                pu.resize_right_add();
+                e.preventDefault();
+                break;
             case "rt_reset":
                 pu.rotate_reset();
                 e.preventDefault();

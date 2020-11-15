@@ -430,7 +430,6 @@ class Puzzle {
     }
 
     resize_top_add() {
-
         if (!this.originalnx) {
             this.originalnx = this.nx;
         }
@@ -491,7 +490,7 @@ class Puzzle {
                 for (var k = 0; k < keys.length; k++) {
                     let m = parseInt(keys[k]) + parseInt(originalnx0);
                     this.record("surface", m);
-                    this[this.mode.qa].surface[m] = temp[keys[k]];
+                    this[i].surface[m] = temp[keys[k]];
                 }
             }
 
@@ -503,7 +502,7 @@ class Puzzle {
                 for (var k = 0; k < keys.length; k++) {
                     let m = parseInt(keys[k]) + parseInt(originalnx0);
                     this.record("number", m);
-                    this[this.mode.qa].number[m] = temp[keys[k]];
+                    this[i].number[m] = temp[keys[k]];
                 }
             }
 
@@ -515,7 +514,7 @@ class Puzzle {
                 for (var k = 0; k < keys.length; k++) {
                     let m = parseInt(keys[k]) + 8 * parseInt(originalnx0);
                     this.record("numberS", m);
-                    this[this.mode.qa].numberS[m] = temp[keys[k]];
+                    this[i].numberS[m] = temp[keys[k]];
                 }
             }
 
@@ -529,7 +528,7 @@ class Puzzle {
                     let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
                     m = parseInt(keys[k]) + (factor + 1) * parseInt(originalnx0);
                     this.record("symbol", m);
-                    this[this.mode.qa].symbol[m] = temp[keys[k]];
+                    this[i].symbol[m] = temp[keys[k]];
                 }
             }
 
@@ -543,13 +542,14 @@ class Puzzle {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
                         m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
                         this.record("line", m);
-                        this[this.mode.qa].line[m] = temp[k];
+                        this[i].line[m] = temp[k];
                     } else {
+                        let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
                         var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("line", key);
-                        this[this.mode.qa].line[key] = temp[k];
+                        this[i].line[key] = temp[k];
                     }
                 }
             }
@@ -564,13 +564,13 @@ class Puzzle {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
                         m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
                         this.record("lineE", m);
-                        this[this.mode.qa].lineE[m] = temp[k];
+                        this[i].lineE[m] = temp[k];
                     } else {
                         var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
                         var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("lineE", key);
-                        this[this.mode.qa].lineE[key] = temp[k];
+                        this[i].lineE[key] = temp[k];
                     }
                 }
             }
@@ -585,7 +585,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("deletelineE", key);
-                    this[this.mode.qa].deletelineE[key] = temp[k];
+                    this[i].deletelineE[key] = temp[k];
                 }
             }
 
@@ -598,7 +598,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freeline", key);
-                    this[this.mode.qa].freeline[key] = temp[k];
+                    this[i].freeline[key] = temp[k];
                 }
             }
 
@@ -611,7 +611,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freelineE", key);
-                    this[this.mode.qa].freelineE[key] = temp[k];
+                    this[i].freelineE[key] = temp[k];
                 }
             }
 
@@ -625,7 +625,7 @@ class Puzzle {
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
                         temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
                     }
-                    this[this.mode.qa].thermo[k] = temp[k];
+                    this[i].thermo[k] = temp[k];
                 }
             }
 
@@ -639,7 +639,7 @@ class Puzzle {
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
                         temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
                     }
-                    this[this.mode.qa].arrows[k] = temp[k];
+                    this[i].arrows[k] = temp[k];
                 }
             }
 
@@ -653,7 +653,7 @@ class Puzzle {
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
                         temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
                     }
-                    this[this.mode.qa].direction[k] = temp[k];
+                    this[i].direction[k] = temp[k];
                 }
             }
 
@@ -667,7 +667,7 @@ class Puzzle {
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
                         temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
                     }
-                    this[this.mode.qa].squareframe[k] = temp[k];
+                    this[i].squareframe[k] = temp[k];
                 }
             }
 
@@ -681,7 +681,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("wall", key);
-                    this[this.mode.qa].wall[key] = temp[k];
+                    this[i].wall[key] = temp[k];
                 }
             }
 
@@ -694,7 +694,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("cage", key);
-                    this[this.mode.qa].cage[key] = temp[k];
+                    this[i].cage[key] = temp[k];
                 }
             }
 
@@ -708,7 +708,7 @@ class Puzzle {
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
                         temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
                     }
-                    this[this.mode.qa].polygon[k] = temp[k];
+                    this[i].polygon[k] = temp[k];
                 }
             }
         }
@@ -777,7 +777,7 @@ class Puzzle {
                 for (var k = 0; k < keys.length; k++) {
                     let m = parseInt(keys[k]) + 4 * parseInt(originalnx0);
                     this.record("numberS", m);
-                    this[this.mode.qa].numberS[m] = temp[keys[k]];
+                    this[i].numberS[m] = temp[keys[k]];
                 }
             }
 
@@ -791,7 +791,7 @@ class Puzzle {
                     let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
                     m = parseInt(keys[k]) + factor * parseInt(originalnx0);
                     this.record("symbol", m);
-                    this[this.mode.qa].symbol[m] = temp[keys[k]];
+                    this[i].symbol[m] = temp[keys[k]];
                 }
             }
 
@@ -805,10 +805,14 @@ class Puzzle {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
                         m = parseInt(k) + factor * parseInt(originalnx0);
                         this.record("line", m);
-                        this[this.mode.qa].line[m] = temp[k];
+                        this[i].line[m] = temp[k];
                     } else {
-                        this.record("line", k);
-                        this[this.mode.qa].line[k] = temp[k];
+                        let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
+                        var k1 = parseInt(k.split(",")[0]);
+                        var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0);
+                        var key = (k1.toString() + "," + k2.toString());
+                        this.record("line", key);
+                        this[i].line[key] = temp[k];
                     }
                 }
             }
@@ -823,13 +827,13 @@ class Puzzle {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
                         m = parseInt(k) + factor * parseInt(originalnx0);
                         this.record("lineE", m);
-                        this[this.mode.qa].lineE[m] = temp[k];
+                        this[i].lineE[m] = temp[k];
                     } else {
                         var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
                         var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("lineE", key);
-                        this[this.mode.qa].lineE[key] = temp[k];
+                        this[i].lineE[key] = temp[k];
                     }
                 }
             }
@@ -844,7 +848,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("deletelineE", key);
-                    this[this.mode.qa].deletelineE[key] = temp[k];
+                    this[i].deletelineE[key] = temp[k];
                 }
             }
 
@@ -858,7 +862,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("freelineE", key);
-                    this[this.mode.qa].freelineE[key] = temp[k];
+                    this[i].freelineE[key] = temp[k];
                 }
             }
 
@@ -872,7 +876,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("wall", key);
-                    this[this.mode.qa].wall[key] = temp[k];
+                    this[i].wall[key] = temp[k];
                 }
             }
 
@@ -885,7 +889,7 @@ class Puzzle {
                     var k2 = parseInt(k.split(",")[1]) + 4 * parseInt(originalnx0);
                     var key = (k1.toString() + "," + k2.toString());
                     this.record("cage", key);
-                    this[this.mode.qa].cage[key] = temp[k];
+                    this[i].cage[key] = temp[k];
                 }
             }
 
@@ -899,18 +903,25 @@ class Puzzle {
                     for (var m = 0; m <= (temp[k].length - 1); m++) {
                         temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
                     }
-                    this[this.mode.qa].polygon[k] = temp[k];
+                    this[i].polygon[k] = temp[k];
                 }
             }
         }
         this.redraw();
     }
 
-    resize_left_add() {}
+    resize_left_add() {
+        if (!this.originalnx) {
+            this.originalnx = this.nx;
+        }
+        if (!this.originalny) {
+            this.originalny = this.ny;
+        }
+        let originalnx0 = this.nx0;
+        let originalny0 = this.ny0;
 
-    resize_right_add() {
-        this.nx = this.nx + 1; // Columns
-        // this.ny = this.ny+1; // Rows
+        this.nx = this.nx + 1; // Columns, Adding 1 column
+        // this.ny = this.ny; // Rows
         this.nx0 = this.nx + 4;
         // this.ny0 = this.ny + 4;
         this.width0 = this.nx + 1;
@@ -946,6 +957,531 @@ class Puzzle {
         this.make_frameline();
         this.cursol = this.centerlist[0];
         this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+
+
+        for (var i of ["pu_q", "pu_a"]) {
+            this[i].command_redo = new Stack();
+            this[i].command_undo = new Stack();
+
+            // shift Surface elements to next column
+            if (this[i].surface) {
+                let temp = this[i].surface;
+                this[i].surface = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3;
+                    this.record("surface", m);
+                    this[i].surface[m] = temp[keys[k]];
+                }
+            }
+
+            // shift Number elements to next column
+            if (this[i].number) {
+                let temp = this[i].number;
+                this[i].number = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3;
+                    this.record("number", m);
+                    this[i].number[m] = temp[keys[k]];
+                }
+            }
+
+            // shift NumberS elements to next column
+            if (this[i].numberS) {
+                let temp = this[i].numberS;
+                this[i].numberS = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let normal_cursor = parseInt(keys[k] / 4) - (originalnx0 * originalny0);
+                    let m = parseInt(keys[k]) + 4 * (parseInt(normal_cursor / originalnx0) + originalny0) + 4;
+                    this.record("numberS", m);
+                    this[i].numberS[m] = temp[keys[k]];
+                }
+            }
+
+            // shift Symbol elements to next column
+            if (this[i].symbol) {
+                let m;
+                let temp = this[i].symbol;
+                this[i].symbol = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
+                    m = parseInt(keys[k]) + (parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                    console.log(factor, m);
+                    this.record("symbol", m);
+                    this[i].symbol[m] = temp[keys[k]];
+                }
+            }
+
+            // shift Line elements to next column
+            if (this[i].line) {
+                let m;
+                let temp = this[i].line;
+                this[i].line = {};
+                for (var k in temp) {
+                    if (temp[k] === 98) {
+                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        this.record("line", m);
+                        this[i].line[m] = temp[k];
+                    } else {
+                        let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
+                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
+                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                        var key = (k1.toString() + "," + k2.toString());
+                        this.record("line", key);
+                        this[i].line[key] = temp[k];
+                    }
+                }
+            }
+
+            // shift Edge elements to next column
+            if (this[i].lineE) {
+                let m;
+                let temp = this[i].lineE;
+                this[i].lineE = {};
+                for (var k in temp) {
+                    if (temp[k] === 98) {
+                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        this.record("lineE", m);
+                        this[i].lineE[m] = temp[k];
+                    } else {
+                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                        var key = (k1.toString() + "," + k2.toString());
+                        this.record("lineE", key);
+                        this[i].lineE[key] = temp[k];
+                    }
+                }
+            }
+
+
+            // shift DeleteEdge elements to next column           
+            if (this[i].deletelineE) {
+                let temp = this[i].deletelineE;
+                this[i].deletelineE = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("deletelineE", key);
+                    this[i].deletelineE[key] = temp[k];
+                }
+            }
+
+            // shift FreeLine elements to next column
+            if (this[i].freeline) {
+                let temp = this[i].freeline;
+                this[i].freeline = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freeline", key);
+                    this[i].freeline[key] = temp[k];
+                }
+            }
+
+            // shift FreeEdge elements to next column
+            if (this[i].freelineE) {
+                let temp = this[i].freelineE;
+                this[i].freelineE = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freelineE", key);
+                    this[i].freelineE[key] = temp[k];
+                }
+            }
+
+            // shift Thermo elements to next column
+            if (this[i].thermo) {
+                let temp = this[i].thermo;
+                this[i].thermo = {};
+                this[i].thermo = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("thermo", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].thermo[k] = temp[k];
+                }
+            }
+
+            // shift Arrow elements to next column
+            if (this[i].arrows) {
+                let temp = this[i].arrows;
+                this[i].arrows = {};
+                this[i].arrows = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("arrows", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].arrows[k] = temp[k];
+                }
+            }
+
+            // shift Direction elements to next column
+            if (this[i].direction) {
+                let temp = this[i].direction;
+                this[i].direction = {};
+                this[i].direction = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("direction", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].direction[k] = temp[k];
+                }
+            }
+
+            // shift RectangleFrame elements to next column
+            if (this[i].squareframe) {
+                let temp = this[i].squareframe;
+                this[i].squareframe = {};
+                this[i].squareframe = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("squareframe", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].squareframe[k] = temp[k];
+                }
+            }
+
+            // shift Wall elements to next column
+            if (this[i].wall) {
+                let temp = this[i].wall;
+                this[i].wall = {};
+                for (var k in temp) {
+                    let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                    var k1 = parseInt(k.split(",")[0]) + (factor + 1) * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("wall", key);
+                    this[i].wall[key] = temp[k];
+                }
+            }
+
+            // shift Cage elements to next column
+            if (this[i].cage) {
+                let temp = this[i].cage;
+                this[i].cage = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 8 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("cage", key);
+                    this[i].cage[key] = temp[k];
+                }
+            }
+
+            // shift Polygon elements to next column
+            if (this[i].polygon) {
+                let temp = this[i].polygon;
+                this[i].polygon = {};
+                this[i].polygon = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("polygon", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
+                    }
+                    this[i].polygon[k] = temp[k];
+                }
+            }
+        }
+        this.redraw();
+    }
+
+    resize_right_add() {
+        if (!this.originalnx) {
+            this.originalnx = this.nx;
+        }
+        if (!this.originalny) {
+            this.originalny = this.ny;
+        }
+        let originalnx0 = this.nx0;
+        let originalny0 = this.ny0;
+
+        this.nx = this.nx + 1; // Columns, Adding 1 column
+        // this.ny = this.ny; // Rows
+        this.nx0 = this.nx + 4;
+        // this.ny0 = this.ny + 4;
+        this.width0 = this.nx + 1;
+        // this.height0 = this.ny + 1;
+        this.width_c = this.width0;
+        // this.height_c = this.height0;
+        this.width = this.width_c;
+        // this.height = this.height_c;
+        this.canvasx = this.width_c * this.size;
+        // this.canvasy = this.height_c * this.size;
+
+
+        this.create_point();
+        this.centerlist = []
+        for (var j = 2; j < this.ny0 - 2; j++) {
+            for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
+                this.centerlist.push(i + j * (this.nx0));
+            }
+        }
+        this.search_center();
+        this.center_n0 = this.center_n;
+        this.canvasxy_update();
+        this.canvas_size_setting();
+        this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
+
+        this.centerlist = [] //reset centerlist to match the margins
+        for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
+            for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+                this.centerlist.push(i + j * (this.nx0));
+            }
+        }
+
+        this.make_frameline();
+        this.cursol = this.centerlist[0];
+        this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+
+
+        for (var i of ["pu_q", "pu_a"]) {
+            this[i].command_redo = new Stack();
+            this[i].command_undo = new Stack();
+
+            // Maintain Surface elements in the same column
+            if (this[i].surface) {
+                let temp = this[i].surface;
+                this[i].surface = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2;
+                    this.record("surface", m);
+                    this[i].surface[m] = temp[keys[k]];
+                }
+            }
+
+            // Maintain Number elements in the same column
+            if (this[i].number) {
+                let temp = this[i].number;
+                this[i].number = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2;
+                    this.record("number", m);
+                    this[i].number[m] = temp[keys[k]];
+                }
+            }
+
+            // Maintain NumberS elements in the same column
+            if (this[i].numberS) {
+                let temp = this[i].numberS;
+                this[i].numberS = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let normal_cursor = parseInt(keys[k] / 4) - (originalnx0 * originalny0);
+                    let m = parseInt(keys[k]) + 4 * (parseInt(normal_cursor / originalnx0) + originalny0);
+                    this.record("numberS", m);
+                    this[i].numberS[m] = temp[keys[k]];
+                }
+            }
+
+            // Maintain Symbol elements in the same column
+            if (this[i].symbol) {
+                let m;
+                let temp = this[i].symbol;
+                this[i].symbol = {};
+                let keys = Object.keys(temp);
+                for (var k = 0; k < keys.length; k++) {
+                    let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
+                    m = parseInt(keys[k]) + (parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                    this.record("symbol", m);
+                    this[i].symbol[m] = temp[keys[k]];
+                }
+            }
+
+            // Maintain Line elements in the same column
+            if (this[i].line) {
+                let m;
+                let temp = this[i].line;
+                this[i].line = {};
+                for (var k in temp) {
+                    if (temp[k] === 98) {
+                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        this.record("line", m);
+                        this[i].line[m] = temp[k];
+                    } else {
+                        let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
+                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
+                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                        var key = (k1.toString() + "," + k2.toString());
+                        this.record("line", key);
+                        this[i].line[key] = temp[k];
+                    }
+                }
+            }
+
+            // Maintain Edge elements in the same column
+            if (this[i].lineE) {
+                let m;
+                let temp = this[i].lineE;
+                this[i].lineE = {};
+                for (var k in temp) {
+                    if (temp[k] === 98) {
+                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                        m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                        this.record("lineE", m);
+                        this[i].lineE[m] = temp[k];
+                    } else {
+                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                        var key = (k1.toString() + "," + k2.toString());
+                        this.record("lineE", key);
+                        this[i].lineE[key] = temp[k];
+                    }
+                }
+            }
+
+
+            // Maintain DeleteEdge elements in the same column           
+            if (this[i].deletelineE) {
+                let temp = this[i].deletelineE;
+                this[i].deletelineE = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("deletelineE", key);
+                    this[i].deletelineE[key] = temp[k];
+                }
+            }
+
+            // Maintain FreeLine elements in the same column
+            if (this[i].freeline) {
+                let temp = this[i].freeline;
+                this[i].freeline = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freeline", key);
+                    this[i].freeline[key] = temp[k];
+                }
+            }
+
+            // Maintain FreeEdge elements in the same column
+            if (this[i].freelineE) {
+                let temp = this[i].freelineE;
+                this[i].freelineE = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("freelineE", key);
+                    this[i].freelineE[key] = temp[k];
+                }
+            }
+
+            // Maintain Thermo elements in the same column
+            if (this[i].thermo) {
+                let temp = this[i].thermo;
+                this[i].thermo = {};
+                this[i].thermo = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("thermo", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].thermo[k] = temp[k];
+                }
+            }
+
+            // Maintain Arrow elements in the same column
+            if (this[i].arrows) {
+                let temp = this[i].arrows;
+                this[i].arrows = {};
+                this[i].arrows = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("arrows", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].arrows[k] = temp[k];
+                }
+            }
+
+            // Maintain Direction elements in the same column
+            if (this[i].direction) {
+                let temp = this[i].direction;
+                this[i].direction = {};
+                this[i].direction = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("direction", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].direction[k] = temp[k];
+                }
+            }
+
+            // Maintain RectangleFrame elements in the same column
+            if (this[i].squareframe) {
+                let temp = this[i].squareframe;
+                this[i].squareframe = {};
+                this[i].squareframe = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("squareframe", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                    }
+                    this[i].squareframe[k] = temp[k];
+                }
+            }
+
+            // Maintain Wall elements in the same column
+            if (this[i].wall) {
+                let temp = this[i].wall;
+                this[i].wall = {};
+                for (var k in temp) {
+                    let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
+                    var k1 = parseInt(k.split(",")[0]) + (factor + 1) * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("wall", key);
+                    this[i].wall[key] = temp[k];
+                }
+            }
+
+            // Maintain Cage elements in the same column
+            if (this[i].cage) {
+                let temp = this[i].cage;
+                this[i].cage = {};
+                for (var k in temp) {
+                    var k1 = parseInt(k.split(",")[0]) + 8 * parseInt(originalnx0);
+                    var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0);
+                    var key = (k1.toString() + "," + k2.toString());
+                    this.record("cage", key);
+                    this[i].cage[key] = temp[k];
+                }
+            }
+
+            // Maintain Polygon elements in the same column
+            if (this[i].polygon) {
+                let temp = this[i].polygon;
+                this[i].polygon = {};
+                this[i].polygon = new Array(temp.length);
+                for (var k in temp) {
+                    this.record("polygon", k);
+                    for (var m = 0; m <= (temp[k].length - 1); m++) {
+                        temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
+                    }
+                    this[i].polygon[k] = temp[k];
+                }
+            }
+        }
         this.redraw();
     }
 
