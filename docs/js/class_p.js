@@ -429,8 +429,9 @@ class Puzzle {
 
     }
 
-    resize_top_add() {
-        if ((this.ny + 1) <= 40) {
+    resize_top(sign) {
+        sign = parseInt(sign);
+        if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -441,7 +442,7 @@ class Puzzle {
             let originalny0 = this.ny0;
 
             // this.nx = nx; // Columns
-            this.ny = this.ny + 1; // Rows, Adding 1 row
+            this.ny = this.ny + (1 * sign); // Rows, Adding/Subtracting 1 row
             // this.nx0 = this.nx + 4;
             this.ny0 = this.ny + 4;
             // this.width0 = this.nx + 1;
@@ -487,7 +488,7 @@ class Puzzle {
                     this[i].surface = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + parseInt(originalnx0);
+                        let m = parseInt(keys[k]) + parseInt(originalnx0) * sign;
                         this.record("surface", m);
                         this[i].surface[m] = temp[keys[k]];
                     }
@@ -499,7 +500,7 @@ class Puzzle {
                     this[i].number = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + parseInt(originalnx0);
+                        let m = parseInt(keys[k]) + parseInt(originalnx0) * sign;
                         this.record("number", m);
                         this[i].number[m] = temp[keys[k]];
                     }
@@ -511,7 +512,7 @@ class Puzzle {
                     this[i].numberS = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + 8 * parseInt(originalnx0);
+                        let m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
                         this.record("numberS", m);
                         this[i].numberS[m] = temp[keys[k]];
                     }
@@ -525,7 +526,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        m = parseInt(keys[k]) + (factor + 1) * parseInt(originalnx0);
+                        m = parseInt(keys[k]) + (factor + 1) * parseInt(originalnx0) * sign;
                         this.record("symbol", m);
                         this[i].symbol[m] = temp[keys[k]];
                     }
@@ -539,13 +540,13 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                            m = parseInt(k) + (factor + 1) * parseInt(originalnx0) * sign;
                             this.record("line", m);
                             this[i].line[m] = temp[k];
                         } else {
                             let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                            var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                            var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
+                            var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0) * sign;
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("line", key);
                             this[i].line[key] = temp[k];
@@ -561,12 +562,12 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (factor + 1) * parseInt(originalnx0);
+                            m = parseInt(k) + (factor + 1) * parseInt(originalnx0) * sign;
                             this.record("lineE", m);
                             this[i].lineE[m] = temp[k];
                         } else {
-                            var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                            var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                            var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0) * sign;
+                            var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0) * sign;
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("lineE", key);
                             this[i].lineE[key] = temp[k];
@@ -580,8 +581,8 @@ class Puzzle {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("deletelineE", key);
                         this[i].deletelineE[key] = temp[k];
@@ -593,8 +594,8 @@ class Puzzle {
                     let temp = this[i].freeline;
                     this[i].freeline = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freeline", key);
                         this[i].freeline[key] = temp[k];
@@ -606,8 +607,8 @@ class Puzzle {
                     let temp = this[i].freelineE;
                     this[i].freelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freelineE", key);
                         this[i].freelineE[key] = temp[k];
@@ -622,7 +623,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("thermo", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
                         }
                         this[i].thermo[k] = temp[k];
                     }
@@ -636,7 +637,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("arrows", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
                         }
                         this[i].arrows[k] = temp[k];
                     }
@@ -650,7 +651,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("direction", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
                         }
                         this[i].direction[k] = temp[k];
                     }
@@ -664,7 +665,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("squareframe", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
                         }
                         this[i].squareframe[k] = temp[k];
                     }
@@ -676,8 +677,8 @@ class Puzzle {
                     this[i].wall = {};
                     for (var k in temp) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + (factor + 1) * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + (factor + 1) * parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("wall", key);
                         this[i].wall[key] = temp[k];
@@ -689,8 +690,8 @@ class Puzzle {
                     let temp = this[i].cage;
                     this[i].cage = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 8 * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + 8 * parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("cage", key);
                         this[i].cage[key] = temp[k];
@@ -705,7 +706,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("polygon", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0);
+                            temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0) * sign;
                         }
                         this[i].polygon[k] = temp[k];
                     }
@@ -713,17 +714,27 @@ class Puzzle {
             }
             this.redraw();
         } else {
-            Swal.fire({
-                title: 'Swaroop says:',
-                html: 'Max row size reached <h2 style="color:red;">40</h2>',
-                icon: 'error',
-                confirmButtonText: 'You, got this 🙂',
-            })
+            if (sign === 1) {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Max row size reached <h2 style="color:red;">40</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            } else {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Min row size reached <h2 style="color:red;">1</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            }
         }
     }
 
-    resize_bottom_add() {
-        if ((this.ny + 1) <= 40) {
+    resize_bottom(sign) {
+        sign = parseInt(sign);
+        if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -734,7 +745,7 @@ class Puzzle {
             let originalny0 = this.ny0;
 
             // this.nx = nx; // Columns
-            this.ny = this.ny + 1; // Rows, Adding 1 row
+            this.ny = this.ny + (1 * sign); // Rows, Adding/Removing 1 row
             // this.nx0 = this.nx + 4;
             this.ny0 = this.ny + 4;
             // this.width0 = this.nx + 1;
@@ -781,7 +792,7 @@ class Puzzle {
                     this[i].numberS = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + 4 * parseInt(originalnx0);
+                        let m = parseInt(keys[k]) + 4 * parseInt(originalnx0) * sign;
                         this.record("numberS", m);
                         this[i].numberS[m] = temp[keys[k]];
                     }
@@ -795,7 +806,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        m = parseInt(keys[k]) + factor * parseInt(originalnx0);
+                        m = parseInt(keys[k]) + factor * parseInt(originalnx0) * sign;
                         this.record("symbol", m);
                         this[i].symbol[m] = temp[keys[k]];
                     }
@@ -809,13 +820,13 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + factor * parseInt(originalnx0);
+                            m = parseInt(k) + (factor * parseInt(originalnx0)) * sign;
                             this.record("line", m);
                             this[i].line[m] = temp[k];
                         } else {
                             let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
                             var k1 = parseInt(k.split(",")[0]);
-                            var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0);
+                            var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0) * sign;
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("line", key);
                             this[i].line[key] = temp[k];
@@ -831,12 +842,12 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + factor * parseInt(originalnx0);
+                            m = parseInt(k) + (factor * parseInt(originalnx0)) * sign;
                             this.record("lineE", m);
                             this[i].lineE[m] = temp[k];
                         } else {
-                            var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                            var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                            var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
+                            var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("lineE", key);
                             this[i].lineE[key] = temp[k];
@@ -850,8 +861,8 @@ class Puzzle {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("deletelineE", key);
                         this[i].deletelineE[key] = temp[k];
@@ -864,8 +875,8 @@ class Puzzle {
                     let temp = this[i].freelineE;
                     this[i].freelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freelineE", key);
                         this[i].freelineE[key] = temp[k];
@@ -878,8 +889,8 @@ class Puzzle {
                     this[i].wall = {};
                     for (var k in temp) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + factor * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + factor * parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("wall", key);
                         this[i].wall[key] = temp[k];
@@ -891,8 +902,8 @@ class Puzzle {
                     let temp = this[i].cage;
                     this[i].cage = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 4 * parseInt(originalnx0);
-                        var k2 = parseInt(k.split(",")[1]) + 4 * parseInt(originalnx0);
+                        var k1 = parseInt(k.split(",")[0]) + 4 * parseInt(originalnx0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + 4 * parseInt(originalnx0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("cage", key);
                         this[i].cage[key] = temp[k];
@@ -907,7 +918,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("polygon", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0);
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
                         }
                         this[i].polygon[k] = temp[k];
                     }
@@ -915,18 +926,27 @@ class Puzzle {
             }
             this.redraw();
         } else {
-            Swal.fire({
-                title: 'Swaroop says:',
-                html: 'Max row size reached <h2 style="color:red;">40</h2>',
-                icon: 'error',
-                confirmButtonText: 'You, got this 🙂',
-            })
+            if (sign === 1) {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Max row size reached <h2 style="color:red;">40</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            } else {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Min row size reached <h2 style="color:red;">1</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            }
         }
     }
 
-    resize_left_add() {
-
-        if ((this.nx + 1) <= 40) {
+    resize_left(sign) {
+        sign = parseInt(sign);
+        if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -936,7 +956,7 @@ class Puzzle {
             let originalnx0 = this.nx0;
             let originalny0 = this.ny0;
 
-            this.nx = this.nx + 1; // Columns, Adding 1 column
+            this.nx = this.nx + (1 * sign); // Columns, Adding/Removing 1 column
             // this.ny = this.ny; // Rows
             this.nx0 = this.nx + 4;
             // this.ny0 = this.ny + 4;
@@ -983,7 +1003,7 @@ class Puzzle {
                     this[i].surface = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3;
+                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3) * sign;
                         this.record("surface", m);
                         this[i].surface[m] = temp[keys[k]];
                     }
@@ -995,7 +1015,7 @@ class Puzzle {
                     this[i].number = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3;
+                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3) * sign;
                         this.record("number", m);
                         this[i].number[m] = temp[keys[k]];
                     }
@@ -1008,7 +1028,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let normal_cursor = parseInt(keys[k] / 4) - (originalnx0 * originalny0);
-                        let m = parseInt(keys[k]) + 4 * (parseInt(normal_cursor / originalnx0) + originalny0) + 4;
+                        let m = parseInt(keys[k]) + (4 * (parseInt(normal_cursor / originalnx0) + originalny0) + 4) * sign;
                         this.record("numberS", m);
                         this[i].numberS[m] = temp[keys[k]];
                     }
@@ -1022,7 +1042,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
-                        m = parseInt(keys[k]) + (parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                        m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
                         this.record("symbol", m);
                         this[i].symbol[m] = temp[keys[k]];
                     }
@@ -1036,16 +1056,16 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
                             this.record("line", m);
                             this[i].line[m] = temp[k];
                         } else {
                             let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3;
+                            var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3) * sign;
                             if (factor == 0) {
-                                var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3;
+                                var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3) * sign;
                             } else {
-                                var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                                var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
                             }
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("line", key);
@@ -1062,12 +1082,12 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
                             this.record("lineE", m);
                             this[i].lineE[m] = temp[k];
                         } else {
-                            var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
-                            var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                            var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
+                            var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("lineE", key);
                             this[i].lineE[key] = temp[k];
@@ -1080,8 +1100,8 @@ class Puzzle {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("deletelineE", key);
                         this[i].deletelineE[key] = temp[k];
@@ -1093,8 +1113,8 @@ class Puzzle {
                     let temp = this[i].freeline;
                     this[i].freeline = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3;
+                        var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freeline", key);
                         this[i].freeline[key] = temp[k];
@@ -1106,8 +1126,8 @@ class Puzzle {
                     let temp = this[i].freelineE;
                     this[i].freelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freelineE", key);
                         this[i].freelineE[key] = temp[k];
@@ -1122,7 +1142,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("thermo", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
                         }
                         this[i].thermo[k] = temp[k];
                     }
@@ -1136,7 +1156,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("arrows", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
                         }
                         this[i].arrows[k] = temp[k];
                     }
@@ -1150,7 +1170,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("direction", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
                         }
                         this[i].direction[k] = temp[k];
                     }
@@ -1164,7 +1184,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("squareframe", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
                         }
                         this[i].squareframe[k] = temp[k];
                     }
@@ -1176,8 +1196,8 @@ class Puzzle {
                     this[i].wall = {};
                     for (var k in temp) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0;
+                        var k1 = parseInt(k.split(",")[0]) + ((parseInt((parseInt(k.split(",")[0]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("wall", key);
                         this[i].wall[key] = temp[k];
@@ -1191,8 +1211,8 @@ class Puzzle {
                     for (var k in temp) {
                         let normal_cursor1 = parseInt(parseInt(k.split(",")[0]) / 4) - (originalnx0 * originalny0);
                         let normal_cursor2 = parseInt(parseInt(k.split(",")[1]) / 4) - (originalnx0 * originalny0);
-                        var k1 = parseInt(k.split(",")[0]) + 4 * (parseInt(normal_cursor1 / originalnx0) + originalny0) + 4;
-                        var k2 = parseInt(k.split(",")[1]) + 4 * (parseInt(normal_cursor2 / originalnx0) + originalny0) + 4;
+                        var k1 = parseInt(k.split(",")[0]) + (4 * (parseInt(normal_cursor1 / originalnx0) + originalny0) + 4) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (4 * (parseInt(normal_cursor2 / originalnx0) + originalny0) + 4) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("cage", key);
                         this[i].cage[key] = temp[k];
@@ -1207,7 +1227,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("polygon", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0);
+                            temp[k][m] = parseInt(temp[k][m]) + (parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
                         }
                         this[i].polygon[k] = temp[k];
                     }
@@ -1215,17 +1235,27 @@ class Puzzle {
             }
             this.redraw();
         } else {
-            Swal.fire({
-                title: 'Swaroop says:',
-                html: 'Max column size reached <h2 style="color:red;">40</h2>',
-                icon: 'error',
-                confirmButtonText: 'You, got this 🙂',
-            })
+            if (sign === 1) {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Max column size reached <h2 style="color:red;">40</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            } else {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Min column size reached <h2 style="color:red;">1</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            }
         }
     }
 
-    resize_right_add() {
-        if ((this.nx + 1) <= 40) {
+    resize_right(sign) {
+        sign = parseInt(sign);
+        if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -1235,7 +1265,7 @@ class Puzzle {
             let originalnx0 = this.nx0;
             let originalny0 = this.ny0;
 
-            this.nx = this.nx + 1; // Columns, Adding 1 column
+            this.nx = this.nx + (1 * sign); // Columns, Adding/Removing 1 column
             // this.ny = this.ny; // Rows
             this.nx0 = this.nx + 4;
             // this.ny0 = this.ny + 4;
@@ -1282,7 +1312,7 @@ class Puzzle {
                     this[i].surface = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2;
+                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2) * sign;
                         this.record("surface", m);
                         this[i].surface[m] = temp[keys[k]];
                     }
@@ -1294,7 +1324,7 @@ class Puzzle {
                     this[i].number = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + (parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2;
+                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2) * sign;
                         this.record("number", m);
                         this[i].number[m] = temp[keys[k]];
                     }
@@ -1307,7 +1337,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let normal_cursor = parseInt(keys[k] / 4) - (originalnx0 * originalny0);
-                        let m = parseInt(keys[k]) + 4 * (parseInt(normal_cursor / originalnx0) + originalny0);
+                        let m = parseInt(keys[k]) + (4 * (parseInt(normal_cursor / originalnx0) + originalny0)) * sign;
                         this.record("numberS", m);
                         this[i].numberS[m] = temp[keys[k]];
                     }
@@ -1321,7 +1351,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
-                        m = parseInt(keys[k]) + (parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                        m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
                         this.record("symbol", m);
                         this[i].symbol[m] = temp[keys[k]];
                     }
@@ -1335,16 +1365,16 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
                             this.record("line", m);
                             this[i].line[m] = temp[k];
                         } else {
                             let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2;
+                            var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2) * sign;
                             if (factor == 0) {
-                                var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2;
+                                var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2) * sign;
                             } else {
-                                var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                                var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
                             }
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("line", key);
@@ -1361,12 +1391,12 @@ class Puzzle {
                     for (var k in temp) {
                         if (temp[k] === 98) {
                             let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
                             this.record("lineE", m);
                             this[i].lineE[m] = temp[k];
                         } else {
-                            var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
-                            var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                            var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
+                            var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
                             var key = (k1.toString() + "," + k2.toString());
                             this.record("lineE", key);
                             this[i].lineE[key] = temp[k];
@@ -1379,8 +1409,8 @@ class Puzzle {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("deletelineE", key);
                         this[i].deletelineE[key] = temp[k];
@@ -1392,8 +1422,8 @@ class Puzzle {
                     let temp = this[i].freeline;
                     this[i].freeline = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2;
+                        var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freeline", key);
                         this[i].freeline[key] = temp[k];
@@ -1405,8 +1435,8 @@ class Puzzle {
                     let temp = this[i].freelineE;
                     this[i].freelineE = {};
                     for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
-                        var k2 = parseInt(k.split(",")[1]) + parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("freelineE", key);
                         this[i].freelineE[key] = temp[k];
@@ -1421,7 +1451,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("thermo", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
                         }
                         this[i].thermo[k] = temp[k];
                     }
@@ -1435,7 +1465,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("arrows", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
                         }
                         this[i].arrows[k] = temp[k];
                     }
@@ -1449,7 +1479,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("direction", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
                         }
                         this[i].direction[k] = temp[k];
                     }
@@ -1463,7 +1493,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("squareframe", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2;
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
                         }
                         this[i].squareframe[k] = temp[k];
                     }
@@ -1475,8 +1505,8 @@ class Puzzle {
                     this[i].wall = {};
                     for (var k in temp) {
                         let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0;
+                        var k1 = parseInt(k.split(",")[0]) + ((parseInt((parseInt(k.split(",")[0]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("wall", key);
                         this[i].wall[key] = temp[k];
@@ -1490,8 +1520,8 @@ class Puzzle {
                     for (var k in temp) {
                         let normal_cursor1 = parseInt(parseInt(k.split(",")[0]) / 4) - (originalnx0 * originalny0);
                         let normal_cursor2 = parseInt(parseInt(k.split(",")[1]) / 4) - (originalnx0 * originalny0);
-                        var k1 = parseInt(k.split(",")[0]) + 4 * (parseInt(normal_cursor1 / originalnx0) + originalny0);
-                        var k2 = parseInt(k.split(",")[1]) + 4 * (parseInt(normal_cursor2 / originalnx0) + originalny0);
+                        var k1 = parseInt(k.split(",")[0]) + (4 * (parseInt(normal_cursor1 / originalnx0) + originalny0)) * sign;
+                        var k2 = parseInt(k.split(",")[1]) + (4 * (parseInt(normal_cursor2 / originalnx0) + originalny0)) * sign;
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("cage", key);
                         this[i].cage[key] = temp[k];
@@ -1506,7 +1536,7 @@ class Puzzle {
                     for (var k in temp) {
                         this.record("polygon", k);
                         for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0);
+                            temp[k][m] = parseInt(temp[k][m]) + (parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
                         }
                         this[i].polygon[k] = temp[k];
                     }
@@ -1514,12 +1544,21 @@ class Puzzle {
             }
             this.redraw();
         } else {
-            Swal.fire({
-                title: 'Swaroop says:',
-                html: 'Max column size reached <h2 style="color:red;">40</h2>',
-                icon: 'error',
-                confirmButtonText: 'You, got this 🙂',
-            })
+            if (sign === 1) {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Max column size reached <h2 style="color:red;">40</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            } else {
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'Min column size reached <h2 style="color:red;">1</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'You, got this 🙂',
+                })
+            }
         }
     }
 

@@ -644,35 +644,35 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "rt_addtop":
-                pu.resize_top_add();
+                pu.resize_top(1);
                 e.preventDefault();
                 break;
             case "rt_addbottom":
-                pu.resize_bottom_add();
+                pu.resize_bottom(1);
                 e.preventDefault();
                 break;
             case "rt_addleft":
-                pu.resize_left_add();
+                pu.resize_left(1);
                 e.preventDefault();
                 break;
             case "rt_addright":
-                pu.resize_right_add();
+                pu.resize_right(1);
                 e.preventDefault();
                 break;
             case "rt_subtop":
-                pu.resize_top_add();
+                pu.resize_top(-1);
                 e.preventDefault();
                 break;
             case "rt_subbottom":
-                pu.resize_bottom_add();
+                pu.resize_bottom(-1);
                 e.preventDefault();
                 break;
             case "rt_subleft":
-                pu.resize_left_add();
+                pu.resize_left(-1);
                 e.preventDefault();
                 break;
             case "rt_subright":
-                pu.resize_right_add();
+                pu.resize_right(-1);
                 e.preventDefault();
                 break;
             case "rt_reset":
