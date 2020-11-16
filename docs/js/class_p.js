@@ -453,7 +453,6 @@ class Puzzle {
             // this.canvasx = this.width_c * this.size;
             this.canvasy = this.height_c * this.size;
 
-
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -477,7 +476,6 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-
 
             for (var i of ["pu_q", "pu_a"]) {
                 this[i].command_redo = new Stack();
@@ -748,7 +746,6 @@ class Puzzle {
             // this.canvasx = this.width_c * this.size;
             this.canvasy = this.height_c * this.size;
 
-
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -952,7 +949,6 @@ class Puzzle {
             this.canvasx = this.width_c * this.size;
             // this.canvasy = this.height_c * this.size;
 
-
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -976,7 +972,6 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-
 
             for (var i of ["pu_q", "pu_a"]) {
                 this[i].command_redo = new Stack();
@@ -1253,7 +1248,6 @@ class Puzzle {
             this.canvasx = this.width_c * this.size;
             // this.canvasy = this.height_c * this.size;
 
-
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -1277,7 +1271,6 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-
 
             for (var i of ["pu_q", "pu_a"]) {
                 this[i].command_redo = new Stack();
