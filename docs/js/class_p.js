@@ -5630,20 +5630,20 @@ class Puzzle {
     //line,lineE,cage_実描画
     re_line(array, num, line_style) {
         if (this[this.mode.qa][array][num] === line_style) {
-            if (this.drawing_mode === 100) {
+            if (this.drawing_mode === 100) { // single line, edge
                 this.record(array, num);
                 delete this[this.mode.qa][array][num];
                 this.drawing_mode = 0;
-            } else if (this.drawing_mode === 0) {
+            } else if (this.drawing_mode === 0) { // to draw in a stretch
                 this.record(array, num);
                 delete this[this.mode.qa][array][num];
             }
         } else {
-            if (this.drawing_mode === 100) {
+            if (this.drawing_mode === 100) { // single line, edge
                 this.record(array, num);
                 this[this.mode.qa][array][num] = line_style;
                 this.drawing_mode = line_style;
-            } else if (this.drawing_mode === line_style) {
+            } else if (this.drawing_mode === line_style) { // to draw in a stretch
                 this.record(array, num);
                 this[this.mode.qa][array][num] = line_style;
             }
@@ -6295,7 +6295,11 @@ class Puzzle {
                     this.re_combi_battleship(num);
                     break;
                 case "star":
-                    this.re_combi_star(num);
+                    if (ondown_key === "mousedown") { // do only star when on laptop
+                        this.re_combi_star_reduced(num);
+                    } else {
+                        this.re_combi_star(num); // Behave as normal when ipad and phone
+                    }
                     break;
                 case "tents":
                     if (ondown_key === "touchstart") {
@@ -6330,6 +6334,9 @@ class Puzzle {
                     break;
                 case "yajilin":
                     this.re_combi_yajilin_downright(num);
+                    break;
+                case "star":
+                    this.re_combi_star_downright(num);
                     break;
             }
         } else if (this.mouse_mode === "move") {
@@ -6889,6 +6896,18 @@ class Puzzle {
         this.redraw();
     }
 
+    re_combi_star_reduced(num) {
+        if (!this[this.mode.qa].symbol[num]) {
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[num] = [1, "star", 2];
+        } else {
+            this.record("symbol", num);
+            delete this[this.mode.qa].symbol[num];
+            this.drawing_mode = 2;
+        }
+        this.redraw();
+    }
+
     re_combi_star(num) {
         if (!this[this.mode.qa].symbol[num]) {
             this.record("symbol", num);
@@ -6904,6 +6923,20 @@ class Puzzle {
         }
         this.redraw();
     }
+
+    re_combi_star_downright(num) {
+        if (!this[this.mode.qa].symbol[num]) {
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[num] = [0, "star", 2];
+            this.drawing_mode = 1;
+        } else {
+            this.record("symbol", num);
+            delete this[this.mode.qa].symbol[num];
+            this.drawing_mode = 2;
+        }
+        this.redraw();
+    }
+
 
     re_combi_star_move(num) {
         if (this.drawing_mode === 1 && (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {
