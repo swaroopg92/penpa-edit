@@ -679,6 +679,38 @@ onload = function() {
                 pu.rotate_reset();
                 e.preventDefault();
                 break;
+            case "rt_addtop_r":
+                pu.resize_top(1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_addbottom_r":
+                pu.resize_bottom(1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_addleft_r":
+                pu.resize_left(1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_addright_r":
+                pu.resize_right(1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_subtop_r":
+                pu.resize_top(-1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_subbottom_r":
+                pu.resize_bottom(-1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_subleft_r":
+                pu.resize_left(-1, 'white');
+                e.preventDefault();
+                break;
+            case "rt_subright_r":
+                pu.resize_right(-1, 'white');
+                e.preventDefault();
+                break;
             case "closeBtn_rotate1":
                 document.getElementById('modal-rotate').style.display = 'none';
                 e.preventDefault();

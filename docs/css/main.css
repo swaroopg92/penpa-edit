@@ -114,7 +114,7 @@ hr.newgridhrline {
     font-size: 12px;
 }
 
-#nb_sudoku7_lb{
+#nb_sudoku7_lb {
     font-weight: bold;
 }
 
@@ -235,7 +235,19 @@ hr.newgridhrline {
 #rt_addtop,
 #rt_addbottom,
 #rt_addleft,
-#rt_addright {
+#rt_addright,
+#rt_addtop_r,
+#rt_addbottom_r,
+#rt_addleft_r,
+#rt_addright_r,
+#rt_subtop,
+#rt_subbottom,
+#rt_subleft,
+#rt_subright,
+#rt_subtop_r,
+#rt_subbottom_r,
+#rt_subleft_r,
+#rt_subright_r {
     margin-top: 1px;
     margin-bottom: 1px;
 }
@@ -800,7 +812,7 @@ body textarea {
 #modal-newsize-content {
     background-color: var(--white);
     width: 300px;
-    height: 100px;
+    height: 250px;
     margin: 0 auto;
     margin-top: 40px;
     border-radius: 20px;

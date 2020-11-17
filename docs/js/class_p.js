@@ -429,9 +429,19 @@ class Puzzle {
 
     }
 
-    resize_top(sign) {
+    resize_top(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+            if (celltype === 'white') {
+                // Over, under, left, right
+                if (sign === 1) {
+                    this.space[0] = this.space[0] + 1;
+                } else {
+                    if (this.space[0] > 0) {
+                        this.space[0] = this.space[0] - 1;
+                    }
+                }
+            }
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -732,9 +742,19 @@ class Puzzle {
         }
     }
 
-    resize_bottom(sign) {
+    resize_bottom(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+            if (celltype === 'white') {
+                // Over, under, left, right
+                if (sign === 1) {
+                    this.space[1] = this.space[1] + 1;
+                } else {
+                    if (this.space[1] > 0) {
+                        this.space[1] = this.space[1] - 1;
+                    }
+                }
+            }
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -944,9 +964,19 @@ class Puzzle {
         }
     }
 
-    resize_left(sign) {
+    resize_left(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+            if (celltype === 'white') {
+                // Over, under, left, right
+                if (sign === 1) {
+                    this.space[2] = this.space[2] + 1;
+                } else {
+                    if (this.space[2] > 0) {
+                        this.space[2] = this.space[2] - 1;
+                    }
+                }
+            }
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -1253,9 +1283,19 @@ class Puzzle {
         }
     }
 
-    resize_right(sign) {
+    resize_right(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+            if (celltype === 'white') {
+                // Over, under, left, right
+                if (sign === 1) {
+                    this.space[3] = this.space[3] + 1;
+                } else {
+                    if (this.space[3] > 0) {
+                        this.space[3] = this.space[3] - 1;
+                    }
+                }
+            }
             if (!this.originalnx) {
                 this.originalnx = this.nx;
             }
@@ -2049,6 +2089,7 @@ class Puzzle {
             [],
             []
         ];
+
         var pu = "pu_a";
 
         for (var i in this[pu].surface) {
