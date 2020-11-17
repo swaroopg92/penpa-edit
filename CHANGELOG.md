@@ -2,6 +2,7 @@
 * 2020/11/22 ver2.24.13
 	* Feature to add/remove rows/columns after the grid is created. Works only for square grid type. It also resets the undo/redo.
 	* Moved the "cross" to right click for StarBattle composite mode.
+	* Erase option added to Edge in Solver mode.
 * 2020/11/07 ver2.24.12
 	* Double and Triple sum arrows now possible. (Use Shape [Mode] -> Special1 [Submode]-> ArrowSums for sums and Special [Mode] -> Arrow [Submode] to draw arrow path).
 	* Added Sudoku 6x6 and 8x8 boards option to Sudoku Grid type.

@@ -5047,6 +5047,9 @@ class Puzzle {
                     }
                     this.pu_a.command_redo.push([a[0], a[1], a[2], pu_mode]);
                 } else {
+                    if (a[0] === "deletelineE") {
+                        pu_mode = "pu_q";
+                    }
                     if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                         this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode]);
                     } else {
@@ -5108,6 +5111,9 @@ class Puzzle {
                     }
                     this.pu_a.command_undo.push([a[0], a[1], a[2], pu_mode]);
                 } else {
+                    if (a[0] === "deletelineE") {
+                        pu_mode = "pu_q";
+                    }
                     if (this[pu_mode][a[0]][a[1]]) {
                         this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode]);
                     } else {
@@ -5142,6 +5148,12 @@ class Puzzle {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
             } else if (arr === "move") {
                 this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
+            } else if (arr === "deletelineE") {
+                if (this.pu_a[arr][num]) {
+                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q"]); // Array is also recorded in JSON
+                } else {
+                    this.pu_a.command_undo.push([arr, num, null, "pu_q"]);
+                }
             } else {
                 if (this.pu_a[arr][num]) {
                     this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
@@ -5153,9 +5165,8 @@ class Puzzle {
         this.pu_q.command_redo = new Stack();
     }
 
-
     /////////////////////////////
-    //キーイベント
+    // Key Event
     //
     /////////////////////////////
 
@@ -5627,25 +5638,41 @@ class Puzzle {
         }
     }
 
-    //line,lineE,cage_実描画
+    //line,lineE,cage Drawing
     re_line(array, num, line_style) {
-        if (this[this.mode.qa][array][num] === line_style) {
+        if ((this[this.mode.qa][array][num] === line_style) || (this["pu_q"]["deletelineE"][num] === line_style)) {
             if (this.drawing_mode === 100) { // single line, edge
                 this.record(array, num);
-                delete this[this.mode.qa][array][num];
+                if (array === "deletelineE") {
+                    delete this["pu_q"][array][num];
+                } else {
+                    delete this[this.mode.qa][array][num];
+                }
                 this.drawing_mode = 0;
             } else if (this.drawing_mode === 0) { // to draw in a stretch
                 this.record(array, num);
-                delete this[this.mode.qa][array][num];
+                if (array === "deletelineE") {
+                    delete this["pu_q"][array][num];
+                } else {
+                    delete this[this.mode.qa][array][num];
+                }
             }
         } else {
             if (this.drawing_mode === 100) { // single line, edge
                 this.record(array, num);
-                this[this.mode.qa][array][num] = line_style;
+                if (array === "deletelineE") {
+                    this["pu_q"][array][num] = line_style;
+                } else {
+                    this[this.mode.qa][array][num] = line_style;
+                }
                 this.drawing_mode = line_style;
             } else if (this.drawing_mode === line_style) { // to draw in a stretch
                 this.record(array, num);
-                this[this.mode.qa][array][num] = line_style;
+                if (array === "deletelineE") {
+                    this["pu_q"][array][num] = line_style;
+                } else {
+                    this[this.mode.qa][array][num] = line_style;
+                }
             }
         }
     }
