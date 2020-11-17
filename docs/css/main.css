@@ -252,6 +252,11 @@ hr.newgridhrline {
     margin-bottom: 1px;
 }
 
+#rt5_lb_r,
+#rt5_lb {
+    color: var(--red);
+}
+
 #st_number1_lb {
     /* Black */
     background-color: var(--black);
@@ -812,7 +817,7 @@ body textarea {
 #modal-newsize-content {
     background-color: var(--white);
     width: 300px;
-    height: 250px;
+    height: 270px;
     margin: 0 auto;
     margin-top: 40px;
     border-radius: 20px;

@@ -643,72 +643,72 @@ onload = function() {
                 pu.rotate_size();
                 e.preventDefault();
                 break;
-            case "rt_addtop":
-                pu.resize_top(1);
-                e.preventDefault();
-                break;
-            case "rt_addbottom":
-                pu.resize_bottom(1);
-                e.preventDefault();
-                break;
-            case "rt_addleft":
-                pu.resize_left(1);
-                e.preventDefault();
-                break;
-            case "rt_addright":
-                pu.resize_right(1);
-                e.preventDefault();
-                break;
-            case "rt_subtop":
-                pu.resize_top(-1);
-                e.preventDefault();
-                break;
-            case "rt_subbottom":
-                pu.resize_bottom(-1);
-                e.preventDefault();
-                break;
-            case "rt_subleft":
-                pu.resize_left(-1);
-                e.preventDefault();
-                break;
-            case "rt_subright":
-                pu.resize_right(-1);
-                e.preventDefault();
-                break;
             case "rt_reset":
                 pu.rotate_reset();
                 e.preventDefault();
                 break;
+            case "rt_addtop":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_top(1); } else if (pu.gridtype === "sudoku") { pu.resize_top(1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_addbottom":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_bottom(1); } else if (pu.gridtype === "sudoku") { pu.resize_bottom(1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_addleft":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_left(1); } else if (pu.gridtype === "sudoku") { pu.resize_left(1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_addright":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_right(1); } else if (pu.gridtype === "sudoku") { pu.resize_right(1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_subtop":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_top(-1); } else if (pu.gridtype === "sudoku") { pu.resize_top(-1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_subbottom":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_bottom(-1); } else if (pu.gridtype === "sudoku") { pu.resize_bottom(-1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_subleft":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_left(-1); } else if (pu.gridtype === "sudoku") { pu.resize_left(-1, 'white'); }
+                e.preventDefault();
+                break;
+            case "rt_subright":
+                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_right(-1); } else if (pu.gridtype === "sudoku") { pu.resize_right(-1, 'white'); }
+                e.preventDefault();
+                break;
             case "rt_addtop_r":
-                pu.resize_top(1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_top(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_addbottom_r":
-                pu.resize_bottom(1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_bottom(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_addleft_r":
-                pu.resize_left(1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_left(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_addright_r":
-                pu.resize_right(1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_right(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subtop_r":
-                pu.resize_top(-1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_top(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subbottom_r":
-                pu.resize_bottom(-1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_bottom(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subleft_r":
-                pu.resize_left(-1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_left(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subright_r":
-                pu.resize_right(-1, 'white');
+                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_right(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "closeBtn_rotate1":
