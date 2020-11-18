@@ -510,7 +510,8 @@ class Puzzle {
                     this[i].number = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + parseInt(originalnx0) * sign;
+                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
+                        let m = parseInt(keys[k]) + (factor + 1) * parseInt(originalnx0) * sign;
                         this.record("number", m);
                         this[i].number[m] = temp[keys[k]];
                     }
@@ -806,6 +807,19 @@ class Puzzle {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
+                // shift Number elements to next row
+                if (this[i].number) {
+                    let temp = this[i].number;
+                    this[i].number = {};
+                    let keys = Object.keys(temp);
+                    for (var k = 0; k < keys.length; k++) {
+                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
+                        let m = parseInt(keys[k]) + factor * parseInt(originalnx0) * sign;
+                        this.record("number", m);
+                        this[i].number[m] = temp[keys[k]];
+                    }
+                }
+
                 // Maintain NumberS elements to be in the same row
                 if (this[i].numberS) {
                     let temp = this[i].numberS;
@@ -1045,7 +1059,8 @@ class Puzzle {
                     this[i].number = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3) * sign;
+                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
+                        let m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
                         this.record("number", m);
                         this[i].number[m] = temp[keys[k]];
                     }
@@ -1364,7 +1379,8 @@ class Puzzle {
                     this[i].number = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2) * sign;
+                        let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
+                        let m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
                         this.record("number", m);
                         this[i].number[m] = temp[keys[k]];
                     }
