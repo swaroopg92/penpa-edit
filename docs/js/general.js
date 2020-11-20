@@ -1641,6 +1641,10 @@ function set_solvemode() {
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";
     document.getElementById("tb_delete").value = "Delete";
+
+    // Hide Visibility button
+    document.getElementById("visibility_button0").style.display = "none";
+    document.getElementById("visibility_button").style.display = "none";
 }
 
 function isEmpty(obj) {
