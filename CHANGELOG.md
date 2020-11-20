@@ -1,5 +1,6 @@
 ## History
-* 2020/11/22 ver2.24.13
+* 2020/11/-- ver2.24.14
+* 2020/11/18 ver2.24.13
 	* Feature to add/remove rows/columns after the grid is created. Works only for square grid type. It also resets the undo/redo.
 	* Moved the "cross" to right click for StarBattle composite mode.
 	* Erase option added to Edge in Solver mode.

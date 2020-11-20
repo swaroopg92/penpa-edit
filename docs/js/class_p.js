@@ -5466,6 +5466,17 @@ class Puzzle {
                         delete this[this.mode.qa].numberS[this.cursolS];
                     }
                 }
+            } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "11") {
+                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
+                if (this[this.mode.qa].numberS[corner_cursor]) {
+                    this.record("numberS", corner_cursor);
+                    number = this[this.mode.qa].numberS[corner_cursor][0].slice(1, -1);
+                    if (number) {
+                        this[this.mode.qa].numberS[corner_cursor][0] = number;
+                    } else {
+                        delete this[this.mode.qa].numberS[corner_cursor];
+                    }
+                }
             } else {
                 if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != 7) {
                     this.record("number", this.cursol);
