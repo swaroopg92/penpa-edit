@@ -816,13 +816,13 @@
                 <h3 id="savetexttitle">Share URL</h3>
             </div>
             <div id="modal-save-info">
-                <span>Title:<input type="text" value="" id="saveinfotitle" class="right"></span>
+                <span>Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
-                <span>Author:<input type="text" value="" id="saveinfoauthor"></span>
+                <span>Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
                 <br>
-                <span>Source:<input type="text" value="" id="saveinfosource"></span>
+                <span>Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
                 <br>
-                <span id = "sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
+                <span id="sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
             </div>
             <div class="nb_button">
                 <input type="button" id="address_edit" value="URL for editing" />
@@ -831,7 +831,7 @@
             </div>
             <div id="modal-save-body">
                 <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
-                <span>Filename:<input type="text" value="sample.txt" id="savetextname"></span>
+                <span>Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">
                 <input type="button" id="closeBtn_save1" value="Copy" />
