@@ -194,6 +194,12 @@ Depending on the browser you can update the page without using the cache with "C
 3. Cancel: Close the window
 
 ### Share
+* Title - Describe the Puzzle Type (e.g. Classic Sudoku, Arrow Sudoku)
+
+* Author - Puzzle creator's name
+
+* Source - If you are not the author of the puzzle, specify the source URL
+
 * URL for editing
 1. Complete creating puzzle in Edit mode "Problem".
 2. If you need to save your puzzle creation progress and come back later to edit then click on this button

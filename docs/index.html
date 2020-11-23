@@ -514,6 +514,11 @@
             </div>
         </div>
     </header>
+    <div id="puzzleinfo">
+        <div><label id="puzzletitle" class="info"></label></div>
+        <div><label id="puzzleauthor" class="info"></label></div>
+        <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
+    </div>
     <div id="dvique" class="dvique"></div>
     <div id="bottom_button">
         <span class="tooltip">
@@ -810,6 +815,15 @@
             <div id="modal-header">
                 <h3 id="savetexttitle">Share URL</h3>
             </div>
+            <div id="modal-save-info">
+                <span>Title:<input type="text" value="" id="saveinfotitle" class="right"></span>
+                <br>
+                <span>Author:<input type="text" value="" id="saveinfoauthor"></span>
+                <br>
+                <span>Source:<input type="text" value="" id="saveinfosource"></span>
+                <br>
+                <span id = "sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
+            </div>
             <div class="nb_button">
                 <input type="button" id="address_edit" value="URL for editing" />
                 <input type="button" id="address_solve" value="URL for solving" />
@@ -817,7 +831,7 @@
             </div>
             <div id="modal-save-body">
                 <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
-                <span>Filename:<input type="text" value="Save.txt" id="savetextname"></span>
+                <span>Filename:<input type="text" value="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">
                 <input type="button" id="closeBtn_save1" value="Copy" />

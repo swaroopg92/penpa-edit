@@ -1079,6 +1079,12 @@ function load(urlParam) {
     if (!rtext_para[12] === 'undefined' && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
     if (!rtext_para[13] === 'undefined' && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
     if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
+    if (rtext_para[15]) { document.getElementById("puzzletitle").innerHTML = rtext_para[15]; }
+    if (rtext_para[16]) { document.getElementById("puzzleauthor").innerHTML = rtext_para[16]; }
+    if (rtext_para[17]) {
+        document.getElementById("puzzlesourcelink").href = rtext_para[17];
+        document.getElementById("puzzlesource").innerHTML = "Source";
+    }
 
     make_class(rtext_para[0], 'url');
 
