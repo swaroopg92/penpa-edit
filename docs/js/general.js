@@ -793,6 +793,9 @@ function saveimage() {
 function saveimage_download() {
     var downloadLink = document.getElementById('download_link');
     var filename = document.getElementById('saveimagename').value;
+    if (!filename) {
+        filename = "my_puzzle";
+    }
     if (document.getElementById("nb_type1").checked) {
         if (filename.slice(-4) != ".png") {
             filename += ".png";
@@ -906,6 +909,9 @@ function savetext_download() {
     var text = document.getElementById("savetextarea").value;
     var downloadLink = document.getElementById('download_link');
     var filename = document.getElementById("savetextname").value;
+    if (!filename) {
+        filename = "my_puzzle.txt";
+    }
     if (filename.indexOf(".") === -1) {
         filename += ".txt";
     }
