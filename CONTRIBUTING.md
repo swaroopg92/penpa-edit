@@ -1,6 +1,6 @@
 # Contributing
 
-Author: Swaroop Guggilam, swaroop.guggilam@gmail.com
+Author: Swaroop Guggilam, penpaplus@gmail.com
 
 The purpose of this file is to provide guidance on contributing to Penpa-edit.
 

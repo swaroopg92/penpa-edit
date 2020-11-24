@@ -593,47 +593,9 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    draw_point() {
-        set_font_style(this.ctx, (0.2 * this.size).toString(), 1);
-        for (var i in this.point) {
-            if (this.point[i].type === 0) {
-                this.ctx.fillStyle = "#000";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 1) {
-                this.ctx.fillStyle = "blue";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 2) {
-                this.ctx.fillStyle = "red";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 3) {
-                this.ctx.fillStyle = "orange";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 4) {
-                this.ctx.fillStyle = "green";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 5) {
-                this.ctx.fillStyle = "green";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            }
-            this.ctx.beginPath();
-            //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
-            this.ctx.fill();
-        }
-    }
-
     draw_lattice() {
         if (this.mode.grid[1] === "1") {
-            this.ctx.fillStyle = "#000";
+            this.ctx.fillStyle = Color.BLACK;
             var verticelist = [];
             for (var i = 0; i < this.centerlist.length; i++) {
                 for (var j = 0; j < this.point[this.centerlist[i]].surround.length; j++) {
@@ -697,7 +659,7 @@ class Puzzle_truncated_square extends Puzzle {
             if (this[pu].direction[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = "#999";
+                this.ctx.strokeStyle = Color.GREY;
                 this.ctx.lineWidth = 3;
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].direction[i][0]].x, this.point[this[pu].direction[i][0]].y);
@@ -1231,24 +1193,24 @@ class Puzzle_truncated_square extends Puzzle {
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(255,255,255,0)";
-                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
                 break;
             case "ox_E":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(255,255,255,0)";
-                ctx.strokeStyle = "rgba(32,128,32,1)";
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = Color.GREEN;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
                 break;
             case "ox_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(255,255,255,0)";
-                ctx.strokeStyle = "rgba(153,153,153,1)";
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = Color.GREY;
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
                 break;
@@ -1258,8 +1220,8 @@ class Puzzle_truncated_square extends Puzzle {
             case "cross":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 3;
                 this.draw_cross(ctx, num, x, y);
                 break;
@@ -1365,19 +1327,19 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
             case "arrow_fouredge_B":
                 set_circle_style(ctx, 2);
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
             case "arrow_fouredge_G":
                 set_circle_style(ctx, 2);
-                ctx.strokeStyle = "rgba(0,0,0,0)";
-                ctx.fillStyle = "#999";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.fillStyle = Color.GREY;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
             case "arrow_fouredge_E":
                 set_circle_style(ctx, 2);
-                ctx.strokeStyle = "rgba(0,0,0,0)";
-                ctx.fillStyle = "#24a024";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.fillStyle = Color.GREEN_LIGHT;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
 
@@ -1400,14 +1362,14 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
             case "battleship_G":
                 set_circle_style(ctx, 3);
-                ctx.fillStyle = "#999";
+                ctx.fillStyle = Color.GREY;
                 this.draw_battleship(ctx, num, x, y);
                 break;
             case "battleship_W":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_battleship(ctx, num, x, y);
                 break;
@@ -1510,7 +1472,7 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = ctx.strokeStyle;
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x, y, r);
                 break;
@@ -1538,8 +1500,8 @@ class Puzzle_truncated_square extends Puzzle {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
-        ctx.fillStyle = "rgba(0,0,0,0)";
-        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.fillStyle = Color.TRANSPARENTBLACK;
+        ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
         switch (num) {
             case 1:
@@ -1604,8 +1566,8 @@ class Puzzle_truncated_square extends Puzzle {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
-        ctx.fillStyle = "rgba(0,0,0,0)";
-        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.fillStyle = Color.TRANSPARENTBLACK;
+        ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
         switch (num) {
             case 1:
@@ -1901,7 +1863,7 @@ class Puzzle_truncated_square extends Puzzle {
 
     draw_pills(ctx, num, x, y) {
         var r = 0.15;
-        ctx.fillStyle = "#999"
+        ctx.fillStyle = Color.GREY
         switch (num) {
             case 1:
                 this.draw_circle(ctx, x, y, r);
@@ -2129,9 +2091,9 @@ class Puzzle_truncated_square extends Puzzle {
                 var r2;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,1)";
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
-                ctx.fillStyle = "#fff";
+                ctx.fillStyle = Color.WHITE;
                 r1 = 0.1;
                 r2 = 0.4;
                 ctx.beginPath();
@@ -2147,8 +2109,8 @@ class Puzzle_truncated_square extends Puzzle {
                 r2 = 0.4;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,1)";
-                ctx.fillStyle = "#999";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.fillStyle = Color.GREY;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(x - r1 * Math.cos(90 * (Math.PI / 180)) * pu.size, y - (r1 * Math.sin(90 * (Math.PI / 180)) + 0) * pu.size);
@@ -2165,8 +2127,8 @@ class Puzzle_truncated_square extends Puzzle {
             case 2:
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "#000";
-                ctx.fillStyle = "#ccc";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.fillStyle = Color.GREY_LIGHT;
                 ctx.lineWidth = 1;
                 r1 = 0.3;
                 r2 = 0.4;
@@ -2182,8 +2144,8 @@ class Puzzle_truncated_square extends Puzzle {
             case 3: //anglers
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "#000";
-                ctx.fillStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(x - 0.35 * pu.size, y);
@@ -2199,34 +2161,6 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.text("～", x, y + 0.09 * pu.size);
                 ctx.text("～", x, y + 0.29 * pu.size);
                 break;
-                /*
-                case 4: //cactus
-                  ctx.setLineDash([]);
-                  ctx.lineCap = "butt";
-                  ctx.strokeStyle = "rgba(0,0,0,0)";
-                  ctx.fillStyle = "rgba(1,1,1,1)";
-                  ctx.lineWidth = 1;
-                  ctx.beginPath();
-                  ctx.moveTo(x-0.1*pu.size,y+0.4*pu.size);
-                  ctx.lineTo(x-0.1*pu.size,y+0.2*pu.size);
-                  ctx.lineTo(x-0.35*pu.size,y+0.2*pu.size);
-                  ctx.lineTo(x-0.35*pu.size,y-0.2*pu.size);
-                  ctx.lineTo(x-0.2*pu.size,y-0.2*pu.size);
-                  ctx.lineTo(x-0.2*pu.size,y+0.05*pu.size);
-                  ctx.lineTo(x-0.1*pu.size,y+0.05*pu.size);
-                  ctx.lineTo(x-0.1*pu.size,y-0.45*pu.size);
-                  ctx.lineTo(x+0.1*pu.size,y-0.45*pu.size);
-                  ctx.lineTo(x+0.1*pu.size,y-0.1*pu.size);
-                  ctx.lineTo(x+0.2*pu.size,y-0.1*pu.size);
-                  ctx.lineTo(x+0.2*pu.size,y-0.3*pu.size);
-                  ctx.lineTo(x+0.35*pu.size,y-0.3*pu.size);
-                  ctx.lineTo(x+0.35*pu.size,y+0.05*pu.size);
-                  ctx.lineTo(x+0.1*pu.size,y+0.05*pu.size);
-                  ctx.lineTo(x+0.1*pu.size,y+0.4*pu.size);
-                  ctx.stroke();
-                  ctx.fill();
-                  break;
-                  */
         }
     }
 
@@ -2235,74 +2169,74 @@ class Puzzle_truncated_square extends Puzzle {
         var r2 = 0.382 * r1;
         switch (num) {
             case 1:
-                ctx.fillStyle = "#fff";
+                ctx.fillStyle = Color.WHITE;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "#000";
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
             case 2:
-                ctx.fillStyle = "#000"; //"#009826";
+                ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
             case 3:
-                ctx.fillStyle = "#999";
+                ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
             case 4:
-                ctx.fillStyle = "#fff";
+                ctx.fillStyle = Color.WHITE;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "#000";
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
             case 5:
-                ctx.fillStyle = "#000"; //"#009826";
+                ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
             case 6:
-                ctx.fillStyle = "#999";
+                ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
             case 7:
-                ctx.fillStyle = "#fff";
+                ctx.fillStyle = Color.WHITE;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "#000";
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
             case 8:
-                ctx.fillStyle = "#000"; //"#009826";
+                ctx.fillStyle = Color.BLACK;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
             case 9:
-                ctx.fillStyle = "#999";
+                ctx.fillStyle = Color.GREY;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 1;
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
@@ -2310,7 +2244,7 @@ class Puzzle_truncated_square extends Puzzle {
                 var r = 0.4;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = "#000";
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_x(ctx, x, y, r)
                 break;
@@ -2345,7 +2279,7 @@ class Puzzle_truncated_square extends Puzzle {
             case 2:
                 r = 0.24;
                 set_circle_style(ctx, 5);
-                ctx.fillStyle = "#999";
+                ctx.fillStyle = Color.GREY;
                 this.draw_polygon(ctx, x, y, r, 4, 45);
                 break;
             case 3:
@@ -2376,8 +2310,8 @@ class Puzzle_truncated_square extends Puzzle {
                 var th = this.rotate_theta((num - 1) * 90 - 180);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
-                ctx.fillStyle = "#000";
-                ctx.strokeStyle = "rgba(0,0,0,0)";
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
@@ -2411,19 +2345,19 @@ class Puzzle_truncated_square extends Puzzle {
         switch (num) {
             case 1:
                 var r = 0.14;
-                ctx.strokeStyle = "rgba(0,0,0,0)";
-                ctx.fillStyle = "#ccc";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.fillStyle = Color.GREY_LIGHT;
                 this.draw_polygon(ctx, x - r * pu.size, y + r * pu.size, r * Math.sqrt(2), 4, 45);
                 this.draw_polygon(ctx, x + r * pu.size, y - r * pu.size, r * Math.sqrt(2), 4, 45);
-                ctx.fillStyle = "#666";
+                ctx.fillStyle = Color.GREY_DARK;
                 this.draw_polygon(ctx, x - r * pu.size, y - r * pu.size, r * Math.sqrt(2), 4, 45);
                 this.draw_polygon(ctx, x + r * pu.size, y + r * pu.size, r * Math.sqrt(2), 4, 45);
                 break;
             case 2:
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#ccc";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.GREY_LIGHT;
                 ctx.lineWidth = 4;
                 this.draw_circle(ctx, x, y, 0.71);
                 break;
@@ -2447,8 +2381,8 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#000";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -2471,8 +2405,8 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.lineCap = "butt";
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
-                ctx.fillStyle = "rgba(0,0,0,0)";
-                ctx.strokeStyle = "#000";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -2491,8 +2425,8 @@ class Puzzle_truncated_square extends Puzzle {
 
     draw_polyomino(ctx, num, x, y) {
         ctx.setLineDash([]);
-        ctx.fillStyle = "rgba(200,200,200,1)";
-        ctx.strokeStyle = "#000";
+        ctx.fillStyle = Color.GREY_LIGHT;
+        ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 1.2;
         ctx.lineCap = "butt";
         var r = 0.25;
@@ -2933,48 +2867,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             this.draw_number("pu_q");
             this.draw_cursol();
             this.draw_freecircle();
-        }
-    }
-
-    draw_point() {
-        set_font_style(this.ctx, (0.2 * this.size).toString(), 1);
-        for (var i in this.point) {
-            if (this.point[i].type === 0) {
-                this.ctx.fillStyle = "#000";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 1) {
-                this.ctx.fillStyle = "blue";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 2) {
-                this.ctx.fillStyle = "red";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 3) {
-                this.ctx.fillStyle = "orange";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 4) {
-                this.ctx.fillStyle = "green";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 5) {
-                this.ctx.fillStyle = "green";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            }
-            this.ctx.beginPath();
-            //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
-            this.ctx.fill();
         }
     }
 
@@ -3479,48 +3371,6 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             this.draw_number("pu_q");
             this.draw_cursol();
             this.draw_freecircle();
-        }
-    }
-
-    draw_point() {
-        set_font_style(this.ctx, (0.2 * this.size).toString(), 1);
-        for (var i in this.point) {
-            if (this.point[i].type === 0) {
-                this.ctx.fillStyle = "#000";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 1) {
-                this.ctx.fillStyle = "blue";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 2) {
-                this.ctx.fillStyle = "red";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 3) {
-                this.ctx.fillStyle = "orange";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 4) {
-                this.ctx.fillStyle = "green";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 5) {
-                this.ctx.fillStyle = "green";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            }
-            this.ctx.beginPath();
-            //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
-            this.ctx.fill();
         }
     }
 
@@ -4045,48 +3895,6 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
         }
     }
 
-    draw_point() {
-        set_font_style(this.ctx, (0.2 * this.size).toString(), 1);
-        for (var i in this.point) {
-            if (this.point[i].type === 0) {
-                this.ctx.fillStyle = "#000";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 1) {
-                this.ctx.fillStyle = "blue";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 2) {
-                this.ctx.fillStyle = "red";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 3) {
-                this.ctx.fillStyle = "orange";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 4) {
-                this.ctx.fillStyle = "green";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 5) {
-                this.ctx.fillStyle = "green";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            }
-            this.ctx.beginPath();
-            //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
-            this.ctx.fill();
-        }
-    }
-
     rotate_theta(th) {
         th = (th + this.theta);
         if (this.reflect[0] === -1) { th = (180 - th + 360) % 360; }
@@ -4606,48 +4414,6 @@ class Puzzle_iso extends Puzzle_truncated_square {
             this.draw_number("pu_q");
             this.draw_cursol();
             this.draw_freecircle();
-        }
-    }
-
-    draw_point() {
-        set_font_style(this.ctx, (0.2 * this.size).toString(), 1);
-        for (var i in this.point) {
-            if (this.point[i].type === 0) {
-                this.ctx.fillStyle = "#000";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 1) {
-                this.ctx.fillStyle = "blue";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-            } else if (this.point[i].type === 2) {
-                this.ctx.fillStyle = "red";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 3) {
-                this.ctx.fillStyle = "orange";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 4) {
-                this.ctx.fillStyle = "green";
-                if (this.point[i].use === 1) {
-                    this.ctx.text(i, this.point[i].x, this.point[i].y, 0.8 * this.size);
-                }
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            } else if (this.point[i].type === 5) {
-                this.ctx.fillStyle = "green";
-                //this.ctx.text(i,this.point[i].x,this.point[i].y,0.8*this.size);
-                this.ctx.fillStyle = "rgba(0,0,0,0)";
-            }
-            this.ctx.beginPath();
-            //this.ctx.arc(this.point[i].x,this.point[i].y,2.5,0,2*Math.PI,true);
-            this.ctx.fill();
         }
     }
 

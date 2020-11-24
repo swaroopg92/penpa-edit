@@ -19,10 +19,6 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + y: Redo
 * Ctrl + d: Clone
 * Ctrl + i: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON
-* Alt + a: Number Mode
-* Alt + x: Surface Mode
-* Alt + c: Line Mode
-* Alt + v: Edge Mode
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
 * F2: Problem mode
@@ -41,43 +37,74 @@ Depending on the browser you can update the page without using the cache with "C
 
 ## Current functions
 
+### Board types
+* Square
+	* Rows: Row size, Number of rows in your puzzle
+	* Columns: Column size, Number of columns in your puzzle
+	* White Space:
+		* Over: Number of empty rows from the top. They are removed from the Row Size.
+		* Under: Number of empty rows from the bottom. They are removed from the Row Size.
+		* Left: Number of empty columns from the left. They are removed from the Column Size.
+		* Right: Number of empty columns from the right. They are removed from the Column Size.
+	* Example: If you want grid size of 9x9 and 3 empty rows and columns on either side. Then you neet set Rows - 15, Columns - 15, Over - 3, Under - 3, Left - 3, Right -3
+* Hexagon
+	* Side
+	* White Space: Side
+* Triangle
+	* Side
+	* White Space: Border
+* Pyramid
+	* Side
+	* White Space: Border
+* Cube
+	* Side
+* Sudoku
+	* Diagonal \
+	* Diagonal /
+	* Skyscraper/Little Killer
+	* Sandwich
+* Kakuro
+	* Rows
+	* Columns
+
 ### Surface
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
 * In Dark grey mode only, click twice to get a green square.
-* Light grey is used when hiding gray letters and symbols.
+* Light grey is used when hiding grey letters and symbols.
 * Right click to enter the green square.
 
 ### Line
-* Normal: A line connecting the center of the square to the horizontal and vertical. (Mashu, bridge over, palindrome Sudoku, etc.)
-* Diagonal line: A line connecting the center of the square to the namame. (Zigzag etc.)
-* Free line: A line that connects arbitrary squares. (Night tour etc.)
-* Midline: A line connecting the center of the square and the center of the side.
-* Auxiliary x: An auxiliary cross mark placed on the side.
+* Normal: A line connecting the center of the square to the horizontal and vertical. (Masyu, Hashi, Palindrome Sudoku, etc.)
+* Diagonal: A line connecting the centers of two diagonally adjacent squares. (Zigzag etc.)
+* Free: A line that connects arbitrary squares. (Night tour etc.)
+* Middle: A line connecting the center of the square and the center of the side.
+* Helper (x): An auxiliary cross mark placed on the side.
 * Select the color and thickness of the line by style.
 
 ### Edge
-* Normal: A line that connects the top of the square to the horizontal and vertical. (Heyawake, Slither link etc.)
-* Diagonal line: A line connecting the vertices of a square to a namame. (Diagonal Sudoku etc.)
+* Normal: A line that connects two horizontal or vertical vertices of a square. (Heyawake, Slitherlink etc.)
+* Diagonal line: A line connecting two diagonal vertices of a square. (Diagonal Sudoku etc.)
 * Free line: A line that connects the vertices of any square. (Sharp and blunt loop etc.)
-* Auxiliary x: An auxiliary cross mark placed on the side.
-* Border erase: Delete the border of the board.
+* Helper (x): An auxiliary cross mark placed on the side.
+* Erase: Delete the border of the board.
 * Select the color and thickness of the line by style.
 
 ### Wall
-* A vertical line drawn inside the square. (Vertical and horizontal, slalom etc.)
+* A vertical or horizontal line drawn inside the square. (Slalom etc.)
 * Select the color and thickness of the line by style.
 
 ### Number		  
 * Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. Some other special symbols are allowed through Panel: ON mode. It also allows custom symbols in the "text" tab (checkout next section for more details)
-* Arrows: Characters with arrows. (Yagirin, CastleWall etc.)
-* Tapa: Characters for Tapa. Up to 4 characters.
-* 1/4: Characters at the four corners. (Kakuro, Hairyrin, Killer Sudoku etc.)
-* Comp: Characters for compass. It is possible to enter small numbers depending on the vertical and horizontal directions.
-* Medium/Small: Small size numbers.
-* Long sentence: Long sentence. It is possible to create a list such as seekers.
+* L, M, S: Large, medium or small size numbers.
 * Candidates: Candidate numbers for Latin Square such as Sudoku. Compatible with 1-9. onoff input.
-* White circles and black circles have a circle on the back of the numbers.
-* For the white background, draw a white circle behind the numbers. When you can't see the numbers because they are hidden behind the lines.
+* 1/4: Small characters at the four corners. (Kakuro, Hairyrin etc.)
+* Side: Small characters at the middle of the four sides. (Compass etc.)
+* Tapa: Characters for Tapa. Up to 4 characters.
+* Arrow: Characters with arrows. Click and hold the mouse and move in the direction of the arrow to draw the arrow. (Yajilin, Castle Wall etc.)
+* Long: Long sentence. It is possible to create a list such as seekers.
+* Killer: Small characters at the top left corner. (Killer Sudou)
+* White, black and red circles have a circle on the back of the numbers.
+* White BG: Draw a white circle behind the numbers. Useful when you can't see the numbers because they are hidden behind the lines.
 * When the boundary input is turned on, the character is placed on the side/vertex.
 
 #### Any Unicode Symbol
@@ -90,23 +117,23 @@ Depending on the browser you can update the page without using the cache with "C
 * One can also type in the sentence of words and "Insert".
 * Clear button to clear the text area.
 
-### symbol
-* Numerous symbols.You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
+### Shape
+* Numerous symbols. You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
 * Depending on the style, you can select whether to place the figure on the front side or the back side of the line.
 * When the boundary input is turned ON, the character is placed on the side/vertex.	  
 
-### special
+### Special
 * A special symbol that spans multiple squares. (Arrow Sudoku, Thermo Sudoku, moving arrows, square area)
 * Click the first cell you entered to erase it.
-* Polygonal fill.The vertices are selected in the order in which they are clicked. Click the last clicked vertex or the first clicked vertex again to end selection.
+* Polygon: The vertices are selected in the order in which they are clicked. Click the last clicked vertex or the first clicked vertex again to end selection.
 
 ### Frame
 * A line that surrounds multiple squares. (Killer Sudoku etc.)
-* There are 4 styles: black dotted line, black solid line, gray dotted line, and gray solid line.
+* There are 4 styles: black dotted line, black solid line, grey dotted line, and grey solid line.
 * Available in square and regular hexagon.
 
 ### Box
-* Click to select the square that draws the frame of the board.
+* Click to remove or add the square that draws the frame of the board. Useful for irregular board shapes.
 
 ### Tab
 * This is tab selector button.
@@ -122,48 +149,57 @@ Depending on the browser you can update the page without using the cache with "C
 
 ### Composite
 * Ability to use multiple input methods simultaneously.
-* Composite mode list
-1. Black/dot: Drag the black square and dot
-2. White/circle Black circle Drag input white circle and black circle
-3. Shakashaka pull the triangle to input
-4. Line/x line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
-5. Line/OX 〇× (Country road) on line and square
-6. Edge/x/inside/outside, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
-7. Yajirin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot
-8. Hashi: draw the line again to make a double line
-9. Edge/Auxiliary line: An auxiliary line that represents the connection between the edge and the square
-10. Battleship: Click twice to change the shape according to the condition of the surrounding ships.
-11. Star Battle x Star
-12. Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
-13. Numerical flick Input the numerical flick. 123456789 from top left to bottom right.
-14. Alphabet flick Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter-in the lower right corner.
-
-### Irregular board shapes
-* You can select square, regular hexagon, regular triangle, and pyramid from the "New/Change frame" menu. Functions other than square are limited.
-* Adjust the board shape in "mass" mode. From the "Rotate/Move" menu, press the "Move board to center" and "Match screen size to board" buttons to adjust margins.
+* Paint:
+	* Black / dot: Black square drag input and dot
+	* White / circle: White circle drag input and black circle
+	* Shakashaka: Pull the triangle to input, left click for dot
+* Loop:
+	* Line or x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
+	* Line or OX: Line and 〇× in square (Country road)
+	* Edge, x, in/out: Edge, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
+	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot
+	* Hashi: Draw the line again to make a double line
+* Area / Field:
+	* Edge/Aux line: An auxiliary line that represents the connection between the edge and the square
+* Object:
+	* Battleships: Click twice to change the shape according to the condition of the surrounding ships.
+	* Star Battle: Left click - star, Right click - x
+	* Tents: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
+	* Magnets: +, - and black square
+	* Arrows: Left click drag to draw an arrow in one of the eight directions in a square.
+* Number logic:
+	* Numerical flick: Input the numerical flick. 123456789 from top left to bottom right.
+	* Alphabet flick: Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter '-' in the lower right corner.
 
 ### Grid
-* You can change the border of the board from the "New/Change frame" menu.
+* You can change the border of the board from the "New grid / frame" menu.
 * Grid: Border type
-* Gridpoints: whether to place points at vertices
+* Gridpoints: Whether to place points at vertices
 * Outside frame: Whether to draw a line around the board
 * White space: Used when placing numbers outside the grid on the board. (Sandwich puzzle etc.)
-* "Create" button resets the board. The "Change grid" button does not reset the board surface, but updates only display size and frame type.
+* "Reset" button resets the board. The "Change grid" button does not reset the board surface, but updates only display size and frame type.
 
-### Rotation
-* You can rotate and flip the board from the "Rotate/Move" menu. Square and pyramid rotate 90°. Regular hexagon, regular triangle Rotate 30° on the board surface.
-* Adjust the margin of the board with the "Move the board to the center" and "Match screen size to the board" buttons.
+### Transform
+* You can rotate and flip the board or remove and add columns or rows from the "Rotate / Move / Add / Remove" menu. Square and pyramid rotate 90°. Regular hexagon and regular triangle rotate 30° on the board surface.
+* Adjust the margin of the board with the "Move board to center" and "Fit window to board" buttons.
 
 ### Save image (Screenshot button)
 * Settings:
-1. Image quality: The higher the quality, the better the image quality, but the larger the image size.
-2. White Border: Setting NO will remove the extra white space around the grid.
+1. White Border: Setting "No" will remove the extra white space around the grid.
+2. Image quality: The higher the quality, the better the image quality, but the larger the image size.
+3. File Type: Supported image types: PNG, JPG
 * Options:
-1. Open in new window: Opens the image in the new TAB
-2. Download: .png image will be downloaded
-3. Cancel: close the window
+1. Open in new window: Opens the image in a new TAB
+2. Download: .png or .jpg image will be downloaded
+3. Cancel: Close the window
 
 ### Share
+* Title - Describe the Puzzle Type (e.g. Classic Sudoku, Arrow Sudoku)
+
+* Author - Puzzle creator's name
+
+* Source - If you are not the author of the puzzle, specify the source URL
+
 * URL for editing
 1. Complete creating puzzle in Edit mode "Problem".
 2. If you need to save your puzzle creation progress and come back later to edit then click on this button

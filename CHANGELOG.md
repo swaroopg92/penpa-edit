@@ -1,7 +1,38 @@
 ## History
-* 2020/xx/xx ver2.24.10
+* 2020/11/-- ver2.24.14
+	* Visibility button is now hidden in Solver Mode.
+	* Improved Readme (PR from ropeko).
+	* Improved display size of Transform.
+	* Backspace button activated for Killer submode.
+	* Creator can provide Author, Title and Source information.
+* 2020/11/18 ver2.24.13
+	* Feature to add/remove rows/columns after the grid is created. Works only for square grid type. It also resets the undo/redo.
+	* Moved the "cross" to right click for StarBattle composite mode.
+	* Erase option added to Edge in Solver mode.
+* 2020/11/07 ver2.24.12
+	* Double and Triple sum arrows now possible. (Use Shape [Mode] -> Special1 [Submode]-> ArrowSums for sums and Special [Mode] -> Arrow [Submode] to draw arrow path).
+	* Added Sudoku 6x6 and 8x8 boards option to Sudoku Grid type.
+	* Personalized alert messages.
+	* Added Composite mode to Tab selector.
+	* Rearranged all colors and improved CODE readability.
+	* Fixed display of some buttons.
+	* Fixed export sudoku bug and improved import sudoku to not overwrite the Problem digits.
+* 2020/11/01 ver2.24.11
+	* Fixed backspace symbol display in the PANEL.
+	* Fixed number mode bug when user enters invalid unicode symbol.
+	* Added Shape mode to the Tab Selector.
+	* Removed un-necessary shortcut keys.
+	* Improved error message display and added info about white space while setting new grid.
+	* I/O Sudoku now allows 6x6 and 8x8 grids as well. Import Sudoku also accepts dots instead of zeros for blank cells.
+	* Fixed text area input in ioS (iPhone, iPad).
+	* Slowed down bulk UNDO, possibly improved UNDO bug.
+	* Added Arrow Key movements to the Hex grid for all rotations.
+* 2020/10/22 ver2.24.10
+	* Kakuro grid type added.
 	* URL for editing will save the UNDO/REDO. "Clone" will not save the UNDO/REDO.
-	* Clicking URL_short now automatically copies the URL
+	* Clicking URL_short now automatically copies the URL.
+	* Fixed bug in arrow and thermo shapes while using UNDO.
+	* Added few more videos to the list.
 * 2020/10/15 ver2.24.9
 	* I/O Sudoku Button - Input/Output 81 digit string for Sudoku grids. This allows user to import/export the sudoku from sudokuwiki.org and vice-versa.
 	* Killer button added to Number mode - User can now select this option to enter killer sums in the cages while creating the killer sudoku. Killer cages can be drawn using "Frame" mode. Then select "Killer" submode under "Number" mode. Select the cell where you wan't to insert the cage total and type in the number.
