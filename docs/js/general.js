@@ -1117,6 +1117,11 @@ function load(urlParam) {
         rtext[5][i] = (rtext[5][i - 1] + rtext[5][i]);
     }
 
+    // Tab settings
+    if (rtext[6] !== 'undefined') {
+        this.usertab_choices = rtext[6];
+    }
+
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {
