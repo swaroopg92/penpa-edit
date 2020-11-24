@@ -977,8 +977,10 @@ onload = function() {
         select.appendChild(option);
     }
     selectBox = new vanillaSelectBox("#mode_choices", {
-        "maxHeight": 130,
-        "search": true
+        "disableSelectAll": false,
+        "maxHeight": 135,
+        "search": true,
+        "translations": { "all": "All", "items": "items", "selectAll": "Check All", "clearAll": "Clear All" }
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
 

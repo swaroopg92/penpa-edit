@@ -5,6 +5,7 @@
 	* Improved display size of Transform.
 	* Backspace button activated for Killer submode.
 	* Creator can provide Author, Title and Source information.
+	* Added Select All/ Clear All option to Tab Selector.
 * 2020/11/18 ver2.24.13
 	* Feature to add/remove rows/columns after the grid is created. Works only for square grid type. It also resets the undo/redo.
 	* Moved the "cross" to right click for StarBattle composite mode.

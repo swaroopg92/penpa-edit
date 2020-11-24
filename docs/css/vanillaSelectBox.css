@@ -1,4 +1,4 @@
-.hide {
+.hidden-search {
     display: none !important;
 }
 
@@ -80,17 +80,6 @@ li.disabled {
     display: block;
     min-width: 80px;
     background: white !important;
-    /*border-radius: 0;
-	width: 100%;
-	text-align: left;
-	z-index: 1;
-	color: #333;
-	background: white !important;
-	border: 1px solid #999 !important;
-	line-height:20px;
-	font-size:14px;
-	padding:6px 12px;
-    margin: 0px;*/
     text-align: left;
     height: 29px;
     padding-left: 5px;
@@ -130,6 +119,11 @@ li.disabled {
     padding: 0.2em 2em 0.2em 1em;
 }
 
+.vsb-menu li.grouped-option {
+    font-weight: bold;
+    font-size: 15px;
+    padding-left: 5px;
+}
 
 .vsb-menu :not(.multi) li.active::before {
     content: "";
@@ -137,7 +131,7 @@ li.disabled {
     font-size: inherit;
     float: left;
     margin-left: -16px;
-    display: inline-block;
+
     transform: rotate(45deg);
     height: 10px;
     width: 5px;
@@ -154,7 +148,13 @@ li.disabled {
     padding: 0.2em 2em 0.2em 26px;
 }
 
-.vsb-menu .multi li::before {
+.vsb-menu .multi li.grouped-option {
+    font-weight: bold;
+    font-size: 15px;
+    padding-left: 5px;
+}
+
+.vsb-menu .multi li:not(.grouped-option)::before {
     content: "";
     display: inline-block;
     font-size: inherit;
@@ -168,7 +168,6 @@ li.disabled {
     margin-top: 0px;
     color: black;
 }
-
 
 .vsb-menu .multi li.active::after {
     content: "";
