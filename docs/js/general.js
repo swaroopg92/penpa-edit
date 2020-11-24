@@ -1117,6 +1117,11 @@ function load(urlParam) {
         rtext[5][i] = (rtext[5][i - 1] + rtext[5][i]);
     }
 
+    // Tab settings
+    if (rtext[6] !== 'undefined') {
+        this.usertab_choices = rtext[6];
+    }
+
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {
@@ -1137,25 +1142,6 @@ function load(urlParam) {
                 pu[i][j] = new Stack();
                 pu[i][j].set(t);
             }
-        }
-
-        if (rtext[6] !== 'undefined') {
-            // set the tab choices
-            let modes = ["Surface", "Wall",
-                "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
-                "Edge Normal", "Edge Diagonal", "Edge Helper",
-                "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
-            ];
-
-            let user_choices = rtext[6];
-            let tab_element = document.getElementById("mode_choices");
-            console.log(tab_element.selectedOptions)
-            for (var k = 0; k < modes.length; k++) {
-                // if (user_choices.indexOf(tab_element[k].value) > -1){
-                    // console.log(tab_element[k].value);
-                // }
-            }
-
         }
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
