@@ -1979,7 +1979,13 @@ class Puzzle {
             list.push(this.centerlist[i] - this.centerlist[i - 1]);
         }
 
-        text += JSON.stringify(list);
+        text += JSON.stringify(list) + "\n";
+
+        // Copy the tab selector modes
+        let user_choices = getValues('mode_choices');
+        if (user_choices) {
+            text += JSON.stringify(user_choices);
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2028,9 +2034,9 @@ class Puzzle {
 
         // Copy the tab selector modes
         let user_choices = getValues('mode_choices');
-        text += JSON.stringify(user_choices);
-
-        console.log(text);
+        if (user_choices) {
+            text += JSON.stringify(user_choices);
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2084,7 +2090,13 @@ class Puzzle {
         for (var i = 1; i < this.centerlist.length; i++) {
             list.push(this.centerlist[i] - this.centerlist[i - 1]);
         }
-        text += JSON.stringify(list);
+        text += JSON.stringify(list) + "\n";
+
+        // Copy the tab selector modes
+        let user_choices = getValues('mode_choices');
+        if (user_choices) {
+            text += JSON.stringify(user_choices);
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
