@@ -1,5 +1,5 @@
 ## History
-* 2020/11/26 ver2.24.14
+* 2020/11/25 ver2.24.14
 	* Tab settings are now saved into URL.
 	* Creator can provide Author, Title and Source information before creating URL.
 	* Added Select All/ Clear All option to Tab Selector. (Default Surface is removed).
