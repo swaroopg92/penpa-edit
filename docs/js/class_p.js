@@ -1788,6 +1788,19 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
+        if ((mode === "number" || mode === "symbol") && (this.ondown_key === "touchstart")) {
+            if (document.getElementById('panel_button').textContent === "OFF") {
+                document.getElementById('panel_button').textContent = "ON";
+                document.getElementById('float-key').style.display = "block";
+                document.getElementById('float-key-body').style.left = 0 + "px";
+                document.getElementById('float-key-body').style.top = 0 + "px";
+                document.getElementById('float-key-header').style.left = 0 + "px";
+                document.getElementById('float-key-header').style.top = 0 + "px";
+            }
+        } else if (this.ondown_key === "touchstart") {
+            document.getElementById('panel_button').textContent = "OFF";
+            document.getElementById('float-key').style.display = "none";
+        }
         if (mode === "symbol") {
             this.stylemode_check('st_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10);
             this.stylemode_check('st_' + mode + parseInt(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] / 10) * 10);

@@ -12,10 +12,13 @@ onload = function() {
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
+        this.ondown_key = "touchstart";
     } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0 || is_iPad || is_iPad2 || is_iPad3) {
         ondown_key = "touchstart";
+        this.ondown_key = "touchstart";
     } else {
         ondown_key = "mousedown";
+        this.ondown_key = "mousedown";
     }
 
     var checkms = 0; // Temporary variable for hover event
