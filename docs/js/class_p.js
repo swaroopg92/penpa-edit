@@ -6356,7 +6356,7 @@ class Puzzle {
             case "linex":
             case "edgexoi":
             case "tents":
-                if (this.mouse_mode === "down_right" || ondown_key === "touchstart") {
+                if (this.mouse_mode === "down_right" || this.ondown_key === "touchstart") {
                     num = this.coord_p_edgex(x, y, 0.3);
                 } else {
                     num = this.coord_p_edgex(x, y, 0.01);
@@ -6375,7 +6375,7 @@ class Puzzle {
                     this.re_combi_shaka(x, y, num);
                     break;
                 case "linex":
-                    if (ondown_key === "touchstart") {
+                    if (this.ondown_key === "touchstart") {
                         this.re_combi_cross_downright(num);
                     } else {
                         this.re_combi_linex(num);
@@ -6385,7 +6385,7 @@ class Puzzle {
                     this.re_combi_lineox(num);
                     break;
                 case "edgexoi":
-                    if (ondown_key === "touchstart") {
+                    if (this.ondown_key === "touchstart") {
                         this.re_combi_cross_downright(num, "lineE");
                     } else {
                         this.re_combi_edgexoi(num);
@@ -6404,14 +6404,14 @@ class Puzzle {
                     this.re_combi_battleship(num);
                     break;
                 case "star":
-                    if (ondown_key === "mousedown") { // do only star when on laptop
+                    if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
                         this.re_combi_star(num); // Behave as normal when ipad and phone
                     }
                     break;
                 case "tents":
-                    if (ondown_key === "touchstart") {
+                    if (this.ondown_key === "touchstart") {
                         this.re_combi_cross_downright(num);
                     } else {
                         this.re_combi_tents(num);
@@ -6519,7 +6519,7 @@ class Puzzle {
                     this.re_combi_edgexoi_up(num);
                     break;
                 case "yajilin":
-                    if (ondown_key === "mousedown") {
+                    if (this.ondown_key === "mousedown") {
                         this.re_combi_yajilin_up_reduced(num); // moved the dot to right click
                     } else {
                         this.re_combi_yajilin_up(num); // on ipad/mobile behave as usual
