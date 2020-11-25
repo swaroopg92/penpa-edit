@@ -20,10 +20,10 @@ Depending on the browser you can update the page without using the cache with "C
 * Ctrl + d: Clone
 * Ctrl + i: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON
 * Ctrl + space: Delete numbers and symbols at the same time
-* Shift + space: Enter a space (Works in "Number" Mode + "Long" SubMode option only)
+* Shift + space: Enter a space (Works in "Number" Mode => "L", "M", "S" and Long" SubMode options only)
 * F2: Problem mode
 * F3: Solution mode
-* TAB/ENTER: checkout the TAB section below in "Current functions"
+* TAB/ENTER: checkout the TAB section below in "Current functions". Tab settings are now retained in the shared URL.
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -140,8 +140,8 @@ Depending on the browser you can update the page without using the cache with "C
 * User can now select which modes/sub-modes they wan't to rotate when pressing TAB/Enter key.
 	* There is search option available.
 	* Search is case-insensitive.
-* Default selection is "Surface".
 * Then you can either press Tab or Enter (closer to the numpad) to rotate between the selected modes.
+* To clear all selections - Click twice on Select All (It changes to Clear ALL on first click).
 
 ### Move
 * You can move numbers and symbols by dragging. Originally, you cannot move to a square with a number or sign.

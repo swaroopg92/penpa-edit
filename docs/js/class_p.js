@@ -519,11 +519,17 @@ class Puzzle {
 
                 // shift Number elements to next row
                 if (this[i].numberS) {
+                    let m;
                     let temp = this[i].numberS;
                     this[i].numberS = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
+                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
+                        if (factor > 8) {
+                            m = parseInt(keys[k]) + 12 * parseInt(originalnx0) * sign;
+                        } else {
+                            m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
+                        }
                         this.record("numberS", m);
                         this[i].numberS[m] = temp[keys[k]];
                     }
@@ -822,11 +828,17 @@ class Puzzle {
 
                 // Maintain NumberS elements to be in the same row
                 if (this[i].numberS) {
+                    let m;
                     let temp = this[i].numberS;
                     this[i].numberS = {};
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + 4 * parseInt(originalnx0) * sign;
+                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
+                        if (factor > 8) {
+                            m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
+                        } else {
+                            m = parseInt(keys[k]) + 4 * parseInt(originalnx0) * sign;
+                        }
                         this.record("numberS", m);
                         this[i].numberS[m] = temp[keys[k]];
                     }

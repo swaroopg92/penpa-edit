@@ -2,7 +2,7 @@
 * 2020/11/26 ver2.24.14
 	* Tab settings are now saved into URL.
 	* Creator can provide Author, Title and Source information before creating URL.
-	* Added Select All/ Clear All option to Tab Selector.
+	* Added Select All/ Clear All option to Tab Selector. (Default Surface is removed).
 	* Visibility button is now hidden in Solver Mode.
 	* Improved Readme (PR from ropeko).
 	* Improved display size of Transform.
