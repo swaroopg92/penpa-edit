@@ -7,18 +7,16 @@ onload = function() {
     }, { passive: false });
 
     var ua = navigator.userAgent;
+    var ondown_key;
     let is_iPad = (!(ua.toLowerCase().match("iphone")) && ua.maxTouchPoints > 1);
     let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
-        this.ondown_key = "touchstart";
     } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0 || is_iPad || is_iPad2 || is_iPad3) {
         ondown_key = "touchstart";
-        this.ondown_key = "touchstart";
     } else {
         ondown_key = "mousedown";
-        this.ondown_key = "mousedown";
     }
 
     var checkms = 0; // Temporary variable for hover event
@@ -429,6 +427,9 @@ onload = function() {
             document.getElementById(e.target.id).style.display = 'none';
             e.preventDefault();
         }
+        if (!pu.ondown_key) {
+            pu.ondown_key = ondown_key;
+        }
         switch (e.target.id) {
             //canvas
             case "canvas":
@@ -459,9 +460,6 @@ onload = function() {
                 savetext();
                 e.preventDefault();
                 break;
-                //case "duplicate":
-                //duplicate();
-                //  break;
             case "input_sudoku":
                 io_sudoku();
                 e.preventDefault();
