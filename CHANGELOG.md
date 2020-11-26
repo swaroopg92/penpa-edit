@@ -1,4 +1,7 @@
 ## History
+* 2020/--/-- ver2.24.15
+	* Automatic popup of Panel on Mobile/Ipad while in Number/Shape Modes.
+	* Fixed input text field bug of not accepting commas
 * 2020/11/25 ver2.24.14
 	* Tab settings are now saved into URL.
 	* Creator can provide Author, Title and Source information before creating URL.
