@@ -103,13 +103,15 @@ onload = function() {
     let modes = ["Surface", "Wall", "Shape", "Composite",
         "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Helper",
-        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side"
+        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
+        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre"
     ];
 
     let modes_mapping = ["surface", "wall", "symbol", "combi",
         "sub_line1", "sub_line2", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
+        "sub_sudoku1", "sub_sudoku2", "sub_sudoku3"
     ];
     let previous_mode = "surface";
     let previous_submode = 1;
@@ -299,6 +301,9 @@ onload = function() {
                     } else {
                         if (modes_mapping[mode_loc].includes("number")) {
                             pu.mode_set('number')
+                            e.preventDefault();
+                        } else if (modes_mapping[mode_loc].includes("sudoku")) {
+                            pu.mode_set('sudoku')
                             e.preventDefault();
                         } else if (modes_mapping[mode_loc].includes("lineE")) {
                             pu.mode_set('lineE')
