@@ -289,6 +289,9 @@ class Puzzle_square extends Puzzle {
                         break;
                 }
                 break;
+            case "sudoku":
+                type = [0];
+                break;
         }
         return type;
     }
@@ -480,6 +483,7 @@ class Puzzle_square extends Puzzle {
         if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
+            this.draw_selection();
             this.draw_squareframe("pu_q");
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
@@ -511,6 +515,7 @@ class Puzzle_square extends Puzzle {
             this.draw_freecircle();
         } else {
             this.draw_surface("pu_q");
+            this.draw_selection();
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
             this.draw_arrowsp("pu_q");
@@ -576,6 +581,22 @@ class Puzzle_square extends Puzzle {
             this.ctx.closePath();
             this.ctx.fill();
             this.ctx.stroke();
+        }
+    }
+
+    draw_selection(pu) {
+        if (this.selection.length > 0) {
+            for (var k of this.selection) {
+                set_surface_style(this.ctx, 13);
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.point[this.point[k].surround[0]].x, this.point[this.point[k].surround[0]].y);
+                for (var j = 1; j < this.point[k].surround.length; j++) {
+                    this.ctx.lineTo(this.point[this.point[k].surround[j]].x, this.point[this.point[k].surround[j]].y);
+                }
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.stroke();
+            }
         }
     }
 
