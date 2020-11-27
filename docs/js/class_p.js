@@ -72,6 +72,7 @@ class Puzzle {
 
         // Drawing position
         this.mouse_mode = "";
+        this.selection = [];
         this.last = -1;
         this.lastx = -1;
         this.lasty = -1;
@@ -99,7 +100,8 @@ class Puzzle {
                 "special": ["thermo", ""],
                 "board": ["", ""],
                 "move": ["1", ""],
-                "combi": ["battleship", ""]
+                "combi": ["battleship", ""],
+                "sudoku": ["1", 1]
             },
             "pu_a": {
                 "edit_mode": "surface",
@@ -113,7 +115,8 @@ class Puzzle {
                 "special": ["thermo", ""],
                 "board": ["", ""],
                 "move": ["1", ""],
-                "combi": ["battleship", ""]
+                "combi": ["battleship", ""],
+                "sudoku": ["1", 9]
             }
         };
         this.theta = 0;
@@ -1788,7 +1791,7 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
-        if ((mode === "number" || mode === "symbol") && (this.ondown_key === "touchstart")) {
+        if ((mode === "number" || mode === "symbol" || mode === "sudoku") && (this.ondown_key === "touchstart")) {
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
                 document.getElementById('float-key').style.display = "block";
@@ -1878,6 +1881,7 @@ class Puzzle {
         document.getElementById('mode_special').style.display = 'none';
         document.getElementById('mode_move').style.display = 'none';
         document.getElementById('mode_combi').style.display = 'none';
+        document.getElementById('mode_sudoku').style.display = 'none';
 
         document.getElementById('style_surface').style.display = 'none';
         document.getElementById('style_line').style.display = 'none';
@@ -1887,6 +1891,7 @@ class Puzzle {
         document.getElementById('style_symbol').style.display = 'none';
         document.getElementById('style_cage').style.display = 'none';
         document.getElementById('style_combi').style.display = 'none';
+        document.getElementById('style_sudoku').style.display = 'none';
     }
 
     reset_selectedmode() {
@@ -5437,6 +5442,147 @@ class Puzzle {
                 }
                 this[this.mode.qa].symbol[this.cursol] = [number, this.mode[this.mode.qa].symbol[0], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
             }
+        } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+                case "1": // Normal mode
+                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                        for (var k of this.selection) {
+
+                            // If the there are corner or sides present then get rid of them
+                            // Only in Answer mode
+                            if (this.mode.qa === "pu_a") {
+                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                        this.record("numberS", corner_cursor + j);
+                                        delete this[this.mode.qa].numberS[corner_cursor + j];
+                                    }
+                                }
+
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                        this.record("numberS", side_cursor + j);
+                                        delete this[this.mode.qa].numberS[side_cursor + j];
+                                    }
+                                }
+                            }
+
+                            this.record("number", k);
+                            this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
+                        }
+                    }
+                    break;
+                case "2": // Corner mode
+                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                        for (var k of this.selection) {
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
+                                this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
+                                var single_digit = true;
+                            } else {
+                                var single_digit = false;
+                            }
+                            if (!single_digit) {
+                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                                con = "";
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                        con += this[this.mode.qa].numberS[corner_cursor + j][0];
+                                    }
+                                }
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                        con += this[this.mode.qa].numberS[side_cursor + j][0];
+                                    }
+                                }
+                                if (con.indexOf(key) != -1) { // if digit already exists
+                                    con = con.replace(key, '');
+
+                                    // remove the last digit from old location
+                                    if ((con.length + 1) < 5) {
+                                        this.record("numberS", corner_cursor + con.length);
+                                        delete this[this.mode.qa].numberS[corner_cursor + con.length];
+                                    } else {
+                                        this.record("numberS", side_cursor + con.length - 4);
+                                        delete this[this.mode.qa].numberS[side_cursor + con.length - 4];
+                                    }
+
+                                    if (con) {
+                                        if (con.length < 4) {
+                                            for (var j = 0; j < con.length; j++) {
+                                                this.record("numberS", corner_cursor + j);
+                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                            }
+                                        } else {
+                                            for (var j = 0; j < 4; j++) {
+                                                this.record("numberS", corner_cursor + j);
+                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                            }
+                                            for (var j = 4; j < con.length; j++) {
+                                                this.record("numberS", side_cursor + j - 4);
+                                                this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                            }
+                                        }
+                                    }
+                                } else if (con.length < 8) { // If digit doesnt exist in the cell
+                                    con += key;
+                                    if (con.length < 4) {
+                                        for (var j = 0; j < con.length; j++) {
+                                            this.record("numberS", corner_cursor + j);
+                                            this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        }
+                                    } else {
+                                        for (var j = 0; j < 4; j++) {
+                                            this.record("numberS", corner_cursor + j);
+                                            this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        }
+                                        for (var j = 4; j < con.length; j++) {
+                                            this.record("numberS", side_cursor + j - 4);
+                                            this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    break;
+                case "3": // Centre mode
+                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                        for (var k of this.selection) {
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
+                                this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
+                                var single_digit = true;
+                            } else {
+                                var single_digit = false;
+                            }
+                            if (!single_digit) {
+                                number = "";
+                                if (this[this.mode.qa].number[k]) {
+                                    con = this[this.mode.qa].number[k][0];
+                                    if (con.indexOf(key) != -1) {
+                                        con = con.split("").sort();
+                                        for (var m of con) {
+                                            if (m != key) {
+                                                number += m;
+                                            }
+                                        }
+                                    } else {
+                                        number = con + key;
+                                        number = number.split("").sort().join("");
+                                    }
+                                } else {
+                                    number += key;
+                                }
+                                this.record("number", k);
+                                this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"]; // S submode is 6
+                            }
+                        }
+                    }
+                    break;
+            }
         }
         this.redraw();
     }
@@ -5460,7 +5606,7 @@ class Puzzle {
         return data;
     }
 
-    key_space() {
+    key_space(keypressed = "ignore") {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                 this.record("numberS", this.cursolS);
@@ -5491,6 +5637,76 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
             delete this[this.mode.qa].symbol[this.cursol];
+        } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (keypressed === "Delete") {
+                if (this.selection.length > 0) {
+                    for (var k of this.selection) {
+
+                        if (this[this.mode.qa].number[k]) {
+                            this.record("number", k);
+                            delete this[this.mode.qa].number[k];
+                        }
+
+                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                this.record("numberS", corner_cursor + j);
+                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                            }
+                        }
+
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                this.record("numberS", side_cursor + j);
+                                delete this[this.mode.qa].numberS[side_cursor + j];
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "1") {
+                    if (this.selection.length > 0) {
+                        for (var k of this.selection) {
+                            if (this[this.mode.qa].number[k]) {
+                                this.record("number", k);
+                                delete this[this.mode.qa].number[k];
+                            }
+                        }
+                    }
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+                    if (this.selection.length > 0) {
+                        for (var k of this.selection) {
+                            if (this[this.mode.qa].number[k]) {
+                                this.record("number", k);
+                                delete this[this.mode.qa].number[k];
+                            }
+                        }
+                    }
+                } else {
+                    if (this.selection.length > 0) {
+                        for (var k of this.selection) {
+                            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+
+                            for (var j = 0; j < 4; j++) {
+                                if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                    this.record("numberS", corner_cursor + j);
+                                    delete this[this.mode.qa].numberS[corner_cursor + j];
+                                }
+                            }
+
+                            for (var j = 0; j < 4; j++) {
+                                if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                    this.record("numberS", side_cursor + j);
+                                    delete this[this.mode.qa].numberS[side_cursor + j];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         this.redraw();
     }
@@ -5571,7 +5787,7 @@ class Puzzle {
         return num;
     }
 
-    mouseevent(x, y, num) {
+    mouseevent(x, y, num, ctrl_key = false) {
         num = this.recalculate_num(x, y, num); //for uniform tiling
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
@@ -5622,6 +5838,9 @@ class Puzzle {
                 break;
             case "combi":
                 this.mouse_combi(x, y, num);
+                break;
+            case "sudoku":
+                this.mouse_sudoku(x, y, num, ctrl_key);
                 break;
         }
     }
@@ -6012,6 +6231,7 @@ class Puzzle {
             this.last = -1;
         }
     }
+
     mouse_numberS(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.cursolS = num;
@@ -6019,6 +6239,28 @@ class Puzzle {
         } else if (this.mouse_mode === "down_right") {
             this.cursolS = num;
             this.redraw();
+        }
+    }
+
+
+    mouse_sudoku(x, y, num, ctrl_key = false) {
+        if (this.mouse_mode === "down_left") {
+            this.drawing = true;
+            if (!ctrl_key) {
+                this.selection = [];
+            }
+            this.selection.push(num);
+            this.cursol = num;
+            this.redraw();
+        } else if (this.mouse_mode === "move") {
+            if (!this.selection.includes(num) & this.drawing) {
+                this.selection.push(num);
+            }
+            this.redraw();
+        } else if (this.mouse_mode === "up") {
+            this.drawing = false;
+        } else if (this.mouse_mode === "out") {
+            this.drawing = false;
         }
     }
 
