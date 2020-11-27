@@ -257,37 +257,43 @@ hr.newgridhrline {
     color: var(--red);
 }
 
-#st_number1_lb {
+#st_number1_lb,
+#st_sudoku1_lb {
     /* Black */
     background-color: var(--black);
     color: var(--white);
 }
 
-#st_number2_lb {
+#st_number2_lb,
+#st_sudoku2_lb {
     /* Green */
     background-color: var(--greenLight);
     color: var(--white);
 }
 
-#st_number8_lb {
+#st_number8_lb,
+#st_sudoku8_lb {
     /* Light Blue */
     background-color: var(--blueLight);
     color: var(--white);
 }
 
-#st_number3_lb {
+#st_number3_lb,
+#st_sudoku3_lb {
     /* Grey */
     background-color: var(--grey);
     color: var(--white);
 }
 
-#st_number9_lb {
+#st_number9_lb,
+#st_sudoku9_lb {
     /* Blue */
     background-color: var(--blue);
     color: var(--white);
 }
 
-#st_number10_lb {
+#st_number10_lb,
+#st_sudoku10_lb {
     /* Red */
     background-color: var(--red);
     color: var(--white);
