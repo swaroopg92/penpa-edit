@@ -21,6 +21,7 @@ const Color = {
     GREY_LIGHT: "#cccccc",
     GREY_LIGHT_VERY: "#f0f0f0",
     ORANGE_LIGHT: "#ffcc80",
+    ORANGE_TRANSPARENT: "rgba(255, 103, 0, 0.6)",
     PINK_LIGHT: "#ffb3ff",
     PURPLE_LIGHT: "#cc99ff",
     RED: "#ff0000",
@@ -75,6 +76,9 @@ function set_surface_style(ctx, type) {
             break;
         case 12:
             ctx.fillStyle = Color.BROWN_LIGHT;
+            break;
+        case 13:
+            ctx.fillStyle = Color.ORANGE_TRANSPARENT;
             break;
         case 99:
             ctx.fillStyle = Color.GREY_LIGHT_VERY;
