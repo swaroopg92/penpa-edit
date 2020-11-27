@@ -286,6 +286,9 @@ class Puzzle_hex extends Puzzle {
                         break;
                 }
                 break;
+            case "sudoku":
+                type = [0];
+                break;
         }
         return type;
     }
@@ -326,7 +329,7 @@ class Puzzle_hex extends Puzzle {
         this.redraw();
     }
 
-    key_arrow(key_code) {
+    key_arrow(key_code, ctrl_key = false) {
         var a, b, c;
         console.log(this.theta);
         if (parseInt(this.theta / 60) === 0) { // 0, 30

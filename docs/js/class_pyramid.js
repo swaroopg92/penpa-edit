@@ -274,6 +274,9 @@ class Puzzle_pyramid extends Puzzle {
                         break;
                 }
                 break;
+            case "sudoku":
+                type = [0];
+                break;
         }
         return type;
     }
@@ -322,7 +325,7 @@ class Puzzle_pyramid extends Puzzle {
         }
     }
 
-    key_arrow(key_code) {
+    key_arrow(key_code, ctrl_key = false) {
         var a, b, c;
         if (this.theta === 0) { b = [0, 1, 2, 3]; } else if (this.theta === 90) { b = [3, 0, 1, 2]; } else if (this.theta === 180) { b = [2, 3, 0, 1]; } else if (this.theta === 270) { b = [1, 2, 3, 0]; }
         if (this.reflect[0] === -1) {

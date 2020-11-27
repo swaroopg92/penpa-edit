@@ -141,7 +141,7 @@ onload = function() {
             }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
-                pu.key_arrow(key);
+                pu.key_arrow(key, ctrl_key);
                 event.returnValue = false;
             }
 

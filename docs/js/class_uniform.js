@@ -399,7 +399,7 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    key_arrow(key_code) {
+    key_arrow(key_code, ctrl_key = false) {
         var a, b, c;
         b = [0, 1, 2, 3];
         if (this.reflect[0] === -1) {
@@ -4295,6 +4295,9 @@ class Puzzle_iso extends Puzzle_truncated_square {
                         type = [0, 1];
                         break;
                 }
+                break;
+            case "sudoku":
+                type = [0];
                 break;
         }
         return type;
