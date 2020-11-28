@@ -162,124 +162,132 @@ onload = function() {
             }
 
             if (ctrl_key && !shift_key && !alt_key) {
-                switch (key) {
-                    case "d": //Ctrl+d
-                    case "D":
-                        duplicate();
-                        event.returnValue = false;
-                        break;
-                    case "y": //Ctrl+y
-                    case "Y":
-                        pu.redo();
-                        event.returnValue = false;
-                        break;
-                    case "z": //Ctrl+z
-                    case "Z":
-                        pu.undo();
-                        event.returnValue = false;
-                        break;
-                    case " ": //Ctrl+space
-                        pu.key_shiftspace();
-                        event.returnValue = false;
-                        break;
-                    case "i": //Ctrl+i
-                    case "I":
-                        if ((document.getElementById('panel_button').textContent === "ON") &&
-                            (typeof panel_select !== "undefined") &&
-                            (panel_select < panel_pu.cont.length) &&
-                            pu.mode[pu.mode.qa].edit_mode !== "symbol") {
-                            var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
+                if (key != "Control") {
+                    switch (key) {
+                        case "d": //Ctrl+d
+                        case "D":
+                            duplicate();
+                            event.returnValue = false;
+                            break;
+                        case "y": //Ctrl+y
+                        case "Y":
+                            pu.redo();
+                            event.returnValue = false;
+                            break;
+                        case "z": //Ctrl+z
+                        case "Z":
+                            pu.undo();
+                            event.returnValue = false;
+                            break;
+                        case " ": //Ctrl+space
+                            pu.key_shiftspace();
+                            event.returnValue = false;
+                            break;
+                        case "i": //Ctrl+i
+                        case "I":
+                            if ((document.getElementById('panel_button').textContent === "ON") &&
+                                (typeof panel_select !== "undefined") &&
+                                (panel_select < panel_pu.cont.length) &&
+                                pu.mode[pu.mode.qa].edit_mode !== "symbol") {
+                                var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
 
-                            if (panel_pu.panelmode === "number") {
-                                if (0 <= panel_select && panel_select <= 9) {
-                                    pu.key_number(panel_pu.cont[panel_select].toString());
-                                } else if (panel_select === 10) {
-                                    pu.key_backspace();
-                                } else if (panel_select === 11) {
-                                    pu.key_space();
-                                }
-                            } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
-                                if (0 <= panel_select && panel_select <= 27) {
-                                    pu.key_number(panel_pu.cont[panel_select].toString());
-                                } else if (panel_select === 28) {
-                                    pu.key_number(" ");
-                                } else if (panel_select >= 29) {
-                                    pu.key_space();
-                                }
-                            } else if (panel_pu.panelmode === "Text") {
-                                panel_pu.inputtext();
-                            } else if (panel_pu.panelmode === "key_symbol") {
-                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != " ") {
-                                    pu.key_number(panel_pu.cont[panel_select]);
-                                } else if (panel_pu.cont[panel_select] === " ") {
-                                    pu.key_space();
-                                }
-                            } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
-                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != "　") {
-                                    pu.key_number(panel_pu.cont[panel_select]);
-                                } else if (panel_pu.cont[panel_select] === "　") {
-                                    pu.key_space();
+                                if (panel_pu.panelmode === "number") {
+                                    if (0 <= panel_select && panel_select <= 9) {
+                                        pu.key_number(panel_pu.cont[panel_select].toString());
+                                    } else if (panel_select === 10) {
+                                        pu.key_backspace();
+                                    } else if (panel_select === 11) {
+                                        pu.key_space();
+                                    }
+                                } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
+                                    if (0 <= panel_select && panel_select <= 27) {
+                                        pu.key_number(panel_pu.cont[panel_select].toString());
+                                    } else if (panel_select === 28) {
+                                        pu.key_number(" ");
+                                    } else if (panel_select >= 29) {
+                                        pu.key_space();
+                                    }
+                                } else if (panel_pu.panelmode === "Text") {
+                                    panel_pu.inputtext();
+                                } else if (panel_pu.panelmode === "key_symbol") {
+                                    if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != " ") {
+                                        pu.key_number(panel_pu.cont[panel_select]);
+                                    } else if (panel_pu.cont[panel_select] === " ") {
+                                        pu.key_space();
+                                    }
+                                } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
+                                    if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != "　") {
+                                        pu.key_number(panel_pu.cont[panel_select]);
+                                    } else if (panel_pu.cont[panel_select] === "　") {
+                                        pu.key_space();
+                                    }
                                 }
                             }
-                        }
-                        event.returnValue = false;
-                        break;
+                            event.returnValue = false;
+                            break;
+                    }
+                } else {
+                    event.returnValue = false;
                 }
             }
 
             if (alt_key && !shift_key && !ctrl_key) {
-                switch (key) {
-                    case "z":
-                    case "Z":
-                        var present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        var present_submode = document.getElementById("sub_sudoku1").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku1");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "x":
-                    case "X":
-                        var present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        var present_submode = document.getElementById("sub_sudoku2").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku2");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "c":
-                    case "C":
-                        var present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        var present_submode = document.getElementById("sub_sudoku3").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku3");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
-                    case "v":
-                    case "V":
-                        var present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        event.returnValue = false;
-                        break;
+                if (key != "Alt") {
+                    switch (key) {
+                        case "z":
+                        case "Z":
+                            var present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            var present_submode = document.getElementById("sub_sudoku1").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku1");
+                                e.preventDefault();
+                            }
+                            event.returnValue = false;
+                            break;
+                        case "x":
+                        case "X":
+                            var present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            var present_submode = document.getElementById("sub_sudoku2").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku2");
+                                e.preventDefault();
+                            }
+                            event.returnValue = false;
+                            break;
+                        case "c":
+                        case "C":
+                            var present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            var present_submode = document.getElementById("sub_sudoku3").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku3");
+                                e.preventDefault();
+                            }
+                            event.returnValue = false;
+                            break;
+                        case "v":
+                        case "V":
+                            var present_mode = document.getElementById("mo_surface").checked;
+                            if (!present_mode) {
+                                pu.mode_set("surface");
+                                e.preventDefault();
+                            }
+                            event.returnValue = false;
+                            break;
+                    }
+                } else {
+                    event.returnValue = false;
                 }
             }
 

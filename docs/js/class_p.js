@@ -5449,30 +5449,49 @@ class Puzzle {
                 case "1": // Normal mode
                     if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
                         for (var k of this.selection) {
-
-                            // If the there are corner or sides present then get rid of them
-                            // Only in Answer mode
-                            if (this.mode.qa === "pu_a") {
-                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-
-                                for (var j = 0; j < 4; j++) {
-                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                        this.record("numberS", corner_cursor + j);
-                                        delete this[this.mode.qa].numberS[corner_cursor + j];
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1")) { // if single digit is present, dont modify that cell
+                                var single_digit = true;
+                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
+                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                var sum = 0,
+                                    a;
+                                for (var j = 0; j < 10; j++) {
+                                    if (this["pu_q"].number[k][0][j] === 1) {
+                                        sum += 1;
+                                        a = j + 1;
                                     }
                                 }
-
-                                for (var j = 0; j < 4; j++) {
-                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                        this.record("numberS", side_cursor + j);
-                                        delete this[this.mode.qa].numberS[side_cursor + j];
-                                    }
+                                if (sum === 1) {
+                                    var single_digit = true;
                                 }
+                            } else {
+                                var single_digit = false;
                             }
+                            if (!single_digit) {
+                                // If the there are corner or sides present then get rid of them
+                                // Only in Answer mode
+                                if (this.mode.qa === "pu_a") {
+                                    var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                    var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                            this.record("number", k);
-                            this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
+                                    for (var j = 0; j < 4; j++) {
+                                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                            this.record("numberS", corner_cursor + j);
+                                            delete this[this.mode.qa].numberS[corner_cursor + j];
+                                        }
+                                    }
+
+                                    for (var j = 0; j < 4; j++) {
+                                        if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                            this.record("numberS", side_cursor + j);
+                                            delete this[this.mode.qa].numberS[side_cursor + j];
+                                        }
+                                    }
+                                }
+
+                                this.record("number", k);
+                                this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
+                            }
                         }
                     }
                     break;
@@ -5482,6 +5501,19 @@ class Puzzle {
                             if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
+                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
+                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                var sum = 0,
+                                    a;
+                                for (var j = 0; j < 10; j++) {
+                                    if (this["pu_q"].number[k][0][j] === 1) {
+                                        sum += 1;
+                                        a = j + 1;
+                                    }
+                                }
+                                if (sum === 1) {
+                                    var single_digit = true;
+                                }
                             } else {
                                 var single_digit = false;
                             }
@@ -5557,6 +5589,19 @@ class Puzzle {
                             if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
+                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
+                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                var sum = 0,
+                                    a;
+                                for (var j = 0; j < 10; j++) {
+                                    if (this["pu_q"].number[k][0][j] === 1) {
+                                        sum += 1;
+                                        a = j + 1;
+                                    }
+                                }
+                                if (sum === 1) {
+                                    var single_digit = true;
+                                }
                             } else {
                                 var single_digit = false;
                             }
