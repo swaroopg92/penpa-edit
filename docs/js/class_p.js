@@ -6316,7 +6316,9 @@ class Puzzle {
             if (!ctrl_key) {
                 this.selection = [];
             }
-            this.selection.push(num);
+            if (!this.selection.includes(num)) {
+                this.selection.push(num);
+            }
             this.cursol = num;
             this.redraw();
         } else if (this.mouse_mode === "move") {

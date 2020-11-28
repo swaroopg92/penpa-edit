@@ -3,6 +3,7 @@
 	* Sudoku Solving Mode added. Controls similar to CTC App except, use ALT+ (Z,X,C,V) to switch to Normal, Corner, Centre and Surface modes for the shortcuts. Currently enabled only for Sudoku/Square grid type.
 	* Automatic popup of Panel on Mobile/Ipad while in Number/Shape/Sudoku Modes.
 	* Fixed input text field bug of not accepting commas.
+	* Saving undo/redo (history) into URL is now optional. Default is false (not saved).
 * 2020/11/25 ver2.24.14
 	* Tab settings are now saved into URL.
 	* Creator can provide Author, Title and Source information before creating URL.
