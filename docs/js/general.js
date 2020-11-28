@@ -1209,7 +1209,7 @@ function load(urlParam) {
             }
         }
     }
-    pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
+    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //include redraw
 }
 
 function loadver1(paramArray, rtext) {

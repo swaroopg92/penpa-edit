@@ -1,16 +1,12 @@
 onload = function() {
 
-    boot();
-
-    document.addEventListener("beforeunload", function(eve) {
-        eve.returnValue = "Move page.";
-    }, { passive: false });
-
+    // Detect mobile or Ipad beforing booting
     var ua = navigator.userAgent;
     var ondown_key;
     let is_iPad = (!(ua.toLowerCase().match("iphone")) && ua.maxTouchPoints > 1);
     let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
     } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0 || is_iPad || is_iPad2 || is_iPad3) {
@@ -18,6 +14,13 @@ onload = function() {
     } else {
         ondown_key = "mousedown";
     }
+    this.ondown_key = ondown_key;
+
+    boot();
+
+    document.addEventListener("beforeunload", function(eve) {
+        eve.returnValue = "Move page.";
+    }, { passive: false });
 
     var checkms = 0; // Temporary variable for hover event
 
