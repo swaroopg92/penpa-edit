@@ -2004,8 +2004,28 @@ class Puzzle {
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
+
+        if (document.getElementById("save_undo").checked === false) {
+            var qr = this.pu_q.command_redo.__a;
+            var qu = this.pu_q.command_undo.__a;
+            var ar = this.pu_a.command_redo.__a;
+            var au = this.pu_a.command_undo.__a;
+            this.pu_q.command_redo.__a = [];
+            this.pu_q.command_undo.__a = [];
+            this.pu_a.command_redo.__a = [];
+            this.pu_a.command_undo.__a = [];
+        }
+
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
+
+        if (document.getElementById("save_undo").checked === false) {
+            this.pu_q.command_redo.__a = qr;
+            this.pu_q.command_undo.__a = qu;
+            this.pu_a.command_redo.__a = ar;
+            this.pu_a.command_undo.__a = au;
+        }
+
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
             list.push(this.centerlist[i] - this.centerlist[i - 1]);

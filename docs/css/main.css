@@ -916,10 +916,16 @@ body textarea {
     color: var(--red);
 }
 
+#save_undo_lb,
+#save_undo {
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
 #modal-save-content {
     background-color: var(--white);
     width: 300px;
-    height: 440px;
+    height: 455px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
