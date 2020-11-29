@@ -924,7 +924,8 @@ onload = function() {
         drag.style.left = event.pageX - x_window + "px";
         body.style.top = event.pageY - y_window + "px";
         body.style.left = event.pageX - x_window + "px";
-
+        window.panel_toplast = body.style.top;
+        window.panel_leftlast = body.style.left;
         drag.addEventListener("touchend", mup, { passive: false });
         drag.addEventListener("mouseup", mup, { passive: false });
         document.body.addEventListener("touchleave", mup, { passive: false });

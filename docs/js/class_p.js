@@ -1798,10 +1798,17 @@ class Puzzle {
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
                 document.getElementById('float-key').style.display = "block";
-                document.getElementById('float-key-body').style.left = 0 + "px";
-                document.getElementById('float-key-body').style.top = 0 + "px";
-                document.getElementById('float-key-header').style.left = 0 + "px";
-                document.getElementById('float-key-header').style.top = 0 + "px";
+                if (window.panel_toplast && window.panel_leftlast) {
+                    document.getElementById('float-key-body').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-body').style.top = window.panel_toplast;
+                    document.getElementById('float-key-header').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-header').style.top = window.panel_toplast;
+                } else {
+                    document.getElementById('float-key-body').style.left = 0 + "px";
+                    document.getElementById('float-key-body').style.top = 0 + "px";
+                    document.getElementById('float-key-header').style.left = 0 + "px";
+                    document.getElementById('float-key-header').style.top = 0 + "px";
+                }
             }
         } else if (this.ondown_key === "touchstart") {
             document.getElementById('panel_button').textContent = "OFF";
