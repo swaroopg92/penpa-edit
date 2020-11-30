@@ -126,6 +126,7 @@ onload = function() {
             // For input form
         } else {
             var key = e.key;
+            var keycode = e.keyCode;
             var shift_key = e.shiftKey;
             var ctrl_key = e.ctrlKey;
             var alt_key = e.altKey;
@@ -155,8 +156,10 @@ onload = function() {
                 } else if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 || str_alph_up.indexOf(key) != -1 || str_sym.indexOf(key) != -1) {
                     event.preventDefault();
                     pu.key_number(key);
-                } else if (key === " " || key === "Delete") {
-                    pu.key_space(key);
+                } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
+                    // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
+                    // Sudoku mode, I have assigned it to Delete
+                    pu.key_space(keycode);
                     event.returnValue = false;
                 } else if (key === "Backspace") {
                     pu.key_backspace();
@@ -234,63 +237,62 @@ onload = function() {
                 }
             }
 
-            if (alt_key && !shift_key && !ctrl_key) {
-                if (key != "Alt") {
-                    switch (key) {
-                        case "z":
-                        case "Z":
-                            var present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            var present_submode = document.getElementById("sub_sudoku1").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku1");
-                                e.preventDefault();
-                            }
-                            event.returnValue = false;
-                            break;
-                        case "x":
-                        case "X":
-                            var present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            var present_submode = document.getElementById("sub_sudoku2").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku2");
-                                e.preventDefault();
-                            }
-                            event.returnValue = false;
-                            break;
-                        case "c":
-                        case "C":
-                            var present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            var present_submode = document.getElementById("sub_sudoku3").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku3");
-                                e.preventDefault();
-                            }
-                            event.returnValue = false;
-                            break;
-                        case "v":
-                        case "V":
-                            var present_mode = document.getElementById("mo_surface").checked;
-                            if (!present_mode) {
-                                pu.mode_set("surface");
-                                e.preventDefault();
-                            }
-                            event.returnValue = false;
-                            break;
-                    }
-                } else {
-                    event.returnValue = false;
+            if (pu.mode[pu.mode.qa].edit_mode === "surface" || pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                switch (key) {
+                    case "z":
+                    case "Z":
+                        var present_mode = document.getElementById("mo_sudoku").checked;
+                        if (!present_mode) {
+                            pu.mode_set("sudoku");
+                            e.preventDefault();
+                        }
+                        var present_submode = document.getElementById("sub_sudoku1").checked;
+                        if (!present_submode) {
+                            pu.submode_check("sub_sudoku1");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "x":
+                    case "X":
+                        var present_mode = document.getElementById("mo_sudoku").checked;
+                        if (!present_mode) {
+                            pu.mode_set("sudoku");
+                            e.preventDefault();
+                        }
+                        var present_submode = document.getElementById("sub_sudoku2").checked;
+                        if (!present_submode) {
+                            pu.submode_check("sub_sudoku2");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "c":
+                    case "C":
+                        var present_mode = document.getElementById("mo_sudoku").checked;
+                        if (!present_mode) {
+                            pu.mode_set("sudoku");
+                            e.preventDefault();
+                        }
+                        var present_submode = document.getElementById("sub_sudoku3").checked;
+                        if (!present_submode) {
+                            pu.submode_check("sub_sudoku3");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "v":
+                    case "V":
+                        var present_mode = document.getElementById("mo_surface").checked;
+                        if (!present_mode) {
+                            pu.mode_set("surface");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    default:
+                        event.returnValue = false;
+                        break;
                 }
             }
 

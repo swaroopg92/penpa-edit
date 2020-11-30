@@ -5681,7 +5681,7 @@ class Puzzle {
         return data;
     }
 
-    key_space(keypressed = "ignore") {
+    key_space(keypressed = 0) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                 this.record("numberS", this.cursolS);
@@ -5713,7 +5713,7 @@ class Puzzle {
             this.record("symbol", this.cursol);
             delete this[this.mode.qa].symbol[this.cursol];
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
-            if (keypressed === "Delete" || this.ondown_key === "touchstart") {
+            if (keypressed === 46 || keypressed === 8 || this.ondown_key === "touchstart") {
                 if (this.selection.length > 0) {
                     for (var k of this.selection) {
 
