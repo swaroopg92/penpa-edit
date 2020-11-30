@@ -7420,7 +7420,7 @@ class Puzzle {
     }
 
     re_combi_magnets(num) {
-        if (!this[this.mode.qa].symbol[num] && !this[this.mode.qa].surface[num]) {
+        if (!this[this.mode.qa].symbol[num] && this[this.mode.qa].surface[num] != 1) {
             this.record("symbol", num);
             this[this.mode.qa].symbol[num] = [2, "math_G", 2];
         } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 2) {
