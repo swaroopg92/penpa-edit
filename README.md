@@ -24,6 +24,11 @@ Depending on the browser you can update the page without using the cache with "C
 * F2: Problem mode
 * F3: Solution mode
 * TAB/ENTER: checkout the TAB section below in "Current functions". Tab settings are now retained in the shared URL.
+* In Sudoku Mode
+	* Z - Normal Submode
+	* X - Corner Submode
+	* C - Centre Submode
+	* V - Shading (Surface Mode)
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -170,6 +175,22 @@ Depending on the browser you can update the page without using the cache with "C
 * Number logic:
 	* Numerical flick: Input the numerical flick. 123456789 from top left to bottom right.
 	* Alphabet flick: Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter '-' in the lower right corner.
+
+### Sudoku
+* This mode is for Sudoku Solving (It can be used for Creating as well but "Number" mode offers more flexibility for creations. Please checkout "Number" section for more details)
+* You can select multiple cells at the same time.
+	* Drag the mouse on the cells by holding Left Click
+	* Drag the finger on mobile/ipad
+	* You can also use keyboard Arrow Keys to move around
+	* CTRL key to do multiple selection of cells (Useful if you need to select distinct/far apart cells)
+* Shortcuts to switch between sub-modes
+	* Z - Normal Submode - Normal sized numbers
+	* X - Corner Submode - Small digits placed on corners or sides of the cell
+	* C - Centre Submode - Small digits placed in the centre of the cell
+	* V - Shading (Surface Mode) - For coloring the cells (12 color choices)
+* 6 Color choices for User Solving
+	* Answer check only looks for Green/Blue color if enabled
+* Normal, Corner and Centre submodes are also available as part of Tab Selector. Please checkout "Tab selector" section for more details.
 
 ### Grid
 * You can change the border of the board from the "New grid / frame" menu.
