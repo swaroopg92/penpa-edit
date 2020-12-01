@@ -2,6 +2,9 @@
 * 2020/12/-- ver2.24.16
 	* Removed ALT. Sudoku shortcuts are now exactly same as (Z,X,C,V)
 	* Fixed the Delete and shortcuts to work in Mac
+	* Updated answer check to detect red colored numbers, also updated description to reflect sudoku mode
+	* Updated readme
+	* Fixed magnets to be entered over other shaded cells
 * 2020/11/28 ver2.24.15
 	* Sudoku Solving Mode added. Controls similar to CTC App except, use ALT+ (Z,X,C,V) to switch to Normal, Corner, Centre and Surface modes for the shortcuts. Currently enabled only for Sudoku/Square grid type.
 	* Automatic popup of Panel on Mobile/Ipad while in Number/Shape/Sudoku Modes.

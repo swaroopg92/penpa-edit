@@ -2239,7 +2239,8 @@ class Puzzle {
         for (var i in this[pu].number) {
             // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
             if (this[pu].number[i][2] === "7") {
-                if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9) {
+                // (Green or light blue or dark blue or red)
+                if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
                     var sum = 0,
                         a;
                     for (var j = 0; j < 10; j++) {
@@ -2253,8 +2254,8 @@ class Puzzle {
                     }
                 }
             } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                // ((Green or light blue or dark blue) and (Normal, M, S, L))
-                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
                     sol[4].push(i + "," + this[pu].number[i][0]);
                 }
             }
