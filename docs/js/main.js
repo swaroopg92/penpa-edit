@@ -237,7 +237,7 @@ onload = function() {
                 }
             }
 
-            if (pu.mode[pu.mode.qa].edit_mode === "surface" || pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (!ctrl_key && (pu.mode[pu.mode.qa].edit_mode === "surface" || pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 switch (key) {
                     case "z":
                     case "Z":
