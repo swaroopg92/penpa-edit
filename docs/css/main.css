@@ -952,6 +952,19 @@ body textarea {
     border-radius: 20px;
 }
 
+#modal-input-parameters-text,
+#modal-input-parameters {
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+#ignore_pencilmarks_lb,
+#ignore_pencilmarks {
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 textarea {
     min-width: 200px;
     min-height: 80px;
