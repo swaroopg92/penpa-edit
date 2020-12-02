@@ -5,6 +5,10 @@
 	* Updated answer check to detect red colored numbers, also updated description to reflect sudoku mode
 	* Updated readme
 	* Fixed magnets to be entered over other shaded cells
+	* Title, Author and Source information is now saved in Edit URL, Clone and Solving URL.
+	* Improved corner sudoku solving mode in case of killer clues
+	* Fixed kakuro grid generation bug for uneven size grid
+	* Fixed IO sudoku import bug for uneven size grid
 * 2020/11/28 ver2.24.15
 	* Sudoku Solving Mode added. Controls similar to CTC App except, use ALT+ (Z,X,C,V) to switch to Normal, Corner, Centre and Surface modes for the shortcuts. Currently enabled only for Sudoku/Square grid type.
 	* Automatic popup of Panel on Mobile/Ipad while in Number/Shape/Sudoku Modes.

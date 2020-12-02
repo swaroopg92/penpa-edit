@@ -7822,7 +7822,7 @@ class Puzzle {
                         if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
                             if (!this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]) {
                                 this.record("number", (i + 2) + ((j + 2) * this.nx0));
-                                this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (this.nx - 1)], scolor, "1"];
+                                this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], scolor, "1"];
                             }
                         }
                     }
