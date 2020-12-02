@@ -2008,7 +2008,21 @@ class Puzzle {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
-            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString() + "\n";
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
+
+        if (document.getElementById("saveinfotitle").value !== "") {
+            let titleinfo = document.getElementById("saveinfotitle").value;
+            text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+        }
+        if (document.getElementById("saveinfoauthor").value !== "") {
+            let authorinfo = document.getElementById("saveinfoauthor").value;
+            text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+        }
+        if (document.getElementById("saveinfosource").value !== "") {
+            text += "," + document.getElementById("saveinfosource").value + "\n";
+        } else {
+            text += "\n";
+        }
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2065,7 +2079,21 @@ class Puzzle {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
-            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString() + "\n";
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
+
+        if (document.getElementById("saveinfotitle").value !== "") {
+            let titleinfo = document.getElementById("saveinfotitle").value;
+            text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+        }
+        if (document.getElementById("saveinfoauthor").value !== "") {
+            let authorinfo = document.getElementById("saveinfoauthor").value;
+            text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+        }
+        if (document.getElementById("saveinfosource").value !== "") {
+            text += "," + document.getElementById("saveinfosource").value + "\n";
+        } else {
+            text += "\n";
+        }
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";

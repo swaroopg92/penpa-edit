@@ -1092,11 +1092,20 @@ function load(urlParam) {
     if (!rtext_para[12] === 'undefined' && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
     if (!rtext_para[13] === 'undefined' && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
     if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
-    if (rtext_para[15]) { document.getElementById("puzzletitle").innerHTML = rtext_para[15].replace(/%2C/g, ','); }
-    if (rtext_para[16]) { document.getElementById("puzzleauthor").innerHTML = rtext_para[16].replace(/%2C/g, ','); }
+    if (rtext_para[15]) {
+        let ptitle = rtext_para[15].replace(/%2C/g, ',');
+        document.getElementById("puzzletitle").innerHTML = ptitle;
+        document.getElementById("saveinfotitle").value = ptitle.slice(7); // text after "Title: "
+    }
+    if (rtext_para[16]) {
+        let pauthor = rtext_para[16].replace(/%2C/g, ',')
+        document.getElementById("puzzleauthor").innerHTML = pauthor;
+        document.getElementById("saveinfoauthor").value = pauthor.slice(8); // text after "Author: "
+    }
     if (rtext_para[17]) {
         document.getElementById("puzzlesourcelink").href = rtext_para[17];
         document.getElementById("puzzlesource").innerHTML = "Source";
+        document.getElementById("saveinfosource").value = rtext_para[17];
     }
 
     make_class(rtext_para[0], 'url');
