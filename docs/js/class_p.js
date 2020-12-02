@@ -5526,12 +5526,23 @@ class Puzzle {
                     break;
                 case "2": // Corner mode
                     if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+
+                        var j_start = 0;
+                        var length_limit = 8;
+
+                        // if any element present in numberS mode then
+                        // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
+                        if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
+                            length_limit = 6;
+                            j_start = 1;
+                        }
+
                         for (var k of this.selection) {
                             if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
-                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                // This is for single digit obtained from candidate submode
                                 var sum = 0,
                                     a;
                                 for (var j = 0; j < 10; j++) {
@@ -5550,61 +5561,56 @@ class Puzzle {
                                 var corner_cursor = 4 * (k + this.nx0 * this.ny0);
                                 var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
                                 con = "";
-                                for (var j = 0; j < 4; j++) {
+
+                                // Read all the existing digits from the corner and sides
+                                for (var j = j_start; j < 4; j++) {
                                     if (this[this.mode.qa].numberS[corner_cursor + j]) {
                                         con += this[this.mode.qa].numberS[corner_cursor + j][0];
                                     }
                                 }
-                                for (var j = 0; j < 4; j++) {
+                                for (var j = j_start; j < 4; j++) {
                                     if (this[this.mode.qa].numberS[side_cursor + j]) {
                                         con += this[this.mode.qa].numberS[side_cursor + j][0];
                                     }
                                 }
+
                                 if (con.indexOf(key) != -1) { // if digit already exists
                                     con = con.replace(key, '');
 
                                     // remove the last digit from old location
-                                    if ((con.length + 1) < 5) {
-                                        this.record("numberS", corner_cursor + con.length);
-                                        delete this[this.mode.qa].numberS[corner_cursor + con.length];
+                                    if ((con.length + 1) < (5 - j_start)) {
+                                        this.record("numberS", corner_cursor + con.length + j_start);
+                                        delete this[this.mode.qa].numberS[corner_cursor + con.length + j_start];
                                     } else {
-                                        this.record("numberS", side_cursor + con.length - 4);
-                                        delete this[this.mode.qa].numberS[side_cursor + con.length - 4];
+                                        this.record("numberS", side_cursor + con.length - 4 + 2 * j_start);
+                                        delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
                                     }
 
                                     if (con) {
-                                        if (con.length < 4) {
-                                            for (var j = 0; j < con.length; j++) {
+                                        if (con.length < (5 - j_start)) {
+                                            for (var j = j_start; j < (con.length + j_start); j++) {
                                                 this.record("numberS", corner_cursor + j);
-                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                                             }
                                         } else {
-                                            for (var j = 0; j < 4; j++) {
+                                            for (var j = j_start; j < 4; j++) {
                                                 this.record("numberS", corner_cursor + j);
-                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                                             }
-                                            for (var j = 4; j < con.length; j++) {
+                                            for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
                                                 this.record("numberS", side_cursor + j - 4);
-                                                this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                                             }
                                         }
                                     }
-                                } else if (con.length < 8) { // If digit doesnt exist in the cell
+                                } else if (con.length < length_limit) { // If digit doesnt exist in the cell
                                     con += key;
-                                    if (con.length < 4) {
-                                        for (var j = 0; j < con.length; j++) {
-                                            this.record("numberS", corner_cursor + j);
-                                            this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                        }
+                                    if (con.length < (5 - j_start)) {
+                                        this.record("numberS", corner_cursor + con.length - 1 + j_start);
+                                        this[this.mode.qa].numberS[corner_cursor + con.length - 1 + j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                                     } else {
-                                        for (var j = 0; j < 4; j++) {
-                                            this.record("numberS", corner_cursor + j);
-                                            this[this.mode.qa].numberS[corner_cursor + j] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                        }
-                                        for (var j = 4; j < con.length; j++) {
-                                            this.record("numberS", side_cursor + j - 4);
-                                            this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                        }
+                                        this.record("numberS", side_cursor + con.length - 5 + 2 * j_start);
+                                        this[this.mode.qa].numberS[side_cursor + con.length - 5 + 2 * j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                                     }
                                 }
                             }
