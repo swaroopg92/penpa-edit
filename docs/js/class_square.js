@@ -3475,7 +3475,7 @@ class Puzzle_kakuro extends Puzzle_square {
 
         // Col 1 Blacks
         i = 0;
-        for (j = 1; j < cols; j++) { // column
+        for (j = 1; j < rows; j++) { // column
             this[this.mode.qa].symbol[(i + 2) + ((j + 2) * this.nx0)] = [1, "kakuro", 2];
         }
     }
