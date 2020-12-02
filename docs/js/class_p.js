@@ -7820,7 +7820,7 @@ class Puzzle {
                 for (var j = r_start; j < (size + r_start); j++) { //  row
                     for (var i = c_start; i < (size + c_start); i++) { // column
                         if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
-                            if (!this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]) {
+                            if (isNaN(parseInt(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]))) {
                                 this.record("number", (i + 2) + ((j + 2) * this.nx0));
                                 this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], scolor, "1"];
                             }
@@ -7839,16 +7839,23 @@ class Puzzle {
         let outputstring = "";
         let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
         let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+
+        // If a cell has a digit in both modes, then decide the order in which its considered
+        if (this.mode.qa == "pu_q") {
+            var mode_order = ["pu_q", "pu_a"];
+        } else {
+            var mode_order = ["pu_a", "pu_q"];
+        }
         for (var j = r_start; j < (size + r_start); j++) { //  row
             for (var i = c_start; i < (size + c_start); i++) { // column
-                if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                    (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                    (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
-                    if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                    (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                    (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                    if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < 10; k++) {
-                            if (this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -7859,16 +7866,20 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        outputstring += this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                        if (isNaN(parseInt(this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                            outputstring += '0';
+                        } else {
+                            outputstring += this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                        }
                     }
-                } else if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                    (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                    (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
-                    if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                } else if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                    if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < (size + 1); k++) {
-                            if (this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -7879,7 +7890,11 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        outputstring += this["pu_a"].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                        if (isNaN(parseInt(this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                            outputstring += '0';
+                        } else {
+                            outputstring += this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                        }
                     }
                 } else {
                     outputstring += '0';
