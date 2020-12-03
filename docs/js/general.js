@@ -52,7 +52,7 @@ function create_newboard() {
             title: 'Swaroop says:',
             html: 'Display size must be in the range <h2 style="color:red;">12-90</h2>',
             icon: 'error',
-            confirmButtonText: 'You, got this 🙂',
+            confirmButtonText: 'ok 🙂',
         })
     }
 }
@@ -87,7 +87,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Rows/Columns Size must be in the range <h2 style="color:red;">1-40</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -103,7 +103,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -119,7 +119,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -135,7 +135,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -148,7 +148,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -307,7 +307,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Rows/Columns Size must be in the range <h2 style="color:red;">1-40</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -320,7 +320,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -333,7 +333,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -346,7 +346,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -359,7 +359,7 @@ function make_class(gridtype, loadtype = 'new') {
                     title: 'Swaroop says:',
                     html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
             break;
@@ -615,7 +615,7 @@ function newgrid() {
             title: 'Swaroop says:',
             html: 'Display Size must be in the range <h2 style="color:red;">12-90</h2>',
             icon: 'error',
-            confirmButtonText: 'You, got this 🙂',
+            confirmButtonText: 'ok 🙂',
         })
     }
 }
@@ -634,7 +634,7 @@ function newgrid_r() {
             title: 'Swaroop says:',
             html: 'Display Size must be in the range <h2 style="color:red;">12-90</h2>',
             icon: 'error',
-            confirmButtonText: 'You, got this 🙂',
+            confirmButtonText: 'ok 🙂',
         })
     }
 }
@@ -834,7 +834,7 @@ function saveimage_download() {
             title: 'Swaroop says:',
             html: 'The characters <h2 style="color:red;">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
-            confirmButtonText: 'You, got this 🙂',
+            confirmButtonText: 'ok 🙂',
         })
     }
 }
@@ -949,7 +949,7 @@ function savetext_download() {
             title: 'Swaroop says:',
             html: 'The characters <h2 style="color:red;">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
-            confirmButtonText: 'You, got this 🙂',
+            confirmButtonText: 'ok 🙂',
         })
     }
 }

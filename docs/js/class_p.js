@@ -741,14 +741,14 @@ class Puzzle {
                     title: 'Swaroop says:',
                     html: 'Max row size reached <h2 style="color:red;">40</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
                     html: 'Min row size reached <h2 style="color:red;">1</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
         }
@@ -982,14 +982,14 @@ class Puzzle {
                     title: 'Swaroop says:',
                     html: 'Max row size reached <h2 style="color:red;">40</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
                     html: 'Min row size reached <h2 style="color:red;">1</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
         }
@@ -1302,14 +1302,14 @@ class Puzzle {
                     title: 'Swaroop says:',
                     html: 'Max column size reached <h2 style="color:red;">40</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
                     html: 'Min column size reached <h2 style="color:red;">1</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
         }
@@ -1622,14 +1622,14 @@ class Puzzle {
                     title: 'Swaroop says:',
                     html: 'Max column size reached <h2 style="color:red;">40</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
                     html: 'Min column size reached <h2 style="color:red;">1</h2>',
                     icon: 'error',
-                    confirmButtonText: 'You, got this 🙂',
+                    confirmButtonText: 'ok 🙂',
                 })
             }
         }
