@@ -920,12 +920,14 @@
             <div id="modal-save-body">
                 <textarea rows="1" cols="81" id="iostring"></textarea>
             </div>
-            <p id="modal-input-parameters-text">*Specify the location of the first cell of your sudoku grid [optional]:</p>
+            <p id="modal-input-parameters-text">*Specify the location of the first cell of your sudoku grid and its size[optional]:</p>
             <div id="modal-input-parameters">
                 <span id="div_all"><label class="label_nb" id="firstcell_row_lb">Row:</label></span>
-                <input type="number" pattern="\d*" name="firstcell_row" id="first_cell_row" value="" min="1" max="50" step="1" placeholder="1">
-                <span id="div_all"><label class="label_nb" id="firstcell_column_lb">Column:</label></span>
-                <input type="number" pattern="\d*" name="firstcell_column" id="first_cell_column" value="" min="1" max="50" step="1" placeholder="1">
+                <input type="number" pattern="\d*" name="firstcell_row" id="firstcell_row" value="" min="1" max="50" step="1" placeholder="1">
+                <span id="div_all"><label class="label_nb" id="firstcell_column_lb">Col:</label></span>
+                <input type="number" pattern="\d*" name="firstcell_column" id="firstcell_column" value="" min="1" max="50" step="1" placeholder="1">
+                <span id="div_all"><label class="label_nb" id="sudokusize_lb">Size:</label></span>
+                <input type="number" pattern="\d*" name="sudokusize" id="sudokusize" value="" min="1" max="9" step="1" placeholder="9">
             </div>
             <div>
                 <span id="div_all"><label class="label_nb" id="ignore_pencilmarks_lb">Ignore Pencil Marks (L, M, S values)</label></span>

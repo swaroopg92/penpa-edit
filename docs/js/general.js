@@ -853,7 +853,7 @@ function savetext() {
 
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
-    document.getElementById("iostring").value = "Enter 36 or 64 or 81 digits (0-9, 0 or . for an empty cell, no spaces)";
+    document.getElementById("iostring").value = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
 }
 
 function expansion() {
@@ -995,59 +995,47 @@ function duplicate() {
 
 function import_sudoku() {
     let flag;
-    if (document.getElementById("gridtype").value === "sudoku") {
-        flag = pu.load_clues();
-    } else if (document.getElementById("gridtype").value === "square") {
-        let rsize = parseInt(document.getElementById("nb_size2").value, 10);
-        let csize = parseInt(document.getElementById("nb_size1").value, 10);
-        let over = parseInt(document.getElementById("nb_space1").value, 10);
-        let under = parseInt(document.getElementById("nb_space2").value, 10);
-        let left = parseInt(document.getElementById("nb_space3").value, 10);
-        let right = parseInt(document.getElementById("nb_space4").value, 10);
-        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
-            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
-            ((rsize - over - under === 6) && (csize - left - right === 6))) {
-            flag = pu.load_clues();
+    if (document.getElementById("gridtype").value === "sudoku" || document.getElementById("gridtype").value === "square") {
+        let size = 9; // Default is 9x9 sudoku
+
+        // if user has defined the sudoku grid size
+        if (document.getElementById("sudokusize").value !== "") {
+            size = parseInt(document.getElementById("sudokusize").value);
+        }
+        if (size <= pu.nx) {
+            if (size > 0 && size < 10) {
+                flag = pu.load_clues();
+            } else {
+                document.getElementById("iostring").value = "Error: Min/Max Sudoku Size allowed is 1x1 to 9x9 (Default is 9x9). Update the input parameters below.";
+            }
         } else {
-            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
+            document.getElementById("iostring").value = "Error: Grid size is smaller than specified Sudoku size (Default is 9x9). Update the input parameters below.";
         }
     } else {
-        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid";
     }
 }
 
 function export_sudoku() {
     let flag;
-    if (document.getElementById("gridtype").value === "sudoku") {
-        let rsize = pu.ny;
-        let csize = pu.nx;
-        let over = parseInt(document.getElementById("nb_space1").value, 10);
-        let under = parseInt(document.getElementById("nb_space2").value, 10);
-        let left = parseInt(document.getElementById("nb_space3").value, 10);
-        let right = parseInt(document.getElementById("nb_space4").value, 10);
-        let size = rsize - over - under;
-        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
-            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
-            ((rsize - over - under === 6) && (csize - left - right === 6))) {
-            flag = pu.export_clues(size);
+    if (document.getElementById("gridtype").value === "sudoku" || document.getElementById("gridtype").value === "square") {
+        let size = 9; // Default is 9x9 sudoku
+
+        // if user has defined the sudoku grid size
+        if (document.getElementById("sudokusize").value !== "") {
+            size = parseInt(document.getElementById("sudokusize").value);
         }
-    } else if (document.getElementById("gridtype").value === "square") {
-        let rsize = parseInt(document.getElementById("nb_size2").value, 10);
-        let csize = parseInt(document.getElementById("nb_size1").value, 10);
-        let over = parseInt(document.getElementById("nb_space1").value, 10);
-        let under = parseInt(document.getElementById("nb_space2").value, 10);
-        let left = parseInt(document.getElementById("nb_space3").value, 10);
-        let right = parseInt(document.getElementById("nb_space4").value, 10);
-        let size = rsize - over - under;
-        if (((rsize - over - under === 9) && (csize - left - right === 9)) ||
-            ((rsize - over - under === 8) && (csize - left - right === 8)) ||
-            ((rsize - over - under === 6) && (csize - left - right === 6))) {
-            flag = pu.export_clues(size);
+        if (size <= pu.nx) {
+            if (size > 0 && size < 10) {
+                flag = pu.export_clues(size);
+            } else {
+                document.getElementById("iostring").value = "Error: Min/Max Sudoku Size allowed is 1x1 to 9x9 (Default is 9x9). Update the input parameters below.";
+            }
         } else {
-            document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
+            document.getElementById("iostring").value = "Error: Grid size is smaller than specified Sudoku size (Default is 9x9). Update the input parameters below.";
         }
     } else {
-        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid with a central grid size of 6x6, 8x8, 9x9";
+        document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid";
     }
 }
 

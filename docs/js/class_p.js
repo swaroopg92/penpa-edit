@@ -7788,7 +7788,8 @@ class Puzzle {
         let scolor = 9; //blue, 2 for green
 
         // Data checking
-        if ((iostring.length == 81) || (iostring.length == 64) || (iostring.length == 36)) {
+        // Check if length is a square number
+        if (Number.isInteger(Math.sqrt(iostring.length))) {
 
             // Replace dots with zeros
             iostring = iostring.replace(/\./g, 0);
@@ -7807,6 +7808,15 @@ class Puzzle {
             // Data check passed, proceed
             let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
             let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+
+            // if user has defined the starting cell then use that
+            if (document.getElementById("firstcell_row").value !== "") {
+                r_start = parseInt(document.getElementById("firstcell_row").value) - 1;
+            }
+            if (document.getElementById("firstcell_column").value !== "") {
+                c_start = parseInt(document.getElementById("firstcell_column").value) - 1;
+            }
+
             if (this.mode.qa === "pu_q") {
                 for (var j = r_start; j < (size + r_start); j++) { //  row
                     for (var i = c_start; i < (size + c_start); i++) { // column
@@ -7829,7 +7839,7 @@ class Puzzle {
                 }
             }
         } else {
-            document.getElementById("iostring").value = "Error: Number of digits not equal to 36 (6x6 grid) or 64 (8x8 grid) or 81 (9x9 grid)";
+            document.getElementById("iostring").value = "Error: Number of digits is not a perfect square";
             return "failed";
         }
         this.redraw();
@@ -7840,6 +7850,14 @@ class Puzzle {
         let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
         let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
 
+        // if user has defined the starting cell then use that
+        if (document.getElementById("firstcell_row").value !== "") {
+            r_start = parseInt(document.getElementById("firstcell_row").value) - 1;
+        }
+        if (document.getElementById("firstcell_column").value !== "") {
+            c_start = parseInt(document.getElementById("firstcell_column").value) - 1;
+        }
+
         // If a cell has a digit in both modes, then decide the order in which its considered
         if (this.mode.qa == "pu_q") {
             var mode_order = ["pu_q", "pu_a"];
@@ -7848,9 +7866,32 @@ class Puzzle {
         }
         for (var j = r_start; j < (size + r_start); j++) { //  row
             for (var i = c_start; i < (size + c_start); i++) { // column
-                if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                    (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                    (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+
+                if (document.getElementById("ignore_pencilmarks").checked) {
+                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10"),
+                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10")
+                    ];
+                } else {
+                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4"),
+                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")
+                    ];
+                }
+
+                if (ifcondition[0]) {
                     if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
                         var sum = 0,
                             a;
@@ -7872,9 +7913,7 @@ class Puzzle {
                             outputstring += this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0];
                         }
                     }
-                } else if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")) {
+                } else if (ifcondition[1]) {
                     if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
                         var sum = 0,
                             a;
@@ -7903,7 +7942,7 @@ class Puzzle {
         }
 
         // Sanity check
-        if ((outputstring.length === 81) || (outputstring.length === 64) || (outputstring.length === 36)) {
+        if (outputstring.length === size * size) {
             document.getElementById("iostring").value = outputstring;
         } else {
             document.getElementById("iostring").value = "Error: Some cells have more than 1 digit";
