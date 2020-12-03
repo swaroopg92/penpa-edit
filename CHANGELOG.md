@@ -8,7 +8,7 @@
 	* Title, Author and Source information is now saved in Edit URL, Clone and Solving URL.
 	* Improved corner sudoku solving mode in case of killer clues
 	* Fixed kakuro grid generation bug for uneven size grid
-	* Fixed IO sudoku import bug for uneven size grid
+	* I/0 Sudoku 2.0 i.e. Rewrote entire code giving more options and flexibility to the User.
 * 2020/11/28 ver2.24.15
 	* Sudoku Solving Mode added. Controls similar to CTC App except, use ALT+ (Z,X,C,V) to switch to Normal, Corner, Centre and Surface modes for the shortcuts. Currently enabled only for Sudoku/Square grid type.
 	* Automatic popup of Panel on Mobile/Ipad while in Number/Shape/Sudoku Modes.
