@@ -5506,20 +5506,20 @@ class Puzzle {
                 case "1": // Normal mode
                     if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
                         for (var k of this.selection) {
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1")) { // if single digit is present, dont modify that cell
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && Number.isInteger(this["pu_q"].number[k][0]))) { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
-                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                                var sum = 0,
-                                    a;
+                                // This is for single digit obtained from candidate submode
+                                var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
                                         sum += 1;
-                                        a = j + 1;
                                     }
                                 }
                                 if (sum === 1) {
                                     var single_digit = true;
+                                } else {
+                                    var single_digit = false;
                                 }
                             } else {
                                 var single_digit = false;
@@ -5566,21 +5566,21 @@ class Puzzle {
                         }
 
                         for (var k of this.selection) {
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && Number.isInteger(this["pu_q"].number[k][0])) ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
                                 // This is for single digit obtained from candidate submode
-                                var sum = 0,
-                                    a;
+                                var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
                                         sum += 1;
-                                        a = j + 1;
                                     }
                                 }
                                 if (sum === 1) {
                                     var single_digit = true;
+                                } else {
+                                    var single_digit = false;
                                 }
                             } else {
                                 var single_digit = false;
@@ -5649,21 +5649,36 @@ class Puzzle {
                 case "3": // Centre mode
                     if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
                         for (var k of this.selection) {
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1") ||
+                            var con = "";
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && Number.isInteger(this["pu_q"].number[k][0])) ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
-                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                                var sum = 0,
-                                    a;
+                                // This is for single digit obtained from candidate submode
+                                var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
                                         sum += 1;
-                                        a = j + 1;
                                     }
                                 }
                                 if (sum === 1) {
                                     var single_digit = true;
+                                } else {
+                                    var single_digit = false;
+                                }
+                            } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
+                                // This is for digits obtained from candidate submode
+                                var sum = 0;
+                                for (var j = 0; j < 10; j++) {
+                                    if (this["pu_a"].number[k][0][j] === 1) {
+                                        sum += 1;
+                                        con += (j + 1).toString();
+                                    }
+                                }
+                                if (sum === 1) {
+                                    var single_digit = true;
+                                } else {
+                                    var single_digit = false;
                                 }
                             } else {
                                 var single_digit = false;
@@ -5671,7 +5686,9 @@ class Puzzle {
                             if (!single_digit) {
                                 number = "";
                                 if (this[this.mode.qa].number[k]) {
-                                    con = this[this.mode.qa].number[k][0];
+                                    if (con.length === 0) {
+                                        con = this[this.mode.qa].number[k][0];
+                                    }
                                     if (con.indexOf(key) != -1) {
                                         con = con.split("").sort();
                                         for (var m of con) {
