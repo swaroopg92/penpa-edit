@@ -9,6 +9,8 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * What do these buttons R, V, Panel, Border do? - https://youtu.be/06FNYpIVERc
 * How to enable answer check? - https://youtu.be/ZYcMJul8lh4
 * Shortcuts of Penpa - https://youtu.be/DHgZ-TU5SEc
+* Sudoku Solving in Penpa - https://youtu.be/b9H2QvouU_A
+* Import and Export Sudoku (I/O Sudoku) in Penpa - https://youtu.be/f-Lw0QuXa2c
 
 ## Puzzles
 * How to Create Thermo Sudoku? - https://youtu.be/ynZOz057mKA
