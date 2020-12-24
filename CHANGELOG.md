@@ -10,6 +10,10 @@
 	* Fixed kakuro grid generation bug for uneven size grid
 	* I/0 Sudoku 2.0 i.e. Rewrote entire code giving more options and flexibility to the User.
 	* Reorganised JS library files
+	* Fixed Sudoku mode bugs
+	* Improved Sudoku solving mode to consider candidates from number mode
+	* Updated warning messages
+	* Added new videos
 * 2020/11/28 ver2.24.15
 	* Sudoku Solving Mode added. Controls similar to CTC App except, use ALT+ (Z,X,C,V) to switch to Normal, Corner, Centre and Surface modes for the shortcuts. Currently enabled only for Sudoku/Square grid type.
 	* Automatic popup of Panel on Mobile/Ipad while in Number/Shape/Sudoku Modes.

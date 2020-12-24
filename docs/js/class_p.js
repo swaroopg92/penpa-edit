@@ -469,6 +469,16 @@ class Puzzle {
             // this.canvasx = this.width_c * this.size;
             this.canvasy = this.height_c * this.size;
 
+            // Find the missing boxes
+            var old_centerlist = this.centerlist;
+            var old_idealcenterlist = []; // If no box was missing
+            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
+                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+                    old_idealcenterlist.push(i + j * (originalnx0));
+                }
+            }
+            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
+
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -486,6 +496,18 @@ class Puzzle {
             for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
                 for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
                     this.centerlist.push(i + j * (this.nx0));
+                }
+            }
+
+            // Remove Box elements
+            if (boxremove) {
+                for (let n = 0; n < boxremove.length; n++) {
+                    let num = boxremove[n];
+                    let m = num + parseInt(originalnx0) * sign;
+                    let index = this.centerlist.indexOf(m);
+                    if (index !== -1) {
+                        this.centerlist.splice(index, 1);
+                    }
                 }
             }
 
@@ -789,6 +811,16 @@ class Puzzle {
             // this.canvasx = this.width_c * this.size;
             this.canvasy = this.height_c * this.size;
 
+            // Find the missing boxes
+            var old_centerlist = this.centerlist;
+            var old_idealcenterlist = []; // If no box was missing
+            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
+                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+                    old_idealcenterlist.push(i + j * (originalnx0));
+                }
+            }
+            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
+
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -806,6 +838,17 @@ class Puzzle {
             for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
                 for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
                     this.centerlist.push(i + j * (this.nx0));
+                }
+            }
+
+            // Remove Box elements
+            if (boxremove) {
+                for (let n = 0; n < boxremove.length; n++) {
+                    let num = boxremove[n];
+                    let index = this.centerlist.indexOf(num);
+                    if (index !== -1) {
+                        this.centerlist.splice(index, 1);
+                    }
                 }
             }
 
@@ -1030,6 +1073,16 @@ class Puzzle {
             this.canvasx = this.width_c * this.size;
             // this.canvasy = this.height_c * this.size;
 
+            // Find the missing boxes
+            var old_centerlist = this.centerlist;
+            var old_idealcenterlist = []; // If no box was missing
+            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
+                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+                    old_idealcenterlist.push(i + j * (originalnx0));
+                }
+            }
+            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
+
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -1047,6 +1100,18 @@ class Puzzle {
             for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
                 for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
                     this.centerlist.push(i + j * (this.nx0));
+                }
+            }
+
+            // Remove Box elements
+            if (boxremove) {
+                for (let n = 0; n < boxremove.length; n++) {
+                    let num = boxremove[n];
+                    let m = num + ((parseInt(num / originalnx0) - 2) + 3) * sign;
+                    let index = this.centerlist.indexOf(m);
+                    if (index !== -1) {
+                        this.centerlist.splice(index, 1);
+                    }
                 }
             }
 
@@ -1350,6 +1415,16 @@ class Puzzle {
             this.canvasx = this.width_c * this.size;
             // this.canvasy = this.height_c * this.size;
 
+            // Find the missing boxes
+            var old_centerlist = this.centerlist;
+            var old_idealcenterlist = []; // If no box was missing
+            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
+                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+                    old_idealcenterlist.push(i + j * (originalnx0));
+                }
+            }
+            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
+
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -1367,6 +1442,18 @@ class Puzzle {
             for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
                 for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
                     this.centerlist.push(i + j * (this.nx0));
+                }
+            }
+
+            // Remove Box elements
+            if (boxremove) {
+                for (let n = 0; n < boxremove.length; n++) {
+                    let num = boxremove[n];
+                    let m = num + ((parseInt(num / originalnx0) - 2) + 2) * sign;
+                    let index = this.centerlist.indexOf(m);
+                    if (index !== -1) {
+                        this.centerlist.splice(index, 1);
+                    }
                 }
             }
 
