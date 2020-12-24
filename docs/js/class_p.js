@@ -7869,8 +7869,9 @@ class Puzzle {
             if (text === this.solution && this.sol_flag === 0) {
                 setTimeout(() => {
                     Swal.fire({
-                        title: 'Swaroop says:',
-                        html: '<h2 style="color:blue;">Congratulations 🙂 Well done 🙂</h2>',
+                        title: '<h3 style="color:white;">Merry Christmas </h3>',
+                        html: '<h2 style="color:white;">Congratulations 🙂 Well done 🙂</h2>',
+                        background: 'url(js/images/christmas.jpg)',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',
                         // timer: 5000
