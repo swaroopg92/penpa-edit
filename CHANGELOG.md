@@ -1,5 +1,9 @@
 ## History
-* 2020/12/-- ver2.24.16
+* 2020/12/25 ver2.24.17
+	* Merged PR from Alice
+	* Added Christmas Wishes
+	* Fixed Transform bug when Box mode is used
+* 2020/12/04 ver2.24.16
 	* Removed ALT. Sudoku shortcuts are now exactly same as (Z,X,C,V)
 	* Fixed the Delete and shortcuts to work in Mac
 	* Updated answer check to detect red colored numbers, also updated description to reflect sudoku mode
