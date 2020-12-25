@@ -5637,7 +5637,11 @@ class Puzzle {
                                 }
 
                                 this.record("number", k);
-                                this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
+                                if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][0] === key) {
+                                    delete this[this.mode.qa].number[k];
+                                } else {
+                                    this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
+                                }
                             }
                         }
                     }
@@ -5665,6 +5669,20 @@ class Puzzle {
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
                                         sum += 1;
+                                    }
+                                }
+                                if (sum === 1) {
+                                    var single_digit = true;
+                                } else {
+                                    var single_digit = false;
+                                }
+                            } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
+                                // This is for digits obtained from candidate submode
+                                var sum = 0;
+                                for (var j = 0; j < 10; j++) {
+                                    if (this["pu_a"].number[k][0][j] === 1) {
+                                        sum += 1;
+                                        con += (j + 1).toString();
                                     }
                                 }
                                 if (sum === 1) {
@@ -5749,6 +5767,7 @@ class Puzzle {
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
                                         sum += 1;
+                                        con += (j + 1).toString();
                                     }
                                 }
                                 if (sum === 1) {
