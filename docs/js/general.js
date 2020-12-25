@@ -853,7 +853,7 @@ function savetext() {
 
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
-    document.getElementById("iostring").value = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
+    document.getElementById("iostring").placeholder = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
 }
 
 function expansion() {
@@ -1009,7 +1009,7 @@ function import_sudoku() {
                 document.getElementById("iostring").value = "Error: Min/Max Sudoku Size allowed is 1x1 to 9x9 (Default is 9x9). Update the input parameters below.";
             }
         } else {
-            document.getElementById("iostring").value = "Error: Grid size is smaller than specified Sudoku size (Default is 9x9). Update the input parameters below.";
+            document.getElementById("iostring").value = "Error: Grid size is smaller than the specified Sudoku size (Default is 9x9). Update the input parameters below.";
         }
     } else {
         document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid";
@@ -1032,7 +1032,7 @@ function export_sudoku() {
                 document.getElementById("iostring").value = "Error: Min/Max Sudoku Size allowed is 1x1 to 9x9 (Default is 9x9). Update the input parameters below.";
             }
         } else {
-            document.getElementById("iostring").value = "Error: Grid size is smaller than specified Sudoku size (Default is 9x9). Update the input parameters below.";
+            document.getElementById("iostring").value = "Error: Grid size is smaller than the specified Sudoku size (Default is 9x9). Update the input parameters below.";
         }
     } else {
         document.getElementById("iostring").value = "Error: The canvas area should be a sudoku grid or square grid";
