@@ -6466,8 +6466,12 @@ class Puzzle {
             if (!ctrl_key) {
                 this.selection = [];
             }
-            if (!this.selection.includes(num)) {
+            // find if num already exist
+            let num_index = this.selection.indexOf(num);
+            if (num_index === -1) {
                 this.selection.push(num);
+            } else if (ctrl_key) {
+                this.selection.splice(num_index, 1);
             }
             this.cursol = num;
             this.redraw();
