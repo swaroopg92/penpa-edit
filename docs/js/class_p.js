@@ -437,6 +437,7 @@ class Puzzle {
     resize_top(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+            let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
                 if (sign === 1) {
@@ -472,8 +473,8 @@ class Puzzle {
             // Find the missing boxes
             var old_centerlist = this.centerlist;
             var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
+                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
                     old_idealcenterlist.push(i + j * (originalnx0));
                 }
             }
@@ -779,6 +780,7 @@ class Puzzle {
     resize_bottom(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+            let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
                 if (sign === 1) {
@@ -814,13 +816,12 @@ class Puzzle {
             // Find the missing boxes
             var old_centerlist = this.centerlist;
             var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
+                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
                     old_idealcenterlist.push(i + j * (originalnx0));
                 }
             }
             var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
-
             this.create_point();
             this.centerlist = []
             for (var j = 2; j < this.ny0 - 2; j++) {
@@ -1041,6 +1042,7 @@ class Puzzle {
     resize_left(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+            let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
                 if (sign === 1) {
@@ -1076,8 +1078,8 @@ class Puzzle {
             // Find the missing boxes
             var old_centerlist = this.centerlist;
             var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
+                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
                     old_idealcenterlist.push(i + j * (originalnx0));
                 }
             }
@@ -1383,6 +1385,7 @@ class Puzzle {
     resize_right(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+            let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
                 if (sign === 1) {
@@ -1418,8 +1421,8 @@ class Puzzle {
             // Find the missing boxes
             var old_centerlist = this.centerlist;
             var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + this.space[0]; j < originalny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < originalnx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
+                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
                     old_idealcenterlist.push(i + j * (originalnx0));
                 }
             }
