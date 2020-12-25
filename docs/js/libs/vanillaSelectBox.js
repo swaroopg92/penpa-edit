@@ -192,7 +192,7 @@ function vanillaSelectBox(domSelector, options) {
                     null);
             }
         }
-        let selectedTexts = "Tab"
+        let selectedTexts = "Tab/↵";
         let sep = "";
         let nrActives = 0;
 
@@ -326,7 +326,7 @@ function vanillaSelectBox(domSelector, options) {
             if (nrActives > self.multipleSize) {
                 let wordForItems = self.userOptions.translations.items || "items"
                 // selectedTexts = nrActives + " " + wordForItems;
-                selectedTexts = "Tab";
+                selectedTexts = "Tab/↵";
             }
         }
         if (self.isMultiple) {
@@ -464,7 +464,7 @@ function vanillaSelectBox(domSelector, options) {
                 } else {
                     e.target.classList.add("active");
                 }
-                let selectedTexts = "Tab";
+                let selectedTexts = "Tab/↵";
                 let sep = "";
                 let nrActives = 0;
                 let nrAll = 0;
@@ -481,12 +481,12 @@ function vanillaSelectBox(domSelector, options) {
                 }
                 if (nrAll == nrActives) {
                     let wordForAll = self.userOptions.translations.all || "all";
-                    selectedTexts = "Tab";
+                    selectedTexts = "Tab/↵";
                 } else if (self.multipleSize != -1) {
                     if (nrActives > self.multipleSize) {
                         let wordForItems = self.userOptions.translations.items || "items"
                         // selectedTexts = nrActives + " " + wordForItems;
-                        selectedTexts = "Tab";
+                        selectedTexts = "Tab/↵";
                     }
                 }
                 self.title.textContent = selectedTexts;
@@ -654,7 +654,7 @@ vanillaSelectBox.prototype.setValue = function(values) {
                         x.selected = false;
                     }
                 });
-                let selectedTexts = "Tab";
+                let selectedTexts = "Tab/↵";
                 let sep = "";
                 let nrActives = 0;
                 let nrAll = 0;
@@ -671,12 +671,12 @@ vanillaSelectBox.prototype.setValue = function(values) {
                 });
                 if (nrAll == nrActives) {
                     let wordForAll = self.userOptions.translations.all || "all";
-                    selectedTexts = "Tab";
+                    selectedTexts = "Tab/↵";
                 } else if (self.multipleSize != -1) {
                     if (nrActives > self.multipleSize) {
                         let wordForItems = self.userOptions.translations.items || "items"
                         // selectedTexts = nrActives + " " + wordForItems;
-                        selectedTexts = "Tab";
+                        selectedTexts = "Tab/↵";
                     }
                 }
                 self.title.textContent = selectedTexts;

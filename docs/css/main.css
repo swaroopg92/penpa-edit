@@ -972,11 +972,8 @@ textarea {
     max-height: 130px;
 }
 
-#savetextarea_pp {
-    min-width: 200px;
-    min-height: 40px;
-    max-width: 280px;
-    max-height: 60px;
+#save5texttitle {
+    margin-left: 10px;
 }
 
 #inputtext {
@@ -1028,6 +1025,14 @@ textarea {
 
 h4 {
     display: inline;
+}
+
+#savetextarea_pp {
+    min-width: 200px;
+    min-height: 40px;
+    max-width: 280px;
+    max-height: 60px;
+    margin-left: 10px;
 }
 
 #solutiontext {

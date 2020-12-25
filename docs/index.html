@@ -560,7 +560,7 @@
             <span id="redo_text" class="tooltiptext">CTRL + y</span>
         </span>
         <span class="tooltip">
-            <input type="button" id="tb_reset" value="Erase current selection" class="button" />
+            <input type="button" id="tb_reset" value="Erase selected mode" class="button" />
             <span id="eraseselect_text" class="tooltiptext">Erase elements that belongs to the selected mode</span>
         </span>
         <span class="tooltip">
@@ -701,7 +701,7 @@
             </span>
             <br>
             <hr size=1 noshade class="newgridhrline">
-            <h5><label id="nb_note">Change grid button only affects the following properties:</label></h5>
+            <h5><label id="nb_note">*Update display* button only affects the following properties:</label></h5>
             <br>
             <h4 id="div_all"><label class="label_nb">Display size:</label></h4>
             <span id="">
@@ -729,8 +729,8 @@
             <label for="nb_out2" class="label" id="nb_out2_lb">No</label>
             <br><br>
             <div class="nb_button">
-                <input type="button" id="closeBtn_nb1" value="Reset" />
-                <input type="button" id="closeBtn_nb2" value="Change grid" />
+                <input type="button" id="closeBtn_nb1" value="New grid" />
+                <input type="button" id="closeBtn_nb2" value="Update display" />
                 <input type="button" id="closeBtn_nb3" value="Cancel" />
             </div>
         </div>
@@ -908,7 +908,6 @@
                 </div>
             </div>
             <div id="modal-save2-pp" style="display:none;">
-                <h3 id="save4texttitle">pp_file</h3>
                 <h5 id="save5texttitle">Header</h5>
                 <textarea rows="1" cols="50" id="savetextarea_pp"></textarea>
                 <div class="nb_button">
