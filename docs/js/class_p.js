@@ -8052,6 +8052,15 @@ class Puzzle {
         // Sanity check
         if (outputstring.length === size * size) {
             document.getElementById("iostring").value = outputstring;
+            let textarea = document.getElementById("iostring");
+            textarea.select();
+            let range = document.createRange();
+            range.selectNodeContents(textarea);
+            let sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            textarea.setSelectionRange(0, 1e5);
+            document.execCommand("copy");
         } else {
             document.getElementById("iostring").value = "Error: Some cells have more than 1 digit";
         }
