@@ -634,22 +634,6 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_selection(pu) {
-        if (this.selection.length > 0) {
-            for (var k of this.selection) {
-                set_surface_style(this.ctx, 13);
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this.point[k].surround[0]].x, this.point[this.point[k].surround[0]].y);
-                for (var j = 1; j < this.point[k].surround.length; j++) {
-                    this.ctx.lineTo(this.point[this.point[k].surround[j]].x, this.point[this.point[k].surround[j]].y);
-                }
-                this.ctx.closePath();
-                this.ctx.fill();
-                this.ctx.stroke();
-            }
-        }
-    }
-
     draw_polygon(ctx, x, y, r, n, th) {
         ctx.LineCap = "round";
         ctx.beginPath();

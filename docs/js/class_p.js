@@ -7898,6 +7898,26 @@ class Puzzle {
         }
     }
 
+    draw_selection() {
+        if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (this.selection.length === 0) {
+                this.selection.push(this.cursol);
+            }
+            for (var k of this.selection) {
+                set_surface_style(this.ctx, 13);
+                // set_line_style(this.ctx, 99); // if we want to set border to cursor
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.point[this.point[k].surround[0]].x, this.point[this.point[k].surround[0]].y);
+                for (var j = 1; j < this.point[k].surround.length; j++) {
+                    this.ctx.lineTo(this.point[this.point[k].surround[j]].x, this.point[this.point[k].surround[j]].y);
+                }
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.stroke();
+            }
+        }
+    }
+
     check_solution() {
         if (this.solution) {
             var text = JSON.stringify(this.make_solution());
