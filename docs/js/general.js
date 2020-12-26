@@ -1139,7 +1139,7 @@ function load(urlParam) {
         if (!pu.pu_a.polygon) { pu.pu_a.polygon = []; }
         pu.centerlist = rtext[5];
 
-        //classがコピーできないので別
+        // Because class cannot be copied, its set in different way
         for (var i of ["pu_q", "pu_a"]) {
             for (var j of ["command_redo", "command_undo"]) {
                 var t = pu[i][j].__a;
