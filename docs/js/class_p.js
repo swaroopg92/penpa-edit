@@ -2226,8 +2226,17 @@ class Puzzle {
         var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
         var ba = window.btoa(char8);
         var url = location.href.split('?')[0];
-        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
-        return url + "?m=edit&p=" + ba;
+        // if solution exist then copy the solution as well
+        if (this.solution) {
+            u8text = new TextEncoder().encode(this.solution);
+            deflate = new Zlib.RawDeflate(u8text);
+            compressed = deflate.compress();
+            char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+            var ba_s = window.btoa(char8);
+            return url + "?m=edit&p=" + ba + "&a=" + ba_s;
+        } else {
+            return url + "?m=edit&p=" + ba;
+        }
     }
 
     maketext_solve() {

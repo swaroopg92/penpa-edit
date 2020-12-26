@@ -1147,6 +1147,16 @@ function load(urlParam) {
                 pu[i][j].set(t);
             }
         }
+
+        // Decrypt a
+        if (paramArray.a) {
+            var ab = atob(paramArray.a);
+            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+            var inflate = new Zlib.RawInflate(ab);
+            var plain = inflate.decompress();
+            var atext = new TextDecoder().decode(plain);
+            pu.solution = atext;
+        }
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
         pu.mode.qa = "pu_a";
