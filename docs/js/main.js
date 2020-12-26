@@ -261,7 +261,6 @@ onload = function() {
 
             if (ctrl_key && !shift_key && !alt_key) {
                 if (key != "Control") {
-                    e.preventDefault();
                     switch (key) {
                         case "d": //Ctrl+d
                         case "D":
@@ -334,6 +333,9 @@ onload = function() {
                         case "7":
                         case "8":
                         case "9":
+                            if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                                e.preventDefault();
+                            }
                             pu.key_number(key);
                             event.returnValue = false;
                             break;
