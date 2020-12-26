@@ -893,7 +893,7 @@ body textarea {
 #modal-rotate-content {
     background-color: var(--white);
     width: 300px;
-    height: 390px;
+    height: 400px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -925,7 +925,7 @@ body textarea {
 #modal-save-content {
     background-color: var(--white);
     width: 300px;
-    height: 455px;
+    height: 465px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -946,7 +946,7 @@ body textarea {
 #modal-input-content {
     background-color: var(--white);
     width: 300px;
-    height: 270px;
+    height: 280px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -954,13 +954,13 @@ body textarea {
 
 #modal-input-parameters-text,
 #modal-input-parameters {
-    margin-left: 10px;
+    margin-left: 5px;
     margin-top: 5px;
 }
 
 #ignore_pencilmarks_lb,
 #ignore_pencilmarks {
-    margin-left: 10px;
+    margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
 }

@@ -11,6 +11,8 @@
 	* Cells can be deselected in sudoku mode using CTRL.
 	* Fixed Kakuro bug for adding row/column on top/left.
 	* Clone now copies answer check feature as well while in solver mode.
+	* Sudoku cursor is regained while switching between modes.
+	* Adjusted display of some windows for iPad.
 * 2020/12/04 ver2.24.16
 	* Removed ALT. Sudoku shortcuts are now exactly same as (Z,X,C,V).
 	* Fixed the Delete and shortcuts to work in Mac.
