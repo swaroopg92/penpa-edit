@@ -29,6 +29,8 @@ Depending on the browser you can update the page without using the cache with "C
 	* X - Corner Submode
 	* C - Centre Submode
 	* V - Shading (Surface Mode)
+	* SHIFT - For Temporary Corner Submode
+	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
