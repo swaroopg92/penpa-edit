@@ -5396,6 +5396,7 @@ class Puzzle {
                     this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
                 }
             }
+            this.pu_q.command_redo = new Stack();
         } else {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
@@ -5414,8 +5415,8 @@ class Puzzle {
                     this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
                 }
             }
+            this.pu_a.command_redo = new Stack();
         }
-        this.pu_q.command_redo = new Stack();
     }
 
     /////////////////////////////
