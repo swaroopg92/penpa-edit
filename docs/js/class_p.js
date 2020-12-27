@@ -2037,14 +2037,31 @@ class Puzzle {
                 this[this.mode.qa].wall = {};
                 break;
             case "number":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "3") {
-                    this[this.mode.qa].number = {};
-                } else {
+                if ((this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") ||
+                    (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9")) {
                     this[this.mode.qa].numberS = {};
+                } else {
+                    this[this.mode.qa].number = {};
                 }
                 break;
             case "symbol":
                 this[this.mode.qa].symbol = {};
+                break;
+            case "sudoku":
+                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+                    if (!isEmpty(this[this.mode.qa].number)) {
+                        let keys = Object.keys(this[this.mode.qa].number);
+                        for (var k = 0; k < keys.length; k++) {
+                            if (this[this.mode.qa].number[keys[k]][2] === "5") {
+                                delete this[this.mode.qa].number[keys[k]];
+                            }
+                        }
+                    }
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                    this[this.mode.qa].numberS = {};
+                } else {
+                    this[this.mode.qa].number = {};
+                }
                 break;
             case "cage":
                 this[this.mode.qa].cage = {};
