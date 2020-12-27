@@ -5664,7 +5664,7 @@ class Puzzle {
                                 }
 
                                 this.record("number", k);
-                                if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][0] === key) {
+                                if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === 1 && this[this.mode.qa].number[k][0] === key) {
                                     delete this[this.mode.qa].number[k];
                                 } else {
                                     this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
