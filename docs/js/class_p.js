@@ -7908,8 +7908,16 @@ class Puzzle {
                 }
             }
             for (var k of this.selection) {
+                // Color of selected cell
                 set_surface_style(this.ctx, 13);
-                // set_line_style(this.ctx, 99); // if we want to set border to cursor
+
+                // Shadow for the selected cell
+                // this.ctx.shadowBlur = 20;
+                // this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
+
+                // Border outline for the selected cell
+                // set_line_style(this.ctx, 99);
+
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this.point[k].surround[0]].x, this.point[this.point[k].surround[0]].y);
                 for (var j = 1; j < this.point[k].surround.length; j++) {
@@ -7918,6 +7926,10 @@ class Puzzle {
                 this.ctx.closePath();
                 this.ctx.fill();
                 this.ctx.stroke();
+
+                // Reset Bluring
+                // this.ctx.shadowBlur = 0;
+                // this.ctx.shadowColor = Color.TRANSPARENTBLACK;
             }
         }
     }
