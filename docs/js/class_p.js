@@ -7901,7 +7901,11 @@ class Puzzle {
     draw_selection() {
         if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             if (this.selection.length === 0) {
-                this.selection.push(this.cursol);
+                // check if cursor is in centerlist, to avoid border/edge case
+                let cursorexist = this.centerlist.indexOf(this.cursol);
+                if (cursorexist !== -1) {
+                    this.selection.push(this.cursol);
+                }
             }
             for (var k of this.selection) {
                 set_surface_style(this.ctx, 13);
