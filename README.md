@@ -240,6 +240,7 @@ Depending on the browser you can update the page without using the cache with "C
 	iii. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
 4. Click on "Generate URL with answer check"
 5. Click anywhere on the screen outside the small window to close it.
+6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode.
 
 * Options
 1. Copy: copies the URL to the clipboard

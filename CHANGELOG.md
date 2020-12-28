@@ -1,4 +1,10 @@
 ## History
+* 2020/12/29 ver2.24.18
+	* Multi Undo/Redo feature implemented for Sudoku Mode.
+	* Answer checking ability is now visually confirmed by Green color of Solution Mode.
+	* Erase Selected Mode now works for Sudoku Mode.
+	* Fixed Panelmode bug and forced to show only Number for Sudoku Mode.
+	* Redo bug for solution mode fixed.
 * 2020/12/25 ver2.24.17
 	* Merged PR from Alice.
 	* Added Christmas Wishes.
