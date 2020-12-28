@@ -294,19 +294,15 @@ class Panel {
                 this.ctxf.strokeRect((i_n % this.nxf) * (this.sizef + this.spacef), (i_n / this.nxf | 0) * (this.sizef + this.spacef), this.sizef, this.sizef);
             }
         } else if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            switch (this.panelmode) {
-                case "number":
-                    this.nxf = 4;
-                    this.nyf = 3;
-                    this.sizef = 36;
-                    this.canvas_size_setting(45);
-                    this.fkb.style.paddingTop = "0px";
-                    this.fkb.style.display = "block";
-                    this.fkm.style.display = "flex";
-                    this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "\u{232B}", "\u{2421}"];
-                    this.draw_number();
-                    break;
-            }
+            this.nxf = 4;
+            this.nyf = 3;
+            this.sizef = 36;
+            this.canvas_size_setting(45);
+            this.fkb.style.paddingTop = "0px";
+            this.fkb.style.display = "block";
+            this.fkm.style.display = "flex";
+            this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "\u{232B}", "\u{2421}"];
+            this.draw_number();
         } else {
             this.fkb.style.display = "none";
         }
