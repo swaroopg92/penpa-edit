@@ -1156,6 +1156,8 @@ function load(urlParam) {
             var plain = inflate.decompress();
             var atext = new TextDecoder().decode(plain);
             pu.solution = atext;
+            // Visually showcase answer check is enabled
+            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
         }
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
@@ -1186,6 +1188,8 @@ function load(urlParam) {
             var plain = inflate.decompress();
             var atext = new TextDecoder().decode(plain);
             pu.solution = atext;
+            // Visually showcase answer check is enabled
+            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
         }
     }
 
