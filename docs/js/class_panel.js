@@ -294,6 +294,7 @@ class Panel {
                 this.ctxf.strokeRect((i_n % this.nxf) * (this.sizef + this.spacef), (i_n / this.nxf | 0) * (this.sizef + this.spacef), this.sizef, this.sizef);
             }
         } else if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            this.panelmode = "number";
             this.nxf = 4;
             this.nyf = 3;
             this.sizef = 36;
