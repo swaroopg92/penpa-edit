@@ -5977,7 +5977,12 @@ class Puzzle {
                                     number += key;
                                 }
                                 this.record("number", k, this.undoredo_counter);
-                                this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"]; // S submode is 6
+                                // S submode is 5, M submode is 6
+                                if (number.length > 5) {
+                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
+                                } else {
+                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                }
                             }
                         }
                     }
