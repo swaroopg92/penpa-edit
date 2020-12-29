@@ -2233,6 +2233,11 @@ class Puzzle {
             text += JSON.stringify(user_choices);
         }
 
+        if (this.mmode === "solve") {
+            text += "\n";
+            text += sw_timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']);
+        }
+
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }

@@ -3,6 +3,7 @@
 	* Multi Undo/Redo feature implemented for Sudoku Mode.
 	* Answer checking ability is now visually confirmed by Green color of Solution Mode.
 	* Erase Selected Mode now works for Sudoku Mode.
+	* Timer now automatically starts when Solve link is loaded, Timer status is also copied to Clone.
 	* Fixed Panelmode bug and forced to show only Number for Sudoku Mode.
 	* Redo bug for solution mode fixed.
 * 2020/12/25 ver2.24.17

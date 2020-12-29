@@ -1147,18 +1147,6 @@ function load(urlParam) {
                 pu[i][j].set(t);
             }
         }
-
-        // Decrypt a
-        if (paramArray.a) {
-            var ab = atob(paramArray.a);
-            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-            var inflate = new Zlib.RawInflate(ab);
-            var plain = inflate.decompress();
-            var atext = new TextDecoder().decode(plain);
-            pu.solution = atext;
-            // Visually showcase answer check is enabled
-            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-        }
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
         pu.mode.qa = "pu_a";
@@ -1191,10 +1179,38 @@ function load(urlParam) {
             // Visually showcase answer check is enabled
             document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
         }
+        sw_timer.start({ precision: 'secondTenths' });
     }
 
     if (paramArray.l === "solvedup") {
         set_solvemode();
+
+        // Decrypt a
+        if (paramArray.a) {
+            var ab = atob(paramArray.a);
+            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+            var inflate = new Zlib.RawInflate(ab);
+            var plain = inflate.decompress();
+            var atext = new TextDecoder().decode(plain);
+            pu.solution = atext;
+            // Visually showcase answer check is enabled
+            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+        }
+
+        if (rtext[7] !== "undefined") {
+            let starttime = rtext[7].split(":");
+            sw_timer.start({
+                precision: 'secondTenths',
+                startValues: {
+                    hours: parseInt(starttime[0]),
+                    minutes: parseInt(starttime[1]),
+                    seconds: parseInt(starttime[2]),
+                    secondTenths: parseInt(starttime[3])
+                }
+            });
+        } else {
+            sw_timer.start({ precision: 'secondTenths' });
+        }
     }
 
     document.getElementById("nb_grid" + pu.mode.grid[0]).checked = true;
