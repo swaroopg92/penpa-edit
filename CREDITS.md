@@ -4,4 +4,4 @@
 * Thanks to kristofersokk for fixing mouse undo glitch.
 * Thanks to Ropeko for his contributions to keep improving the tool.
 * Thanks to Alice for his contributions to keep improving the tool.
-* Christmas Image by <a href="https://pixabay.com/users/jillwellington-334088/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1846481">Jill Wellington</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1846481">Pixabay</a>
+* NewYear Image by <a href="https://pixabay.com/users/pattyjansen-154933/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=586225">Patty Jansen</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=586225">Pixabay</a>

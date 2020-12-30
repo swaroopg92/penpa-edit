@@ -2052,7 +2052,7 @@ class Puzzle {
                     if (!isEmpty(this[this.mode.qa].number)) {
                         let keys = Object.keys(this[this.mode.qa].number);
                         for (var k = 0; k < keys.length; k++) {
-                            if (this[this.mode.qa].number[keys[k]][2] === "5") {
+                            if (this[this.mode.qa].number[keys[k]][2] === "5" || this[this.mode.qa].number[keys[k]][2] === "6") { // S or M
                                 delete this[this.mode.qa].number[keys[k]];
                             }
                         }
@@ -8106,9 +8106,9 @@ class Puzzle {
             if (text === this.solution && this.sol_flag === 0) {
                 setTimeout(() => {
                     Swal.fire({
-                        title: '<h3 style="color:white;">Merry Christmas </h3>',
+                        title: '<h3 style="color:white;">Happy New Year 2021 </h3>',
                         html: '<h2 style="color:white;">Congratulations 🙂 Well done 🙂</h2>',
-                        background: 'url(js/images/christmas.jpg)',
+                        background: 'url(js/images/new_year.jpg)',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',
                         // timer: 5000
