@@ -2338,6 +2338,12 @@ class Puzzle {
     }
 
     make_solution() {
+        // 0 - shading
+        // 1 - Line
+        // 2 - Edge
+        // 3 - Wall
+        // 4 - Number
+        // 5 - Symbol
         var sol = [
             [],
             [],
@@ -7362,7 +7368,7 @@ class Puzzle {
             var line_style = 3;
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
-                array = "lineE";
+                array = "line";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
             }
