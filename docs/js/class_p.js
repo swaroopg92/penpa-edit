@@ -6346,9 +6346,11 @@ class Puzzle {
         } else if (this.mouse_mode === "up") {
             this.drawing = false;
             this.last = -1;
+            this.drawing_mode = -1;
         } else if (this.mouse_mode === "out") {
             this.drawing = false;
             this.last = -1;
+            this.drawing_mode = -1;
         }
     }
 
@@ -6435,11 +6437,13 @@ class Puzzle {
             this.drawing = false;
             this.freelinecircle_g = [-1, -1];
             this.last = -1;
+            this.drawing_mode = -1;
             this.redraw();
         } else if (this.mouse_mode === "out") {
             this.drawing = false;
             this.freelinecircle_g = [-1, -1];
             this.last = -1;
+            this.drawing_mode = -1;
             this.redraw();
         }
     }
@@ -6490,9 +6494,11 @@ class Puzzle {
         } else if (this.mouse_mode === "up") {
             this.drawing = false;
             this.last = -1;
+            this.drawing_mode = -1;
         } else if (this.mouse_mode === "out") {
             this.drawing = false;
             this.last = -1;
+            this.drawing_mode = -1;
         }
     }
 
@@ -6540,11 +6546,13 @@ class Puzzle {
             this.drawing = false;
             this.freelinecircle_g = [-1, -1];
             this.last = -1;
+            this.drawing_mode = -1;
             this.redraw();
         } else if (this.mouse_mode === "out") {
             this.drawing = false;
             this.freelinecircle_g = [-1, -1];
             this.last = -1;
+            this.drawing_mode = -1;
             this.redraw();
         }
     }
