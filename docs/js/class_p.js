@@ -7480,12 +7480,24 @@ class Puzzle {
 
     re_combi_yajilin_move(num) {
         if (this.drawing_mode != -1 && this.point[num].type === 0) {
-            var line_style = 3;
-            var array;
-            if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
-                array = "line";
-                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
-                this.re_line(array, key, line_style);
+            if (this.drawing_mode === 5 && num != this.last) {
+                if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                }
+            } else if (this.drawing_mode === 6 && num != this.last) {
+                if (this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+            } else {
+                var line_style = 3;
+                var array;
+                if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
+                    array = "line";
+                    var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                    this.re_line(array, key, line_style);
+                }
             }
             this.last = num;
             this.redraw();
@@ -7539,20 +7551,20 @@ class Puzzle {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                this.drawing_mode = 5; // placing dots
             } else if (this[this.mode.qa].surface[num] === 1) {
                 this.record("surface", num);
                 delete this[this.mode.qa].surface[num];
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                this.drawing_mode = 5; // placing dots
             } else {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 6; // removing dots
             }
         }
-        this.drawing_mode = -1;
-        this.first = -1;
-        this.last = -1;
-        this.redraw();
+        this.last = num;
     }
 
     re_combi_hashi(num) {
