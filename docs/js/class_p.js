@@ -6050,11 +6050,16 @@ class Puzzle {
             delete this[this.mode.qa].symbol[this.cursol];
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             if (keypressed === 46 || keypressed === 8 || this.ondown_key === "touchstart") {
+                if (this.selection.length === 1) {
+                    this.undoredo_counter = 0;
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
                 if (this.selection.length > 0) {
                     for (var k of this.selection) {
 
                         if (this[this.mode.qa].number[k]) {
-                            this.record("number", k);
+                            this.record("number", k, this.undoredo_counter);
                             delete this[this.mode.qa].number[k];
                         }
 
@@ -6063,14 +6068,14 @@ class Puzzle {
 
                         for (var j = 0; j < 4; j++) {
                             if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                this.record("numberS", corner_cursor + j);
+                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
                                 delete this[this.mode.qa].numberS[corner_cursor + j];
                             }
                         }
 
                         for (var j = 0; j < 4; j++) {
                             if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                this.record("numberS", side_cursor + j);
+                                this.record("numberS", side_cursor + j, this.undoredo_counter);
                                 delete this[this.mode.qa].numberS[side_cursor + j];
                             }
                         }
@@ -6080,8 +6085,8 @@ class Puzzle {
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "1") {
                     if (this.selection.length > 0) {
                         for (var k of this.selection) {
-                            if (this[this.mode.qa].number[k]) {
-                                this.record("number", k);
+                            if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === "1") {
+                                this.record("number", k, this.undoredo_counter);
                                 delete this[this.mode.qa].number[k];
                             }
                         }
@@ -6089,8 +6094,8 @@ class Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
                     if (this.selection.length > 0) {
                         for (var k of this.selection) {
-                            if (this[this.mode.qa].number[k]) {
-                                this.record("number", k);
+                            if (this[this.mode.qa].number[k] && (this[this.mode.qa].number[k][2] === "5" || this[this.mode.qa].number[k][2] === "6")) {
+                                this.record("number", k, this.undoredo_counter);
                                 delete this[this.mode.qa].number[k];
                             }
                         }
@@ -6103,14 +6108,14 @@ class Puzzle {
 
                             for (var j = 0; j < 4; j++) {
                                 if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                    this.record("numberS", corner_cursor + j);
+                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
                                     delete this[this.mode.qa].numberS[corner_cursor + j];
                                 }
                             }
 
                             for (var j = 0; j < 4; j++) {
                                 if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                    this.record("numberS", side_cursor + j);
+                                    this.record("numberS", side_cursor + j, this.undoredo_counter);
                                     delete this[this.mode.qa].numberS[side_cursor + j];
                                 }
                             }

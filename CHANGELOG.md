@@ -6,6 +6,11 @@
 	* Timer now automatically starts when Solve link is loaded, Timer status is also copied to Clone.
 	* Fixed Panelmode bug and forced to show only Number for Sudoku Mode.
 	* Redo bug for solution mode fixed.
+	* Fixed composite and line mode bug.
+	* Added New Year message.
+	* Fixed composite lineOX bug.
+	* Improved multiple delete in Sudoku mode. Also spacebar to delete only selected mode contents.
+	* Adaptive centre mode in Sudoku.
 * 2020/12/25 ver2.24.17
 	* Merged PR from Alice.
 	* Added Christmas Wishes.
