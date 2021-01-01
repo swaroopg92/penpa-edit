@@ -643,6 +643,13 @@ function newsize() {
     document.getElementById('modal-newsize').style.display = 'block';
 }
 
+function display_rules() {
+    Swal.fire({
+        title: 'Rules:',
+        html: '<h4 class="info">' + pu.rules + '</h4>'
+    })
+}
+
 function panel_onoff() {
     if (document.getElementById('panel_button').textContent === "OFF") {
         document.getElementById('panel_button').textContent = "ON";
@@ -1082,21 +1089,31 @@ function load(urlParam) {
     if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
     if (rtext_para[15]) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
-        document.getElementById("puzzletitle").innerHTML = ptitle;
-        document.getElementById("saveinfotitle").value = ptitle.slice(7); // text after "Title: "
+        if (ptitle !== "Title: ") {
+            document.getElementById("puzzletitle").innerHTML = ptitle;
+            document.getElementById("saveinfotitle").value = ptitle.slice(7); // text after "Title: "
+        }
     }
     if (rtext_para[16]) {
         let pauthor = rtext_para[16].replace(/%2C/g, ',')
-        document.getElementById("puzzleauthor").innerHTML = pauthor;
-        document.getElementById("saveinfoauthor").value = pauthor.slice(8); // text after "Author: "
+        if (pauthor != "Author: ") {
+            document.getElementById("puzzleauthor").innerHTML = pauthor;
+            document.getElementById("saveinfoauthor").value = pauthor.slice(8); // text after "Author: "
+        }
     }
-    if (rtext_para[17]) {
+    if (rtext_para[17] && rtext_para[17] !== "") {
         document.getElementById("puzzlesourcelink").href = rtext_para[17];
         document.getElementById("puzzlesource").innerHTML = "Source";
         document.getElementById("saveinfosource").value = rtext_para[17];
     }
 
     make_class(rtext_para[0], 'url');
+
+    if (rtext_para[18] && rtext_para[18] !== "") {
+        document.getElementById("puzzlerules").style.display = "inline";
+        pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>');
+        document.getElementById("saveinforules").value = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '\n');
+    }
 
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);

@@ -908,7 +908,8 @@ body textarea {
 
 #saveinfoauthor,
 #saveinfotitle,
-#saveinfosource {
+#saveinfosource,
+#saveinforules {
     margin: 2px auto;
     width: 90%;
 }
@@ -926,7 +927,7 @@ body textarea {
 #modal-save-content {
     background-color: var(--white);
     width: 300px;
-    height: 465px;
+    height: 545px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;

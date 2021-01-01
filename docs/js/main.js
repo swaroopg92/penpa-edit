@@ -130,7 +130,12 @@ onload = function() {
     let ctrl_release_time = -1e5;
 
     function onKeyDown(e) {
-        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "iostring" || e.target.id == "inputtext") {
+        if (e.target.type === "number" ||
+            e.target.type === "text" ||
+            e.target.id == "savetextarea_pp" ||
+            e.target.id == "iostring" ||
+            e.target.id == "inputtext" ||
+            e.target.id == "saveinforules") {
             // For input form
         } else {
             var key = e.key;
@@ -443,7 +448,12 @@ onload = function() {
     }
 
     function onKeyUp(e) {
-        if (e.target.type === "number" || e.target.type === "text" || e.target.id == "savetextarea_pp" || e.target.id == "iostring" || e.target.id == "inputtext") {
+        if (e.target.type === "number" ||
+            e.target.type === "text" ||
+            e.target.id == "savetextarea_pp" ||
+            e.target.id == "iostring" ||
+            e.target.id == "inputtext" ||
+            e.target.id == "saveinforules") {
             // For input form
         } else {
             var key = e.key;
@@ -993,6 +1003,10 @@ onload = function() {
                 break;
             case "pu_a_label":
                 pu.mode_qa("pu_a");
+                e.preventDefault();
+                break;
+            case "puzzlerules":
+                display_rules();
                 e.preventDefault();
                 break;
         }

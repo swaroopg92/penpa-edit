@@ -547,6 +547,7 @@
     <div id="puzzleinfo">
         <div><label id="puzzletitle" class="info"></label></div>
         <div><label id="puzzleauthor" class="info"></label></div>
+        <div><input type="button" id="puzzlerules" value="Show rules" style="display:none;" /></div>
         <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
     </div>
     <div id="dvique" class="dvique"></div>
@@ -850,6 +851,8 @@
                 <br>
                 <span>Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
                 <br>
+                <span>Rules:<textarea rows="1" cols="10" placeholder="e.g. Classic sudoku rules. Avoid using /." value = "" id="saveinforules"></textarea></span>
+                <br>
                 <span>Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
                 <br>
                 <span id="sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
@@ -864,7 +867,7 @@
                 <input type="checkbox" name="save_undo" id="save_undo">
             </div>
             <div id="modal-save-body">
-                <textarea readonly rows="10" cols="50" id="savetextarea"></textarea>
+                <textarea readonly rows="1" cols="50" id="savetextarea"></textarea>
                 <span>Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">

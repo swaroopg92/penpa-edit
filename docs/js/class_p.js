@@ -127,6 +127,7 @@ class Puzzle {
         this.solution = "";
         this.sol_flag = 0;
         this.undoredo_counter = 0;
+        this.rules = "";
         this.replace = [
             ["\"qa\"", "z9"],
             ["\"pu_q\"", "zQ"],
@@ -2117,19 +2118,20 @@ class Puzzle {
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
             this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
 
-        if (document.getElementById("saveinfotitle").value !== "") {
-            let titleinfo = document.getElementById("saveinfotitle").value;
-            text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
-        }
-        if (document.getElementById("saveinfoauthor").value !== "") {
-            let authorinfo = document.getElementById("saveinfoauthor").value;
-            text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
-        }
-        if (document.getElementById("saveinfosource").value !== "") {
-            text += "," + document.getElementById("saveinfosource").value + "\n";
-        } else {
-            text += "\n";
-        }
+        // Puzzle title
+        let titleinfo = document.getElementById("saveinfotitle").value;
+        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+
+        // Puzzle author
+        let authorinfo = document.getElementById("saveinfoauthor").value;
+        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+
+        // Puzzle Source
+        text += "," + document.getElementById("saveinfosource").value;
+
+        // Puzzle Rules
+        let ruleinfo = document.getElementById("saveinforules").value;
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C') + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2188,19 +2190,20 @@ class Puzzle {
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
             this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
 
-        if (document.getElementById("saveinfotitle").value !== "") {
-            let titleinfo = document.getElementById("saveinfotitle").value;
-            text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
-        }
-        if (document.getElementById("saveinfoauthor").value !== "") {
-            let authorinfo = document.getElementById("saveinfoauthor").value;
-            text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
-        }
-        if (document.getElementById("saveinfosource").value !== "") {
-            text += "," + document.getElementById("saveinfosource").value + "\n";
-        } else {
-            text += "\n";
-        }
+        // Puzzle title
+        let titleinfo = document.getElementById("saveinfotitle").value;
+        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+
+        // Puzzle author
+        let authorinfo = document.getElementById("saveinfoauthor").value;
+        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+
+        // Puzzle Source
+        text += "," + document.getElementById("saveinfosource").value;
+
+        // Puzzle Rules
+        let ruleinfo = document.getElementById("saveinforules").value;
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C') + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2266,19 +2269,21 @@ class Puzzle {
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
             this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
-        if (document.getElementById("saveinfotitle").value !== "") {
-            let titleinfo = document.getElementById("saveinfotitle").value;
-            text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
-        }
-        if (document.getElementById("saveinfoauthor").value !== "") {
-            let authorinfo = document.getElementById("saveinfoauthor").value;
-            text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
-        }
-        if (document.getElementById("saveinfosource").value !== "") {
-            text += "," + document.getElementById("saveinfosource").value + "\n";
-        } else {
-            text += "\n";
-        }
+
+        // Puzzle title
+        let titleinfo = document.getElementById("saveinfotitle").value;
+        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+
+        // Puzzle author
+        let authorinfo = document.getElementById("saveinfoauthor").value;
+        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+
+        // Puzzle Source
+        text += "," + document.getElementById("saveinfosource").value;
+
+        // Puzzle Rules
+        let ruleinfo = document.getElementById("saveinforules").value;
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C') + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
