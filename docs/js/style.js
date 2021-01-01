@@ -10,6 +10,7 @@ const Color = {
     BLUE_DARK_VERY: "#00008b",
     BLUE_LIGHT: "#187bcd",
     BLUE_LIGHT_VERY: "#c0e0ff",
+    BLUE_SKY: "#3085d6",
     BROWN_LIGHT: "#eecab1",
     GREEN: "#208020",
     GREEN_LIGHT: "#4c9900",

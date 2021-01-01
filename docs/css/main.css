@@ -6,6 +6,7 @@
     --blueDark: #1e50a2;
     --blueLight: #187bcd;
     --blueLightVery: #c0e0ff;
+    --bluesky: #3085d6;
     --brownLight: #eecab1;
     --green: #208020;
     --greenLight: #4c9900;
@@ -1179,4 +1180,17 @@ input[type=number] {
 #tutorials {
     color: var(--blue);
     background-color: var(--blueLightVery);
+}
+
+/* Swal fire - Warnings and Wish */
+.wish {
+    color: var(--white);
+}
+
+.warn {
+    color: var(--red);
+}
+
+.info {
+    color: var(--blue);
 }

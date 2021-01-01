@@ -762,14 +762,14 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 style="color:red;">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Min row size reached <h2 style="color:red;">1</h2>',
+                    html: 'Min row size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1024,14 +1024,14 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 style="color:red;">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Min row size reached <h2 style="color:red;">1</h2>',
+                    html: 'Min row size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1367,14 +1367,14 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max column size reached <h2 style="color:red;">40</h2>',
+                    html: 'Max column size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Min column size reached <h2 style="color:red;">1</h2>',
+                    html: 'Min column size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1710,14 +1710,14 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max column size reached <h2 style="color:red;">40</h2>',
+                    html: 'Max column size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Min column size reached <h2 style="color:red;">1</h2>',
+                    html: 'Min column size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -8129,10 +8129,11 @@ class Puzzle {
         if (this.solution) {
             var text = JSON.stringify(this.make_solution());
             if (text === this.solution && this.sol_flag === 0) {
+                console.log(Color.WHITE);
                 setTimeout(() => {
                     Swal.fire({
-                        title: '<h3 style="color:white;">Happy New Year 2021 </h3>',
-                        html: '<h2 style="color:white;">Congratulations 🙂 Well done 🙂</h2>',
+                        title: '<h3 class="wish">Happy New Year 2021 </h3>',
+                        html: '<h2 class="wish">Congratulations 🙂 Well done 🙂</h2>',
                         background: 'url(js/images/new_year.jpg)',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',

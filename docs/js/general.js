@@ -50,7 +50,7 @@ function create_newboard() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'Display size must be in the range <h2 style="color:red;">12-90</h2>',
+            html: 'Display size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
@@ -85,7 +85,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Rows/Columns Size must be in the range <h2 style="color:red;">1-40</h2>',
+                    html: 'Rows/Columns Size must be in the range <h2 class="warn">1-40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -101,7 +101,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -117,7 +117,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -133,7 +133,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -146,7 +146,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -305,7 +305,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Rows/Columns Size must be in the range <h2 style="color:red;">1-40</h2>',
+                    html: 'Rows/Columns Size must be in the range <h2 class="warn">1-40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -318,7 +318,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -331,7 +331,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -344,7 +344,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -357,7 +357,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 style="color:red;">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -589,11 +589,11 @@ function rotation() {
 function CreateCheck() {
     Swal.fire({
         title: 'Are you sure want to reset the current board? To only change display size and grid lines use "Change grid" button',
-        html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+        html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: Color.BLUE_SKY,
+        cancelButtonColor: Color.RED,
         confirmButtonText: 'Yes, Reset it!'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -613,7 +613,7 @@ function newgrid() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'Display Size must be in the range <h2 style="color:red;">12-90</h2>',
+            html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
@@ -632,7 +632,7 @@ function newgrid_r() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'Display Size must be in the range <h2 style="color:red;">12-90</h2>',
+            html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
@@ -697,11 +697,11 @@ function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "LINEE") {
         Swal.fire({
             title: 'Erase/Clear all EDGE mode elements?',
-            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: Color.BLUE_SKY,
+            cancelButtonColor: Color.RED,
             confirmButtonText: 'Yes, Erase it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -711,11 +711,11 @@ function ResetCheck() {
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "SYMBOL") {
         Swal.fire({
             title: 'Erase/Clear all SHAPE mode elements?',
-            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: Color.BLUE_SKY,
+            cancelButtonColor: Color.RED,
             confirmButtonText: 'Yes, Erase it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -725,11 +725,11 @@ function ResetCheck() {
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "CAGE") {
         Swal.fire({
             title: 'Erase/Clear all FRAME mode elements?',
-            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: Color.BLUE_SKY,
+            cancelButtonColor: Color.RED,
             confirmButtonText: 'Yes, Erase it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -739,11 +739,11 @@ function ResetCheck() {
     } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "COMBI") {
         Swal.fire({
             title: 'Erase/Clear all selected COMPOSITE mode elements?',
-            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: Color.BLUE_SKY,
+            cancelButtonColor: Color.RED,
             confirmButtonText: 'Yes, Erase it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -753,11 +753,11 @@ function ResetCheck() {
     } else {
         Swal.fire({
             title: 'Erase/Clear all ' + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + ' mode elements?',
-            html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: Color.BLUE_SKY,
+            cancelButtonColor: Color.RED,
             confirmButtonText: 'Yes, Erase it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -776,11 +776,11 @@ function DeleteCheck() {
     }
     Swal.fire({
         title: 'Erase/Clear all the elements in ' + text.toUpperCase() + ' mode?',
-        html: '<h4 style="color:red;">You won\'t be able to revert this!</h4>',
+        html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: Color.BLUE_SKY,
+        cancelButtonColor: Color.RED,
         confirmButtonText: 'Yes, Erase it!'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -832,7 +832,7 @@ function saveimage_download() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'The characters <h2 style="color:red;">\\ / : * ? \" < > |</h2> cannot be used in filename',
+            html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
@@ -898,7 +898,7 @@ function make_gmpfile() {
 function savetext_copy() {
     Swal.fire({
         title: 'Swaroop says:',
-        html: '<h2 style="color:blue;">URL is copied to clipboard</h2>',
+        html: '<h2 class="info">URL is copied to clipboard</h2>',
         icon: 'info'
     })
     var textarea = document.getElementById("savetextarea");
@@ -947,7 +947,7 @@ function savetext_download() {
     } else {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'The characters <h2 style="color:red;">\\ / : * ? \" < > |</h2> cannot be used in filename',
+            html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
