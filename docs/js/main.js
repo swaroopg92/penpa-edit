@@ -132,10 +132,11 @@ onload = function() {
     function onKeyDown(e) {
         if (e.target.type === "number" ||
             e.target.type === "text" ||
-            e.target.id == "savetextarea_pp" ||
-            e.target.id == "iostring" ||
-            e.target.id == "inputtext" ||
-            e.target.id == "saveinforules") {
+            e.target.id === "savetextarea_pp" ||
+            e.target.id === "iostring" ||
+            e.target.id === "inputtext" ||
+            e.target.id === "saveinforules" ||
+            e.target.id === "urlstring") {
             // For input form
         } else {
             var key = e.key;
@@ -450,10 +451,11 @@ onload = function() {
     function onKeyUp(e) {
         if (e.target.type === "number" ||
             e.target.type === "text" ||
-            e.target.id == "savetextarea_pp" ||
-            e.target.id == "iostring" ||
-            e.target.id == "inputtext" ||
-            e.target.id == "saveinforules") {
+            e.target.id === "savetextarea_pp" ||
+            e.target.id === "iostring" ||
+            e.target.id === "inputtext" ||
+            e.target.id === "saveinforules" ||
+            e.target.id === "urlstring") {
             // For input form
         } else {
             var key = e.key;
@@ -653,6 +655,10 @@ onload = function() {
                 break;
             case "input_sudoku":
                 io_sudoku();
+                e.preventDefault();
+                break;
+            case "input_url":
+                i_url();
                 e.preventDefault();
                 break;
             case "tb_undo":

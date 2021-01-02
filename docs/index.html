@@ -48,9 +48,10 @@
             <input type="button" id="newsize" value="Resize" class="button" style="display:none;" />
             <input type="button" id="saveimage" value="Screenshot" class="button" />
             <input type="button" id="savetext" value="Share" class="button" />
-            <a id="download_link"></a>
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
             <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
+            <br>
+            <input type="button" id="input_url" value="Load" class="button" />
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -944,6 +945,19 @@
             <div class="nb_button">
                 <input type="button" id="load_input" value="Import Sudoku" onclick="import_sudoku();" />
                 <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();" />
+            </div>
+        </div>
+    </div>
+    <div id="modal-load" class="modal">
+        <div id="modal-load-content">
+            <div id="modal-header">
+                <h3 id="save6texttitle">Load URL</h3>
+            </div>
+            <div id="modal-save-body">
+                <textarea rows="1" cols="81" id="urlstring" value=""></textarea>
+            </div>
+            <div class="nb_button">
+                <input type="button" id="load_url" value="Load URL" onclick="import_url();" />
             </div>
         </div>
     </div>

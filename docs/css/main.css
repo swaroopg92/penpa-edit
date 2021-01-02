@@ -108,6 +108,12 @@ hr.newgridhrline {
     margin-bottom: 5px;
 }
 
+#duplicate,
+#input_sudoku,
+#input_url {
+    margin-top: 5px;
+}
+
 .mode_button {
     position: relative;
     text-align: left;
@@ -933,7 +939,8 @@ body textarea {
     border-radius: 20px;
 }
 
-#modal-input {
+#modal-input,
+#modal-load {
     display: none;
     position: fixed;
     z-index: 2;
@@ -945,7 +952,8 @@ body textarea {
     background-color: var(--transparent70);
 }
 
-#modal-input-content {
+#modal-input-content,
+#modal-load-content {
     background-color: var(--white);
     width: 300px;
     height: 280px;
