@@ -1,4 +1,6 @@
 ## History
+* 2021/01/02 ver2.24.20
+	* Load URL feature - This resolves the problem of URL Too Long
 * 2021/01/01 ver2.24.19
 	* Rules feature implemented.
 	* Fixed composite and line mode bug.
