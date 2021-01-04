@@ -885,7 +885,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addbottom":
@@ -922,7 +922,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addleft":
@@ -959,7 +959,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addright":
@@ -996,7 +996,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subtop":
@@ -1033,7 +1033,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subbottom":
@@ -1070,7 +1070,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subleft":
@@ -1107,7 +1107,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subright":
@@ -1144,7 +1144,7 @@ onload = function() {
                             break;
                     }
                 }
-                pu.rotate_size(); // fit board to window
+                // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addtop_r":
