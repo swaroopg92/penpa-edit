@@ -1,3 +1,4 @@
+/* Defaults */
 :root {
     /* Colors: should be the same as in style.js */
     --black: #000000;
@@ -30,6 +31,43 @@
     --transparent70: rgba(0, 0, 0, 0.3);
     --white: #ffffff;
     --yellow: #ffffa3;
+}
+
+/* Dark Mode - This is to detect if windows app settings is set to dark */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Colors: should be the same as in style.js */
+        --black: #ffffff;
+        --blackLight: #232323;
+        --blue: #0000ff;
+        --blueDark: #1e50a2;
+        --blueLight: #187bcd;
+        --blueLightVery: #c0e0ff;
+        --bluesky: #3085d6;
+        --brownLight: #eecab1;
+        --green: #208020;
+        --greenLight: #4c9900;
+        --greenLightVery: #b3ffb3;
+        --grey: #999999;
+        --greyDark: #777777;
+        --greyDarkVery: #444444;
+        --greyLight: #cccccc;
+        --greyLightMedium: #dddddd;
+        --greyLightVery: #f0f0f0;
+        --orange: #ffa500;
+        --orangeLight: #ffcc80;
+        --pinkLight: #ffb3ff;
+        --purpleLight: #cc99ff;
+        --red: #ff0000;
+        --redLight: #ffa3a3;
+        --transparentBlack: rgba(0, 0, 0, 0);
+        --transparentWhite: rgba(255, 255, 255, 0);
+        --transparent40: rgba(0, 0, 0, 0.6);
+        --transparent50: rgba(0, 0, 0, 0.5);
+        --transparent70: rgba(0, 0, 0, 0.3);
+        --white: #222222;
+        --yellow: #ffffa3;
+    }
 }
 
 * {

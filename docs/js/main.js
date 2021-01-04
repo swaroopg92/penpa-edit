@@ -34,6 +34,10 @@ onload = function() {
     document.addEventListener("keydown", onKeyDown, { passive: false });
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
+    // if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
+    //     console.log('🎉 Dark mode is supported');
+    // }
+
     function onDown(e) {
         if (e.type === "mousedown") {
             var event = e;
