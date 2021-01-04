@@ -8154,7 +8154,6 @@ class Puzzle {
         if (this.solution) {
             var text = JSON.stringify(this.make_solution());
             if (text === this.solution && this.sol_flag === 0) {
-                console.log(Color.WHITE);
                 setTimeout(() => {
                     Swal.fire({
                         title: '<h3 class="wish">Happy New Year 2021 </h3>',
