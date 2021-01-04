@@ -1058,7 +1058,9 @@ function import_url() {
             urlstring = urlstring.split("github.io/penpa-edit/?")[1];
             load(urlstring);
             document.getElementById("modal-load").style.display = 'none';
-            selectBox.setValue(JSON.parse(this.usertab_choices));
+            if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+                selectBox.setValue(JSON.parse(this.usertab_choices));
+            }
         } else {
             document.getElementById("urlstring").value = "Error: Invalid URL";
         }
