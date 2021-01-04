@@ -609,6 +609,7 @@ onload = function() {
     document.addEventListener("mousedown", window_click, { passive: false });
 
     function window_click(e) {
+        var orientation;
         //modalwindow
         if (e.target.className === "modal") {
             document.getElementById(e.target.id).style.display = 'none';
@@ -822,10 +823,12 @@ onload = function() {
                 break;
             case "rt_right":
                 pu.rotate_right();
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_left":
                 pu.rotate_left();
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_LR":
@@ -849,35 +852,299 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "rt_addtop":
-                if (pu.gridtype === "square") { pu.resize_top(1); } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) { pu.resize_top(1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('t');
+                if (pu.gridtype === "square") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_bottom(1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_left(1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_top(1); // original
+                            break;
+                        case 3:
+                            pu.resize_right(1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_bottom(1, 'white');
+                            break;
+                        case 1:
+                            pu.resize_left(1, 'white');
+                            break;
+                        case 2:
+                            pu.resize_top(1, 'white');
+                            break;
+                        case 3:
+                            pu.resize_right(1, 'white');
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addbottom":
-                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_bottom(1); } else if (pu.gridtype === "sudoku") { pu.resize_bottom(1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('b');
+                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_top(1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_right(1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_bottom(1); // original
+                            break;
+                        case 3:
+                            pu.resize_left(1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_top(1, 'white'); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_right(1, 'white'); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_bottom(1, 'white'); // original
+                            break;
+                        case 3:
+                            pu.resize_left(1, 'white'); // rotated by 270
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addleft":
-                if (pu.gridtype === "square") { pu.resize_left(1); } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) { pu.resize_left(1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('l');
+                if (pu.gridtype === "square") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_right(1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_bottom(1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_left(1); // original
+                            break;
+                        case 3:
+                            pu.resize_top(1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_right(1, 'white');
+                            break;
+                        case 1:
+                            pu.resize_bottom(1, 'white');
+                            break;
+                        case 2:
+                            pu.resize_left(1, 'white');
+                            break;
+                        case 3:
+                            pu.resize_top(1, 'white');
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addright":
-                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_right(1); } else if (pu.gridtype === "sudoku") { pu.resize_right(1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('r');
+                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_left(1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_top(1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_right(1); // original
+                            break;
+                        case 3:
+                            pu.resize_bottom(1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_left(1, 'white'); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_top(1, 'white'); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_right(1, 'white'); // original
+                            break;
+                        case 3:
+                            pu.resize_bottom(1, 'white'); // rotated by 270
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subtop":
-                if (pu.gridtype === "square") { pu.resize_top(-1); } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) { pu.resize_top(-1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('t');
+                if (pu.gridtype === "square") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_bottom(-1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_left(-1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_top(-1); // original
+                            break;
+                        case 3:
+                            pu.resize_right(-1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_bottom(-1, 'white');
+                            break;
+                        case 1:
+                            pu.resize_left(-1, 'white');
+                            break;
+                        case 2:
+                            pu.resize_top(-1, 'white');
+                            break;
+                        case 3:
+                            pu.resize_right(-1, 'white');
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subbottom":
-                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_bottom(-1); } else if (pu.gridtype === "sudoku") { pu.resize_bottom(-1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('b');
+                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_top(-1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_right(-1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_bottom(-1); // original
+                            break;
+                        case 3:
+                            pu.resize_left(-1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_top(-1, 'white'); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_right(-1, 'white'); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_bottom(-1, 'white'); // original
+                            break;
+                        case 3:
+                            pu.resize_left(-1, 'white'); // rotated by 270
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subleft":
-                if (pu.gridtype === "square") { pu.resize_left(-1); } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) { pu.resize_left(-1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('l');
+                if (pu.gridtype === "square") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_right(-1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_bottom(-1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_left(-1); // original
+                            break;
+                        case 3:
+                            pu.resize_top(-1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_right(-1, 'white');
+                            break;
+                        case 1:
+                            pu.resize_bottom(-1, 'white');
+                            break;
+                        case 2:
+                            pu.resize_left(-1, 'white');
+                            break;
+                        case 3:
+                            pu.resize_top(-1, 'white');
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_subright":
-                if ((pu.gridtype === "square") || (pu.gridtype === "kakuro")) { pu.resize_right(-1); } else if (pu.gridtype === "sudoku") { pu.resize_right(-1, 'white'); }
+                // To handle Rotation and Reflection
+                orientation = pu.get_orientation('r');
+                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_left(-1); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_top(-1); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_right(-1); // original
+                            break;
+                        case 3:
+                            pu.resize_bottom(-1); // rotated by 270
+                            break;
+                    }
+                } else if (pu.gridtype === "sudoku") {
+                    switch (orientation) {
+                        case 0:
+                            pu.resize_left(-1, 'white'); // rotated by 180
+                            break;
+                        case 1:
+                            pu.resize_top(-1, 'white'); // rotated by 90
+                            break;
+                        case 2:
+                            pu.resize_right(-1, 'white'); // original
+                            break;
+                        case 3:
+                            pu.resize_bottom(-1, 'white'); // rotated by 270
+                            break;
+                    }
+                }
+                pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
             case "rt_addtop_r":

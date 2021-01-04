@@ -408,7 +408,7 @@ class Puzzle_square extends Puzzle {
                 }
             } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
                 if (this.selection.length >= 1) {
-                    var current_cursor = parseInt(this.selection[this.selection.length - 1]);
+                    var current_cursor = this.cursol;
                     switch (c) {
                         case 0:
                             a = current_cursor - 1;
@@ -419,6 +419,7 @@ class Puzzle_square extends Puzzle {
                                 if (!this.selection.includes(a)) {
                                     this.selection.push(a);
                                 }
+                                this.cursol = a;
                             }
                             break;
                         case 1:
@@ -430,6 +431,7 @@ class Puzzle_square extends Puzzle {
                                 if (!this.selection.includes(a)) {
                                     this.selection.push(a);
                                 }
+                                this.cursol = a;
                             }
                             break;
                         case 2:
@@ -441,6 +443,7 @@ class Puzzle_square extends Puzzle {
                                 if (!this.selection.includes(a)) {
                                     this.selection.push(a);
                                 }
+                                this.cursol = a;
                             }
                             break;
                         case 3:
@@ -452,6 +455,7 @@ class Puzzle_square extends Puzzle {
                                 if (!this.selection.includes(a)) {
                                     this.selection.push(a);
                                 }
+                                this.cursol = a;
                             }
                             break;
                     }
@@ -1389,6 +1393,9 @@ class Puzzle_square extends Puzzle {
                 this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, 0.18);
             } else if (this[pu].numberS[i][1] === 7) {
                 set_circle_style(this.ctx, 2);
+                this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, 0.18);
+            } else if (this[pu].numberS[i][1] === 11) {
+                set_circle_style(this.ctx, 11);
                 this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, 0.18);
             }
             if (true) { //(this[pu].numberS[i][0].length <= 2 ){
