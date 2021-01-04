@@ -436,6 +436,9 @@ class Puzzle {
     }
 
     resize_top(sign, celltype = 'black') {
+        // reset the selection while resizing the grid
+        this.selection = [];
+
         sign = parseInt(sign);
         if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
             let originalspace = [...this.space];
@@ -784,6 +787,9 @@ class Puzzle {
     }
 
     resize_bottom(sign, celltype = 'black') {
+        // reset the selection while resizing the grid
+        this.selection = [];
+
         sign = parseInt(sign);
         if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
             let originalspace = [...this.space];
@@ -1051,6 +1057,9 @@ class Puzzle {
     }
 
     resize_left(sign, celltype = 'black') {
+        // reset the selection while resizing the grid
+        this.selection = [];
+
         sign = parseInt(sign);
         if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
             let originalspace = [...this.space];
@@ -1399,6 +1408,9 @@ class Puzzle {
     }
 
     resize_right(sign, celltype = 'black') {
+        // reset the selection while resizing the grid
+        this.selection = [];
+
         sign = parseInt(sign);
         if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
             let originalspace = [...this.space];
