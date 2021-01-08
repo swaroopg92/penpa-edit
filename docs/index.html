@@ -48,6 +48,7 @@
             <input type="button" id="newsize" value="Resize" class="button" style="display:none;" />
             <input type="button" id="saveimage" value="Screenshot" class="button" />
             <input type="button" id="savetext" value="Share" class="button" />
+            <a id="download_link"></a>
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
             <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
             <input type="button" id="input_url" value="Load" class="button" />
@@ -142,9 +143,9 @@
                     <input type="radio" name="mode_number" value="7" id="sub_number7">
                     <label for="sub_number7" class="labelL" id="sub_number7_lb">Candidates</label>
                     <input type="radio" name="mode_number" value="3" id="sub_number3">
-                    <label for="sub_number3" class="labelL" id="sub_number3_lb">1/4</label>
+                    <label for="sub_number3" class="labelL" id="sub_number3_lb"></label>
                     <input type="radio" name="mode_number" value="9" id="sub_number9">
-                    <label for="sub_number9" class="labelL" id="sub_number9_lb">Side</label>
+                    <label for="sub_number9" class="labelL" id="sub_number9_lb"></label>
                     <input type="radio" name="mode_number" value="4" id="sub_number4">
                     <label for="sub_number4" class="labelL" id="sub_number4_lb">Tapa</label>
                     <input type="radio" name="mode_number" value="2" id="sub_number2">

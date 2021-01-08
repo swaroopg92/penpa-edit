@@ -701,21 +701,81 @@ function reloadcheck_onoff() {
 }
 
 function ResetCheck() {
-    if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "LINEE") {
-        Swal.fire({
-            title: 'Erase/Clear all EDGE mode elements?',
-            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: Color.BLUE_SKY,
-            cancelButtonColor: Color.RED,
-            confirmButtonText: 'Yes, Erase it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                pu.reset_selectedmode();
-            }
-        })
-    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "SYMBOL") {
+    if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "LINE") {
+        if (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === '4') {
+            Swal.fire({
+                title: 'Erase/Clear all Helper (x) - Crosses in Line Mode?',
+                html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: Color.BLUE_SKY,
+                cancelButtonColor: Color.RED,
+                confirmButtonText: 'Yes, Erase it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    pu.reset_selectedmode();
+                }
+            })
+        } else {
+            Swal.fire({
+                title: 'Erase/Clear all LINE mode elements?',
+                html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: Color.BLUE_SKY,
+                cancelButtonColor: Color.RED,
+                confirmButtonText: 'Yes, Erase it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    pu.reset_selectedmode();
+                }
+            })
+        }
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "LINEE") {
+        if (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === '4') {
+            Swal.fire({
+                title: 'Erase/Clear all Helper (x) - Crosses in Edge Mode?',
+                html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: Color.BLUE_SKY,
+                cancelButtonColor: Color.RED,
+                confirmButtonText: 'Yes, Erase it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    pu.reset_selectedmode();
+                }
+            })
+        } else if (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === '5') {
+            Swal.fire({
+                title: 'Reset Erased Edges in Edge Mode?',
+                html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: Color.BLUE_SKY,
+                cancelButtonColor: Color.RED,
+                confirmButtonText: 'Yes, Erase it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    pu.reset_selectedmode();
+                }
+            })
+        } else {
+            Swal.fire({
+                title: 'Erase/Clear all EDGE mode elements?',
+                html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: Color.BLUE_SKY,
+                cancelButtonColor: Color.RED,
+                confirmButtonText: 'Yes, Erase it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    pu.reset_selectedmode();
+                }
+            })
+        }
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "SYMBOL") {
         Swal.fire({
             title: 'Erase/Clear all SHAPE mode elements?',
             html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
@@ -729,7 +789,7 @@ function ResetCheck() {
                 pu.reset_selectedmode();
             }
         })
-    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "CAGE") {
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "CAGE") {
         Swal.fire({
             title: 'Erase/Clear all FRAME mode elements?',
             html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
@@ -743,20 +803,20 @@ function ResetCheck() {
                 pu.reset_selectedmode();
             }
         })
-    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() == "COMBI") {
-        Swal.fire({
-            title: 'Erase/Clear all selected COMPOSITE mode elements?',
-            html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: Color.BLUE_SKY,
-            cancelButtonColor: Color.RED,
-            confirmButtonText: 'Yes, Erase it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                pu.reset_selectedmode();
-            }
-        })
+    } else if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "COMBI") {
+        // Swal.fire({
+        //     title: 'Erase/Clear all selected COMPOSITE mode elements?',
+        //     html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: Color.BLUE_SKY,
+        //     cancelButtonColor: Color.RED,
+        //     confirmButtonText: 'Yes, Erase it!'
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         pu.reset_selectedmode();
+        //     }
+        // })
     } else {
         Swal.fire({
             title: 'Erase/Clear all ' + pu.mode[pu.mode.qa].edit_mode.toUpperCase() + ' mode elements?',

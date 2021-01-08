@@ -27,8 +27,9 @@ const Color = {
     PURPLE_LIGHT: "#cc99ff",
     RED: "#ff0000",
     RED_LIGHT: "#ffa3a3",
-    TRANSPARENTBLACK: "rgba(0,0,0,0)",
-    TRANSPARENTWHITE: "rgba(255,255,255,0)",
+    RED_TRANSPARENT: "rgba(255, 0, 0, 0.7)",
+    TRANSPARENTBLACK: "rgba(0, 0, 0, 0)",
+    TRANSPARENTWHITE: "rgba(255, 255, 255, 0)",
     WHITE: "#ffffff",
     YELLOW: "#ffffa3"
 };
@@ -258,6 +259,10 @@ function set_line_style(ctx, type) {
         case 100: //cursor_panel
             ctx.strokeStyle = Color.RED;
             ctx.lineWidth = 2.5;
+            break;
+        case 101: // Sudoku cursor
+            ctx.strokeStyle = Color.RED_TRANSPARENT;
+            ctx.lineWidth = 2;
             break;
     }
 }
