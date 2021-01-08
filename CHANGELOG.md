@@ -4,6 +4,9 @@
 	* Add rows/columns improved by considering rotations and reflections.
 	* Fixed red circle in draw_number for killer sum submode.
 	* Improved Ctrl+Arrow Key Selection in Sudoku Mode.
+	* Improved warning messages.
+	* Improved Sudoku Cursor, colors are better visible.
+	* Improved some button display in Number Mode.
 * 2021/01/01 ver2.24.19
 	* Rules feature implemented.
 	* Fixed composite and line mode bug.

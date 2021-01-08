@@ -306,6 +306,24 @@ hr.newgridhrline {
     color: var(--white);
 }
 
+#sub_number3_lb {
+    background: url(images/corners.png);
+    background-repeat: no-repeat;
+    background-size: 90% 90%;
+    background-position: center;
+    vertical-align: top;
+    width: 20px;
+}
+
+#sub_number9_lb {
+    background: url(images/sides.png);
+    background-repeat: no-repeat;
+    background-size: 90% 90%;
+    background-position: center;
+    vertical-align: top;
+    width: 20px;
+}
+
 #st_number6_lb {
     /* White Circle */
     background: url(images/white_circle.png);
