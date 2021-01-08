@@ -2376,8 +2376,8 @@ class Puzzle {
 
     make_solution() {
         // 0 - shading
-        // 1 - Line
-        // 2 - Edge
+        // 1 - Line / FreeLine
+        // 2 - Edge / FreeEdge
         // 3 - Wall
         // 4 - Number
         // 5 - Symbol
@@ -2414,10 +2414,26 @@ class Puzzle {
             }
         }
 
+        for (var i in this[pu].freeline) {
+            if (this[pu].freeline[i] === 3) {
+                sol[1].push(i + ",1");
+            } else if (this[pu].freeline[i] === 30) {
+                sol[1].push(i + ",2");
+            }
+        }
+
         for (var i in this[pu].lineE) {
             if (this[pu].lineE[i] === 3) {
                 sol[2].push(i + ",1");
             } else if (this[pu].lineE[i] === 30) {
+                sol[2].push(i + ",2");
+            }
+        }
+
+        for (var i in this[pu].freelineE) {
+            if (this[pu].freelineE[i] === 3) {
+                sol[2].push(i + ",1");
+            } else if (this[pu].freelineE[i] === 30) {
                 sol[2].push(i + ",2");
             }
         }
@@ -8188,8 +8204,8 @@ class Puzzle {
                     })
                 }, 20)
                 sw_timer.stop();
-                this.mouse_mode = "out";
-                this.mouseevent(0, 0, 0);
+                // this.mouse_mode = "out";
+                // this.mouseevent(0, 0, 0);
                 this.sol_flag = 1;
             } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
                 this.sol_flag = 0;
