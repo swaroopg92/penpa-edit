@@ -8137,27 +8137,38 @@ class Puzzle {
             }
             for (var k of this.selection) {
                 // Color of selected cell
-                set_surface_style(this.ctx, 13);
+                // set_surface_style(this.ctx, 13);
 
                 // Shadow for the selected cell
-                // this.ctx.shadowBlur = 20;
-                // this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
+                this.ctx.shadowBlur = 10;
+                this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
 
                 // Border outline for the selected cell
-                // set_line_style(this.ctx, 99);
+                set_line_style(this.ctx, 101);
+                let offset = 3;
 
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this.point[k].surround[0]].x, this.point[this.point[k].surround[0]].y);
+                this.ctx.moveTo(this.point[this.point[k].surround[0]].x + offset, this.point[this.point[k].surround[0]].y + offset);
                 for (var j = 1; j < this.point[k].surround.length; j++) {
-                    this.ctx.lineTo(this.point[this.point[k].surround[j]].x, this.point[this.point[k].surround[j]].y);
+                    switch (j) {
+                        case 1:
+                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y + offset);
+                            break;
+                        case 2:
+                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y - offset);
+                            break;
+                        case 3:
+                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x + offset, this.point[this.point[k].surround[j]].y - offset);
+                            break;
+                    }
                 }
                 this.ctx.closePath();
-                this.ctx.fill();
+                // this.ctx.fill();
                 this.ctx.stroke();
 
                 // Reset Bluring
-                // this.ctx.shadowBlur = 0;
-                // this.ctx.shadowColor = Color.TRANSPARENTBLACK;
+                this.ctx.shadowBlur = 0;
+                this.ctx.shadowColor = Color.TRANSPARENTBLACK;
             }
         }
     }
