@@ -544,10 +544,10 @@ onload = function() {
         count_redo = 0;
         new_timer = setInterval(() => {
             count_undo++;
-            if (count_undo > 2) {
+            if (count_undo > 10) {
                 pu.undo();
             }
-        }, 200);
+        }, 80);
         if (new_timer !== timer) {
             clearInterval(timer);
             count = 0;
@@ -577,10 +577,10 @@ onload = function() {
         count_undo = 0;
         new_timer = setInterval(() => {
             count_redo++;
-            if (count_redo > 2) {
+            if (count_redo > 10) {
                 pu.redo();
             }
-        }, 200);
+        }, 80);
         if (new_timer !== timer) {
             clearInterval(timer);
             count = 0;
