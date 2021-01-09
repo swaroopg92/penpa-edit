@@ -34,10 +34,6 @@ onload = function() {
     document.addEventListener("keydown", onKeyDown, { passive: false });
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
-    // if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
-    //     console.log('🎉 Dark mode is supported');
-    // }
-
     function onDown(e) {
         if (e.type === "mousedown") {
             var event = e;
@@ -666,6 +662,10 @@ onload = function() {
                 i_url();
                 e.preventDefault();
                 break;
+            case "page_settings":
+                p_settings();
+                e.preventDefault();
+                break;
             case "tb_undo":
                 pu.undo();
                 e.preventDefault();
@@ -1194,6 +1194,19 @@ onload = function() {
                 break;
             case "nb_margin2_lb":
                 document.getElementById("nb_margin2").checked = true;
+                e.preventDefault();
+                break;
+                // theme setting
+            case "light_mode_lb":
+                document.getElementById("light_mode").checked = true;
+                document.getElementById("color_theme").href = "./css/light_theme.css";
+                pu.set_redoundocolor();
+                e.preventDefault();
+                break;
+            case "dark_mode_lb":
+                document.getElementById("dark_mode").checked = true;
+                document.getElementById("color_theme").href = "./css/dark_theme.css";
+                pu.set_redoundocolor();
                 e.preventDefault();
                 break;
             case "saveimagename":
