@@ -928,6 +928,10 @@ function i_url() {
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button.";
 }
 
+function p_settings() {
+    document.getElementById("modal-settings").style.display = 'block';
+}
+
 function expansion() {
     document.getElementById("modal-save2").style.display = 'block';
 }
