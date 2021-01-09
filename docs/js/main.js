@@ -544,13 +544,12 @@ onload = function() {
         count_redo = 0;
         new_timer = setInterval(() => {
             count_undo++;
-            if (count_undo > 2) {
+            if (count_undo > 10) {
                 pu.undo();
             }
-        }, 200);
+        }, 80);
         if (new_timer !== timer) {
             clearInterval(timer);
-            count = 0;
         }
         timer = new_timer;
     }
@@ -558,10 +557,8 @@ onload = function() {
     function undoUp(e) {
         e.preventDefault();
         undo_button.classList.remove('active');
-        if (count_undo) {
-            clearInterval(timer);
-            count_undo = 0;
-        }
+        clearInterval(timer);
+        count_undo = 0;
     }
 
     function undoLeave(e) {
@@ -577,24 +574,21 @@ onload = function() {
         count_undo = 0;
         new_timer = setInterval(() => {
             count_redo++;
-            if (count_redo > 2) {
+            if (count_redo > 10) {
                 pu.redo();
             }
-        }, 200);
+        }, 80);
         if (new_timer !== timer) {
             clearInterval(timer);
-            count = 0;
         }
         timer = new_timer;
     }
 
     function redoUp(e) {
         e.preventDefault();
-        if (count_redo) {
-            redo_button.classList.remove('active');
-            clearInterval(timer);
-            count_redo = 0;
-        }
+        redo_button.classList.remove('active');
+        clearInterval(timer);
+        count_redo = 0;
     }
 
     function redoLeave(e) {
