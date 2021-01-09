@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <!-- STYLES -->
-    <link href="./css/main.css" rel="stylesheet" type="text/css">
+    <link href="./css/light_theme.css" rel="stylesheet" type="text/css" id="color_theme">
     <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
     <!-- SCRIPTS -->
     <!-- libs -->
@@ -52,6 +52,7 @@
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
             <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
             <input type="button" id="input_url" value="Load" class="button" />
+            <input type="button" id="page_settings" value="Settings" class="button" />
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -848,13 +849,13 @@
                 <h3 id="savetexttitle">Share URL</h3>
             </div>
             <div id="modal-save-info">
-                <span>Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <span class="DM">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
-                <span>Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
+                <span class="DM">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
                 <br>
-                <span>Rules:<textarea rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <span class="DM">Rules:<textarea rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>
-                <span>Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
+                <span class="DM">Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
                 <br>
                 <span id="sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
             </div>
@@ -869,7 +870,7 @@
             </div>
             <div id="modal-save-body">
                 <textarea readonly rows="1" cols="50" id="savetextarea"></textarea>
-                <span>Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
+                <span class="DM">Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">
                 <input type="button" id="closeBtn_save1" value="Copy" />
@@ -958,6 +959,20 @@
             </div>
             <div class="nb_button">
                 <input type="button" id="load_url" value="Load URL" onclick="import_url();" />
+            </div>
+        </div>
+    </div>
+    <div id="modal-settings" class="modal">
+        <div id="modal-settings-content">
+            <div id="modal-header">
+                <h3 id="save7texttitle">General Settings</h3>
+            </div>
+            <div id="modal-settings-body">
+                <h4 id="div_all"><label class="label_settings" id="theme_mode_lb">Display Theme:</label></h4>
+                <input type="radio" name="theme_mode" value="1" id="light_mode" checked="checked">
+                <label for="light_mode" class="label" id="light_mode_lb">LIGHT</label>
+                <input type="radio" name="theme_mode" value="2" id="dark_mode">
+                <label for="dark_mode" class="label" id="dark_mode_lb">DARK</label>
             </div>
         </div>
     </div>

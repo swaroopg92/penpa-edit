@@ -8021,25 +8021,57 @@ class Puzzle {
     set_redoundocolor() {
         if (this.mode.qa === "pu_q") {
             if (this.pu_q.command_redo.__a.length === 0) {
-                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_redo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.WHITE;
+                }
             }
             if (this.pu_q.command_undo.__a.length === 0) {
-                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_undo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.WHITE;
+                }
             }
         } else {
             if (this.pu_a.command_redo.__a.length === 0) {
-                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_redo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.WHITE;
+                }
             }
             if (this.pu_a.command_undo.__a.length === 0) {
-                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_undo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.WHITE;
+                }
             }
         }
     }
