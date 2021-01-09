@@ -550,7 +550,6 @@ onload = function() {
         }, 80);
         if (new_timer !== timer) {
             clearInterval(timer);
-            count = 0;
         }
         timer = new_timer;
     }
@@ -558,10 +557,8 @@ onload = function() {
     function undoUp(e) {
         e.preventDefault();
         undo_button.classList.remove('active');
-        if (count_undo) {
-            clearInterval(timer);
-            count_undo = 0;
-        }
+        clearInterval(timer);
+        count_undo = 0;
     }
 
     function undoLeave(e) {
@@ -583,18 +580,15 @@ onload = function() {
         }, 80);
         if (new_timer !== timer) {
             clearInterval(timer);
-            count = 0;
         }
         timer = new_timer;
     }
 
     function redoUp(e) {
         e.preventDefault();
-        if (count_redo) {
-            redo_button.classList.remove('active');
-            clearInterval(timer);
-            count_redo = 0;
-        }
+        redo_button.classList.remove('active');
+        clearInterval(timer);
+        count_redo = 0;
     }
 
     function redoLeave(e) {
