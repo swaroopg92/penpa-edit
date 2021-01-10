@@ -1221,7 +1221,7 @@ function load(urlParam) {
     }
 
     // Tab settings
-    if (rtext[6] !== 'undefined') {
+    if (typeof rtext[6] !== 'undefined') {
         this.usertab_choices = rtext[6];
     }
 
@@ -1244,6 +1244,56 @@ function load(urlParam) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
                 pu[i][j].set(t);
+            }
+        }
+
+        if (paramArray.l === "solvedup") { // Basically clone of solve mode when answer check is enabled
+            set_solvemode();
+
+            // Decrypt a
+            if (paramArray.a) {
+                var ab = atob(paramArray.a);
+                ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+                var inflate = new Zlib.RawInflate(ab);
+                var plain = inflate.decompress();
+                var atext = new TextDecoder().decode(plain);
+                pu.solution = atext;
+                // Visually showcase answer check is enabled
+                document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+            }
+
+            if (rtext[7] !== "undefined") {
+                let starttime = rtext[7].split(":");
+                sw_timer.start({
+                    precision: 'secondTenths',
+                    startValues: {
+                        hours: parseInt(starttime[0]),
+                        minutes: parseInt(starttime[1]),
+                        seconds: parseInt(starttime[2]),
+                        secondTenths: parseInt(starttime[3])
+                    }
+                });
+            } else {
+                sw_timer.start({ precision: 'secondTenths' });
+            }
+
+            if (typeof rtext[8] !== 'undefined') {
+                // set the answer check settings
+                var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+                var answersetting = JSON.parse(rtext[8]);
+                for (var i = 0; i < settingstatus.length; i++) {
+                    settingstatus[i].checked = answersetting[settingstatus[i].id];
+                }
+            }
+        } else {
+            if (typeof rtext[7] !== 'undefined') {
+                // set the answer check settings
+                var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+                var answersetting = JSON.parse(rtext[7]);
+                for (var i = 0; i < settingstatus.length; i++) {
+                    settingstatus[i].checked = answersetting[settingstatus[i].id];
+                }
             }
         }
     } else if (paramArray.m === "solve") { //solve_mode
@@ -1277,39 +1327,17 @@ function load(urlParam) {
             pu.solution = atext;
             // Visually showcase answer check is enabled
             document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+            document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+        }
+        if (typeof rtext[7] !== 'undefined') {
+            // set the answer check settings
+            var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+            var answersetting = JSON.parse(rtext[7]);
+            for (var i = 0; i < settingstatus.length; i++) {
+                settingstatus[i].checked = answersetting[settingstatus[i].id];
+            }
         }
         sw_timer.start({ precision: 'secondTenths' });
-    }
-
-    if (paramArray.l === "solvedup") {
-        set_solvemode();
-
-        // Decrypt a
-        if (paramArray.a) {
-            var ab = atob(paramArray.a);
-            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-            var inflate = new Zlib.RawInflate(ab);
-            var plain = inflate.decompress();
-            var atext = new TextDecoder().decode(plain);
-            pu.solution = atext;
-            // Visually showcase answer check is enabled
-            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-        }
-
-        if (rtext[7] !== "undefined") {
-            let starttime = rtext[7].split(":");
-            sw_timer.start({
-                precision: 'secondTenths',
-                startValues: {
-                    hours: parseInt(starttime[0]),
-                    minutes: parseInt(starttime[1]),
-                    seconds: parseInt(starttime[2]),
-                    secondTenths: parseInt(starttime[3])
-                }
-            });
-        } else {
-            sw_timer.start({ precision: 'secondTenths' });
-        }
     }
 
     document.getElementById("nb_grid" + pu.mode.grid[0]).checked = true;
