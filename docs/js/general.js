@@ -1260,6 +1260,7 @@ function load(urlParam) {
                 pu.solution = atext;
                 // Visually showcase answer check is enabled
                 document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             }
 
             if (rtext[7] !== "undefined") {
@@ -1326,6 +1327,7 @@ function load(urlParam) {
             pu.solution = atext;
             // Visually showcase answer check is enabled
             document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+            document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings
