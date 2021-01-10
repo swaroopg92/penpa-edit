@@ -49,7 +49,7 @@ function create_newboard() {
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: 'Display size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -84,7 +84,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Rows/Columns Size must be in the range <h2 class="warn">1-40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -100,7 +100,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -116,7 +116,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_tri(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -132,7 +132,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_pyramid(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -145,7 +145,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -304,7 +304,7 @@ function make_class(gridtype, loadtype = 'new') {
                 }
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Rows/Columns Size must be in the range <h2 class="warn">1-40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -317,7 +317,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -330,7 +330,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -343,7 +343,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -356,7 +356,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -612,7 +612,7 @@ function newgrid() {
         document.getElementById('modal').style.display = 'none';
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -631,7 +631,7 @@ function newgrid_r() {
         document.getElementById('modal-newsize').style.display = 'none';
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -898,7 +898,7 @@ function saveimage_download() {
         }
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -969,7 +969,7 @@ function make_gmpfile() {
 
 function savetext_copy() {
     Swal.fire({
-        title: 'Swaroop says:',
+        title: 'GMPuzzles says:',
         html: '<h2 class="info">URL is copied to clipboard</h2>',
         icon: 'info'
     })
@@ -1018,7 +1018,7 @@ function savetext_download() {
         }
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',

@@ -770,14 +770,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Max row size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Min row size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -1040,14 +1040,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Max row size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Min row size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -1391,14 +1391,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Max column size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Min column size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -1742,14 +1742,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Max column size reached <h2 class="warn">40</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: 'Min column size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
