@@ -1271,3 +1271,16 @@ input[type=number] {
 .label_nb {
     color: var(--white);
 }
+
+/* Hyper Links */
+a:link {
+    color: var(--orange);
+}
+
+a:visited {
+    color: var(--green);
+}
+
+a:active {
+    color: var(--red);
+}
