@@ -891,22 +891,114 @@
             </div>
             <div id="modal-save2-solution">
                 <h3 id="save3texttitle">Solution will check only following:</h3>
+                <h5 id="answerwarning">*Default (none selected) it checks for all</h5>
                 <div class="nb_button">
-                    <div id="solutiontext">
-                        <p id="solutiontext1">Shading - Dark Grey, Black</p>
-                        <p id="solutiontext2">Number - Normal, L, M, S - Green, Blue, Red</p>
-                        <p id="solutiontext2">Sudoku - Normal, Centre - Green, Blue, Red</p>
-                        <p id="solutiontext3">Line/Edge - Green, Double</p>
-                        <p id="solutiontext4">Wall - Green</p>
-                        <p id="solutiontext5">Shape - Shape - Square - Option 2</p>
-                        <p id="solutiontext6">Shape - Shape - Circle - M size - Options 1 & 2</p>
-                        <p id="solutiontext7">Shape - Shape - Corner triangle - Options 1 to 4 </p>
-                        <p id="solutiontext8">Shape - Arrow - Small - Options 1 to 8</p>
-                        <p id="solutiontext9">Shape - Number - Math - Black, Green - Options 2 & 3</p>
-                        <p id="solutiontext10">Shape - Special 1 - Battleship - Black - Options 1 to 6</p>
-                        <p id="solutiontext11">Shape - Special 1 - Tent - Option 2</p>
-                        <p id="solutiontext11">Shape - Special 1 - Star - Options 1 to 3</p>
-                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_shading_lb">Shading - Dark Grey, Black: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_shading" id="sol_shading">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_number_lb">Number - Normal, L, M, S - Green, Blue, Red: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_number" id="sol_number">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_sudoku_lb">Sudoku - Normal, Centre - Green, Blue, Red: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_sudoku" id="sol_sudoku">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_loop_lb">Line/Edge - Green, Double: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_loop" id="sol_loop">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_wall_lb">Wall - Green: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_wall" id="sol_wall">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_square_lb">Shape - Shape - Square - Option 2: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_square" id="sol_square">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_circle_lb">Shape - Shape - Circle - M size - Options 1 & 2: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_circle" id="sol_circle">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_tri_lb">Shape - Shape - Corner triangle - Options 1 to 4: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_tri" id="sol_tri">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_arrow_lb">Shape - Arrow - Small - Options 1 to 8: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_arrow" id="sol_arrow">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_math_lb">Shape - Number - Math - Black, Green - Options 2 & 3: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_math" id="sol_math">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_battleship_lb">Shape - Special 1 - Battleship - Black - Options 1 to 6: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_battleship" id="sol_battleship">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_tent_lb">Shape - Special 1 - Tent - Option 2: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_tent" id="sol_tent">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_star_lb">Shape - Special 1 - Star - Options 1 to 3: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="sol_star" id="sol_star">
+                            </td>
+                        </tr>
+                    </table>
                     <br>
                     <input type="button" id="closeBtn_save5" value="Generate URL with answer check" />
                 </div>
