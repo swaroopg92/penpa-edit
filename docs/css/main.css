@@ -942,7 +942,7 @@ body textarea {
     color: var(--red);
 }
 
-#answerwarning{
+#answerwarning {
     color: var(--red);
     text-align: center;
 }
@@ -1036,7 +1036,7 @@ textarea {
 #modal-save2-content {
     background-color: var(--white);
     width: 330px;
-    height: 420px;
+    height: 450px;
     margin: 0 auto;
     margin-top: 160px;
     border-radius: 20px;
@@ -1063,6 +1063,10 @@ textarea {
     background: var(--greyLight);
     padding-top: 0px;
     border-radius: 20px 20px 0px 0px;
+}
+
+.solcheck {
+    vertical-align: middle;
 }
 
 h4 {
