@@ -1,4 +1,8 @@
 ## History
+* 2021/01/10 ver2.24.21
+	* Exposed answer check settings to the Setter. Creator can now select which mode elements to be used for answer checking.
+	* Added free line and edge to answer checking.
+	* Fixed Undo bug.
 * 2021/01/03 ver2.24.20
 	* Load URL feature - This resolves the problem of URL Too Long.
 	* Add rows/columns improved by considering rotations and reflections.
