@@ -128,6 +128,7 @@ class Puzzle {
         this.sol_flag = 0;
         this.undoredo_counter = 0;
         this.rules = "";
+        this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
             ["\"pu_q\"", "zQ"],
@@ -440,7 +441,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+        if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -771,7 +772,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -791,7 +792,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+        if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -1041,7 +1042,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1061,7 +1062,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -1392,7 +1393,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max column size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1412,7 +1413,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -1743,7 +1744,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Max column size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -5680,6 +5681,7 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
+        var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
         if (this.mode[this.mode.qa].edit_mode === "number") {
@@ -5815,14 +5817,16 @@ class Puzzle {
                     }
                     break;
                 case "7": // Candidates
-                    this.record("number", this.cursol);
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
+                    if (str_num_no0.indexOf(key) != -1) {
+                        this.record("number", this.cursol);
+                        if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
+                            con = this[this.mode.qa].number[this.cursol][0];
+                        } else {
+                            con = "";
+                        }
+                        number = this.onofftext(9, key, con);
+                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
-                    number = this.onofftext(9, key, con);
-                    this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     break;
                 case "8": // Long
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
