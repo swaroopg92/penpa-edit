@@ -148,7 +148,7 @@ onload = function() {
             var str_num = "1234567890";
             var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
             var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§";
+            var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤";
 
             if ((Date.now() - shift_release_time) < 15) {
                 shift_counter = 1;
