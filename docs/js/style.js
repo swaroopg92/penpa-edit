@@ -3,7 +3,7 @@
 //
 /////////////////////////////
 
-// Colors: should be the same as in main.css
+// Colors: should be the same as in light_theme.css/dark_theme.css
 const Color = {
     BLACK: "#000000",
     BLUE: "#0000ff",

@@ -1195,12 +1195,14 @@ onload = function() {
                 document.getElementById("light_mode").checked = true;
                 document.getElementById("color_theme").href = "./css/light_theme.css";
                 pu.set_redoundocolor();
+                pu.redraw();
                 e.preventDefault();
                 break;
             case "dark_mode_lb":
                 document.getElementById("dark_mode").checked = true;
                 document.getElementById("color_theme").href = "./css/dark_theme.css";
                 pu.set_redoundocolor();
+                pu.redraw();
                 e.preventDefault();
                 break;
             case "saveimagename":
