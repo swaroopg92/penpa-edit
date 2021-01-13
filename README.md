@@ -53,7 +53,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Under: Number of empty rows from the bottom. They are removed from the Row Size.
 		* Left: Number of empty columns from the left. They are removed from the Column Size.
 		* Right: Number of empty columns from the right. They are removed from the Column Size.
-	* Example: If you want grid size of 9x9 and 3 empty rows and columns on either side. Then you neet set Rows - 15, Columns - 15, Over - 3, Under - 3, Left - 3, Right -3
+	* Example: If you want grid size of 9x9 and 3 empty rows and columns on either side. Then you need to set Rows - 15, Columns - 15, Over - 3, Under - 3, Left - 3, Right -3
 * Hexagon
 	* Side
 	* White Space: Side
@@ -190,21 +190,32 @@ Depending on the browser you can update the page without using the cache with "C
 	* X - Corner Submode - Small digits placed on corners or sides of the cell
 	* C - Centre Submode - Small digits placed in the centre of the cell
 	* V - Shading (Surface Mode) - For coloring the cells (12 color choices)
+	* SHIFT - For Temporary Corner Submode
+	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
 * 6 Color choices for User Solving
-	* Answer check only looks for Green/Blue color if enabled
+	* Answer check only looks for Green/Blue/Red color if enabled
 * Normal, Corner and Centre submodes are also available as part of Tab Selector. Please checkout "Tab selector" section for more details.
 
 ### Grid
-* You can change the border of the board from the "New grid / frame" menu.
+* You can change the border of the board from the "New grid / Update" menu.
 * Grid: Border type
 * Gridpoints: Whether to place points at vertices
 * Outside frame: Whether to draw a line around the board
 * White space: Used when placing numbers outside the grid on the board. (Sandwich puzzle etc.)
-* "Reset" button resets the board. The "Change grid" button does not reset the board surface, but updates only display size and frame type.
+* "New grid" button resets the board. The "Update display" button does not reset the board (i.e. it will keep all the puzzle elements you have entered so far), but updates only display size and frame type.
 
 ### Transform
 * You can rotate and flip the board or remove and add columns or rows from the "Rotate / Move / Add / Remove" menu. Square and pyramid rotate 90°. Regular hexagon and regular triangle rotate 30° on the board surface.
 * Adjust the margin of the board with the "Move board to center" and "Fit window to board" buttons.
+* After creating the grid, if you want to add additional rows and columns without resetting the board then you can these buttons:
+	* Top +: Adds a row on the top of the grid
+	* Top -: Removes a row from the top of the grid
+	* Bottom +: Adds a row in the bottom of the grid
+	* Bottom -: Removes a row from the bottom of the grid
+	* Left +: Adds a column to the left of the grid
+	* Left -: Removes a column from the left of the grid
+	* Right +: Adds a column to the right of the grid
+	* Right -: Removes a column from the right of the grid
 
 ### Save image (Screenshot button)
 * Settings:
@@ -221,6 +232,8 @@ Depending on the browser you can update the page without using the cache with "C
 
 * Author - Puzzle creator's name
 
+* Rules - Enter rules here
+
 * Source - If you are not the author of the puzzle, specify the source URL
 
 * URL for editing
@@ -236,11 +249,11 @@ Depending on the browser you can update the page without using the cache with "C
 2. Select Edit mode "Solution" and complete the solution. (Check part of Step 3 before doing this step)
 3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new small window will appear.
 	i. Please note that the solution will check only for a certain elements with a certain color and style.
-	ii. The small window that appeared will show you all the possibilities.
+	ii. The small window that appeared will show you all the possibilities. Select the relevant options. If no option is selected, then it will check for all the elements.
 	iii. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
 4. Click on "Generate URL with answer check"
 5. Click anywhere on the screen outside the small window to close it.
-6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode.
+6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode and a text "Automatic answer checking is enabled" is displayed.
 
 * Options
 1. Copy: copies the URL to the clipboard
@@ -248,10 +261,9 @@ Depending on the browser you can update the page without using the cache with "C
 3. Open: opens a new TAB with the same url
 4. URL_short:
 	1. First create an URL using one of the three methods described above.
-	2. Click on "Copy".
-	3. Click on "URL_short" (It will open a new TAB).
-	4. Paste the URL (CTRL + V on windows).
-	5. Click "Shorten"
+	2. Click on "URL_short" (It will open a new TAB, URL is automatically copied to your clipboard).
+	3. Paste the URL (CTRL + V on windows).
+	4. Click "Shorten"
 4. Cancel: close the window
 
 * Extra Options (puzzle_output_file -> GMPuzzle output:)
@@ -338,7 +350,7 @@ Depending on the browser you can update the page without using the cache with "C
 			* For Number and Arrow: use Number mode -> Arrow submode (drag the mouse in the cell for the arrow, type in the number from keyboard or select from panel)
 			* Use white color style for arrow and clue on black square
 3. How to use it?
-	1. Create a Puzzle in "Edit: Problem" mode.
+	1. Create a Puzzle in "Edit: Problem" mode using the guide provided in Step 2.
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Green numbering, Green loop, Green edge).
 	3. click on Share -> Extra Options -> puzzle_output_file.
 	4. In the "Header" area, type the puzzle type you are creating.
@@ -361,6 +373,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* If its default sudoku grid created from the New Grid options then Penpa automatically knows the position of the Sudoku grid.
 		* User can also select a square portion of the grid and export the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.
 		* Ignore Pencil Marks - Sometimes we want to export the Sudoku grid in the middle of the solve. Checkmark this option and then export to ignore the Corner and Centre digits used while solving.
+		* Pressing Export button also automatically copies the output string to the clipboard.
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.
