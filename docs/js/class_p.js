@@ -1950,7 +1950,7 @@ class Puzzle {
                     document.getElementById('float-key-header').style.top = 0 + "px";
                 }
             }
-        } else {
+        } else if (this.ondown_key === "touchstart") {
             document.getElementById('panel_button').textContent = "OFF";
             document.getElementById('float-key').style.display = "none";
         }
