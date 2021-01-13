@@ -1917,7 +1917,23 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
-        if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
+        if (mode === "symbol") {
+            if (document.getElementById('panel_button').textContent === "OFF") {
+                document.getElementById('panel_button').textContent = "ON";
+                document.getElementById('float-key').style.display = "block";
+                if (window.panel_toplast && window.panel_leftlast) {
+                    document.getElementById('float-key-body').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-body').style.top = window.panel_toplast;
+                    document.getElementById('float-key-header').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-header').style.top = window.panel_toplast;
+                } else {
+                    document.getElementById('float-key-body').style.left = 0 + "px";
+                    document.getElementById('float-key-body').style.top = 0 + "px";
+                    document.getElementById('float-key-header').style.left = 0 + "px";
+                    document.getElementById('float-key-header').style.top = 0 + "px";
+                }
+            }
+        } else if ((mode === "number" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
@@ -1934,7 +1950,7 @@ class Puzzle {
                     document.getElementById('float-key-header').style.top = 0 + "px";
                 }
             }
-        } else if (this.ondown_key === "touchstart") {
+        } else {
             document.getElementById('panel_button').textContent = "OFF";
             document.getElementById('float-key').style.display = "none";
         }
