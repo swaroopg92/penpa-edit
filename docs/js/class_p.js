@@ -8241,6 +8241,28 @@ class Puzzle {
                     this.selection.push(this.cursol);
                 }
             }
+
+            // Handling rotation and reflection of the grid
+            var a = [0, 1, 2, 3],
+                c;
+            if (this.theta === 90) { a = [3, 0, 1, 2]; } else if (this.theta === 180) { a = [2, 3, 0, 1]; } else if (this.theta === 270) { a = [1, 2, 3, 0]; }
+            if (this.reflect[0] === -1) {
+                c = a[0];
+                a[0] = a[1];
+                a[1] = c;
+                c = a[2];
+                a[2] = a[3];
+                a[3] = c;
+            }
+            if (this.reflect[1] === -1) {
+                c = a[0];
+                a[0] = a[3];
+                a[3] = c;
+                c = a[1];
+                a[1] = a[2];
+                a[2] = c;
+            }
+
             for (var k of this.selection) {
                 // Color of selected cell
                 // set_surface_style(this.ctx, 13);
@@ -8252,19 +8274,21 @@ class Puzzle {
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 let offset = 3;
-
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this.point[k].surround[0]].x + offset, this.point[this.point[k].surround[0]].y + offset);
-                for (var j = 1; j < this.point[k].surround.length; j++) {
+
+                for (var j = 0; j < this.point[k].surround.length; j++) {
                     switch (j) {
+                        case 0:
+                            this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
+                            break;
                         case 1:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y + offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
                             break;
                         case 2:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y - offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
                             break;
                         case 3:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x + offset, this.point[this.point[k].surround[j]].y - offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
                             break;
                     }
                 }
