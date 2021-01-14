@@ -2448,7 +2448,7 @@ class Puzzle_truncated_square extends Puzzle {
 
 class Puzzle_tetrakis_square extends Puzzle_truncated_square {
     constructor(nx, ny, size) {
-        //盤面情報
+        // Board Information
         super("tetrakis_square");
         this.gridtype = 'tetrakis_square';
         this.nx = nx;
@@ -2876,6 +2876,37 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
         if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
         th = th / 180 * Math.PI;
         return th;
+    }
+
+    key_arrow(key_code, ctrl_key = false) {
+        console.log(this.cursol)
+        var a, b, c;
+        b = [0, 1, 2, 3];
+        if (this.reflect[0] === -1) {
+            c = b[0];
+            b[0] = b[2];
+            b[2] = c;
+        }
+        if (this.reflect[1] === -1) {
+            c = b[1];
+            b[1] = b[3];
+            b[3] = c;
+        }
+        switch (key_code) {
+            case "ArrowLeft":
+                c = b[0];
+                break;
+            case "ArrowUp":
+                c = b[1];
+                break;
+            case "ArrowRight":
+                c = b[2];
+                break;
+            case "ArrowDown":
+                c = b[3];
+                break;
+        }
+        this.redraw();
     }
 }
 

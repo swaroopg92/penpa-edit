@@ -59,7 +59,7 @@ function create_newboard() {
 
 function make_class(gridtype, loadtype = 'new') {
     var size = parseInt(document.getElementById("nb_size3").value);
-    var gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in class_p.js
+    var gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60, 'tetrakis': 20 }; // also defined in class_p.js
     switch (gridtype) {
         case "square":
             var nx = parseInt(document.getElementById("nb_size1").value, 10);
@@ -332,7 +332,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'Swaroop says:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['tetrakis'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
