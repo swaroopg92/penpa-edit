@@ -852,11 +852,8 @@ function DeleteCheck() {
         confirmButtonText: 'Yes, Erase it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            pu.reset_board();
+            pu.reset_board(); // contains reset of undo/redo
             pu.redraw();
-            // reset undo/redo
-            pu.command_undo = new Stack();
-            pu.command_redo = new Stack();
         }
     })
 }
