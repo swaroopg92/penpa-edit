@@ -2484,6 +2484,32 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
         this.erase_buttons();
     }
 
+    erase_buttons() {
+        console.log('enters here')
+        for (var i of this.group1) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group2) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group3) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group4) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group5) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
+        for (var i of this.group7) {
+            console.log(this.group7)
+            document.getElementById(i).style.display = "none";
+        }
+    }
+
     create_point() {
         var k = 0,
             k0;

@@ -71,6 +71,8 @@ class Puzzle {
         this.group5 = ["sub_specialthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb"];
         // tri, cube
         this.group6 = ["sub_number10_lb"];
+        // tetrakis
+        this.group7 = ["modal-rotate", "modal-newsize"];
 
         // Drawing position
         this.mouse_mode = "";
