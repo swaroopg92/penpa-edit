@@ -1198,6 +1198,11 @@ function load(urlParam) {
         document.getElementById("saveinforules").value = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
     }
 
+    // Border button status
+    if (rtext_para[19] && rtext_para[19] === "ON") {
+        document.getElementById('edge_button').textContent = "ON";
+    }
+
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);
     pu.reflect[1] = parseInt(rtext_para[6]);

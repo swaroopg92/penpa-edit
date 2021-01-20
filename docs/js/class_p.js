@@ -2180,7 +2180,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2262,7 +2265,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2353,7 +2359,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
