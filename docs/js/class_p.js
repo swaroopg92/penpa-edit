@@ -128,6 +128,7 @@ class Puzzle {
         this.sol_flag = 0;
         this.undoredo_counter = 0;
         this.rules = "";
+        this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
             ["\"pu_q\"", "zQ"],
@@ -440,7 +441,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+        if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -771,7 +772,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Max row size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -791,7 +792,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.ny + 1) <= 40 && (this.ny - 1) > 0) {
+        if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -1041,7 +1042,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Max row size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1061,7 +1062,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -1392,7 +1393,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Max column size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1412,7 +1413,7 @@ class Puzzle {
         this.selection = [];
 
         sign = parseInt(sign);
-        if ((this.nx + 1) <= 40 && (this.nx - 1) > 0) {
+        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
             let originalspace = [...this.space];
             if (celltype === 'white') {
                 // Over, under, left, right
@@ -1743,7 +1744,7 @@ class Puzzle {
             if (sign === 1) {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Max column size reached <h2 class="warn">40</h2>',
+                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1916,7 +1917,23 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
-        if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
+        if (mode === "symbol") {
+            if (document.getElementById('panel_button').textContent === "OFF") {
+                document.getElementById('panel_button').textContent = "ON";
+                document.getElementById('float-key').style.display = "block";
+                if (window.panel_toplast && window.panel_leftlast) {
+                    document.getElementById('float-key-body').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-body').style.top = window.panel_toplast;
+                    document.getElementById('float-key-header').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-header').style.top = window.panel_toplast;
+                } else {
+                    document.getElementById('float-key-body').style.left = 0 + "px";
+                    document.getElementById('float-key-body').style.top = 0 + "px";
+                    document.getElementById('float-key-header').style.left = 0 + "px";
+                    document.getElementById('float-key-header').style.top = 0 + "px";
+                }
+            }
+        } else if ((mode === "number" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
@@ -2163,7 +2180,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2245,7 +2265,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2336,7 +2359,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -5680,6 +5706,7 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
+        var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
         if (this.mode[this.mode.qa].edit_mode === "number") {
@@ -5815,14 +5842,16 @@ class Puzzle {
                     }
                     break;
                 case "7": // Candidates
-                    this.record("number", this.cursol);
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
+                    if (str_num_no0.indexOf(key) != -1) {
+                        this.record("number", this.cursol);
+                        if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
+                            con = this[this.mode.qa].number[this.cursol][0];
+                        } else {
+                            con = "";
+                        }
+                        number = this.onofftext(9, key, con);
+                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     }
-                    number = this.onofftext(9, key, con);
-                    this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
                     break;
                 case "8": // Long
                     if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
@@ -8221,6 +8250,28 @@ class Puzzle {
                     this.selection.push(this.cursol);
                 }
             }
+
+            // Handling rotation and reflection of the grid
+            var a = [0, 1, 2, 3],
+                c;
+            if (this.theta === 90) { a = [3, 0, 1, 2]; } else if (this.theta === 180) { a = [2, 3, 0, 1]; } else if (this.theta === 270) { a = [1, 2, 3, 0]; }
+            if (this.reflect[0] === -1) {
+                c = a[0];
+                a[0] = a[1];
+                a[1] = c;
+                c = a[2];
+                a[2] = a[3];
+                a[3] = c;
+            }
+            if (this.reflect[1] === -1) {
+                c = a[0];
+                a[0] = a[3];
+                a[3] = c;
+                c = a[1];
+                a[1] = a[2];
+                a[2] = c;
+            }
+
             for (var k of this.selection) {
                 // Color of selected cell
                 // set_surface_style(this.ctx, 13);
@@ -8232,19 +8283,21 @@ class Puzzle {
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 let offset = 3;
-
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this.point[k].surround[0]].x + offset, this.point[this.point[k].surround[0]].y + offset);
-                for (var j = 1; j < this.point[k].surround.length; j++) {
+
+                for (var j = 0; j < this.point[k].surround.length; j++) {
                     switch (j) {
+                        case 0:
+                            this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
+                            break;
                         case 1:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y + offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
                             break;
                         case 2:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y - offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
                             break;
                         case 3:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x + offset, this.point[this.point[k].surround[j]].y - offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
                             break;
                     }
                 }

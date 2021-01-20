@@ -59,6 +59,7 @@ function create_newboard() {
 
 function make_class(gridtype, loadtype = 'new') {
     var size = parseInt(document.getElementById("nb_size3").value);
+    var gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in class_p.js
     switch (gridtype) {
         case "square":
             var nx = parseInt(document.getElementById("nb_size1").value, 10);
@@ -80,12 +81,12 @@ function make_class(gridtype, loadtype = 'new') {
             }
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the row/column size";
-            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
+            if (nx <= gridmax['square'] && nx > 0 && ny <= gridmax['square'] && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Rows/Columns Size must be in the range <h2 class="warn">1-40</h2>',
+                    html: 'Rows/Columns Size must be in the range <h2 class="warn">1-' + gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -96,12 +97,12 @@ function make_class(gridtype, loadtype = 'new') {
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
-            if (n0 <= 20 && n0 > 0 && space1 < n0) {
+            if (n0 <= gridmax['hex'] && n0 > 0 && space1 < n0) {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['hex'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -112,12 +113,12 @@ function make_class(gridtype, loadtype = 'new') {
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
-            if (n0 <= 20 && n0 > 0 && space1 < n0 / 3) {
+            if (n0 <= gridmax['tri'] && n0 > 0 && space1 < n0 / 3) {
                 pu = new Puzzle_tri(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['tri'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -128,12 +129,12 @@ function make_class(gridtype, loadtype = 'new') {
             var space1 = parseInt(document.getElementById("nb_space1").value, 10);
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "*White space is subtracted from the Side size";
-            if (n0 <= 20 && n0 > 0 && space1 < n0 / 3) {
+            if (n0 <= gridmax['pyramid'] && n0 > 0 && space1 < n0 / 3) {
                 pu = new Puzzle_pyramid(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['pyramid'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -141,12 +142,12 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "iso":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['cube'] && n0 > 0) {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-20</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['iso'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -295,7 +296,7 @@ function make_class(gridtype, loadtype = 'new') {
             var nx = parseInt(document.getElementById("nb_size1").value, 10);
             var ny = parseInt(document.getElementById("nb_size2").value, 10);
 
-            if (nx <= 40 && nx > 0 && ny <= 40 && ny > 0) {
+            if (nx <= gridmax['square'] && nx > 0 && ny <= 40 && ny > 0) {
                 // Create Kakuro object
                 pu = new Puzzle_kakuro(nx, ny, size);
 
@@ -305,7 +306,7 @@ function make_class(gridtype, loadtype = 'new') {
             } else {
                 Swal.fire({
                     title: 'GMPuzzles says:',
-                    html: 'Rows/Columns Size must be in the range <h2 class="warn">1-40</h2>',
+                    html: 'Rows/Columns Size must be in the range <h2 class="warn">1-' + gridmax['kakuro'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
@@ -1195,6 +1196,11 @@ function load(urlParam) {
         document.getElementById("puzzlerules").style.display = "inline";
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
         document.getElementById("saveinforules").value = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+    }
+
+    // Border button status
+    if (rtext_para[19] && rtext_para[19] === "ON") {
+        document.getElementById('edge_button').textContent = "ON";
     }
 
     pu.theta = parseInt(rtext_para[4]);
