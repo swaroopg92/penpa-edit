@@ -1,5 +1,5 @@
 ## History
-* 2021/01/** ver2.24.22
+* 2021/01/19 ver2.24.22
 	* Fixed Candidate to Center mode bug while entering 0.
 	* Increased the size limit to 60.
 	* Fixed german and UK keyboard bug.
@@ -7,6 +7,7 @@
 	* Improved sudoku solving mode for rotated and reflected grids.
 	* Fixed the border lower case alphabets to be centered.
 	* Cleaning up html file.
+	* Border button status is now retained in the URL.
 * 2021/01/10 ver2.24.21
 	* Exposed answer check settings to the Setter. Creator can now select which mode elements to be used for answer checking.
 	* Added free line and edge to answer checking.
