@@ -5981,7 +5981,7 @@ class Puzzle {
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
-                                // This is for single digit obtained from candidate submode
+                                // This is for single digit obtained from candidate submode in Problem
                                 var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
@@ -5994,7 +5994,7 @@ class Puzzle {
                                     var single_digit = false;
                                 }
                             } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
-                                // This is for digits obtained from candidate submode
+                                // This is for digits obtained from candidate submode in Solution
                                 var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_a"].number[k][0][j] === 1) {
