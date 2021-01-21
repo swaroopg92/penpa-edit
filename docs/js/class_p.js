@@ -7427,36 +7427,40 @@ class Puzzle {
     }
 
     re_combi_blwh(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
-            this.drawing_mode = 1;
-        } else if (this[this.mode.qa].symbol[num][0] === 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
-            this.drawing_mode = 2;
-        } else if (this[this.mode.qa].symbol[num][0] === 2) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 0;
+        if ((this.mode.qa === "pu_q") || (this.mode.qa === "pu_a" && !this["pu_q"].symbol[num])) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
+                this.drawing_mode = 1;
+            } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
+                this.drawing_mode = 2;
+            } else if (this[this.mode.qa].symbol[num][0] === 2) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 0;
+            }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_blwh_move(num) {
-        if (this.drawing_mode === 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
-        } else if (this.drawing_mode === 2) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
-        } else if (this.drawing_mode === 0) {
-            if (this[this.mode.qa].symbol[num]) {
+        if ((this.mode.qa === "pu_q") || (this.mode.qa === "pu_a" && !this["pu_q"].symbol[num])) {
+            if (this.drawing_mode === 1) {
                 this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
+                this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
+            } else if (this.drawing_mode === 2) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
+            } else if (this.drawing_mode === 0) {
+                if (this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
             }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_shaka(x, y, num) {

@@ -2485,7 +2485,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
     }
 
     erase_buttons() {
-        console.log('enters here')
         for (var i of this.group1) {
             document.getElementById(i).style.display = "none";
         }
@@ -2505,7 +2504,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of this.group7) {
-            console.log(this.group7)
             document.getElementById(i).style.display = "none";
         }
     }
