@@ -8,6 +8,7 @@
 	* Fixed the border lower case alphabets to be centered.
 	* Cleaning up html file.
 	* Border button status is now retained in the URL.
+	* Fixed yin-yang bug.
 * 2021/01/10 ver2.24.21
 	* Exposed answer check settings to the Setter. Creator can now select which mode elements to be used for answer checking.
 	* Added free line and edge to answer checking.
