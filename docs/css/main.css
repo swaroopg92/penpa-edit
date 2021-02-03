@@ -71,7 +71,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 520px;
+    max-width: 530px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -101,7 +101,7 @@ hr.newgridhrline {
 #buttons {
     font-size: 0;
     border: 1px solid var(--black);
-    width: 520px;
+    width: 530px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
