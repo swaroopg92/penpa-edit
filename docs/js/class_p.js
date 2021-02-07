@@ -55,7 +55,7 @@ class Puzzle {
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
         //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils",
+        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
             "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
@@ -8326,8 +8326,8 @@ class Puzzle {
             if (text === this.solution && this.sol_flag === 0) {
                 setTimeout(() => {
                     Swal.fire({
-                        title: '<h3 class="wish">Happy New Year 2021 </h3>',
-                        html: '<h2 class="wish">Congratulations 🙂 Well done 🙂</h2>',
+                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                        html: '<h2 class="wish">Congratulations 🙂</h2>',
                         background: 'url(js/images/new_year.jpg)',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',
