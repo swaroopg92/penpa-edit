@@ -86,7 +86,7 @@ class Puzzle {
         this.drawing_mode = -1;
         this.cursol = 0;
         this.cursolS = 0;
-        this.paneloff = false;
+        this.panelflag = false;
         // Drawing mode
         this.mmode = ""; // Problem mode
         this.mode = {
@@ -1919,7 +1919,8 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
-        if (mode === "symbol") {
+        if (mode === "symbol" && !this.panelflag) {
+            // Show the panel on the first time landing and then respect user's choice
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
                 document.getElementById('float-key').style.display = "block";
@@ -1935,8 +1936,10 @@ class Puzzle {
                     document.getElementById('float-key-header').style.top = 0 + "px";
                 }
             }
-        } else if ((mode === "number" || mode === "sudoku") &&
+            this.panelflag = true;
+        } else if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
+            // Automatically show panel while in number or shape or sudoku mode on the Mobile/Ipad device
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
                 document.getElementById('float-key').style.display = "block";
@@ -1953,6 +1956,7 @@ class Puzzle {
                 }
             }
         } else if (this.ondown_key === "touchstart") {
+            // Turn off panel while switching to other modes on Mobile/Ipad
             document.getElementById('panel_button').textContent = "OFF";
             document.getElementById('float-key').style.display = "none";
         }

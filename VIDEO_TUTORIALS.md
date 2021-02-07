@@ -11,10 +11,12 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * Shortcuts of Penpa - https://youtu.be/DHgZ-TU5SEc
 * Sudoku Solving in Penpa - https://youtu.be/b9H2QvouU_A
 * Import and Export Sudoku (I/O Sudoku) in Penpa - https://youtu.be/f-Lw0QuXa2c
+* Enhancing the Solver Experience in Penpa - https://youtu.be/azNx2lQmANg
 
 ## Puzzles
-* How to Create Thermo Sudoku? - https://youtu.be/ynZOz057mKA
-* How to Create Killer Sudoku? - https://youtu.be/yagyJbQD_gs
+* How to Create a Thermo Sudoku? - https://youtu.be/ynZOz057mKA
+* How to Create a Killer Sudoku? - https://youtu.be/yagyJbQD_gs
+* How to Create an Arrow Sudoku? - https://youtu.be/fliy567hSng
 
 ## Bonus
 * How to post a puzzle on Logic Masters Germany website - https://www.youtube.com/watch?v=9vhpo2B9qrM&t=1124s
