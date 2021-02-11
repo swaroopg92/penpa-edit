@@ -35,27 +35,6 @@ class Puzzle_truncated_square extends Puzzle {
         this.erase_buttons();
     }
 
-    erase_buttons() {
-        for (var i of this.group1) {
-            document.getElementById(i).style.display = "none";
-        }
-        for (var i of this.group2) {
-            document.getElementById(i).style.display = "none";
-        }
-        for (var i of this.group3) {
-            document.getElementById(i).style.display = "none";
-        }
-        for (var i of this.group4) {
-            document.getElementById(i).style.display = "none";
-        }
-        for (var i of this.group5) {
-            document.getElementById(i).style.display = "none";
-        }
-        for (var i of this.group6) {
-            document.getElementById(i).style.display = "inline-block";
-        }
-    }
-
     create_point() {
         var k = 0,
             k0;
@@ -2504,6 +2483,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of this.group7) {
+            // document.getElementById(i).style.listStyleType = 'none';
             document.getElementById(i).style.display = "none";
         }
     }
@@ -2859,6 +2839,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
     draw() {
         var present_mode = this.mode.qa;
         if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+            this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -2871,7 +2852,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
-            this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_number("pu_q");
@@ -2879,6 +2859,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             this.draw_cursol();
             this.draw_freecircle();
         } else {
+            this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_symbol("pu_q", 1);
             this.draw_frame();
@@ -2886,7 +2867,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
-            this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
             this.draw_cursol();
@@ -3996,6 +3976,30 @@ class Puzzle_iso extends Puzzle_truncated_square {
         this.reset();
         this.erase_buttons();
         document.getElementById("sub_lineE2_lb").style.display = "inline-block";
+    }
+
+    erase_buttons() {
+        for (var i of this.group1) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group2) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group3) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group4) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group5) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {

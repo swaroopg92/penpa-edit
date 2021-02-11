@@ -54,12 +54,12 @@ class Puzzle {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
-        //square
+        //square (only want in square)
         this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils",
             "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb"
+            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb", "input_sudoku"
         ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
@@ -71,8 +71,12 @@ class Puzzle {
         this.group5 = ["sub_specialthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb"];
         // tri, cube
         this.group6 = ["sub_number10_lb"];
-        // tetrakis
-        this.group7 = ["modal-rotate", "modal-newsize"];
+        // tetrakis (only want in others and not in tetrakis)
+        this.group7 = ["rotation", "mo_move_lb", //main buttons
+            "sub_number7_lb", "sub_number2_lb", "sub_number4_lb", // number mode
+            "ms1_degital", "ul_degital", "ms_frameline", "ms1_bars", "ul_bars", "ms_degital_f", "ms_dice", "ms_pills", // shape mode
+            "subc5"
+        ];
 
         // Drawing position
         this.mouse_mode = "";

@@ -52,6 +52,9 @@ class Puzzle_tri extends Puzzle {
         for (var i of this.group6) {
             document.getElementById(i).style.display = "inline-block";
         }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {

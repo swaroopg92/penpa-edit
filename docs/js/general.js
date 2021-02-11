@@ -43,6 +43,12 @@ function create_newboard() {
         pu = make_class(gridtype);
         pu.mode = mode;
 
+        // update default composite mode for special grids
+        if (!(gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro")) {
+            pu.mode["pu_q"]["combi"] = ["linex", ""];
+            pu.mode["pu_a"]["combi"] = ["linex", ""];
+        }
+
         pu.reset_frame(); // Draw the board
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
