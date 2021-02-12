@@ -557,6 +557,8 @@ function changetype() {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_sudoku3_lb").style.display = "none";
+            document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 32;
             break;
