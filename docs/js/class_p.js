@@ -157,7 +157,9 @@ class Puzzle {
             ["\"deletelineE\"", "z4"],
             ["\"__a\"", "z_"],
             ["null", "zO"],
-        ]
+        ];
+        this.version = [2, 25, 2];
+        this.undoredo_disable = false;
     }
 
     reset() {
@@ -2234,7 +2236,12 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        // Version
+        text += JSON.stringify(this.version);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2318,7 +2325,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Version
+        text += JSON.stringify(this.version);
 
 
         for (var i = 0; i < this.replace.length; i++) {
@@ -2405,7 +2415,94 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        // Version
+        text += JSON.stringify(this.version);
+
+        for (var i = 0; i < this.replace.length; i++) {
+            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        }
+
+        var u8text = new TextEncoder().encode(text);
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        var ba = window.btoa(char8);
+        var url = location.href.split('?')[0];
+        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        return url + "?m=solve&p=" + ba;
+    }
+
+    maketext_compsolve() {
+        var text = "";
+        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
+            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
+
+        // Puzzle title
+        let titleinfo = document.getElementById("saveinfotitle").value;
+        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+
+        // Puzzle author
+        let authorinfo = document.getElementById("saveinfoauthor").value;
+        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+
+        // Puzzle Source
+        text += "," + document.getElementById("saveinfosource").value;
+
+        // Puzzle Rules
+        let ruleinfo = document.getElementById("saveinforules").value;
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
+
+        text += JSON.stringify(this.space) + "\n";
+        text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
+
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
+        this.pu_q.command_redo.__a = [];
+        this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q) + "\n" + "\n";
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
+
+        var list = [this.centerlist[0]];
+        for (var i = 1; i < this.centerlist.length; i++) {
+            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        }
+        text += JSON.stringify(list) + "\n";
+
+        // Copy the tab selector modes
+        let user_choices = getValues('mode_choices');
+        text += JSON.stringify(user_choices) + "\n";
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("comp") + "\n";
+
+        // Version
+        text += JSON.stringify(this.version);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);

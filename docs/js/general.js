@@ -950,6 +950,11 @@ function savetext_solve() {
     document.getElementById("savetextarea").value = text;
 }
 
+function savetext_comp() {
+    var text = pu.maketext_compsolve();
+    document.getElementById("savetextarea").value = text;
+}
+
 function savetext_withsolution() {
     var text = pu.maketext_solve_solution();
     document.getElementById("savetextarea").value = text;
@@ -1339,6 +1344,18 @@ function load(urlParam) {
             for (var i = 0; i < settingstatus.length; i++) {
                 settingstatus[i].checked = answersetting[settingstatus[i].id];
             }
+        }
+        if (typeof rtext[8] !== 'undefined' && rtext[8].indexOf("comp") !== -1) { // Competitive mode
+            // Disable Share, Undo/Redo buttons, Clone, IO sudoku
+            document.getElementById("savetext").style.display = "none";
+            document.getElementById("duplicate").style.display = "none";
+            document.getElementById("input_sudoku").style.display = "none";
+            document.getElementById("tb_undo").style.display = "none";
+            document.getElementById("tb_redo").style.display = "none";
+            document.getElementById("tb_reset").style.display = "none";
+            document.getElementById("tb_delete").style.display = "none";
+            document.getElementById("mo_move_lb").style.display = "none";
+            pu.undoredo_disable = true;
         }
         sw_timer.start({ precision: 'secondTenths' });
     }

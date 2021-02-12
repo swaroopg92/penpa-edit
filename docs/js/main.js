@@ -275,12 +275,16 @@ onload = function() {
                             break;
                         case "y": //Ctrl+y
                         case "Y":
-                            pu.redo();
+                            if (!pu.undoredo_disable) {
+                                pu.redo();
+                            }
                             event.returnValue = false;
                             break;
                         case "z": //Ctrl+z
                         case "Z":
-                            pu.undo();
+                            if (!pu.undoredo_disable) {
+                                pu.undo();
+                            }
                             event.returnValue = false;
                             break;
                         case " ": //Ctrl+space
@@ -773,6 +777,10 @@ onload = function() {
                 break;
             case "expansion":
                 expansion();
+                e.preventDefault();
+                break;
+            case "address_comp":
+                savetext_comp();
                 e.preventDefault();
                 break;
             case "pp_file":

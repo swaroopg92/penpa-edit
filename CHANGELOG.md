@@ -1,4 +1,6 @@
 ## History
+* 2021/02/12 ver2.25.2
+	* URL for competitive solving
 * 2021/02/07 ver2.25.1
 	* Added Right Triangle, Left triangle and Darts to the Shapes. Merging the latest changes from upupstream.
 * 2021/01/19 ver2.24.22
