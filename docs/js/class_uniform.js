@@ -2883,7 +2883,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
     }
 
     key_arrow(key_code, ctrl_key = false) {
-        console.log(this.cursol)
         var a, b, c;
         b = [0, 1, 2, 3];
         if (this.reflect[0] === -1) {
@@ -2909,6 +2908,27 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             case "ArrowDown":
                 c = b[3];
                 break;
+        }
+        if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
+            console.log(this.cursol);
+            // switch (c) {
+            //     case 0:
+            //         a = this.cursol - 1;
+            //         if (this.point[a].use === 1) { this.cursol = a; }
+            //         break;
+            //     case 1:
+            //         a = this.cursol - this.nx0;
+            //         if (this.point[a].use === 1) { this.cursol = a; }
+            //         break;
+            //     case 2:
+            //         a = this.cursol + 1;
+            //         if (this.point[a].use === 1) { this.cursol = a; }
+            //         break;
+            //     case 3:
+            //         a = this.cursol + this.nx0;
+            //         if (this.point[a].use === 1) { this.cursol = a; }
+            //         break;
+            // }
         }
         this.redraw();
     }
