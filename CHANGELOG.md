@@ -1,7 +1,19 @@
 ## History
-* 2021/01/** ver2.24.22
+* 2021/02/12 ver2.25.2
+	* Settings button, Dark Theme
+* 2021/02/07 ver2.25.1
+	* Added Right Triangle, Left triangle and Darts to the Shapes. Merging the latest changes from upupstream.
+* 2021/01/19 ver2.24.22
 	* Fixed Candidate to Center mode bug while entering 0.
 	* Increased the size limit to 60.
+	* Fixed german and UK keyboard bug.
+	* Automatic popup of panel in SHAPE mode while on desktop.
+	* Improved sudoku solving mode for rotated and reflected grids.
+	* Fixed the border lower case alphabets to be centered.
+	* Cleaning up html file.
+	* Border button status is now retained in the URL.
+	* Fixed yin-yang bug.
+	* Changed the heirarchy of outside bold frame to minimum. (Suitable for Araf kind of puzzles)
 * 2021/01/10 ver2.24.21
 	* Exposed answer check settings to the Setter. Creator can now select which mode elements to be used for answer checking.
 	* Added free line and edge to answer checking.

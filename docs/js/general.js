@@ -852,11 +852,8 @@ function DeleteCheck() {
         confirmButtonText: 'Yes, Erase it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            pu.reset_board();
+            pu.reset_board(); // contains reset of undo/redo
             pu.redraw();
-            // reset undo/redo
-            pu.command_undo = new Stack();
-            pu.command_redo = new Stack();
         }
     })
 }
@@ -1200,6 +1197,11 @@ function load(urlParam) {
         document.getElementById("puzzlerules").style.display = "inline";
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
         document.getElementById("saveinforules").value = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+    }
+
+    // Border button status
+    if (rtext_para[19] && rtext_para[19] === "ON") {
+        document.getElementById('edge_button').textContent = "ON";
     }
 
     pu.theta = parseInt(rtext_para[4]);

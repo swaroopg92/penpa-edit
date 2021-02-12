@@ -535,6 +535,7 @@ class Puzzle_square extends Puzzle {
     draw() {
         var present_mode = this.mode.qa;
         if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+            this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_squareframe("pu_q");
@@ -557,7 +558,6 @@ class Puzzle_square extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_direction("pu_a");
             this.draw_lattice();
-            this.draw_frameBold();
             this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
@@ -568,6 +568,7 @@ class Puzzle_square extends Puzzle {
             this.draw_cursol();
             this.draw_freecircle();
         } else {
+            this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
@@ -580,7 +581,6 @@ class Puzzle_square extends Puzzle {
             this.draw_line("pu_q");
             this.draw_direction("pu_q");
             this.draw_lattice();
-            this.draw_frameBold();
             this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_cage("pu_q");
@@ -1200,7 +1200,8 @@ class Puzzle_square extends Puzzle {
 
     draw_number(pu) {
         /*number*/
-        var p_x, p_y;
+        var p_x, p_y, factor;
+        var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
         for (var i in this[pu].number) {
             if (i.slice(-1) === "E") { // Overwriting in Edge Mode
                 p_x = this.point[i.slice(0, -1)].x;
@@ -1209,11 +1210,17 @@ class Puzzle_square extends Puzzle {
                 p_x = this.point[i].x;
                 p_y = this.point[i].y;
             }
+            // if its lower case
+            if (str_alph_low.indexOf(this[pu].number[i][0]) === -1) {
+                factor = 1;
+            } else {
+                factor = 0;
+            }
             switch (this[pu].number[i][2]) {
                 case "1": //normal
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.06 * factor * this.size, this.size * 0.8);
                     break;
                 case "2": //arrow
                     var arrowlength = 0.7;
@@ -1337,17 +1344,17 @@ class Puzzle_square extends Puzzle {
                 case "5": //small
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
                     set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * factor * this.size, this.size * 0.8);
                     break;
                 case "6": //medium
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
                     set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
                     break;
                 case "10": //big
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
                     set_font_style(this.ctx, 0.6 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
                     break;
                 case "7": //sudoku
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
@@ -1514,6 +1521,30 @@ class Puzzle_square extends Puzzle {
             case "tridown_SS":
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y - 0.16 * 0.25 * this.size, 0.16, 3, -90);
+                break;
+            case "triright_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x - 0.5 * 0.25 * this.size, y, 0.5, 3, 180);
+                break;
+            case "triright_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x - 0.4 * 0.25 * this.size, y, 0.4, 3, 180);
+                break;
+            case "triright_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x - 0.16 * 0.25 * this.size, y, 0.16, 3, 180);
+                break;
+            case "trileft_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x + 0.5 * 0.25 * this.size, y, 0.5, 3, 0);
+                break;
+            case "trileft_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x + 0.4 * 0.25 * this.size, y, 0.4, 3, 0);
+                break;
+            case "trileft_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x + 0.16 * 0.25 * this.size, y, 0.16, 3, 0);
                 break;
             case "diamond_L":
                 set_circle_style(ctx, num);
@@ -1772,6 +1803,9 @@ class Puzzle_square extends Puzzle {
                 break;
             case "arc":
                 this.draw_arc(ctx, num, x, y);
+                break;
+            case "darts":
+                this.draw_darts(ctx, num, x, y);
                 break;
             case "spans":
                 this.draw_spans(ctx, num, x, y);
@@ -3253,6 +3287,21 @@ class Puzzle_square extends Puzzle {
                 ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th + Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th + Math.PI * 0.25)));
                 ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.75)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.75)));
                 ctx.stroke();
+        }
+    }
+
+    draw_darts(ctx, num, x, y) {
+        set_circle_style(ctx, 13);
+        if (1 <= num, num <= 4) {
+            for (var i = 1; i <= num; i++) {
+                this.draw_circle(ctx, x, y, Math.sqrt(2) * 0.5 * (2 * i - 1));
+            }
+        }
+        for (var i = 0; i <= 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(Math.PI * 0.5 * i)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(Math.PI * 0.5 * i)));
+            ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(Math.PI * 0.5 * i) * (2 * num - 1)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(Math.PI * 0.5 * i) * (2 * num - 1)));
+            ctx.stroke();
         }
     }
 

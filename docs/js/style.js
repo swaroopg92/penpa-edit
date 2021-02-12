@@ -396,6 +396,11 @@ function set_circle_style(ctx, num) {
             ctx.strokeStyle = Color.GREEN;
             ctx.lineWidth = 1;
             break;
+        case 13:
+            ctx.fillStyle = Color.TRANSPARENTWHITE;
+            ctx.strokeStyle = Color.BLACK;
+            ctx.lineWidth = 1;
+            break;
         default:
             ctx.fillStyle = Color.TRANSPARENTWHITE;
             ctx.strokeStyle = Color.TRANSPARENTWHITE;

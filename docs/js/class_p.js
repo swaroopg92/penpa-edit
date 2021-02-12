@@ -55,7 +55,7 @@ class Puzzle {
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
         //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "ms_tri", "ms_pencils",
+        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
             "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
@@ -84,7 +84,7 @@ class Puzzle {
         this.drawing_mode = -1;
         this.cursol = 0;
         this.cursolS = 0;
-        this.paneloff = false;
+        this.panelflag = false;
         // Drawing mode
         this.mmode = ""; // Problem mode
         this.mode = {
@@ -1917,8 +1917,27 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
-        if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
+        if (mode === "symbol" && !this.panelflag) {
+            // Show the panel on the first time landing and then respect user's choice
+            if (document.getElementById('panel_button').textContent === "OFF") {
+                document.getElementById('panel_button').textContent = "ON";
+                document.getElementById('float-key').style.display = "block";
+                if (window.panel_toplast && window.panel_leftlast) {
+                    document.getElementById('float-key-body').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-body').style.top = window.panel_toplast;
+                    document.getElementById('float-key-header').style.left = window.panel_leftlast;
+                    document.getElementById('float-key-header').style.top = window.panel_toplast;
+                } else {
+                    document.getElementById('float-key-body').style.left = 0 + "px";
+                    document.getElementById('float-key-body').style.top = 0 + "px";
+                    document.getElementById('float-key-header').style.left = 0 + "px";
+                    document.getElementById('float-key-header').style.top = 0 + "px";
+                }
+            }
+            this.panelflag = true;
+        } else if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
+            // Automatically show panel while in number or shape or sudoku mode on the Mobile/Ipad device
             if (document.getElementById('panel_button').textContent === "OFF") {
                 document.getElementById('panel_button').textContent = "ON";
                 document.getElementById('float-key').style.display = "block";
@@ -1935,6 +1954,7 @@ class Puzzle {
                 }
             }
         } else if (this.ondown_key === "touchstart") {
+            // Turn off panel while switching to other modes on Mobile/Ipad
             document.getElementById('panel_button').textContent = "OFF";
             document.getElementById('float-key').style.display = "none";
         }
@@ -2164,7 +2184,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2246,7 +2269,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2337,7 +2363,10 @@ class Puzzle {
 
         // Puzzle Rules
         let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F') + "\n";
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -5956,7 +5985,7 @@ class Puzzle {
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
-                                // This is for single digit obtained from candidate submode
+                                // This is for single digit obtained from candidate submode in Problem
                                 var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_q"].number[k][0][j] === 1) {
@@ -5969,7 +5998,7 @@ class Puzzle {
                                     var single_digit = false;
                                 }
                             } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
-                                // This is for digits obtained from candidate submode
+                                // This is for digits obtained from candidate submode in Solution
                                 var sum = 0;
                                 for (var j = 0; j < 10; j++) {
                                     if (this["pu_a"].number[k][0][j] === 1) {
@@ -7400,36 +7429,40 @@ class Puzzle {
     }
 
     re_combi_blwh(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
-            this.drawing_mode = 1;
-        } else if (this[this.mode.qa].symbol[num][0] === 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
-            this.drawing_mode = 2;
-        } else if (this[this.mode.qa].symbol[num][0] === 2) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 0;
+        if ((this.mode.qa === "pu_q") || (this.mode.qa === "pu_a" && !this["pu_q"].symbol[num])) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
+                this.drawing_mode = 1;
+            } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
+                this.drawing_mode = 2;
+            } else if (this[this.mode.qa].symbol[num][0] === 2) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 0;
+            }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_blwh_move(num) {
-        if (this.drawing_mode === 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
-        } else if (this.drawing_mode === 2) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
-        } else if (this.drawing_mode === 0) {
-            if (this[this.mode.qa].symbol[num]) {
+        if ((this.mode.qa === "pu_q") || (this.mode.qa === "pu_a" && !this["pu_q"].symbol[num])) {
+            if (this.drawing_mode === 1) {
                 this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
+                this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
+            } else if (this.drawing_mode === 2) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
+            } else if (this.drawing_mode === 0) {
+                if (this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
             }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_shaka(x, y, num) {
@@ -8257,6 +8290,28 @@ class Puzzle {
                     this.selection.push(this.cursol);
                 }
             }
+
+            // Handling rotation and reflection of the grid
+            var a = [0, 1, 2, 3],
+                c;
+            if (this.theta === 90) { a = [3, 0, 1, 2]; } else if (this.theta === 180) { a = [2, 3, 0, 1]; } else if (this.theta === 270) { a = [1, 2, 3, 0]; }
+            if (this.reflect[0] === -1) {
+                c = a[0];
+                a[0] = a[1];
+                a[1] = c;
+                c = a[2];
+                a[2] = a[3];
+                a[3] = c;
+            }
+            if (this.reflect[1] === -1) {
+                c = a[0];
+                a[0] = a[3];
+                a[3] = c;
+                c = a[1];
+                a[1] = a[2];
+                a[2] = c;
+            }
+
             for (var k of this.selection) {
                 // Color of selected cell
                 // set_surface_style(this.ctx, 13);
@@ -8268,19 +8323,21 @@ class Puzzle {
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 let offset = 3;
-
                 this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this.point[k].surround[0]].x + offset, this.point[this.point[k].surround[0]].y + offset);
-                for (var j = 1; j < this.point[k].surround.length; j++) {
+
+                for (var j = 0; j < this.point[k].surround.length; j++) {
                     switch (j) {
+                        case 0:
+                            this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
+                            break;
                         case 1:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y + offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
                             break;
                         case 2:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x - offset, this.point[this.point[k].surround[j]].y - offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
                             break;
                         case 3:
-                            this.ctx.lineTo(this.point[this.point[k].surround[j]].x + offset, this.point[this.point[k].surround[j]].y - offset);
+                            this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
                             break;
                     }
                 }
@@ -8301,8 +8358,8 @@ class Puzzle {
             if (text === this.solution && this.sol_flag === 0) {
                 setTimeout(() => {
                     Swal.fire({
-                        title: '<h3 class="wish">Happy New Year 2021 </h3>',
-                        html: '<h2 class="wish">Congratulations 🙂 Well done 🙂</h2>',
+                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                        html: '<h2 class="wish">Congratulations 🙂</h2>',
                         background: 'url(js/images/new_year.jpg)',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',

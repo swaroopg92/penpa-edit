@@ -4385,6 +4385,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
     draw() {
         var present_mode = this.mode.qa;
         if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+            this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -4397,7 +4398,6 @@ class Puzzle_iso extends Puzzle_truncated_square {
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
-            this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_number("pu_q");
@@ -4405,6 +4405,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             this.draw_cursol();
             this.draw_freecircle();
         } else {
+            this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_symbol("pu_q", 1);
             this.draw_frame();
@@ -4412,7 +4413,6 @@ class Puzzle_iso extends Puzzle_truncated_square {
             this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
-            this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
             this.draw_cursol();
