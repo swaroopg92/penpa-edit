@@ -244,7 +244,11 @@ onload = function() {
                 if (shift_key && key === " ") {
                     pu.key_number(key);
                     event.returnValue = false;
-                } else if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 || str_alph_up.indexOf(key) != -1 || str_sym.indexOf(key) != -1) {
+                } else if (str_num.indexOf(key) != -1 ||
+                    str_alph_low.indexOf(key) != -1 ||
+                    str_alph_up.indexOf(key) != -1 ||
+                    str_sym.indexOf(key) != -1 ||
+                    (keycode >= 48 && keycode <= 57)) {
                     event.preventDefault();
                     if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(String.fromCharCode(keycode));
