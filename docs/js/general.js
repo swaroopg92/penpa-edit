@@ -1222,6 +1222,11 @@ function load(urlParam) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
+
+        // submode, style settings
+        if (typeof rtext[10] !== 'undefined') {
+            rtext[10] = rtext[10].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
     }
     rtext[5] = JSON.parse(rtext[5]);
     for (var i = 1; i < rtext[5].length; i++) {
@@ -1377,6 +1382,12 @@ function load(urlParam) {
     }
     pu.make_frameline(); // Draw Board
     panel_pu.draw_panel();
+
+    // submode, style settings
+    if (typeof rtext[10] !== 'undefined') {
+        pu.mode = JSON.parse(rtext[10]);
+    }
+
     pu.mode_qa(pu.mode.qa); //include redraw
     if (paramArray.m === "solve") {
         // Saving the solve mode
@@ -1390,7 +1401,13 @@ function load(urlParam) {
             }
         }
     }
-    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //include redraw
+
+    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
+
+    // version save
+    if (typeof rtext[9] !== 'undefined') {
+        pu.version = JSON.parse(rtext[9]);
+    }
 }
 
 function loadver1(paramArray, rtext) {

@@ -2014,7 +2014,7 @@ class Puzzle {
     mode_qa(mode) {
         document.getElementById(mode).checked = true;
         this.mode.qa = mode;
-        this.mode_set(this.mode[this.mode.qa].edit_mode);
+        this.mode_set(this.mode[this.mode.qa].edit_mode); // includes redraw
         this.redraw(); //cursol更新用
     }
 
@@ -2241,7 +2241,10 @@ class Puzzle {
         text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
 
         // Version
-        text += JSON.stringify(this.version);
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2328,8 +2331,10 @@ class Puzzle {
         text += JSON.stringify(answersetting) + "\n";
 
         // Version
-        text += JSON.stringify(this.version);
+        text += JSON.stringify(this.version) + "\n";
 
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2420,7 +2425,10 @@ class Puzzle {
         text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
 
         // Version
-        text += JSON.stringify(this.version);
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2502,7 +2510,10 @@ class Puzzle {
         text += JSON.stringify("comp") + "\n";
 
         // Version
-        text += JSON.stringify(this.version);
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
