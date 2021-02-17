@@ -160,6 +160,7 @@ class Puzzle {
         ];
         this.version = [2, 25, 2];
         this.undoredo_disable = false;
+        this.comp = false;
     }
 
     reset() {
@@ -2240,6 +2241,8 @@ class Puzzle {
 
         text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
 
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
         // Version
         text += JSON.stringify(this.version) + "\n";
 
@@ -2329,6 +2332,12 @@ class Puzzle {
             }
         }
         text += JSON.stringify(answersetting) + "\n";
+
+        if (this.comp) {
+            text += JSON.stringify("comp") + "\n";
+        } else {
+            text += JSON.stringify("x") + "\n";
+        }
 
         // Version
         text += JSON.stringify(this.version) + "\n";
@@ -2424,6 +2433,8 @@ class Puzzle {
 
         text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
 
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
         // Version
         text += JSON.stringify(this.version) + "\n";
 
@@ -2506,6 +2517,8 @@ class Puzzle {
             }
         }
         text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
 
         text += JSON.stringify("comp") + "\n";
 

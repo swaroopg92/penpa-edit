@@ -1224,8 +1224,8 @@ function load(urlParam) {
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
 
         // submode, style settings
-        if (typeof rtext[10] !== 'undefined') {
-            rtext[10] = rtext[10].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        if (typeof rtext[11] !== 'undefined') {
+            rtext[11] = rtext[11].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
     }
     rtext[5] = JSON.parse(rtext[5]);
@@ -1260,7 +1260,7 @@ function load(urlParam) {
             }
         }
 
-        if (paramArray.l === "solvedup") { // Basically clone of solve mode when answer check is enabled
+        if (paramArray.l === "solvedup") { // Basically clone of solve mode
             set_solvemode();
 
             // Decrypt a
@@ -1298,6 +1298,19 @@ function load(urlParam) {
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
+            }
+
+            if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+                // Disable Share, Undo/Redo buttons, IO sudoku
+                document.getElementById("savetext").style.display = "none";
+                document.getElementById("input_sudoku").style.display = "none";
+                document.getElementById("tb_undo").style.display = "none";
+                document.getElementById("tb_redo").style.display = "none";
+                document.getElementById("tb_reset").style.display = "none";
+                document.getElementById("tb_delete").style.display = "none";
+                document.getElementById("mo_move_lb").style.display = "none";
+                pu.undoredo_disable = true;
+                pu.comp = true;
             }
         } else {
             if (typeof rtext[7] !== 'undefined') {
@@ -1350,10 +1363,9 @@ function load(urlParam) {
                 settingstatus[i].checked = answersetting[settingstatus[i].id];
             }
         }
-        if (typeof rtext[8] !== 'undefined' && rtext[8].indexOf("comp") !== -1) { // Competitive mode
-            // Disable Share, Undo/Redo buttons, Clone, IO sudoku
+        if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+            // Disable Share, Undo/Redo buttons, IO sudoku
             document.getElementById("savetext").style.display = "none";
-            document.getElementById("duplicate").style.display = "none";
             document.getElementById("input_sudoku").style.display = "none";
             document.getElementById("tb_undo").style.display = "none";
             document.getElementById("tb_redo").style.display = "none";
@@ -1361,6 +1373,7 @@ function load(urlParam) {
             document.getElementById("tb_delete").style.display = "none";
             document.getElementById("mo_move_lb").style.display = "none";
             pu.undoredo_disable = true;
+            pu.comp = true;
         }
         sw_timer.start({ precision: 'secondTenths' });
     }
@@ -1384,8 +1397,8 @@ function load(urlParam) {
     panel_pu.draw_panel();
 
     // submode, style settings
-    if (typeof rtext[10] !== 'undefined') {
-        pu.mode = JSON.parse(rtext[10]);
+    if (typeof rtext[11] !== 'undefined') {
+        pu.mode = JSON.parse(rtext[11]);
     }
 
     pu.mode_qa(pu.mode.qa); //include redraw
@@ -1405,8 +1418,8 @@ function load(urlParam) {
     pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
 
     // version save
-    if (typeof rtext[9] !== 'undefined') {
-        pu.version = JSON.parse(rtext[9]);
+    if (typeof rtext[10] !== 'undefined') {
+        pu.version = JSON.parse(rtext[10]);
     }
 }
 
