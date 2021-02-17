@@ -2132,6 +2132,8 @@ class Puzzle {
                         break;
                     case "linex":
                         break;
+                    case "edgex":
+                        break;
                     case "edgexoi":
                         break;
                     case "blpo":
@@ -7305,6 +7307,7 @@ class Puzzle {
     mouse_combi(x, y, num) {
         switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
             case "linex":
+            case "edgex":
             case "edgexoi":
             case "tents":
                 if (this.mouse_mode === "down_right" || this.ondown_key === "touchstart") {
@@ -7334,6 +7337,13 @@ class Puzzle {
                     break;
                 case "lineox":
                     this.re_combi_lineox(num);
+                    break;
+                case "edgex":
+                    if (this.ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num, "lineE");
+                    } else {
+                        this.re_combi_edgex(num);
+                    }
                     break;
                 case "edgexoi":
                     if (this.ondown_key === "touchstart") {
@@ -7386,6 +7396,7 @@ class Puzzle {
                 case "linex":
                     this.re_combi_cross_downright(num);
                     break;
+                case "edgex":
                 case "edgexoi":
                     this.re_combi_cross_downright(num, "lineE");
                     break;
@@ -7415,6 +7426,9 @@ class Puzzle {
                     break;
                 case "lineox":
                     this.re_combi_lineox_move(num);
+                    break;
+                case "edgex":
+                    this.re_combi_edgex_move(num);
                     break;
                 case "edgexoi":
                     this.re_combi_edgexoi_move(num);
@@ -7465,6 +7479,9 @@ class Puzzle {
                     break;
                 case "lineox":
                     this.re_combi_lineox_up(num);
+                    break;
+                case "edgex":
+                    this.re_combi_edgex_up(num);
                     break;
                 case "edgexoi":
                     this.re_combi_edgexoi_up(num);
@@ -7751,6 +7768,34 @@ class Puzzle {
                 delete this[this.mode.qa].surface[num];
             }
         }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
+    re_combi_edgex(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
+        this.redraw();
+    }
+
+    re_combi_edgex_move(num) {
+        if (this.drawing_mode != -1 && this.point[num].type === 1) {
+            var line_style = 3;
+            var array;
+            if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
+                array = "lineE";
+                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                this.re_line(array, key, line_style);
+            }
+            this.last = num;
+            this.redraw();
+        }
+    }
+
+    re_combi_edgex_up(num) {
         this.drawing_mode = -1;
         this.first = -1;
         this.last = -1;

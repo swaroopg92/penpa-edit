@@ -308,6 +308,7 @@ class Puzzle_truncated_square extends Puzzle {
                     case "linex":
                         type = [0, 2];
                         break;
+                    case "edgex":
                     case "edgexoi":
                         type = [0, 1, 2];
                         break;
@@ -2750,6 +2751,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                     case "linex":
                         type = [0, 3, 4];
                         break;
+                    case "edgex":
                     case "edgexoi":
                         type = [0, 1, 3, 4];
                         break;
@@ -3254,6 +3256,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                     case "linex":
                         type = [0, 2];
                         break;
+                    case "edgex":
                     case "edgexoi":
                         type = [0, 1, 2];
                         break;
@@ -3775,6 +3778,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                     case "linex":
                         type = [0, 2];
                         break;
+                    case "edgex":
                     case "edgexoi":
                         type = [0, 1, 2];
                         break;
@@ -4274,6 +4278,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                     case "linex":
                         type = [0, 2];
                         break;
+                    case "edgex":
                     case "edgexoi":
                         type = [0, 1, 2];
                         break;

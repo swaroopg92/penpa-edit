@@ -267,6 +267,7 @@ class Puzzle_square extends Puzzle {
                     case "linex":
                         type = [0, 2, 3];
                         break;
+                    case "edgex":
                     case "edgexoi":
                         type = [0, 1, 2, 3];
                         break;
