@@ -2335,6 +2335,10 @@ class Puzzle {
         }
         text += JSON.stringify(answersetting) + "\n";
 
+        if (this.mmode !== "solve") {
+            text += JSON.stringify("x") + "\n"; // dummy to compensate time saver for non solve cloning
+        }
+
         if (this.comp) {
             text += JSON.stringify("comp") + "\n";
         } else {
