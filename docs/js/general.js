@@ -1399,6 +1399,9 @@ function load(urlParam) {
     // submode, style settings
     if (typeof rtext[11] !== 'undefined') {
         pu.mode = JSON.parse(rtext[11]);
+        if (paramArray.m === "solve") {
+            pu.mode.qa = "pu_a";
+        }
     }
 
     pu.mode_qa(pu.mode.qa); //include redraw
