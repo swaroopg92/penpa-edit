@@ -1865,7 +1865,7 @@ function set_solvemode() {
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
     document.getElementById("mo_cage_lb").style.display = "none";
-    document.getElementById("mo_special_lb").style.display = "none";
+    // document.getElementById("mo_special_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
     // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";
