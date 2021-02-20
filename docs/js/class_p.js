@@ -8059,11 +8059,9 @@ class Puzzle {
                 if (!this[this.mode.qa].symbol[num]) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [2, "circle_SS", 2];
-                    this.drawing_mode = 1;
                 } else {
                     this.record("symbol", num);
                     delete this[this.mode.qa].symbol[num];
-                    this.drawing_mode = 2;
                 }
                 this.redraw();
                 break;
@@ -8091,11 +8089,9 @@ class Puzzle {
                 if (!this[this.mode.qa].symbol[num]) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [2, "circle_SS", 2];
-                    this.drawing_mode = 1;
                 } else {
                     this.record("symbol", num);
                     delete this[this.mode.qa].symbol[num];
-                    this.drawing_mode = 2;
                 }
                 this.redraw();
                 break;
