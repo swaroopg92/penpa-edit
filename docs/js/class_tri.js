@@ -278,12 +278,12 @@ class Puzzle_tri extends Puzzle {
                         break;
                     case "edgex":
                     case "edgexoi":
+                    case "star":
                         type = [0, 1, 2, 3, 4];
                         break;
                     case "blpo":
                     case "blwh":
                     case "battleship":
-                    case "star":
                     case "magnets":
                     case "lineox":
                     case "yajilin":

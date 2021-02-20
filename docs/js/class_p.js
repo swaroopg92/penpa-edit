@@ -158,7 +158,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 2];
+        this.version = [2, 25, 3];
         this.undoredo_disable = false;
         this.comp = false;
     }
@@ -8022,56 +8022,99 @@ class Puzzle {
     }
 
     re_combi_star_reduced(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "star", 2];
-        } else {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "star", 2];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 2;
+            }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_star(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "star", 2];
-        } else if (this[this.mode.qa].symbol[num][0] === 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [0, "star", 2];
-            this.drawing_mode = 1;
-        } else {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [1, "star", 2];
+                } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [2, "circle_SS", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
         }
-        this.redraw();
     }
 
     re_combi_star_downright(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [0, "star", 2];
-            this.drawing_mode = 1;
-        } else {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [2, "circle_SS", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
         }
-        this.redraw();
     }
 
 
     re_combi_star_move(num) {
-        if (this.drawing_mode === 1 && (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [0, "star", 2];
-        } else if (this.drawing_mode === 2 && this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
+        if (this.point[num].type === 0) {
+            if (this.drawing_mode === 1 &&
+                (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [0, "star", 2];
+            } else if (this.drawing_mode === 2 && this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_tents(num) {
