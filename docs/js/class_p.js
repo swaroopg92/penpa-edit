@@ -8021,10 +8021,37 @@ class Puzzle {
         this.redraw();
     }
 
+    get_neighbors(num) {
+        let col_num = (num % (this.nx0));
+        let row_num = parseInt(num / this.nx0);
+        let neighbors = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
+            (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
+            row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
+            row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
+            (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+            row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+            row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+            row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+        ]
+        return neighbors;
+    }
+
     re_combi_star_reduced(num) {
         if (this.point[num].type === 0) {
             if (!this[this.mode.qa].symbol[num]) {
-                this.record("symbol", num);
+                if (this.undoredo_counter > 3) {
+                    this.undoredo_counter = 1;
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let neighbors = this.get_neighbors(num);
+                for (let i = 0; i < neighbors.length; i++) {
+                    if (this[this.mode.qa].symbol[neighbors[i]]) {
+                        this.record("symbol", neighbors[i], this.undoredo_counter);
+                        delete this[this.mode.qa].symbol[neighbors[i]];
+                    }
+                }
+                this.record("symbol", num, this.undoredo_counter);
                 this[this.mode.qa].symbol[num] = [1, "star", 2];
             } else {
                 this.record("symbol", num);
@@ -8039,7 +8066,19 @@ class Puzzle {
         switch (this.point[num].type) {
             case 0:
                 if (!this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
+                    if (this.undoredo_counter > 3) {
+                        this.undoredo_counter = 1;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                    let neighbors = this.get_neighbors(num);
+                    for (let i = 0; i < neighbors.length; i++) {
+                        if (this[this.mode.qa].symbol[neighbors[i]]) {
+                            this.record("symbol", neighbors[i], this.undoredo_counter);
+                            delete this[this.mode.qa].symbol[neighbors[i]];
+                        }
+                    }
+                    this.record("symbol", num, this.undoredo_counter);
                     this[this.mode.qa].symbol[num] = [1, "star", 2];
                 } else if (this[this.mode.qa].symbol[num][0] === 1) {
                     this.record("symbol", num);
@@ -8058,7 +8097,7 @@ class Puzzle {
             case 4:
                 if (!this[this.mode.qa].symbol[num]) {
                     this.record("symbol", num);
-                    this[this.mode.qa].symbol[num] = [2, "circle_SS", 2];
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
                 } else {
                     this.record("symbol", num);
                     delete this[this.mode.qa].symbol[num];
@@ -8088,7 +8127,7 @@ class Puzzle {
             case 4:
                 if (!this[this.mode.qa].symbol[num]) {
                     this.record("symbol", num);
-                    this[this.mode.qa].symbol[num] = [2, "circle_SS", 2];
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
                 } else {
                     this.record("symbol", num);
                     delete this[this.mode.qa].symbol[num];
@@ -8097,7 +8136,6 @@ class Puzzle {
                 break;
         }
     }
-
 
     re_combi_star_move(num) {
         if (this.point[num].type === 0) {
