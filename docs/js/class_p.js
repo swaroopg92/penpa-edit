@@ -8496,8 +8496,8 @@ class Puzzle {
             if (text === this.solution && this.sol_flag === 0) {
                 setTimeout(() => {
                     Swal.fire({
-                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                        html: '<h2 class="wish">Congratulations 🙂</h2>',
+                        title: '<h3 class="wish">Congratulations!</h3>',
+                        html: '<h2 class="wish">The solution is correct.</h2>',
                         background: 'url(js/images/new_year.jpg)',
                         icon: 'success',
                         confirmButtonText: 'Hurray!',
