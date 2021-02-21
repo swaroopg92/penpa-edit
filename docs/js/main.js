@@ -42,7 +42,11 @@ onload = function() {
             e.preventDefault(); // When both mouse and touch start, only touch
         }
         var ctrl_key = e.ctrlKey;
-        var obj = coord_point(event);
+        if (ondown_key === "mousedown" && event.button !== 2) {
+            var obj = coord_point(event, 'left');
+        } else {
+            var obj = coord_point(event);
+        }
         var x = obj.x,
             y = obj.y,
             num = obj.num;
@@ -564,12 +568,22 @@ onload = function() {
         }
     }
 
-    function coord_point(e) {
+    function coord_point(e, mouseclick = 'none') {
         var x = e.pageX - canvas.offsetLeft;
         var y = e.pageY - canvas.offsetTop;
         var min0, min = 10e6;
         var num = 0;
+        let type;
         //const startTime = performance.now();
+
+        // Improving starbattle composite mode, left click
+        if ((mouseclick === 'left') &&
+            (pu.mode[pu.mode.qa].edit_mode === "combi") &&
+            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star")) {
+            type = pu.type;
+            pu.type = [0];
+        }
+
         for (var i = 0; i < pu.point.length; i++) {
             if (pu.point[i] && pu.type.indexOf(pu.point[i].type) != -1) {
                 min0 = (x - pu.point[i].x) ** 2 + (y - pu.point[i].y) ** 2;
@@ -579,6 +593,14 @@ onload = function() {
                 }
             }
         }
+
+        // resetting the type for starbattle composite mode
+        if ((mouseclick === 'left') &&
+            (pu.mode[pu.mode.qa].edit_mode === "combi") &&
+            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star")) {
+            pu.type = type;
+        }
+
         //const endTime = performance.now();
         //console.log(endTime - startTime);
         num = parseInt(num);
