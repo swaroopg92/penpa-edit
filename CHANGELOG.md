@@ -2,6 +2,7 @@
 * 2021/02/** ver2.25.3
 	* Improved "Star battle" composite mode. One can mark dots between two cells.
 	* Enabled "Special" mode in Solving mode.
+	* Improved Sudoku Solving mode for French Keyboard Layout and possibly any keyboard layout.
 * 2021/02/16 ver2.25.2
 	* Added URL for competitive solving button.
 	* Save submode, style settings for various modes.

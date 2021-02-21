@@ -252,45 +252,45 @@ onload = function() {
                     (keycode >= 48 && keycode <= 57)) {
                     event.preventDefault();
                     if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                        switch (code) {
-                            case "Digit0":
-                                pu.key_number("0");
-                                break;
-                            case "Digit1":
-                                pu.key_number("1");
-                                break;
-                            case "Digit2":
-                                pu.key_number("2");
-                                break;
-                            case "Digit3":
-                                pu.key_number("3");
-                                break;
-                            case "Digit4":
-                                pu.key_number("4");
-                                break;
-                            case "Digit5":
-                                pu.key_number("5");
-                                break;
-                            case "Digit6":
-                                pu.key_number("6");
-                                break;
-                            case "Digit7":
-                                pu.key_number("7");
-                                break;
-                            case "Digit8":
-                                pu.key_number("8");
-                                break;
-                            case "Digit9":
-                                pu.key_number("9");
-                                break;
-                            default:
-                                pu.key_number(String.fromCharCode(keycode));
-                                break;
-                        }
+                        pu.key_number(String.fromCharCode(keycode));
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(key);
                         shift_numkey = false;
                     } else {
+                        if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                            switch (code) {
+                                case "Digit0":
+                                    key = "0";
+                                    break;
+                                case "Digit1":
+                                    key = "1";
+                                    break;
+                                case "Digit2":
+                                    key = "2";
+                                    break;
+                                case "Digit3":
+                                    key = "3";
+                                    break;
+                                case "Digit4":
+                                    key = "4";
+                                    break;
+                                case "Digit5":
+                                    key = "5";
+                                    break;
+                                case "Digit6":
+                                    key = "6";
+                                    break;
+                                case "Digit7":
+                                    key = "7";
+                                    break;
+                                case "Digit8":
+                                    key = "8";
+                                    break;
+                                case "Digit9":
+                                    key = "9";
+                                    break;
+                            }
+                        }
                         pu.key_number(key);
                     }
                 } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
@@ -306,6 +306,40 @@ onload = function() {
 
             if (ctrl_key && !shift_key && !alt_key) {
                 if (key != "Control") {
+                    if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                        switch (code) {
+                            case "Digit0":
+                                key = "0";
+                                break;
+                            case "Digit1":
+                                key = "1";
+                                break;
+                            case "Digit2":
+                                key = "2";
+                                break;
+                            case "Digit3":
+                                key = "3";
+                                break;
+                            case "Digit4":
+                                key = "4";
+                                break;
+                            case "Digit5":
+                                key = "5";
+                                break;
+                            case "Digit6":
+                                key = "6";
+                                break;
+                            case "Digit7":
+                                key = "7";
+                                break;
+                            case "Digit8":
+                                key = "8";
+                                break;
+                            case "Digit9":
+                                key = "9";
+                                break;
+                        }
+                    }
                     switch (key) {
                         case "d": //Ctrl+d
                         case "D":
