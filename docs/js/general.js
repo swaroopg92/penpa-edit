@@ -49,10 +49,10 @@ function create_newboard() {
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
     } else {
         Swal.fire({
-            title: 'GMPuzzles says:',
+            title: 'Error:',
             html: 'Display size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
-            confirmButtonText: 'ok 🙂',
+            confirmButtonText: 'OK',
         })
     }
 }
@@ -85,10 +85,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Rows/Columns Size must be in the range <h2 class="warn">1-' + gridmax['square'] + '</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -101,10 +101,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['hex'] + '</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -117,10 +117,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_tri(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['tri'] + '</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -133,10 +133,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_pyramid(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['pyramid'] + '</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -146,10 +146,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['iso'] + '</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -305,10 +305,10 @@ function make_class(gridtype, loadtype = 'new') {
                 }
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Rows/Columns Size must be in the range <h2 class="warn">1-' + gridmax['kakuro'] + '</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -318,10 +318,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -331,10 +331,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -344,10 +344,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -357,10 +357,10 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'GMPuzzles says:',
+                    title: 'Error:',
                     html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
                     icon: 'error',
-                    confirmButtonText: 'ok 🙂',
+                    confirmButtonText: 'OK',
                 })
             }
             break;
@@ -613,10 +613,10 @@ function newgrid() {
         document.getElementById('modal').style.display = 'none';
     } else {
         Swal.fire({
-            title: 'GMPuzzles says:',
+            title: 'Error:',
             html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
-            confirmButtonText: 'ok 🙂',
+            confirmButtonText: 'OK',
         })
     }
 }
@@ -632,10 +632,10 @@ function newgrid_r() {
         document.getElementById('modal-newsize').style.display = 'none';
     } else {
         Swal.fire({
-            title: 'GMPuzzles says:',
+            title: 'Error:',
             html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
-            confirmButtonText: 'ok 🙂',
+            confirmButtonText: 'OK',
         })
     }
 }
@@ -896,10 +896,10 @@ function saveimage_download() {
         }
     } else {
         Swal.fire({
-            title: 'GMPuzzles says:',
+            title: 'Error:',
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
-            confirmButtonText: 'ok 🙂',
+            confirmButtonText: 'OK',
         })
     }
 }
@@ -972,7 +972,7 @@ function make_gmpfile() {
 
 function savetext_copy() {
     Swal.fire({
-        title: 'GMPuzzles says:',
+        title: 'Success:',
         html: '<h2 class="info">URL is copied to clipboard</h2>',
         icon: 'info'
     })
@@ -1021,10 +1021,10 @@ function savetext_download() {
         }
     } else {
         Swal.fire({
-            title: 'GMPuzzles says:',
+            title: 'Error:',
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
-            confirmButtonText: 'ok 🙂',
+            confirmButtonText: 'OK',
         })
     }
 }
