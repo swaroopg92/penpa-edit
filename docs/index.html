@@ -190,6 +190,20 @@
                                         <li><span id="ms_tridown_SS">XS</span></li>
                                     </ul>
                                 </li>
+                                <li id="msli_triright"><span id="ms1_triright">&#9655; &#11208; &#9657; &#9656;</span>
+                                    <ul>
+                                        <li><span id="ms_triright_L">L</span></li>
+                                        <li><span id="ms_triright_M">M</span></li>
+                                        <li><span id="ms_triright_SS">XS</span></li>
+                                    </ul>
+                                </li>
+                                <li id="msli_trileft"><span id="ms1_trileft">&#9665; &#11207; &#9667; &#9666;</span>
+                                    <ul>
+                                        <li><span id="ms_trileft_L">L</span></li>
+                                        <li><span id="ms_trileft_M">M</span></li>
+                                        <li><span id="ms_trileft_SS">XS</span></li>
+                                    </ul>
+                                </li>
                                 <li><span id="ms1_diamond">&#x2B25; &#x2B26; &#x25C6; &#x25C7;</span>
                                     <ul>
                                         <li><span id="ms_diamond_L">L</span></li>
@@ -307,6 +321,7 @@
                                 <li><span id="ms_pencils">Pencils</span></li>
                                 <li><span id="ms_slovak">Slovak Sums</span></li>
                                 <li><span id="ms_arc">Arc</span></li>
+                                <li><span id="ms_darts">Darts</span></li>
                                 <li><span id="ms_spans">Spans</span></li>
                                 <li><span id="ms_neighbors">Neighbors</span></li>
                             </ul>
@@ -346,7 +361,8 @@
                             <ul>
                                 <li><span id="combisub_linex">Line or x</span></li>
                                 <li><span id="combisub_lineox">Line or OX</span></li>
-                                <li><span id="combisub_edgexoi">Edge, x, in/out</span></li>
+                                <li><span id="combisub_edgex">Edge x</span></li>
+                                <li><span id="combisub_edgexoi">Edge IO</span></li>
                                 <li><span id="combisub_yajilin">Yajilin</span></li>
                                 <li><span id="combisub_hashi">Hashi</span></li>
                             </ul>
@@ -585,7 +601,7 @@
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.24.22, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.25.3, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -863,6 +879,8 @@
                 <input type="button" id="address_edit" value="URL for editing" />
                 <input type="button" id="address_solve" value="URL for solving" />
                 <input type="button" id="expansion" value="Extra options" />
+                <!--For Competitive Solving-->
+                <input type="button" id="address_comp" value="URL for contests" />
             </div>
             <div>
                 <span id="div_all"><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>

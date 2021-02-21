@@ -267,13 +267,14 @@ class Puzzle_square extends Puzzle {
                     case "linex":
                         type = [0, 2, 3];
                         break;
+                    case "edgex":
                     case "edgexoi":
+                    case "star":
                         type = [0, 1, 2, 3];
                         break;
                     case "blpo":
                     case "blwh":
                     case "battleship":
-                    case "star":
                     case "magnets":
                     case "lineox":
                     case "yajilin":
@@ -1522,6 +1523,30 @@ class Puzzle_square extends Puzzle {
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y - 0.16 * 0.25 * this.size, 0.16, 3, -90);
                 break;
+            case "triright_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x - 0.5 * 0.25 * this.size, y, 0.5, 3, 180);
+                break;
+            case "triright_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x - 0.4 * 0.25 * this.size, y, 0.4, 3, 180);
+                break;
+            case "triright_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x - 0.16 * 0.25 * this.size, y, 0.16, 3, 180);
+                break;
+            case "trileft_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x + 0.5 * 0.25 * this.size, y, 0.5, 3, 0);
+                break;
+            case "trileft_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x + 0.4 * 0.25 * this.size, y, 0.4, 3, 0);
+                break;
+            case "trileft_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x + 0.16 * 0.25 * this.size, y, 0.16, 3, 0);
+                break;
             case "diamond_L":
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.43, 4, 0);
@@ -1779,6 +1804,9 @@ class Puzzle_square extends Puzzle {
                 break;
             case "arc":
                 this.draw_arc(ctx, num, x, y);
+                break;
+            case "darts":
+                this.draw_darts(ctx, num, x, y);
                 break;
             case "spans":
                 this.draw_spans(ctx, num, x, y);
@@ -3260,6 +3288,21 @@ class Puzzle_square extends Puzzle {
                 ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th + Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th + Math.PI * 0.25)));
                 ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.75)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.75)));
                 ctx.stroke();
+        }
+    }
+
+    draw_darts(ctx, num, x, y) {
+        set_circle_style(ctx, 13);
+        if (1 <= num, num <= 4) {
+            for (var i = 1; i <= num; i++) {
+                this.draw_circle(ctx, x, y, Math.sqrt(2) * 0.5 * (2 * i - 1));
+            }
+        }
+        for (var i = 0; i <= 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(Math.PI * 0.5 * i)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(Math.PI * 0.5 * i)));
+            ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(Math.PI * 0.5 * i) * (2 * num - 1)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(Math.PI * 0.5 * i) * (2 * num - 1)));
+            ctx.stroke();
         }
     }
 

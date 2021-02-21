@@ -950,6 +950,11 @@ function savetext_solve() {
     document.getElementById("savetextarea").value = text;
 }
 
+function savetext_comp() {
+    var text = pu.maketext_compsolve();
+    document.getElementById("savetextarea").value = text;
+}
+
 function savetext_withsolution() {
     var text = pu.maketext_solve_solution();
     document.getElementById("savetextarea").value = text;
@@ -1217,6 +1222,11 @@ function load(urlParam) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
+
+        // submode, style settings
+        if (typeof rtext[11] !== 'undefined') {
+            rtext[11] = rtext[11].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
     }
     rtext[5] = JSON.parse(rtext[5]);
     for (var i = 1; i < rtext[5].length; i++) {
@@ -1250,7 +1260,7 @@ function load(urlParam) {
             }
         }
 
-        if (paramArray.l === "solvedup") { // Basically clone of solve mode when answer check is enabled
+        if (paramArray.l === "solvedup") { // Basically clone of solve mode
             set_solvemode();
 
             // Decrypt a
@@ -1288,6 +1298,19 @@ function load(urlParam) {
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
+            }
+
+            if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+                // Disable Share, Undo/Redo buttons, IO sudoku
+                document.getElementById("savetext").style.display = "none";
+                document.getElementById("input_sudoku").style.display = "none";
+                document.getElementById("tb_undo").style.display = "none";
+                document.getElementById("tb_redo").style.display = "none";
+                document.getElementById("tb_reset").style.display = "none";
+                document.getElementById("tb_delete").style.display = "none";
+                document.getElementById("mo_move_lb").style.display = "none";
+                pu.undoredo_disable = true;
+                pu.comp = true;
             }
         } else {
             if (typeof rtext[7] !== 'undefined') {
@@ -1340,6 +1363,18 @@ function load(urlParam) {
                 settingstatus[i].checked = answersetting[settingstatus[i].id];
             }
         }
+        if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+            // Disable Share, Undo/Redo buttons, IO sudoku
+            document.getElementById("savetext").style.display = "none";
+            document.getElementById("input_sudoku").style.display = "none";
+            document.getElementById("tb_undo").style.display = "none";
+            document.getElementById("tb_redo").style.display = "none";
+            document.getElementById("tb_reset").style.display = "none";
+            document.getElementById("tb_delete").style.display = "none";
+            document.getElementById("mo_move_lb").style.display = "none";
+            pu.undoredo_disable = true;
+            pu.comp = true;
+        }
         sw_timer.start({ precision: 'secondTenths' });
     }
 
@@ -1360,6 +1395,15 @@ function load(urlParam) {
     }
     pu.make_frameline(); // Draw Board
     panel_pu.draw_panel();
+
+    // submode, style settings
+    if (typeof rtext[11] !== 'undefined') {
+        pu.mode = JSON.parse(rtext[11]);
+        if (paramArray.m === "solve") {
+            pu.mode.qa = "pu_a";
+        }
+    }
+
     pu.mode_qa(pu.mode.qa); //include redraw
     if (paramArray.m === "solve") {
         // Saving the solve mode
@@ -1373,7 +1417,13 @@ function load(urlParam) {
             }
         }
     }
-    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //include redraw
+
+    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
+
+    // version save
+    if (typeof rtext[10] !== 'undefined') {
+        pu.version = JSON.parse(rtext[10]);
+    }
 }
 
 function loadver1(paramArray, rtext) {
@@ -1815,7 +1865,7 @@ function set_solvemode() {
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
     document.getElementById("mo_cage_lb").style.display = "none";
-    document.getElementById("mo_special_lb").style.display = "none";
+    // document.getElementById("mo_special_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
     // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";
