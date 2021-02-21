@@ -141,6 +141,7 @@ onload = function() {
         } else {
             var key = e.key;
             var keycode = e.keyCode;
+            var code = e.code;
             var keylocation = e.location;
             var shift_key = e.shiftKey;
             var ctrl_key = e.ctrlKey;
@@ -251,7 +252,41 @@ onload = function() {
                     (keycode >= 48 && keycode <= 57)) {
                     event.preventDefault();
                     if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                        pu.key_number(String.fromCharCode(keycode));
+                        switch (code) {
+                            case "Digit0":
+                                pu.key_number("0");
+                                break;
+                            case "Digit1":
+                                pu.key_number("1");
+                                break;
+                            case "Digit2":
+                                pu.key_number("2");
+                                break;
+                            case "Digit3":
+                                pu.key_number("3");
+                                break;
+                            case "Digit4":
+                                pu.key_number("4");
+                                break;
+                            case "Digit5":
+                                pu.key_number("5");
+                                break;
+                            case "Digit6":
+                                pu.key_number("6");
+                                break;
+                            case "Digit7":
+                                pu.key_number("7");
+                                break;
+                            case "Digit8":
+                                pu.key_number("8");
+                                break;
+                            case "Digit9":
+                                pu.key_number("9");
+                                break;
+                            default:
+                                pu.key_number(String.fromCharCode(keycode));
+                                break;
+                        }
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(key);
                         shift_numkey = false;
