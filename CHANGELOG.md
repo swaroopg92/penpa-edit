@@ -1,4 +1,6 @@
 ## History
+* 2021/02/** ver2.25.4
+	* Added "Edge Free" and "Line Free" to tab settings.
 * 2021/02/21 ver2.25.3
 	* Improved "Star battle" composite mode. One can mark dots between two/four cells.
 	* Enabled "Special" mode in Solving mode.
