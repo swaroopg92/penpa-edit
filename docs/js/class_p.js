@@ -75,6 +75,7 @@ class Puzzle {
         // Drawing position
         this.mouse_mode = "";
         this.selection = [];
+        this.cageselection = [];
         this.last = -1;
         this.lastx = -1;
         this.lasty = -1;
@@ -2036,6 +2037,7 @@ class Puzzle {
         document.getElementById('mode_number').style.display = 'none';
         document.getElementById('mode_symbol').style.display = 'none';
         document.getElementById('mode_special').style.display = 'none';
+        document.getElementById('mode_cage').style.display = 'none';
         document.getElementById('mode_move').style.display = 'none';
         document.getElementById('mode_combi').style.display = 'none';
         document.getElementById('mode_sudoku').style.display = 'none';
@@ -7042,19 +7044,53 @@ class Puzzle {
     //////////////////////////
 
     mouse_cage(x, y, num) {
-        if (this.mouse_mode === "down_left") {
-            this.drawing = true;
-            this.drawing_mode = 100;
-            this.last = num;
-        } else if (this.mouse_mode === "move") {
-            this.re_linecage(num);
-            this.last = num;
-        } else if (this.mouse_mode === "up") {
-            this.drawing = false;
-            this.last = -1;
-        } else if (this.mouse_mode === "out") {
-            this.drawing = false;
-            this.last = -1;
+        if (document.getElementById('sub_cages').checked) {
+            if (this.mouse_mode === "down_left") {
+                this.drawing = true;
+                // find if num already exist
+                let num_index = this.cageselection.indexOf(num);
+                if (num_index === -1) {
+                    this.cageselection.push(num);
+                }
+                this.cursol = num;
+            } else if (this.mouse_mode === "move") {
+                if (this.drawing) {
+                    if (!this.cageselection.includes(num)) {
+                        this.cageselection.push(num);
+                    }
+                } else {
+                    this.cageselection = [];
+                }
+            } else if (this.mouse_mode === "up") {
+                this.drawing = false;
+                console.log(this.cageselection);
+
+                // Find the corner coordinates of the cell
+                for (let i = 0; i < this.cageselection.length; i++) {
+                    let col_num = (this.cageselection[i] % (this.nx0));
+                    let row_num = parseInt(this.cageselection[i] / this.nx0);
+                    let tl = 4 * this.nx0 * this.ny0 + 8 * this.nx0 + 4 * (col_num - 1) + 4 * this.nx0 * (row_num) + 4 // top left
+                    let corners = [tl, tl+1, tl+2, tl+3];
+                }
+                // Draw up cages
+            } else if (this.mouse_mode === "out") {
+                this.drawing = false;
+            }
+        } else if (document.getElementById('sub_free').checked) {
+            if (this.mouse_mode === "down_left") {
+                this.drawing = true;
+                this.drawing_mode = 100;
+                this.last = num;
+            } else if (this.mouse_mode === "move") {
+                this.re_linecage(num);
+                this.last = num;
+            } else if (this.mouse_mode === "up") {
+                this.drawing = false;
+                this.last = -1;
+            } else if (this.mouse_mode === "out") {
+                this.drawing = false;
+                this.last = -1;
+            }
         }
     }
 
@@ -7062,7 +7098,8 @@ class Puzzle {
         if (this.drawing && this.last != num) {
             var line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
-            if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) { //隣接していたら
+            if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) { // If they are adjacent
+                console.log(this.last, num);
                 array = "cage";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
