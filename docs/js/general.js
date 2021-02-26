@@ -1117,8 +1117,8 @@ function export_sudoku() {
 function import_url() {
     let urlstring = document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("github.io/penpa-edit/?") !== -1) {
-            urlstring = urlstring.split("github.io/penpa-edit/?")[1];
+        if (urlstring.indexOf("/penpa-edit/?") !== -1) {
+            urlstring = urlstring.split("/penpa-edit/?")[1];
             load(urlstring);
             document.getElementById("modal-load").style.display = 'none';
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
@@ -1301,16 +1301,7 @@ function load(urlParam) {
             }
 
             if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
-                // Disable Share, Undo/Redo buttons, IO sudoku
-                document.getElementById("savetext").style.display = "none";
-                document.getElementById("input_sudoku").style.display = "none";
-                document.getElementById("tb_undo").style.display = "none";
-                document.getElementById("tb_redo").style.display = "none";
-                document.getElementById("tb_reset").style.display = "none";
-                document.getElementById("tb_delete").style.display = "none";
-                document.getElementById("mo_move_lb").style.display = "none";
-                pu.undoredo_disable = true;
-                pu.comp = true;
+                set_contestmode();
             }
         } else {
             if (typeof rtext[7] !== 'undefined') {
@@ -1364,16 +1355,7 @@ function load(urlParam) {
             }
         }
         if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
-            // Disable Share, Undo/Redo buttons, IO sudoku
-            document.getElementById("savetext").style.display = "none";
-            document.getElementById("input_sudoku").style.display = "none";
-            document.getElementById("tb_undo").style.display = "none";
-            document.getElementById("tb_redo").style.display = "none";
-            document.getElementById("tb_reset").style.display = "none";
-            document.getElementById("tb_delete").style.display = "none";
-            document.getElementById("mo_move_lb").style.display = "none";
-            pu.undoredo_disable = true;
-            pu.comp = true;
+            set_contestmode();
         }
         sw_timer.start({ precision: 'secondTenths' });
     }
@@ -1879,6 +1861,22 @@ function set_solvemode() {
 
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
+}
+
+function set_contestmode() {
+    // Disable Share, Undo/Redo buttons, IO sudoku
+    document.getElementById("title").innerHTML = "Contest mode"
+    document.getElementById("savetext").style.display = "none";
+    document.getElementById("input_sudoku").style.display = "none";
+    document.getElementById("tb_undo").style.display = "none";
+    document.getElementById("tb_redo").style.display = "none";
+    document.getElementById("tb_reset").style.display = "none";
+    document.getElementById("tb_delete").style.display = "none";
+    document.getElementById("mo_move_lb").style.display = "none";
+    document.getElementById("puzzlesourcelink").style.display = "none";
+    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+    pu.undoredo_disable = true;
+    pu.comp = true;
 }
 
 function isEmpty(obj) {
