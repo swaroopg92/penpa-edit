@@ -1,5 +1,5 @@
 ## History
-* 2021/02/** ver2.25.4
+* 2021/02/21 ver2.25.4
 	* Added "Edge Free" and "Line Free" to tab settings.
 	* Made some improvements to "URL for contests".
 	* Load URL now accepts gmpuzzles link as well.
