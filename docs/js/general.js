@@ -1117,8 +1117,8 @@ function export_sudoku() {
 function import_url() {
     let urlstring = document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("github.io/penpa-edit/?") !== -1) {
-            urlstring = urlstring.split("github.io/penpa-edit/?")[1];
+        if (urlstring.indexOf("/penpa-edit/?") !== -1) {
+            urlstring = urlstring.split("/penpa-edit/?")[1];
             load(urlstring);
             document.getElementById("modal-load").style.display = 'none';
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
