@@ -76,6 +76,7 @@ class Puzzle {
         this.mouse_mode = "";
         this.selection = [];
         this.cageselection = [];
+        this.killercages = [];
         this.last = -1;
         this.lastx = -1;
         this.lasty = -1;
@@ -7063,16 +7064,36 @@ class Puzzle {
                 }
             } else if (this.mouse_mode === "up") {
                 this.drawing = false;
-                console.log(this.cageselection);
+                let cageexist_status = false;
+                let cageexist_loc;
+                let killercages_cells = [].concat.apply([], this.killercages);
+                console.log(this.cageselection, this.killercages);
 
-                // Find the corner coordinates of the cell
+                // Find if any cell of the new cage already has a cage
                 for (let i = 0; i < this.cageselection.length; i++) {
-                    let col_num = (this.cageselection[i] % (this.nx0));
-                    let row_num = parseInt(this.cageselection[i] / this.nx0);
-                    let tl = 4 * this.nx0 * this.ny0 + 8 * this.nx0 + 4 * (col_num - 1) + 4 * this.nx0 * (row_num) + 4 // top left
-                    let corners = [tl, tl+1, tl+2, tl+3];
+                    if (killercages_cells.includes(this.cageselection[i])) {
+                        cageexist_status = true;
+                        cageexist_loc = i;
+                        break;
+                    }
                 }
-                // Draw up cages
+                if (!cageexist_status) {
+                    this.killercages.push(this.cageselection);
+
+                    // Find the corner coordinates of the cell
+                    for (let i = 0; i < this.cageselection.length; i++) {
+                        let col_num = (this.cageselection[i] % (this.nx0));
+                        let row_num = parseInt(this.cageselection[i] / this.nx0);
+                        let tl = 4 * this.nx0 * this.ny0 + 8 * this.nx0 + 4 * (col_num - 1) + 4 * this.nx0 * (row_num) + 4 // top left
+                        let corners = [tl, tl + 1, tl + 2, tl + 3];
+                    }
+                    // Draw up cages
+                } else {
+                    // length 1 then delete
+
+                    // length > 1 do not do anything
+                }
+
             } else if (this.mouse_mode === "out") {
                 this.drawing = false;
             }
