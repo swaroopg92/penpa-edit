@@ -704,7 +704,8 @@ body textarea {
     font-size: 12px;
 }
 
-#puzzleinfo {
+#puzzleinfo,
+#contestinfo {
     background: var(--black);
     width: 400px;
     margin: 0 auto;
@@ -1312,5 +1313,14 @@ a:active {
 
 #symmode_content,
 #combimode_content {
+    color: var(--white);
+}
+
+/* Solution Code Message */
+#answer_key {
+    color: var(--white);
+}
+
+#title {
     color: var(--white);
 }
