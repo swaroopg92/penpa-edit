@@ -68,7 +68,12 @@ onload = function() {
             var event = e.changedTouches[0];
             e.preventDefault(); // When both mouse and touch start, only touch
         }
-        var obj = coord_point(event);
+        if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") &&
+            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) {
+            var obj = coord_point(event, 'flex');
+        } else {
+            var obj = coord_point(event);
+        }
         var x = obj.x,
             y = obj.y,
             num = obj.num;
@@ -86,7 +91,12 @@ onload = function() {
         if (event.buttons === 2) { // Right click and moving
             var obj = coord_point(event, 'flex');
         } else {
-            var obj = coord_point(event);
+            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) {
+                var obj = coord_point(event, 'flex');
+            } else {
+                var obj = coord_point(event);
+            }
         }
         var x = obj.x,
             y = obj.y,
@@ -581,11 +591,13 @@ onload = function() {
         //const startTime = performance.now();
 
         // Improving starbattle composite mode, left click
-        if ((fittype === 'flex') &&
-            (pu.mode[pu.mode.qa].edit_mode === "combi") &&
-            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star")) {
-            type = pu.type;
-            pu.type = [0];
+        if (fittype === 'flex') {
+            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
+                    (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) {
+                type = pu.type;
+                pu.type = [0];
+            }
         }
 
         for (var i = 0; i < pu.point.length; i++) {
@@ -599,10 +611,12 @@ onload = function() {
         }
 
         // resetting the type for starbattle composite mode
-        if ((fittype === 'flex') &&
-            (pu.mode[pu.mode.qa].edit_mode === "combi") &&
-            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star")) {
-            pu.type = type;
+        if (fittype === 'flex') {
+            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
+                    (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) {
+                pu.type = type;
+            }
         }
 
         //const endTime = performance.now();

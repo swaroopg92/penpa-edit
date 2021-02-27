@@ -7840,18 +7840,28 @@ class Puzzle {
     }
 
     re_combi_yajilin_up(num) {
-        if (this.point[num].type === 0 && this.last === num && this.first === num) {
-            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 1;
-            } else if (this[this.mode.qa].surface[num] === 1) {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-            } else {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
+        if (this.last === num && this.first === num) {
+            if (this.point[num].type === 0) {
+                if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                    this.record("surface", num);
+                    this[this.mode.qa].surface[num] = 1;
+                } else if (this[this.mode.qa].surface[num] === 1) {
+                    this.record("surface", num);
+                    delete this[this.mode.qa].surface[num];
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+            } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
+                if (!this[this.mode.qa].line[num]) { // Insert cross
+                    this.record('line', num);
+                    this[this.mode.qa].line[num] = 98;
+                } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                    this.record('line', num);
+                    delete this[this.mode.qa].line[num];
+                }
             }
         }
         this.drawing_mode = -1;
@@ -7897,6 +7907,14 @@ class Puzzle {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
                 this.drawing_mode = 6; // removing dots
+            }
+        } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
             }
         }
         this.last = num;

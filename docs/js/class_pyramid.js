@@ -250,6 +250,7 @@ class Puzzle_pyramid extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2, 3];
                         break;
                     case "edgex":
@@ -262,7 +263,6 @@ class Puzzle_pyramid extends Puzzle {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
