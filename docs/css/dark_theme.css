@@ -1324,3 +1324,10 @@ a:active {
 #title {
     color: var(--white);
 }
+
+#puzzletitle,
+#puzzleauthor,
+#puzzlesource,
+#solution_check {
+    color: var(--white);
+}
