@@ -42,7 +42,11 @@ onload = function() {
             e.preventDefault(); // When both mouse and touch start, only touch
         }
         var ctrl_key = e.ctrlKey;
-        var obj = coord_point(event);
+        if (ondown_key === "mousedown" && event.button !== 2) {
+            var obj = coord_point(event, 'flex');
+        } else {
+            var obj = coord_point(event);
+        }
         var x = obj.x,
             y = obj.y,
             num = obj.num;
@@ -64,7 +68,12 @@ onload = function() {
             var event = e.changedTouches[0];
             e.preventDefault(); // When both mouse and touch start, only touch
         }
-        var obj = coord_point(event);
+        if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") &&
+            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) {
+            var obj = coord_point(event, 'flex');
+        } else {
+            var obj = coord_point(event);
+        }
         var x = obj.x,
             y = obj.y,
             num = obj.num;
@@ -79,7 +88,16 @@ onload = function() {
             var event = e.changedTouches[0];
         }
         e.preventDefault();
-        var obj = coord_point(event);
+        if (event.buttons === 2) { // Right click and moving
+            var obj = coord_point(event, 'flex');
+        } else {
+            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) {
+                var obj = coord_point(event, 'flex');
+            } else {
+                var obj = coord_point(event);
+            }
+        }
         var x = obj.x,
             y = obj.y,
             num = obj.num;
@@ -105,15 +123,15 @@ onload = function() {
 
     // Variables for Tab selector
     let modes = ["Surface", "Wall", "Shape", "Composite",
-        "Line Normal", "Line Diagonal", "Line Middle", "Line Helper",
-        "Edge Normal", "Edge Diagonal", "Edge Helper",
+        "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
+        "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre"
     ];
 
     let modes_mapping = ["surface", "wall", "symbol", "combi",
-        "sub_line1", "sub_line2", "sub_line5", "sub_line4",
-        "sub_lineE1", "sub_lineE2", "sub_lineE4",
+        "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
+        "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
         "sub_sudoku1", "sub_sudoku2", "sub_sudoku3"
     ];
@@ -141,6 +159,7 @@ onload = function() {
         } else {
             var key = e.key;
             var keycode = e.keyCode;
+            var code = e.code;
             var keylocation = e.location;
             var shift_key = e.shiftKey;
             var ctrl_key = e.ctrlKey;
@@ -244,7 +263,11 @@ onload = function() {
                 if (shift_key && key === " ") {
                     pu.key_number(key);
                     event.returnValue = false;
-                } else if (str_num.indexOf(key) != -1 || str_alph_low.indexOf(key) != -1 || str_alph_up.indexOf(key) != -1 || str_sym.indexOf(key) != -1) {
+                } else if (str_num.indexOf(key) != -1 ||
+                    str_alph_low.indexOf(key) != -1 ||
+                    str_alph_up.indexOf(key) != -1 ||
+                    str_sym.indexOf(key) != -1 ||
+                    (keycode >= 48 && keycode <= 57)) {
                     event.preventDefault();
                     if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(String.fromCharCode(keycode));
@@ -252,6 +275,40 @@ onload = function() {
                         pu.key_number(key);
                         shift_numkey = false;
                     } else {
+                        if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                            switch (code) {
+                                case "Digit0":
+                                    key = "0";
+                                    break;
+                                case "Digit1":
+                                    key = "1";
+                                    break;
+                                case "Digit2":
+                                    key = "2";
+                                    break;
+                                case "Digit3":
+                                    key = "3";
+                                    break;
+                                case "Digit4":
+                                    key = "4";
+                                    break;
+                                case "Digit5":
+                                    key = "5";
+                                    break;
+                                case "Digit6":
+                                    key = "6";
+                                    break;
+                                case "Digit7":
+                                    key = "7";
+                                    break;
+                                case "Digit8":
+                                    key = "8";
+                                    break;
+                                case "Digit9":
+                                    key = "9";
+                                    break;
+                            }
+                        }
                         pu.key_number(key);
                     }
                 } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
@@ -267,6 +324,40 @@ onload = function() {
 
             if (ctrl_key && !shift_key && !alt_key) {
                 if (key != "Control") {
+                    if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                        switch (code) {
+                            case "Digit0":
+                                key = "0";
+                                break;
+                            case "Digit1":
+                                key = "1";
+                                break;
+                            case "Digit2":
+                                key = "2";
+                                break;
+                            case "Digit3":
+                                key = "3";
+                                break;
+                            case "Digit4":
+                                key = "4";
+                                break;
+                            case "Digit5":
+                                key = "5";
+                                break;
+                            case "Digit6":
+                                key = "6";
+                                break;
+                            case "Digit7":
+                                key = "7";
+                                break;
+                            case "Digit8":
+                                key = "8";
+                                break;
+                            case "Digit9":
+                                key = "9";
+                                break;
+                        }
+                    }
                     switch (key) {
                         case "d": //Ctrl+d
                         case "D":
@@ -275,12 +366,16 @@ onload = function() {
                             break;
                         case "y": //Ctrl+y
                         case "Y":
-                            pu.redo();
+                            if (!pu.undoredo_disable) {
+                                pu.redo();
+                            }
                             event.returnValue = false;
                             break;
                         case "z": //Ctrl+z
                         case "Z":
-                            pu.undo();
+                            if (!pu.undoredo_disable) {
+                                pu.undo();
+                            }
                             event.returnValue = false;
                             break;
                         case " ": //Ctrl+space
@@ -487,12 +582,24 @@ onload = function() {
         }
     }
 
-    function coord_point(e) {
+    function coord_point(e, fittype = 'none') {
         var x = e.pageX - canvas.offsetLeft;
         var y = e.pageY - canvas.offsetTop;
         var min0, min = 10e6;
         var num = 0;
+        let type;
         //const startTime = performance.now();
+
+        // Improving starbattle composite mode, left click
+        if (fittype === 'flex') {
+            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
+                    (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) {
+                type = pu.type;
+                pu.type = [0];
+            }
+        }
+
         for (var i = 0; i < pu.point.length; i++) {
             if (pu.point[i] && pu.type.indexOf(pu.point[i].type) != -1) {
                 min0 = (x - pu.point[i].x) ** 2 + (y - pu.point[i].y) ** 2;
@@ -502,6 +609,16 @@ onload = function() {
                 }
             }
         }
+
+        // resetting the type for starbattle composite mode
+        if (fittype === 'flex') {
+            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
+                    (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) {
+                pu.type = type;
+            }
+        }
+
         //const endTime = performance.now();
         //console.log(endTime - startTime);
         num = parseInt(num);
@@ -777,6 +894,10 @@ onload = function() {
                 break;
             case "expansion":
                 expansion();
+                e.preventDefault();
+                break;
+            case "address_comp":
+                savetext_comp();
                 e.preventDefault();
                 break;
             case "pp_file":

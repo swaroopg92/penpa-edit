@@ -362,7 +362,8 @@
                             <ul>
                                 <li><span id="combisub_linex">Line or x</span></li>
                                 <li><span id="combisub_lineox">Line or OX</span></li>
-                                <li><span id="combisub_edgexoi">Edge, x, in/out</span></li>
+                                <li><span id="combisub_edgex">Edge x</span></li>
+                                <li><span id="combisub_edgexoi">Edge IO</span></li>
                                 <li><span id="combisub_yajilin">Yajilin</span></li>
                                 <li><span id="combisub_hashi">Hashi</span></li>
                             </ul>
@@ -569,6 +570,9 @@
         <div><label id="solution_check" class="info" /></label></div>
     </div>
     <div id="dvique" class="dvique"></div>
+    <div id="contestinfo">
+        <div><label id="answer_key" class="info" /></label></div>
+    </div>
     <div id="bottom_button">
         <span class="tooltip">
             <input type="button" id="tb_undo" value="Undo" class="button" />
@@ -601,7 +605,7 @@
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.25.2, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.25.4, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -694,6 +698,8 @@
                 <span id="div_all"><label class="label_nb" id="nb_sudoku3_lb">Sandwich</label></span>
                 <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
                 <br>
+                <span id="div_all"><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
+                <input type="checkbox" name="nb_sudoku8" id="nb_sudoku8">
                 <span id="div_all"><label class="label_nb" id="nb_sudoku5_lb">Size 6x6</label></span>
                 <input type="checkbox" name="nb_sudoku5" id="nb_sudoku5">
                 <span id="div_all"><label class="label_nb" id="nb_sudoku6_lb">Size 8x8</label></span>
@@ -879,6 +885,8 @@
                 <input type="button" id="address_edit" value="URL for editing" />
                 <input type="button" id="address_solve" value="URL for solving" />
                 <input type="button" id="expansion" value="Extra options" />
+                <!--For Competitive Solving-->
+                <input type="button" id="address_comp" value="URL for contests" />
             </div>
             <div>
                 <span id="div_all"><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>

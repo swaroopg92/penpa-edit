@@ -685,7 +685,8 @@ body textarea {
     font-size: 12px;
 }
 
-#puzzleinfo {
+#puzzleinfo,
+#contestinfo {
     background: var(--white);
     width: 400px;
     margin: 0 auto;

@@ -127,6 +127,7 @@ class Puzzle {
         this.solution = "";
         this.sol_flag = 0;
         this.undoredo_counter = 0;
+        this.loop_counter = false;
         this.rules = "";
         this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
         this.replace = [
@@ -157,7 +158,10 @@ class Puzzle {
             ["\"deletelineE\"", "z4"],
             ["\"__a\"", "z_"],
             ["null", "zO"],
-        ]
+        ];
+        this.version = [2, 25, 3];
+        this.undoredo_disable = false;
+        this.comp = false;
     }
 
     reset() {
@@ -2012,7 +2016,7 @@ class Puzzle {
     mode_qa(mode) {
         document.getElementById(mode).checked = true;
         this.mode.qa = mode;
-        this.mode_set(this.mode[this.mode.qa].edit_mode);
+        this.mode_set(this.mode[this.mode.qa].edit_mode); // includes redraw
         this.redraw(); //cursol更新用
     }
 
@@ -2129,6 +2133,8 @@ class Puzzle {
                         break;
                     case "linex":
                         break;
+                    case "edgex":
+                        break;
                     case "edgexoi":
                         break;
                     case "blpo":
@@ -2234,7 +2240,17 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        // Version
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2318,8 +2334,23 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
 
+        if (this.mmode !== "solve") {
+            text += JSON.stringify("x") + "\n"; // dummy to compensate time saver for non solve cloning
+        }
+
+        if (this.comp) {
+            text += JSON.stringify("comp") + "\n";
+        } else {
+            text += JSON.stringify("x") + "\n";
+        }
+
+        // Version
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2405,7 +2436,104 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        // Version
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
+
+        for (var i = 0; i < this.replace.length; i++) {
+            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        }
+
+        var u8text = new TextEncoder().encode(text);
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        var ba = window.btoa(char8);
+        var url = location.href.split('?')[0];
+        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        return url + "?m=solve&p=" + ba;
+    }
+
+    maketext_compsolve() {
+        var text = "";
+        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
+            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
+            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
+
+        // Puzzle title
+        let titleinfo = document.getElementById("saveinfotitle").value;
+        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
+
+        // Puzzle author
+        let authorinfo = document.getElementById("saveinfoauthor").value;
+        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
+
+        // Puzzle Source
+        text += "," + document.getElementById("saveinfosource").value;
+
+        // Puzzle Rules
+        let ruleinfo = document.getElementById("saveinforules").value;
+        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent + "\n";
+
+        text += JSON.stringify(this.space) + "\n";
+        text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
+
+        var qr = this.pu_q.command_redo.__a;
+        var qu = this.pu_q.command_undo.__a;
+        var ar = this.pu_a.command_redo.__a;
+        var au = this.pu_a.command_undo.__a;
+        this.pu_q.command_redo.__a = [];
+        this.pu_q.command_undo.__a = [];
+        this.pu_a.command_redo.__a = [];
+        this.pu_a.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q) + "\n" + "\n";
+        this.pu_q.command_redo.__a = qr;
+        this.pu_q.command_undo.__a = qu;
+        this.pu_a.command_redo.__a = ar;
+        this.pu_a.command_undo.__a = au;
+
+        var list = [this.centerlist[0]];
+        for (var i = 1; i < this.centerlist.length; i++) {
+            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        }
+        text += JSON.stringify(list) + "\n";
+
+        // Copy the tab selector modes
+        let user_choices = getValues('mode_choices');
+        text += JSON.stringify(user_choices) + "\n";
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting) + "\n";
+
+        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+
+        text += JSON.stringify("comp") + "\n";
+
+        // Version
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -7184,6 +7312,7 @@ class Puzzle {
     mouse_combi(x, y, num) {
         switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
             case "linex":
+            case "edgex":
             case "edgexoi":
             case "tents":
                 if (this.mouse_mode === "down_right" || this.ondown_key === "touchstart") {
@@ -7213,6 +7342,13 @@ class Puzzle {
                     break;
                 case "lineox":
                     this.re_combi_lineox(num);
+                    break;
+                case "edgex":
+                    if (this.ondown_key === "touchstart") {
+                        this.re_combi_cross_downright(num, "lineE");
+                    } else {
+                        this.re_combi_edgex(num);
+                    }
                     break;
                 case "edgexoi":
                     if (this.ondown_key === "touchstart") {
@@ -7265,6 +7401,7 @@ class Puzzle {
                 case "linex":
                     this.re_combi_cross_downright(num);
                     break;
+                case "edgex":
                 case "edgexoi":
                     this.re_combi_cross_downright(num, "lineE");
                     break;
@@ -7294,6 +7431,9 @@ class Puzzle {
                     break;
                 case "lineox":
                     this.re_combi_lineox_move(num);
+                    break;
+                case "edgex":
+                    this.re_combi_edgex_move(num);
                     break;
                 case "edgexoi":
                     this.re_combi_edgexoi_move(num);
@@ -7344,6 +7484,9 @@ class Puzzle {
                     break;
                 case "lineox":
                     this.re_combi_lineox_up(num);
+                    break;
+                case "edgex":
+                    this.re_combi_edgex_up(num);
                     break;
                 case "edgexoi":
                     this.re_combi_edgexoi_up(num);
@@ -7636,6 +7779,34 @@ class Puzzle {
         this.redraw();
     }
 
+    re_combi_edgex(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
+        this.redraw();
+    }
+
+    re_combi_edgex_move(num) {
+        if (this.drawing_mode != -1 && this.point[num].type === 1) {
+            var line_style = 3;
+            var array;
+            if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
+                array = "lineE";
+                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                this.re_line(array, key, line_style);
+            }
+            this.last = num;
+            this.redraw();
+        }
+    }
+
+    re_combi_edgex_up(num) {
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
     re_combi_yajilin(num) {
         this.drawing_mode = 100;
         this.first = num;
@@ -7662,6 +7833,7 @@ class Puzzle {
                     array = "line";
                     var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                     this.re_line(array, key, line_style);
+                    this.loop_counter = true; // to ignore cross feature when loop is drawn on mobile (to avoid accidental crosses)
                 }
             }
             this.last = num;
@@ -7683,10 +7855,20 @@ class Puzzle {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
             }
+        } else if (!this.loop_counter &&
+            (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4)) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
+            }
         }
         this.drawing_mode = -1;
         this.first = -1;
         this.last = -1;
+        this.loop_counter = false;
         this.redraw();
     }
 
@@ -7727,6 +7909,14 @@ class Puzzle {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
                 this.drawing_mode = 6; // removing dots
+            }
+        } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
             }
         }
         this.last = num;
@@ -7851,57 +8041,134 @@ class Puzzle {
         this.redraw();
     }
 
+    get_neighbors(num) {
+        let col_num = (num % (this.nx0));
+        let row_num = parseInt(num / this.nx0);
+        let neighbors = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
+            (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
+            row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
+            row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
+            (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+            row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+            row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+            row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+        ]
+        return neighbors;
+    }
+
     re_combi_star_reduced(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "star", 2];
-        } else {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].symbol[num]) {
+                if (this.undoredo_counter > 3) {
+                    this.undoredo_counter = 1;
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let neighbors = this.get_neighbors(num);
+                for (let i = 0; i < neighbors.length; i++) {
+                    if (this[this.mode.qa].symbol[neighbors[i]]) {
+                        this.record("symbol", neighbors[i], this.undoredo_counter);
+                        delete this[this.mode.qa].symbol[neighbors[i]];
+                    }
+                }
+                this.record("symbol", num, this.undoredo_counter);
+                this[this.mode.qa].symbol[num] = [1, "star", 2];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 2;
+            }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_star(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [1, "star", 2];
-        } else if (this[this.mode.qa].symbol[num][0] === 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [0, "star", 2];
-            this.drawing_mode = 1;
-        } else {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    if (this.undoredo_counter > 3) {
+                        this.undoredo_counter = 1;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                    let neighbors = this.get_neighbors(num);
+                    for (let i = 0; i < neighbors.length; i++) {
+                        if (this[this.mode.qa].symbol[neighbors[i]]) {
+                            this.record("symbol", neighbors[i], this.undoredo_counter);
+                            delete this[this.mode.qa].symbol[neighbors[i]];
+                        }
+                    }
+                    this.record("symbol", num, this.undoredo_counter);
+                    this[this.mode.qa].symbol[num] = [1, "star", 2];
+                } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+                this.redraw();
+                break;
         }
-        this.redraw();
     }
 
     re_combi_star_downright(num) {
-        if (!this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [0, "star", 2];
-            this.drawing_mode = 1;
-        } else {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+                this.redraw();
+                break;
         }
-        this.redraw();
     }
 
-
     re_combi_star_move(num) {
-        if (this.drawing_mode === 1 && (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [0, "star", 2];
-        } else if (this.drawing_mode === 2 && this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
+        if (this.point[num].type === 0) {
+            if (this.drawing_mode === 1 &&
+                (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [0, "star", 2];
+            } else if (this.drawing_mode === 2 && this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+            this.redraw();
         }
-        this.redraw();
     }
 
     re_combi_tents(num) {
