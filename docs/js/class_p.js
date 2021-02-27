@@ -127,6 +127,7 @@ class Puzzle {
         this.solution = "";
         this.sol_flag = 0;
         this.undoredo_counter = 0;
+        this.loop_counter = false;
         this.rules = "";
         this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
         this.replace = [
@@ -7832,6 +7833,7 @@ class Puzzle {
                     array = "line";
                     var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                     this.re_line(array, key, line_style);
+                    this.loop_counter = true; // to ignore cross feature when loop is drawn on mobile (to avoid accidental crosses)
                 }
             }
             this.last = num;
@@ -7840,33 +7842,33 @@ class Puzzle {
     }
 
     re_combi_yajilin_up(num) {
-        if (this.last === num && this.first === num) {
-            if (this.point[num].type === 0) {
-                if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                    this.record("surface", num);
-                    this[this.mode.qa].surface[num] = 1;
-                } else if (this[this.mode.qa].surface[num] === 1) {
-                    this.record("surface", num);
-                    delete this[this.mode.qa].surface[num];
-                    this.record("symbol", num);
-                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                } else {
-                    this.record("symbol", num);
-                    delete this[this.mode.qa].symbol[num];
-                }
-            } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
-                if (!this[this.mode.qa].line[num]) { // Insert cross
-                    this.record('line', num);
-                    this[this.mode.qa].line[num] = 98;
-                } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
-                    this.record('line', num);
-                    delete this[this.mode.qa].line[num];
-                }
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 1;
+            } else if (this[this.mode.qa].surface[num] === 1) {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+        } else if (!this.loop_counter &&
+            (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4)) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
             }
         }
         this.drawing_mode = -1;
         this.first = -1;
         this.last = -1;
+        this.loop_counter = false;
         this.redraw();
     }
 
