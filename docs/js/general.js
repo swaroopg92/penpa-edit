@@ -74,7 +74,8 @@ function make_class(gridtype, loadtype = 'new') {
                 "nb_sudoku4_lb", "nb_sudoku4",
                 "nb_sudoku5_lb", "nb_sudoku5",
                 "nb_sudoku6_lb", "nb_sudoku6",
-                "nb_sudoku7_lb"
+                "nb_sudoku7_lb",
+                "nb_sudoku8_lb", "nb_sudoku8"
             ]; // of sudoku
             for (var i of type4) {
                 document.getElementById(i).style.display = "none";
@@ -162,6 +163,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         var nx = 8;
                         var ny = 8;
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        var nx = 6;
+                        var ny = 6;
                     } else { // Default 9x9 grid
                         var nx = 11;
                         var ny = 11;
@@ -177,6 +181,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         var nx = 7;
                         var ny = 7;
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        var nx = 5;
+                        var ny = 5;
                     } else { // Default 9x9 grid
                         var nx = 10;
                         var ny = 10;
@@ -192,6 +199,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         var nx = 6;
                         var ny = 6;
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        var nx = 4;
+                        var ny = 4;
                     } else { // Default 9x9 grid
                         var nx = 9;
                         var ny = 9;
@@ -218,6 +228,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         rows = [4, 6];
                         cols = [5];
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        rows = [4];
+                        cols = [4];
                     } else { // Default 9x9 grid
                         rows = [5, 8];
                         cols = [5, 8];
@@ -244,6 +257,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         rows = [4, 6];
                         cols = [5];
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        rows = [4];
+                        cols = [4];
                     } else { // Default 9x9 grid
                         rows = [5, 8];
                         cols = [5, 8];
@@ -270,6 +286,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         rows = [3, 5];
                         cols = [4];
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        rows = [3];
+                        cols = [3];
                     } else { // Default 9x9 grid
                         rows = [4, 7];
                         cols = [4, 7];
@@ -380,7 +399,8 @@ function changetype() {
         "nb_sudoku4_lb", "nb_sudoku4",
         "nb_sudoku5_lb", "nb_sudoku5",
         "nb_sudoku6_lb", "nb_sudoku6",
-        "nb_sudoku7_lb"
+        "nb_sudoku7_lb",
+        "nb_sudoku8_lb", "nb_sudoku8"
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     switch (gridtype) {
@@ -511,6 +531,7 @@ function changetype() {
             document.getElementById("nb_sudoku4").checked = false;
             document.getElementById("nb_sudoku5").checked = false;
             document.getElementById("nb_sudoku6").checked = false;
+            document.getElementById("nb_sudoku8").checked = false;
             break;
         case "kakuro":
             for (var i of type) {
@@ -926,6 +947,10 @@ function i_url() {
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button.";
 }
 
+function p_settings() {
+    document.getElementById("modal-settings").style.display = 'block';
+}
+
 function expansion() {
     document.getElementById("modal-save2").style.display = 'block';
 }
@@ -1117,8 +1142,8 @@ function export_sudoku() {
 function import_url() {
     let urlstring = document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("github.io/penpa-edit/?") !== -1) {
-            urlstring = urlstring.split("github.io/penpa-edit/?")[1];
+        if (urlstring.indexOf("/penpa-edit/?") !== -1) {
+            urlstring = urlstring.split("/penpa-edit/?")[1];
             load(urlstring);
             document.getElementById("modal-load").style.display = 'none';
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
@@ -1301,16 +1326,7 @@ function load(urlParam) {
             }
 
             if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
-                // Disable Share, Undo/Redo buttons, IO sudoku
-                document.getElementById("savetext").style.display = "none";
-                document.getElementById("input_sudoku").style.display = "none";
-                document.getElementById("tb_undo").style.display = "none";
-                document.getElementById("tb_redo").style.display = "none";
-                document.getElementById("tb_reset").style.display = "none";
-                document.getElementById("tb_delete").style.display = "none";
-                document.getElementById("mo_move_lb").style.display = "none";
-                pu.undoredo_disable = true;
-                pu.comp = true;
+                set_contestmode();
             }
         } else {
             if (typeof rtext[7] !== 'undefined') {
@@ -1364,16 +1380,7 @@ function load(urlParam) {
             }
         }
         if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
-            // Disable Share, Undo/Redo buttons, IO sudoku
-            document.getElementById("savetext").style.display = "none";
-            document.getElementById("input_sudoku").style.display = "none";
-            document.getElementById("tb_undo").style.display = "none";
-            document.getElementById("tb_redo").style.display = "none";
-            document.getElementById("tb_reset").style.display = "none";
-            document.getElementById("tb_delete").style.display = "none";
-            document.getElementById("mo_move_lb").style.display = "none";
-            pu.undoredo_disable = true;
-            pu.comp = true;
+            set_contestmode();
         }
         sw_timer.start({ precision: 'secondTenths' });
     }
@@ -1423,6 +1430,16 @@ function load(urlParam) {
     // version save
     if (typeof rtext[10] !== 'undefined') {
         pu.version = JSON.parse(rtext[10]);
+    }
+
+    // Theme
+    if (typeof rtext[12] !== 'undefined') {
+        if (JSON.parse(rtext[12]) === 'dark') {
+            document.getElementById("dark_mode").checked = true;
+            document.getElementById("color_theme").href = "./css/dark_theme.css";
+            pu.set_redoundocolor();
+            pu.redraw();
+        }
     }
 }
 
@@ -1879,6 +1896,22 @@ function set_solvemode() {
 
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
+}
+
+function set_contestmode() {
+    // Disable Share, Undo/Redo buttons, IO sudoku
+    document.getElementById("title").innerHTML = "Contest mode"
+    document.getElementById("savetext").style.display = "none";
+    document.getElementById("input_sudoku").style.display = "none";
+    document.getElementById("tb_undo").style.display = "none";
+    document.getElementById("tb_redo").style.display = "none";
+    document.getElementById("tb_reset").style.display = "none";
+    document.getElementById("tb_delete").style.display = "none";
+    document.getElementById("mo_move_lb").style.display = "none";
+    document.getElementById("puzzlesourcelink").style.display = "none";
+    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+    pu.undoredo_disable = true;
+    pu.comp = true;
 }
 
 function isEmpty(obj) {

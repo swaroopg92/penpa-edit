@@ -129,6 +129,7 @@ class Puzzle {
         this.solution = "";
         this.sol_flag = 0;
         this.undoredo_counter = 0;
+        this.loop_counter = false;
         this.rules = "";
         this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
         this.replace = [
@@ -2252,7 +2253,14 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Theme Setting
+        if (document.getElementById("light_mode").checked) {
+            text += JSON.stringify("light");
+        } else if (document.getElementById("dark_mode").checked) {
+            text += JSON.stringify("dark");
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2352,7 +2360,14 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Theme Setting
+        if (document.getElementById("light_mode").checked) {
+            text += JSON.stringify("light");
+        } else if (document.getElementById("dark_mode").checked) {
+            text += JSON.stringify("dark");
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2448,7 +2463,10 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x");
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2535,7 +2553,10 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x");
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -7890,6 +7911,7 @@ class Puzzle {
                     array = "line";
                     var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                     this.re_line(array, key, line_style);
+                    this.loop_counter = true; // to ignore cross feature when loop is drawn on mobile (to avoid accidental crosses)
                 }
             }
             this.last = num;
@@ -7911,10 +7933,20 @@ class Puzzle {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
             }
+        } else if (!this.loop_counter &&
+            (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4)) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
+            }
         }
         this.drawing_mode = -1;
         this.first = -1;
         this.last = -1;
+        this.loop_counter = false;
         this.redraw();
     }
 
@@ -7955,6 +7987,14 @@ class Puzzle {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
                 this.drawing_mode = 6; // removing dots
+            }
+        } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
             }
         }
         this.last = num;
@@ -8433,25 +8473,57 @@ class Puzzle {
     set_redoundocolor() {
         if (this.mode.qa === "pu_q") {
             if (this.pu_q.command_redo.__a.length === 0) {
-                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_redo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.WHITE;
+                }
             }
             if (this.pu_q.command_undo.__a.length === 0) {
-                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_undo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.WHITE;
+                }
             }
         } else {
             if (this.pu_a.command_redo.__a.length === 0) {
-                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_redo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_redo').style.color = Color.WHITE;
+                }
             }
             if (this.pu_a.command_undo.__a.length === 0) {
-                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                }
             } else {
-                document.getElementById('tb_undo').style.color = Color.BLACK;
+                if (document.getElementById('light_mode').checked) {
+                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                } else {
+                    document.getElementById('tb_undo').style.color = Color.WHITE;
+                }
             }
         }
     }

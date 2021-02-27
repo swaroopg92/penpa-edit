@@ -1,6 +1,12 @@
 ## History
-* 2021/02/** ver2.25.4
+* 2021/02/21 ver2.25.5
+	* Added 4x4 sudoku support (for kids in the school)
+	* Cross Helper feature added to Yajilin Composite Mode (Right click on Edges)
+	* Settings button, Dark Theme
+* 2021/02/21 ver2.25.4
 	* Added "Edge Free" and "Line Free" to tab settings.
+	* Made some improvements to "URL for contests".
+	* Load URL now accepts gmpuzzles link as well.
 * 2021/02/21 ver2.25.3
 	* Improved "Star battle" composite mode. One can mark dots between two/four cells.
 	* Enabled "Special" mode in Solving mode.
