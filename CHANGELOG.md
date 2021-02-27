@@ -1,4 +1,6 @@
 ## History
+* 2021/02/** ver2.25.5
+	* Added 4x4 sudoku support (for kids in the school)
 * 2021/02/21 ver2.25.4
 	* Added "Edge Free" and "Line Free" to tab settings.
 	* Made some improvements to "URL for contests".
