@@ -1431,6 +1431,16 @@ function load(urlParam) {
     if (typeof rtext[10] !== 'undefined') {
         pu.version = JSON.parse(rtext[10]);
     }
+
+    // Theme
+    if (typeof rtext[12] !== 'undefined') {
+        if (JSON.parse(rtext[12]) === 'dark') {
+            document.getElementById("dark_mode").checked = true;
+            document.getElementById("color_theme").href = "./css/dark_theme.css";
+            pu.set_redoundocolor();
+            pu.redraw();
+        }
+    }
 }
 
 function loadver1(paramArray, rtext) {

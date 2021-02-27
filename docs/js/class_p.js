@@ -2250,7 +2250,14 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Theme Setting
+        if (document.getElementById("light_mode").checked) {
+            text += JSON.stringify("light");
+        } else if (document.getElementById("dark_mode").checked) {
+            text += JSON.stringify("dark");
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2350,7 +2357,14 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Theme Setting
+        if (document.getElementById("light_mode").checked) {
+            text += JSON.stringify("light");
+        } else if (document.getElementById("dark_mode").checked) {
+            text += JSON.stringify("dark");
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2446,7 +2460,10 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x");
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2533,7 +2550,10 @@ class Puzzle {
         text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
-        text += JSON.stringify(this.mode);
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x");
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
