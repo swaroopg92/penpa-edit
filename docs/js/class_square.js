@@ -2964,6 +2964,10 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.fill();
                 break;
+            case 3:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.7 * pu.size, this.size * 0.8);
+                break;
         }
     }
 
