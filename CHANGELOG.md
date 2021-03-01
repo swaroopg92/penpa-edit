@@ -1,6 +1,8 @@
 ## History
 * 2021/02/** ver2.25.6
-	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb)
+	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
+	* Added light bulb to solution check option.
+	* Added Ignore Edges option to Solution Check (useful for araf, pentominous type of puzzles).
 * 2021/02/21 ver2.25.5
 	* Added 4x4 sudoku support (for kids in the school)
 	* Cross Helper feature added to Yajilin Composite Mode (Right click on Edges)
