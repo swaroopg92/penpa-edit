@@ -2651,11 +2651,25 @@ class Puzzle {
         }
 
         if (document.getElementById("sol_loopedge").checked === true || checkall) {
-            for (var i in this[pu].lineE) {
-                if (this[pu].lineE[i] === 3) {
-                    sol[2].push(i + ",1");
-                } else if (this[pu].lineE[i] === 30) {
-                    sol[2].push(i + ",2");
+            if (document.getElementById("sol_ignoreborder").checked === true) {
+                for (var i in this[pu].lineE) {
+                    if (this.frame[i] && this.frame[i] === 2) {
+                        // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                    } else {
+                        if (this[pu].lineE[i] === 3) {
+                            sol[2].push(i + ",1");
+                        } else if (this[pu].lineE[i] === 30) {
+                            sol[2].push(i + ",2");
+                        }
+                    }
+                }
+            } else {
+                for (var i in this[pu].lineE) {
+                    if (this[pu].lineE[i] === 3) {
+                        sol[2].push(i + ",1");
+                    } else if (this[pu].lineE[i] === 30) {
+                        sol[2].push(i + ",2");
+                    }
                 }
             }
 
@@ -2752,6 +2766,13 @@ class Puzzle {
                     if (document.getElementById("sol_math").checked === true || checkall) {
                         if (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
                             sol[5].push(i + "," + this[pu].symbol[i][0] + "G");
+                        }
+                    }
+                    break;
+                case "sun_moon":
+                    if (document.getElementById("sol_akari").checked === true || checkall) {
+                        if (this[pu].symbol[i][0] === 3) {
+                            sol[5].push(i + "," + this[pu].symbol[i][0] + "H");
                         }
                     }
                     break;
