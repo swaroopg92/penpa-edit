@@ -2653,7 +2653,8 @@ class Puzzle {
         if (document.getElementById("sol_loopedge").checked === true || checkall) {
             if (document.getElementById("sol_ignoreborder").checked === true) {
                 for (var i in this[pu].lineE) {
-                    if (this.frame[i] && this.frame[i] === 2) {
+                    if ((this.frame[i] && this.frame[i] === 2) ||
+                        (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
                         // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
                     } else {
                         if (this[pu].lineE[i] === 3) {
