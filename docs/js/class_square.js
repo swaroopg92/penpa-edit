@@ -265,6 +265,7 @@ class Puzzle_square extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2, 3];
                         break;
                     case "edgex":
@@ -277,7 +278,6 @@ class Puzzle_square extends Puzzle {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -2963,6 +2963,10 @@ class Puzzle_square extends Puzzle {
                 ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
                 ctx.closePath();
                 ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.7 * pu.size, this.size * 0.8);
                 break;
         }
     }

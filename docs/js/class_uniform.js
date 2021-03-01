@@ -306,6 +306,7 @@ class Puzzle_truncated_square extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2];
                         break;
                     case "edgex":
@@ -318,7 +319,6 @@ class Puzzle_truncated_square extends Puzzle {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -2749,6 +2749,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 3, 4];
                         break;
                     case "edgex":
@@ -2761,7 +2762,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -3254,6 +3254,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2];
                         break;
                     case "edgex":
@@ -3266,7 +3267,6 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -3776,6 +3776,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2];
                         break;
                     case "edgex":
@@ -3788,7 +3789,6 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -4276,6 +4276,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2];
                         break;
                     case "edgex":
@@ -4288,7 +4289,6 @@ class Puzzle_iso extends Puzzle_truncated_square {
                     case "battleship":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
