@@ -7052,6 +7052,7 @@ class Puzzle {
 
 
     mouse_sudoku(x, y, num, ctrl_key = false) {
+        // if (this.point[num].type === 0) {}  // Add this line, to ignore corners and allow diagonal selection, and set type = [0, 1]
         if (this.mouse_mode === "down_left") {
             this.drawing = true;
             if (!ctrl_key) {
