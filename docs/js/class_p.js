@@ -2275,7 +2275,7 @@ class Puzzle {
         if (ba.length >= 7360) {
             Swal.fire({
                 title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
                 icon: 'warning',
                 confirmButtonText: 'ok',
             })
@@ -2397,7 +2397,7 @@ class Puzzle {
             if ((ba.length + ba_s.length) >= 7360) {
                 Swal.fire({
                     title: 'Warning:',
-                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
                     icon: 'warning',
                     confirmButtonText: 'ok',
                 })
@@ -2408,7 +2408,7 @@ class Puzzle {
             if (ba.length >= 7360) {
                 Swal.fire({
                     title: 'Warning:',
-                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
                     icon: 'warning',
                     confirmButtonText: 'ok',
                 })
@@ -2509,7 +2509,7 @@ class Puzzle {
         if (ba.length >= 7360) {
             Swal.fire({
                 title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
                 icon: 'warning',
                 confirmButtonText: 'ok',
             })
@@ -2609,7 +2609,7 @@ class Puzzle {
         if (ba.length >= 7360) {
             Swal.fire({
                 title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
                 icon: 'warning',
                 confirmButtonText: 'ok',
             })
@@ -2633,7 +2633,7 @@ class Puzzle {
         if ((text_head.length + ba.length) >= 7360) {
             Swal.fire({
                 title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
                 icon: 'warning',
                 confirmButtonText: 'ok',
             })
