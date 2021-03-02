@@ -610,7 +610,7 @@ function rotation() {
 
 function CreateCheck() {
     Swal.fire({
-        title: 'Are you sure want to reset the current board? To only change display size and grid lines use "Change grid" button',
+        title: 'Are you sure want to reset the current board? To only change display size and grid lines use "Update display" button',
         html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
         icon: 'warning',
         showCancelButton: true,
