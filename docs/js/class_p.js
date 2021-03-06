@@ -6161,14 +6161,14 @@ class Puzzle {
                 if (this.pu_q[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") { // Currently only Thermo Supported, keep updating as I add other support
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) { // Currently only Thermo Supported, keep updating as I add other support
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         }
                     } else {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") {
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
@@ -6205,14 +6205,14 @@ class Puzzle {
                 if (this.pu_a[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") {
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         }
                     } else {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") {
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
