@@ -1326,6 +1326,17 @@ onload = function() {
                 pu.redraw();
                 e.preventDefault();
                 break;
+                // custom color
+            case "custom_color_yes_lb":
+                document.getElementById("custom_color_yes").checked = true;
+                pu.redraw();
+                e.preventDefault();
+                break;
+            case "custom_color_no_lb":
+                document.getElementById("custom_color_no").checked = true;
+                pu.redraw();
+                e.preventDefault();
+                break;
             case "saveimagename":
                 return;
             case "closeBtn_image2":

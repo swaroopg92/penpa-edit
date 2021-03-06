@@ -159,15 +159,38 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 6];
+        this.version = [2, 25, 7];
         this.undoredo_disable = false;
         this.comp = false;
     }
 
     reset() {
 
-        //盤面状態
+        // Object and Array initialization
         for (var i of ["pu_q", "pu_a"]) {
+            this[i] = {};
+            this[i].command_redo = new Stack();
+            this[i].command_undo = new Stack();
+            this[i].surface = {};
+            this[i].number = {};
+            this[i].numberS = {};
+            this[i].symbol = {};
+            this[i].freeline = {};
+            this[i].freelineE = {};
+            this[i].thermo = [];
+            this[i].arrows = [];
+            this[i].direction = [];
+            this[i].squareframe = [];
+            this[i].polygon = [];
+            this[i].line = {};
+            this[i].lineE = {};
+            this[i].wall = {};
+            this[i].cage = {};
+            this[i].deletelineE = {};
+        }
+
+        // Object and Array initialization for custom colors
+        for (var i of ["pu_q_col", "pu_a_col"]) {
             this[i] = {};
             this[i].command_redo = new Stack();
             this[i].command_undo = new Stack();
@@ -214,6 +237,27 @@ class Puzzle {
         this[this.mode.qa].wall = {};
         this[this.mode.qa].cage = {};
         this[this.mode.qa].deletelineE = {};
+
+        // Object and Array initialization for custom colors
+        this[this.mode.qa + "_col"] = {};
+        this[this.mode.qa + "_col"].command_redo = new Stack();
+        this[this.mode.qa + "_col"].command_undo = new Stack();
+        this[this.mode.qa + "_col"].surface = {};
+        this[this.mode.qa + "_col"].number = {};
+        this[this.mode.qa + "_col"].numberS = {};
+        this[this.mode.qa + "_col"].symbol = {};
+        this[this.mode.qa + "_col"].freeline = {};
+        this[this.mode.qa + "_col"].freelineE = {};
+        this[this.mode.qa + "_col"].thermo = [];
+        this[this.mode.qa + "_col"].arrows = [];
+        this[this.mode.qa + "_col"].direction = [];
+        this[this.mode.qa + "_col"].squareframe = [];
+        this[this.mode.qa + "_col"].polygon = [];
+        this[this.mode.qa + "_col"].line = {};
+        this[this.mode.qa + "_col"].lineE = {};
+        this[this.mode.qa + "_col"].wall = {};
+        this[this.mode.qa + "_col"].cage = {};
+        this[this.mode.qa + "_col"].deletelineE = {};
     }
 
     reset_arr() {
@@ -1984,6 +2028,25 @@ class Puzzle {
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
+
+        // set the custom color to default
+        switch (name) {
+            case "sub_specialthermo":
+                document.getElementById("colorpicker_special").value = Color.GREY_LIGHT;
+                break;
+            case "sub_specialarrows":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK_LIGHT;
+                break;
+            case "sub_specialdirection":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK_LIGHT;
+                break;
+            case "sub_specialsquareframe":
+                document.getElementById("colorpicker_special").value = Color.GREY_LIGHT;
+                break;
+            case "sub_specialpolygon":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+        }
     }
 
     // override
@@ -2047,6 +2110,7 @@ class Puzzle {
         document.getElementById('style_wall').style.display = 'none';
         document.getElementById('style_number').style.display = 'none';
         document.getElementById('style_symbol').style.display = 'none';
+        document.getElementById('style_special').style.display = 'none';
         document.getElementById('style_cage').style.display = 'none';
         document.getElementById('style_combi').style.display = 'none';
         document.getElementById('style_sudoku').style.display = 'none';
@@ -2254,9 +2318,37 @@ class Puzzle {
 
         // Theme Setting
         if (document.getElementById("light_mode").checked) {
-            text += JSON.stringify("light");
+            text += JSON.stringify("light") + "\n";
         } else if (document.getElementById("dark_mode").checked) {
-            text += JSON.stringify("dark");
+            text += JSON.stringify("dark") + "\n";
+        }
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+
+        if (document.getElementById("save_undo").checked === false) {
+            qr = this.pu_q_col.command_redo.__a;
+            qu = this.pu_q_col.command_undo.__a;
+            ar = this.pu_a_col.command_redo.__a;
+            au = this.pu_a_col.command_undo.__a;
+            this.pu_q_col.command_redo.__a = [];
+            this.pu_q_col.command_undo.__a = [];
+            this.pu_a_col.command_redo.__a = [];
+            this.pu_a_col.command_undo.__a = [];
+        }
+
+        text += JSON.stringify(this.pu_q_col) + "\n";
+        text += JSON.stringify(this.pu_a_col);
+
+        if (document.getElementById("save_undo").checked === false) {
+            this.pu_q_col.command_redo.__a = qr;
+            this.pu_q_col.command_undo.__a = qu;
+            this.pu_a_col.command_redo.__a = ar;
+            this.pu_a_col.command_undo.__a = au;
         }
 
         for (var i = 0; i < this.replace.length; i++) {
@@ -2371,10 +2463,32 @@ class Puzzle {
 
         // Theme Setting
         if (document.getElementById("light_mode").checked) {
-            text += JSON.stringify("light");
+            text += JSON.stringify("light") + "\n";
         } else if (document.getElementById("dark_mode").checked) {
-            text += JSON.stringify("dark");
+            text += JSON.stringify("dark") + "\n";
         }
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+
+        qr = this.pu_q_col.command_redo.__a;
+        qu = this.pu_q_col.command_undo.__a;
+        ar = this.pu_a_col.command_redo.__a;
+        au = this.pu_a_col.command_undo.__a;
+        this.pu_q_col.command_redo.__a = [];
+        this.pu_q_col.command_undo.__a = [];
+        this.pu_a_col.command_redo.__a = [];
+        this.pu_a_col.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q_col) + "\n";
+        text += JSON.stringify(this.pu_a_col);
+        this.pu_q_col.command_redo.__a = qr;
+        this.pu_q_col.command_undo.__a = qu;
+        this.pu_a_col.command_redo.__a = ar;
+        this.pu_a_col.command_undo.__a = au;
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2446,17 +2560,11 @@ class Puzzle {
 
         var qr = this.pu_q.command_redo.__a;
         var qu = this.pu_q.command_undo.__a;
-        var ar = this.pu_a.command_redo.__a;
-        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
-        this.pu_a.command_redo.__a = [];
-        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
         this.pu_q.command_redo.__a = qr;
         this.pu_q.command_undo.__a = qu;
-        this.pu_a.command_redo.__a = ar;
-        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
@@ -2491,7 +2599,21 @@ class Puzzle {
         text += JSON.stringify(this.mode) + "\n";
 
         // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x");
+        text += JSON.stringify("x") + "\n";
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+        qr = this.pu_q_col.command_redo.__a;
+        qu = this.pu_q_col.command_undo.__a;
+        this.pu_q_col.command_redo.__a = [];
+        this.pu_q_col.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q_col) + "\n" + "\n";
+        this.pu_q_col.command_redo.__a = qr;
+        this.pu_q_col.command_undo.__a = qu;
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2546,17 +2668,11 @@ class Puzzle {
 
         var qr = this.pu_q.command_redo.__a;
         var qu = this.pu_q.command_undo.__a;
-        var ar = this.pu_a.command_redo.__a;
-        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
-        this.pu_a.command_redo.__a = [];
-        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
         this.pu_q.command_redo.__a = qr;
         this.pu_q.command_undo.__a = qu;
-        this.pu_a.command_redo.__a = ar;
-        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
@@ -2591,7 +2707,21 @@ class Puzzle {
         text += JSON.stringify(this.mode) + "\n";
 
         // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x");
+        text += JSON.stringify("x") + "\n";
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+        qr = this.pu_q_col.command_redo.__a;
+        qu = this.pu_q_col.command_undo.__a;
+        this.pu_q_col.command_redo.__a = [];
+        this.pu_q_col.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q_col) + "\n" + "\n";
+        this.pu_q_col.command_redo.__a = qr;
+        this.pu_q_col.command_undo.__a = qu;
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -5631,6 +5761,8 @@ class Puzzle {
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
+                console.log(this.pu_q_col);
+                console.log(this.pu_a_col);
                 console.log(this);
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
@@ -5652,51 +5784,86 @@ class Puzzle {
         if (pu_mode === "pu_q") {
             while (undocounter !== 0) {
                 var a = this.pu_q.command_undo.pop(); /*a[0]:list_name,a[1]:point_number, a[4]: groupindex (optional)*/
+                var a_col = this.pu_q_col.command_undo.pop();
                 if (a && a[4]) { // If part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) { // If part of different group, stop
                         this.pu_q.command_undo.push(a);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push(a_col);
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
                     this.pu_q.command_undo.push(a);
+                    if (a_col) {
+                        this.pu_q_col.command_undo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
+                            if (a_col) {
+                                this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
+                            }
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[1][i]] = this[pu_mode][i][a[2]];
                                 delete this[pu_mode][i][a[2]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[1][i]] = this[pu_mode + "_col"][i][a_col[2]];
+                                    delete this[pu_mode + "_col"][i][a_col[2]];
+                                }
                             }
                         }
                         this.pu_q.command_redo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_q_col.command_redo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_q.command_redo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_q.command_redo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5705,33 +5872,50 @@ class Puzzle {
         } else {
             while (undocounter !== 0) {
                 var a = this.pu_a.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value, a[4]: groupindex (optional)*/
+                var a_col = this.pu_a_col.command_undo.pop();
                 if (a && a[4]) { // if part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) {
                         this.pu_a.command_undo.push(a); // if part of ganother group, stop
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push(a_col); // if part of ganother group, stop
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
                     this.pu_a.command_undo.push(a);
+                    if (a_col) {
+                        this.pu_a_col.command_undo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
+                            if (a_col) {
+                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
+                            }
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[1][i]] = this[pu_mode][i][a[2]];
                                 delete this[pu_mode][i][a[2]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[1][i]] = this[pu_mode + "_col"][i][a_col[2]];
+                                    delete this[pu_mode + "_col"][i][a_col[2]];
+                                }
                             }
                         }
                         this.pu_a.command_redo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_a_col.command_redo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[0] === "deletelineE") {
                             pu_mode = "pu_q";
@@ -5739,20 +5923,38 @@ class Puzzle {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_a.command_redo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_a.command_redo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5768,50 +5970,86 @@ class Puzzle {
         if (pu_mode === "pu_q") {
             while (redocounter !== 0) {
                 var a = this.pu_q.command_redo.pop();
+                var a_col = this.pu_q_col.command_redo.pop();
                 if (a && a[4]) { // if part of group redo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) { // if part of different group, stop
                         this.pu_q.command_redo.push(a);
+                        if (a_col) {
+                            this.pu_q_col.command_redo.push(a_col);
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else { // group redo is done, stop
                     this.pu_q.command_redo.push(a);
+                    if (a_col) {
+                        this.pu_q_col.command_redo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
+                        }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[2]] = this[pu_mode][i][a[1][i]];
                                 delete this[pu_mode][i][a[1][i]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[2]] = this[pu_mode + "_col"][i][a_col[1][i]];
+                                    delete this[pu_mode + "_col"][i][a_col[1][i]];
+                                }
                             }
                         }
                         this.pu_q.command_undo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_q.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_q.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_q.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = a[2];
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = a_col[2];
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5820,32 +6058,50 @@ class Puzzle {
         } else {
             while (redocounter !== 0) {
                 var a = this.pu_a.command_redo.pop();
+                var a_col = this.pu_a_col.command_redo.pop();
                 if (a && a[4]) { // if its part of group
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) { // if its part of another group then stop
                         this.pu_a.command_redo.push(a);
+                        if (a_col) {
+                            this.pu_a_col.command_redo.push(a_col);
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else {
                     this.pu_a.command_redo.push(a); // group redo is done, stop
+                    if (a_col) {
+                        this.pu_a_col.command_redo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
+                        }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[2]] = this[pu_mode][i][a[1][i]];
                                 delete this[pu_mode][i][a[1][i]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[2]] = this[pu_mode + "_col"][i][a_col[1][i]];
+                                    delete this[pu_mode + "_col"][i][a_col[1][i]];
+                                }
                             }
                         }
                         this.pu_a.command_undo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[0] === "deletelineE") {
                             pu_mode = "pu_q";
@@ -5853,20 +6109,38 @@ class Puzzle {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_a.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = a[2];
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = a_col[2];
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5879,52 +6153,83 @@ class Puzzle {
         if (this.mode.qa === "pu_q") {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
+                this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
             } else if (arr === "move") {
                 this.pu_q.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
+                this.pu_q_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
             } else {
                 if (this.pu_q[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
+                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") { // Currently only Thermo Supported, keep updating as I add other support
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        }
                     } else {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
+                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") {
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        }
                     }
                 } else {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
+                        this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
                     } else {
                         this.pu_q.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+                        this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
                     }
                 }
             }
             this.pu_q.command_redo = new Stack();
+            this.pu_q_col.command_redo = new Stack();
         } else {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
+                this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
             } else if (arr === "move") {
                 this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
+                this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
             } else if (arr === "deletelineE") {
                 if (this.pu_a[arr][num]) {
                     this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q"]); // Array is also recorded in JSON
+                    this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q_col"]); // Array is also recorded in JSON
                 } else {
                     this.pu_a.command_undo.push([arr, num, null, "pu_q"]);
+                    this.pu_a_col.command_undo.push([arr, num, null, "pu_q_col"]);
                 }
             } else {
                 if (this.pu_a[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
+                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        }
                     } else {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
+                        if (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        }
                     }
-
                 } else {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
+                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
                     } else {
                         this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
                     }
                 }
             }
             this.pu_a.command_redo = new Stack();
+            this.pu_a_col.command_redo = new Stack();
         }
     }
 
@@ -7225,6 +7530,11 @@ class Puzzle {
             }
             this.last = num;
         }
+        if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length > 1) {
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = document.getElementById("colorpicker_special").value;
+            }
+        }
         this.redraw();
     }
 
@@ -7235,6 +7545,7 @@ class Puzzle {
                 if (this[this.mode.qa][arr][i][0] === num) {
                     this.record(arr, i);
                     this[this.mode.qa][arr][i] = [];
+                    this[this.mode.qa + "_col"][arr][i] = [];
                     break;
                 }
             }
@@ -7246,6 +7557,9 @@ class Puzzle {
         this.freelinecircle_g[1] = num;
         if (this.drawing) {
             this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length - 1] = num;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = document.getElementById("colorpicker_special").value;
+            }
         }
         this.redraw();
     }
@@ -8594,8 +8908,13 @@ class Puzzle {
             if (this[pu].polygon[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = Color.BLACK;
-                this.ctx.fillStyle = Color.BLACK;
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].polygon[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].polygon[i];
+                    this.ctx.fillStyle = this[pu + "_col"].polygon[i];
+                } else {
+                    this.ctx.strokeStyle = Color.BLACK;
+                    this.ctx.fillStyle = Color.BLACK;
+                }
                 this.ctx.lineWidth = 1;
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].polygon[i][0]].x, this.point[this[pu].polygon[i][0]].y);

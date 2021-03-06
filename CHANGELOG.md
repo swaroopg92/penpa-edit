@@ -1,7 +1,8 @@
 ## History
 * 2021/03/** ver2.25.7
-	* Warning message for URL too long
-	*
+	* Warning message for URL too long.
+	* Automatic closing of window after generating URL/gmpuzzle output text.
+	* Introducing custom color for Special Mode. (Eventually for everything else).
 * 2021/02/28 ver2.25.6
 	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
 	* Added light bulb to solution check option.

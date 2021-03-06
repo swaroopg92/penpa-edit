@@ -670,7 +670,11 @@ class Puzzle_square extends Puzzle {
             if (this[pu].squareframe[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = Color.GREY_LIGHT;
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].squareframe[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].squareframe[i];
+                } else {
+                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                }
                 this.ctx.lineWidth = this.size * 0.8;
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].squareframe[i][0]].x, this.point[this[pu].squareframe[i][0]].y);
@@ -690,11 +694,19 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    this.ctx.fillStyle = Color.GREY_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                        this.ctx.fillStyle = this[pu + "_col"].thermo[i];
+                    } else {
+                        this.ctx.fillStyle = Color.GREY_LIGHT;
+                    }
                     this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].thermo[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    }
                     this.ctx.lineWidth = this.size * 0.4;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y);
@@ -787,7 +799,11 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].arrows[i] && this[pu].arrows[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    }
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y);
@@ -817,7 +833,11 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                        if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                            this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
+                        } else {
+                            this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                        }
                         this.ctx.fillStyle = Color.WHITE;
                         this.ctx.lineWidth = 3;
 
@@ -839,7 +859,11 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].direction[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].direction[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].direction[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    }
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
 

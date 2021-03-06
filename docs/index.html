@@ -529,6 +529,9 @@
                         <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
                     </span>
                 </span>
+                <span id="style_special" style="display:none;">
+                    <input type="color" name="style_special" value="#0000ff" id="colorpicker_special">
+                </span>
                 <span id="style_combi" style="display:none;">
                     <span class="combimode_display">
                         <span id="panel_buttonc0" class="label">Selection:</span>
@@ -605,7 +608,7 @@
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.25.6, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.25.7, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -1105,6 +1108,12 @@
                 <label for="light_mode" class="label" id="light_mode_lb">LIGHT</label>
                 <input type="radio" name="theme_mode" value="2" id="dark_mode">
                 <label for="dark_mode" class="label" id="dark_mode_lb">DARK</label>
+                <br>
+                <h4 id="div_all"><label class="label_settings" id="custom_color_lb">Custom Colors: </label></h4>
+                <input type="radio" name="custom_color" value="1" id="custom_color_yes">
+                <label for="custom_color" class="label" id="custom_color_yes_lb">Yes</label>
+                <input type="radio" name="custom_color" value="2" id="custom_color_no" checked="checked">
+                <label for="custom_color" class="label" id="custom_color_no_lb">No</label>
             </div>
         </div>
     </div>
