@@ -1223,6 +1223,9 @@ class Puzzle_square extends Puzzle {
             } else {
                 set_line_style(this.ctx, this[pu].cage[i]);
             }
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].cage[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].cage[i];
+            }
             this.ctx.beginPath();
             this.ctx.moveTo(x1, y1);
             this.ctx.lineTo(x2, y2);

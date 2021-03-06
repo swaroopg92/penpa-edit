@@ -2019,7 +2019,7 @@ class Puzzle {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
         if (((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
-            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface")) {
+            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage")) {
             document.getElementById('style_special').style.display = 'inline';
         }
         this.redraw();
@@ -2190,6 +2190,18 @@ class Puzzle {
                 break;
             case "st_wall14":
                 document.getElementById("colorpicker_special").value = Color.GREY_DARK;
+                break;
+            case "st_cage10":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_cage7":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK;
+                break;
+            case "st_cage15":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK;
+                break;
+            case "st_cage16":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
                 break;
         }
     }
