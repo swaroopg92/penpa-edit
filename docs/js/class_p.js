@@ -2018,7 +2018,8 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "combi") {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
-        if (((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) && (mode === "line" || mode === "lineE")) {
+        if (((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
+            (mode === "line" || mode === "lineE" || mode === "wall")) {
             document.getElementById('style_special').style.display = 'inline';
         }
         this.redraw();
@@ -2126,6 +2127,33 @@ class Puzzle {
                 break;
             case "st_lineE30":
                 document.getElementById("colorpicker_special").value = Color.GREEN;
+                break;
+            case "st_wall3":
+                document.getElementById("colorpicker_special").value = Color.GREEN;
+                break;
+            case "st_wall2":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_wall5":
+                document.getElementById("colorpicker_special").value = Color.GREY;
+                break;
+            case "st_wall8":
+                document.getElementById("colorpicker_special").value = Color.RED;
+                break;
+            case "st_wall9":
+                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT;
+                break;
+            case "st_wall1":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_wall12":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                break;
+            case "st_wall17":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_wall14":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK;
                 break;
         }
     }

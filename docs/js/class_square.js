@@ -1150,6 +1150,9 @@ class Puzzle_square extends Puzzle {
     draw_wall(pu) {
         for (var i in this[pu].wall) {
             set_line_style(this.ctx, this[pu].wall[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].wall[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].wall[i];
+            }
             this.ctx.lineCap = "butt";
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
