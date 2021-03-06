@@ -983,16 +983,19 @@ function savetext_comp() {
 function savetext_withsolution() {
     var text = pu.maketext_solve_solution();
     document.getElementById("savetextarea").value = text;
+    document.getElementById("modal-save2").style.display = 'none';
 }
 
 function make_ppfile() {
     var text = pu.maketext_ppfile();
     document.getElementById("savetextarea").value = text;
+    document.getElementById("modal-save2").style.display = 'none';
 }
 
 function make_gmpfile() {
     var text = pu.maketext_gmpfile();
     document.getElementById("savetextarea").value = text;
+    document.getElementById("modal-save2").style.display = 'none';
 }
 
 function savetext_copy() {
