@@ -59,7 +59,8 @@ class Puzzle {
             "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb"
+            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
+            "colorpicker_special", "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb"
         ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
@@ -2017,6 +2018,9 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "combi") {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
+        if (((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) && (mode === "line" || mode === "lineE")) {
+            document.getElementById('style_special').style.display = 'inline';
+        }
         this.redraw();
     }
 
@@ -2059,6 +2063,70 @@ class Puzzle {
             document.getElementById(name).checked = true;
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = parseInt(document.getElementById(name).value);
             panel_pu.draw_panel(); // Panel update
+        }
+
+        // set the custom color to default
+        switch (name) {
+            case "st_line3":
+                document.getElementById("colorpicker_special").value = Color.GREEN;
+                break;
+            case "st_line2":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_line5":
+                document.getElementById("colorpicker_special").value = Color.GREY;
+                break;
+            case "st_line8":
+                document.getElementById("colorpicker_special").value = Color.RED;
+                break;
+            case "st_line9":
+                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT;
+                break;
+            case "st_line80":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_line12":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                break;
+            case "st_line13":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_line40":
+                document.getElementById("colorpicker_special").value = Color.GREY;
+                break;
+            case "st_line30":
+                document.getElementById("colorpicker_special").value = Color.GREEN;
+                break;
+            case "st_lineE3":
+                document.getElementById("colorpicker_special").value = Color.GREEN;
+                break;
+            case "st_lineE2":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_lineE5":
+                document.getElementById("colorpicker_special").value = Color.GREY;
+                break;
+            case "st_lineE8":
+                document.getElementById("colorpicker_special").value = Color.RED;
+                break;
+            case "st_lineE9":
+                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT;
+                break;
+            case "st_lineE21":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_lineE80":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_lineE12":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                break;
+            case "st_lineE13":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_lineE30":
+                document.getElementById("colorpicker_special").value = Color.GREEN;
+                break;
         }
     }
 
@@ -7055,16 +7123,28 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this["pu_q_col"][array][num];
+                    }
                 } else {
                     delete this[this.mode.qa][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this[this.mode.qa + "_col"][array][num];
+                    }
                 }
                 this.drawing_mode = 0;
             } else if (this.drawing_mode === 0) { // to draw in a stretch
                 this.record(array, num);
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this["pu_q_col"][array][num];
+                    }
                 } else {
                     delete this[this.mode.qa][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this[this.mode.qa + "_col"][array][num];
+                    }
                 }
             }
         } else {
@@ -7072,16 +7152,28 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this["pu_q_col"][array][num] = document.getElementById("colorpicker_special").value;
+                    }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this[this.mode.qa + "_col"][array][num] = document.getElementById("colorpicker_special").value;
+                    }
                 }
                 this.drawing_mode = line_style;
             } else if (this.drawing_mode === line_style) { // to draw in a stretch
                 this.record(array, num);
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this["pu_q_col"][array][num] = document.getElementById("colorpicker_special").value;
+                    }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this[this.mode.qa + "_col"][array][num] = document.getElementById("colorpicker_special").value;
+                    }
                 }
             }
         }
@@ -7120,11 +7212,11 @@ class Puzzle {
             this.drawing_mode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             this.last = num;
             this.freelinecircle_g[0] = num;
-            this.redraw();
+            this.redraw(); // This is needed so that the circle appears for aid
         } else if (this.mouse_mode === "move") {
             if (this.drawing && this.last != num) {
                 this.freelinecircle_g[1] = num;
-                this.redraw();
+                this.redraw(); // This is needed so that the circle appears for aid
             }
         } else if (this.mouse_mode === "up") {
             this.re_lineup_free(num);
@@ -7148,8 +7240,14 @@ class Puzzle {
             this.record("freeline", key);
             if (this[this.mode.qa].freeline[key]) {
                 delete this[this.mode.qa].freeline[key];
+                if (document.getElementById("custom_color_yes").checked) {
+                    delete this[this.mode.qa + "_col"].freeline[key];
+                }
             } else {
                 this[this.mode.qa].freeline[key] = this.drawing_mode;
+                if (document.getElementById("custom_color_yes").checked) {
+                    this[this.mode.qa + "_col"].freeline[key] = document.getElementById("colorpicker_special").value;
+                }
             }
         }
     }
@@ -7161,12 +7259,18 @@ class Puzzle {
     }
 
     re_lineX(num) {
-        if (this[this.mode.qa].line[num] && this[this.mode.qa].line[num] === 98) { //×印
+        if (this[this.mode.qa].line[num] && this[this.mode.qa].line[num] === 98) { // Cross mark (x)
             this.record("line", num);
             delete this[this.mode.qa].line[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].line[num];
+            }
         } else {
             this.record("line", num);
             this[this.mode.qa].line[num] = 98;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].line[num] = document.getElementById("colorpicker_special").value;
+            }
         }
         this.redraw();
     }
@@ -7257,8 +7361,14 @@ class Puzzle {
             this.record("freelineE", key);
             if (this[this.mode.qa].freelineE[key]) {
                 delete this[this.mode.qa].freelineE[key];
+                if (document.getElementById("custom_color_yes").checked) {
+                    delete this[this.mode.qa + "_col"].freelineE[key];
+                }
             } else {
                 this[this.mode.qa].freelineE[key] = this.drawing_mode;
+                if (document.getElementById("custom_color_yes").checked) {
+                    this[this.mode.qa + "_col"].freelineE[key] = document.getElementById("colorpicker_special").value;
+                }
             }
         }
     }
@@ -7273,9 +7383,15 @@ class Puzzle {
         if (this[this.mode.qa].lineE[num] && this[this.mode.qa].lineE[num] === 98) { //×印
             this.record("lineE", num);
             delete this[this.mode.qa].lineE[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].lineE[num];
+            }
         } else {
             this.record("lineE", num);
             this[this.mode.qa].lineE[num] = 98;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].lineE[num] = document.getElementById("colorpicker_special").value;
+            }
         }
         this.redraw();
     }
@@ -7545,7 +7661,9 @@ class Puzzle {
                 if (this[this.mode.qa][arr][i][0] === num) {
                     this.record(arr, i);
                     this[this.mode.qa][arr][i] = [];
-                    this[this.mode.qa + "_col"][arr][i] = [];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this[this.mode.qa + "_col"][arr][i] = [];
+                    }
                     break;
                 }
             }

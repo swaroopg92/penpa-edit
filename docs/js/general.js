@@ -1932,6 +1932,12 @@ function set_solvemode() {
 
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
+
+    // custom color
+    document.getElementById('colorpicker_special').style.display = 'none';
+    document.getElementById('custom_color_lb').style.display = 'none';
+    document.getElementById('custom_color_yes_lb').style.display = 'none';
+    document.getElementById('custom_color_no_lb').style.display = 'none';
 }
 
 function set_contestmode() {
