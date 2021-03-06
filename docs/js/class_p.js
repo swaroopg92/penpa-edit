@@ -2019,7 +2019,7 @@ class Puzzle {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
         if (((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
-            (mode === "line" || mode === "lineE" || mode === "wall")) {
+            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface")) {
             document.getElementById('style_special').style.display = 'inline';
         }
         this.redraw();
@@ -2068,6 +2068,42 @@ class Puzzle {
 
         // set the custom color to default
         switch (name) {
+            case "st_surface1":
+                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                break;
+            case "st_surface8":
+                document.getElementById("colorpicker_special").value = Color.GREY;
+                break;
+            case "st_surface3":
+                document.getElementById("colorpicker_special").value = Color.GREY_LIGHT;
+                break;
+            case "st_surface4":
+                document.getElementById("colorpicker_special").value = Color.BLACK;
+                break;
+            case "st_surface2":
+                document.getElementById("colorpicker_special").value = Color.GREEN_LIGHT_VERY;
+                break;
+            case "st_surface5":
+                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT_VERY;
+                break;
+            case "st_surface6":
+                document.getElementById("colorpicker_special").value = Color.RED_LIGHT;
+                break;
+            case "st_surface7":
+                document.getElementById("colorpicker_special").value = Color.YELLOW;
+                break;
+            case "st_surface9":
+                document.getElementById("colorpicker_special").value = Color.PINK_LIGHT;
+                break;
+            case "st_surface10":
+                document.getElementById("colorpicker_special").value = Color.ORANGE_LIGHT;
+                break;
+            case "st_surface11":
+                document.getElementById("colorpicker_special").value = Color.PURPLE_LIGHT;
+                break;
+            case "st_surface12":
+                document.getElementById("colorpicker_special").value = Color.BROWN_LIGHT;
+                break;
             case "st_line3":
                 document.getElementById("colorpicker_special").value = Color.GREEN;
                 break;
@@ -7075,15 +7111,25 @@ class Puzzle {
 
     re_surface(num) {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+        console.log(num, color, this[this.mode.qa].surface[num])
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 1 && color === 1) {
             this[this.mode.qa].surface[num] = 2;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+            }
             this.drawing_mode = 2;
         } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && color === 1))) {
             delete this[this.mode.qa].surface[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].surface[num];
+            }
             this.drawing_mode = 0;
         } else {
             this[this.mode.qa].surface[num] = color;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].surface[num] = document.getElementById("colorpicker_special").value;
+            }
             this.drawing_mode = color;
         }
         this.redraw();
@@ -7093,9 +7139,15 @@ class Puzzle {
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 2) {
             delete this[this.mode.qa].surface[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].surface[num];
+            }
             this.drawing_mode = 0;
         } else {
             this[this.mode.qa].surface[num] = 2;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+            }
             this.drawing_mode = 2;
         }
         this.redraw();
@@ -7107,12 +7159,22 @@ class Puzzle {
                 if (this[this.mode.qa].surface[num]) {
                     this.record("surface", num);
                     delete this[this.mode.qa].surface[num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this[this.mode.qa + "_col"].surface[num];
+                    }
                     this.redraw();
                 }
             } else {
                 if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode) {
                     this.record("surface", num);
                     this[this.mode.qa].surface[num] = this.drawing_mode;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        if (this.drawing_mode === 2) {
+                            this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+                        } else {
+                            this[this.mode.qa + "_col"].surface[num] = document.getElementById("colorpicker_special").value;
+                        }
+                    }
                     this.redraw();
                 }
             }

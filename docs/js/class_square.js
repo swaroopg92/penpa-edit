@@ -628,6 +628,9 @@ class Puzzle_square extends Puzzle {
         for (var k = 0; k < keys.length; k++) {
             var i = keys[k];
             set_surface_style(this.ctx, this[pu].surface[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].surface[i]) {
+                this.ctx.fillStyle = this[pu + "_col"].surface[i];
+            }
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
             for (var j = 1; j < this.point[i].surround.length; j++) {
