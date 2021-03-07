@@ -1,8 +1,9 @@
 ## History
 * 2021/03/** ver2.25.7
+	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
 	* Warning message for URL too long.
 	* Automatic closing of window after generating URL/gmpuzzle output text.
-	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
+	* Fixed the display color of Grey and Light Grey in Surface Mode.
 * 2021/02/28 ver2.25.6
 	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
 	* Added light bulb to solution check option.
