@@ -612,7 +612,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        if (factor > 8) {
+                        if (factor >= 8) {
                             m = parseInt(keys[k]) + 12 * parseInt(originalnx0) * sign;
                         } else {
                             m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
@@ -950,7 +950,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        if (factor > 8) {
+                        if (factor >= 8) {
                             m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
                         } else {
                             m = parseInt(keys[k]) + 4 * parseInt(originalnx0) * sign;
