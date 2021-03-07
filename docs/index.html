@@ -9,12 +9,15 @@
     <!-- STYLES -->
     <link href="./css/light_theme.css" rel="stylesheet" type="text/css" id="color_theme">
     <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
+    <link href="./css/spectrum.css" rel="stylesheet" type="text/css">
     <!-- SCRIPTS -->
     <!-- libs -->
+    <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="./js/libs/CanvasRenderingContext2D.ext.js"></script>
     <script type="text/javascript" src="./js/libs/encoding.js"></script>
     <script type="text/javascript" src="./js/libs/vanillaSelectBox.js"></script>
     <script type="text/javascript" src="./js/libs/zlib.js"></script>
+    <script type="text/javascript" src="./js/libs/spectrum.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- rest -->
     <script type="text/javascript" src="./js/main.js"></script>
@@ -560,7 +563,7 @@
                     <label for="st_sudoku10" class="labelL" id="st_sudoku10_lb">R</label>
                 </span>
                 <span id="style_special" style="display:none;">
-                    <input type="color" name="style_special" value="#0000ff" id="colorpicker_special">
+                    <input type="text" name="style_special" id="colorpicker_special" />
                 </span>
             </div>
         </div>
@@ -1117,7 +1120,6 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="./js/libs/easytimer.min.js"></script>
     <script type="text/javascript" src="./js/timer.js"></script>
 </body>

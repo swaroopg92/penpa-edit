@@ -1240,13 +1240,3 @@ input[type=number] {
 .info {
     color: var(--blue);
 }
-
-/* Custom Color */
-input[type="color"] {
-    margin: 0px;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: var(--white);
-    border: 1px solid var(--blueDark);
-    border-radius: 3px;
-}

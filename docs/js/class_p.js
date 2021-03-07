@@ -2037,19 +2037,19 @@ class Puzzle {
         // set the custom color to default
         switch (name) {
             case "sub_specialthermo":
-                document.getElementById("colorpicker_special").value = Color.GREY_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
                 break;
             case "sub_specialarrows":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
                 break;
             case "sub_specialdirection":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
                 break;
             case "sub_specialsquareframe":
-                document.getElementById("colorpicker_special").value = Color.GREY_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
                 break;
             case "sub_specialpolygon":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
         }
     }
@@ -2069,139 +2069,139 @@ class Puzzle {
         // set the custom color to default
         switch (name) {
             case "st_surface1":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
                 break;
             case "st_surface8":
-                document.getElementById("colorpicker_special").value = Color.GREY;
+                $("#colorpicker_special").spectrum("set", Color.GREY);
                 break;
             case "st_surface3":
-                document.getElementById("colorpicker_special").value = Color.GREY_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
                 break;
             case "st_surface4":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_surface2":
-                document.getElementById("colorpicker_special").value = Color.GREEN_LIGHT_VERY;
+                $("#colorpicker_special").spectrum("set", Color.GREEN_LIGHT_VERY);
                 break;
             case "st_surface5":
-                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT_VERY;
+                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT_VERY);
                 break;
             case "st_surface6":
-                document.getElementById("colorpicker_special").value = Color.RED_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.RED_LIGHT);
                 break;
             case "st_surface7":
-                document.getElementById("colorpicker_special").value = Color.YELLOW;
+                $("#colorpicker_special").spectrum("set", Color.YELLOW);
                 break;
             case "st_surface9":
-                document.getElementById("colorpicker_special").value = Color.PINK_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.PINK_LIGHT);
                 break;
             case "st_surface10":
-                document.getElementById("colorpicker_special").value = Color.ORANGE_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.ORANGE_LIGHT);
                 break;
             case "st_surface11":
-                document.getElementById("colorpicker_special").value = Color.PURPLE_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.PURPLE_LIGHT);
                 break;
             case "st_surface12":
-                document.getElementById("colorpicker_special").value = Color.BROWN_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.BROWN_LIGHT);
                 break;
             case "st_line3":
-                document.getElementById("colorpicker_special").value = Color.GREEN;
+                $("#colorpicker_special").spectrum("set", Color.GREEN);
                 break;
             case "st_line2":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_line5":
-                document.getElementById("colorpicker_special").value = Color.GREY;
+                $("#colorpicker_special").spectrum("set", Color.GREY);
                 break;
             case "st_line8":
-                document.getElementById("colorpicker_special").value = Color.RED;
+                $("#colorpicker_special").spectrum("set", Color.RED);
                 break;
             case "st_line9":
-                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
                 break;
             case "st_line80":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_line12":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
                 break;
             case "st_line13":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_line40":
-                document.getElementById("colorpicker_special").value = Color.GREY;
+                $("#colorpicker_special").spectrum("set", Color.GREY);
                 break;
             case "st_line30":
-                document.getElementById("colorpicker_special").value = Color.GREEN;
+                $("#colorpicker_special").spectrum("set", Color.GREEN);
                 break;
             case "st_lineE3":
-                document.getElementById("colorpicker_special").value = Color.GREEN;
+                $("#colorpicker_special").spectrum("set", Color.GREEN);
                 break;
             case "st_lineE2":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_lineE5":
-                document.getElementById("colorpicker_special").value = Color.GREY;
+                $("#colorpicker_special").spectrum("set", Color.GREY);
                 break;
             case "st_lineE8":
-                document.getElementById("colorpicker_special").value = Color.RED;
+                $("#colorpicker_special").spectrum("set", Color.RED);
                 break;
             case "st_lineE9":
-                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
                 break;
             case "st_lineE21":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_lineE80":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_lineE12":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
                 break;
             case "st_lineE13":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_lineE30":
-                document.getElementById("colorpicker_special").value = Color.GREEN;
+                $("#colorpicker_special").spectrum("set", Color.GREEN);
                 break;
             case "st_wall3":
-                document.getElementById("colorpicker_special").value = Color.GREEN;
+                $("#colorpicker_special").spectrum("set", Color.GREEN);
                 break;
             case "st_wall2":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_wall5":
-                document.getElementById("colorpicker_special").value = Color.GREY;
+                $("#colorpicker_special").spectrum("set", Color.GREY);
                 break;
             case "st_wall8":
-                document.getElementById("colorpicker_special").value = Color.RED;
+                $("#colorpicker_special").spectrum("set", Color.RED);
                 break;
             case "st_wall9":
-                document.getElementById("colorpicker_special").value = Color.BLUE_LIGHT;
+                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
                 break;
             case "st_wall1":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_wall12":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK_VERY;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
                 break;
             case "st_wall17":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_wall14":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
                 break;
             case "st_cage10":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
             case "st_cage7":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
                 break;
             case "st_cage15":
-                document.getElementById("colorpicker_special").value = Color.GREY_DARK;
+                $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
                 break;
             case "st_cage16":
-                document.getElementById("colorpicker_special").value = Color.BLACK;
+                $("#colorpicker_special").spectrum("set", Color.BLACK);
                 break;
         }
     }
@@ -7123,7 +7123,6 @@ class Puzzle {
 
     re_surface(num) {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
-        console.log(num, color, this[this.mode.qa].surface[num])
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 1 && color === 1) {
             this[this.mode.qa].surface[num] = 2;
@@ -7140,7 +7139,7 @@ class Puzzle {
         } else {
             this[this.mode.qa].surface[num] = color;
             if (document.getElementById("custom_color_yes").checked) {
-                this[this.mode.qa + "_col"].surface[num] = document.getElementById("colorpicker_special").value;
+                this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
             }
             this.drawing_mode = color;
         }
@@ -7184,7 +7183,7 @@ class Puzzle {
                         if (this.drawing_mode === 2) {
                             this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
                         } else {
-                            this[this.mode.qa + "_col"].surface[num] = document.getElementById("colorpicker_special").value;
+                            this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
                         }
                     }
                     this.redraw();
@@ -7255,12 +7254,12 @@ class Puzzle {
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
                     if (document.getElementById("custom_color_yes").checked) {
-                        this["pu_q_col"][array][num] = document.getElementById("colorpicker_special").value;
+                        this["pu_q_col"][array][num] = this.get_customcolor();
                     }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
                     if (document.getElementById("custom_color_yes").checked) {
-                        this[this.mode.qa + "_col"][array][num] = document.getElementById("colorpicker_special").value;
+                        this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
                 this.drawing_mode = line_style;
@@ -7269,12 +7268,12 @@ class Puzzle {
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
                     if (document.getElementById("custom_color_yes").checked) {
-                        this["pu_q_col"][array][num] = document.getElementById("colorpicker_special").value;
+                        this["pu_q_col"][array][num] = this.get_customcolor();
                     }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
                     if (document.getElementById("custom_color_yes").checked) {
-                        this[this.mode.qa + "_col"][array][num] = document.getElementById("colorpicker_special").value;
+                        this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
             }
@@ -7348,7 +7347,7 @@ class Puzzle {
             } else {
                 this[this.mode.qa].freeline[key] = this.drawing_mode;
                 if (document.getElementById("custom_color_yes").checked) {
-                    this[this.mode.qa + "_col"].freeline[key] = document.getElementById("colorpicker_special").value;
+                    this[this.mode.qa + "_col"].freeline[key] = this.get_customcolor();
                 }
             }
         }
@@ -7371,7 +7370,7 @@ class Puzzle {
             this.record("line", num);
             this[this.mode.qa].line[num] = 98;
             if (document.getElementById("custom_color_yes").checked) {
-                this[this.mode.qa + "_col"].line[num] = document.getElementById("colorpicker_special").value;
+                this[this.mode.qa + "_col"].line[num] = this.get_customcolor();
             }
         }
         this.redraw();
@@ -7469,7 +7468,7 @@ class Puzzle {
             } else {
                 this[this.mode.qa].freelineE[key] = this.drawing_mode;
                 if (document.getElementById("custom_color_yes").checked) {
-                    this[this.mode.qa + "_col"].freelineE[key] = document.getElementById("colorpicker_special").value;
+                    this[this.mode.qa + "_col"].freelineE[key] = this.get_customcolor();
                 }
             }
         }
@@ -7492,7 +7491,7 @@ class Puzzle {
             this.record("lineE", num);
             this[this.mode.qa].lineE[num] = 98;
             if (document.getElementById("custom_color_yes").checked) {
-                this[this.mode.qa + "_col"].lineE[num] = document.getElementById("colorpicker_special").value;
+                this[this.mode.qa + "_col"].lineE[num] = this.get_customcolor();
             }
         }
         this.redraw();
@@ -7750,7 +7749,7 @@ class Puzzle {
         }
         if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length > 1) {
             if (document.getElementById("custom_color_yes").checked) {
-                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = document.getElementById("colorpicker_special").value;
+                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
             }
         }
         this.redraw();
@@ -7778,7 +7777,7 @@ class Puzzle {
         if (this.drawing) {
             this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length - 1] = num;
             if (document.getElementById("custom_color_yes").checked) {
-                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = document.getElementById("colorpicker_special").value;
+                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
             }
         }
         this.redraw();
@@ -9486,5 +9485,10 @@ class Puzzle {
             b[2] = c;
         }
         return b[2];
+    }
+
+    get_customcolor() {
+        let customcolor = $("#colorpicker_special").spectrum("get");
+        return "rgba(" + customcolor._r + "," + customcolor._g + "," + customcolor._b + "," + customcolor._a + ")";
     }
 }
