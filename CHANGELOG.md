@@ -4,6 +4,7 @@
 	* Warning message for URL too long.
 	* Automatic closing of window after generating URL/gmpuzzle output text.
 	* Fixed the display color of Grey and Light Grey in Surface Mode.
+	* Bug fixed for Transform button for Add Top/Bottom for Side sub-mode (i.e. NumberS elements).
 * 2021/02/28 ver2.25.6
 	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
 	* Added light bulb to solution check option.
