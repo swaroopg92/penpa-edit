@@ -51,13 +51,12 @@ input {
 }
 
 body {
-    background: var(--white);
+    background: url(images/corky_light.jpg) top center;
 }
 
 header {
     width: 100%;
     margin: 0 auto;
-    background: var(--white);
     padding-top: 15px;
 }
 
@@ -101,6 +100,7 @@ hr.newgridhrline {
 }
 
 #buttons {
+    background: url(images/parch_light.jpg) top center;
     font-size: 0;
     border: 1px solid var(--black);
     width: 530px;
@@ -546,7 +546,7 @@ body textarea {
 #reload_button,
 #edge_button {
     width: 25px;
-    border: 1px solid var(--greyLight);
+    border: 1px solid var(--blueLight);
     background: none;
     margin-left: 0px;
     border-radius: 1px;
@@ -687,8 +687,8 @@ body textarea {
 
 #puzzleinfo,
 #contestinfo {
-    background: var(--white);
-    width: 400px;
+    background: url(images/parch_light.jpg) top center;
+    width: 530px;
     margin: 0 auto;
     margin-bottom: 5px;
     margin-top: 5px;
@@ -698,7 +698,7 @@ body textarea {
 }
 
 #dvique {
-    background: var(--white);
+    background: url(images/parch_light.jpg) top center;
     border: 1px solid var(--blackLight);
     width: 400px;
     margin: 0 auto;
@@ -1243,4 +1243,19 @@ input[type=number] {
 
 .info {
     color: var(--blue);
+}
+
+#title {
+    font-size: 25px;
+    color: var(--white);
+}
+
+/*Timer Display*/
+.values {
+    color: var(--white);
+}
+
+.footer {
+    background: url(images/parch_light.jpg) top center;
+    border: 1px solid var(--blackLight);
 }

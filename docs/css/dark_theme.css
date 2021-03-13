@@ -52,7 +52,7 @@ input {
 }
 
 body {
-    background: var(--black);
+    background: url(images/corky_dark.jpg) top center;
 }
 
 p {
@@ -62,7 +62,6 @@ p {
 header {
     width: 100%;
     margin: 0 auto;
-    background: var(--black);
     padding-top: 15px;
 }
 
@@ -110,6 +109,7 @@ hr.newgridhrline {
 }
 
 #buttons {
+    background: url(images/parch_dark.jpg) top center;
     font-size: 0;
     border: 1px solid var(--white);
     width: 530px;
@@ -706,8 +706,8 @@ body textarea {
 
 #puzzleinfo,
 #contestinfo {
-    background: var(--black);
-    width: 400px;
+    background: url(images/parch_dark.jpg) top center;
+    width: 530px;
     margin: 0 auto;
     margin-bottom: 5px;
     margin-top: 5px;
@@ -717,7 +717,7 @@ body textarea {
 }
 
 #dvique {
-    background: var(--black);
+    background: url(images/parch_dark.jpg) top center;
     border: 1px solid var(--blackLight);
     width: 400px;
     margin: 0 auto;
@@ -1322,6 +1322,7 @@ a:active {
 }
 
 #title {
+    font-size: 25px;
     color: var(--white);
 }
 
