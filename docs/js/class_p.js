@@ -2018,7 +2018,7 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "combi") {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
-        if (((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
+        if ((document.getElementById("custom_color_yes").checked) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
             (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage")) {
             document.getElementById('style_special').style.display = 'inline';
         }

@@ -1329,11 +1329,17 @@ onload = function() {
                 // custom color
             case "custom_color_yes_lb":
                 document.getElementById("custom_color_yes").checked = true;
+                let mode = pu.mode[pu.mode.qa].edit_mode;
+                if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
+                    (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage")) {
+                    document.getElementById('style_special').style.display = 'inline';
+                }
                 pu.redraw();
                 e.preventDefault();
                 break;
             case "custom_color_no_lb":
                 document.getElementById("custom_color_no").checked = true;
+                document.getElementById('style_special').style.display = 'none';
                 pu.redraw();
                 e.preventDefault();
                 break;
@@ -1618,6 +1624,8 @@ onload = function() {
         type: "component",
         preferredFormat: "hex",
         showInput: true,
+        chooseText: "OK",
+        // cancelText: "No way",
         // showAlpha: true,
         // allowAlpha: true,
         // allowEmpty: true,
@@ -1625,6 +1633,7 @@ onload = function() {
         togglePaletteMoreText: 'more',
         togglePaletteLessText: 'less',
         showPalette: true,
+        hideAfterPaletteSelect: true,
         maxSelectionSize: 8,
         showSelectionPalette: true,
         palette: [
