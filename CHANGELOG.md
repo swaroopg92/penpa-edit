@@ -1,7 +1,8 @@
 ## History
-* 2021/03/** ver2.25.7
+* 2021/03/17 ver2.25.7
 	* Warning message for URL too long
-	*
+	* Fixed label color display in Surface Mode fir GR abd LG.
+	* Initializing GMPuzzle Theme
 * 2021/02/28 ver2.25.6
 	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
 	* Added light bulb to solution check option.
