@@ -8386,9 +8386,11 @@ class Puzzle {
                 if (!this[this.mode.qa].lineE[num]) { // Insert cross
                     this.record(symboltype, num);
                     this[this.mode.qa].lineE[num] = 98;
+                    this.drawing_mode = 52;
                 } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
                     this.record(symboltype, num);
                     delete this[this.mode.qa].lineE[num];
+                    this.drawing_mode = 50;
                 }
             }
         } else {
@@ -8447,7 +8449,9 @@ class Puzzle {
     }
 
     re_combi_edgex_move(num) {
-        if (this.drawing_mode != -1 && this.point[num].type === 1) {
+        if (this.drawing_mode != -1 &&
+            this.mouse_click != 2 &&
+            this.point[num].type === 1) {
             var line_style = 3;
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
@@ -8456,6 +8460,19 @@ class Puzzle {
                 this.re_line(array, key, line_style);
             }
             this.last = num;
+            this.redraw();
+        } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
+            if (this.drawing_mode == 52) {
+                if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                    this.record("lineE", num);
+                    this[this.mode.qa].lineE[num] = 98;
+                }
+            } else if (this.drawing_mode == 50) {
+                if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                    this.record("lineE", num);
+                    delete this[this.mode.qa].lineE[num];
+                }
+            }
             this.redraw();
         }
     }
