@@ -1,4 +1,6 @@
 ## History
+* 2021/**/** ver2.25.9
+	* Dragging cross (x) in linex and edgex modes.
 * 2021/03/20 ver2.25.8
 	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
 	* Automatic closing of window after generating URL with answer check / gmpuzzle output text.

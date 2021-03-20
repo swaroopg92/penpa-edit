@@ -53,9 +53,11 @@ onload = function() {
         if (pu.point[num].use === 1) {
             if (event.button === 2) { // right click
                 pu.mouse_mode = "down_right";
+                pu.mouse_click = 2;
                 pu.mouseevent(x, y, num, ctrl_key);
             } else { // Left click or tap
                 pu.mouse_mode = "down_left";
+                pu.mouse_click = 0;
                 pu.mouseevent(x, y, num, ctrl_key);
             }
         }
@@ -78,6 +80,7 @@ onload = function() {
             y = obj.y,
             num = obj.num;
         pu.mouse_mode = "up";
+        pu.mouse_click = 0;
         pu.mouseevent(x, y, num);
     }
 
@@ -89,6 +92,7 @@ onload = function() {
         }
         e.preventDefault();
         if (event.buttons === 2) { // Right click and moving
+            pu.mouse_click = 2;
             var obj = coord_point(event, 'flex');
         } else {
             if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
@@ -97,6 +101,7 @@ onload = function() {
             } else {
                 var obj = coord_point(event);
             }
+            pu.mouse_click = 0;
         }
         var x = obj.x,
             y = obj.y,
@@ -113,6 +118,7 @@ onload = function() {
 
     function onOut() {
         pu.mouse_mode = "out";
+        pu.mouse_click = 0;
         pu.mouseevent(0, 0, 0);
         return;
     }

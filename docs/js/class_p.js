@@ -75,6 +75,7 @@ class Puzzle {
 
         // Drawing position
         this.mouse_mode = "";
+        this.mouse_click = 0; // 0 for left, 2 for right
         this.selection = [];
         this.last = -1;
         this.lastx = -1;
@@ -7949,6 +7950,12 @@ class Puzzle {
         switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
             case "linex":
             case "edgex":
+                if (this.mouse_click === 2 || this.ondown_key === "touchstart") {
+                    num = this.coord_p_edgex(x, y, 0.3);
+                } else {
+                    num = this.coord_p_edgex(x, y, 0.01);
+                }
+                break;
             case "edgexoi":
             case "tents":
                 if (this.mouse_mode === "down_right" || this.ondown_key === "touchstart") {
@@ -8296,7 +8303,9 @@ class Puzzle {
     }
 
     re_combi_linex_move(num) {
-        if (this.drawing_mode != -1 && this.point[num].type === 0) {
+        if (this.drawing_mode != -1 &&
+            this.mouse_click !== 2 &&
+            this.point[num].type === 0) {
             var line_style = 3;
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
@@ -8305,6 +8314,19 @@ class Puzzle {
                 this.re_line(array, key, line_style);
             }
             this.last = num;
+            this.redraw();
+        } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
+            if (this.drawing_mode == 52) {
+                if (!this[this.mode.qa].line[num]) { // Insert cross
+                    this.record("line", num);
+                    this[this.mode.qa].line[num] = 98;
+                }
+            } else if (this.drawing_mode == 50) {
+                if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                    this.record("line", num);
+                    delete this[this.mode.qa].line[num];
+                }
+            }
             this.redraw();
         }
     }
@@ -8354,9 +8376,11 @@ class Puzzle {
                 if (!this[this.mode.qa].line[num]) { // Insert cross
                     this.record(symboltype, num);
                     this[this.mode.qa].line[num] = 98;
+                    this.drawing_mode = 52;
                 } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
                     this.record(symboltype, num);
                     delete this[this.mode.qa].line[num];
+                    this.drawing_mode = 50;
                 }
             } else {
                 if (!this[this.mode.qa].lineE[num]) { // Insert cross
