@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 7];
+        this.version = [2, 25, 8];
         this.undoredo_disable = false;
         this.comp = false;
     }
@@ -2019,8 +2019,10 @@ class Puzzle {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
         if ((document.getElementById("custom_color_yes").checked) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
-            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage")) {
+            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special")) {
             document.getElementById('style_special').style.display = 'inline';
+        } else {
+            document.getElementById('style_special').style.display = 'none';
         }
         this.redraw();
     }

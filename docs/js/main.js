@@ -1331,7 +1331,7 @@ onload = function() {
                 document.getElementById("custom_color_yes").checked = true;
                 let mode = pu.mode[pu.mode.qa].edit_mode;
                 if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
-                    (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage")) {
+                    (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special")) {
                     document.getElementById('style_special').style.display = 'inline';
                 }
                 pu.redraw();
