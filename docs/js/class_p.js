@@ -60,7 +60,7 @@ class Puzzle {
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
             "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
-            "colorpicker_special", "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb"
+            "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb"
         ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
