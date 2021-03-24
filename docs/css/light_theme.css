@@ -72,7 +72,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 530px;
+    max-width: 630px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -103,7 +103,7 @@ hr.newgridhrline {
     background: url(images/parch_light.jpg) top center;
     font-size: 0;
     border: 1px solid var(--black);
-    width: 530px;
+    width: 550px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -158,7 +158,6 @@ hr.newgridhrline {
 
 .label_mode {
     display: inline;
-    text-align: left;
     margin: 0px;
     width: 110px;
     height: 25px;
@@ -178,7 +177,6 @@ hr.newgridhrline {
 .label {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -194,7 +192,6 @@ hr.newgridhrline {
 .label_option {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -221,7 +218,6 @@ hr.newgridhrline {
 .labelL {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;

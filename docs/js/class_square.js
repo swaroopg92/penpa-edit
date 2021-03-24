@@ -628,6 +628,9 @@ class Puzzle_square extends Puzzle {
         for (var k = 0; k < keys.length; k++) {
             var i = keys[k];
             set_surface_style(this.ctx, this[pu].surface[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].surface[i]) {
+                this.ctx.fillStyle = this[pu + "_col"].surface[i];
+            }
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
             for (var j = 1; j < this.point[i].surround.length; j++) {
@@ -670,7 +673,11 @@ class Puzzle_square extends Puzzle {
             if (this[pu].squareframe[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = Color.GREY_LIGHT;
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].squareframe[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].squareframe[i];
+                } else {
+                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                }
                 this.ctx.lineWidth = this.size * 0.8;
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].squareframe[i][0]].x, this.point[this[pu].squareframe[i][0]].y);
@@ -690,11 +697,19 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    this.ctx.fillStyle = Color.GREY_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                        this.ctx.fillStyle = this[pu + "_col"].thermo[i];
+                    } else {
+                        this.ctx.fillStyle = Color.GREY_LIGHT;
+                    }
                     this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].thermo[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    }
                     this.ctx.lineWidth = this.size * 0.4;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y);
@@ -787,7 +802,11 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].arrows[i] && this[pu].arrows[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    }
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y);
@@ -817,7 +836,11 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                        if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                            this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
+                        } else {
+                            this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                        }
                         this.ctx.fillStyle = Color.WHITE;
                         this.ctx.lineWidth = 3;
 
@@ -839,7 +862,11 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].direction[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].direction[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].direction[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    }
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
 
@@ -972,6 +999,9 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].line[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].line[i];
+                }
                 this.ctx.beginPath();
                 this.ctx.moveTo(x + r * Math.cos(45 * (Math.PI / 180)) * this.size, y + r * Math.sin(45 * (Math.PI / 180)) * this.size);
                 this.ctx.lineTo(x + r * Math.cos(225 * (Math.PI / 180)) * this.size, y + r * Math.sin(225 * (Math.PI / 180)) * this.size);
@@ -982,6 +1012,9 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].line[i]);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].line[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].line[i];
+                }
                 var i1 = i.split(",")[0];
                 var i2 = i.split(",")[1];
                 this.ctx.beginPath();
@@ -1027,6 +1060,9 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].lineE[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
+                }
                 this.ctx.beginPath();
                 this.ctx.moveTo(x + r * Math.cos(45 * (Math.PI / 180)) * this.size, y + r * Math.sin(45 * (Math.PI / 180)) * this.size);
                 this.ctx.lineTo(x + r * Math.cos(225 * (Math.PI / 180)) * this.size, y + r * Math.sin(225 * (Math.PI / 180)) * this.size);
@@ -1037,6 +1073,9 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].lineE[i]);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].lineE[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
+                }
                 var i1 = i.split(",")[0];
                 var i2 = i.split(",")[1];
                 this.ctx.beginPath();
@@ -1063,6 +1102,9 @@ class Puzzle_square extends Puzzle {
         /*freeline*/
         for (var i in this[pu].freeline) {
             set_line_style(this.ctx, this[pu].freeline[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].freeline[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].freeline[i];
+            }
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
             this.ctx.beginPath();
@@ -1084,6 +1126,9 @@ class Puzzle_square extends Puzzle {
         }
         for (var i in this[pu].freelineE) {
             set_line_style(this.ctx, this[pu].freelineE[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].freelineE[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].freelineE[i];
+            }
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
             this.ctx.beginPath();
@@ -1108,6 +1153,9 @@ class Puzzle_square extends Puzzle {
     draw_wall(pu) {
         for (var i in this[pu].wall) {
             set_line_style(this.ctx, this[pu].wall[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].wall[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].wall[i];
+            }
             this.ctx.lineCap = "butt";
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
@@ -1174,6 +1222,9 @@ class Puzzle_square extends Puzzle {
                 set_line_style(this.ctx, this[pu].cage[i] + 100);
             } else {
                 set_line_style(this.ctx, this[pu].cage[i]);
+            }
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].cage[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].cage[i];
             }
             this.ctx.beginPath();
             this.ctx.moveTo(x1, y1);

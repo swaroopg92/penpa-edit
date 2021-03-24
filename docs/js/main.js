@@ -53,9 +53,11 @@ onload = function() {
         if (pu.point[num].use === 1) {
             if (event.button === 2) { // right click
                 pu.mouse_mode = "down_right";
+                pu.mouse_click = 2;
                 pu.mouseevent(x, y, num, ctrl_key);
             } else { // Left click or tap
                 pu.mouse_mode = "down_left";
+                pu.mouse_click = 0;
                 pu.mouseevent(x, y, num, ctrl_key);
             }
         }
@@ -78,6 +80,7 @@ onload = function() {
             y = obj.y,
             num = obj.num;
         pu.mouse_mode = "up";
+        pu.mouse_click = 0;
         pu.mouseevent(x, y, num);
     }
 
@@ -89,6 +92,7 @@ onload = function() {
         }
         e.preventDefault();
         if (event.buttons === 2) { // Right click and moving
+            pu.mouse_click = 2;
             var obj = coord_point(event, 'flex');
         } else {
             if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
@@ -97,6 +101,7 @@ onload = function() {
             } else {
                 var obj = coord_point(event);
             }
+            pu.mouse_click = 0;
         }
         var x = obj.x,
             y = obj.y,
@@ -113,6 +118,7 @@ onload = function() {
 
     function onOut() {
         pu.mouse_mode = "out";
+        pu.mouse_click = 0;
         pu.mouseevent(0, 0, 0);
         return;
     }
@@ -1326,6 +1332,23 @@ onload = function() {
                 pu.redraw();
                 e.preventDefault();
                 break;
+                // custom color
+            case "custom_color_yes_lb":
+                document.getElementById("custom_color_yes").checked = true;
+                let mode = pu.mode[pu.mode.qa].edit_mode;
+                if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
+                    (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special")) {
+                    document.getElementById('style_special').style.display = 'inline';
+                }
+                pu.redraw();
+                e.preventDefault();
+                break;
+            case "custom_color_no_lb":
+                document.getElementById("custom_color_no").checked = true;
+                document.getElementById('style_special').style.display = 'none';
+                pu.redraw();
+                e.preventDefault();
+                break;
             case "saveimagename":
                 return;
             case "closeBtn_image2":
@@ -1601,5 +1624,33 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+    });
+
+    $(colorpicker_special).spectrum({
+        type: "component",
+        preferredFormat: "hex",
+        showInput: true,
+        chooseText: "OK",
+        // cancelText: "No way",
+        // showAlpha: true,
+        // allowAlpha: true,
+        // allowEmpty: true,
+        togglePaletteOnly: true,
+        togglePaletteMoreText: 'more',
+        togglePaletteLessText: 'less',
+        showPalette: true,
+        hideAfterPaletteSelect: true,
+        maxSelectionSize: 8,
+        showSelectionPalette: true,
+        palette: [
+            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+            ["#00008b", "#187bcd", "#c0e0ff", "#3085d6", "#eecab1", "#208020", "#4c9900", "#b3ffb3"],
+            ["#ffcc80", "#777777", "#b3b3b3", "#ffa3a3", "#ffffa3", "#f0f0f0", "#ffb3ff", "#cc99ff"]
+        ],
+        localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
 };

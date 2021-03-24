@@ -1,7 +1,16 @@
 ## History
+* 2021/**/** ver2.25.9
+	* Improved composite modes linex and edgex. Right click and drag for crosses (x).
+	* Undo/Redo buttons greyed in Dark Mode.
+	* Added shortcut/tab Icon.
+* 2021/03/20 ver2.25.8
+	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
+	* Automatic closing of window after generating URL with answer check / gmpuzzle output text.
+	* Bug fixed for Transform button for Add Top/Bottom for Side sub-mode (i.e. NumberS elements).
+	* Updated Readme.
 * 2021/03/17 ver2.25.7
 	* Warning message for URL too long
-	* Fixed label color display in Surface Mode fir GR abd LG.
+	* Fixed label color display in Surface Mode for GR abd LG.
 	* Initializing GMPuzzle Theme
 * 2021/02/28 ver2.25.6
 	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).

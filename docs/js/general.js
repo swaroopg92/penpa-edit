@@ -1255,6 +1255,12 @@ function load(urlParam) {
         if (typeof rtext[11] !== 'undefined') {
             rtext[11] = rtext[11].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
+
+        // custom colors, only checking for 14 as 14 and 15 will appear together or never
+        if (typeof rtext[14] !== 'undefined') {
+            rtext[14] = rtext[14].split(pu.replace[i][1]).join(pu.replace[i][0]);
+            rtext[15] = rtext[15].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
     }
     rtext[5] = JSON.parse(rtext[5]);
     for (var i = 1; i < rtext[5].length; i++) {
@@ -1275,12 +1281,26 @@ function load(urlParam) {
         }
         pu.pu_q = JSON.parse(rtext[3]);
         pu.pu_a = JSON.parse(rtext[4]);
-        if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; }
+        if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; } // not sure yet, why these lines exist
         if (!pu.pu_a.polygon) { pu.pu_a.polygon = []; }
+
+        // custom color
+        if (typeof rtext[13] !== 'undefined') {
+            if (JSON.parse(rtext[13]) === "true") {
+                document.getElementById("custom_color_yes").checked = true;
+            }
+        }
+        if (typeof rtext[14] !== 'undefined') {
+            pu.pu_q_col = JSON.parse(rtext[14]);
+            pu.pu_a_col = JSON.parse(rtext[15]);
+            if (!pu.pu_q_col.polygon) { pu.pu_q_col.polygon = []; } // not sure yet, why these lines exist
+            if (!pu.pu_a_col.polygon) { pu.pu_a_col.polygon = []; }
+        }
+
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q", "pu_a"]) {
+        for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
             for (var j of ["command_redo", "command_undo"]) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
@@ -1351,10 +1371,23 @@ function load(urlParam) {
         pu.mode_set("surface");
         pu.pu_q = JSON.parse(rtext[3]);
         if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; }
+
+        // custom color
+        if (typeof rtext[13] !== 'undefined') {
+            if (JSON.parse(rtext[13]) === "true") {
+                document.getElementById("custom_color_yes").checked = true;
+            }
+        }
+
+        if (typeof rtext[14] !== 'undefined') {
+            pu.pu_q_col = JSON.parse(rtext[14]);
+            if (!pu.pu_q_col.polygon) { pu.pu_q_col.polygon = []; } // not sure yet, why these lines exist
+        }
+
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q"]) {
+        for (var i of ["pu_q", "pu_q_col"]) {
             for (var j of ["command_redo", "command_undo"]) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
@@ -1899,6 +1932,12 @@ function set_solvemode() {
 
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
+
+    // custom color
+    document.getElementById('colorpicker_special').style.display = 'none';
+    document.getElementById('custom_color_lb').style.display = 'none';
+    document.getElementById('custom_color_yes_lb').style.display = 'none';
+    document.getElementById('custom_color_no_lb').style.display = 'none';
 }
 
 function set_contestmode() {

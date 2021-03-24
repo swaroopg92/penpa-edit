@@ -77,7 +77,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 530px;
+    max-width: 630px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -112,7 +112,7 @@ hr.newgridhrline {
     background: url(images/parch_dark.jpg) top center;
     font-size: 0;
     border: 1px solid var(--white);
-    width: 530px;
+    width: 550px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -187,7 +187,6 @@ hr.newgridhrline {
 .label {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -203,7 +202,6 @@ hr.newgridhrline {
 .label_option {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -232,7 +230,6 @@ hr.newgridhrline {
 .labelL {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -1284,7 +1281,8 @@ input[type=number] {
 #firstcell_column_lb,
 #sudokusize_lb,
 #ignore_pencilmarks_lb,
-#theme_mode_lb {
+#theme_mode_lb,
+#custom_color_lb {
     color: var(--white);
 }
 
