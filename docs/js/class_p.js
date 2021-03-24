@@ -9075,7 +9075,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                    document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -9088,7 +9088,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                    document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -9102,7 +9102,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                    document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -9115,7 +9115,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                    document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
