@@ -871,6 +871,11 @@ onload = function() {
                 panel_pu.select_close();
                 e.preventDefault();
                 break;
+            case "panel_fullcards_lbmenu":
+                panel_pu.mode_set('fullcards');
+                panel_pu.select_close();
+                e.preventDefault();
+                break;
             case "panel_select_lbmenu":
                 panel_pu.select_open();
                 e.preventDefault();
@@ -1585,6 +1590,12 @@ onload = function() {
             if (panel_pu.cont[n] && panel_pu.cont[n] != " ") {
                 pu.key_number(panel_pu.cont[n]);
             } else if (panel_pu.cont[n] === " ") {
+                pu.key_space();
+            }
+        } else if (panel_pu.panelmode === "fullcards") {
+            if (panel_pu.cont[n] && panel_pu.cont[n] != "　") {
+                pu.key_number(panel_pu.cont[n]);
+            } else if (panel_pu.cont[n] === "　") {
                 pu.key_space();
             }
         } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
