@@ -3969,8 +3969,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -4046,8 +4046,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -4123,8 +4123,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -4901,8 +4901,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -5482,8 +5482,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 // Regions
