@@ -1233,6 +1233,13 @@ function load(urlParam) {
         document.getElementById('edge_button').textContent = "ON";
     }
 
+    // version save
+    if (typeof rtext[10] !== 'undefined') {
+        pu.version = JSON.parse(rtext[10]);
+    } else {
+        pu.version = [0, 0, 0]; // To handle all the old links
+    }
+
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);
     pu.reflect[1] = parseInt(rtext_para[6]);
@@ -1462,11 +1469,6 @@ function load(urlParam) {
     }
 
     pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
-
-    // version save
-    if (typeof rtext[10] !== 'undefined') {
-        pu.version = JSON.parse(rtext[10]);
-    }
 
     // Theme
     if (typeof rtext[12] !== 'undefined') {

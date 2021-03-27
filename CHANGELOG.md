@@ -1,8 +1,10 @@
 ## History
-* 2021/**/** ver2.25.9
+* 2021/03/27 ver2.25.9
 	* Improved composite modes linex and edgex. Right click and drag for crosses (x).
 	* Undo/Redo buttons greyed in Dark Mode.
-	* Added shortcut/tab Icon.
+	* Added shortcut/tab Icon (favicon).
+	* Fixed a bug for gmpuzzle output from Sudoku board.
+	* Fill sudoku arrowsums with white space.
 * 2021/03/20 ver2.25.8
 	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
 	* Automatic closing of window after generating URL with answer check / gmpuzzle output text.
