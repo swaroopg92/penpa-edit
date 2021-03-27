@@ -1256,7 +1256,6 @@ class Puzzle_square extends Puzzle {
         var p_x, p_y, factor;
         var counter = 0;
         var counter_ref = 0;
-        var cardimages = [];
         var ignoreimages = false;
         var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
 
@@ -1272,7 +1271,8 @@ class Puzzle_square extends Puzzle {
         // In composite, Sudoku, special mode, there is constant calling of mouse movement, do not update images then.
         if (this.mode[pu].edit_mode === 'sudoku' ||
             this.mode[pu].edit_mode === 'special' ||
-            this.mode[pu].edit_mode === 'combi') {
+            this.mode[pu].edit_mode === 'combi' ||
+            this.mode[pu].edit_mode === 'move') {
             ignoreimages = true;
         }
 
@@ -1298,15 +1298,14 @@ class Puzzle_square extends Puzzle {
                         let position_factor = 0.45;
                         let size_factor = 1.9;
                         img.src = './js/images/cards/' + this[pu].number[i][0].codePointAt(0).toString() + '.svg';
-                        cardimages.push(img); // save the image objects
 
                         // onload gets called for each loading of image, we need to save the p_x, p_y value, the first time its called
-                        if (!(this[pu].number[i][0].codePointAt(0) in this.pxpy)) {
-                            this.pxpy[this[pu].number[i][0].codePointAt(0)] = {
-                                'px': p_x,
-                                'py': p_y
-                            };
-                        }
+                        this.pxpy[this[pu].number[i][0].codePointAt(0)] = {
+                            'px': p_x,
+                            'py': p_y,
+                            'img': img
+                        };
+
                         // img.onerror to detect image loading errors
                         img.onload = () => {
                             counter++;
@@ -1315,7 +1314,7 @@ class Puzzle_square extends Puzzle {
                             if (counter == counter_ref) {
                                 counter = 0; // to loop through the image list
                                 for (var k in this.pxpy) {
-                                    this.ctx.drawImage(cardimages[counter],
+                                    this.ctx.drawImage(this.pxpy[k].img,
                                         this.pxpy[k].px - position_factor * this.size,
                                         this.pxpy[k].py - position_factor * this.size,
                                         size_factor * this.size,

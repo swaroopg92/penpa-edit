@@ -330,7 +330,11 @@ class Panel {
             this.ctxf.fillRect((i % this.nxf) * (this.sizef + this.spacef), (i / this.nxf | 0) * (this.sizef + this.spacef), this.sizef, this.sizef);
         }
         for (var i = 0; i < this.nxf * this.nyf; i++) {
-            set_font_style(this.ctxf, 0.9 * this.sizef.toString(10), pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][1]);
+            if (i % 4 == 0 || i % 4 == 3) {
+                set_font_style(this.ctxf, 0.9 * this.sizef.toString(10), 1);
+            } else {
+                set_font_style(this.ctxf, 0.9 * this.sizef.toString(10), 10);
+            }
             if (this.ctxf.fillStyle === Color.WHITE) { this.ctxf.fillStyle = Color.BLACK; }
             this.ctxf.text(this.cont[i], (i % this.nxf + 0.45) * (this.sizef + this.spacef), ((i / this.nxf | 0) + 0.55) * (this.sizef + this.spacef));
         }

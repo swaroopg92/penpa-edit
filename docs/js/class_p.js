@@ -6428,7 +6428,6 @@ class Puzzle {
                         }
                     } else {
                         // It enters for first entry in a cell and then for alphabets or special characters i.e. non numbers
-                        console.log(key.codePointAt(0))
                         number = key;
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
