@@ -3282,7 +3282,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3295,6 +3299,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
             case 2:
@@ -3306,7 +3311,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3319,6 +3328,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
             case 3:
@@ -3330,7 +3340,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3343,6 +3357,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
             case 4:
@@ -3354,7 +3369,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3367,6 +3386,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
         }
