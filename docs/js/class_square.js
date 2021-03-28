@@ -1298,6 +1298,7 @@ class Puzzle_square extends Puzzle {
                         let position_factor = 0.45;
                         let size_factor = 1.9;
                         img.src = './js/images/cards/' + this[pu].number[i][0].codePointAt(0).toString() + '.svg';
+                        img.setAttribute('crossorigin', 'anonymous');
 
                         // onload gets called for each loading of image, we need to save the p_x, p_y value, the first time its called
                         this.pxpy[this[pu].number[i][0].codePointAt(0)] = {
