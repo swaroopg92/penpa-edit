@@ -612,7 +612,7 @@
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.25.9, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.25.10, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -923,15 +923,28 @@
             </div>
             <div id="modal-save2-solution">
                 <h3 id="save3texttitle">Solution will check only following:</h3>
-                <h5 id="answerwarning">*Default (none selected) it checks for all</h5>
+                <h5 id="answerwarning">*Default (none selected) it checks for all. Choose either AND or OR column, if both are selected, AND will be given preference.</h5>
                 <div class="nb_button">
-                    <table id="answersetting">
+                    <table id="answersetting" class="center">
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_and_lb">AND</label></span>
+                            </td>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_or_lb">OR</label></span>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <span id="div_all"><label class="solutiontext" id="sol_surface_lb">Shading - Dark Grey, Black: </label></span>
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_surface" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_surface" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -941,6 +954,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_number" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_number" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -949,6 +965,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopline" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_loopline" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -956,6 +975,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopedge" class="solcheck">
+                            </td>
+                            <td rowspan="2">
+                                <input type="checkbox" name="solution_or" id="sol_or_loopedge" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -973,6 +995,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_wall" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_wall" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -980,6 +1005,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_square" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_square" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -989,6 +1017,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_circle" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_circle" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -996,6 +1027,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_tri" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_tri" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -1005,6 +1039,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_arrow" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_arrow" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1012,6 +1049,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_math" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_math" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -1021,6 +1061,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_battleship" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_battleship" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1028,6 +1071,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_tent" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_tent" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -1037,6 +1083,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_star" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_star" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1044,6 +1093,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_akari" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_akari" class="solcheck_or">
                             </td>
                         </tr>
                     </table>
