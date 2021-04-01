@@ -164,6 +164,7 @@ class Puzzle {
         this.version = [2, 25, 9];
         this.undoredo_disable = false;
         this.comp = false;
+        this.multisolution = false;
     }
 
     reset() {
@@ -2404,7 +2405,10 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        text += "," + document.getElementById('edge_button').textContent;
+
+        // Multi Solution status, it will be true only when generating solution checking
+        text += "," + false + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2442,7 +2446,7 @@ class Puzzle {
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2489,7 +2493,7 @@ class Puzzle {
         }
 
         text += JSON.stringify(this.pu_q_col) + "\n";
-        text += JSON.stringify(this.pu_a_col);
+        text += JSON.stringify(this.pu_a_col) + "\n";
 
         if (document.getElementById("save_undo").checked === false) {
             this.pu_q_col.command_redo.__a = qr;
@@ -2497,6 +2501,18 @@ class Puzzle {
             this.pu_a_col.command_redo.__a = ar;
             this.pu_a_col.command_undo.__a = au;
         }
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2543,8 +2559,20 @@ class Puzzle {
         let ruleinfo = document.getElementById("saveinforules").value;
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        // if solution check exists, then read multisolution variable or else set to false
+        if (this.solution) {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + this.multisolution + "\n";
+        } else {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + false + "\n";
+        }
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2581,7 +2609,7 @@ class Puzzle {
         }
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2631,11 +2659,23 @@ class Puzzle {
         this.pu_a_col.command_redo.__a = [];
         this.pu_a_col.command_undo.__a = [];
         text += JSON.stringify(this.pu_q_col) + "\n";
-        text += JSON.stringify(this.pu_a_col);
+        text += JSON.stringify(this.pu_a_col) + "\n";
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
         this.pu_a_col.command_redo.__a = ar;
         this.pu_a_col.command_undo.__a = au;
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2678,7 +2718,7 @@ class Puzzle {
         }
     }
 
-    maketext_solve() {
+    maketext_solve(type = "none") {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
@@ -2699,8 +2739,21 @@ class Puzzle {
         let ruleinfo = document.getElementById("saveinforules").value;
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        // if solution check exists, then read multisolution variable or else set to false
+        if (type === "answercheck") {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            this.checkall_status(); // this will update the multisolution status
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + this.multisolution + "\n";
+        } else {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + false + "\n";
+        }
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -2724,7 +2777,7 @@ class Puzzle {
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2758,9 +2811,21 @@ class Puzzle {
         qu = this.pu_q_col.command_undo.__a;
         this.pu_q_col.command_redo.__a = [];
         this.pu_q_col.command_undo.__a = [];
-        text += JSON.stringify(this.pu_q_col) + "\n" + "\n";
+        text += JSON.stringify(this.pu_q_col) + "\n" + "x" + "\n";
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2808,7 +2873,10 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        text += "," + document.getElementById('edge_button').textContent;
+
+        // Multi Solution status, it will be true only when generating solution checking
+        text += "," + false + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -2832,7 +2900,7 @@ class Puzzle {
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2866,9 +2934,21 @@ class Puzzle {
         qu = this.pu_q_col.command_undo.__a;
         this.pu_q_col.command_redo.__a = [];
         this.pu_q_col.command_undo.__a = [];
-        text += JSON.stringify(this.pu_q_col) + "\n" + "\n";
+        text += JSON.stringify(this.pu_q_col) + "\n" + "x" + "\n";
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2895,7 +2975,7 @@ class Puzzle {
     }
 
     maketext_solve_solution() {
-        var text_head = this.maketext_solve();
+        var text_head = this.maketext_solve("answercheck");
         var text;
         text = JSON.stringify(this.make_solution());
 
@@ -2918,80 +2998,111 @@ class Puzzle {
         return text_head + "&a=" + ba;
     }
 
-    make_solution() {
-        // 0 - shading
-        // 1 - Line / FreeLine
-        // 2 - Edge / FreeEdge
-        // 3 - Wall
-        // 4 - Number
-        // 5 - Symbol
-        var sol = [
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ];
-
-        var pu = "pu_a";
-
+    checkall_status() {
         // See if user selected any particular setting
-        var answersetting = document.getElementById("answersetting");
-        var settingstatus = answersetting.getElementsByTagName("INPUT");
-        var checkall = true;
+        let answersetting = document.getElementById("answersetting");
+        let settingstatus_and = answersetting.getElementsByClassName("solcheck");
+        let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
+        let checkall = true;
 
-        // loop through and check if any settings are selected
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
+        // loop through and check if any "AND" settings are selected
+        for (var i = 0; i < settingstatus_and.length; i++) {
+            if (settingstatus_and[i].checked) {
                 checkall = false;
                 break;
             }
         }
 
-        if (document.getElementById("sol_surface").checked === true || checkall) {
-            for (var i in this[pu].surface) {
-                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
-                    sol[0].push(i);
+        // If checkall is still true, it means, no "AND" option was selected
+        if (checkall) {
+            // loop through and check if any "OR" settings are selected
+            for (var i = 0; i < settingstatus_or.length; i++) {
+                if (settingstatus_or[i].checked) {
+                    checkall = false;
+                    this.multisolution = true;
+                    break;
                 }
             }
         }
 
-        if (document.getElementById("sol_square").checked === true || checkall) {
-            for (var i in this[pu].symbol) {
-                if (this[pu].symbol[i][0] === 2 && this[pu].symbol[i][1] === "square_LL") {
-                    if (sol[0].indexOf(i) === -1) {
+        return checkall;
+    }
+
+    make_solution() {
+
+        let checkall = this.checkall_status();
+        let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+
+        if (!this.multisolution) {
+            // 0 - shading
+            // 1 - Line / FreeLine
+            // 2 - Edge / FreeEdge
+            // 3 - Wall
+            // 4 - Number
+            // 5 - Symbol
+            var sol = [
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ];
+
+            var pu = "pu_a";
+
+            if (document.getElementById("sol_surface").checked === true || checkall) {
+                for (var i in this[pu].surface) {
+                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
                         sol[0].push(i);
                     }
                 }
             }
-        }
 
-        if (document.getElementById("sol_loopline").checked === true || checkall) {
-            for (var i in this[pu].line) {
-                if (this[pu].line[i] === 3) {
-                    sol[1].push(i + ",1");
-                } else if (this[pu].line[i] === 30) {
-                    sol[1].push(i + ",2");
+            if (document.getElementById("sol_square").checked === true || checkall) {
+                for (var i in this[pu].symbol) {
+                    if (this[pu].symbol[i][0] === 2 && this[pu].symbol[i][1] === "square_LL") {
+                        if (sol[0].indexOf(i) === -1) {
+                            sol[0].push(i);
+                        }
+                    }
                 }
             }
 
-            for (var i in this[pu].freeline) {
-                if (this[pu].freeline[i] === 3) {
-                    sol[1].push(i + ",1");
-                } else if (this[pu].freeline[i] === 30) {
-                    sol[1].push(i + ",2");
+            if (document.getElementById("sol_loopline").checked === true || checkall) {
+                for (var i in this[pu].line) {
+                    if (this[pu].line[i] === 3) {
+                        sol[1].push(i + ",1");
+                    } else if (this[pu].line[i] === 30) {
+                        sol[1].push(i + ",2");
+                    }
+                }
+
+                for (var i in this[pu].freeline) {
+                    if (this[pu].freeline[i] === 3) {
+                        sol[1].push(i + ",1");
+                    } else if (this[pu].freeline[i] === 30) {
+                        sol[1].push(i + ",2");
+                    }
                 }
             }
-        }
 
-        if (document.getElementById("sol_loopedge").checked === true || checkall) {
-            if (document.getElementById("sol_ignoreborder").checked === true) {
-                for (var i in this[pu].lineE) {
-                    if ((this.frame[i] && this.frame[i] === 2) ||
-                        (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
-                        // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
-                    } else {
+            if (document.getElementById("sol_loopedge").checked === true || checkall) {
+                if (document.getElementById("sol_ignoreborder").checked === true) {
+                    for (var i in this[pu].lineE) {
+                        if ((this.frame[i] && this.frame[i] === 2) ||
+                            (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
+                            // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                        } else {
+                            if (this[pu].lineE[i] === 3) {
+                                sol[2].push(i + ",1");
+                            } else if (this[pu].lineE[i] === 30) {
+                                sol[2].push(i + ",2");
+                            }
+                        }
+                    }
+                } else {
+                    for (var i in this[pu].lineE) {
                         if (this[pu].lineE[i] === 3) {
                             sol[2].push(i + ",1");
                         } else if (this[pu].lineE[i] === 30) {
@@ -2999,125 +3110,318 @@ class Puzzle {
                         }
                     }
                 }
-            } else {
-                for (var i in this[pu].lineE) {
-                    if (this[pu].lineE[i] === 3) {
+
+                for (var i in this[pu].freelineE) {
+                    if (this[pu].freelineE[i] === 3) {
                         sol[2].push(i + ",1");
-                    } else if (this[pu].lineE[i] === 30) {
+                    } else if (this[pu].freelineE[i] === 30) {
                         sol[2].push(i + ",2");
                     }
                 }
             }
 
-            for (var i in this[pu].freelineE) {
-                if (this[pu].freelineE[i] === 3) {
-                    sol[2].push(i + ",1");
-                } else if (this[pu].freelineE[i] === 30) {
-                    sol[2].push(i + ",2");
+            if (document.getElementById("sol_wall").checked === true || checkall) {
+                for (var i in this[pu].wall) {
+                    if (this[pu].wall[i] === 3) {
+                        sol[3].push(i);
+                    }
                 }
             }
-        }
 
-        if (document.getElementById("sol_wall").checked === true || checkall) {
-            for (var i in this[pu].wall) {
-                if (this[pu].wall[i] === 3) {
-                    sol[3].push(i);
-                }
-            }
-        }
-
-        if (document.getElementById("sol_number").checked === true || checkall) {
-            for (var i in this[pu].number) {
-                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                if (this[pu].number[i][2] === "7") {
-                    // (Green or light blue or dark blue or red)
-                    if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
-                        var sum = 0,
-                            a;
-                        for (var j = 0; j < 10; j++) {
-                            if (this[pu].number[i][0][j] === 1) {
-                                sum += 1;
-                                a = j + 1;
+            if (document.getElementById("sol_number").checked === true || checkall) {
+                for (var i in this[pu].number) {
+                    // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                    if (this[pu].number[i][2] === "7") {
+                        // (Green or light blue or dark blue or red)
+                        if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                            var sum = 0,
+                                a;
+                            for (var j = 0; j < 10; j++) {
+                                if (this[pu].number[i][0][j] === 1) {
+                                    sum += 1;
+                                    a = j + 1;
+                                }
+                            }
+                            if (sum === 1) {
+                                sol[4].push(i + "," + a);
                             }
                         }
-                        if (sum === 1) {
-                            sol[4].push(i + "," + a);
+                    } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                            sol[4].push(i + "," + this[pu].number[i][0]);
                         }
                     }
-                } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                        sol[4].push(i + "," + this[pu].number[i][0]);
+                }
+            }
+
+            for (var i in this[pu].symbol) {
+                switch (this[pu].symbol[i][1]) {
+                    case "circle_M":
+                        if (document.getElementById("sol_circle").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "A");
+                            }
+                        }
+                        break;
+                    case "tri":
+                        if (document.getElementById("sol_tri").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "B");
+                            }
+                        }
+                        break;
+                    case "arrow_S":
+                        if (document.getElementById("sol_arrow").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "C");
+                            }
+                        }
+                        break;
+                    case "battleship_B":
+                        if (document.getElementById("sol_battleship").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "D");
+                            }
+                        }
+                        break;
+                    case "star": //any star
+                        if (document.getElementById("sol_star").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
+                                sol[5].push(i + "," + 1 + "E");
+                            }
+                        }
+                        break;
+                    case "tents":
+                        if (document.getElementById("sol_tent").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 2) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "F");
+                            }
+                        }
+                        break;
+                    case "math":
+                    case "math_G":
+                        if (document.getElementById("sol_math").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "G");
+                            }
+                        }
+                        break;
+                    case "sun_moon":
+                        if (document.getElementById("sol_akari").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 3) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "H");
+                            }
+                        }
+                        break;
+                }
+            }
+
+            for (var i = 0; i < 6; i++) {
+                sol[i] = sol[i].sort();
+            }
+        } else {
+            // store multiple solutions
+
+            var sol = [];
+            var pu = "pu_a";
+            var sol_count = -1; // as list indexing starts at 0
+
+            // loop through and check which "OR" settings are selected
+            for (var m = 0; m < settingstatus_or.length; m++) {
+                if (settingstatus_or[m].checked) {
+
+                    // incrementing solution count by 1
+                    sol_count++;
+
+                    // Extracting the checkbox id. First 7 chracters "sol_or_" are sliced.
+                    let sol_id = settingstatus_or[m].id.slice(7);
+
+                    let temp_sol = [];
+
+                    switch (sol_id) {
+                        case "surface":
+                            for (var i in this[pu].surface) {
+                                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "number":
+                            for (var i in this[pu].number) {
+                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                if (this[pu].number[i][2] === "7") {
+                                    // (Green or light blue or dark blue or red)
+                                    if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                                        var sum = 0,
+                                            a;
+                                        for (var j = 0; j < 10; j++) {
+                                            if (this[pu].number[i][0][j] === 1) {
+                                                sum += 1;
+                                                a = j + 1;
+                                            }
+                                        }
+                                        if (sum === 1) {
+                                            temp_sol.push(i + "," + a);
+                                        }
+                                    }
+                                } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                        temp_sol.push(i + "," + this[pu].number[i][0]);
+                                    }
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "loopline":
+                            for (var i in this[pu].line) {
+                                if (this[pu].line[i] === 3) {
+                                    temp_sol.push(i + ",1");
+                                } else if (this[pu].line[i] === 30) {
+                                    temp_sol.push(i + ",2");
+                                }
+                            }
+
+                            for (var i in this[pu].freeline) {
+                                if (this[pu].freeline[i] === 3) {
+                                    temp_sol.push(i + ",1");
+                                } else if (this[pu].freeline[i] === 30) {
+                                    temp_sol.push(i + ",2");
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "loopedge":
+                            for (var i in this[pu].lineE) {
+                                if ((this.frame[i] && this.frame[i] === 2) ||
+                                    (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
+                                    // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                                } else {
+                                    if (this[pu].lineE[i] === 3) {
+                                        temp_sol.push(i + ",1");
+                                    } else if (this[pu].lineE[i] === 30) {
+                                        temp_sol.push(i + ",2");
+                                    }
+                                }
+                            }
+                            for (var i in this[pu].freelineE) {
+                                if (this[pu].freelineE[i] === 3) {
+                                    temp_sol.push(i + ",1");
+                                } else if (this[pu].freelineE[i] === 30) {
+                                    temp_sol.push(i + ",2");
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "wall":
+                            for (var i in this[pu].wall) {
+                                if (this[pu].wall[i] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "square":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "square_LL" && this[pu].symbol[i][0] === 2) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "circle":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "circle_M" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "tri":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "tri" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "arrow":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "arrow_S" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "math":
+                            for (var i in this[pu].symbol) {
+                                if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
+                                    this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "battleship":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "battleship_B" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "tent":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "tents" &&
+                                    this[pu].symbol[i][0] === 2) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "star":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "star" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "akari":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "sun_moon" &&
+                                    this[pu].symbol[i][0] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
                     }
                 }
             }
         }
-
-        for (var i in this[pu].symbol) {
-            switch (this[pu].symbol[i][1]) {
-                case "circle_M":
-                    if (document.getElementById("sol_circle").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "A");
-                        }
-                    }
-                    break;
-                case "tri":
-                    if (document.getElementById("sol_tri").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "B");
-                        }
-                    }
-                    break;
-                case "arrow_S":
-                    if (document.getElementById("sol_arrow").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "C");
-                        }
-                    }
-                    break;
-                case "battleship_B":
-                    if (document.getElementById("sol_battleship").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "D");
-                        }
-                    }
-                    break;
-                case "star": //any star
-                    if (document.getElementById("sol_star").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
-                            sol[5].push(i + "," + 1 + "E");
-                        }
-                    }
-                    break;
-                case "tents":
-                    if (document.getElementById("sol_tent").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] === 2) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "F");
-                        }
-                    }
-                    break;
-                case "math":
-                case "math_G":
-                    if (document.getElementById("sol_math").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "G");
-                        }
-                    }
-                    break;
-                case "sun_moon":
-                    if (document.getElementById("sol_akari").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] === 3) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "H");
-                        }
-                    }
-                    break;
-            }
-        }
-
-        for (var i = 0; i < 6; i++) {
-            sol[i] = sol[i].sort();
-        }
+        console.log(sol);
         return sol;
     }
 
@@ -9302,25 +9606,55 @@ class Puzzle {
     }
 
     check_solution() {
-        if (this.solution) {
-            var text = JSON.stringify(this.make_solution());
-            if (text === this.solution && this.sol_flag === 0) {
-                setTimeout(() => {
-                    Swal.fire({
-                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                        html: '<h2 class="wish">Congratulations 🙂</h2>',
-                        background: 'url(js/images/new_year.jpg)',
-                        icon: 'success',
-                        confirmButtonText: 'Hurray!',
-                        // timer: 5000
-                    })
-                }, 20)
-                sw_timer.stop();
-                // this.mouse_mode = "out";
-                // this.mouseevent(0, 0, 0);
-                this.sol_flag = 1;
-            } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                this.sol_flag = 0;
+        if (!this.multisolution) {
+            if (this.solution) {
+                var text = JSON.stringify(this.make_solution());
+                console.log(this.multisolution, this.solution, text)
+                if (text === this.solution && this.sol_flag === 0) {
+                    setTimeout(() => {
+                        Swal.fire({
+                            title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                            html: '<h2 class="wish">Congratulations 🙂</h2>',
+                            background: 'url(js/images/new_year.jpg)',
+                            icon: 'success',
+                            confirmButtonText: 'Hurray!',
+                            // timer: 5000
+                        })
+                    }, 20)
+                    sw_timer.stop();
+                    // this.mouse_mode = "out";
+                    // this.mouseevent(0, 0, 0);
+                    this.sol_flag = 1;
+                } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                    this.sol_flag = 0;
+                }
+            }
+        } else {
+            var text = this.make_solution();
+            if (!this.sol_flag) {
+                for (var i = 0; i < this.solution.length; i++) {
+                    let author_sol = JSON.stringify(this.solution[i]);
+                    if (author_sol) {
+                        for (var j = 0; j < text.length; j++) {
+                            let user_sol = JSON.stringify(text[j]);
+                            if (user_sol === author_sol && this.sol_flag === 0) {
+                                setTimeout(() => {
+                                    Swal.fire({
+                                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                                        html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                        background: 'url(js/images/new_year.jpg)',
+                                        icon: 'success',
+                                        confirmButtonText: 'Hurray!',
+                                    })
+                                }, 20)
+                                sw_timer.stop();
+                                this.sol_flag = 1;
+                                i = this.solution.length; // to break the outer for loop
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
