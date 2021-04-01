@@ -1233,6 +1233,11 @@ function load(urlParam) {
         document.getElementById('edge_button').textContent = "ON";
     }
 
+    // multisolution status
+    if (rtext_para[20] && rtext_para[20] === "true") {
+        pu.multisolution = true;
+    }
+
     // version save
     if (typeof rtext[10] !== 'undefined') {
         pu.version = JSON.parse(rtext[10]);
@@ -1325,7 +1330,12 @@ function load(urlParam) {
                 var inflate = new Zlib.RawInflate(ab);
                 var plain = inflate.decompress();
                 var atext = new TextDecoder().decode(plain);
-                pu.solution = atext;
+
+                if (pu.multisolution) {
+                    pu.solution = JSON.parse(atext);
+                } else {
+                    pu.solution = atext;
+                }
                 // Visually showcase answer check is enabled
                 document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                 document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
@@ -1348,7 +1358,7 @@ function load(urlParam) {
 
             if (typeof rtext[8] !== 'undefined') {
                 // set the answer check settings
-                var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+                var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
                 var answersetting = JSON.parse(rtext[8]);
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
@@ -1361,7 +1371,7 @@ function load(urlParam) {
         } else {
             if (typeof rtext[7] !== 'undefined') {
                 // set the answer check settings
-                var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+                var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
                 var answersetting = JSON.parse(rtext[7]);
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
@@ -1409,14 +1419,19 @@ function load(urlParam) {
             var inflate = new Zlib.RawInflate(ab);
             var plain = inflate.decompress();
             var atext = new TextDecoder().decode(plain);
-            pu.solution = atext;
+            if (pu.multisolution) {
+                pu.solution = JSON.parse(atext);
+            } else {
+                pu.solution = atext;
+            }
+
             // Visually showcase answer check is enabled
             document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
             document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings
-            var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+            var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
             var answersetting = JSON.parse(rtext[7]);
             for (var i = 0; i < settingstatus.length; i++) {
                 settingstatus[i].checked = answersetting[settingstatus[i].id];
@@ -1477,6 +1492,16 @@ function load(urlParam) {
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
+        }
+    }
+
+    // answerchecking settings for "OR"
+    if (typeof rtext[16] !== 'undefined') {
+        // set the answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = JSON.parse(rtext[16]);
+        for (var i = 0; i < settingstatus.length; i++) {
+            settingstatus[i].checked = answersetting[settingstatus[i].id];
         }
     }
 }
