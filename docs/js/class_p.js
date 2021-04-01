@@ -3111,11 +3111,26 @@ class Puzzle {
                     }
                 }
 
-                for (var i in this[pu].freelineE) {
-                    if (this[pu].freelineE[i] === 3) {
-                        sol[2].push(i + ",1");
-                    } else if (this[pu].freelineE[i] === 30) {
-                        sol[2].push(i + ",2");
+                if (document.getElementById("sol_ignoreborder").checked === true) {
+                    for (var i in this[pu].lineE) {
+                        if ((this.frame[i] && this.frame[i] === 2) ||
+                            (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
+                            // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                        } else {
+                            if (this[pu].freelineE[i] === 3) {
+                                sol[2].push(i + ",1");
+                            } else if (this[pu].freelineE[i] === 30) {
+                                sol[2].push(i + ",2");
+                            }
+                        }
+                    }
+                } else {
+                    for (var i in this[pu].freelineE) {
+                        if (this[pu].freelineE[i] === 3) {
+                            sol[2].push(i + ",1");
+                        } else if (this[pu].freelineE[i] === 30) {
+                            sol[2].push(i + ",2");
+                        }
                     }
                 }
             }
@@ -3310,10 +3325,15 @@ class Puzzle {
                                 }
                             }
                             for (var i in this[pu].freelineE) {
-                                if (this[pu].freelineE[i] === 3) {
-                                    temp_sol.push(i + ",1");
-                                } else if (this[pu].freelineE[i] === 30) {
-                                    temp_sol.push(i + ",2");
+                                if ((this.frame[i] && this.frame[i] === 2) ||
+                                    (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
+                                    // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                                } else {
+                                    if (this[pu].freelineE[i] === 3) {
+                                        temp_sol.push(i + ",1");
+                                    } else if (this[pu].freelineE[i] === 30) {
+                                        temp_sol.push(i + ",2");
+                                    }
                                 }
                             }
                             temp_sol.sort();
