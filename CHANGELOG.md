@@ -1,6 +1,7 @@
 ## History
 * 2021/04/** ver2.25.10
 	* Multiple solution feature.
+	* Added Thermo and Arrow to Tab settings.
 * 2021/03/27 ver2.25.9
 	* Improved composite modes linex and edgex. Right click and drag for crosses (x).
 	* Undo/Redo buttons greyed in Dark Mode.
