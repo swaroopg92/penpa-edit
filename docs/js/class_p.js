@@ -7762,7 +7762,7 @@ class Puzzle {
         if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length === 1) {
             this[this.mode.qa][arr].pop();
             for (var i = this[this.mode.qa][arr].length - 1; i >= 0; i--) {
-                if (this[this.mode.qa][arr][i][0] === num) {
+                if (this[this.mode.qa][arr][i] && this[this.mode.qa][arr][i][0] === num) {
                     this.record(arr, i);
                     this[this.mode.qa][arr][i] = [];
                     if (document.getElementById("custom_color_yes").checked) {
