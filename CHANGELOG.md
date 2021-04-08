@@ -1,4 +1,9 @@
 ## History
+* 2021/04/** ver2.25.10
+	* Added cookies to store user preferenace regarding reload button, theme and tab_settings.
+	* Fixed undo bug for special mode.
+	* Added Thermo and Arrow submodes to the tab settings.
+	* Fixed bug of Handling null Thermo and Arrow arrays.
 * 2021/03/27 ver2.25.9
 	* Improved composite modes linex and edgex. Right click and drag for crosses (x).
 	* Undo/Redo buttons greyed in Dark Mode.

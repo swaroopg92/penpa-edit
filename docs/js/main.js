@@ -1354,6 +1354,28 @@ onload = function() {
                 pu.redraw();
                 e.preventDefault();
                 break;
+            case "save_settings_yes_lb":
+                document.getElementById("save_settings_yes").checked = true;
+                const theme = document.querySelectorAll('input[name="theme_mode"]');
+                for (const th of theme) {
+                    if (th.checked) {
+                        setCookie("color_theme", th.value, 2147483647);
+                        break;
+                    }
+                }
+                setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
+                setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
+                setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
+                e.preventDefault();
+                break;
+            case "save_settings_no_lb":
+                document.getElementById("save_settings_no").checked = true;
+                deleteCookie("color_theme");
+                deleteCookie("reload_button");
+                deleteCookie("tab_settings");
+                deleteCookie("gridtype");
+                e.preventDefault();
+                break;
             case "saveimagename":
                 return;
             case "closeBtn_image2":

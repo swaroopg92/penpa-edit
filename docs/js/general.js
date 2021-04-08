@@ -25,14 +25,48 @@ function boot_parameters() {
 }
 
 function create() {
-    var gridtype = document.getElementById("gridtype").value;
+    let gridtype = getCookie("gridtype");
+    if (gridtype == null) {
+        gridtype = document.getElementById("gridtype").value;
+    }
     pu = make_class(gridtype);
     pu.reset_frame();
+
     // Drawing Panel
     panel_pu = new Panel();
     panel_pu.draw_panel();
     pu.mode_set("surface"); //include redraw
+
+    // Check cookies
+    let theme_cookie = getCookie("color_theme");
+    if (theme_cookie !== null && theme_cookie == 2) {
+        document.getElementById("dark_mode").checked = true;
+        document.getElementById("color_theme").href = "./css/dark_theme.css";
+        pu.set_redoundocolor();
+    }
+    let reload_cookie = getCookie("reload_button");
+    if (reload_cookie !== null) {
+        document.getElementById('reload_button').textContent = reload_cookie;
+    }
+    let tab_cookie = getCookie("tab_settings");
+    if (tab_cookie !== null) {
+        this.usertab_choices = tab_cookie;
+    }
+    pu.redraw();
 }
+
+function getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+}
+
+function setCookie(name, value, days) {
+    var d = new Date;
+    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+}
+
+function deleteCookie(name) { setCookie(name, '', -1); }
 
 function create_newboard() {
 
