@@ -3441,7 +3441,6 @@ class Puzzle {
                 }
             }
         }
-        console.log(sol);
         return sol;
     }
 
@@ -4106,7 +4105,6 @@ class Puzzle {
                         }
                     }
                 }
-                // console.log(JSON.parse(JSON.stringify(cell_matrix))); // To avoid passing by reference
             }
         }
 
@@ -9643,7 +9641,6 @@ class Puzzle {
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
-                console.log(this.multisolution, this.solution, text)
                 if (text === this.solution && this.sol_flag === 0) {
                     setTimeout(() => {
                         Swal.fire({
@@ -9665,29 +9662,35 @@ class Puzzle {
             }
         } else {
             var text = this.make_solution();
-            if (!this.sol_flag) {
-                for (var i = 0; i < this.solution.length; i++) {
-                    let author_sol = JSON.stringify(this.solution[i]);
-                    if (author_sol) {
-                        for (var j = 0; j < text.length; j++) {
-                            let user_sol = JSON.stringify(text[j]);
-                            if (user_sol === author_sol && this.sol_flag === 0) {
-                                setTimeout(() => {
-                                    Swal.fire({
-                                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                                        html: '<h2 class="wish">Congratulations 🙂</h2>',
-                                        background: 'url(js/images/new_year.jpg)',
-                                        icon: 'success',
-                                        confirmButtonText: 'Hurray!',
-                                    })
-                                }, 20)
-                                sw_timer.stop();
-                                this.sol_flag = 1;
-                                i = this.solution.length; // to break the outer for loop
-                                break;
-                            }
+            for (var i = 0; i < this.solution.length; i++) {
+                let author_sol = JSON.stringify(this.solution[i]);
+                if (author_sol) {
+                    for (var j = 0; j < text.length; j++) {
+                        let user_sol = JSON.stringify(text[j]);
+                        if (user_sol === author_sol && this.sol_flag === 0) {
+                            setTimeout(() => {
+                                Swal.fire({
+                                    title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                                    html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                    background: 'url(js/images/new_year.jpg)',
+                                    icon: 'success',
+                                    confirmButtonText: 'Hurray!',
+                                })
+                            }, 20)
+                            sw_timer.stop();
+                            this.sol_flag = 1;
+                            i = this.solution.length; // to break the outer for loop
+                            break;
+                        } else if (user_sol === author_sol && this.sol_flag === 1) {
+                            i = this.solution.length; // to break the outer for loop
+                            break;
                         }
                     }
+                }
+                if (i === (this.solution.length - 1) && this.sol_flag === 1) {
+                    // If there was any change in the grid and none of the solution matches then reset the flag
+                    // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
+                    this.sol_flag = 0;
                 }
             }
         }
