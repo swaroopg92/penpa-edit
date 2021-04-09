@@ -256,13 +256,17 @@ Depending on the browser you can update the page without using the cache with "C
 
 * URL for solving with Solution
 1. Complete creating puzzle in Edit mode "Problem".
-2. Select Edit mode "Solution" and complete the solution. (Check part of Step 3 before doing this step)
-3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new small window will appear.
+2. Select Edit mode "Solution" and complete the solution. (The solution must be entered using certain shape or color which Penpa+ will detect. Check part of Step 3 before doing this step)
+3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new window will appear.
 	i. Please note that the solution will check only for a certain elements with a certain color and style.
-	ii. The small window that appeared will show you all the possibilities. Select the relevant options. If no option is selected, then it will check for all the elements.
+	ii. The new window that appeared will show you all the possibilities. Select the relevant options. There are two choices:
+		a. "AND" column - Solution will check for all the selected elements.
+		b. "OR" column - Solution will check if at least any one of the selected elements is completed.
+		c. If both "AND", "OR" column has some checkmarks then Penpa+ will ignore the "OR" column and only consider "AND" column.
+		d. If no option is selected, then it will check for all the elements.
 	iii. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
-4. Click on "Generate URL with answer check"
-5. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
+4. Click on "Generate URL with answer check".
+5. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Clicking on the "URL_short" button automatically copies the URL, look at the Options section below for more detailed description.
 6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode and a text "Automatic answer checking is enabled" is displayed.
 
 * URL for contests

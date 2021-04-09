@@ -767,9 +767,8 @@ vanillaSelectBox.prototype.enable = function() {
     }
 }
 
-vanillaSelectBox.prototype.showOptions = function() {
-    console.log(this.userOptions);
-}
+vanillaSelectBox.prototype.showOptions = function() {}
+
 // Polyfills for IE
 if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function() {
