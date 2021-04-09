@@ -8,6 +8,9 @@ If the message "Invalid address" is displayed on a supported browser, try cleari
 
 Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
 
+## Sample Preview of the possibilities of this tool
+![Sample of Objects](./images/sample1.PNG "Sample of Options")
+
 ## Compatible browsers
 * Google Chrome
 * Safari
@@ -256,25 +259,26 @@ Depending on the browser you can update the page without using the cache with "C
 
 * URL for solving with Solution
 1. Complete creating puzzle in Edit mode "Problem".
-2. Select Edit mode "Solution" and complete the solution. (The solution must be entered using certain shape or color which Penpa+ will detect. Check part of Step 3 before doing this step)
+2. Select Edit mode "Solution" and complete the solution. The solution must be entered using certain shape or color which Penpa+ will detect. Check the following image for guidance:
+![Use the mentioned color/shape for implementing solution](./images/multisolution.PNG "Solution checking settings")
 3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new window will appear.
-	i. Please note that the solution will check only for a certain elements with a certain color and style.
-	ii. The new window that appeared will show you all the possibilities. Select the relevant options. There are two choices:
-		a. "AND" column - Solution will check for all the selected elements.
-		b. "OR" column - Solution will check if at least any one of the selected elements is completed.
-		c. If both "AND", "OR" column has some checkmarks then Penpa+ will ignore the "OR" column and only consider "AND" column.
-		d. If no option is selected, then it will check for all the elements.
-	iii. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
+	1. Please note that the solution will check only for a certain elements with a certain color and style.
+	2. The new window that appeared will show you all the possibilities. Select the relevant options. There are two choices:
+		1. "AND" column - Solution will check for all the selected elements.
+		2. "OR" column - Solution will check if at least any one of the selected elements is completed.
+		3. If both "AND", "OR" column has some checkmarks then Penpa+ will ignore the "OR" column and only consider "AND" column.
+		4. If no option is selected, then it will check for all the elements.
+	3. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
 4. Click on "Generate URL with answer check".
 5. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Clicking on the "URL_short" button automatically copies the URL, look at the Options section below for more detailed description.
 6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode and a text "Automatic answer checking is enabled" is displayed.
 
 * URL for contests
 1. This is almost like URL for solving with following exceptions:
-	i. No Undo/Redo feature.
-	ii. No I/O Sudoku Option.
-	iii. No Share Option.
-	iv. Some additional display information to help the solver.
+	1. No Undo/Redo feature.
+	2. No I/O Sudoku Option.
+	3. No Share Option.
+	4. Some additional display information to help the solver.
 2. Useful for online contests (e.g. Logic Masters India - Puzzle Ramayan and Sudoku Mahabharat contests)
 
 * Options
@@ -402,7 +406,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Pressing Export button also automatically copies the output string to the clipboard.
 
 ### Load
-* This function is a solution for "URL too long Error"
+* This function is a solution for "URL too long Error".
 * If the puzzle is too big and contains a lot of elements, it generates a big URL and the size is limited by the internet. In order to address this issue, one can use this Load button option to copy the big URL and click "Load URL" button.
 * Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
 
@@ -410,6 +414,7 @@ Depending on the browser you can update the page without using the cache with "C
 * This function is to provide Penpa-site general settings like theme, custom color etc.
 	* Display Theme: It currently offers only two options (light and dark).
 	* Custom Colors: To enable custom colors in certain modes.
+	* Save Settings: Selecting yes, will save the theme, tab settings, reload button status, gridtype in the browser cookies. When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.
