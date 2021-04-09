@@ -1530,7 +1530,7 @@ function load(urlParam) {
     }
 
     // answerchecking settings for "OR"
-    if (typeof rtext[16] !== 'undefined') {
+    if (typeof rtext[16] !== 'undefined' && rtext[16] !== "") { // for some reason old links had 16th entry as empty
         // set the answer check settings
         var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
         var answersetting = JSON.parse(rtext[16]);
