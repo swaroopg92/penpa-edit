@@ -7760,9 +7760,23 @@ class Puzzle {
 
     re_specialup(num, arr) {
         if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length === 1) {
+            //*********SPECIAL CASE of EMPTY STARTS HERE***************
+            // If the mouse was released back on the starting cell, basically no thermo then remove the custom color entry as well.
+            // This accounts for the case when user dragged the thermo but came back to starting point.
+            if (document.getElementById("custom_color_yes").checked && this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1]) {
+                this[this.mode.qa + "_col"][arr].pop();
+            }
+            if (this.mode.qa === "pu_q") {
+                this.pu_q.command_undo.pop();
+                this.pu_q_col.command_undo.pop();
+            } else if (this.mode.qa === "pu_a") {
+                this.pu_a.command_undo.pop();
+                this.pu_a_col.command_undo.pop();
+            }
+            //*********SPECIAL CASE of EMPTY ENDS HERE***************
             this[this.mode.qa][arr].pop();
             for (var i = this[this.mode.qa][arr].length - 1; i >= 0; i--) {
-                if (this[this.mode.qa][arr][i][0] === num) {
+                if (this[this.mode.qa][arr][i] && this[this.mode.qa][arr][i][0] === num) {
                     this.record(arr, i);
                     this[this.mode.qa][arr][i] = [];
                     if (document.getElementById("custom_color_yes").checked) {

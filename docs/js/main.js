@@ -132,14 +132,16 @@ onload = function() {
         "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
-        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre"
+        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
+        "Thermo", "Sudoku Arrow"
     ];
 
     let modes_mapping = ["surface", "wall", "symbol", "combi",
         "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
-        "sub_sudoku1", "sub_sudoku2", "sub_sudoku3"
+        "sub_sudoku1", "sub_sudoku2", "sub_sudoku3",
+        "sub_specialthermo", "sub_specialarrows"
     ];
     let previous_mode = "surface";
     let previous_submode = 1;
@@ -528,16 +530,19 @@ onload = function() {
                         e.preventDefault();
                     } else {
                         if (modes_mapping[mode_loc].includes("number")) {
-                            pu.mode_set('number')
+                            pu.mode_set('number');
                             e.preventDefault();
                         } else if (modes_mapping[mode_loc].includes("sudoku")) {
-                            pu.mode_set('sudoku')
+                            pu.mode_set('sudoku');
                             e.preventDefault();
                         } else if (modes_mapping[mode_loc].includes("lineE")) {
-                            pu.mode_set('lineE')
+                            pu.mode_set('lineE');
+                            e.preventDefault();
+                        } else if (modes_mapping[mode_loc].includes("special")) {
+                            pu.mode_set('special');
                             e.preventDefault();
                         } else {
-                            pu.mode_set('line')
+                            pu.mode_set('line');
                             e.preventDefault();
                         }
                         pu.submode_check(modes_mapping[mode_loc]);
@@ -1347,6 +1352,28 @@ onload = function() {
                 document.getElementById("custom_color_no").checked = true;
                 document.getElementById('style_special').style.display = 'none';
                 pu.redraw();
+                e.preventDefault();
+                break;
+            case "save_settings_yes_lb":
+                document.getElementById("save_settings_yes").checked = true;
+                const theme = document.querySelectorAll('input[name="theme_mode"]');
+                for (const th of theme) {
+                    if (th.checked) {
+                        setCookie("color_theme", th.value, 2147483647);
+                        break;
+                    }
+                }
+                setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
+                setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
+                setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
+                e.preventDefault();
+                break;
+            case "save_settings_no_lb":
+                document.getElementById("save_settings_no").checked = true;
+                deleteCookie("color_theme");
+                deleteCookie("reload_button");
+                deleteCookie("tab_settings");
+                deleteCookie("gridtype");
                 e.preventDefault();
                 break;
             case "saveimagename":
