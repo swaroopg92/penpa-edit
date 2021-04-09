@@ -1284,7 +1284,8 @@ input[type=number] {
 #sudokusize_lb,
 #ignore_pencilmarks_lb,
 #theme_mode_lb,
-#custom_color_lb {
+#custom_color_lb,
+#save_settings_lb {
     color: var(--white);
 }
 

@@ -380,7 +380,7 @@ Depending on the browser you can update the page without using the cache with "C
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Green numbering, Green loop, Green edge).
 	3. click on Share -> Extra Options -> puzzle_output_file.
 	4. In the "Header" area, type the puzzle type you are creating.
-	5. click on "GMPUzzle output" button and then click anywhere outside to close this window.
+	5. click on "GMPUzzle output" button.
 	6. Specify your required filename and click "Download" button.
 		* Template: [Constructor Initials]-[SubmissionID]-[Genre]-[ShortTitle].txt
 		* Example: SG-012-kurottu-pairs.txt
@@ -392,7 +392,7 @@ Depending on the browser you can update the page without using the cache with "C
 ### I/O Sudoku
 * This function is to allow the flexibility of Importing and Exporting a Sudoku. It supports Import and Export to https://www.sudokuwiki.org/sudoku.htm solver.
 	* Import Sudoku
-		* Type the input string in the text area which contains digits (0-9) where 0 or (.) is used for an empty cell. No spaces in the string. The number of digits entered should be a perfect square. Basically (1,4,9,16,25,36,49,64,91) is allowed. That is grid size of 1x1 to 9x9.
+		* Type the input string in the text area which contains digits (0-9) where 0 or (.) is used for an empty cell. No spaces in the string. The number of digits entered should be a perfect square. Basically (1,4,9,16,25,36,49,64,81) is allowed. That is grid size of 1x1 to 9x9.
 		* If its default sudoku grid created from the New Grid options then Penpa automatically knows the position of the Sudoku grid.
 		* User can also select a square portion of the grid and import the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.
 	* Export Sudoku
