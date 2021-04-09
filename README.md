@@ -9,7 +9,7 @@ If the message "Invalid address" is displayed on a supported browser, try cleari
 Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
 
 ## Sample Preview of the possibilities of this tool
-![Sample of Objects](./images/sample1.PNG "Sample of Options")
+![Sample of Objects](./images/sample1.png "Sample of Options")
 
 ## Compatible browsers
 * Google Chrome
