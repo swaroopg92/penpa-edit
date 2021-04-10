@@ -1296,9 +1296,12 @@ class Puzzle_square extends Puzzle {
                         (this[pu].number[i][0].codePointAt(0) <= 127199) && !ignoreimages) {
                         let img = new Image();
                         let position_factor = 0.45;
-                        let size_factor = 1.9;
-                        img.src = './js/images/cards/' + this[pu].number[i][0].codePointAt(0).toString() + '.svg';
-                        img.setAttribute('crossorigin', 'anonymous');
+                        let size_factor_row = 2.9;
+                        let size_factor_col = 1.9;
+                        img.src = 'https://raw.githubusercontent.com/swaroopg92/penpa-edit/81e91a23f75e664c777d51ece6465dd80e429a1d/docs/js/images/cards/' +
+                            this[pu].number[i][0].codePointAt(0).toString() +
+                            '.svg';
+                        // img.setAttribute('crossorigin', 'anonymous');
 
                         // onload gets called for each loading of image, we need to save the p_x, p_y value, the first time its called
                         this.pxpy[this[pu].number[i][0].codePointAt(0)] = {
@@ -1318,8 +1321,8 @@ class Puzzle_square extends Puzzle {
                                     this.ctx.drawImage(this.pxpy[k].img,
                                         this.pxpy[k].px - position_factor * this.size,
                                         this.pxpy[k].py - position_factor * this.size,
-                                        size_factor * this.size,
-                                        size_factor * this.size);
+                                        size_factor_col * this.size,
+                                        size_factor_row * this.size);
                                     counter++;
                                 }
                             }
