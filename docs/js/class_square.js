@@ -1294,6 +1294,7 @@ class Puzzle_square extends Puzzle {
                 case "1": //normal
                     if ((this[pu].number[i][0].codePointAt(0) >= 127137) &&
                         (this[pu].number[i][0].codePointAt(0) <= 127199) && !ignoreimages) {
+
                         let img = new Image();
                         let position_factor = 0.45;
                         let size_factor_row = 2.9;
@@ -1307,7 +1308,8 @@ class Puzzle_square extends Puzzle {
                         this.pxpy[this[pu].number[i][0].codePointAt(0)] = {
                             'px': p_x,
                             'py': p_y,
-                            'img': img
+                            'img': img,
+                            'flag': true
                         };
 
                         // img.onerror to detect image loading errors
@@ -1318,12 +1320,14 @@ class Puzzle_square extends Puzzle {
                             if (counter == counter_ref) {
                                 counter = 0; // to loop through the image list
                                 for (var k in this.pxpy) {
-                                    this.ctx.drawImage(this.pxpy[k].img,
-                                        this.pxpy[k].px - position_factor * this.size,
-                                        this.pxpy[k].py - position_factor * this.size,
-                                        size_factor_col * this.size,
-                                        size_factor_row * this.size);
-                                    counter++;
+                                    if (this.pxpy[k].flag) {
+                                        this.ctx.drawImage(this.pxpy[k].img,
+                                            this.pxpy[k].px - position_factor * this.size,
+                                            this.pxpy[k].py - position_factor * this.size,
+                                            size_factor_col * this.size,
+                                            size_factor_row * this.size);
+                                        counter++;
+                                    }
                                 }
                             }
                         }

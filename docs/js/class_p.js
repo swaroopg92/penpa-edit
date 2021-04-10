@@ -239,6 +239,8 @@ class Puzzle {
         this[this.mode.qa].wall = {};
         this[this.mode.qa].cage = {};
         this[this.mode.qa].deletelineE = {};
+        // handle cards
+        this.pxpy = {}
 
         // Object and Array initialization for custom colors
         this[this.mode.qa + "_col"] = {};
@@ -6002,11 +6004,30 @@ class Puzzle {
                             }
                         }
                         if (a[2]) {
+                            // Handle cards, flag back to false for current card
+                            if (this[pu_mode][a[0]][a[1]] &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = true;
+                            }
                             if (a_col) {
                                 this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
                             }
                         } else {
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             delete this[pu_mode][a[0]][a[1]];
                             if (a_col) {
                                 delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
@@ -6093,11 +6114,30 @@ class Puzzle {
                             }
                         }
                         if (a[2]) {
+                            // Handle cards, flag back to false for current card
+                            if (this[pu_mode][a[0]][a[1]] &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = true;
+                            }
                             if (a_col) {
                                 this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
                             }
                         } else {
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             delete this[pu_mode][a[0]][a[1]];
                             if (a_col) {
                                 delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
@@ -6188,12 +6228,31 @@ class Puzzle {
                             }
                         }
                         if (a[2]) {
+                            // Handle cards, flag back to false for current card
+                            if ((this[pu_mode][a[0]][a[1]] &&
+                                    this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             this[pu_mode][a[0]][a[1]] = a[2];
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = true;
+                            }
                             if (a_col) {
                                 this[pu_mode + "_col"][a_col[0]][a_col[1]] = a_col[2];
                             }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             if (a_col) {
                                 delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
                             }
@@ -6279,11 +6338,30 @@ class Puzzle {
                             }
                         }
                         if (a[2]) {
+                            // Handle cards, flag back to false for current card
+                            if ((this[pu_mode][a[0]][a[1]] &&
+                                    this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             this[pu_mode][a[0]][a[1]] = a[2];
+                            // Handle cards, flag back to true for old card
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = true;
+                            }
                             if (a_col) {
                                 this[pu_mode + "_col"][a_col[0]][a_col[1]] = a_col[2];
                             }
                         } else {
+                            // Handle cards
+                            if ((this[pu_mode][a[0]][a[1]][0].codePointAt(0) >= 127137) &&
+                                (this[pu_mode][a[0]][a[1]][0].codePointAt(0) <= 127199) &&
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]) {
+                                this.pxpy[this[pu_mode][a[0]][a[1]][0].codePointAt(0)]['flag'] = false;
+                            }
                             delete this[pu_mode][a[0]][a[1]];
                             if (a_col) {
                                 delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
@@ -6308,6 +6386,13 @@ class Puzzle {
                 if (this.pu_q[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
+                        // handle cards
+                        if (this.gridtype === "square" && arr === "number" &&
+                            (this[this.mode.qa][arr][num][0].codePointAt(0) >= 127137) &&
+                            (this[this.mode.qa][arr][num][0].codePointAt(0) <= 127199) &&
+                            this.pxpy[this[this.mode.qa][arr][num][0].codePointAt(0)]) {
+                            this.pxpy[this[this.mode.qa][arr][num][0].codePointAt(0)]['flag'] = false;
+                        }
                         if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) { // Currently only Thermo Supported, keep updating as I add other support
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
@@ -6352,6 +6437,13 @@ class Puzzle {
                 if (this.pu_a[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
+                        // handle cards
+                        if (this.gridtype === "square" && arr === "number" &&
+                            (this[this.mode.qa][arr][num][0].codePointAt(0) >= 127137) &&
+                            (this[this.mode.qa][arr][num][0].codePointAt(0) <= 127199) &&
+                            this.pxpy[this[this.mode.qa][arr][num][0].codePointAt(0)]) {
+                            this.pxpy[this[this.mode.qa][arr][num][0].codePointAt(0)]['flag'] = false;
+                        }
                         if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
@@ -6877,7 +6969,7 @@ class Puzzle {
                         delete this[this.mode.qa].numberS[side_cursor + j];
                     }
                 }
-
+                console.log('enters del')
                 this.record("number", this.cursol);
                 delete this[this.mode.qa].number[this.cursol];
             }
