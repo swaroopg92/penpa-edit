@@ -1999,6 +1999,11 @@ function set_solvemode() {
     document.getElementById('custom_color_lb').style.display = 'none';
     document.getElementById('custom_color_yes_lb').style.display = 'none';
     document.getElementById('custom_color_no_lb').style.display = 'none';
+
+    // Save settings
+    document.getElementById('save_settings_lb').style.display = 'none';
+    document.getElementById('save_settings_yes_lb').style.display = 'none';
+    document.getElementById('save_settings_no_lb').style.display = 'none';
 }
 
 function set_contestmode() {
