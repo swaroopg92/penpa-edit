@@ -723,7 +723,6 @@ onload = function() {
     }
 
     function onKeyUp(e) {
-        console.log('enters here')
         if (e.target.type === "number" ||
             e.target.type === "text" ||
             e.target.id === "savetextarea_pp" ||
@@ -1656,7 +1655,6 @@ onload = function() {
             pu.submode_check(e.target.id.slice(0, -3));
             e.preventDefault();
         }
-        console.log(e.target.id)
         // Style mode
         if (e.target.id.slice(0, 3) === "st_") {
             pu.stylemode_check(e.target.id.slice(0, -3));
