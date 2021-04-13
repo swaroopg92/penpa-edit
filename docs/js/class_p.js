@@ -2038,23 +2038,25 @@ class Puzzle {
         }
         this.type = this.type_set(); // Coordinate type to select
 
-        // set the custom color to default
-        switch (name) {
-            case "sub_specialthermo":
-                $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                break;
-            case "sub_specialarrows":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
-                break;
-            case "sub_specialdirection":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
-                break;
-            case "sub_specialsquareframe":
-                $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                break;
-            case "sub_specialpolygon":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
+        if (document.getElementById("custom_color_yes").checked) {
+            // set the custom color to default
+            switch (name) {
+                case "sub_specialthermo":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "sub_specialarrows":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
+                    break;
+                case "sub_specialdirection":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
+                    break;
+                case "sub_specialsquareframe":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "sub_specialpolygon":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+            }
         }
     }
 
@@ -2070,143 +2072,145 @@ class Puzzle {
             panel_pu.draw_panel(); // Panel update
         }
 
-        // set the custom color to default
-        switch (name) {
-            case "st_surface1":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                break;
-            case "st_surface8":
-                $("#colorpicker_special").spectrum("set", Color.GREY);
-                break;
-            case "st_surface3":
-                $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                break;
-            case "st_surface4":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_surface2":
-                $("#colorpicker_special").spectrum("set", Color.GREEN_LIGHT_VERY);
-                break;
-            case "st_surface5":
-                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT_VERY);
-                break;
-            case "st_surface6":
-                $("#colorpicker_special").spectrum("set", Color.RED_LIGHT);
-                break;
-            case "st_surface7":
-                $("#colorpicker_special").spectrum("set", Color.YELLOW);
-                break;
-            case "st_surface9":
-                $("#colorpicker_special").spectrum("set", Color.PINK_LIGHT);
-                break;
-            case "st_surface10":
-                $("#colorpicker_special").spectrum("set", Color.ORANGE_LIGHT);
-                break;
-            case "st_surface11":
-                $("#colorpicker_special").spectrum("set", Color.PURPLE_LIGHT);
-                break;
-            case "st_surface12":
-                $("#colorpicker_special").spectrum("set", Color.BROWN_LIGHT);
-                break;
-            case "st_line3":
-                $("#colorpicker_special").spectrum("set", Color.GREEN);
-                break;
-            case "st_line2":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_line5":
-                $("#colorpicker_special").spectrum("set", Color.GREY);
-                break;
-            case "st_line8":
-                $("#colorpicker_special").spectrum("set", Color.RED);
-                break;
-            case "st_line9":
-                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
-                break;
-            case "st_line80":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_line12":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                break;
-            case "st_line13":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_line40":
-                $("#colorpicker_special").spectrum("set", Color.GREY);
-                break;
-            case "st_line30":
-                $("#colorpicker_special").spectrum("set", Color.GREEN);
-                break;
-            case "st_lineE3":
-                $("#colorpicker_special").spectrum("set", Color.GREEN);
-                break;
-            case "st_lineE2":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_lineE5":
-                $("#colorpicker_special").spectrum("set", Color.GREY);
-                break;
-            case "st_lineE8":
-                $("#colorpicker_special").spectrum("set", Color.RED);
-                break;
-            case "st_lineE9":
-                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
-                break;
-            case "st_lineE21":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_lineE80":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_lineE12":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                break;
-            case "st_lineE13":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_lineE30":
-                $("#colorpicker_special").spectrum("set", Color.GREEN);
-                break;
-            case "st_wall3":
-                $("#colorpicker_special").spectrum("set", Color.GREEN);
-                break;
-            case "st_wall2":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_wall5":
-                $("#colorpicker_special").spectrum("set", Color.GREY);
-                break;
-            case "st_wall8":
-                $("#colorpicker_special").spectrum("set", Color.RED);
-                break;
-            case "st_wall9":
-                $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
-                break;
-            case "st_wall1":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_wall12":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                break;
-            case "st_wall17":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_wall14":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                break;
-            case "st_cage10":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
-            case "st_cage7":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                break;
-            case "st_cage15":
-                $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                break;
-            case "st_cage16":
-                $("#colorpicker_special").spectrum("set", Color.BLACK);
-                break;
+        if (document.getElementById("custom_color_yes").checked) {
+            // set the custom color to default
+            switch (name) {
+                case "st_surface1":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_surface8":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_surface3":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "st_surface4":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_surface2":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN_LIGHT_VERY);
+                    break;
+                case "st_surface5":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT_VERY);
+                    break;
+                case "st_surface6":
+                    $("#colorpicker_special").spectrum("set", Color.RED_LIGHT);
+                    break;
+                case "st_surface7":
+                    $("#colorpicker_special").spectrum("set", Color.YELLOW);
+                    break;
+                case "st_surface9":
+                    $("#colorpicker_special").spectrum("set", Color.PINK_LIGHT);
+                    break;
+                case "st_surface10":
+                    $("#colorpicker_special").spectrum("set", Color.ORANGE_LIGHT);
+                    break;
+                case "st_surface11":
+                    $("#colorpicker_special").spectrum("set", Color.PURPLE_LIGHT);
+                    break;
+                case "st_surface12":
+                    $("#colorpicker_special").spectrum("set", Color.BROWN_LIGHT);
+                    break;
+                case "st_line3":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_line2":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_line5":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_line8":
+                    $("#colorpicker_special").spectrum("set", Color.RED);
+                    break;
+                case "st_line9":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
+                    break;
+                case "st_line80":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_line12":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_line13":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_line40":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_line30":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_lineE3":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_lineE2":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE5":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_lineE8":
+                    $("#colorpicker_special").spectrum("set", Color.RED);
+                    break;
+                case "st_lineE9":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
+                    break;
+                case "st_lineE21":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE80":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE12":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_lineE13":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE30":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_wall3":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_wall2":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_wall5":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_wall8":
+                    $("#colorpicker_special").spectrum("set", Color.RED);
+                    break;
+                case "st_wall9":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
+                    break;
+                case "st_wall1":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_wall12":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_wall17":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_wall14":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "st_cage10":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_cage7":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "st_cage15":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "st_cage16":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+            }
         }
     }
 
