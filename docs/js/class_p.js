@@ -7436,6 +7436,7 @@ class Puzzle {
             this.re_surfacemove(num);
             this.last = num;
         } else if (this.mouse_mode === "up") {
+            this.cursol = this.last;
             this.drawing = false;
             this.drawing_mode = -1;
             this.last = -1;

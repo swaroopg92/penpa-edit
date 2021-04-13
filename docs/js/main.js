@@ -151,9 +151,13 @@ onload = function() {
     let shift_counter = 0;
     let shift_numkey = false;
     let shift_release_time = -1e5;
+    let shift_time_limit = 15; // milliseconds
     let ctrl_counter = 0;
     let ctrl_numkey = false;
     let ctrl_release_time = -1e5;
+    let number_release_time = -1e5;
+    let number_release_limit = 300; // milliseconds
+    let previousdigit1 = false;
 
     function onKeyDown(e) {
         if (e.target.type === "number" ||
@@ -177,10 +181,19 @@ onload = function() {
             var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤";
 
-            if ((Date.now() - shift_release_time) < 15) {
+            if ((Date.now() - shift_release_time) < shift_time_limit) {
                 shift_counter = 1;
                 pu.submode_check("sub_sudoku2");
                 shift_release_time = -1e5;
+            }
+
+            // shortcut to styles in surface mode
+            if (pu.mode[pu.mode.qa].edit_mode === "surface" &&
+                str_num.indexOf(key) != -1 &&
+                previousdigit1 &&
+                ((Date.now() - number_release_time) < number_release_limit)) {
+                key = 1 + key;
+                number_release_time = -1e5;
             }
 
             // For shift shortcut in Sudoku mode, modify the numpad keys
@@ -454,7 +467,7 @@ onload = function() {
                 }
             }
 
-            if (!ctrl_key && (pu.mode[pu.mode.qa].edit_mode === "surface" || pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
+            if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 switch (key) {
                     case "z":
                     case "Z":
@@ -503,6 +516,161 @@ onload = function() {
                         present_mode = document.getElementById("mo_surface").checked;
                         if (!present_mode) {
                             pu.mode_set("surface");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    default:
+                        event.returnValue = false;
+                        break;
+                }
+            }
+
+            if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "surface") {
+                switch (key) {
+                    case "z":
+                    case "Z":
+                        present_mode = document.getElementById("mo_sudoku").checked;
+                        if (!present_mode) {
+                            pu.mode_set("sudoku");
+                            e.preventDefault();
+                        }
+                        present_submode = document.getElementById("sub_sudoku1").checked;
+                        if (!present_submode) {
+                            pu.submode_check("sub_sudoku1");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "x":
+                    case "X":
+                        present_mode = document.getElementById("mo_sudoku").checked;
+                        if (!present_mode) {
+                            pu.mode_set("sudoku");
+                            e.preventDefault();
+                        }
+                        present_submode = document.getElementById("sub_sudoku2").checked;
+                        if (!present_submode) {
+                            pu.submode_check("sub_sudoku2");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "c":
+                    case "C":
+                        present_mode = document.getElementById("mo_sudoku").checked;
+                        if (!present_mode) {
+                            pu.mode_set("sudoku");
+                            e.preventDefault();
+                        }
+                        present_submode = document.getElementById("sub_sudoku3").checked;
+                        if (!present_submode) {
+                            pu.submode_check("sub_sudoku3");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "v":
+                    case "V":
+                        present_mode = document.getElementById("mo_surface").checked;
+                        if (!present_mode) {
+                            pu.mode_set("surface");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "1":
+                        present_style = document.getElementById("st_surface1").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface1");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "2":
+                        present_style = document.getElementById("st_surface8").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface8");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "3":
+                        present_style = document.getElementById("st_surface3").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface3");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "4":
+                        present_style = document.getElementById("st_surface4").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface4");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "5":
+                        present_style = document.getElementById("st_surface2").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface2");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "6":
+                        present_style = document.getElementById("st_surface5").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface5");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "7":
+                        present_style = document.getElementById("st_surface6").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface6");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "8":
+                        present_style = document.getElementById("st_surface7").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface7");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "9":
+                        present_style = document.getElementById("st_surface9").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface9");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "0":
+                        present_style = document.getElementById("st_surface10").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface10");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "11":
+                        present_style = document.getElementById("st_surface11").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface11");
+                            e.preventDefault();
+                        }
+                        event.returnValue = false;
+                        break;
+                    case "12":
+                        present_style = document.getElementById("st_surface12").checked;
+                        if (!present_style) {
+                            pu.stylemode_check("st_surface12");
                             e.preventDefault();
                         }
                         event.returnValue = false;
@@ -588,6 +756,16 @@ onload = function() {
                 ctrl_counter = 0;
                 ctrl_release_time = Date.now();
                 event.returnValue = false;
+            } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
+                if (key === "1") {
+                    number_release_time = Date.now();
+                    previousdigit1 = true;
+                    event.returnValue = false;
+                } else {
+                    previousdigit1 = false;
+                    number_release_time = -1e5;
+                    event.returnValue = false;
+                }
             }
 
         }
