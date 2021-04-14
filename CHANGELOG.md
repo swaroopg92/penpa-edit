@@ -1,4 +1,10 @@
 ## History
+* 2021/04/08 ver2.25.11
+	* Cookies Feature - User can now save Grid Type, Tab Settings, Theme and Reload button status locally by clicking Save Settings: YES in the Settings Button. When penpa loads, it will use the User preferences. 
+	* Number shortcuts to switch between different styles for Surface mode.
+	* Improvement to multisolution feature to detect changes in the grid.
+	* Improved Freeline submode answer checking.
+	* Improved switching between Surface and Sudoku mode. Sudoku mode now remembers the last visited valid cell in the surface mode.
 * 2021/04/08 ver2.25.10
 	* Multiple solution feature.
 	* Added cookies to store user preference regarding reload button, theme and tab_settings.

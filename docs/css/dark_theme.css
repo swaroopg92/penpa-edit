@@ -1350,3 +1350,8 @@ table.center {
 #sol_and_lb {
     font-weight: bold;
 }
+
+sup {
+    line-height: 0;
+    vertical-align: center;
+}
