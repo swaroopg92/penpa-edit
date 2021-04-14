@@ -407,30 +407,31 @@
                     <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
+                    <!-- Adding superscript was affecting the color selection as it did not had id, so defined new id and followed same structure as parent. Its important to have only two characters at the end after _ because of the way, window_click is setup in main.js for stylemode_check-->
                     <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
-                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG</label>
+                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG<sup id="st_surface1_sp">1</sup></label>
                     <input type="radio" name="style_surface" value="8" id="st_surface8">
-                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR</label>
+                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR<sup id="st_surface8_sp">2</sup></label>
                     <input type="radio" name="style_surface" value="3" id="st_surface3">
-                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG</label>
+                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG<sup id="st_surface3_sp">3</sup></label>
                     <input type="radio" name="style_surface" value="4" id="st_surface4">
-                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL</label>
+                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
                     <input type="radio" name="style_surface" value="2" id="st_surface2">
-                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR</label>
+                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
                     <input type="radio" name="style_surface" value="5" id="st_surface5">
-                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL</label>
+                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
                     <input type="radio" name="style_surface" value="6" id="st_surface6">
-                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE</label>
+                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE<sup id="st_surface6_sp">7</sup></label>
                     <input type="radio" name="style_surface" value="7" id="st_surface7">
-                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE</label>
+                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE<sup id="st_surface7_sp">8</sup></label>
                     <input type="radio" name="style_surface" value="9" id="st_surface9">
-                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI</label>
+                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI<sup id="st_surface9_sp">9</sup></label>
                     <input type="radio" name="style_surface" value="10" id="st_surface10">
-                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR</label>
+                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR<sup id="st_surface10_sp">0</sup></label>
                     <input type="radio" name="style_surface" value="11" id="st_surface11">
-                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU</label>
+                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU<sup id="st_surface11_sp">11</sup></label>
                     <input type="radio" name="style_surface" value="12" id="st_surface12">
-                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR</label>
+                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR<sup id="st_surface12_sp">12</sup></label>
                 </span>
                 <span id="style_line" style="display:none;">
                     <input type="radio" name="style_line" value="3" id="st_line3" checked="checked">
@@ -612,7 +613,7 @@
             <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
             <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
                 Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-            <p>Penpa+ Version 2.25.10, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+            <p>Penpa+ Version 2.25.11, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
         </div>
     </div>
     <div id="float-key">
