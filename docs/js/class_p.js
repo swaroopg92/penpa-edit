@@ -6691,6 +6691,7 @@ class Puzzle {
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
                 } else {
+                    console.log('enters drawing line', array, num, line_style);
                     this[this.mode.qa][array][num] = line_style;
                 }
                 this.drawing_mode = line_style;
@@ -7087,30 +7088,114 @@ class Puzzle {
                 this.drawing = false;
                 let cageexist_status = false;
                 let cageexist_loc;
-                let killercages_cells = [].concat.apply([], this.killercages);
-                console.log(this.cageselection, this.killercages);
+                // let killercages_cells = [].concat.apply([], this.killercages);
+                let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+                console.log('before', this.cageselection, this.killercages, this.killercages.length);
 
                 // Find if any cell of the new cage already has a cage
-                for (let i = 0; i < this.cageselection.length; i++) {
-                    if (killercages_cells.includes(this.cageselection[i])) {
-                        cageexist_status = true;
-                        cageexist_loc = i;
+                for (let j = 0; j < this.killercages.length; j++) {
+                    let killercages_cells = [].concat.apply([], this.killercages[j]);
+                    for (let i = 0; i < this.cageselection.length; i++) {
+                        if (killercages_cells.includes(this.cageselection[i])) {
+                            cageexist_status = true;
+                            cageexist_loc = j;
+                            break;
+                        }
+                    }
+                    if (cageexist_status) {
                         break;
                     }
                 }
+                console.log('cage exist status', cageexist_loc, cageexist_status)
                 if (!cageexist_status) {
-                    this.killercages.push(this.cageselection);
+                    // if cage does not exist, then add to killer cages.
+                    this.killercages.push(this.cageselection.sort());
+                    let min_cell = Math.min(...this.cageselection);
+                    let max_cell = Math.max(...this.cageselection);
+                    let min_row = parseInt(min_cell / this.nx0) - 1;
+                    let max_row = parseInt(max_cell / this.nx0) - 1;
+                    let boundary_matrix = [];
+                    let grid_matrix = [];
+                    console.log(min_cell, max_cell, 'min_row', min_row, 'max_row', max_row);
+
+                    // Grid Size
+                    let row_size = document.getElementById("nb_size2").value;
+                    let col_size = document.getElementById("nb_size1").value;
+
+                    // cage cell locations
+                    for (let i = 0; i < row_size; i++) {
+                        grid_matrix[i] = new Array(parseInt(col_size)).fill(0);
+                    }
+                    // for (let i = 0; i < this.cageselection.length; i++) {
+                    //     let col_num = (this.cageselection[i] % (this.nx0));
+                    //     let row_num = parseInt(this.cageselection[i] / this.nx0);
+                    //     console.log('cell', row_num, col_num);
+                    //     grid_matrix[row_num][col_num] = 1;
+                    // }
+
+                    // Find boundary cells in each row
+                    for (let i = 0; i < (max_row - min_row + 1); i++) {
+                        boundary_matrix[i] = new Array(parseInt(2)).fill(0);
+                    }
+
+                    // remember drawing_mode
+                    let draw_mode = this.drawing_mode;
+                    this.drawing_mode = 100;
 
                     // Find the corner coordinates of the cell
                     for (let i = 0; i < this.cageselection.length; i++) {
-                        let col_num = (this.cageselection[i] % (this.nx0));
-                        let row_num = parseInt(this.cageselection[i] / this.nx0);
-                        let tl = 4 * this.nx0 * this.ny0 + 8 * this.nx0 + 4 * (col_num - 1) + 4 * this.nx0 * (row_num) + 4 // top left
-                        let corners = [tl, tl + 1, tl + 2, tl + 3];
+                        // let col_num = (this.cageselection[i] % (this.nx0));
+                        // let row_num = parseInt(this.cageselection[i] / this.nx0);
+                        // let tl = 4 * this.nx0 * this.ny0 + 8 * this.nx0 + 4 * (col_num - 1) + 4 * this.nx0 * (row_num) + 4 // top left
+                        // let corners = [tl, tl + 1, tl + 2, tl + 3];
+                        let top_left = 4 * (this.cageselection[i] + this.nx0 * this.ny0);
+                        let top_right = top_left + 1;
+                        let bottom_left = top_left + 2;
+                        let bottom_right = top_left + 3;
+                        let corners = [top_left, top_left + 1, top_left + 2, top_left + 3];
+                        this.re_line("cage", (top_left.toString() + "," + top_right.toString()), line_style); // top line
+                        this.re_line("cage", (top_right.toString() + "," + bottom_right.toString()), line_style); // right line
+                        this.re_line("cage", (bottom_right.toString() + "," + bottom_left.toString()), line_style); // bottom line
+                        this.re_line("cage", (bottom_left.toString() + "," + top_left.toString()), line_style); // left line
+                        console.log(corners);
                     }
+
+                    // reset variables
+                    this.cageselection = [];
+                    this.drawing_mode = draw_mode;
+                    console.log('after', this.cageselection, this.killercages);
                     // Draw up cages
+                    this.redraw();
+
                 } else {
                     // length 1 then delete
+                    if (this.cageselection.length === 1) {
+
+                        // remember drawing_mode
+                        let draw_mode = this.drawing_mode;
+                        this.drawing_mode = 100;
+
+                        for (let i = 0; i < this.killercages[cageexist_loc].length; i++) {
+                            let top_left = 4 * (this.killercages[cageexist_loc][i] + this.nx0 * this.ny0);
+                            let top_right = top_left + 1;
+                            let bottom_left = top_left + 2;
+                            let bottom_right = top_left + 3;
+                            let corners = [top_left, top_left + 1, top_left + 2, top_left + 3];
+                            this.re_line("cage", (top_left.toString() + "," + top_right.toString()), line_style); // top line
+                            this.re_line("cage", (top_right.toString() + "," + bottom_right.toString()), line_style); // right line
+                            this.re_line("cage", (bottom_right.toString() + "," + bottom_left.toString()), line_style); // bottom line
+                            this.re_line("cage", (bottom_left.toString() + "," + top_left.toString()), line_style); // left line
+                        }
+                        console.log('cage loc', cageexist_loc)
+                        this.killercages.splice(cageexist_loc, cageexist_loc);
+                        console.log('removed', this.killercages)
+                        // reset variables
+                        this.cageselection = [];
+                        this.drawing_mode = draw_mode;
+
+                        // Draw up cages
+                        this.redraw();
+                    }
 
                     // length > 1 do not do anything
                 }
@@ -7119,6 +7204,7 @@ class Puzzle {
                 this.drawing = false;
             }
         } else if (document.getElementById('sub_free').checked) {
+            console.log('should not enter here')
             if (this.mouse_mode === "down_left") {
                 this.drawing = true;
                 this.drawing_mode = 100;
