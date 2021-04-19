@@ -332,7 +332,6 @@ class Puzzle_hex extends Puzzle {
 
     key_arrow(key_code, ctrl_key = false) {
         var a, b, c;
-        console.log(this.theta);
         if (parseInt(this.theta / 60) === 0) { // 0, 30
             b = [0, 1, 2, 3];
         } else if (parseInt(this.theta / 60) === 1) { // 60, 90

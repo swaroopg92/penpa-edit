@@ -59,7 +59,8 @@ class Puzzle {
             "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb"
+            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
+            "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb"
         ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
@@ -74,6 +75,7 @@ class Puzzle {
 
         // Drawing position
         this.mouse_mode = "";
+        this.mouse_click = 0; // 0 for left, 2 for right
         this.selection = [];
         this.cageselection = [];
         this.killercages = [];
@@ -161,15 +163,39 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 3];
+        this.version = [2, 25, 9];
         this.undoredo_disable = false;
         this.comp = false;
+        this.multisolution = false;
     }
 
     reset() {
 
-        //盤面状態
+        // Object and Array initialization
         for (var i of ["pu_q", "pu_a"]) {
+            this[i] = {};
+            this[i].command_redo = new Stack();
+            this[i].command_undo = new Stack();
+            this[i].surface = {};
+            this[i].number = {};
+            this[i].numberS = {};
+            this[i].symbol = {};
+            this[i].freeline = {};
+            this[i].freelineE = {};
+            this[i].thermo = [];
+            this[i].arrows = [];
+            this[i].direction = [];
+            this[i].squareframe = [];
+            this[i].polygon = [];
+            this[i].line = {};
+            this[i].lineE = {};
+            this[i].wall = {};
+            this[i].cage = {};
+            this[i].deletelineE = {};
+        }
+
+        // Object and Array initialization for custom colors
+        for (var i of ["pu_q_col", "pu_a_col"]) {
             this[i] = {};
             this[i].command_redo = new Stack();
             this[i].command_undo = new Stack();
@@ -216,6 +242,27 @@ class Puzzle {
         this[this.mode.qa].wall = {};
         this[this.mode.qa].cage = {};
         this[this.mode.qa].deletelineE = {};
+
+        // Object and Array initialization for custom colors
+        this[this.mode.qa + "_col"] = {};
+        this[this.mode.qa + "_col"].command_redo = new Stack();
+        this[this.mode.qa + "_col"].command_undo = new Stack();
+        this[this.mode.qa + "_col"].surface = {};
+        this[this.mode.qa + "_col"].number = {};
+        this[this.mode.qa + "_col"].numberS = {};
+        this[this.mode.qa + "_col"].symbol = {};
+        this[this.mode.qa + "_col"].freeline = {};
+        this[this.mode.qa + "_col"].freelineE = {};
+        this[this.mode.qa + "_col"].thermo = [];
+        this[this.mode.qa + "_col"].arrows = [];
+        this[this.mode.qa + "_col"].direction = [];
+        this[this.mode.qa + "_col"].squareframe = [];
+        this[this.mode.qa + "_col"].polygon = [];
+        this[this.mode.qa + "_col"].line = {};
+        this[this.mode.qa + "_col"].lineE = {};
+        this[this.mode.qa + "_col"].wall = {};
+        this[this.mode.qa + "_col"].cage = {};
+        this[this.mode.qa + "_col"].deletelineE = {};
     }
 
     reset_arr() {
@@ -569,7 +616,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        if (factor > 8) {
+                        if (factor >= 8) {
                             m = parseInt(keys[k]) + 12 * parseInt(originalnx0) * sign;
                         } else {
                             m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
@@ -907,7 +954,7 @@ class Puzzle {
                     let keys = Object.keys(temp);
                     for (var k = 0; k < keys.length; k++) {
                         let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        if (factor > 8) {
+                        if (factor >= 8) {
                             m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
                         } else {
                             m = parseInt(keys[k]) + 4 * parseInt(originalnx0) * sign;
@@ -1975,6 +2022,12 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "combi") {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
+        if ((document.getElementById("custom_color_yes").checked) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
+            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special")) {
+            document.getElementById('style_special').style.display = 'inline';
+        } else {
+            document.getElementById('style_special').style.display = 'none';
+        }
         this.redraw();
     }
 
@@ -1986,6 +2039,27 @@ class Puzzle {
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
+
+        if (document.getElementById("custom_color_yes").checked) {
+            // set the custom color to default
+            switch (name) {
+                case "sub_specialthermo":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "sub_specialarrows":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
+                    break;
+                case "sub_specialdirection":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
+                    break;
+                case "sub_specialsquareframe":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "sub_specialpolygon":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+            }
+        }
     }
 
     // override
@@ -1998,6 +2072,147 @@ class Puzzle {
             document.getElementById(name).checked = true;
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = parseInt(document.getElementById(name).value);
             panel_pu.draw_panel(); // Panel update
+        }
+
+        if (document.getElementById("custom_color_yes").checked) {
+            // set the custom color to default
+            switch (name) {
+                case "st_surface1":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_surface8":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_surface3":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "st_surface4":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_surface2":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN_LIGHT_VERY);
+                    break;
+                case "st_surface5":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT_VERY);
+                    break;
+                case "st_surface6":
+                    $("#colorpicker_special").spectrum("set", Color.RED_LIGHT);
+                    break;
+                case "st_surface7":
+                    $("#colorpicker_special").spectrum("set", Color.YELLOW);
+                    break;
+                case "st_surface9":
+                    $("#colorpicker_special").spectrum("set", Color.PINK_LIGHT);
+                    break;
+                case "st_surface10":
+                    $("#colorpicker_special").spectrum("set", Color.ORANGE_LIGHT);
+                    break;
+                case "st_surface11":
+                    $("#colorpicker_special").spectrum("set", Color.PURPLE_LIGHT);
+                    break;
+                case "st_surface12":
+                    $("#colorpicker_special").spectrum("set", Color.BROWN_LIGHT);
+                    break;
+                case "st_line3":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_line2":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_line5":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_line8":
+                    $("#colorpicker_special").spectrum("set", Color.RED);
+                    break;
+                case "st_line9":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
+                    break;
+                case "st_line80":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_line12":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_line13":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_line40":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_line30":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_lineE3":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_lineE2":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE5":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_lineE8":
+                    $("#colorpicker_special").spectrum("set", Color.RED);
+                    break;
+                case "st_lineE9":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
+                    break;
+                case "st_lineE21":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE80":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE12":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_lineE13":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_lineE30":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_wall3":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "st_wall2":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_wall5":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "st_wall8":
+                    $("#colorpicker_special").spectrum("set", Color.RED);
+                    break;
+                case "st_wall9":
+                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
+                    break;
+                case "st_wall1":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_wall12":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
+                    break;
+                case "st_wall17":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_wall14":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "st_cage10":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+                case "st_cage7":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "st_cage15":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "st_cage16":
+                    $("#colorpicker_special").spectrum("set", Color.BLACK);
+                    break;
+            }
         }
     }
 
@@ -2050,6 +2265,7 @@ class Puzzle {
         document.getElementById('style_wall').style.display = 'none';
         document.getElementById('style_number').style.display = 'none';
         document.getElementById('style_symbol').style.display = 'none';
+        document.getElementById('style_special').style.display = 'none';
         document.getElementById('style_cage').style.display = 'none';
         document.getElementById('style_combi').style.display = 'none';
         document.getElementById('style_sudoku').style.display = 'none';
@@ -2196,7 +2412,10 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        text += "," + document.getElementById('edge_button').textContent;
+
+        // Multi Solution status, it will be true only when generating solution checking
+        text += "," + false + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2234,7 +2453,7 @@ class Puzzle {
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2257,10 +2476,50 @@ class Puzzle {
 
         // Theme Setting
         if (document.getElementById("light_mode").checked) {
-            text += JSON.stringify("light");
+            text += JSON.stringify("light") + "\n";
         } else if (document.getElementById("dark_mode").checked) {
-            text += JSON.stringify("dark");
+            text += JSON.stringify("dark") + "\n";
         }
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+
+        if (document.getElementById("save_undo").checked === false) {
+            qr = this.pu_q_col.command_redo.__a;
+            qu = this.pu_q_col.command_undo.__a;
+            ar = this.pu_a_col.command_redo.__a;
+            au = this.pu_a_col.command_undo.__a;
+            this.pu_q_col.command_redo.__a = [];
+            this.pu_q_col.command_undo.__a = [];
+            this.pu_a_col.command_redo.__a = [];
+            this.pu_a_col.command_undo.__a = [];
+        }
+
+        text += JSON.stringify(this.pu_q_col) + "\n";
+        text += JSON.stringify(this.pu_a_col) + "\n";
+
+        if (document.getElementById("save_undo").checked === false) {
+            this.pu_q_col.command_redo.__a = qr;
+            this.pu_q_col.command_undo.__a = qu;
+            this.pu_a_col.command_redo.__a = ar;
+            this.pu_a_col.command_undo.__a = au;
+        }
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2272,7 +2531,17 @@ class Puzzle {
         var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
         var ba = window.btoa(char8);
         var url = location.href.split('?')[0];
-        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max 7360
+
+        // Warning Long URL
+        if (ba.length >= 7360) {
+            Swal.fire({
+                title: 'Warning:',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                icon: 'warning',
+                confirmButtonText: 'ok',
+            })
+        }
         return url + "?m=edit&p=" + ba;
     }
 
@@ -2297,8 +2566,20 @@ class Puzzle {
         let ruleinfo = document.getElementById("saveinforules").value;
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        // if solution check exists, then read multisolution variable or else set to false
+        if (this.solution) {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + this.multisolution + "\n";
+        } else {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + false + "\n";
+        }
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2335,7 +2616,7 @@ class Puzzle {
         }
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2364,10 +2645,44 @@ class Puzzle {
 
         // Theme Setting
         if (document.getElementById("light_mode").checked) {
-            text += JSON.stringify("light");
+            text += JSON.stringify("light") + "\n";
         } else if (document.getElementById("dark_mode").checked) {
-            text += JSON.stringify("dark");
+            text += JSON.stringify("dark") + "\n";
         }
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+
+        qr = this.pu_q_col.command_redo.__a;
+        qu = this.pu_q_col.command_undo.__a;
+        ar = this.pu_a_col.command_redo.__a;
+        au = this.pu_a_col.command_undo.__a;
+        this.pu_q_col.command_redo.__a = [];
+        this.pu_q_col.command_undo.__a = [];
+        this.pu_a_col.command_redo.__a = [];
+        this.pu_a_col.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q_col) + "\n";
+        text += JSON.stringify(this.pu_a_col) + "\n";
+        this.pu_q_col.command_redo.__a = qr;
+        this.pu_q_col.command_undo.__a = qu;
+        this.pu_a_col.command_redo.__a = ar;
+        this.pu_a_col.command_undo.__a = au;
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2379,20 +2694,44 @@ class Puzzle {
         var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
         var ba = window.btoa(char8);
         var url = location.href.split('?')[0];
+        let solution_clone;
         // if solution exist then copy the solution as well
         if (this.solution) {
-            u8text = new TextEncoder().encode(this.solution);
+            if (this.multisolution){
+                solution_clone = JSON.stringify(this.solution);
+            } else{
+                solution_clone = this.solution;
+            }
+            u8text = new TextEncoder().encode(solution_clone);
             deflate = new Zlib.RawDeflate(u8text);
             compressed = deflate.compress();
             char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
             var ba_s = window.btoa(char8);
+            // Warning Long URL
+            if ((ba.length + ba_s.length) >= 7360) {
+                Swal.fire({
+                    title: 'Warning:',
+                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                    icon: 'warning',
+                    confirmButtonText: 'ok',
+                })
+            }
             return url + "?m=edit&p=" + ba + "&a=" + ba_s;
         } else {
+            // Warning Long URL
+            if (ba.length >= 7360) {
+                Swal.fire({
+                    title: 'Warning:',
+                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                    icon: 'warning',
+                    confirmButtonText: 'ok',
+                })
+            }
             return url + "?m=edit&p=" + ba;
         }
     }
 
-    maketext_solve() {
+    maketext_solve(type = "none") {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
@@ -2413,25 +2752,32 @@ class Puzzle {
         let ruleinfo = document.getElementById("saveinforules").value;
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        // if solution check exists, then read multisolution variable or else set to false
+        if (type === "answercheck") {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            this.checkall_status(); // this will update the multisolution status
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + this.multisolution + "\n";
+        } else {
+            // Border button status
+            text += "," + document.getElementById('edge_button').textContent;
+
+            // Multi Solution status, it will be true only when generating solution checking
+            text += "," + false + "\n";
+        }
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
 
         var qr = this.pu_q.command_redo.__a;
         var qu = this.pu_q.command_undo.__a;
-        var ar = this.pu_a.command_redo.__a;
-        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
-        this.pu_a.command_redo.__a = [];
-        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
         this.pu_q.command_redo.__a = qr;
         this.pu_q.command_undo.__a = qu;
-        this.pu_a.command_redo.__a = ar;
-        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
@@ -2444,7 +2790,7 @@ class Puzzle {
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2466,7 +2812,33 @@ class Puzzle {
         text += JSON.stringify(this.mode) + "\n";
 
         // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x");
+        text += JSON.stringify("x") + "\n";
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+        qr = this.pu_q_col.command_redo.__a;
+        qu = this.pu_q_col.command_undo.__a;
+        this.pu_q_col.command_redo.__a = [];
+        this.pu_q_col.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q_col) + "\n" + "x" + "\n";
+        this.pu_q_col.command_redo.__a = qr;
+        this.pu_q_col.command_undo.__a = qu;
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2479,6 +2851,16 @@ class Puzzle {
         var ba = window.btoa(char8);
         var url = location.href.split('?')[0];
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+
+        // Warning Long URL
+        if (ba.length >= 7360) {
+            Swal.fire({
+                title: 'Warning:',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                icon: 'warning',
+                confirmButtonText: 'ok',
+            })
+        }
         return url + "?m=solve&p=" + ba;
     }
 
@@ -2504,24 +2886,21 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent + "\n";
+        text += "," + document.getElementById('edge_button').textContent;
+
+        // Multi Solution status, it will be true only when generating solution checking
+        text += "," + false + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
 
         var qr = this.pu_q.command_redo.__a;
         var qu = this.pu_q.command_undo.__a;
-        var ar = this.pu_a.command_redo.__a;
-        var au = this.pu_a.command_undo.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
-        this.pu_a.command_redo.__a = [];
-        this.pu_a.command_undo.__a = [];
         text += JSON.stringify(this.pu_q) + "\n" + "\n";
         this.pu_q.command_redo.__a = qr;
         this.pu_q.command_undo.__a = qu;
-        this.pu_a.command_redo.__a = ar;
-        this.pu_a.command_undo.__a = au;
 
         var list = [this.centerlist[0]];
         for (var i = 1; i < this.centerlist.length; i++) {
@@ -2534,7 +2913,7 @@ class Puzzle {
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
             if (settingstatus[i].checked) {
@@ -2556,7 +2935,33 @@ class Puzzle {
         text += JSON.stringify(this.mode) + "\n";
 
         // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x");
+        text += JSON.stringify("x") + "\n";
+
+        // Custom Colors
+        if (document.getElementById("custom_color_yes").checked) {
+            text += JSON.stringify("true") + "\n"
+        } else {
+            text += JSON.stringify("false") + "\n"
+        }
+        qr = this.pu_q_col.command_redo.__a;
+        qu = this.pu_q_col.command_undo.__a;
+        this.pu_q_col.command_redo.__a = [];
+        this.pu_q_col.command_undo.__a = [];
+        text += JSON.stringify(this.pu_q_col) + "\n" + "x" + "\n";
+        this.pu_q_col.command_redo.__a = qr;
+        this.pu_q_col.command_undo.__a = qu;
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            if (settingstatus[i].checked) {
+                answersetting[settingstatus[i].id] = true;
+            } else {
+                answersetting[settingstatus[i].id] = false;
+            }
+        }
+        text += JSON.stringify(answersetting);
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2569,11 +2974,21 @@ class Puzzle {
         var ba = window.btoa(char8);
         var url = location.href.split('?')[0];
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+
+        // Warning Long URL
+        if (ba.length >= 7360) {
+            Swal.fire({
+                title: 'Warning:',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                icon: 'warning',
+                confirmButtonText: 'ok',
+            })
+        }
         return url + "?m=solve&p=" + ba;
     }
 
     maketext_solve_solution() {
-        var text_head = this.maketext_solve();
+        var text_head = this.maketext_solve("answercheck");
         var text;
         text = JSON.stringify(this.make_solution());
 
@@ -2583,186 +2998,461 @@ class Puzzle {
         var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
         var ba = window.btoa(char8);
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+
+        // Warning Long URL
+        if ((text_head.length + ba.length) >= 7360) {
+            Swal.fire({
+                title: 'Warning:',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                icon: 'warning',
+                confirmButtonText: 'ok',
+            })
+        }
         return text_head + "&a=" + ba;
     }
 
-    make_solution() {
-        // 0 - shading
-        // 1 - Line / FreeLine
-        // 2 - Edge / FreeEdge
-        // 3 - Wall
-        // 4 - Number
-        // 5 - Symbol
-        var sol = [
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ];
-
-        var pu = "pu_a";
-
+    checkall_status() {
         // See if user selected any particular setting
-        var answersetting = document.getElementById("answersetting");
-        var settingstatus = answersetting.getElementsByTagName("INPUT");
-        var checkall = true;
+        let answersetting = document.getElementById("answersetting");
+        let settingstatus_and = answersetting.getElementsByClassName("solcheck");
+        let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
+        let checkall = true;
 
-        // loop through and check if any settings are selected
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
+        // loop through and check if any "AND" settings are selected
+        for (var i = 0; i < settingstatus_and.length; i++) {
+            if (settingstatus_and[i].checked) {
                 checkall = false;
                 break;
             }
         }
 
-        if (document.getElementById("sol_surface").checked === true || checkall) {
-            for (var i in this[pu].surface) {
-                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
-                    sol[0].push(i);
+        // If checkall is still true, it means, no "AND" option was selected
+        if (checkall) {
+            // loop through and check if any "OR" settings are selected
+            for (var i = 0; i < settingstatus_or.length; i++) {
+                if (settingstatus_or[i].checked) {
+                    checkall = false;
+                    this.multisolution = true;
+                    break;
                 }
             }
         }
 
-        if (document.getElementById("sol_square").checked === true || checkall) {
-            for (var i in this[pu].symbol) {
-                if (this[pu].symbol[i][0] === 2 && this[pu].symbol[i][1] === "square_LL") {
-                    if (sol[0].indexOf(i) === -1) {
+        return checkall;
+    }
+
+    make_solution() {
+
+        let checkall = this.checkall_status();
+        let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+
+        if (!this.multisolution) {
+            // 0 - shading
+            // 1 - Line / FreeLine
+            // 2 - Edge / FreeEdge
+            // 3 - Wall
+            // 4 - Number
+            // 5 - Symbol
+            var sol = [
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ];
+
+            var pu = "pu_a";
+
+            if (document.getElementById("sol_surface").checked === true || checkall) {
+                for (var i in this[pu].surface) {
+                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
                         sol[0].push(i);
                     }
                 }
             }
-        }
 
-        if (document.getElementById("sol_loopline").checked === true || checkall) {
-            for (var i in this[pu].line) {
-                if (this[pu].line[i] === 3) {
-                    sol[1].push(i + ",1");
-                } else if (this[pu].line[i] === 30) {
-                    sol[1].push(i + ",2");
+            if (document.getElementById("sol_square").checked === true || checkall) {
+                for (var i in this[pu].symbol) {
+                    if (this[pu].symbol[i][0] === 2 && this[pu].symbol[i][1] === "square_LL") {
+                        if (sol[0].indexOf(i) === -1) {
+                            sol[0].push(i);
+                        }
+                    }
                 }
             }
 
-            for (var i in this[pu].freeline) {
-                if (this[pu].freeline[i] === 3) {
-                    sol[1].push(i + ",1");
-                } else if (this[pu].freeline[i] === 30) {
-                    sol[1].push(i + ",2");
+            if (document.getElementById("sol_loopline").checked === true || checkall) {
+                for (var i in this[pu].line) {
+                    if (this[pu].line[i] === 3) {
+                        sol[1].push(i + ",1");
+                    } else if (this[pu].line[i] === 30) {
+                        sol[1].push(i + ",2");
+                    }
+                }
+
+                for (var i in this[pu].freeline) {
+                    if (this[pu].freeline[i] === 3) {
+                        sol[1].push(i + ",1");
+                    } else if (this[pu].freeline[i] === 30) {
+                        sol[1].push(i + ",2");
+                    }
                 }
             }
-        }
 
-        if (document.getElementById("sol_loopedge").checked === true || checkall) {
-            for (var i in this[pu].lineE) {
-                if (this[pu].lineE[i] === 3) {
-                    sol[2].push(i + ",1");
-                } else if (this[pu].lineE[i] === 30) {
-                    sol[2].push(i + ",2");
-                }
-            }
-
-            for (var i in this[pu].freelineE) {
-                if (this[pu].freelineE[i] === 3) {
-                    sol[2].push(i + ",1");
-                } else if (this[pu].freelineE[i] === 30) {
-                    sol[2].push(i + ",2");
-                }
-            }
-        }
-
-        if (document.getElementById("sol_wall").checked === true || checkall) {
-            for (var i in this[pu].wall) {
-                if (this[pu].wall[i] === 3) {
-                    sol[3].push(i);
-                }
-            }
-        }
-
-        if (document.getElementById("sol_number").checked === true || checkall) {
-            for (var i in this[pu].number) {
-                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                if (this[pu].number[i][2] === "7") {
-                    // (Green or light blue or dark blue or red)
-                    if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
-                        var sum = 0,
-                            a;
-                        for (var j = 0; j < 10; j++) {
-                            if (this[pu].number[i][0][j] === 1) {
-                                sum += 1;
-                                a = j + 1;
+            if (document.getElementById("sol_loopedge").checked === true || checkall) {
+                if (document.getElementById("sol_ignoreborder").checked === true) {
+                    for (var i in this[pu].lineE) {
+                        if ((this.frame[i] && this.frame[i] === 2) ||
+                            (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
+                            // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                        } else {
+                            if (this[pu].lineE[i] === 3) {
+                                sol[2].push(i + ",1");
+                            } else if (this[pu].lineE[i] === 30) {
+                                sol[2].push(i + ",2");
                             }
                         }
-                        if (sum === 1) {
-                            sol[4].push(i + "," + a);
+                    }
+                } else {
+                    for (var i in this[pu].lineE) {
+                        if (this[pu].lineE[i] === 3) {
+                            sol[2].push(i + ",1");
+                        } else if (this[pu].lineE[i] === 30) {
+                            sol[2].push(i + ",2");
                         }
                     }
-                } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                        sol[4].push(i + "," + this[pu].number[i][0]);
+                }
+
+                if (document.getElementById("sol_ignoreborder").checked === true) {
+                    for (var i in this[pu].lineE) {
+                        if ((this.frame[i] && this.frame[i] === 2) ||
+                            (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
+                            // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                        } else {
+                            if (this[pu].freelineE[i] === 3) {
+                                sol[2].push(i + ",1");
+                            } else if (this[pu].freelineE[i] === 30) {
+                                sol[2].push(i + ",2");
+                            }
+                        }
+                    }
+                } else {
+                    for (var i in this[pu].freelineE) {
+                        if (this[pu].freelineE[i] === 3) {
+                            sol[2].push(i + ",1");
+                        } else if (this[pu].freelineE[i] === 30) {
+                            sol[2].push(i + ",2");
+                        }
                     }
                 }
             }
-        }
 
-        for (var i in this[pu].symbol) {
-            switch (this[pu].symbol[i][1]) {
-                case "circle_M":
-                    if (document.getElementById("sol_circle").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "A");
-                        }
+            if (document.getElementById("sol_wall").checked === true || checkall) {
+                for (var i in this[pu].wall) {
+                    if (this[pu].wall[i] === 3) {
+                        sol[3].push(i);
                     }
-                    break;
-                case "tri":
-                    if (document.getElementById("sol_tri").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "B");
-                        }
-                    }
-                    break;
-                case "arrow_S":
-                    if (document.getElementById("sol_arrow").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "C");
-                        }
-                    }
-                    break;
-                case "battleship_B":
-                    if (document.getElementById("sol_battleship").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "D");
-                        }
-                    }
-                    break;
-                case "star": //any star
-                    if (document.getElementById("sol_star").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
-                            sol[5].push(i + "," + 1 + "E");
-                        }
-                    }
-                    break;
-                case "tents":
-                    if (document.getElementById("sol_tent").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] === 2) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "F");
-                        }
-                    }
-                    break;
-                case "math":
-                case "math_G":
-                    if (document.getElementById("sol_math").checked === true || checkall) {
-                        if (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
-                            sol[5].push(i + "," + this[pu].symbol[i][0] + "G");
-                        }
-                    }
-                    break;
+                }
             }
-        }
 
-        for (var i = 0; i < 6; i++) {
-            sol[i] = sol[i].sort();
+            if (document.getElementById("sol_number").checked === true || checkall) {
+                for (var i in this[pu].number) {
+                    // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                    if (this[pu].number[i][2] === "7") {
+                        // (Green or light blue or dark blue or red)
+                        if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                            var sum = 0,
+                                a;
+                            for (var j = 0; j < 10; j++) {
+                                if (this[pu].number[i][0][j] === 1) {
+                                    sum += 1;
+                                    a = j + 1;
+                                }
+                            }
+                            if (sum === 1) {
+                                sol[4].push(i + "," + a);
+                            }
+                        }
+                    } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                            sol[4].push(i + "," + this[pu].number[i][0]);
+                        }
+                    }
+                }
+            }
+
+            for (var i in this[pu].symbol) {
+                switch (this[pu].symbol[i][1]) {
+                    case "circle_M":
+                        if (document.getElementById("sol_circle").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "A");
+                            }
+                        }
+                        break;
+                    case "tri":
+                        if (document.getElementById("sol_tri").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "B");
+                            }
+                        }
+                        break;
+                    case "arrow_S":
+                        if (document.getElementById("sol_arrow").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "C");
+                            }
+                        }
+                        break;
+                    case "battleship_B":
+                        if (document.getElementById("sol_battleship").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "D");
+                            }
+                        }
+                        break;
+                    case "star": //any star
+                        if (document.getElementById("sol_star").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
+                                sol[5].push(i + "," + 1 + "E");
+                            }
+                        }
+                        break;
+                    case "tents":
+                        if (document.getElementById("sol_tent").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 2) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "F");
+                            }
+                        }
+                        break;
+                    case "math":
+                    case "math_G":
+                        if (document.getElementById("sol_math").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "G");
+                            }
+                        }
+                        break;
+                    case "sun_moon":
+                        if (document.getElementById("sol_akari").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 3) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "H");
+                            }
+                        }
+                        break;
+                }
+            }
+
+            for (var i = 0; i < 6; i++) {
+                sol[i] = sol[i].sort();
+            }
+        } else {
+            // store multiple solutions
+
+            var sol = [];
+            var pu = "pu_a";
+            var sol_count = -1; // as list indexing starts at 0
+
+            // loop through and check which "OR" settings are selected
+            for (var m = 0; m < settingstatus_or.length; m++) {
+                if (settingstatus_or[m].checked) {
+
+                    // incrementing solution count by 1
+                    sol_count++;
+
+                    // Extracting the checkbox id. First 7 chracters "sol_or_" are sliced.
+                    let sol_id = settingstatus_or[m].id.slice(7);
+
+                    let temp_sol = [];
+
+                    switch (sol_id) {
+                        case "surface":
+                            for (var i in this[pu].surface) {
+                                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "number":
+                            for (var i in this[pu].number) {
+                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                if (this[pu].number[i][2] === "7") {
+                                    // (Green or light blue or dark blue or red)
+                                    if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                                        var sum = 0,
+                                            a;
+                                        for (var j = 0; j < 10; j++) {
+                                            if (this[pu].number[i][0][j] === 1) {
+                                                sum += 1;
+                                                a = j + 1;
+                                            }
+                                        }
+                                        if (sum === 1) {
+                                            temp_sol.push(i + "," + a);
+                                        }
+                                    }
+                                } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                        temp_sol.push(i + "," + this[pu].number[i][0]);
+                                    }
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "loopline":
+                            for (var i in this[pu].line) {
+                                if (this[pu].line[i] === 3) {
+                                    temp_sol.push(i + ",1");
+                                } else if (this[pu].line[i] === 30) {
+                                    temp_sol.push(i + ",2");
+                                }
+                            }
+
+                            for (var i in this[pu].freeline) {
+                                if (this[pu].freeline[i] === 3) {
+                                    temp_sol.push(i + ",1");
+                                } else if (this[pu].freeline[i] === 30) {
+                                    temp_sol.push(i + ",2");
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "loopedge":
+                            for (var i in this[pu].lineE) {
+                                if ((this.frame[i] && this.frame[i] === 2) ||
+                                    (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
+                                    // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                                } else {
+                                    if (this[pu].lineE[i] === 3) {
+                                        temp_sol.push(i + ",1");
+                                    } else if (this[pu].lineE[i] === 30) {
+                                        temp_sol.push(i + ",2");
+                                    }
+                                }
+                            }
+                            for (var i in this[pu].freelineE) {
+                                if ((this.frame[i] && this.frame[i] === 2) ||
+                                    (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
+                                    // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                                } else {
+                                    if (this[pu].freelineE[i] === 3) {
+                                        temp_sol.push(i + ",1");
+                                    } else if (this[pu].freelineE[i] === 30) {
+                                        temp_sol.push(i + ",2");
+                                    }
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "wall":
+                            for (var i in this[pu].wall) {
+                                if (this[pu].wall[i] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "square":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "square_LL" && this[pu].symbol[i][0] === 2) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "circle":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "circle_M" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "tri":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "tri" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "arrow":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "arrow_S" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "math":
+                            for (var i in this[pu].symbol) {
+                                if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
+                                    this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "battleship":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "battleship_B" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "tent":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "tents" &&
+                                    this[pu].symbol[i][0] === 2) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "star":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "star" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "akari":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "sun_moon" &&
+                                    this[pu].symbol[i][0] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                    }
+                }
+            }
         }
         return sol;
     }
@@ -3428,7 +4118,6 @@ class Puzzle {
                         }
                     }
                 }
-                // console.log(JSON.parse(JSON.stringify(cell_matrix))); // To avoid passing by reference
             }
         }
 
@@ -3615,8 +4304,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -3692,8 +4381,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -3769,8 +4458,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -4547,8 +5236,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 text += 'aaabbbccc\n' +
@@ -5128,8 +5817,8 @@ class Puzzle {
                 var col_size;
 
                 // Grid Size
-                row_size = document.getElementById("nb_size2").value;
-                col_size = document.getElementById("nb_size1").value;
+                row_size = this.ny;
+                col_size = this.nx;
                 text += col_size + ' ' + row_size + ' 1' + '\n';
 
                 // Regions
@@ -5554,6 +6243,8 @@ class Puzzle {
             } else if (header === "testing") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
+                console.log(this.pu_q_col);
+                console.log(this.pu_a_col);
                 console.log(this);
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
@@ -5575,51 +6266,86 @@ class Puzzle {
         if (pu_mode === "pu_q") {
             while (undocounter !== 0) {
                 var a = this.pu_q.command_undo.pop(); /*a[0]:list_name,a[1]:point_number, a[4]: groupindex (optional)*/
+                var a_col = this.pu_q_col.command_undo.pop();
                 if (a && a[4]) { // If part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) { // If part of different group, stop
                         this.pu_q.command_undo.push(a);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push(a_col);
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
                     this.pu_q.command_undo.push(a);
+                    if (a_col) {
+                        this.pu_q_col.command_undo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
+                            if (a_col) {
+                                this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
+                            }
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[1][i]] = this[pu_mode][i][a[2]];
                                 delete this[pu_mode][i][a[2]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[1][i]] = this[pu_mode + "_col"][i][a_col[2]];
+                                    delete this[pu_mode + "_col"][i][a_col[2]];
+                                }
                             }
                         }
                         this.pu_q.command_redo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_q_col.command_redo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_q.command_redo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_q.command_redo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5628,33 +6354,50 @@ class Puzzle {
         } else {
             while (undocounter !== 0) {
                 var a = this.pu_a.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value, a[4]: groupindex (optional)*/
+                var a_col = this.pu_a_col.command_undo.pop();
                 if (a && a[4]) { // if part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) {
                         this.pu_a.command_undo.push(a); // if part of ganother group, stop
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push(a_col); // if part of ganother group, stop
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
                     this.pu_a.command_undo.push(a);
+                    if (a_col) {
+                        this.pu_a_col.command_undo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
+                            if (a_col) {
+                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
+                            }
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[1][i]] = this[pu_mode][i][a[2]];
                                 delete this[pu_mode][i][a[2]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[1][i]] = this[pu_mode + "_col"][i][a_col[2]];
+                                    delete this[pu_mode + "_col"][i][a_col[2]];
+                                }
                             }
                         }
                         this.pu_a.command_redo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_a_col.command_redo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[0] === "deletelineE") {
                             pu_mode = "pu_q";
@@ -5662,20 +6405,38 @@ class Puzzle {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_a.command_redo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) { //symbol etc
                                 this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_a.command_redo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5691,50 +6452,86 @@ class Puzzle {
         if (pu_mode === "pu_q") {
             while (redocounter !== 0) {
                 var a = this.pu_q.command_redo.pop();
+                var a_col = this.pu_q_col.command_redo.pop();
                 if (a && a[4]) { // if part of group redo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) { // if part of different group, stop
                         this.pu_q.command_redo.push(a);
+                        if (a_col) {
+                            this.pu_q_col.command_redo.push(a_col);
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else { // group redo is done, stop
                     this.pu_q.command_redo.push(a);
+                    if (a_col) {
+                        this.pu_q_col.command_redo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
+                        }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[2]] = this[pu_mode][i][a[1][i]];
                                 delete this[pu_mode][i][a[1][i]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[2]] = this[pu_mode + "_col"][i][a_col[1][i]];
+                                    delete this[pu_mode + "_col"][i][a_col[1][i]];
+                                }
                             }
                         }
                         this.pu_q.command_undo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_q.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_q.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_q.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = a[2];
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = a_col[2];
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5743,32 +6540,50 @@ class Puzzle {
         } else {
             while (redocounter !== 0) {
                 var a = this.pu_a.command_redo.pop();
+                var a_col = this.pu_a_col.command_redo.pop();
                 if (a && a[4]) { // if its part of group
                     if (!groupindex) {
                         groupindex = a[4];
                     }
                     if (a[4] != groupindex) { // if its part of another group then stop
                         this.pu_a.command_redo.push(a);
+                        if (a_col) {
+                            this.pu_a_col.command_redo.push(a_col);
+                        }
                         break;
                     }
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else {
                     this.pu_a.command_redo.push(a); // group redo is done, stop
+                    if (a_col) {
+                        this.pu_a_col.command_redo.push(a_col);
+                    }
                     break;
                 }
                 if (a) {
                     if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
+                        }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
                                 this[pu_mode][i][a[2]] = this[pu_mode][i][a[1][i]];
                                 delete this[pu_mode][i][a[1][i]];
+                                if (a_col) {
+                                    this[pu_mode + "_col"][i][a_col[2]] = this[pu_mode + "_col"][i][a_col[1][i]];
+                                    delete this[pu_mode + "_col"][i][a_col[1][i]];
+                                }
                             }
                         }
                         this.pu_a.command_undo.push([a[0], a[1], a[2], pu_mode]);
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                        }
                     } else {
                         if (a[0] === "deletelineE") {
                             pu_mode = "pu_q";
@@ -5776,20 +6591,38 @@ class Puzzle {
                         if (a[4]) {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col", a_col[4]]);
+                                }
                             } else {
                                 this.pu_a.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                                }
                             }
                         } else {
                             if (this[pu_mode][a[0]][a[1]]) {
                                 this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col"]);
+                                }
                             } else {
                                 this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
+                                if (a_col) {
+                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                                }
                             }
                         }
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = a[2];
+                            if (a_col) {
+                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = a_col[2];
+                            }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
+                            if (a_col) {
+                                delete this[pu_mode + "_col"][a_col[0]][a_col[1]];
+                            }
                         }
                     }
                     this.redraw();
@@ -5802,52 +6635,83 @@ class Puzzle {
         if (this.mode.qa === "pu_q") {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
+                this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
             } else if (arr === "move") {
                 this.pu_q.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
+                this.pu_q_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
             } else {
                 if (this.pu_q[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) { // Currently only Thermo Supported, keep updating as I add other support
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        }
                     } else {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        }
                     }
                 } else {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
+                        this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
                     } else {
                         this.pu_q.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+                        this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
                     }
                 }
             }
             this.pu_q.command_redo = new Stack();
+            this.pu_q_col.command_redo = new Stack();
         } else {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
+                this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
             } else if (arr === "move") {
                 this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
+                this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
             } else if (arr === "deletelineE") {
                 if (this.pu_a[arr][num]) {
                     this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q"]); // Array is also recorded in JSON
+                    this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q_col"]); // Array is also recorded in JSON
                 } else {
                     this.pu_a.command_undo.push([arr, num, null, "pu_q"]);
+                    this.pu_a_col.command_undo.push([arr, num, null, "pu_q_col"]);
                 }
             } else {
                 if (this.pu_a[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
+                        }
                     } else {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        } else {
+                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        }
                     }
-
                 } else {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
+                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
                     } else {
                         this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
                     }
                 }
             }
             this.pu_a.command_redo = new Stack();
+            this.pu_a_col.command_redo = new Stack();
         }
     }
 
@@ -6585,6 +7449,7 @@ class Puzzle {
             this.re_surfacemove(num);
             this.last = num;
         } else if (this.mouse_mode === "up") {
+            this.cursol = this.last;
             this.drawing = false;
             this.drawing_mode = -1;
             this.last = -1;
@@ -6600,12 +7465,21 @@ class Puzzle {
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 1 && color === 1) {
             this[this.mode.qa].surface[num] = 2;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+            }
             this.drawing_mode = 2;
         } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && color === 1))) {
             delete this[this.mode.qa].surface[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].surface[num];
+            }
             this.drawing_mode = 0;
         } else {
             this[this.mode.qa].surface[num] = color;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+            }
             this.drawing_mode = color;
         }
         this.redraw();
@@ -6615,9 +7489,15 @@ class Puzzle {
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 2) {
             delete this[this.mode.qa].surface[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].surface[num];
+            }
             this.drawing_mode = 0;
         } else {
             this[this.mode.qa].surface[num] = 2;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+            }
             this.drawing_mode = 2;
         }
         this.redraw();
@@ -6629,12 +7509,22 @@ class Puzzle {
                 if (this[this.mode.qa].surface[num]) {
                     this.record("surface", num);
                     delete this[this.mode.qa].surface[num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this[this.mode.qa + "_col"].surface[num];
+                    }
                     this.redraw();
                 }
             } else {
                 if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode) {
                     this.record("surface", num);
                     this[this.mode.qa].surface[num] = this.drawing_mode;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        if (this.drawing_mode === 2) {
+                            this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+                        } else {
+                            this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+                        }
+                    }
                     this.redraw();
                 }
             }
@@ -6673,16 +7563,28 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this["pu_q_col"][array][num];
+                    }
                 } else {
                     delete this[this.mode.qa][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this[this.mode.qa + "_col"][array][num];
+                    }
                 }
                 this.drawing_mode = 0;
             } else if (this.drawing_mode === 0) { // to draw in a stretch
                 this.record(array, num);
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this["pu_q_col"][array][num];
+                    }
                 } else {
                     delete this[this.mode.qa][array][num];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        delete this[this.mode.qa + "_col"][array][num];
+                    }
                 }
             }
         } else {
@@ -6690,17 +7592,29 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this["pu_q_col"][array][num] = this.get_customcolor();
+                    }
                 } else {
                     console.log('enters drawing line', array, num, line_style);
                     this[this.mode.qa][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
+                    }
                 }
                 this.drawing_mode = line_style;
             } else if (this.drawing_mode === line_style) { // to draw in a stretch
                 this.record(array, num);
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this["pu_q_col"][array][num] = this.get_customcolor();
+                    }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
+                    }
                 }
             }
         }
@@ -6739,11 +7653,11 @@ class Puzzle {
             this.drawing_mode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             this.last = num;
             this.freelinecircle_g[0] = num;
-            this.redraw();
+            this.redraw(); // This is needed so that the circle appears for aid
         } else if (this.mouse_mode === "move") {
             if (this.drawing && this.last != num) {
                 this.freelinecircle_g[1] = num;
-                this.redraw();
+                this.redraw(); // This is needed so that the circle appears for aid
             }
         } else if (this.mouse_mode === "up") {
             this.re_lineup_free(num);
@@ -6767,8 +7681,14 @@ class Puzzle {
             this.record("freeline", key);
             if (this[this.mode.qa].freeline[key]) {
                 delete this[this.mode.qa].freeline[key];
+                if (document.getElementById("custom_color_yes").checked) {
+                    delete this[this.mode.qa + "_col"].freeline[key];
+                }
             } else {
                 this[this.mode.qa].freeline[key] = this.drawing_mode;
+                if (document.getElementById("custom_color_yes").checked) {
+                    this[this.mode.qa + "_col"].freeline[key] = this.get_customcolor();
+                }
             }
         }
     }
@@ -6780,12 +7700,18 @@ class Puzzle {
     }
 
     re_lineX(num) {
-        if (this[this.mode.qa].line[num] && this[this.mode.qa].line[num] === 98) { //×印
+        if (this[this.mode.qa].line[num] && this[this.mode.qa].line[num] === 98) { // Cross mark (x)
             this.record("line", num);
             delete this[this.mode.qa].line[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].line[num];
+            }
         } else {
             this.record("line", num);
             this[this.mode.qa].line[num] = 98;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].line[num] = this.get_customcolor();
+            }
         }
         this.redraw();
     }
@@ -6876,8 +7802,14 @@ class Puzzle {
             this.record("freelineE", key);
             if (this[this.mode.qa].freelineE[key]) {
                 delete this[this.mode.qa].freelineE[key];
+                if (document.getElementById("custom_color_yes").checked) {
+                    delete this[this.mode.qa + "_col"].freelineE[key];
+                }
             } else {
                 this[this.mode.qa].freelineE[key] = this.drawing_mode;
+                if (document.getElementById("custom_color_yes").checked) {
+                    this[this.mode.qa + "_col"].freelineE[key] = this.get_customcolor();
+                }
             }
         }
     }
@@ -6892,9 +7824,15 @@ class Puzzle {
         if (this[this.mode.qa].lineE[num] && this[this.mode.qa].lineE[num] === 98) { //×印
             this.record("lineE", num);
             delete this[this.mode.qa].lineE[num];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].lineE[num];
+            }
         } else {
             this.record("lineE", num);
             this[this.mode.qa].lineE[num] = 98;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"].lineE[num] = this.get_customcolor();
+            }
         }
         this.redraw();
     }
@@ -6976,6 +7914,7 @@ class Puzzle {
 
 
     mouse_sudoku(x, y, num, ctrl_key = false) {
+        // if (this.point[num].type === 0) {}  // Add this line, to ignore corners and allow diagonal selection, and set type = [0, 1]
         if (this.mouse_mode === "down_left") {
             this.drawing = true;
             if (!ctrl_key) {
@@ -7288,16 +8227,38 @@ class Puzzle {
             }
             this.last = num;
         }
+        if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length > 1) {
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
+            }
+        }
         this.redraw();
     }
 
     re_specialup(num, arr) {
         if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length === 1) {
+            //*********SPECIAL CASE of EMPTY STARTS HERE***************
+            // If the mouse was released back on the starting cell, basically no thermo then remove the custom color entry as well.
+            // This accounts for the case when user dragged the thermo but came back to starting point.
+            if (document.getElementById("custom_color_yes").checked && this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1]) {
+                this[this.mode.qa + "_col"][arr].pop();
+            }
+            if (this.mode.qa === "pu_q") {
+                this.pu_q.command_undo.pop();
+                this.pu_q_col.command_undo.pop();
+            } else if (this.mode.qa === "pu_a") {
+                this.pu_a.command_undo.pop();
+                this.pu_a_col.command_undo.pop();
+            }
+            //*********SPECIAL CASE of EMPTY ENDS HERE***************
             this[this.mode.qa][arr].pop();
             for (var i = this[this.mode.qa][arr].length - 1; i >= 0; i--) {
-                if (this[this.mode.qa][arr][i][0] === num) {
+                if (this[this.mode.qa][arr][i] && this[this.mode.qa][arr][i][0] === num) {
                     this.record(arr, i);
                     this[this.mode.qa][arr][i] = [];
+                    if (document.getElementById("custom_color_yes").checked) {
+                        this[this.mode.qa + "_col"][arr][i] = [];
+                    }
                     break;
                 }
             }
@@ -7309,6 +8270,9 @@ class Puzzle {
         this.freelinecircle_g[1] = num;
         if (this.drawing) {
             this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length - 1] = num;
+            if (document.getElementById("custom_color_yes").checked) {
+                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
+            }
         }
         this.redraw();
     }
@@ -7477,6 +8441,12 @@ class Puzzle {
         switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
             case "linex":
             case "edgex":
+                if (this.mouse_click === 2 || this.ondown_key === "touchstart") {
+                    num = this.coord_p_edgex(x, y, 0.3);
+                } else {
+                    num = this.coord_p_edgex(x, y, 0.01);
+                }
+                break;
             case "edgexoi":
             case "tents":
                 if (this.mouse_mode === "down_right" || this.ondown_key === "touchstart") {
@@ -7824,7 +8794,9 @@ class Puzzle {
     }
 
     re_combi_linex_move(num) {
-        if (this.drawing_mode != -1 && this.point[num].type === 0) {
+        if (this.drawing_mode != -1 &&
+            this.mouse_click !== 2 &&
+            this.point[num].type === 0) {
             var line_style = 3;
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
@@ -7833,6 +8805,19 @@ class Puzzle {
                 this.re_line(array, key, line_style);
             }
             this.last = num;
+            this.redraw();
+        } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
+            if (this.drawing_mode == 52) {
+                if (!this[this.mode.qa].line[num]) { // Insert cross
+                    this.record("line", num);
+                    this[this.mode.qa].line[num] = 98;
+                }
+            } else if (this.drawing_mode == 50) {
+                if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                    this.record("line", num);
+                    delete this[this.mode.qa].line[num];
+                }
+            }
             this.redraw();
         }
     }
@@ -7882,17 +8867,21 @@ class Puzzle {
                 if (!this[this.mode.qa].line[num]) { // Insert cross
                     this.record(symboltype, num);
                     this[this.mode.qa].line[num] = 98;
+                    this.drawing_mode = 52;
                 } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
                     this.record(symboltype, num);
                     delete this[this.mode.qa].line[num];
+                    this.drawing_mode = 50;
                 }
             } else {
                 if (!this[this.mode.qa].lineE[num]) { // Insert cross
                     this.record(symboltype, num);
                     this[this.mode.qa].lineE[num] = 98;
+                    this.drawing_mode = 52;
                 } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
                     this.record(symboltype, num);
                     delete this[this.mode.qa].lineE[num];
+                    this.drawing_mode = 50;
                 }
             }
         } else {
@@ -7951,7 +8940,9 @@ class Puzzle {
     }
 
     re_combi_edgex_move(num) {
-        if (this.drawing_mode != -1 && this.point[num].type === 1) {
+        if (this.drawing_mode != -1 &&
+            this.mouse_click != 2 &&
+            this.point[num].type === 1) {
             var line_style = 3;
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
@@ -7960,6 +8951,19 @@ class Puzzle {
                 this.re_line(array, key, line_style);
             }
             this.last = num;
+            this.redraw();
+        } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
+            if (this.drawing_mode == 52) {
+                if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                    this.record("lineE", num);
+                    this[this.mode.qa].lineE[num] = 98;
+                }
+            } else if (this.drawing_mode == 50) {
+                if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                    this.record("lineE", num);
+                    delete this[this.mode.qa].lineE[num];
+                }
+            }
             this.redraw();
         }
     }
@@ -8562,7 +9566,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                    document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -8575,7 +9579,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                    document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -8589,7 +9593,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_redo').style.color = Color.BLACK;
+                    document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -8602,7 +9606,7 @@ class Puzzle {
                 if (document.getElementById('light_mode').checked) {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
-                    document.getElementById('tb_undo').style.color = Color.BLACK;
+                    document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
                 if (document.getElementById('light_mode').checked) {
@@ -8657,8 +9661,13 @@ class Puzzle {
             if (this[pu].polygon[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = Color.BLACK;
-                this.ctx.fillStyle = Color.BLACK;
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].polygon[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].polygon[i];
+                    this.ctx.fillStyle = this[pu + "_col"].polygon[i];
+                } else {
+                    this.ctx.strokeStyle = Color.BLACK;
+                    this.ctx.fillStyle = Color.BLACK;
+                }
                 this.ctx.lineWidth = 1;
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].polygon[i][0]].x, this.point[this[pu].polygon[i][0]].y);
@@ -8784,25 +9793,60 @@ class Puzzle {
     }
 
     check_solution() {
-        if (this.solution) {
-            var text = JSON.stringify(this.make_solution());
-            if (text === this.solution && this.sol_flag === 0) {
-                setTimeout(() => {
-                    Swal.fire({
-                        title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                        html: '<h2 class="wish">Congratulations 🙂</h2>',
-                        background: 'url(js/images/new_year.jpg)',
-                        icon: 'success',
-                        confirmButtonText: 'Hurray!',
-                        // timer: 5000
-                    })
-                }, 20)
-                sw_timer.stop();
-                // this.mouse_mode = "out";
-                // this.mouseevent(0, 0, 0);
-                this.sol_flag = 1;
-            } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                this.sol_flag = 0;
+        if (!this.multisolution) {
+            if (this.solution) {
+                var text = JSON.stringify(this.make_solution());
+                if (text === this.solution && this.sol_flag === 0) {
+                    setTimeout(() => {
+                        Swal.fire({
+                            title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                            html: '<h2 class="wish">Congratulations 🙂</h2>',
+                            background: 'url(js/images/new_year.jpg)',
+                            icon: 'success',
+                            confirmButtonText: 'Hurray!',
+                            // timer: 5000
+                        })
+                    }, 20)
+                    sw_timer.stop();
+                    // this.mouse_mode = "out";
+                    // this.mouseevent(0, 0, 0);
+                    this.sol_flag = 1;
+                } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                    this.sol_flag = 0;
+                }
+            }
+        } else {
+            var text = this.make_solution();
+            for (var i = 0; i < this.solution.length; i++) {
+                let author_sol = JSON.stringify(this.solution[i]);
+                if (author_sol) {
+                    for (var j = 0; j < text.length; j++) {
+                        let user_sol = JSON.stringify(text[j]);
+                        if (user_sol === author_sol && this.sol_flag === 0) {
+                            setTimeout(() => {
+                                Swal.fire({
+                                    title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                                    html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                    background: 'url(js/images/new_year.jpg)',
+                                    icon: 'success',
+                                    confirmButtonText: 'Hurray!',
+                                })
+                            }, 20)
+                            sw_timer.stop();
+                            this.sol_flag = 1;
+                            i = this.solution.length; // to break the outer for loop
+                            break;
+                        } else if (user_sol === author_sol && this.sol_flag === 1) {
+                            i = this.solution.length; // to break the outer for loop
+                            break;
+                        }
+                    }
+                }
+                if (i === (this.solution.length - 1) && this.sol_flag === 1) {
+                    // If there was any change in the grid and none of the solution matches then reset the flag
+                    // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
+                    this.sol_flag = 0;
+                }
             }
         }
     }
@@ -9010,5 +10054,10 @@ class Puzzle {
             b[2] = c;
         }
         return b[2];
+    }
+
+    get_customcolor() {
+        let customcolor = $("#colorpicker_special").spectrum("get");
+        return "rgba(" + customcolor._r + "," + customcolor._g + "," + customcolor._b + "," + customcolor._a + ")";
     }
 }

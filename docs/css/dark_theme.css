@@ -78,7 +78,7 @@ hr.newgridhrline {
 #top_button,
 #bottom_button {
     position: relative;
-    max-width: 530px;
+    max-width: 630px;
     text-align: center;
     margin: 0 auto;
     padding-top: 10px;
@@ -112,7 +112,7 @@ hr.newgridhrline {
 #buttons {
     font-size: 0;
     border: 1px solid var(--white);
-    width: 530px;
+    width: 550px;
     margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -187,7 +187,6 @@ hr.newgridhrline {
 .label {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -203,7 +202,6 @@ hr.newgridhrline {
 .label_option {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -232,7 +230,6 @@ hr.newgridhrline {
 .labelL {
     display: inline-block;
     margin: 0px;
-    text-align: left;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -394,7 +391,7 @@ hr.newgridhrline {
 
 #st_surface3_lb {
     /* Light Grey */
-    background-color: var(--greyLightVery);
+    background-color: var(--greyLight);
     color: var(--black);
     font-size: 12px;
 }
@@ -436,7 +433,7 @@ hr.newgridhrline {
 
 #st_surface8_lb {
     /* Grey */
-    background-color: var(--greyLight);
+    background-color: var(--grey);
     color: var(--black);
     font-size: 12px;
 }
@@ -1060,15 +1057,16 @@ textarea {
 
 #modal-save2-content {
     background-color: var(--black);
-    width: 330px;
-    height: 450px;
+    width: 360px;
+    height: 550px;
     margin: 0 auto;
-    margin-top: 160px;
+    margin-top: 100px;
     border-radius: 20px;
 }
 
 #modal-save2-solution {
-    padding-left: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
     padding-top: 10px;
 }
 
@@ -1082,7 +1080,7 @@ textarea {
 }
 
 #save2texttitle {
-    width: 330px;
+    width: 360px;
     height: 30px;
     text-align: center;
     background: var(--greyLight);
@@ -1112,7 +1110,8 @@ h4 {
     color: var(--white);
 }
 
-.solcheck {
+.solcheck,
+.solcheck_or {
     vertical-align: middle;
 }
 
@@ -1284,7 +1283,9 @@ input[type=number] {
 #firstcell_column_lb,
 #sudokusize_lb,
 #ignore_pencilmarks_lb,
-#theme_mode_lb {
+#theme_mode_lb,
+#custom_color_lb,
+#save_settings_lb {
     color: var(--white);
 }
 
@@ -1323,4 +1324,34 @@ a:active {
 
 #title {
     color: var(--white);
+}
+
+#puzzletitle,
+#puzzleauthor,
+#puzzlesource,
+#solution_check {
+    color: var(--white);
+}
+
+table,
+td,
+tr {
+    border-collapse: collapse;
+    border: 1px solid var(--white);
+    padding: 1px;
+}
+
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#sol_or_lb,
+#sol_and_lb {
+    font-weight: bold;
+}
+
+sup {
+    line-height: 0;
+    vertical-align: center;
 }

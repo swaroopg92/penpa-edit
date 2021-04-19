@@ -2,19 +2,23 @@
 <html>
 
 <head>
-    <title>Penpa</title>
+    <title>Penpa+</title>
+    <link rel="shortcut icon" href="./css/images/logo.png" />
     <meta charset="utf-8" />
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <!-- STYLES -->
     <link href="./css/light_theme.css" rel="stylesheet" type="text/css" id="color_theme">
     <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
+    <link href="./css/spectrum.css" rel="stylesheet" type="text/css">
     <!-- SCRIPTS -->
     <!-- libs -->
+    <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="./js/libs/CanvasRenderingContext2D.ext.js"></script>
     <script type="text/javascript" src="./js/libs/encoding.js"></script>
     <script type="text/javascript" src="./js/libs/vanillaSelectBox.js"></script>
     <script type="text/javascript" src="./js/libs/zlib.js"></script>
+    <script type="text/javascript" src="./js/libs/spectrum.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- rest -->
     <script type="text/javascript" src="./js/main.js"></script>
@@ -318,7 +322,7 @@
                             <ul id="mode_symbolul5">
                                 <li><span id="ms_angleloop">Angle Loop</span></li>
                                 <li><span id="ms_firefly">Firefly</span></li>
-                                <li><span id="ms_sun_moon">Sun & Moon</span></li>
+                                <li><span id="ms_sun_moon">☼ 🌙 💡</span></li>
                                 <li><span id="ms_pencils">Pencils</span></li>
                                 <li><span id="ms_slovak">Slovak Sums</span></li>
                                 <li><span id="ms_arc">Arc</span></li>
@@ -410,30 +414,31 @@
                     <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
+                    <!-- Adding superscript was affecting the color selection as it did not had id, so defined new id and followed same structure as parent. Its important to have only two characters at the end after _ because of the way, window_click is setup in main.js for stylemode_check-->
                     <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
-                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG</label>
+                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG<sup id="st_surface1_sp">1</sup></label>
                     <input type="radio" name="style_surface" value="8" id="st_surface8">
-                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR</label>
+                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR<sup id="st_surface8_sp">2</sup></label>
                     <input type="radio" name="style_surface" value="3" id="st_surface3">
-                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG</label>
+                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG<sup id="st_surface3_sp">3</sup></label>
                     <input type="radio" name="style_surface" value="4" id="st_surface4">
-                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL</label>
+                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
                     <input type="radio" name="style_surface" value="2" id="st_surface2">
-                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR</label>
+                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
                     <input type="radio" name="style_surface" value="5" id="st_surface5">
-                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL</label>
+                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
                     <input type="radio" name="style_surface" value="6" id="st_surface6">
-                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE</label>
+                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE<sup id="st_surface6_sp">7</sup></label>
                     <input type="radio" name="style_surface" value="7" id="st_surface7">
-                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE</label>
+                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE<sup id="st_surface7_sp">8</sup></label>
                     <input type="radio" name="style_surface" value="9" id="st_surface9">
-                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI</label>
+                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI<sup id="st_surface9_sp">9</sup></label>
                     <input type="radio" name="style_surface" value="10" id="st_surface10">
-                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR</label>
+                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR<sup id="st_surface10_sp">0</sup></label>
                     <input type="radio" name="style_surface" value="11" id="st_surface11">
-                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU</label>
+                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU<sup id="st_surface11_sp">11</sup></label>
                     <input type="radio" name="style_surface" value="12" id="st_surface12">
-                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR</label>
+                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR<sup id="st_surface12_sp">12</sup></label>
                 </span>
                 <span id="style_line" style="display:none;">
                     <input type="radio" name="style_line" value="3" id="st_line3" checked="checked">
@@ -565,6 +570,9 @@
                     <input type="radio" name="style_sudoku" value="10" id="st_sudoku10">
                     <label for="st_sudoku10" class="labelL" id="st_sudoku10_lb">R</label>
                 </span>
+                <span id="style_special" style="display:none;">
+                    <input type="text" name="style_special" id="colorpicker_special" />
+                </span>
             </div>
         </div>
     </header>
@@ -607,11 +615,11 @@
             </div>
         </div>
         <p style="margin-top: 5px;"> <a id="channel" href="https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos" target="_blank">Youtube tutorials</a> & <a id="tutorials" href="https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md" target="_blank">List of tutorials</a></p>
-        <p>Any suggestions or improvements, send an email to <b>penpaplus@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a>.</p>
+        <p>Any suggestions or improvements, send an email to <b>penpaplus@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a> or join discussions in #penpa-plus channel in the Discord Server <a href="https://discord.gg/BbN89j5" target="_blank">here</a>.</p>
         <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
         <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
             Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.25.5, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.25.11, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -922,15 +930,28 @@
             </div>
             <div id="modal-save2-solution">
                 <h3 id="save3texttitle">Solution will check only following:</h3>
-                <h5 id="answerwarning">*Default (none selected) it checks for all</h5>
+                <h5 id="answerwarning">*Default (none selected) it checks for all. Choose either AND or OR column, if both are selected, AND will be given preference.</h5>
                 <div class="nb_button">
-                    <table id="answersetting">
+                    <table id="answersetting" class="center">
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_and_lb">AND</label></span>
+                            </td>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_or_lb">OR</label></span>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <span id="div_all"><label class="solutiontext" id="sol_surface_lb">Shading - Dark Grey, Black: </label></span>
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_surface" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_surface" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -940,6 +961,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_number" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_number" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -947,6 +971,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopline" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_loopline" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -956,6 +983,17 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopedge" class="solcheck">
                             </td>
+                            <td rowspan="2">
+                                <input type="checkbox" name="solution_or" id="sol_or_loopedge" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_ignoreborder_lb">Ignore Edges on Grid Border / Givens: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_ignoreborder" class="solcheck">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -963,6 +1001,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_wall" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_wall" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -972,6 +1013,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_square" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_square" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -979,6 +1023,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_circle" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_circle" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -988,6 +1035,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_tri" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_tri" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -995,6 +1045,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_arrow" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_arrow" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -1004,6 +1057,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_math" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_math" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1011,6 +1067,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_battleship" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_battleship" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -1020,6 +1079,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_tent" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_tent" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1027,6 +1089,20 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_star" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_star" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_akari_lb">Shape - Special 2 - Lightbulb - Option 3: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_akari" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_akari" class="solcheck_or">
                             </td>
                         </tr>
                     </table>
@@ -1036,7 +1112,7 @@
             </div>
             <div id="modal-save2-pp" style="display:none;">
                 <h5 id="save5texttitle">Header</h5>
-                <textarea rows="1" cols="50" id="savetextarea_pp"></textarea>
+                <textarea rows="1" cols="50" placeholder="e.g. classicsudoku or cs" id="savetextarea_pp"></textarea>
                 <div class="nb_button">
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
@@ -1095,10 +1171,23 @@
                 <label for="light_mode" class="label" id="light_mode_lb">LIGHT</label>
                 <input type="radio" name="theme_mode" value="2" id="dark_mode">
                 <label for="dark_mode" class="label" id="dark_mode_lb">DARK</label>
+                <br>
+                <h4 id="div_all"><label class="label_settings" id="custom_color_lb">Custom Colors (Beta): </label></h4>
+                <input type="radio" name="custom_color" value="1" id="custom_color_yes">
+                <label for="custom_color" class="label" id="custom_color_yes_lb">Yes</label>
+                <input type="radio" name="custom_color" value="2" id="custom_color_no" checked="checked">
+                <label for="custom_color" class="label" id="custom_color_no_lb">No</label>
+                <br>
+                <h4 id="div_all"><label class="label_settings" id="save_settings_lb">Save Settings:
+                        <br>
+                        Theme, Tab, Reload, Gridtype</label></h4>
+                <input type="radio" name="save_settings" value="1" id="save_settings_yes">
+                <label for="save_settings" class="label" id="save_settings_yes_lb">Yes</label>
+                <input type="radio" name="save_settings" value="2" id="save_settings_no" checked="checked">
+                <label for="save_settings" class="label" id="save_settings_no_lb">No</label>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="./js/libs/easytimer.min.js"></script>
     <script type="text/javascript" src="./js/timer.js"></script>
 </body>

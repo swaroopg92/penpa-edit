@@ -1,5 +1,37 @@
 ## History
-* 2021/02/21 ver2.25.5
+* 2021/04/08 ver2.25.11
+	* Cookies Feature - User can now save Grid Type, Tab Settings, Theme and Reload button status locally by clicking Save Settings: YES in the Settings Button. When penpa loads, it will use the User preferences. 
+	* Number shortcuts to switch between different styles for Surface mode.
+	* Improvement to multisolution feature to detect changes in the grid.
+	* Improved Freeline submode answer checking.
+	* Improved switching between Surface and Sudoku mode. Sudoku mode now remembers the last visited valid cell in the surface mode.
+* 2021/04/08 ver2.25.10
+	* Multiple solution feature.
+	* Added cookies to store user preference regarding reload button, theme and tab_settings.
+	* Fixed undo bug for special mode.
+	* Added Thermo and Arrow submodes to the tab settings.
+	* Fixed bug of Handling null Thermo and Arrow arrays.
+	* Updated Readme.
+* 2021/03/27 ver2.25.9
+	* Improved composite modes linex and edgex. Right click and drag for crosses (x).
+	* Undo/Redo buttons greyed in Dark Mode.
+	* Added shortcut/tab Icon (favicon).
+	* Fixed a bug for gmpuzzle output from Sudoku board.
+	* Fill sudoku arrowsums with white space.
+* 2021/03/20 ver2.25.8
+	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
+	* Automatic closing of window after generating URL with answer check / gmpuzzle output text.
+	* Bug fixed for Transform button for Add Top/Bottom for Side sub-mode (i.e. NumberS elements).
+	* Updated Readme.
+* 2021/03/17 ver2.25.7
+	* Warning message for URL too long
+	* Fixed label color display in Surface Mode for GR abd LG.
+	* Initializing GMPuzzle Theme
+* 2021/02/28 ver2.25.6
+	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
+	* Added light bulb to solution check option.
+	* Added Ignore Edges option to Solution Check (useful for araf, pentominous type of puzzles).
+* 2021/02/26 ver2.25.5
 	* Added 4x4 sudoku support (for kids in the school)
 	* Cross Helper feature added to Yajilin Composite Mode (Right click on Edges)
 	* Settings button, Dark Theme

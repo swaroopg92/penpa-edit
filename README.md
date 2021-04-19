@@ -8,6 +8,9 @@ If the message "Invalid address" is displayed on a supported browser, try cleari
 
 Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
 
+## Sample Preview of the possibilities of this tool
+![Sample of Objects](./images/sample1.png "Sample of Options")
+
 ## Compatible browsers
 * Google Chrome
 * Safari
@@ -31,6 +34,9 @@ Depending on the browser you can update the page without using the cache with "C
 	* V - Shading (Surface Mode)
 	* SHIFT - For Temporary Corner Submode
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
+	* DEL - To delete all the contents of the cell
+	* SPACEBAR - To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
+	* Drag the mouse pressing left click / drag your finger holding down on Mobile or Ipad for multiple cell selection
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -41,6 +47,8 @@ Depending on the browser you can update the page without using the cache with "C
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
 * V: Visibility Button. Users can now choose if they dont want the solution visible in the "Problem" mode. Default is "ON". In "Solution" mode everything will be visible.
 * R: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
+* Border: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
+* Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
 
 ## Current functions
 
@@ -70,6 +78,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Diagonal /
 	* Skyscraper/Little Killer
 	* Sandwich
+	* Sizes 4x4, 6x6, 8x8, 9x9 (default)
 * Kakuro
 	* Rows
 	* Columns
@@ -78,7 +87,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
 * In Dark grey mode only, click twice to get a green square.
 * Light grey is used when hiding grey letters and symbols.
-* Right click to enter the green square.
+* Irrespective of any Style selected, Right click to enter the green square. This feature is to provide a quick access to secondary color (fixed to green currently)
 
 ### Line
 * Normal: A line connecting the center of the square to the horizontal and vertical. (Masyu, Hashi, Palindrome Sudoku, etc.)
@@ -104,19 +113,19 @@ Depending on the browser you can update the page without using the cache with "C
 * Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. Some other special symbols are allowed through Panel: ON mode. It also allows custom symbols in the "text" tab (checkout next section for more details)
 * L, M, S: Large, medium or small size numbers.
 * Candidates: Candidate numbers for Latin Square such as Sudoku. Compatible with 1-9. onoff input.
-* 1/4: Small characters at the four corners. (Kakuro, Hairyrin etc.)
-* Side: Small characters at the middle of the four sides. (Compass etc.)
+* Corners: Small characters at the four corners. (Kakuro, Hairyrin etc.)
+* Sides: Small characters at the middle of the four sides. (Compass etc.)
 * Tapa: Characters for Tapa. Up to 4 characters.
 * Arrow: Characters with arrows. Click and hold the mouse and move in the direction of the arrow to draw the arrow. (Yajilin, Castle Wall etc.)
 * Long: Long sentence. It is possible to create a list such as seekers.
 * Killer: Small characters at the top left corner. (Killer Sudou)
 * White, black and red circles have a circle on the back of the numbers.
 * White BG: Draw a white circle behind the numbers. Useful when you can't see the numbers because they are hidden behind the lines.
-* When the boundary input is turned on, the character is placed on the side/vertex.
+* When the BORDER input is turned on, the character is placed on the side/vertex.
 
 #### Any Unicode Symbol
 * Select "Number" mode.
-* Then select "Long" or "L" or "M" submode. (Preferrable is Long submode, although it should also work in some other Number submodes (i.e. 1/4, side, arrow, L, M, S)).
+* Then select "Long" or "L" or "M" submode. (Preferrable is Long submode, although it should also work in some other Number submodes (i.e. corner, side, arrow, S)).
 * Panel: ON.
 * Select "Text" tab in the Panel.
 * One can copy unicode symbol (supports most (not all) of them although rendering might be different based on browser) from the websites https://unicode-table.com/en/ or https://www.alt-codes.net/ and paste in the textbox available. (You can click on the symbol/shape in the website, it will allow copying). Based on experience, unicode from https://charbase.com/block has a better chance of getting rendered on different devices as compared to other unicode websites.
@@ -127,7 +136,7 @@ Depending on the browser you can update the page without using the cache with "C
 ### Shape
 * Numerous symbols. You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
 * Depending on the style, you can select whether to place the figure on the front side or the back side of the line.
-* When the boundary input is turned ON, the character is placed on the side/vertex.	  
+* When the BORDER input is turned ON, the character is placed on the side/vertex.
 
 ### Special
 * A special symbol that spans multiple squares. (Arrow Sudoku, Thermo Sudoku, moving arrows, square area)
@@ -163,14 +172,15 @@ Depending on the browser you can update the page without using the cache with "C
 * Loop:
 	* Line or x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
 	* Line or OX: Line and 〇× in square (Country road)
-	* Edge, x, in/out: Edge, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
-	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot
+	* Edge x: Edge and auxiliary cross marks (x) on edges. (Right click for x)
+	* Edge IO: Edge, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
+	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot in center, cross (x) on edges
 	* Hashi: Draw the line again to make a double line
 * Area / Field:
 	* Edge/Aux line: An auxiliary line that represents the connection between the edge and the square
 * Object:
 	* Battleships: Click twice to change the shape according to the condition of the surrounding ships.
-	* Star Battle: Left click - star, Right click - x
+	* Star Battle: Left click - star, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
 	* Tents: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 	* Magnets: +, - and black square
 	* Arrows: Left click drag to draw an arrow in one of the eight directions in a square.
@@ -192,6 +202,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* V - Shading (Surface Mode) - For coloring the cells (12 color choices)
 	* SHIFT - For Temporary Corner Submode
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
+	* SPACEBAR - To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
 * 6 Color choices for User Solving
 	* Answer check only looks for Green/Blue/Red color if enabled
 * Normal, Corner and Centre submodes are also available as part of Tab Selector. Please checkout "Tab selector" section for more details.
@@ -239,28 +250,43 @@ Depending on the browser you can update the page without using the cache with "C
 * URL for editing
 1. Complete creating puzzle in Edit mode "Problem".
 2. If you need to save your puzzle creation progress and come back later to edit then click on this button
+3. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
 
 * URL for solving
 1. Complete creating puzzle in Edit mode "Problem".
 2. If you want to share your puzzle for others to solve then click on this button
+3. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
 
 * URL for solving with Solution
 1. Complete creating puzzle in Edit mode "Problem".
-2. Select Edit mode "Solution" and complete the solution. (Check part of Step 3 before doing this step)
-3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new small window will appear.
-	i. Please note that the solution will check only for a certain elements with a certain color and style.
-	ii. The small window that appeared will show you all the possibilities. Select the relevant options. If no option is selected, then it will check for all the elements.
-	iii. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
-4. Click on "Generate URL with answer check"
-5. Click anywhere on the screen outside the small window to close it.
+2. Select Edit mode "Solution" and complete the solution. The solution must be entered using certain shape or color which Penpa+ will detect. Check the following image for guidance:
+![Use the mentioned color/shape for implementing solution](./images/multisolution.PNG "Solution checking settings")
+3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new window will appear.
+	1. Please note that the solution will check only for a certain elements with a certain color and style.
+	2. The new window that appeared will show you all the possibilities. Select the relevant options. There are two choices:
+		1. "AND" column - Solution will check for all the selected elements.
+		2. "OR" column - Solution will check if at least any one of the selected elements is completed.
+		3. If both "AND", "OR" column has some checkmarks then Penpa+ will ignore the "OR" column and only consider "AND" column.
+		4. If no option is selected, then it will check for all the elements.
+	3. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
+4. Click on "Generate URL with answer check".
+5. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Clicking on the "URL_short" button automatically copies the URL, look at the Options section below for more detailed description.
 6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode and a text "Automatic answer checking is enabled" is displayed.
+
+* URL for contests
+1. This is almost like URL for solving with following exceptions:
+	1. No Undo/Redo feature.
+	2. No I/O Sudoku Option.
+	3. No Share Option.
+	4. Some additional display information to help the solver.
+2. Useful for online contests (e.g. Logic Masters India - Puzzle Ramayan and Sudoku Mahabharat contests)
 
 * Options
 1. Copy: copies the URL to the clipboard
 2. Download: downloads a .txt file with the url
 3. Open: opens a new TAB with the same url
 4. URL_short:
-	1. First create an URL using one of the three methods described above.
+	1. First create an URL using one of the four methods described above.
 	2. Click on "URL_short" (It will open a new TAB, URL is automatically copied to your clipboard).
 	3. Paste the URL (CTRL + V on windows).
 	4. Click "Shorten"
@@ -272,24 +298,28 @@ Depending on the browser you can update the page without using the cache with "C
 	* Sudoku
 		* classicsudoku (cs)
 		* thermosudoku (ts)
+			* Special -> Thermo
 		* arrowsudoku (as)
+			* Special -> Sudoku Arrow
 		* evenoddsudoku (eos)
+			* [Panel: ON] Use Shape mode -> Shape/Circle submode (1st option in the dropdown) and Shape/Square submode (2nd option in the dropdown)
 		* consecutivepairssudoku (cps)
+			* [Panel: ON] Use Shape mode -> Shape/Circle submode -> XS size (1st option in the dropdown). Set BORDER: ON to put circles on edges.
 		* tightfitsudoku (tfs)
 			* (Panel: ON) For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape in the Panel
-			* For numbers: Use "1/4" submode to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
+			* For numbers: Use "Corner" submode (6th option) to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
 	* Number Placement
 		* tomtom (tt)
 			* Use +, -, x, / from keyboard for mathematical operator
-			* For numbers: Number mode -> 1/4 submode
+			* For numbers: Number mode -> "Corner" submode (6th option)
 		* skyscrapers (ss)
 			* Ensure 1 white row/column on top/botton and left/right - e.g. If your puzzle is 7x7 size, then set the Rows = 9, Columns = 9, White Space: Over = 1, Under = 1, Left = 1, Right = 1 in the New Grid settings
 		* kakuro
 			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape in the Panel
-			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
+			* For numbers: Use "Corner" submode (6th option) and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
 		* doublekakuro (dk)
 			* (Panel: ON) For Slash/Split: Use Shape Mode -> Special 1 Submode -> "kakuro" from dropdown list -> 1st and 2nd Shape in the Panel
-			* For numbers: Use "1/4" submode and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
+			* For numbers: Use "Corner" submode (6th option) and "W" style (white) to enter in top right or bottom left corner of the split cell, Normal submode for numbers in the cells without split (Green or Blue color)
 			* For 2x2 regions: Use Surface mode and shade the upper-left corner of a 2x2 region with grey color and remaining 3 cells with green color.
 			* Solution: Use Number mode --> Normal submode. Fill in all the white and grey shaded cells with appropriate numbers and ignore the green shaded cells. This is similar to as it's described in the document. They grey shaded cell contains the number that belongs to corresponding 2x2 region.
 	* Object Placement
@@ -354,7 +384,7 @@ Depending on the browser you can update the page without using the cache with "C
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Green numbering, Green loop, Green edge).
 	3. click on Share -> Extra Options -> puzzle_output_file.
 	4. In the "Header" area, type the puzzle type you are creating.
-	5. click on "GMPUzzle output" button and then click anywhere outside to close this window.
+	5. click on "GMPUzzle output" button.
 	6. Specify your required filename and click "Download" button.
 		* Template: [Constructor Initials]-[SubmissionID]-[Genre]-[ShortTitle].txt
 		* Example: SG-012-kurottu-pairs.txt
@@ -366,7 +396,7 @@ Depending on the browser you can update the page without using the cache with "C
 ### I/O Sudoku
 * This function is to allow the flexibility of Importing and Exporting a Sudoku. It supports Import and Export to https://www.sudokuwiki.org/sudoku.htm solver.
 	* Import Sudoku
-		* Type the input string in the text area which contains digits (0-9) where 0 or (.) is used for an empty cell. No spaces in the string. The number of digits entered should be a perfect square. Basically (1,4,9,16,25,36,49,64,91) is allowed. That is grid size of 1x1 to 9x9.
+		* Type the input string in the text area which contains digits (0-9) where 0 or (.) is used for an empty cell. No spaces in the string. The number of digits entered should be a perfect square. Basically (1,4,9,16,25,36,49,64,81) is allowed. That is grid size of 1x1 to 9x9.
 		* If its default sudoku grid created from the New Grid options then Penpa automatically knows the position of the Sudoku grid.
 		* User can also select a square portion of the grid and import the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.
 	* Export Sudoku
@@ -374,6 +404,17 @@ Depending on the browser you can update the page without using the cache with "C
 		* User can also select a square portion of the grid and export the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.
 		* Ignore Pencil Marks - Sometimes we want to export the Sudoku grid in the middle of the solve. Checkmark this option and then export to ignore the Corner and Centre digits used while solving.
 		* Pressing Export button also automatically copies the output string to the clipboard.
+
+### Load
+* This function is a solution for "URL too long Error".
+* If the puzzle is too big and contains a lot of elements, it generates a big URL and the size is limited by the internet. In order to address this issue, one can use this Load button option to copy the big URL and click "Load URL" button.
+* Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
+
+### Settings
+* This function is to provide Penpa-site general settings like theme, custom color etc.
+	* Display Theme: It currently offers only two options (light and dark).
+	* Custom Colors: To enable custom colors in certain modes.
+	* Save Settings: Selecting yes, will save the theme, tab settings, reload button status, gridtype in the browser cookies. When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.
