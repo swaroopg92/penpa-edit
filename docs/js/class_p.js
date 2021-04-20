@@ -8331,9 +8331,12 @@ class Puzzle {
                         // check which style cage exist, if same style then delete or else do nothing
                         let top_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][0] + this.nx0 * this.ny0);
                         let top_right = top_left + 1;
-                        key = (top_left.toString() + "," + top_right.toString());
+                        let bottom_left = top_left + 2;
+                        let key1 = (top_left.toString() + "," + top_right.toString());
+                        let key2 = (top_left.toString() + "," + bottom_left.toString());
 
-                        if (this[this.mode.qa][array][key] === line_style) {
+                        // caveat - if both of these lines are manually removed from the cage then it won't detect the cage.
+                        if (this[this.mode.qa][array][key1] === line_style || this[this.mode.qa][array][key2] === line_style) {
 
                             // undo redo group counter
                             this.undoredo_counter = this.undoredo_counter + 1;
@@ -8382,11 +8385,15 @@ class Puzzle {
                                         }
                                     } else {
                                         key = (top_left.toString() + "," + bottom_left.toString());
-                                        this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                        }
                                     }
                                 } else {
                                     key = (top_left.toString() + "," + bottom_left.toString());
-                                    this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                    if (this[this.mode.qa][array][key] === line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                    }
                                 }
 
                                 // check if top cell is shared
@@ -8408,11 +8415,15 @@ class Puzzle {
                                         }
                                     } else {
                                         key = (top_left.toString() + "," + top_right.toString());
-                                        this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                        }
                                     }
                                 } else {
                                     key = (top_left.toString() + "," + top_right.toString());
-                                    this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                    if (this[this.mode.qa][array][key] === line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                    }
                                 }
 
                                 // check if right cell is shared
@@ -8434,11 +8445,15 @@ class Puzzle {
                                         }
                                     } else {
                                         key = (top_right.toString() + "," + bottom_right.toString());
-                                        this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                        }
                                     }
                                 } else {
                                     key = (top_right.toString() + "," + bottom_right.toString());
-                                    this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                    if (this[this.mode.qa][array][key] === line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                    }
                                 }
 
                                 // check if bottom cell is shared
@@ -8460,11 +8475,15 @@ class Puzzle {
                                         }
                                     } else {
                                         key = (bottom_left.toString() + "," + bottom_right.toString());
-                                        this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                        }
                                     }
                                 } else {
                                     key = (bottom_left.toString() + "," + bottom_right.toString());
-                                    this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                    if (this[this.mode.qa][array][key] === line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                    }
                                 }
                             }
 
