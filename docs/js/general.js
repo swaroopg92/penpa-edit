@@ -1372,6 +1372,8 @@ function load(urlParam) {
                 }
 
                 // Solution button
+                document.getElementById("pu_a_label").style.display = "inline-block";
+                document.getElementById("pu_a_label").style.marginLeft = "6px";
                 document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             }
@@ -1461,6 +1463,8 @@ function load(urlParam) {
             }
 
             // Solution button
+            document.getElementById("pu_a_label").style.display = "inline-block";
+            document.getElementById("pu_a_label").style.marginLeft = "6px";
             document.getElementById("pu_a_label").innerHTML = "Check Solution";
             document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
         }
@@ -1976,7 +1980,9 @@ function set_solvemode() {
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
+    document.getElementById("edit_txt").style.display = "none";
     document.getElementById("pu_q_label").style.display = "none";
+    document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
     document.getElementById("mo_cage_lb").style.display = "none";
@@ -2008,8 +2014,6 @@ function set_solvemode() {
 function set_contestmode() {
     // Disable Share, Undo/Redo buttons, IO sudoku
     document.getElementById("title").innerHTML = "Contest mode"
-    document.getElementById("edit_txt").style.display = "none";
-    document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("savetext").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
