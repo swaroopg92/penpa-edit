@@ -8494,14 +8494,13 @@ class Puzzle {
                             if (document.getElementById("custom_color_yes").checked) {
                                 this[this.mode.qa + "_col"][arraykill][cageexist_loc] = [];
                             }
-
-                            // reset variables
-                            this.cageselection = [];
-                            this.selection = [];
                             this.drawing_mode = draw_mode;
                         }
                     }
                     // length > 1 do not do anything
+                    // reset variables
+                    this.cageselection = [];
+                    this.selection = [];
                 }
 
                 // reset variables
@@ -8511,6 +8510,9 @@ class Puzzle {
                 this.redraw();
 
             } else if (this.mouse_mode === "out") {
+                // reset variables
+                this.selection = [];
+
                 this.drawing = false;
             }
         } else if (document.getElementById('sub_free').checked) {

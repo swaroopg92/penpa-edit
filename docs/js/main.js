@@ -783,8 +783,7 @@ onload = function() {
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) ||
-                ((pu.mode[pu.mode.qa].edit_mode === "cage") && (document.getElementById("sub_cages").checked))) {
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")))) {
                 type = pu.type;
                 pu.type = [0];
             }
@@ -804,8 +803,7 @@ onload = function() {
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) ||
-                ((pu.mode[pu.mode.qa].edit_mode === "cage") && (document.getElementById("sub_cages").checked))) {
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")))) {
                 pu.type = type;
             }
         }

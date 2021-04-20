@@ -252,7 +252,11 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "cage":
-                type = [4];
+                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "1") {
+                    type = [0];
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                    type = [4];
+                }
                 break;
             case "special":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
