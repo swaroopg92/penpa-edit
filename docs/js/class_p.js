@@ -78,7 +78,6 @@ class Puzzle {
         this.mouse_click = 0; // 0 for left, 2 for right
         this.selection = [];
         this.cageselection = [];
-        this.killercages = [];
         this.last = -1;
         this.lastx = -1;
         this.lasty = -1;
@@ -160,10 +159,11 @@ class Puzzle {
             ["\"squareframe\"", "z0"],
             ["\"polygon\"", "z5"],
             ["\"deletelineE\"", "z4"],
+            ["\"killercages\"", "z6"],
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 9];
+        this.version = [2, 25, 12];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -192,6 +192,7 @@ class Puzzle {
             this[i].wall = {};
             this[i].cage = {};
             this[i].deletelineE = {};
+            this[i].killercages = [];
         }
 
         // Object and Array initialization for custom colors
@@ -215,6 +216,7 @@ class Puzzle {
             this[i].wall = {};
             this[i].cage = {};
             this[i].deletelineE = {};
+            this[i].killercages = [];
         }
 
         this.frame = {};
@@ -242,6 +244,7 @@ class Puzzle {
         this[this.mode.qa].wall = {};
         this[this.mode.qa].cage = {};
         this[this.mode.qa].deletelineE = {};
+        this[this.mode.qa].killercages = [];
 
         // Object and Array initialization for custom colors
         this[this.mode.qa + "_col"] = {};
@@ -263,6 +266,7 @@ class Puzzle {
         this[this.mode.qa + "_col"].wall = {};
         this[this.mode.qa + "_col"].cage = {};
         this[this.mode.qa + "_col"].deletelineE = {};
+        this[this.mode.qa + "_col"].killercages = [];
     }
 
     reset_arr() {
@@ -2697,9 +2701,9 @@ class Puzzle {
         let solution_clone;
         // if solution exist then copy the solution as well
         if (this.solution) {
-            if (this.multisolution){
+            if (this.multisolution) {
                 solution_clone = JSON.stringify(this.solution);
-            } else{
+            } else {
                 solution_clone = this.solution;
             }
             u8text = new TextEncoder().encode(solution_clone);
@@ -6295,6 +6299,13 @@ class Puzzle {
                                 this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
                             }
                         }
+                    } else if (a[0] === "killercages") {
+                        if (this[pu_mode][a[0]].length > 0) {
+                            this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode, a[4]]);
+                            if (a_col) {
+                                this.pu_q_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col", a_col[4]]);
+                            }
+                        }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
@@ -6339,7 +6350,11 @@ class Puzzle {
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
                             if (a_col) {
-                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                                if (a_col[2]) {
+                                    this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                                } else {
+                                    this[pu_mode + "_col"][a_col[0]][a_col[1]] = null;
+                                }
                             }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
@@ -6381,6 +6396,13 @@ class Puzzle {
                             this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
                             if (a_col) {
                                 this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
+                            }
+                        }
+                    } else if (a[0] === "killercages") {
+                        if (this[pu_mode][a[0]].length > 0) {
+                            this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode, a[4]]);
+                            if (a_col) {
+                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col", a_col[4]]);
                             }
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
@@ -6430,7 +6452,11 @@ class Puzzle {
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
                             if (a_col) {
-                                this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                                if (a_col[2]) {
+                                    this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                                } else {
+                                    this[pu_mode + "_col"][a_col[0]][a_col[1]] = null;
+                                }
                             }
                         } else {
                             delete this[pu_mode][a[0]][a[1]];
@@ -6479,6 +6505,13 @@ class Puzzle {
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
                             this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
+                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
+                        }
+                    } else if (a[0] === "killercages") {
+                        this.pu_q.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
+                        this[pu_mode][a[0]].push(a[2]);
+                        if (a_col) {
+                            this.pu_q_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
                             this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
@@ -6569,6 +6602,13 @@ class Puzzle {
                             this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
                             this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
                         }
+                    } else if (a[0] === "killercages") {
+                        this.pu_a.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
+                        this[pu_mode][a[0]].push(a[2]);
+                        if (a_col) {
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
+                        }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
                         for (var i in a[1]) {
                             if (a[1][i] != a[2]) {
@@ -6636,6 +6676,9 @@ class Puzzle {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
                 this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
+            } else if (arr === "killercages") { // killer cages always have groupcounter passed
+                this.pu_q.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+                this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
             } else if (arr === "move") {
                 this.pu_q.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
                 this.pu_q_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
@@ -6643,14 +6686,18 @@ class Puzzle {
                 if (this.pu_q[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) { // Currently only Thermo Supported, keep updating as I add other support
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage")) { // Update this as more support for custom colors are added
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         }
                     } else {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage")) { // Update this as more support for custom colors are added
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
@@ -6672,6 +6719,9 @@ class Puzzle {
             if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
                 this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
+            } else if (arr === "killercages") {
+                this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+                this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
             } else if (arr === "move") {
                 this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
                 this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
@@ -6687,14 +6737,18 @@ class Puzzle {
                 if (this.pu_a[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage")) { // Update this as more support for custom colors are added
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         }
                     } else {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") && (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe")) {
+                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage")) { // Update this as more support for custom colors are added
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
@@ -7557,10 +7611,14 @@ class Puzzle {
     }
 
     //line,lineE,cage Drawing
-    re_line(array, num, line_style) {
+    re_line(array, num, line_style, group_counter = 0) {
         if ((this[this.mode.qa][array][num] === line_style) || (this["pu_q"]["deletelineE"][num] === line_style)) {
             if (this.drawing_mode === 100) { // single line, edge
-                this.record(array, num);
+                if (group_counter > 0) { // for killer
+                    this.record(array, num, group_counter);
+                } else {
+                    this.record(array, num);
+                }
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
                     if (document.getElementById("custom_color_yes").checked) {
@@ -7572,7 +7630,9 @@ class Puzzle {
                         delete this[this.mode.qa + "_col"][array][num];
                     }
                 }
-                this.drawing_mode = 0;
+                if (group_counter === 0) { //group_counter > 0 belongs to automatic killer cage
+                    this.drawing_mode = 0;
+                }
             } else if (this.drawing_mode === 0) { // to draw in a stretch
                 this.record(array, num);
                 if (array === "deletelineE") {
@@ -7589,20 +7649,25 @@ class Puzzle {
             }
         } else {
             if (this.drawing_mode === 100) { // single line, edge
-                this.record(array, num);
+                if (group_counter > 0) {
+                    this.record(array, num, group_counter);
+                } else {
+                    this.record(array, num);
+                }
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
                     if (document.getElementById("custom_color_yes").checked) {
                         this["pu_q_col"][array][num] = this.get_customcolor();
                     }
                 } else {
-                    console.log('enters drawing line', array, num, line_style);
                     this[this.mode.qa][array][num] = line_style;
                     if (document.getElementById("custom_color_yes").checked) {
                         this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
-                this.drawing_mode = line_style;
+                if (group_counter === 0) { //group_counter > 0 belongs to automatic killer cage
+                    this.drawing_mode = line_style;
+                }
             } else if (this.drawing_mode === line_style) { // to draw in a stretch
                 this.record(array, num);
                 if (array === "deletelineE") {
@@ -8014,67 +8079,75 @@ class Puzzle {
                 if (num_index === -1) {
                     this.cageselection.push(num);
                 }
+                if (!this.selection.includes(num)) {
+                    this.selection.push(num);
+                }
+                this.redraw();
                 this.cursol = num;
             } else if (this.mouse_mode === "move") {
                 if (this.drawing) {
                     if (!this.cageselection.includes(num)) {
                         this.cageselection.push(num);
                     }
+                    if (!this.selection.includes(num)) {
+                        this.selection.push(num);
+                    }
+                    this.redraw();
                 } else {
                     this.cageselection = [];
                 }
             } else if (this.mouse_mode === "up") {
                 this.drawing = false;
                 let cageexist_status = false;
+                let array = "cage";
+                let arraykill = "killercages";
+                let grid_matrix = [];
                 let cageexist_loc;
-                // let killercages_cells = [].concat.apply([], this.killercages);
+                let key;
+
+                // Grid Size
+                let row_size = parseInt(document.getElementById("nb_size2").value);
+                let col_size = parseInt(document.getElementById("nb_size1").value);
+
+                // sort cage
+                let sortedcages = this.cageselection.sort((a, b) => a - b);
+
                 let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
-                console.log('before', this.cageselection, this.killercages, this.killercages.length);
 
                 // Find if any cell of the new cage already has a cage
-                for (let j = 0; j < this.killercages.length; j++) {
-                    let killercages_cells = [].concat.apply([], this.killercages[j]);
-                    for (let i = 0; i < this.cageselection.length; i++) {
-                        if (killercages_cells.includes(this.cageselection[i])) {
+                for (let j = 0; j < this[this.mode.qa][arraykill].length; j++) {
+                    let killercages_cells = [].concat.apply([], this[this.mode.qa][arraykill][j]);
+                    for (let i = 0; i < sortedcages.length; i++) {
+                        if (killercages_cells.includes(sortedcages[i])) {
                             cageexist_status = true;
                             cageexist_loc = j;
                             break;
                         }
                     }
-                    if (cageexist_status) {
+                    if (cageexist_status) { // to exit from outermost for loop
                         break;
                     }
                 }
-                console.log('cage exist status', cageexist_loc, cageexist_status)
-                if (!cageexist_status) {
-                    // if cage does not exist, then add to killer cages.
-                    this.killercages.push(this.cageselection.sort());
-                    let min_cell = Math.min(...this.cageselection);
-                    let max_cell = Math.max(...this.cageselection);
-                    let min_row = parseInt(min_cell / this.nx0) - 1;
-                    let max_row = parseInt(max_cell / this.nx0) - 1;
-                    let boundary_matrix = [];
-                    let grid_matrix = [];
-                    console.log(min_cell, max_cell, 'min_row', min_row, 'max_row', max_row);
 
-                    // Grid Size
-                    let row_size = document.getElementById("nb_size2").value;
-                    let col_size = document.getElementById("nb_size1").value;
+                if (!cageexist_status) {
+
+                    // undo redo group counter
+                    this.undoredo_counter = this.undoredo_counter + 1;
+
+                    // if cage does not exist, then add to killer cages.
+                    this.record(arraykill, -1, this.undoredo_counter);
+                    this[this.mode.qa][arraykill].push(sortedcages);
+                    // let min_cell = Math.min(...this.cageselection);
+                    // let max_cell = Math.max(...this.cageselection);
 
                     // cage cell locations
                     for (let i = 0; i < row_size; i++) {
                         grid_matrix[i] = new Array(parseInt(col_size)).fill(0);
                     }
-                    // for (let i = 0; i < this.cageselection.length; i++) {
-                    //     let col_num = (this.cageselection[i] % (this.nx0));
-                    //     let row_num = parseInt(this.cageselection[i] / this.nx0);
-                    //     console.log('cell', row_num, col_num);
-                    //     grid_matrix[row_num][col_num] = 1;
-                    // }
-
-                    // Find boundary cells in each row
-                    for (let i = 0; i < (max_row - min_row + 1); i++) {
-                        boundary_matrix[i] = new Array(parseInt(2)).fill(0);
+                    for (let i = 0; i < sortedcages.length; i++) {
+                        let col_num = (sortedcages[i] % (this.nx0)) - 2;
+                        let row_num = parseInt(sortedcages[i] / this.nx0) - 2;
+                        grid_matrix[row_num][col_num] = 1;
                     }
 
                     // remember drawing_mode
@@ -8082,68 +8155,351 @@ class Puzzle {
                     this.drawing_mode = 100;
 
                     // Find the corner coordinates of the cell
-                    for (let i = 0; i < this.cageselection.length; i++) {
-                        // let col_num = (this.cageselection[i] % (this.nx0));
-                        // let row_num = parseInt(this.cageselection[i] / this.nx0);
-                        // let tl = 4 * this.nx0 * this.ny0 + 8 * this.nx0 + 4 * (col_num - 1) + 4 * this.nx0 * (row_num) + 4 // top left
-                        // let corners = [tl, tl + 1, tl + 2, tl + 3];
-                        let top_left = 4 * (this.cageselection[i] + this.nx0 * this.ny0);
+                    for (let i = 0; i < sortedcages.length; i++) {
+                        let col_num = (sortedcages[i] % (this.nx0)) - 2;
+                        let row_num = parseInt(sortedcages[i] / this.nx0) - 2;
+
+                        // current cell
+                        let top_left = 4 * (sortedcages[i] + this.nx0 * this.ny0);
                         let top_right = top_left + 1;
                         let bottom_left = top_left + 2;
                         let bottom_right = top_left + 3;
-                        let corners = [top_left, top_left + 1, top_left + 2, top_left + 3];
-                        this.re_line("cage", (top_left.toString() + "," + top_right.toString()), line_style); // top line
-                        this.re_line("cage", (top_right.toString() + "," + bottom_right.toString()), line_style); // right line
-                        this.re_line("cage", (bottom_right.toString() + "," + bottom_left.toString()), line_style); // bottom line
-                        this.re_line("cage", (bottom_left.toString() + "," + top_left.toString()), line_style); // left line
-                        console.log(corners);
+
+                        // check if left cell is shared
+                        if (col_num !== 0) {
+                            if (grid_matrix[row_num][col_num - 1]) {
+
+                                // left shared cell
+                                let top_left_left = 4 * (sortedcages[i] - 1 + this.nx0 * this.ny0);
+                                let top_right_left = top_left_left + 1;
+                                let bottom_left_left = top_left_left + 2;
+                                let bottom_right_left = top_left_left + 3;
+
+                                if ((row_num !== 0) && (grid_matrix[row_num - 1][col_num - 1]) && (grid_matrix[row_num - 1][col_num])) {
+                                    // dont do anything
+                                } else {
+                                    key = (top_right_left.toString() + "," + top_left.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+
+                                if ((row_num !== row_size - 1) && (grid_matrix[row_num + 1][col_num - 1]) && (grid_matrix[row_num + 1][col_num])) {
+                                    // dont do anything
+                                } else {
+                                    key = (bottom_right_left.toString() + "," + bottom_left.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+                            } else {
+                                key = (top_left.toString() + "," + bottom_left.toString());
+                                if (this[this.mode.qa][array][key] !== line_style) {
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                }
+                            }
+                        } else {
+                            key = (top_left.toString() + "," + bottom_left.toString());
+                            if (this[this.mode.qa][array][key] !== line_style) {
+                                this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                            }
+                        }
+
+                        // check if top cell is shared
+                        if (row_num !== 0) {
+                            if (grid_matrix[row_num - 1][col_num]) {
+
+                                // top shared cell
+                                let top_left_top = 4 * (sortedcages[i] - this.nx0 + this.nx0 * this.ny0);
+                                let top_right_top = top_left_top + 1;
+                                let bottom_left_top = top_left_top + 2;
+                                let bottom_right_top = top_left_top + 3;
+
+                                if ((col_num !== 0) && (grid_matrix[row_num - 1][col_num - 1]) && (grid_matrix[row_num][col_num - 1])) {
+                                    // dont do anything
+                                } else {
+                                    key = (bottom_left_top.toString() + "," + top_left.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+
+                                if ((col_num !== col_size - 1) && (grid_matrix[row_num - 1][col_num + 1]) && (grid_matrix[row_num][col_num + 1])) {
+                                    // dont do anything
+                                } else {
+                                    key = (bottom_right_top.toString() + "," + top_right.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+                            } else {
+                                key = (top_left.toString() + "," + top_right.toString());
+                                if (this[this.mode.qa][array][key] !== line_style) {
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                }
+                            }
+                        } else {
+                            key = (top_left.toString() + "," + top_right.toString());
+                            if (this[this.mode.qa][array][key] !== line_style) {
+                                this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                            }
+                        }
+
+                        // check if right cell is shared
+                        if (col_num !== col_size - 1) {
+                            if (grid_matrix[row_num][col_num + 1]) {
+
+                                // top shared cell
+                                let top_left_right = 4 * (sortedcages[i] + 1 + this.nx0 * this.ny0);
+                                let top_right_right = top_left_right + 1;
+                                let bottom_left_right = top_left_right + 2;
+                                let bottom_right_right = top_left_right + 3;
+
+                                if ((row_num !== 0) && (grid_matrix[row_num - 1][col_num]) && (grid_matrix[row_num - 1][col_num + 1])) {
+                                    // dont do anything
+                                } else {
+                                    key = (top_right.toString() + "," + top_left_right.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+
+                                if ((row_num !== row_size - 1) && (grid_matrix[row_num + 1][col_num]) && (grid_matrix[row_num + 1][col_num + 1])) {
+                                    // dont do anything
+                                } else {
+                                    key = (bottom_right.toString() + "," + bottom_left_right.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+                            } else {
+                                key = (top_right.toString() + "," + bottom_right.toString());
+                                if (this[this.mode.qa][array][key] !== line_style) {
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                }
+                            }
+                        } else {
+                            key = (top_right.toString() + "," + bottom_right.toString());
+                            if (this[this.mode.qa][array][key] !== line_style) {
+                                this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                            }
+                        }
+
+                        // check if bottom cell is shared
+                        if (row_num !== row_size - 1) {
+                            if (grid_matrix[row_num + 1][col_num]) {
+
+                                // top shared cell
+                                let top_left_bottom = 4 * (sortedcages[i] + this.nx0 + this.nx0 * this.ny0);
+                                let top_right_bottom = top_left_bottom + 1;
+                                let bottom_left_bottom = top_left_bottom + 2;
+                                let bottom_right_bottom = top_left_bottom + 3;
+
+                                if ((col_num !== 0) && (grid_matrix[row_num][col_num - 1]) && (grid_matrix[row_num + 1][col_num - 1])) {
+                                    // dont do anything
+                                } else {
+                                    key = (bottom_left.toString() + "," + top_left_bottom.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+
+                                if ((col_num !== col_size - 1) && (grid_matrix[row_num][col_num + 1]) && (grid_matrix[row_num + 1][col_num + 1])) {
+                                    // dont do anything
+                                } else {
+                                    key = (bottom_right.toString() + "," + top_right_bottom.toString());
+                                    if (this[this.mode.qa][array][key] !== line_style) {
+                                        this.re_line(array, key, line_style, this.undoredo_counter);
+                                    }
+                                }
+                            } else {
+                                key = (bottom_left.toString() + "," + bottom_right.toString());
+                                if (this[this.mode.qa][array][key] !== line_style) {
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                }
+                            }
+                        } else {
+                            key = (bottom_left.toString() + "," + bottom_right.toString());
+                            if (this[this.mode.qa][array][key] !== line_style) {
+                                this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                            }
+                        }
                     }
 
                     // reset variables
                     this.cageselection = [];
+                    this.selection = [];
                     this.drawing_mode = draw_mode;
-                    console.log('after', this.cageselection, this.killercages);
-                    // Draw up cages
-                    this.redraw();
-
                 } else {
                     // length 1 then delete
-                    if (this.cageselection.length === 1) {
+                    if (sortedcages.length === 1) {
 
-                        // remember drawing_mode
-                        let draw_mode = this.drawing_mode;
-                        this.drawing_mode = 100;
+                        // check which style cage exist, if same style then delete or else do nothing
+                        let top_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][0] + this.nx0 * this.ny0);
+                        let top_right = top_left + 1;
+                        key = (top_left.toString() + "," + top_right.toString());
 
-                        for (let i = 0; i < this.killercages[cageexist_loc].length; i++) {
-                            let top_left = 4 * (this.killercages[cageexist_loc][i] + this.nx0 * this.ny0);
-                            let top_right = top_left + 1;
-                            let bottom_left = top_left + 2;
-                            let bottom_right = top_left + 3;
-                            let corners = [top_left, top_left + 1, top_left + 2, top_left + 3];
-                            this.re_line("cage", (top_left.toString() + "," + top_right.toString()), line_style); // top line
-                            this.re_line("cage", (top_right.toString() + "," + bottom_right.toString()), line_style); // right line
-                            this.re_line("cage", (bottom_right.toString() + "," + bottom_left.toString()), line_style); // bottom line
-                            this.re_line("cage", (bottom_left.toString() + "," + top_left.toString()), line_style); // left line
+                        if (this[this.mode.qa][array][key] === line_style) {
+
+                            // undo redo group counter
+                            this.undoredo_counter = this.undoredo_counter + 1;
+
+                            // remember drawing_mode
+                            let draw_mode = this.drawing_mode;
+                            this.drawing_mode = 100;
+
+                            // cage cell locations
+                            for (let i = 0; i < row_size; i++) {
+                                grid_matrix[i] = new Array(parseInt(col_size)).fill(0);
+                            }
+                            for (let i = 0; i < this[this.mode.qa][arraykill][cageexist_loc].length; i++) {
+                                let col_num = (this[this.mode.qa][arraykill][cageexist_loc][i] % (this.nx0)) - 2;
+                                let row_num = parseInt(this[this.mode.qa][arraykill][cageexist_loc][i] / this.nx0) - 2;
+                                grid_matrix[row_num][col_num] = 1;
+                            }
+
+
+                            for (let i = 0; i < this[this.mode.qa][arraykill][cageexist_loc].length; i++) {
+                                let col_num = (this[this.mode.qa][arraykill][cageexist_loc][i] % (this.nx0)) - 2;
+                                let row_num = parseInt(this[this.mode.qa][arraykill][cageexist_loc][i] / this.nx0) - 2;
+
+                                // current cell
+                                let top_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][i] + this.nx0 * this.ny0);
+                                let top_right = top_left + 1;
+                                let bottom_left = top_left + 2;
+                                let bottom_right = top_left + 3;
+
+                                // check if left cell is shared
+                                if (col_num !== 0) {
+                                    if (grid_matrix[row_num][col_num - 1]) {
+
+                                        // left shared cell
+                                        let top_left_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][i] - 1 + this.nx0 * this.ny0);
+                                        let top_right_left = top_left_left + 1;
+                                        let bottom_left_left = top_left_left + 2;
+                                        let bottom_right_left = top_left_left + 3;
+                                        key = (top_right_left.toString() + "," + top_left.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                        key = (bottom_right_left.toString() + "," + bottom_left.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                    } else {
+                                        key = (top_left.toString() + "," + bottom_left.toString());
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                    }
+                                } else {
+                                    key = (top_left.toString() + "," + bottom_left.toString());
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // left line
+                                }
+
+                                // check if top cell is shared
+                                if (row_num !== 0) {
+                                    if (grid_matrix[row_num - 1][col_num]) {
+
+                                        // top shared cell
+                                        let top_left_top = 4 * (this[this.mode.qa][arraykill][cageexist_loc][i] - this.nx0 + this.nx0 * this.ny0);
+                                        let top_right_top = top_left_top + 1;
+                                        let bottom_left_top = top_left_top + 2;
+                                        let bottom_right_top = top_left_top + 3;
+                                        key = (bottom_left_top.toString() + "," + top_left.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                        key = (bottom_right_top.toString() + "," + top_right.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                    } else {
+                                        key = (top_left.toString() + "," + top_right.toString());
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                    }
+                                } else {
+                                    key = (top_left.toString() + "," + top_right.toString());
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // top line
+                                }
+
+                                // check if right cell is shared
+                                if (col_num !== col_size - 1) {
+                                    if (grid_matrix[row_num][col_num + 1]) {
+
+                                        // top shared cell
+                                        let top_left_right = 4 * (this[this.mode.qa][arraykill][cageexist_loc][i] + 1 + this.nx0 * this.ny0);
+                                        let top_right_right = top_left_right + 1;
+                                        let bottom_left_right = top_left_right + 2;
+                                        let bottom_right_right = top_left_right + 3;
+                                        key = (top_right.toString() + "," + top_left_right.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                        key = (bottom_right.toString() + "," + bottom_left_right.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                    } else {
+                                        key = (top_right.toString() + "," + bottom_right.toString());
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                    }
+                                } else {
+                                    key = (top_right.toString() + "," + bottom_right.toString());
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // right line
+                                }
+
+                                // check if bottom cell is shared
+                                if (row_num !== row_size - 1) {
+                                    if (grid_matrix[row_num + 1][col_num]) {
+
+                                        // top shared cell
+                                        let top_left_bottom = 4 * (this[this.mode.qa][arraykill][cageexist_loc][i] + this.nx0 + this.nx0 * this.ny0);
+                                        let top_right_bottom = top_left_bottom + 1;
+                                        let bottom_left_bottom = top_left_bottom + 2;
+                                        let bottom_right_bottom = top_left_bottom + 3;
+                                        key = (bottom_left.toString() + "," + top_left_bottom.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                        key = (bottom_right.toString() + "," + top_right_bottom.toString());
+                                        if (this[this.mode.qa][array][key] === line_style) {
+                                            this.re_line(array, key, line_style, this.undoredo_counter);
+                                        }
+                                    } else {
+                                        key = (bottom_left.toString() + "," + bottom_right.toString());
+                                        this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                    }
+                                } else {
+                                    key = (bottom_left.toString() + "," + bottom_right.toString());
+                                    this.re_line(array, key, line_style, this.undoredo_counter); // bottom line
+                                }
+                            }
+
+                            // Save the current killercage and then delete
+                            this.record(arraykill, cageexist_loc, this.undoredo_counter);
+                            this[this.mode.qa][arraykill][cageexist_loc] = [];
+                            if (document.getElementById("custom_color_yes").checked) {
+                                this[this.mode.qa + "_col"][arraykill][cageexist_loc] = [];
+                            }
+
+                            // reset variables
+                            this.cageselection = [];
+                            this.selection = [];
+                            this.drawing_mode = draw_mode;
                         }
-                        console.log('cage loc', cageexist_loc)
-                        this.killercages.splice(cageexist_loc, cageexist_loc);
-                        console.log('removed', this.killercages)
-                        // reset variables
-                        this.cageselection = [];
-                        this.drawing_mode = draw_mode;
-
-                        // Draw up cages
-                        this.redraw();
                     }
-
                     // length > 1 do not do anything
                 }
+
+                // reset variables
+                this.selection = [];
+
+                // Draw up cages
+                this.redraw();
 
             } else if (this.mouse_mode === "out") {
                 this.drawing = false;
             }
         } else if (document.getElementById('sub_free').checked) {
-            console.log('should not enter here')
             if (this.mouse_mode === "down_left") {
                 this.drawing = true;
                 this.drawing_mode = 100;
@@ -8166,7 +8522,6 @@ class Puzzle {
             var line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) { // If they are adjacent
-                console.log(this.last, num);
                 array = "cage";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
@@ -9722,8 +10077,10 @@ class Puzzle {
     }
 
     draw_selection() {
-        if (this.mode[this.mode.qa].edit_mode === "sudoku") {
-            if (this.selection.length === 0) {
+        if (this.mode[this.mode.qa].edit_mode === "sudoku" ||
+            (this.mode[this.mode.qa].edit_mode === "cage" && document.getElementById("sub_cages").checked)) {
+            // since we dont want single cell highlighed while in killer submode
+            if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
                 // check if cursor is in centerlist, to avoid border/edge case
                 let cursorexist = this.centerlist.indexOf(this.cursol);
                 if (cursorexist !== -1) {
