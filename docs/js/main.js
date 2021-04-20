@@ -1639,6 +1639,17 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "pu_a_label":
+                // if solution exist, it means, its solve mode with answer checking
+                // if user clicks on Check Solution button
+                if (pu.solution && pu.sol_flag === 0) {
+                    Swal.fire({
+                        title: '<h3>Your solution is incorrect.</h3>',
+                        html: '<h2>Keep trying 🙂</h2>',
+                        icon: 'error',
+                        confirmButtonText: 'ok',
+                    })
+                    document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
+                }
                 pu.mode_qa("pu_a");
                 e.preventDefault();
                 break;

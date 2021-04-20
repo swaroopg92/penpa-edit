@@ -1,5 +1,8 @@
 ## History
 * 2021/04/** ver2.25.12
+	* Improved answerchecking code by allowing userclick button. Improved answerchecking display color and message.
+	* Cleaned up display of contest mode.
+	* Cleaned up make URL text code.
 	* Killer cage submode in Cage mode. Automatically drawing killer cages.
 	* Fixed bug in multisolution feature for duplicate function.
 	* Fixed bug in Custom Color for Undo.

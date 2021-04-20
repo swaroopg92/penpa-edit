@@ -2570,17 +2570,14 @@ class Puzzle {
         let ruleinfo = document.getElementById("saveinforules").value;
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent;
+
         // if solution check exists, then read multisolution variable or else set to false
         if (this.solution) {
-            // Border button status
-            text += "," + document.getElementById('edge_button').textContent;
-
             // Multi Solution status, it will be true only when generating solution checking
             text += "," + this.multisolution + "\n";
         } else {
-            // Border button status
-            text += "," + document.getElementById('edge_button').textContent;
-
             // Multi Solution status, it will be true only when generating solution checking
             text += "," + false + "\n";
         }
@@ -2756,18 +2753,15 @@ class Puzzle {
         let ruleinfo = document.getElementById("saveinforules").value;
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
+        // Border button status
+        text += "," + document.getElementById('edge_button').textContent;
+
         // if solution check exists, then read multisolution variable or else set to false
         if (type === "answercheck") {
-            // Border button status
-            text += "," + document.getElementById('edge_button').textContent;
-
             this.checkall_status(); // this will update the multisolution status
             // Multi Solution status, it will be true only when generating solution checking
             text += "," + this.multisolution + "\n";
         } else {
-            // Border button status
-            text += "," + document.getElementById('edge_button').textContent;
-
             // Multi Solution status, it will be true only when generating solution checking
             text += "," + false + "\n";
         }
@@ -10168,8 +10162,10 @@ class Puzzle {
                     // this.mouse_mode = "out";
                     // this.mouseevent(0, 0, 0);
                     this.sol_flag = 1;
+                    document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                 } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
                     this.sol_flag = 0;
+                    document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                 }
             }
         } else {
@@ -10191,6 +10187,7 @@ class Puzzle {
                             }, 20)
                             sw_timer.stop();
                             this.sol_flag = 1;
+                            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                             i = this.solution.length; // to break the outer for loop
                             break;
                         } else if (user_sol === author_sol && this.sol_flag === 1) {
@@ -10203,6 +10200,7 @@ class Puzzle {
                     // If there was any change in the grid and none of the solution matches then reset the flag
                     // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
                     this.sol_flag = 0;
+                    document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                 }
             }
         }
