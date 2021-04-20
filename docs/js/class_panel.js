@@ -67,8 +67,7 @@ class Panel {
     }
 
     inputtext() {
-        var input_text = "";
-        input_text = document.getElementById("inputtext").value;
+        let input_text = [...document.getElementById("inputtext").value];
         pu.key_space();
         for (var i = 0; i < input_text.length; i++) {
             pu.key_number(input_text[i]);

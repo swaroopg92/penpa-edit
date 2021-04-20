@@ -6830,7 +6830,7 @@ class Puzzle {
                         arrow = "";
                     }
                     if (str_num.indexOf(key) != -1) {
-                        if (conA >= 1 && conA <= 9) { //1~9だったら2桁目へ
+                        if (conA >= 1 && conA <= 9) { // If 1 to 9 got to the second digit
                             number = conA.toString() + key;
                         } else {
                             number = key;
@@ -6861,13 +6861,14 @@ class Puzzle {
                         con = "";
                         mode = "";
                     }
-                    if (mode != 2 && mode != 7) { //arrowでなければ
-                        if (con.length >= 0 && con.length <= 3) { //3文字以内なら追加
+                    let con_expand = [...con];
+                    if (mode != 2 && mode != 7) { // If not arrow mode
+                        if (con_expand.length >= 0 && con_expand.length <= 3) { // Max 4 values
                             number = con + key;
                         } else {
-                            number = con; //4文字以上ならそのまま
+                            number = con; // Don't update if more than 4 values
                         }
-                    } else { //arrowなら上書き
+                    } else { // Overwrite if arrow
                         number = key;
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
