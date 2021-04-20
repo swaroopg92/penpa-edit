@@ -8,7 +8,7 @@ class Panel {
         this.fkb = document.getElementById("float-key-body");
 
         this.spacef = 3;
-        this.sizef = 36; //Math.min(45,Math.max(pu.size,28));
+        this.sizef = 36; // Math.min(45,Math.max(pu.size,28));
         this.nxf = 4;
         this.nyf = 3;
 
@@ -98,7 +98,7 @@ class Panel {
                 case "number":
                     this.nxf = 4;
                     this.nyf = 3;
-                    this.sizef = 36;
+                    this.sizef = 50;
                     this.canvas_size_setting(45);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
@@ -259,7 +259,7 @@ class Panel {
         } else if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
             this.nxf = 4;
             this.nyf = 3;
-            this.sizef = 36;
+            this.sizef = 50;
             this.canvas_size_setting(5);
             this.fkb.style.paddingTop = "20px";
             this.fkb.style.display = "block";
@@ -296,7 +296,7 @@ class Panel {
             this.panelmode = "number";
             this.nxf = 4;
             this.nyf = 3;
-            this.sizef = 36;
+            this.sizef = 50;
             this.canvas_size_setting(45);
             this.fkb.style.paddingTop = "0px";
             this.fkb.style.display = "block";
