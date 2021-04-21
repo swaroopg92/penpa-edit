@@ -60,7 +60,8 @@ class Puzzle {
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
             "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
-            "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb"
+            "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
+            "sub_cage1_lb"
         ];
         //square,pyramid,hex
         this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
@@ -8066,7 +8067,7 @@ class Puzzle {
     //////////////////////////
 
     mouse_cage(x, y, num) {
-        if (document.getElementById('sub_cages').checked) {
+        if (document.getElementById('sub_cage1').checked) {
             if (this.mouse_mode === "down_left") {
                 this.drawing = true;
                 // find if num already exist
@@ -8515,7 +8516,7 @@ class Puzzle {
 
                 this.drawing = false;
             }
-        } else if (document.getElementById('sub_free').checked) {
+        } else if (document.getElementById('sub_cage2').checked) {
             if (this.mouse_mode === "down_left") {
                 this.drawing = true;
                 this.drawing_mode = 100;
@@ -10094,7 +10095,7 @@ class Puzzle {
 
     draw_selection() {
         if (this.mode[this.mode.qa].edit_mode === "sudoku" ||
-            (this.mode[this.mode.qa].edit_mode === "cage" && document.getElementById("sub_cages").checked)) {
+            (this.mode[this.mode.qa].edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
             // since we dont want single cell highlighed while in killer submode
             if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
                 // check if cursor is in centerlist, to avoid border/edge case

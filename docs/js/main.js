@@ -96,7 +96,7 @@ onload = function() {
             var obj = coord_point(event, 'flex');
         } else {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) ||
-                ((pu.mode[pu.mode.qa].edit_mode === "cage") && (document.getElementById("sub_cages").checked))) {
+                ((pu.mode[pu.mode.qa].edit_mode === "cage") && (document.getElementById("sub_cage1").checked))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
