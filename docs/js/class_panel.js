@@ -11,6 +11,7 @@ class Panel {
         this.sizef = 36; // Math.min(45,Math.max(pu.size,28));
         this.nxf = 4;
         this.nyf = 3;
+        this.offset = 0.47; // to center the display of symbols/numbers in the Panel
 
         this.cont = [];
         this.str = "";
@@ -50,7 +51,7 @@ class Panel {
         for (var i = 0; i < this.nxf * this.nyf; i++) {
             set_font_style(this.ctxf, 0.8 * this.sizef.toString(10), pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][1]);
             if (this.ctxf.fillStyle === Color.WHITE) { this.ctxf.fillStyle = Color.BLACK; }
-            this.ctxf.text(this.cont[i].toString(), (i % this.nxf + 0.45) * (this.sizef + this.spacef), ((i / this.nxf | 0) + 0.55) * (this.sizef + this.spacef));
+            this.ctxf.text(this.cont[i].toString(), (i % this.nxf + this.offset) * (this.sizef + this.spacef), ((i / this.nxf | 0) + 0.55) * (this.sizef + this.spacef));
         }
     }
 
@@ -62,7 +63,7 @@ class Panel {
         for (var i = 0; i < this.nxf * this.nyf; i++) {
             set_font_style(this.ctxf, 0.8 * this.sizef.toString(10), pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][1]);
             if (this.ctxf.fillStyle === Color.WHITE) { this.ctxf.fillStyle = Color.BLACK; }
-            this.ctxf.text(this.cont[i], (i % this.nxf + 0.45) * (this.sizef + this.spacef), ((i / this.nxf | 0) + 0.55) * (this.sizef + this.spacef));
+            this.ctxf.text(this.cont[i], (i % this.nxf + this.offset) * (this.sizef + this.spacef), ((i / this.nxf | 0) + 0.55) * (this.sizef + this.spacef));
         }
     }
 
@@ -280,7 +281,7 @@ class Panel {
             var size = pu.size;
             pu.size = this.sizef;
             for (var i = 0; i < this.cont.length; i++) {
-                pu.draw_symbol_select(this.ctxf, (i % this.nxf + 0.45) * (this.sizef + this.spacef), ((i / this.nxf | 0) + 0.45) * (this.sizef + this.spacef), this.cont[i], pu.mode[pu.mode.qa].symbol[0]);
+                pu.draw_symbol_select(this.ctxf, (i % this.nxf + this.offset) * (this.sizef + this.spacef), ((i / this.nxf | 0) + this.offset) * (this.sizef + this.spacef), this.cont[i], pu.mode[pu.mode.qa].symbol[0]);
             }
             pu.size = size;
 
