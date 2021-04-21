@@ -4,6 +4,8 @@
 	* Cleaned up display of contest mode.
 	* Cleaned up make URL text code.
 	* Killer cage submode in Cage mode. Automatically drawing killer cages.
+	* Increased Panel Size.
+	* Fixed Unicode/Tofu problem with Normal submode.
 	* Fixed bug in multisolution feature for duplicate function.
 	* Fixed bug in Custom Color for Undo.
 * 2021/04/12 ver2.25.11
