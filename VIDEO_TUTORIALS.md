@@ -17,6 +17,8 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * How to Create a Thermo Sudoku? - https://youtu.be/ynZOz057mKA
 * How to Create a Killer Sudoku? - https://youtu.be/yagyJbQD_gs
 * How to Create an Arrow Sudoku? - https://youtu.be/fliy567hSng
+* How to Create a Pentominous Puzzle? - https://youtu.be/hVH_x_m7nZQ
+* How to Create a XV, GreaterThan, Consecutive, Kropki, Quadruple Sudoku? - https://youtu.be/vl1hEuX7H5M
 
 ## Bonus
 * How to post a puzzle on Logic Masters Germany website - https://www.youtube.com/watch?v=9vhpo2B9qrM&t=1124s
