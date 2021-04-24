@@ -297,7 +297,11 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudoku":
-                type = [0, 2, 3];
+                if (document.getElementById('edge_button').textContent === "ON") {
+                    type = [0, 2, 3];
+                } else {
+                    type = [0];
+                }
                 break;
         }
         return type;
