@@ -1,5 +1,14 @@
 ## History
-* 2021/04/08 ver2.25.11
+* 2021/04/22 ver2.25.12
+	* Improved answerchecking code by allowing userclick button. Improved answerchecking display color and message.
+	* Cleaned up display of contest mode.
+	* Cleaned up make URL text code.
+	* Killer cage submode in Cage mode. Automatically drawing killer cages.
+	* Increased Panel Size.
+	* Fixed Unicode/Tofu problem with Normal submode.
+	* Fixed bug in multisolution feature for duplicate function.
+	* Fixed bug in Custom Color for Undo.
+* 2021/04/12 ver2.25.11
 	* Cookies Feature - User can now save Grid Type, Tab Settings, Theme and Reload button status locally by clicking Save Settings: YES in the Settings Button. When penpa loads, it will use the User preferences. 
 	* Number shortcuts to switch between different styles for Surface mode.
 	* Improvement to multisolution feature to detect changes in the grid.

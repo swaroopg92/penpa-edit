@@ -1370,8 +1370,11 @@ function load(urlParam) {
                 } else {
                     pu.solution = atext;
                 }
-                // Visually showcase answer check is enabled
-                document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+
+                // Solution button
+                document.getElementById("pu_a_label").style.display = "inline-block";
+                document.getElementById("pu_a_label").style.marginLeft = "6px";
+                document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             }
 
@@ -1459,8 +1462,10 @@ function load(urlParam) {
                 pu.solution = atext;
             }
 
-            // Visually showcase answer check is enabled
-            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+            // Solution button
+            document.getElementById("pu_a_label").style.display = "inline-block";
+            document.getElementById("pu_a_label").style.marginLeft = "6px";
+            document.getElementById("pu_a_label").innerHTML = "Check Solution";
             document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
         }
         if (typeof rtext[7] !== 'undefined') {
@@ -1975,17 +1980,17 @@ function set_solvemode() {
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
+    document.getElementById("edit_txt").style.display = "none";
     document.getElementById("pu_q_label").style.display = "none";
+    document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
     document.getElementById("mo_cage_lb").style.display = "none";
-    // document.getElementById("mo_special_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
     // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";
-    document.getElementById("tb_delete").value = "Delete all";
 
     // Hide Visibility button
     document.getElementById("visibility_button0").style.display = "none";

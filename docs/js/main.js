@@ -95,8 +95,8 @@ onload = function() {
             pu.mouse_click = 2;
             var obj = coord_point(event, 'flex');
         } else {
-            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) {
+            if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) ||
+                ((pu.mode[pu.mode.qa].edit_mode === "cage") && (document.getElementById("sub_cage1").checked))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -781,9 +781,9 @@ onload = function() {
 
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
-            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
-                    (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) {
+            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                    ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")))) {
                 type = pu.type;
                 pu.type = [0];
             }
@@ -801,9 +801,9 @@ onload = function() {
 
         // resetting the type for starbattle composite mode
         if (fittype === 'flex') {
-            if ((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
-                    (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin"))) {
+            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                    ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")))) {
                 pu.type = type;
             }
         }
@@ -1637,6 +1637,17 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "pu_a_label":
+                // if solution exist, it means, its solve mode with answer checking
+                // if user clicks on Check Solution button
+                if (pu.solution && pu.sol_flag === 0) {
+                    Swal.fire({
+                        title: '<h3>Your solution is incorrect.</h3>',
+                        html: '<h2>Keep trying!</h2>',
+                        icon: 'error',
+                        confirmButtonText: 'ok',
+                    })
+                    document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
+                }
                 pu.mode_qa("pu_a");
                 e.preventDefault();
                 break;

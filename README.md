@@ -247,6 +247,8 @@ Depending on the browser you can update the page without using the cache with "C
 
 * Source - If you are not the author of the puzzle, specify the source URL
 
+* Save Undo/Redo (History) - If you checkmark this option, then your action history will be saved in the URL. This is effective only while using "URL for editing" button. Other options will automatically ignore history. Note: Saving history might make URL too big depending on your usage.
+
 * URL for editing
 1. Complete creating puzzle in Edit mode "Problem".
 2. If you need to save your puzzle creation progress and come back later to edit then click on this button
