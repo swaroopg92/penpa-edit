@@ -42,7 +42,7 @@ onload = function() {
             e.preventDefault(); // When both mouse and touch start, only touch
         }
         var ctrl_key = e.ctrlKey;
-        if (ondown_key === "mousedown" && event.button !== 2) {
+        if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
             var obj = coord_point(event, 'flex');
         } else {
             var obj = coord_point(event);
@@ -70,7 +70,7 @@ onload = function() {
             var event = e.changedTouches[0];
             e.preventDefault(); // When both mouse and touch start, only touch
         }
-        if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") &&
+        if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") && // to handle mobile/ipad users for up events for certain modes
             (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
                 pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) {
             var obj = coord_point(event, 'flex');
@@ -94,6 +94,9 @@ onload = function() {
         e.preventDefault();
         if (event.buttons === 2) { // Right click and moving
             pu.mouse_click = 2;
+            var obj = coord_point(event, 'flex');
+        } else if (event.buttons === 1 && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click and moving in Sudoku Mode
+            pu.mouse_click = 0;
             var obj = coord_point(event, 'flex');
         } else {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
@@ -786,7 +789,8 @@ onload = function() {
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")))) {
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
+                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 type = pu.type;
                 pu.type = [0];
             }
@@ -808,7 +812,8 @@ onload = function() {
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")))) {
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
+                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 pu.type = type;
             }
         }

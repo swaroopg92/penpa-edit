@@ -297,7 +297,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudoku":
-                type = [0];
+                type = [0, 2, 3];
                 break;
         }
         return type;
