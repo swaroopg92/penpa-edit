@@ -95,7 +95,7 @@ onload = function() {
         if (event.buttons === 2) { // Right click and moving
             pu.mouse_click = 2;
             var obj = coord_point(event, 'flex');
-        } else if (event.buttons === 1 && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click and moving in Sudoku Mode
+        } else if ((ondown_key === "touchstart" || event.buttons === 1) && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click/Ipad and moving in Sudoku Mode
             pu.mouse_click = 0;
             var obj = coord_point(event, 'flex');
         } else {
