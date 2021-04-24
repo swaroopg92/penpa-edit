@@ -8900,6 +8900,13 @@ class Puzzle {
                 case "magnets":
                     this.re_combi_magnets(num);
                     break;
+                case "mines":
+                    if (this.ondown_key === "mousedown") { // do only mine when on laptop
+                        this.re_combi_mines_reduced(num);
+                    } else {
+                        this.re_combi_mines(num); // Behave as normal when ipad and phone
+                    }
+                    break;
                 case "akari":
                     this.re_combi_akari(num);
                     break;
@@ -8933,6 +8940,9 @@ class Puzzle {
                     break;
                 case "star":
                     this.re_combi_star_downright(num);
+                    break;
+                case "mines":
+                    this.re_combi_mines_downright(num);
                     break;
             }
         } else if (this.mouse_mode === "move") {
@@ -8976,6 +8986,9 @@ class Puzzle {
                 case "tents":
                     this.re_combi_tents_move(num);
                     break;
+                case "mines":
+                    this.re_combi_mines_move(num);
+                    break;
                 case "akari":
                     this.re_combi_akari_move(num);
                     break;
@@ -8997,6 +9010,7 @@ class Puzzle {
                 case "hashi":
                 case "battleship":
                 case "star":
+                case "mines":
                 case "magnets":
                     this.drawing_mode = -1;
                     break;
@@ -9837,6 +9851,121 @@ class Puzzle {
     }
 
     re_combi_star_move(num) {
+        if (this.point[num].type === 0) {
+            if (this.drawing_mode === 1 &&
+                (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [0, "star", 2];
+            } else if (this.drawing_mode === 2 && this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+            this.redraw();
+        }
+    }
+
+    re_combi_mines_reduced(num) {
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].symbol[num]) {
+                if (this.undoredo_counter > 3) {
+                    this.undoredo_counter = 1;
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let neighbors = this.get_neighbors(num);
+                for (let i = 0; i < neighbors.length; i++) {
+                    if (this[this.mode.qa].symbol[neighbors[i]]) {
+                        this.record("symbol", neighbors[i], this.undoredo_counter);
+                        delete this[this.mode.qa].symbol[neighbors[i]];
+                    }
+                }
+                this.record("symbol", num, this.undoredo_counter);
+                this[this.mode.qa].symbol[num] = [4, "sun_moon", 2];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 2;
+            }
+            this.redraw();
+        }
+    }
+
+    re_combi_mines(num) {
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    if (this.undoredo_counter > 3) {
+                        this.undoredo_counter = 1;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                    let neighbors = this.get_neighbors(num);
+                    for (let i = 0; i < neighbors.length; i++) {
+                        if (this[this.mode.qa].symbol[neighbors[i]]) {
+                            this.record("symbol", neighbors[i], this.undoredo_counter);
+                            delete this[this.mode.qa].symbol[neighbors[i]];
+                        }
+                    }
+                    this.record("symbol", num, this.undoredo_counter);
+                    this[this.mode.qa].symbol[num] = [4, "sun_moon", 2];
+                } else if (this[this.mode.qa].symbol[num][0] === 4) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+                this.redraw();
+                break;
+        }
+    }
+
+    re_combi_mines_downright(num) {
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+                this.redraw();
+                break;
+        }
+    }
+
+    re_combi_mines_move(num) {
         if (this.point[num].type === 0) {
             if (this.drawing_mode === 1 &&
                 (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 0)) {

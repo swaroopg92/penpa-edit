@@ -276,6 +276,7 @@ class Puzzle_square extends Puzzle {
                     case "edgex":
                     case "edgexoi":
                     case "star":
+                    case "mines":
                         type = [0, 1, 2, 3];
                         break;
                     case "blpo":
