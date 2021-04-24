@@ -71,7 +71,8 @@ onload = function() {
             e.preventDefault(); // When both mouse and touch start, only touch
         }
         if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") &&
-            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) {
+            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
+                pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) {
             var obj = coord_point(event, 'flex');
         } else {
             var obj = coord_point(event);
@@ -95,7 +96,8 @@ onload = function() {
             pu.mouse_click = 2;
             var obj = coord_point(event, 'flex');
         } else {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin")) ||
+            if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
+                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) ||
                 ((pu.mode[pu.mode.qa].edit_mode === "cage") && (document.getElementById("sub_cage1").checked))) {
                 var obj = coord_point(event, 'flex');
             } else {
