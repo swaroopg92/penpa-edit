@@ -1,5 +1,5 @@
 ## History
-* 2021/04/** ver2.25.13
+* 2021/04/24 ver2.25.13
 	* Added Akari composite mode.
 	* Added Minesweeper composite mode.
 * 2021/04/22 ver2.25.12
