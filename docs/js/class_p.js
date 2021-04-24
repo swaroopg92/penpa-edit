@@ -57,7 +57,7 @@ class Puzzle {
         //square
         this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
             "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
-            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
+            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb", "combili_akari", "combili_mines",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
             "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
             "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
@@ -8900,6 +8900,9 @@ class Puzzle {
                 case "magnets":
                     this.re_combi_magnets(num);
                     break;
+                case "akari":
+                    this.re_combi_akari(num);
+                    break;
                 case "arrowS":
                     this.re_combi_arrowS(x, y, num);
                     break;
@@ -8924,6 +8927,9 @@ class Puzzle {
                     break;
                 case "yajilin":
                     this.re_combi_yajilin_downright(num);
+                    break;
+                case "akari":
+                    this.re_combi_akari_downright(num);
                     break;
                 case "star":
                     this.re_combi_star_downright(num);
@@ -8970,6 +8976,9 @@ class Puzzle {
                 case "tents":
                     this.re_combi_tents_move(num);
                     break;
+                case "akari":
+                    this.re_combi_akari_move(num);
+                    break;
                 case "arrowS":
                     this.re_combi_arrowS_move(x, y, num);
                     break;
@@ -9014,6 +9023,13 @@ class Puzzle {
                     break;
                 case "tents":
                     this.re_combi_tents_up(num);
+                    break;
+                case "akari":
+                    if (this.ondown_key === "mousedown") {
+                        this.re_combi_akari_up_reduced(num); // moved the dot to right click
+                    } else {
+                        this.re_combi_akari_up(num); // on ipad/mobile behave as usual
+                    }
                     break;
                 case "shaka":
                     this.re_combi_shaka_up(num);
@@ -9450,6 +9466,121 @@ class Puzzle {
             } else if (this[this.mode.qa].surface[num] === 1) {
                 this.record("surface", num);
                 delete this[this.mode.qa].surface[num];
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                this.drawing_mode = 5; // placing dots
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 6; // removing dots
+            }
+        } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
+            }
+        }
+        this.last = num;
+    }
+
+    re_combi_akari(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
+        this.redraw();
+    }
+
+    re_combi_akari_move(num) {
+        if (this.drawing_mode != -1 && this.point[num].type === 0) {
+            if (this.drawing_mode === 5 && num != this.last) {
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                }
+            } else if (this.drawing_mode === 6 && num != this.last) {
+                if (this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+            } else {
+                var line_style = 12;
+                var array;
+                if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
+                    array = "line";
+                    var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                    this.re_line(array, key, line_style);
+                    this.loop_counter = true; // to ignore cross feature when loop is drawn on mobile (to avoid accidental crosses)
+                }
+            }
+            this.last = num;
+            this.redraw();
+        }
+    }
+
+    re_combi_akari_up(num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [3, "sun_moon", 2];
+            } else if (this[this.mode.qa].symbol[num][0] === 3) { // bulb is present then delete and place a dot
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+        } else if (!this.loop_counter &&
+            (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4)) {
+            if (!this[this.mode.qa].line[num]) { // Insert cross
+                this.record('line', num);
+                this[this.mode.qa].line[num] = 98;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record('line', num);
+                delete this[this.mode.qa].line[num];
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.loop_counter = false;
+        this.redraw();
+    }
+
+    re_combi_akari_up_reduced(num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [3, "sun_moon", 2];
+            } else if (this[this.mode.qa].symbol[num][0] === 3) { // bulb is present then delete and place a dot
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [3, "sun_moon", 2];
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
+    re_combi_akari_downright(num) {
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                this.drawing_mode = 5; // placing dots
+            } else if (this[this.mode.qa].symbol[num][0] === 3) { // bulb is present then delete and place a dot
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
                 this.drawing_mode = 5; // placing dots

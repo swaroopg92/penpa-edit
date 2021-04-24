@@ -270,6 +270,7 @@ class Puzzle_square extends Puzzle {
                     case "tents":
                     case "linex":
                     case "yajilin":
+                    case "akari":
                         type = [0, 2, 3];
                         break;
                     case "edgex":
@@ -3023,6 +3024,10 @@ class Puzzle_square extends Puzzle {
             case 3:
                 set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
                 ctx.text("💡", x, y, 0.7 * pu.size, this.size * 0.8);
+                break;
+            case 4:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.7 * pu.size, this.size * 0.8);
                 break;
         }
     }
