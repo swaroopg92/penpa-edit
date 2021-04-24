@@ -6980,7 +6980,12 @@ class Puzzle {
                 case "1": // Normal mode
                     if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
                         if (this.selection.length === 1) {
-                            this.undoredo_counter = 0;
+                            let clean_flag = this.check_neighbors(this.selection[0]);
+                            if (!clean_flag) {
+                                this.undoredo_counter = 0;
+                            } else {
+                                this.undoredo_counter = this.undoredo_counter + 1;
+                            }
                         } else {
                             this.undoredo_counter = this.undoredo_counter + 1;
                         }
@@ -7009,6 +7014,7 @@ class Puzzle {
                                 if (this.mode.qa === "pu_a") {
                                     var corner_cursor = 4 * (k + this.nx0 * this.ny0);
                                     var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                                    var edge_cursor = this.get_neighbors(k, 'edges');
 
                                     for (var j = 0; j < 4; j++) {
                                         if (this[this.mode.qa].numberS[corner_cursor + j]) {
@@ -7021,6 +7027,13 @@ class Puzzle {
                                         if (this[this.mode.qa].numberS[side_cursor + j]) {
                                             this.record("numberS", side_cursor + j, this.undoredo_counter);
                                             delete this[this.mode.qa].numberS[side_cursor + j];
+                                        }
+                                    }
+
+                                    for (var j = 0; j < 4; j++) {
+                                        if (this[this.mode.qa].number[edge_cursor[j]]) {
+                                            this.record("number", edge_cursor[j], this.undoredo_counter);
+                                            delete this[this.mode.qa].number[edge_cursor[j]];
                                         }
                                     }
                                 }
@@ -7040,6 +7053,11 @@ class Puzzle {
 
                         if (this.selection.length === 1) {
                             this.undoredo_counter = 0;
+
+                            // if the selected cell is on the edge then do not proceed
+                            if (parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
+                                break;
+                            }
                         } else {
                             this.undoredo_counter = this.undoredo_counter + 1;
                         }
@@ -7244,6 +7262,38 @@ class Puzzle {
             }
         }
         return data;
+    }
+
+    check_neighbors(k) {
+        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+        var edge_cursor = this.get_neighbors(k, 'edges');
+        let clean_flag = false;
+
+        // if even one element exist to be cleaned then return true
+        for (var j = 0; j < 4; j++) {
+            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                clean_flag = true;
+                return clean_flag;
+            }
+        }
+
+        for (var j = 0; j < 4; j++) {
+            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                clean_flag = true;
+                return clean_flag;
+            }
+        }
+
+        for (var j = 0; j < 4; j++) {
+            if (this[this.mode.qa].number[edge_cursor[j]]) {
+                clean_flag = true;
+                return clean_flag;
+            }
+        }
+
+        // if no element exist then it will reach here
+        return clean_flag;
     }
 
     key_space(keypressed = 0) {
@@ -7999,7 +8049,10 @@ class Puzzle {
             this.cursol = num;
             this.redraw();
         } else if (this.mouse_mode === "move") {
-            if (!this.selection.includes(num) & this.drawing) {
+            // if the first selected position is edge then do not consider move
+            if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
+                // do nothing
+            } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);
             }
             this.redraw();
@@ -9734,18 +9787,27 @@ class Puzzle {
         this.redraw();
     }
 
-    get_neighbors(num) {
+    get_neighbors(num, options = 'all') {
+        let neighbors;
         let col_num = (num % (this.nx0));
         let row_num = parseInt(num / this.nx0);
-        let neighbors = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
-            (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
-            row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
-            row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
-            (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
-            row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
-            row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
-            row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
-        ]
+        if (options === 'edges') {
+            neighbors = [(row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+                row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+            ]
+        } else {
+            neighbors = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
+                (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
+                row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
+                row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
+                (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+                row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+            ]
+        }
         return neighbors;
     }
 
@@ -10393,8 +10455,8 @@ class Puzzle {
                 a[1] = a[2];
                 a[2] = c;
             }
-
             for (var k of this.selection) {
+                let factor = parseInt(k / (this.nx0 * this.ny0));
                 // Color of selected cell
                 // set_surface_style(this.ctx, 13);
 
@@ -10404,28 +10466,46 @@ class Puzzle {
 
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
-                let offset = 3;
-                this.ctx.beginPath();
 
-                for (var j = 0; j < this.point[k].surround.length; j++) {
-                    switch (j) {
-                        case 0:
-                            this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
-                            break;
-                        case 1:
-                            this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
-                            break;
-                        case 2:
-                            this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
-                            break;
-                        case 3:
-                            this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
-                            break;
+                if (factor < 1) {
+                    let offset = 3;
+                    this.ctx.beginPath();
+
+                    for (var j = 0; j < this.point[k].surround.length; j++) {
+                        switch (j) {
+                            case 0:
+                                this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
+                                break;
+                            case 1:
+                                this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
+                                break;
+                            case 2:
+                                this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
+                                break;
+                            case 3:
+                                this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
+                                break;
+                        }
                     }
+                    this.ctx.closePath();
+                    // this.ctx.fill();
+                    this.ctx.stroke();
+                } else {
+                    let r = 0.2;
+                    let n = 4;
+                    let th = 45;
+                    let x = this.point[k].x;
+                    let y = this.point[k].y
+
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x - r * Math.cos(th * (Math.PI / 180)) * this.size, y - r * Math.sin(th * (Math.PI / 180)) * this.size);
+                    for (var i = 0; i < n - 1; i++) {
+                        th += 360 / n;
+                        this.ctx.lineTo(x - r * Math.cos(th * (Math.PI / 180)) * this.size, y - r * Math.sin(th * (Math.PI / 180)) * this.size);
+                    }
+                    this.ctx.closePath();
+                    this.ctx.stroke();
                 }
-                this.ctx.closePath();
-                // this.ctx.fill();
-                this.ctx.stroke();
 
                 // Reset Bluring
                 this.ctx.shadowBlur = 0;
