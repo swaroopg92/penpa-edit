@@ -37,6 +37,9 @@ Depending on the browser you can update the page without using the cache with "C
 	* DEL - To delete all the contents of the cell
 	* SPACEBAR - To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
 	* Drag the mouse pressing left click / drag your finger holding down on Mobile or Ipad for multiple cell selection
+	* Border: ON - will allow you to write digits on the edges
+* In Surface Mode
+	* Use number keys to quickly switch between styles.
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -143,8 +146,10 @@ Depending on the browser you can update the page without using the cache with "C
 * Click the first cell you entered to erase it.
 * Polygon: The vertices are selected in the order in which they are clicked. Click the last clicked vertex or the first clicked vertex again to end selection.
 
-### Frame
+### Cage
 * A line that surrounds multiple squares. (Killer Sudoku etc.)
+* Killer submode - Automatic drawing of cages. Click and drag to draw the cage. Click on any cell inside the cage to delete it. Overlapping of cages is not allowed using this automatic mode. You may want to use the Free submode to do that.
+* Free submode - Complete control over to the user to draw the cages.
 * There are 4 styles: black dotted line, black solid line, grey dotted line, and grey solid line.
 * Available in square and regular hexagon.
 
@@ -170,9 +175,9 @@ Depending on the browser you can update the page without using the cache with "C
 	* White / circle: White circle drag input and black circle
 	* Shakashaka: Pull the triangle to input, left click for dot
 * Loop:
-	* Line or x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line
+	* Line or x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line. Right click and drag for multiple crosses in one go.
 	* Line or OX: Line and 〇× in square (Country road)
-	* Edge x: Edge and auxiliary cross marks (x) on edges. (Right click for x)
+	* Edge x: Edge and auxiliary cross marks (x) on edges. Right click for x. Right click and drag for multiple crosses in one go.
 	* Edge IO: Edge, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
 	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot in center, cross (x) on edges
 	* Hashi: Draw the line again to make a double line
@@ -183,6 +188,8 @@ Depending on the browser you can update the page without using the cache with "C
 	* Star Battle: Left click - star, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
 	* Tents: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 	* Magnets: +, - and black square
+	* Minesweeper: Left click - mine, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
+	* Akari: Left mouse click - Light bulb, Left mouse click drag - dotted black line, Right click - dot in center, cross (x) on edges
 	* Arrows: Left click drag to draw an arrow in one of the eight directions in a square.
 * Number logic:
 	* Numerical flick: Input the numerical flick. 123456789 from top left to bottom right.
@@ -203,6 +210,8 @@ Depending on the browser you can update the page without using the cache with "C
 	* SHIFT - For Temporary Corner Submode
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
 	* SPACEBAR - To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
+* Border: ON
+	* IF border is ON then you can write digits on the edges of the cells.
 * 6 Color choices for User Solving
 	* Answer check only looks for Green/Blue/Red color if enabled
 * Normal, Corner and Centre submodes are also available as part of Tab Selector. Please checkout "Tab selector" section for more details.
@@ -219,6 +228,7 @@ Depending on the browser you can update the page without using the cache with "C
 * You can rotate and flip the board or remove and add columns or rows from the "Rotate / Move / Add / Remove" menu. Square and pyramid rotate 90°. Regular hexagon and regular triangle rotate 30° on the board surface.
 * Adjust the margin of the board with the "Move board to center" and "Fit window to board" buttons.
 * After creating the grid, if you want to add additional rows and columns without resetting the board then you can these buttons:
+	* Note: This feature only works on Square grid type. It also rests Undo/Redo history. Before removing a row/column ensure they are empty and contains no elements.
 	* Top +: Adds a row on the top of the grid
 	* Top -: Removes a row from the top of the grid
 	* Bottom +: Adds a row in the bottom of the grid
@@ -263,7 +273,7 @@ Depending on the browser you can update the page without using the cache with "C
 1. Complete creating puzzle in Edit mode "Problem".
 2. Select Edit mode "Solution" and complete the solution. The solution must be entered using certain shape or color which Penpa+ will detect. Check the following image for guidance:
 ![Use the mentioned color/shape for implementing solution](./images/multisolution.PNG "Solution checking settings")
-3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "Extra options" button. A new window will appear.
+3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "URL with answer check / Extra options" button. A new window will appear.
 	1. Please note that the solution will check only for a certain elements with a certain color and style.
 	2. The new window that appeared will show you all the possibilities. Select the relevant options. There are two choices:
 		1. "AND" column - Solution will check for all the selected elements.
@@ -294,7 +304,7 @@ Depending on the browser you can update the page without using the cache with "C
 	4. Click "Shorten"
 4. Cancel: close the window
 
-* Extra Options (puzzle_output_file -> GMPuzzle output:)
+* URL with answer check / Extra options (puzzle_output_file -> GMPuzzle output:)
 1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
 2. It currently supports (this list is frequently updated):
 	* Sudoku
@@ -384,9 +394,9 @@ Depending on the browser you can update the page without using the cache with "C
 3. How to use it?
 	1. Create a Puzzle in "Edit: Problem" mode using the guide provided in Step 2.
 	2. Select "Solution Mode" and fill in the solution (Grey shading, Green numbering, Green loop, Green edge).
-	3. click on Share -> Extra Options -> puzzle_output_file.
+	3. click on Share -> URL with answer check / Extra options -> puzzle_output_file.
 	4. In the "Header" area, type the puzzle type you are creating.
-	5. click on "GMPUzzle output" button.
+	5. click on "GMPuzzle output" button.
 	6. Specify your required filename and click "Download" button.
 		* Template: [Constructor Initials]-[SubmissionID]-[Genre]-[ShortTitle].txt
 		* Example: SG-012-kurottu-pairs.txt
