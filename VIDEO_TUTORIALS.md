@@ -19,6 +19,8 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * How to Create an Arrow Sudoku? - https://youtu.be/fliy567hSng
 * How to Create a Pentominous Puzzle? - https://youtu.be/hVH_x_m7nZQ
 * How to Create a XV, GreaterThan, Consecutive, Kropki, Quadruple Sudoku? - https://youtu.be/vl1hEuX7H5M
+* How to Create 3D Sudoku/Isodoku? - https://youtu.be/PZ8imdAa_g0
+* How to Create a Little Killer Sudoku? - https://youtu.be/L_5DGjV2Z-w
 
 ## Bonus
 * How to post a puzzle on Logic Masters Germany website - https://www.youtube.com/watch?v=9vhpo2B9qrM&t=1124s
