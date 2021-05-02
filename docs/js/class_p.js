@@ -7072,10 +7072,12 @@ class Puzzle {
                         }
 
                         for (var k of this.selection) {
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && Number.isInteger(parseInt(this["pu_q"].number[k][0]))) ||
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
+                                    Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
+                                    this.selection.length > 1) ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
-                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
+                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
                                 // This is for single digit obtained from candidate submode in Problem
                                 var sum = 0;
                                 for (var j = 0; j < 10; j++) {
