@@ -434,5 +434,5 @@ Depending on the browser you can update the page without using the cache with "C
 * stop - stops the timer. click on start again to restart the timer. click on reset to set the timer back to 00:00.
 * reset - resets the timer to 00:00.
 
-## Disclaimer
-Secondary distribution of code is prohibited. Images created using this software can be used freely with proper due credit. We are not responsible for any damages caused by using this software.
+## LICENSE
+Released under MIT license. Check https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE.
