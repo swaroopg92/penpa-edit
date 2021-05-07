@@ -64,13 +64,13 @@ class Puzzle {
             "sub_cage1_lb"
         ];
         //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number3_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
+        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
         //square,tri,hex
         this.group3 = ["sub_line5_lb"];
         //square,hex
         this.group4 = ["mo_cage_lb"];
         //square,tri,hex,pyramid,
-        this.group5 = ["sub_specialthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb"];
+        this.group5 = ["sub_specialthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb", "sub_number3_lb"];
         // tri, cube
         this.group6 = ["sub_number10_lb"];
 
