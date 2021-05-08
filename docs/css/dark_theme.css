@@ -1184,7 +1184,27 @@ input[type=number] {
 
 #reload_text.tooltiptext {
     width: 160px;
-    margin-left: -110px;
+    margin-left: -95px;
+}
+
+#visibility_text_lb.tooltiptext {
+    width: 150px;
+    margin-left: -80px;
+}
+
+#border_text_lb.tooltiptext {
+    width: 160px;
+    margin-left: -120px;
+}
+
+#panel_text_lb.tooltiptext {
+    width: 120px;
+    margin-left: -55px;
+}
+
+#reload_text_lb.tooltiptext {
+    width: 160px;
+    margin-left: -140px;
 }
 
 #sub_text.tooltiptext {
@@ -1233,6 +1253,14 @@ input[type=number] {
 }
 
 #reload_text.tooltiptext::after {
+    left: 90%;
+}
+
+#border_text_lb.tooltiptext::after {
+    left: 75%;
+}
+
+#reload_text_lb.tooltiptext::after {
     left: 90%;
 }
 
@@ -1354,4 +1382,12 @@ table.center {
 sup {
     line-height: 0;
     vertical-align: center;
+}
+
+/*overwrite some label hover settings*/
+#visibility_button0:hover,
+#panel_button0:hover,
+#edge_button0:hover,
+#reload_button0:hover {
+    color: var(--white);
 }
