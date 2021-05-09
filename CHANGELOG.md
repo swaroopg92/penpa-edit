@@ -1,9 +1,4 @@
 ## History
-* 2021/05/** ver2.25.14
-	* Enabled corner submode in Triangle grid type.
-	* Added MIT license.
-	* Improved bounding box for edge feature in Sudoku solving mode.
-	* Improved Sudoku solving mode in setter mode.
 * 2021/04/24 ver2.25.13
 	* Added Akari composite mode.
 	* Added Minesweeper composite mode.
