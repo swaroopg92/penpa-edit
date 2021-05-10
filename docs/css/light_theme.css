@@ -1143,7 +1143,7 @@ input[type=number] {
 
 #visibility_text.tooltiptext {
     width: 150px;
-    margin-left: -40px;
+    margin-left: -20px;
 }
 
 #border_text.tooltiptext {
@@ -1158,7 +1158,7 @@ input[type=number] {
 
 #reload_text.tooltiptext {
     width: 160px;
-    margin-left: -110px;
+    margin-left: -95px;
 }
 
 #sub_text.tooltiptext {
