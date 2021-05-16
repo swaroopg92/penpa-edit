@@ -1219,7 +1219,7 @@ function load_readme() {
 }
 
 function load_wiki() {
-    window.open('https://github.com/swaroopg92/penpa-edit/wiki', '_blank');
+    window.open('https://github.com/swaroopg92/penpa-edit/wiki/Steps-to-Create-Sudoku-or-Puzzle-in-Penpa', '_blank');
 }
 
 function load_rules() {
