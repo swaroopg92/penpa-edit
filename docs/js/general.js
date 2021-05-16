@@ -985,6 +985,10 @@ function p_settings() {
     document.getElementById("modal-settings").style.display = 'block';
 }
 
+function help() {
+    document.getElementById("modal-help").style.display = 'block';
+}
+
 function expansion() {
     document.getElementById("modal-save2").style.display = 'block';
 }
@@ -1192,6 +1196,74 @@ function import_url() {
     } else {
         document.getElementById("urlstring").value = "Error: Invalid URL";
     }
+}
+
+function load_about() {
+    Swal.fire({
+        title: 'About',
+        html: '<h2 class="info">Welcome to Penpa+ Tool. <br> Its a web application to create and solve Sudokus and Puzzles.<br> Its a Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. <br> You can download your puzzle as images and save the puzzle link in the form of URL to share with others.</h2>',
+        icon: 'info'
+    })
+}
+
+function load_youtube() {
+    window.open('https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos', '_blank');
+}
+
+function load_list() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md', '_blank');
+}
+
+function load_readme() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/README.md', '_blank');
+}
+
+function load_wiki() {
+    window.open('https://github.com/swaroopg92/penpa-edit/wiki', '_blank');
+}
+
+function load_rules() {
+    Swal.fire({
+        title: 'Sudoku/Puzzle Rulesets',
+        html: '<h2 class="info"><a href="https://tinyurl.com/puzzlerules" target="_blank"> Eric Fox - Dictioniary of Rulesets </a> <br> <a href="https://wpcunofficial.miraheze.org/wiki/Category:Puzzle_Types" target="_blank"> Ryotaro Chiba - WPC Puzzles </a> <br> <a href="http://logicmastersindia.com/lmitests/dl.asp?attachmentid=669&v1" target="_blank"> LMI - WSC IB (Sudoku Variants)</a> <br> <a href="http://www.puzzleduel.club/archive/types" target="_blank">Puzzle Duel Club</a> </h2> <br> <h3>Note :- This is by no means an exhaustive list. Penpa+ is not affiliated with these sources. Please contact respective owners for any further information. If you have any additional interesting sources which I can add here, send me an email to penpaplus@gmail.com</h3>',
+        icon: 'info'
+    })
+}
+
+function load_faqs() {
+    window.open('https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit', '_blank');
+}
+
+function load_discord() {
+    window.open('https://discord.gg/BbN89j5', '_blank');
+}
+
+function load_feedback() {
+    Swal.fire({
+        title: 'Feedback',
+        html: '<h2 class="info"><p>Any suggestions or improvements, send an email to <b> penpaplus@gmail.com </b> <br> or <br> Create an issue on github <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a> <br> or <br> Join discussions in #penpa-plus channel in the Discord Server <a href="https://discord.gg/BbN89j5" target="_blank">here</a>.</p></h2>',
+        icon: 'info'
+    })
+}
+
+function load_contribute() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CONTRIBUTING.md', '_blank');
+}
+
+function load_todolist() {
+    window.open('https://github.com/swaroopg92/penpa-edit/projects/1', '_blank');
+}
+
+function load_changelogs() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md', '_blank');
+}
+
+function load_credits() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md', '_blank');
+}
+
+function load_license() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
 function load(urlParam) {

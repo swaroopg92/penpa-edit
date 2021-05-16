@@ -925,7 +925,8 @@ body textarea {
 
 #modal-save-body,
 #modal-save-info,
-#modal-settings-body {
+#modal-settings-body,
+#modal-help-body {
     padding-left: 10px;
     padding-top: 10px;
 }
@@ -964,7 +965,8 @@ body textarea {
 
 #modal-input,
 #modal-load,
-#modal-settings {
+#modal-settings,
+#modal-help {
     display: none;
     position: fixed;
     z-index: 2;
@@ -1223,13 +1225,6 @@ input[type=number] {
     opacity: 1;
 }
 
-/* Information area*/
-#channel,
-#tutorials {
-    color: var(--blue);
-    background-color: var(--blueLightVery);
-}
-
 /* Swal fire - Warnings and Wish */
 .wish {
     color: var(--white);
@@ -1264,4 +1259,32 @@ table.center {
 sup {
     line-height: 0;
     vertical-align: center;
+}
+
+#load_about,
+#load_youtube,
+#load_list,
+#load_readme,
+#load_wiki,
+#load_rules,
+#load_faqs,
+#load_discord,
+#load_feedback,
+#load_contribute,
+#load_todolist,
+#load_changelogs,
+#load_credits,
+#load_license {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+}
+
+#modal-help-content {
+    background-color: var(--white);
+    width: 300px;
+    height: 400px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 20px;
 }

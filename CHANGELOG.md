@@ -1,5 +1,7 @@
 ## History
 * 2021/05/** ver2.25.14
+	* Added Help Button and seggregated all the Penpa help tools and cleaned up main html page footer.
+	* Improved labels of some buttons.
 	* Enabled corner submode in Triangle grid type.
 	* Added MIT license.
 	* Improved bounding box for edge feature in Sudoku solving mode.
