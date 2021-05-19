@@ -559,6 +559,8 @@ class Puzzle_square extends Puzzle {
             this.draw_symbol("pu_a", 1);
             this.draw_wall("pu_q");
             this.draw_wall("pu_a");
+            this.draw_direction("pu_q");
+            this.draw_direction("pu_a");
             this.draw_frame();
             this.draw_polygonsp("pu_q");
             this.draw_polygonsp("pu_a");
@@ -566,8 +568,6 @@ class Puzzle_square extends Puzzle {
             this.draw_freeline("pu_a");
             this.draw_line("pu_q");
             this.draw_line("pu_a");
-            this.draw_direction("pu_q");
-            this.draw_direction("pu_a");
             this.draw_lattice();
             this.draw_selection();
             this.draw_symbol("pu_q", 2);
