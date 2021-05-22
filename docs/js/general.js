@@ -931,6 +931,10 @@ function saveimage_download() {
         if (filename.slice(-4) != ".jpg") {
             filename += ".jpg";
         }
+    } else if (document.getElementById("nb_type3").checked) {
+        if (filename.slice(-4) != ".svg") {
+            filename += ".svg";
+        }
     }
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
@@ -941,13 +945,32 @@ function saveimage_download() {
     }
 
     if (valid_name) {
-        if (pu.canvas.msToBlob) { // For IE
-            var blob = pu.canvas.msToBlob();
-            window.navigator.msSaveBlob(blob, filename);
-        } else { // Other browsers
-            downloadLink.href = pu.resizecanvas();
-            downloadLink.download = filename;
-            downloadLink.click();
+        if (document.getElementById("nb_type3").checked) {
+            var text = pu.resizecanvas();
+            var downloadLink = document.getElementById('download_link');
+            var blob = new Blob([text], { type: "text/plain" });
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
+                //safari
+                window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+            } else if (window.navigator.msSaveBlob) {
+                // for IE
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.target = "_blank";
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        } else {
+            if (pu.canvas.msToBlob) { // For IE
+                var blob = pu.canvas.msToBlob();
+                window.navigator.msSaveBlob(blob, filename);
+            } else { // Other browsers
+                downloadLink.href = pu.resizecanvas();
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
         }
     } else {
         Swal.fire({

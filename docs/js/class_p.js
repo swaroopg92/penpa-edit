@@ -1890,8 +1890,27 @@ class Puzzle {
         resizedContext.drawImage(this.canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
         if (document.getElementById("nb_type1").checked) {
             var canvastext = resizedCanvas.toDataURL("image/png");
-        } else {
+        } else if (document.getElementById("nb_type2").checked) {
             var canvastext = resizedCanvas.toDataURL("image/jpeg");
+        } else if (document.getElementById("nb_type3").checked) {
+            var svg_canvas = new fabric.Canvas()
+            var imginstance = new fabric.Image(this.canvas, {
+                left: 0,
+                top: 0,
+                width: this.canvas.width,
+                height: this.canvas.height
+            });
+            svg_canvas.add(imginstance);
+            var canvastext = svg_canvas.toSVG({
+                width: "100%",
+                height: "100%",
+                viewBox: {
+                    x: 0,
+                    y: 0,
+                    width: this.canvas.width,
+                    height: this.canvas.height
+                }
+            });
         }
         this.mode[this.mode.qa].edit_mode = mode;
 
