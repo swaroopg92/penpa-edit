@@ -70,7 +70,7 @@ class Puzzle {
         //square,hex
         this.group4 = ["mo_cage_lb"];
         //square,tri,hex,pyramid,
-        this.group5 = ["sub_specialthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb", "sub_number3_lb"];
+        this.group5 = ["sub_specialthermo_lb", "sub_specialnobulbthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb", "sub_number3_lb"];
         // tri, cube
         this.group6 = ["sub_number10_lb"];
 
@@ -161,6 +161,7 @@ class Puzzle {
             ["\"polygon\"", "z5"],
             ["\"deletelineE\"", "z4"],
             ["\"killercages\"", "z6"],
+            ["\"nobulbthermo\"", "z7"],
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
@@ -194,6 +195,7 @@ class Puzzle {
             this[i].cage = {};
             this[i].deletelineE = {};
             this[i].killercages = [];
+            this[i].nobulbthermo = [];
         }
 
         // Object and Array initialization for custom colors
@@ -218,6 +220,7 @@ class Puzzle {
             this[i].cage = {};
             this[i].deletelineE = {};
             this[i].killercages = [];
+            this[i].nobulbthermo = [];
         }
 
         this.frame = {};
@@ -246,6 +249,7 @@ class Puzzle {
         this[this.mode.qa].cage = {};
         this[this.mode.qa].deletelineE = {};
         this[this.mode.qa].killercages = [];
+        this[this.mode.qa].nobulbthermo = [];
 
         // Object and Array initialization for custom colors
         this[this.mode.qa + "_col"] = {};
@@ -268,6 +272,7 @@ class Puzzle {
         this[this.mode.qa + "_col"].cage = {};
         this[this.mode.qa + "_col"].deletelineE = {};
         this[this.mode.qa + "_col"].killercages = [];
+        this[this.mode.qa + "_col"].nobulbthermo = [];
     }
 
     reset_arr() {
@@ -742,6 +747,20 @@ class Puzzle {
                     }
                 }
 
+                // shift No Bulb Thermo elements to next row
+                if (this[i].nobulbthermo) {
+                    let temp = this[i].nobulbthermo;
+                    this[i].nobulbthermo = {};
+                    this[i].nobulbthermo = new Array(temp.length);
+                    for (var k in temp) {
+                        this.record("nobulbthermo", k);
+                        for (var m = 0; m <= (temp[k].length - 1); m++) {
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
+                        }
+                        this[i].nobulbthermo[k] = temp[k];
+                    }
+                }
+
                 // shift Arrow elements to next row
                 if (this[i].arrows) {
                     let temp = this[i].arrows;
@@ -808,6 +827,20 @@ class Puzzle {
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("cage", key);
                         this[i].cage[key] = temp[k];
+                    }
+                }
+
+                // shift Killer Cages to next row
+                if (this[i].killercages) {
+                    let temp = this[i].killercages;
+                    this[i].killercages = {};
+                    this[i].killercages = new Array(temp.length);
+                    for (var k in temp) {
+                        this.record("killercages", k);
+                        for (var m = 0; m <= (temp[k].length - 1); m++) {
+                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
+                        }
+                        this[i].killercages[k] = temp[k];
                     }
                 }
 
@@ -1361,6 +1394,20 @@ class Puzzle {
                     }
                 }
 
+                // shift No Bulb Thermo elements to next column
+                if (this[i].nobulbthermo) {
+                    let temp = this[i].nobulbthermo;
+                    this[i].nobulbthermo = {};
+                    this[i].nobulbthermo = new Array(temp.length);
+                    for (var k in temp) {
+                        this.record("nobulbthermo", k);
+                        for (var m = 0; m <= (temp[k].length - 1); m++) {
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
+                        }
+                        this[i].nobulbthermo[k] = temp[k];
+                    }
+                }
+
                 // shift Arrow elements to next column
                 if (this[i].arrows) {
                     let temp = this[i].arrows;
@@ -1431,6 +1478,21 @@ class Puzzle {
                         this[i].cage[key] = temp[k];
                     }
                 }
+
+                // shift Killer cages to next column
+                if (this[i].killercages) {
+                    let temp = this[i].killercages;
+                    this[i].killercages = {};
+                    this[i].killercages = new Array(temp.length);
+                    for (var k in temp) {
+                        this.record("killercages", k);
+                        for (var m = 0; m <= (temp[k].length - 1); m++) {
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
+                        }
+                        this[i].killercages[k] = temp[k];
+                    }
+                }
+
 
                 // shift Polygon elements to next column
                 if (this[i].polygon) {
@@ -1712,6 +1774,20 @@ class Puzzle {
                     }
                 }
 
+                // Maintain No Bulb Thermo elements in the same column
+                if (this[i].nobulbthermo) {
+                    let temp = this[i].nobulbthermo;
+                    this[i].nobulbthermo = {};
+                    this[i].nobulbthermo = new Array(temp.length);
+                    for (var k in temp) {
+                        this.record("nobulbthermo", k);
+                        for (var m = 0; m <= (temp[k].length - 1); m++) {
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
+                        }
+                        this[i].nobulbthermo[k] = temp[k];
+                    }
+                }
+
                 // Maintain Arrow elements in the same column
                 if (this[i].arrows) {
                     let temp = this[i].arrows;
@@ -1780,6 +1856,20 @@ class Puzzle {
                         var key = (k1.toString() + "," + k2.toString());
                         this.record("cage", key);
                         this[i].cage[key] = temp[k];
+                    }
+                }
+
+                // Maintain Killer Cages in the same column
+                if (this[i].killercages) {
+                    let temp = this[i].killercages;
+                    this[i].killercages = {};
+                    this[i].killercages = new Array(temp.length);
+                    for (var k in temp) {
+                        this.record("killercages", k);
+                        for (var m = 0; m <= (temp[k].length - 1); m++) {
+                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
+                        }
+                        this[i].killercages[k] = temp[k];
                     }
                 }
 
@@ -2076,6 +2166,9 @@ class Puzzle {
             // set the custom color to default
             switch (name) {
                 case "sub_specialthermo":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+                case "sub_specialnobulbthermo":
                     $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
                     break;
                 case "sub_specialarrows":
@@ -6314,7 +6407,7 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
                             if (a_col) {
@@ -6413,7 +6506,7 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
                             if (a_col) {
@@ -6522,7 +6615,7 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
@@ -6617,7 +6710,7 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
                         this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
@@ -6695,7 +6788,7 @@ class Puzzle {
 
     record(arr, num, groupcounter = 0) {
         if (this.mode.qa === "pu_q") {
-            if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
+            if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_q.command_undo.push([arr, num, null, this.mode.qa]);
                 this.pu_q_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
             } else if (arr === "killercages" && num === -1) { // killer cages always have groupcounter passed
@@ -6738,7 +6831,7 @@ class Puzzle {
             this.pu_q.command_redo = new Stack();
             this.pu_q_col.command_redo = new Stack();
         } else {
-            if ((arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
+            if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
                 this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
             } else if (arr === "killercages" && num === -1) {
