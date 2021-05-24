@@ -581,20 +581,22 @@ class Puzzle_pyramid extends Puzzle {
     }
 
     draw_nobulbthermo(pu) {
-        for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
-            if (this[pu].nobulbthermo[i][0]) {
-                this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                this.ctx.fillStyle = Color.GREY_LIGHT;
-                this.ctx.setLineDash([]);
-                this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = Color.GREY_LIGHT;
-                this.ctx.lineWidth = this.size * 0.4;
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this[pu].nobulbthermo[i][0]].x, this.point[this[pu].nobulbthermo[i][0]].y);
-                for (var j = 1; j < this[pu].nobulbthermo[i].length; j++) {
-                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+        if (this[pu].nobulbthermo) {
+            for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
+                if (this[pu].nobulbthermo[i][0]) {
+                    this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                    this.ctx.fillStyle = Color.GREY_LIGHT;
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineCap = "square";
+                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    this.ctx.lineWidth = this.size * 0.4;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[this[pu].nobulbthermo[i][0]].x, this.point[this[pu].nobulbthermo[i][0]].y);
+                    for (var j = 1; j < this[pu].nobulbthermo[i].length; j++) {
+                        this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                    }
+                    this.ctx.stroke();
                 }
-                this.ctx.stroke();
             }
         }
     }
