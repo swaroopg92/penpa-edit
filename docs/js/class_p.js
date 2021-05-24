@@ -9049,7 +9049,7 @@ class Puzzle {
                     this.re_combi_edgesub(num);
                     break;
                 case "battleship":
-                    this.re_combi_battleship(num);
+                    this.re_combi_battleship(x, y, num);
                     break;
                 case "star":
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
@@ -9112,6 +9112,9 @@ class Puzzle {
                 case "mines":
                     this.re_combi_mines_downright(num);
                     break;
+                case "battleship":
+                    this.re_combi_battleship_downright(num);
+                    break;
             }
         } else if (this.mouse_mode === "move") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
@@ -9146,7 +9149,7 @@ class Puzzle {
                     this.re_combi_edgesub_move(num);
                     break;
                 case "battleship":
-                    this.re_combi_battleship_move(num);
+                    this.re_combi_battleship_move(x, y, num);
                     break;
                 case "star":
                     this.re_combi_star_move(num);
@@ -9176,7 +9179,6 @@ class Puzzle {
                 case "blwh":
                 case "linex":
                 case "hashi":
-                case "battleship":
                 case "star":
                 case "mines":
                 case "magnets":
@@ -9218,6 +9220,9 @@ class Puzzle {
                     break;
                 case "arrowS":
                     this.re_combi_arrowS_up(num);
+                    break;
+                case "battleship":
+                    this.re_combi_battleship_up(x, y, num);
                     break;
                 case "numfl":
                     this.re_combi_numfl_up(num);
@@ -9846,59 +9851,104 @@ class Puzzle {
         }
     }
 
-    re_combi_battleship(num) {
-        if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][1] != "battleship_B") {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "battleship_B", 2];
-        } else if (this[this.mode.qa].symbol[num][0] === 8) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.drawing_mode = 2;
-        } else {
-            var adj = [0, 0, 0, 0, 0];
-            for (var i = 0; i < 4; i++) {
-                if (this[this.mode.qa].symbol[this.point[num].adjacent[i]] && this[this.mode.qa].symbol[this.point[num].adjacent[i]][1] === "battleship_B" && this[this.mode.qa].symbol[this.point[num].adjacent[i]][0] <= 6) { //隣がバトルシップだったら
-                    adj[i] = 1;
-                    adj[4] += 1;
-                }
-            }
-            if (adj[4] === 0) {
-                this.key_battleship(num, 1);
-            } else if (adj[4] === 1) {
-                if (adj[0] === 1) {
-                    this.key_battleship(num, 6);
-                } else if (adj[1] === 1) {
-                    this.key_battleship(num, 5);
-                } else if (adj[2] === 1) {
-                    this.key_battleship(num, 3);
-                } else if (adj[3] === 1) {
-                    this.key_battleship(num, 4);
-                }
+    re_combi_battleship(x, y, num) {
+        if (this.point[num].type === 0) {
+            this.last = num;
+            this.lastx = x;
+            this.lasty = y;
+            if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 8) {
+                this.drawing_mode = 3;
+            } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 7) {
+                this.drawing_mode = 2;
             } else {
-                this.key_battleship(num, 8);
+                this.drawing_mode = 1;
             }
         }
-        this.redraw();
     }
 
-    key_battleship(num, n) {
-        this.record("symbol", num);
-        if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === n) {
-            this[this.mode.qa].symbol[num] = [8, "battleship_B", 2];
-            this.drawing_mode = 1;
-        } else {
-            this[this.mode.qa].symbol[num] = [n, "battleship_B", 2];
+    re_combi_battleship_downright(num) {
+        if (this.point[num].type === 0) {
+            this.last = num;
+            if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 7) {
+                this.drawing_mode = 5;
+            } else {
+                this.drawing_mode = 4;
+            }
         }
     }
 
-    re_combi_battleship_move(num) {
-        if (this.drawing_mode === 1 && (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] != 8)) {
+    re_combi_battleship_move(x, y, num) {
+        if (this.drawing_mode === 5) {
+            if (this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.redraw();
+            }
+        } else if (this.drawing_mode === 4) {
+            if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 7)) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [7, "battleship_B", 2];
+                this.redraw();
+            }
+        } else if (this.drawing_mode === 3) {
+            if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 8)) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "battleship_B", 2];
+                this.redraw();
+            }
+        } else if (this.drawing_mode === 2) {
+            if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 7)) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [7, "battleship_B", 2];
+                this.redraw();
+            }
+        } else if (this.drawing_mode === 1) {
+            var battleshipdirection;
+            if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
+                battleshipdirection = this.direction_battleship4(x, y, this.lastx, this.lasty);
+            } else {
+                return;
+            }
+            // battleshipdirection = 1 (left pointing), 0 (up pointing), 3 (right pointing), 2 (down pointing)
+            var a = [6, 5, 4, 3];
+            this.record("symbol", this.last);
+            this[this.mode.qa].symbol[this.last] = [a[battleshipdirection], "battleship_B", 2];
+            this.drawing_mode = -1;
+            this.last = -1;
+            this.redraw();
+        }
+    }
+
+    re_combi_battleship_up(x, y, num) {
+        if (this.drawing_mode === 1) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[this.last] = [1, "battleship_B", 2];
+            } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[this.last] = [2, "battleship_B", 2];
+            } else if (this[this.mode.qa].symbol[num][0] === 2) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[this.last] = [8, "battleship_B", 2];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+        } else if (this.drawing_mode == 5 && (this.last === num)) {
             this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [8, "battleship_B", 2];
-        } else if (this.drawing_mode === 2 && this[this.mode.qa].symbol[num]) {
+            delete this[this.mode.qa].symbol[num];
+        } else if (this.drawing_mode == 4 && (this.last === num)) {
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[this.last] = [7, "battleship_B", 2];
+        } else if (this.drawing_mode == 3 && (this.last === num)) {
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[this.last] = [7, "battleship_B", 2];
+        } else if (this.drawing_mode == 2 && (this.last === num)) {
             this.record("symbol", num);
             delete this[this.mode.qa].symbol[num];
         }
+        this.drawing_mode = -1;
+        this.last = -1;
         this.redraw();
     }
 
