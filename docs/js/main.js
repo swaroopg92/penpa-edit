@@ -976,6 +976,10 @@ onload = function() {
                 p_settings();
                 e.preventDefault();
                 break;
+            case "page_help":
+                help();
+                e.preventDefault();
+                break;
             case "tb_undo":
                 pu.undo();
                 e.preventDefault();

@@ -931,6 +931,10 @@ function saveimage_download() {
         if (filename.slice(-4) != ".jpg") {
             filename += ".jpg";
         }
+    } else if (document.getElementById("nb_type3").checked) {
+        if (filename.slice(-4) != ".svg") {
+            filename += ".svg";
+        }
     }
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
@@ -941,13 +945,32 @@ function saveimage_download() {
     }
 
     if (valid_name) {
-        if (pu.canvas.msToBlob) { // For IE
-            var blob = pu.canvas.msToBlob();
-            window.navigator.msSaveBlob(blob, filename);
-        } else { // Other browsers
-            downloadLink.href = pu.resizecanvas();
-            downloadLink.download = filename;
-            downloadLink.click();
+        if (document.getElementById("nb_type3").checked) {
+            var text = pu.resizecanvas();
+            var downloadLink = document.getElementById('download_link');
+            var blob = new Blob([text], { type: "text/plain" });
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
+                //safari
+                window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+            } else if (window.navigator.msSaveBlob) {
+                // for IE
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.target = "_blank";
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        } else {
+            if (pu.canvas.msToBlob) { // For IE
+                var blob = pu.canvas.msToBlob();
+                window.navigator.msSaveBlob(blob, filename);
+            } else { // Other browsers
+                downloadLink.href = pu.resizecanvas();
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
         }
     } else {
         Swal.fire({
@@ -983,6 +1006,10 @@ function i_url() {
 
 function p_settings() {
     document.getElementById("modal-settings").style.display = 'block';
+}
+
+function help() {
+    document.getElementById("modal-help").style.display = 'block';
 }
 
 function expansion() {
@@ -1192,6 +1219,70 @@ function import_url() {
     } else {
         document.getElementById("urlstring").value = "Error: Invalid URL";
     }
+}
+
+function load_about() {
+    Swal.fire({
+        title: 'About',
+        html: '<h2 class="info">Welcome to Penpa+ Tool. <br> Its a web application to create and solve Sudokus and Puzzles.<br> Its a Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. <br> You can download your puzzle as images and save the puzzle link in the form of URL to share with others.</h2>',
+        icon: 'info'
+    })
+}
+
+function load_youtube() {
+    window.open('https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos', '_blank');
+}
+
+function load_list() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md', '_blank');
+}
+
+function load_readme() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/README.md', '_blank');
+}
+
+function load_wiki() {
+    window.open('https://github.com/swaroopg92/penpa-edit/wiki/Steps-to-Create-Sudoku-or-Puzzle-in-Penpa', '_blank');
+}
+
+function load_rules() {
+    window.open('https://tinyurl.com/GMPuzzlesFormatting', '_blank');
+}
+
+function load_faqs() {
+    window.open('https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit', '_blank');
+}
+
+function load_discord() {
+    window.open('https://discord.gg/BbN89j5', '_blank');
+}
+
+function load_feedback() {
+    Swal.fire({
+        title: 'Feedback',
+        html: '<h2 class="info"><p>Any suggestions or improvements, send an email to <b> penpaplus@gmail.com </b> <br> or <br> Create an issue on github <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a> <br> or <br> Join discussions in #penpa-plus channel in the Discord Server <a href="https://discord.gg/BbN89j5" target="_blank">here</a>.</p></h2>',
+        icon: 'info'
+    })
+}
+
+function load_contribute() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CONTRIBUTING.md', '_blank');
+}
+
+function load_todolist() {
+    window.open('https://github.com/swaroopg92/penpa-edit/projects/1', '_blank');
+}
+
+function load_changelogs() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md', '_blank');
+}
+
+function load_credits() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md', '_blank');
+}
+
+function load_license() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
 function load(urlParam) {
@@ -1985,7 +2076,7 @@ function set_solvemode() {
     document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
-    document.getElementById("mo_cage_lb").style.display = "none";
+    // document.getElementById("mo_cage_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
     // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";

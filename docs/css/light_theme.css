@@ -51,7 +51,8 @@ input {
 }
 
 body {
-    background: url(images/corky_light.jpg) top center;
+    background: var(--white);
+    /*background: url(images/corky_light.jpg) top center;*/
 }
 
 header {
@@ -100,7 +101,7 @@ hr.newgridhrline {
 }
 
 #buttons {
-    background: url(images/parch_light.jpg) top center;
+    /*background: url(images/parch_light.jpg) top center;*/
     font-size: 0;
     border: 1px solid var(--black);
     width: 550px;
@@ -683,7 +684,8 @@ body textarea {
 
 #puzzleinfo,
 #contestinfo {
-    background: url(images/parch_light.jpg) top center;
+    background: var(--white);
+    /*background: url(images/parch_light.jpg) top center;*/
     width: 530px;
     margin: 0 auto;
     margin-bottom: 5px;
@@ -694,7 +696,8 @@ body textarea {
 }
 
 #dvique {
-    background: url(images/parch_light.jpg) top center;
+    background: var(--white);
+    /*background: url(images/parch_light.jpg) top center;*/
     border: 1px solid var(--blackLight);
     width: 400px;
     margin: 0 auto;
@@ -925,7 +928,8 @@ body textarea {
 
 #modal-save-body,
 #modal-save-info,
-#modal-settings-body {
+#modal-settings-body,
+#modal-help-body {
     padding-left: 10px;
     padding-top: 10px;
 }
@@ -964,7 +968,8 @@ body textarea {
 
 #modal-input,
 #modal-load,
-#modal-settings {
+#modal-settings,
+#modal-help {
     display: none;
     position: fixed;
     z-index: 2;
@@ -1143,7 +1148,7 @@ input[type=number] {
 
 #visibility_text.tooltiptext {
     width: 150px;
-    margin-left: -40px;
+    margin-left: -20px;
 }
 
 #border_text.tooltiptext {
@@ -1158,7 +1163,7 @@ input[type=number] {
 
 #reload_text.tooltiptext {
     width: 160px;
-    margin-left: -110px;
+    margin-left: -95px;
 }
 
 #sub_text.tooltiptext {
@@ -1223,13 +1228,6 @@ input[type=number] {
     opacity: 1;
 }
 
-/* Information area*/
-#channel,
-#tutorials {
-    color: var(--blue);
-    background-color: var(--blueLightVery);
-}
-
 /* Swal fire - Warnings and Wish */
 .wish {
     color: var(--white);
@@ -1245,17 +1243,6 @@ input[type=number] {
 
 #title {
     font-size: 25px;
-    color: var(--white);
-}
-
-/*Timer Display*/
-.values {
-    color: var(--white);
-}
-
-.footer {
-    background: url(images/parch_light.jpg) top center;
-    border: 1px solid var(--blackLight);
 }
 
 table,
@@ -1279,4 +1266,32 @@ table.center {
 sup {
     line-height: 0;
     vertical-align: center;
+}
+
+#load_about,
+#load_youtube,
+#load_list,
+#load_readme,
+#load_wiki,
+#load_rules,
+#load_faqs,
+#load_discord,
+#load_feedback,
+#load_contribute,
+#load_todolist,
+#load_changelogs,
+#load_credits,
+#load_license {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+}
+
+#modal-help-content {
+    background-color: var(--white);
+    width: 300px;
+    height: 440px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 20px;
 }

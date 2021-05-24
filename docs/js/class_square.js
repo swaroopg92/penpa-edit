@@ -553,12 +553,16 @@ class Puzzle_square extends Puzzle {
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
             this.draw_thermo("pu_a");
+            this.draw_nobulbthermo("pu_q");
+            this.draw_nobulbthermo("pu_a");
             this.draw_arrowsp("pu_q");
             this.draw_arrowsp("pu_a");
             this.draw_symbol("pu_q", 1);
             this.draw_symbol("pu_a", 1);
             this.draw_wall("pu_q");
             this.draw_wall("pu_a");
+            this.draw_direction("pu_q");
+            this.draw_direction("pu_a");
             this.draw_frame();
             this.draw_polygonsp("pu_q");
             this.draw_polygonsp("pu_a");
@@ -566,8 +570,6 @@ class Puzzle_square extends Puzzle {
             this.draw_freeline("pu_a");
             this.draw_line("pu_q");
             this.draw_line("pu_a");
-            this.draw_direction("pu_q");
-            this.draw_direction("pu_a");
             this.draw_lattice();
             this.draw_selection();
             this.draw_symbol("pu_q", 2);
@@ -583,6 +585,7 @@ class Puzzle_square extends Puzzle {
             this.draw_surface("pu_q");
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
+            this.draw_nobulbthermo("pu_q");
             this.draw_arrowsp("pu_q");
             this.draw_symbol("pu_q", 1);
             this.draw_wall("pu_q");
@@ -759,14 +762,86 @@ class Puzzle_square extends Puzzle {
         }
     }
 
+    draw_nobulbthermo(pu) {
+        if (this[pu].nobulbthermo) {
+            let xdirection, ydirection, commonend; // x is column, y is row
+            let reduce_straight = 0.44 * this.size,
+                reduce_diagonal = 0.316 * this.size;
+            for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
+                if (this[pu].nobulbthermo[i] && this[pu].nobulbthermo[i][0]) {
+                    this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].nobulbthermo[i]) {
+                        this.ctx.fillStyle = this[pu + "_col"].nobulbthermo[i];
+                    } else {
+                        this.ctx.fillStyle = Color.GREY_LIGHT;
+                    }
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineCap = "square";
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].nobulbthermo[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].nobulbthermo[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    }
+                    this.ctx.lineWidth = this.size * 0.4;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[this[pu].nobulbthermo[i][0]].x, this.point[this[pu].nobulbthermo[i][0]].y);
+                    for (var j = 1; j < this[pu].nobulbthermo[i].length; j++) {
+                        if (j < (this[pu].nobulbthermo[i].length - 1)) {
+                            this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                        } else {
+                            commonend = this.find_common(pu, i, this[pu].nobulbthermo[i][j], "nobulbthermo");
+                            if (commonend) {
+                                xdirection = this.point[this[pu].nobulbthermo[i][j]].x - this.point[this[pu].nobulbthermo[i][j - 1]].x;
+                                ydirection = this.point[this[pu].nobulbthermo[i][j]].y - this.point[this[pu].nobulbthermo[i][j - 1]].y;
+                                if (xdirection == 0 && ydirection < 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y + reduce_straight);
+                                } else if (xdirection < 0 && ydirection > 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x + reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y - reduce_diagonal);
+                                } else if (xdirection > 0 && ydirection == 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x - reduce_straight, this.point[this[pu].nobulbthermo[i][j]].y);
+                                } else if (xdirection > 0 && ydirection > 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x - reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y - reduce_diagonal);
+                                } else if (xdirection == 0 && ydirection > 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y - reduce_straight);
+                                } else if (xdirection > 0 && ydirection < 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x - reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y + reduce_diagonal);
+                                } else if (xdirection < 0 && ydirection == 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x + reduce_straight, this.point[this[pu].nobulbthermo[i][j]].y);
+                                } else if (xdirection < 0 && ydirection < 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x + reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y + reduce_diagonal);
+                                }
+                            } else {
+                                this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                            }
+                        }
+                    }
+                    this.ctx.stroke();
+                }
+            }
+        }
+    }
+
     find_common(pu, i, endpoint, symboltype) {
-        if (symboltype === "thermo") {
+        if (symboltype === "thermo" || symboltype === "nobulbthermo") {
             if (this[pu].thermo) {
                 for (var k = 0; k < this[pu].thermo.length; k++) {
                     if (k != i) {
                         if (this[pu].thermo[k]) {
                             for (var m = 1; m < this[pu].thermo[k].length; m++) {
                                 if (this[pu].thermo[k][m] === endpoint) {
+                                    return 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (this[pu].nobulbthermo) {
+                for (var k = 0; k < this[pu].nobulbthermo.length; k++) {
+                    if (k != i) {
+                        if (this[pu].nobulbthermo[k]) {
+                            for (var m = 1; m < this[pu].nobulbthermo[k].length; m++) {
+                                if (this[pu].nobulbthermo[k][m] === endpoint) {
                                     return 1;
                                 }
                             }

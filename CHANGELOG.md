@@ -1,4 +1,14 @@
 ## History
+* 2021/05/23 ver2.25.15
+	* Added "SVG" graphic support.
+	* Added Bulbless Thermo support.
+* 2021/05/20 ver2.25.14
+	* Added Help Button and seggregated all the Penpa help tools and cleaned up main html page footer.
+	* Improved labels of some buttons.
+	* Enabled corner submode in Triangle grid type.
+	* Added MIT license.
+	* Improved bounding box for edge feature in Sudoku solving mode.
+	* Improved Sudoku solving mode in setter mode.
 * 2021/04/24 ver2.25.13
 	* Added Akari composite mode.
 	* Added Minesweeper composite mode.
