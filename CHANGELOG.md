@@ -1,4 +1,7 @@
 ## History
+* 2021/**/** ver 2.25.16
+	* Added Alpha Version of New Board type "Tetrakis Square".
+	* Added Sun, Moon, Mine, Bulb, firefly, Angle loop to all the non-square grids.
 * 2021/05/23 ver2.25.15
 	* Added "SVG" graphic support.
 	* Added Bulbless Thermo support.
