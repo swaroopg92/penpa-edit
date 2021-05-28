@@ -8172,7 +8172,8 @@ class Puzzle {
             this.redraw();
         } else if (this.mouse_mode === "move") {
             // if the first selected position is edge then do not consider move
-            if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 && this.gridtype !== "iso") {
+            if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
+                this.gridtype !== "iso" && this.gridtype !== "tetrakis_square") {
                 // do nothing
             } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);
@@ -10651,13 +10652,15 @@ class Puzzle {
                 a[1] = a[2];
                 a[2] = c;
             }
-
             for (var k of this.selection) {
                 let factor, offset;
                 if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
                     factor = parseInt(k / (this.nx0 * this.ny0));
                     offset = 3;
                 } else if (this.gridtype === "iso") {
+                    factor = 0;
+                    offset = 0;
+                } else if (this.gridtype === "tetrakis_square") {
                     factor = 0;
                     offset = 0;
                 } else {
