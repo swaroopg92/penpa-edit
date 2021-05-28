@@ -58,8 +58,7 @@ class Puzzle {
         this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
             "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb", "combili_akari", "combili_mines",
-            "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb", "input_sudoku",
+            "sub_sudoku2_lb", "input_sudoku",
             "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
             "sub_cage1_lb"
         ];
@@ -7167,123 +7166,125 @@ class Puzzle {
                     }
                     break;
                 case "2": // Corner mode
-                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                    if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                        if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
 
-                        if (this.selection.length === 1) {
-                            this.undoredo_counter = 0;
+                            if (this.selection.length === 1) {
+                                this.undoredo_counter = 0;
 
-                            // if the selected cell is on the edge then do not proceed
-                            if (parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
-                                break;
-                            }
-                        } else {
-                            this.undoredo_counter = this.undoredo_counter + 1;
-                        }
-                        var j_start = 0;
-                        var length_limit = 8;
-
-                        // if any element present in numberS mode then
-                        // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
-                        if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
-                            length_limit = 6;
-                            j_start = 1;
-                        }
-
-                        for (var k of this.selection) {
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
-                                    this.selection.length > 1) ||
-                                this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
-                                var single_digit = true;
-                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
-                                // This is for single digit obtained from candidate submode in Problem
-                                var sum = 0;
-                                for (var j = 0; j < 10; j++) {
-                                    if (this["pu_q"].number[k][0][j] === 1) {
-                                        sum += 1;
-                                    }
-                                }
-                                if (sum === 1) {
-                                    var single_digit = true;
-                                } else {
-                                    var single_digit = false;
-                                }
-                            } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
-                                // This is for digits obtained from candidate submode in Solution
-                                var sum = 0;
-                                for (var j = 0; j < 10; j++) {
-                                    if (this["pu_a"].number[k][0][j] === 1) {
-                                        sum += 1;
-                                        con += (j + 1).toString();
-                                    }
-                                }
-                                if (sum === 1) {
-                                    var single_digit = true;
-                                } else {
-                                    var single_digit = false;
+                                // if the selected cell is on the edge then do not proceed
+                                if (parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
+                                    break;
                                 }
                             } else {
-                                var single_digit = false;
+                                this.undoredo_counter = this.undoredo_counter + 1;
                             }
-                            if (!single_digit) {
-                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-                                con = "";
+                            var j_start = 0;
+                            var length_limit = 8;
 
-                                // Read all the existing digits from the corner and sides
-                                for (var j = j_start; j < 4; j++) {
-                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                        con += this[this.mode.qa].numberS[corner_cursor + j][0];
-                                    }
-                                }
-                                for (var j = j_start; j < 4; j++) {
-                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                        con += this[this.mode.qa].numberS[side_cursor + j][0];
-                                    }
-                                }
+                            // if any element present in numberS mode then
+                            // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
+                            if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
+                                length_limit = 6;
+                                j_start = 1;
+                            }
 
-                                if (con.indexOf(key) != -1) { // if digit already exists
-                                    con = con.replace(key, '');
-
-                                    // remove the last digit from old location
-                                    if ((con.length + 1) < (5 - j_start)) {
-                                        this.record("numberS", corner_cursor + con.length + j_start, this.undoredo_counter);
-                                        delete this[this.mode.qa].numberS[corner_cursor + con.length + j_start];
-                                    } else {
-                                        this.record("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
-                                        delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
-                                    }
-
-                                    if (con) {
-                                        if (con.length < (5 - j_start)) {
-                                            for (var j = j_start; j < (con.length + j_start); j++) {
-                                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            }
-                                        } else {
-                                            for (var j = j_start; j < 4; j++) {
-                                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            }
-                                            for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
-                                                this.record("numberS", side_cursor + j - 4, this.undoredo_counter);
-                                                this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            }
+                            for (var k of this.selection) {
+                                if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
+                                        Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
+                                        this.selection.length > 1) ||
+                                    this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
+                                    var single_digit = true;
+                                } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
+                                    // This is for single digit obtained from candidate submode in Problem
+                                    var sum = 0;
+                                    for (var j = 0; j < 10; j++) {
+                                        if (this["pu_q"].number[k][0][j] === 1) {
+                                            sum += 1;
                                         }
                                     }
-                                } else if (con.length < length_limit) { // If digit doesnt exist in the cell
-                                    con += key;
-                                    if (con.length < (5 - j_start)) {
-                                        this.record("numberS", corner_cursor + con.length - 1 + j_start, this.undoredo_counter);
-                                        this[this.mode.qa].numberS[corner_cursor + con.length - 1 + j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                    if (sum === 1) {
+                                        var single_digit = true;
                                     } else {
-                                        this.record("numberS", side_cursor + con.length - 5 + 2 * j_start, this.undoredo_counter);
-                                        this[this.mode.qa].numberS[side_cursor + con.length - 5 + 2 * j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        var single_digit = false;
+                                    }
+                                } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
+                                    // This is for digits obtained from candidate submode in Solution
+                                    var sum = 0;
+                                    for (var j = 0; j < 10; j++) {
+                                        if (this["pu_a"].number[k][0][j] === 1) {
+                                            sum += 1;
+                                            con += (j + 1).toString();
+                                        }
+                                    }
+                                    if (sum === 1) {
+                                        var single_digit = true;
+                                    } else {
+                                        var single_digit = false;
+                                    }
+                                } else {
+                                    var single_digit = false;
+                                }
+                                if (!single_digit) {
+                                    var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                    var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                                    con = "";
+
+                                    // Read all the existing digits from the corner and sides
+                                    for (var j = j_start; j < 4; j++) {
+                                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                            con += this[this.mode.qa].numberS[corner_cursor + j][0];
+                                        }
+                                    }
+                                    for (var j = j_start; j < 4; j++) {
+                                        if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                            con += this[this.mode.qa].numberS[side_cursor + j][0];
+                                        }
+                                    }
+
+                                    if (con.indexOf(key) != -1) { // if digit already exists
+                                        con = con.replace(key, '');
+
+                                        // remove the last digit from old location
+                                        if ((con.length + 1) < (5 - j_start)) {
+                                            this.record("numberS", corner_cursor + con.length + j_start, this.undoredo_counter);
+                                            delete this[this.mode.qa].numberS[corner_cursor + con.length + j_start];
+                                        } else {
+                                            this.record("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
+                                            delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
+                                        }
+
+                                        if (con) {
+                                            if (con.length < (5 - j_start)) {
+                                                for (var j = j_start; j < (con.length + j_start); j++) {
+                                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                                    this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                }
+                                            } else {
+                                                for (var j = j_start; j < 4; j++) {
+                                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                                    this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                }
+                                                for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
+                                                    this.record("numberS", side_cursor + j - 4, this.undoredo_counter);
+                                                    this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                }
+                                            }
+                                        }
+                                    } else if (con.length < length_limit) { // If digit doesnt exist in the cell
+                                        con += key;
+                                        if (con.length < (5 - j_start)) {
+                                            this.record("numberS", corner_cursor + con.length - 1 + j_start, this.undoredo_counter);
+                                            this[this.mode.qa].numberS[corner_cursor + con.length - 1 + j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        } else {
+                                            this.record("numberS", side_cursor + con.length - 5 + 2 * j_start, this.undoredo_counter);
+                                            this[this.mode.qa].numberS[side_cursor + con.length - 5 + 2 * j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        }
                                     }
                                 }
                             }
-                        }
 
+                        }
                     }
                     break;
                 case "3": // Centre mode
@@ -10650,8 +10651,14 @@ class Puzzle {
                 a[1] = a[2];
                 a[2] = c;
             }
+
             for (var k of this.selection) {
-                let factor = parseInt(k / (this.nx0 * this.ny0));
+                let factor;
+                if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                    factor = parseInt(k / (this.nx0 * this.ny0));
+                } else {
+                    factor = 2;
+                }
                 // Color of selected cell
                 // set_surface_style(this.ctx, 13);
 
@@ -10661,7 +10668,6 @@ class Puzzle {
 
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
-
                 if (factor < 1) {
                     let offset = 3;
                     this.ctx.beginPath();
@@ -10686,9 +10692,29 @@ class Puzzle {
                     // this.ctx.fill();
                     this.ctx.stroke();
                 } else {
-                    let r = 0.2;
-                    let n = 4;
-                    let th = 45;
+                    let r, n, th;
+                    if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                        r = 0.2;
+                        n = 4;
+                        th = 45;
+                    } else if (this.gridtype === "hex") {
+                        r = 0.5;
+                        n = 6;
+                        th = 30;
+                    } else if (this.gridtype === "tri") {
+                        r = 0.5;
+                        n = 3;
+                        if (parseInt(k / (this.n0) ** 2) === 1) {
+                            th = 90;
+                        } else if (parseInt(k / (this.n0) ** 2) === 2) {
+                            th = 150;
+                        }
+                    } else if (this.gridtype === "pyramid") {
+                        console.log('enters here')
+                        r = 0.6;
+                        n = 4;
+                        th = 45;
+                    }
                     let x = this.point[k].x;
                     let y = this.point[k].y
 

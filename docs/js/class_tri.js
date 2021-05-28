@@ -463,6 +463,7 @@ class Puzzle_tri extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_direction("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_number("pu_q");
@@ -483,6 +484,7 @@ class Puzzle_tri extends Puzzle {
             this.draw_line("pu_q");
             this.draw_direction("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
             this.draw_cursol();
