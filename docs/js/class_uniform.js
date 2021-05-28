@@ -4597,6 +4597,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_number("pu_q");
@@ -4612,6 +4613,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
             this.draw_cursol();
