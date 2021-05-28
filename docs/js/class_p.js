@@ -56,7 +56,7 @@ class Puzzle {
         this.obj = document.getElementById("dvique");
         //square
         this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
-            "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
+            "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb", "combili_akari", "combili_mines",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
             "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
@@ -64,7 +64,7 @@ class Puzzle {
             "sub_cage1_lb"
         ];
         //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
+        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4", "subc4"];
         //square,tri,hex
         this.group3 = ["sub_line5_lb"];
         //square,hex

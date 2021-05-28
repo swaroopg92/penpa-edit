@@ -2451,8 +2451,8 @@ class Puzzle_tri extends Puzzle {
     }
 
     draw_sun_moon(ctx, num, x, y) {
-        var r1 = 0.36,
-            r2 = 0.34;
+        var r1 = 0.22,
+            r2 = 0.20;
         switch (num) {
             case 1:
                 set_circle_style(ctx, 1);
@@ -2465,6 +2465,14 @@ class Puzzle_tri extends Puzzle {
                 ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
                 ctx.closePath();
                 ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.5 * pu.size, this.size * 0.6);
+                break;
+            case 4:
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.5 * pu.size, this.size * 0.6);
                 break;
         }
     }
