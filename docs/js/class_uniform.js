@@ -2284,10 +2284,34 @@ class Puzzle_truncated_square extends Puzzle {
         ctx.lineCap = "butt";
         switch (num) {
             case 1:
+                var th = this.rotate_theta(-90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
             case 2:
+                var th = this.rotate_theta(90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
             case 3:
+                var th = this.rotate_theta(-30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
             case 4:
-                var th = this.rotate_theta((num - 1) * 90 - 180);
+                var th = this.rotate_theta(30);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
@@ -2296,6 +2320,33 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 5:
+                var th = this.rotate_theta(-210);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 6:
+                var th = this.rotate_theta(210);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 7:
+                var th = this.rotate_theta(150);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 8:
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 break;
@@ -2317,6 +2368,14 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
                 ctx.closePath();
                 ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.6 * pu.size, this.size * 0.7);
+                break;
+            case 4:
+                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.6 * pu.size, this.size * 0.7);
                 break;
         }
     }
