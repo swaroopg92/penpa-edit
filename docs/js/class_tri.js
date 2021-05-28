@@ -231,7 +231,7 @@ class Puzzle_tri extends Puzzle {
                 break;
             case "number":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-                    type = [];
+                    type = [6];
                 } else {
                     if (document.getElementById('edge_button').textContent === "OFF") {
                         type = [0];
@@ -277,18 +277,19 @@ class Puzzle_tri extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2, 3, 4];
                         break;
+                    case "edgex":
                     case "edgexoi":
+                    case "star":
                         type = [0, 1, 2, 3, 4];
                         break;
                     case "blpo":
                     case "blwh":
                     case "battleship":
-                    case "star":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -446,6 +447,8 @@ class Puzzle_tri extends Puzzle {
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
             this.draw_thermo("pu_a");
+            this.draw_nobulbthermo("pu_q");
+            this.draw_nobulbthermo("pu_a");
             this.draw_arrowsp("pu_q");
             this.draw_arrowsp("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -471,6 +474,7 @@ class Puzzle_tri extends Puzzle {
             this.draw_surface("pu_q");
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
+            this.draw_nobulbthermo("pu_q");
             this.draw_arrowsp("pu_q");
             this.draw_symbol("pu_q", 1);
             this.draw_frame();
@@ -564,6 +568,27 @@ class Puzzle_tri extends Puzzle {
                     this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y);
                 }
                 this.ctx.stroke();
+            }
+        }
+    }
+
+    draw_nobulbthermo(pu) {
+        if (this[pu].nobulbthermo) {
+            for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
+                if (this[pu].nobulbthermo[i][0]) {
+                    this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                    this.ctx.fillStyle = Color.GREY_LIGHT;
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineCap = "square";
+                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    this.ctx.lineWidth = this.size * 0.27;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[this[pu].nobulbthermo[i][0]].x, this.point[this[pu].nobulbthermo[i][0]].y);
+                    for (var j = 1; j < this[pu].nobulbthermo[i].length; j++) {
+                        this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                    }
+                    this.ctx.stroke();
+                }
             }
         }
     }
@@ -999,28 +1024,28 @@ class Puzzle_tri extends Puzzle {
                     break;
             }
         }
-        /*
-            for(var i in this[pu].numberS){
-                if(this[pu].numberS[i][1]===5){
-                  set_circle_style(this.ctx,7);
-                  this.draw_circle(this.ctx,this.point[i].x,this.point[i].y,0.15);
-                }else if(this[pu].numberS[i][1]===6){
-                  set_circle_style(this.ctx,1);
-                  this.draw_circle(this.ctx,this.point[i].x,this.point[i].y,0.15);
-                }else if(this[pu].numberS[i][1]===7){
-                  set_circle_style(this.ctx,2);
-                  this.draw_circle(this.ctx,this.point[i].x,this.point[i].y,0.15);
-                }
-                if (this[pu].numberS[i][0].length <= 2 ){
-                  set_font_style(this.ctx,0.25*this.size.toString(10),this[pu].numberS[i][1]);
-                  this.ctx.textAlign = "center";
-                  this.ctx.text(this[pu].numberS[i][0],this.point[i].x,this.point[i].y+0.03*this.size);
-                }else{
-                  set_font_style(this.ctx,0.25*this.size.toString(10),this[pu].numberS[i][1]);
-                  this.ctx.textAlign = "left";
-                  this.ctx.text(this[pu].numberS[i][0],this.point[i].x-0.15*this.size,this.point[i].y+0.03*this.size);
-                }
-            }*/
+
+        for (var i in this[pu].numberS) {
+            if (this[pu].numberS[i][1] === 5) {
+                set_circle_style(this.ctx, 7);
+                this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, 0.15);
+            } else if (this[pu].numberS[i][1] === 6) {
+                set_circle_style(this.ctx, 1);
+                this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, 0.15);
+            } else if (this[pu].numberS[i][1] === 7) {
+                set_circle_style(this.ctx, 2);
+                this.draw_circle(this.ctx, this.point[i].x, this.point[i].y, 0.15);
+            }
+            if (this[pu].numberS[i][0].length <= 2) {
+                set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].numberS[i][1]);
+                this.ctx.textAlign = "center";
+                this.ctx.text(this[pu].numberS[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size);
+            } else {
+                set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].numberS[i][1]);
+                this.ctx.textAlign = "left";
+                this.ctx.text(this[pu].numberS[i][0], this.point[i].x - 0.15 * this.size, this.point[i].y + 0.03 * this.size);
+            }
+        }
     }
 
     draw_numbercircle(pu, i, size) {

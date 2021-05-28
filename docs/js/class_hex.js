@@ -265,18 +265,19 @@ class Puzzle_hex extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
                         type = [0, 2, 3, 4];
                         break;
+                    case "edgex":
                     case "edgexoi":
+                    case "star":
                         type = [0, 1, 2, 3, 4];
                         break;
                     case "blpo":
                     case "blwh":
                     case "battleship":
-                    case "star":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -334,7 +335,6 @@ class Puzzle_hex extends Puzzle {
 
     key_arrow(key_code, ctrl_key = false) {
         var a, b, c;
-        console.log(this.theta);
         if (parseInt(this.theta / 60) === 0) { // 0, 30
             b = [0, 1, 2, 3];
         } else if (parseInt(this.theta / 60) === 1) { // 60, 90
@@ -506,6 +506,8 @@ class Puzzle_hex extends Puzzle {
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
             this.draw_thermo("pu_a");
+            this.draw_nobulbthermo("pu_q");
+            this.draw_nobulbthermo("pu_a");
             this.draw_arrowsp("pu_q");
             this.draw_arrowsp("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -535,6 +537,7 @@ class Puzzle_hex extends Puzzle {
             this.draw_surface("pu_q");
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
+            this.draw_nobulbthermo("pu_q");
             this.draw_arrowsp("pu_q");
             this.draw_symbol("pu_q", 1);
             this.draw_wall("pu_q");
@@ -630,6 +633,27 @@ class Puzzle_hex extends Puzzle {
                     this.ctx.lineTo(this.point[this[pu].thermo[i][j]].x, this.point[this[pu].thermo[i][j]].y);
                 }
                 this.ctx.stroke();
+            }
+        }
+    }
+
+    draw_nobulbthermo(pu) {
+        if (this[pu].nobulbthermo) {
+            for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
+                if (this[pu].nobulbthermo[i][0]) {
+                    this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                    this.ctx.fillStyle = Color.GREY_LIGHT;
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineCap = "square";
+                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    this.ctx.lineWidth = this.size * 0.4;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[this[pu].nobulbthermo[i][0]].x, this.point[this[pu].nobulbthermo[i][0]].y);
+                    for (var j = 1; j < this[pu].nobulbthermo[i].length; j++) {
+                        this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                    }
+                    this.ctx.stroke();
+                }
             }
         }
     }

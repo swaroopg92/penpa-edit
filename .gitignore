@@ -3,3 +3,8 @@ videos/
 old_images/
 
 *.log
+
+launch_sync.bat
+
+docs/css/images/corky.psd
+docs/css/images/parch.psd

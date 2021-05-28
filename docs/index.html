@@ -2,19 +2,24 @@
 <html>
 
 <head>
-    <title>Penpa</title>
+    <title>Penpa+</title>
+    <link rel="shortcut icon" href="./css/images/logo.png" />
     <meta charset="utf-8" />
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <!-- STYLES -->
-    <link href="./css/main.css" rel="stylesheet" type="text/css">
+    <link href="./css/light_theme.css" rel="stylesheet" type="text/css" id="color_theme">
     <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
+    <link href="./css/spectrum.css" rel="stylesheet" type="text/css">
     <!-- SCRIPTS -->
     <!-- libs -->
+    <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="./js/libs/CanvasRenderingContext2D.ext.js"></script>
     <script type="text/javascript" src="./js/libs/encoding.js"></script>
     <script type="text/javascript" src="./js/libs/vanillaSelectBox.js"></script>
     <script type="text/javascript" src="./js/libs/zlib.js"></script>
+    <script type="text/javascript" src="./js/libs/spectrum.js"></script>
+    <script type="text/javascript" src="./js/libs/fabric.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- rest -->
     <script type="text/javascript" src="./js/main.js"></script>
@@ -50,8 +55,11 @@
             <input type="button" id="savetext" value="Share" class="button" />
             <a id="download_link"></a>
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
+            <br>
             <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
             <input type="button" id="input_url" value="Load" class="button" />
+            <input type="button" id="page_settings" value="Settings" class="button" />
+            <input type="button" id="page_help" value="Help" class="button" />
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -60,13 +68,14 @@
                 <label for="pu_q" class="label" id="pu_q_label">Problem</label>
                 <input type="radio" name="mode_qa" id="pu_a" value=2 />
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
-                <span id="visibility_button0" class="label tooltip">V:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
+                <br>
+                <span id="visibility_button0" class="label tooltip">Visibility:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
                 <span id="visibility_button" class="label">ON</span>
                 <span id="panel_button0" class="label tooltip">Panel:<span id="panel_text" class="tooltiptext">Panel for Shape and Number Mode</span></span>
                 <span id="panel_button" class="label">OFF</span>
                 <span id="edge_button0" class="label tooltip">Border:<span id="border_text" class="tooltiptext">To enter numbers/symbols on edges/corners of the grid</span></span>
                 <span id="edge_button" class="label">OFF</span>
-                <span id="reload_button0" class="label tooltip">R:<span id="reload_text" class="tooltiptext">Ask confirmation to reload or close the page?</span></span>
+                <span id="reload_button0" class="label tooltip">Reload:<span id="reload_text" class="tooltiptext">Ask confirmation to reload or close the page?</span></span>
                 <span id="reload_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -95,7 +104,7 @@
                 <input type="radio" name="mode" id="mo_special" />
                 <label for="mo_special" class="label" id="mo_special_lb">Special</label>
                 <input type="radio" name="mode" id="mo_cage" />
-                <label for="mo_cage" class="label" id="mo_cage_lb">Frame</label>
+                <label for="mo_cage" class="label" id="mo_cage_lb">Cage</label>
                 <input type="radio" name="mode" id="mo_combi" />
                 <label for="mo_combi" class="label_option" id="mo_combi_lb">Composite</label>
                 <input type="radio" name="mode" id="mo_sudoku" />
@@ -220,7 +229,7 @@
                                 </li>
                                 <li><span id="ms_cross">Cross</span></li>
                                 <li><span id="ms_line">Lines</span></li>
-                                <li><span id="ms_frameline">Frame Lines</span></li>
+                                <li><span id="ms_frameline">Cage Lines</span></li>
                                 <li><span id="ms1_bars">Bars &#x25AE; &#x25AF;</span>
                                     <ul id="ul_bars">
                                         <li><span id="ms_bars_B">Black</span></li>
@@ -306,7 +315,7 @@
                                 </li>
                                 <li><span id="ms_kakuro">Kakuro</span></li>
                                 <li><span id="ms_tents">&#127794; &#9650; &#8779; &#128031;</span></li>
-                                <li><span id="ms_star">&#10022; &#9734; &#9733; </span></li>
+                                <li><span id="ms_star">&#10022; &#9734; &#9733;</span></li>
                                 <li><span id="ms_compass">Compass</span></li>
                                 <li><span id="ms_sudokuetc">Sudoku</span></li>
                                 <li><span id="ms_sudokumore">ArrowSums</span></li>
@@ -317,7 +326,7 @@
                             <ul id="mode_symbolul5">
                                 <li><span id="ms_angleloop">Angle Loop</span></li>
                                 <li><span id="ms_firefly">Firefly</span></li>
-                                <li><span id="ms_sun_moon">Sun & Moon</span></li>
+                                <li><span id="ms_sun_moon">☼ 🌙 💡 💣</span></li>
                                 <li><span id="ms_pencils">Pencils</span></li>
                                 <li><span id="ms_slovak">Slovak Sums</span></li>
                                 <li><span id="ms_arc">Arc</span></li>
@@ -331,6 +340,8 @@
                 <span id="mode_special" style="display:none;">
                     <input type="radio" name="mode_special" value="thermo" id="sub_specialthermo" checked="checked">
                     <label for="sub_specialthermo" class="label" id="sub_specialthermo_lb">Thermo</label>
+                    <input type="radio" name="mode_special" value="nobulbthermo" id="sub_specialnobulbthermo">
+                    <label for="sub_specialnobulbthermo" class="label" id="sub_specialnobulbthermo_lb">No Bulb Thermo</label>
                     <input type="radio" name="mode_special" value="arrows" id="sub_specialarrows">
                     <label for="sub_specialarrows" class="label" id="sub_specialarrows_lb">Sudoku Arrow</label>
                     <input type="radio" name="mode_special" value="direction" id="sub_specialdirection">
@@ -339,6 +350,12 @@
                     <label for="sub_specialsquareframe" class="label" id="sub_specialsquareframe_lb">Rectangle frame</label>
                     <input type="radio" name="mode_special" value="polygon" id="sub_specialpolygon">
                     <label for="sub_specialpolygon" class="label" id="sub_specialpolygon_lb">Polygon</label>
+                </span>
+                <span id="mode_cage" style="display:none;">
+                    <input type="radio" name="mode_cage" value="1" id="sub_cage1" checked="checked">
+                    <label for="sub_cage1" class="label" id="sub_cage1_lb">Killer</label>
+                    <input type="radio" name="mode_cage" value="2" id="sub_cage2">
+                    <label for="sub_cage2" class="label" id="sub_cage2_lb">Free</label>
                 </span>
                 <span id="mode_move" style="display:none;">
                     <input type="radio" name="mode_move" value="1" id="sub_move1" checked="checked">
@@ -361,7 +378,8 @@
                             <ul>
                                 <li><span id="combisub_linex">Line or x</span></li>
                                 <li><span id="combisub_lineox">Line or OX</span></li>
-                                <li><span id="combisub_edgexoi">Edge, x, in/out</span></li>
+                                <li><span id="combisub_edgex">Edge x</span></li>
+                                <li><span id="combisub_edgexoi">Edge IO</span></li>
                                 <li><span id="combisub_yajilin">Yajilin</span></li>
                                 <li><span id="combisub_hashi">Hashi</span></li>
                             </ul>
@@ -377,6 +395,8 @@
                                 <li><span id="combisub_star">Star Battle</span></li>
                                 <li><span id="combisub_tents">Tent</span></li>
                                 <li><span id="combisub_magnets">Magnets</span></li>
+                                <li id="combili_mines"><span id="combisub_mines">Minesweeper</span></li>
+                                <li id="combili_akari"><span id="combisub_akari">Akari</span></li>
                                 <li id="combili_arrowS"><span id="combisub_arrowS">Arrows</span></li>
                             </ul>
                         </li>
@@ -402,30 +422,31 @@
                     <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
+                    <!-- Adding superscript was affecting the color selection as it did not had id, so defined new id and followed same structure as parent. Its important to have only two characters at the end after _ because of the way, window_click is setup in main.js for stylemode_check-->
                     <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
-                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG</label>
+                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG<sup id="st_surface1_sp">1</sup></label>
                     <input type="radio" name="style_surface" value="8" id="st_surface8">
-                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR</label>
+                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR<sup id="st_surface8_sp">2</sup></label>
                     <input type="radio" name="style_surface" value="3" id="st_surface3">
-                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG</label>
+                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG<sup id="st_surface3_sp">3</sup></label>
                     <input type="radio" name="style_surface" value="4" id="st_surface4">
-                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL</label>
+                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
                     <input type="radio" name="style_surface" value="2" id="st_surface2">
-                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR</label>
+                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
                     <input type="radio" name="style_surface" value="5" id="st_surface5">
-                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL</label>
+                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
                     <input type="radio" name="style_surface" value="6" id="st_surface6">
-                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE</label>
+                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE<sup id="st_surface6_sp">7</sup></label>
                     <input type="radio" name="style_surface" value="7" id="st_surface7">
-                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE</label>
+                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE<sup id="st_surface7_sp">8</sup></label>
                     <input type="radio" name="style_surface" value="9" id="st_surface9">
-                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI</label>
+                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI<sup id="st_surface9_sp">9</sup></label>
                     <input type="radio" name="style_surface" value="10" id="st_surface10">
-                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR</label>
+                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR<sup id="st_surface10_sp">0</sup></label>
                     <input type="radio" name="style_surface" value="11" id="st_surface11">
-                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU</label>
+                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU<sup id="st_surface11_sp">11</sup></label>
                     <input type="radio" name="style_surface" value="12" id="st_surface12">
-                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR</label>
+                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR<sup id="st_surface12_sp">12</sup></label>
                 </span>
                 <span id="style_line" style="display:none;">
                     <input type="radio" name="style_line" value="3" id="st_line3" checked="checked">
@@ -557,6 +578,9 @@
                     <input type="radio" name="style_sudoku" value="10" id="st_sudoku10">
                     <label for="st_sudoku10" class="labelL" id="st_sudoku10_lb">R</label>
                 </span>
+                <span id="style_special" style="display:none;">
+                    <input type="text" name="style_special" id="colorpicker_special" />
+                </span>
             </div>
         </div>
     </header>
@@ -568,6 +592,9 @@
         <div><label id="solution_check" class="info" /></label></div>
     </div>
     <div id="dvique" class="dvique"></div>
+    <div id="contestinfo">
+        <div><label id="answer_key" class="info" /></label></div>
+    </div>
     <div id="bottom_button">
         <span class="tooltip">
             <input type="button" id="tb_undo" value="Undo" class="button" />
@@ -595,12 +622,7 @@
                 <button id="sw_reset" class="button sw">Reset</button>
             </div>
         </div>
-        <p style="margin-top: 5px;"> <a id="channel" href="https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos" target="_blank">Youtube tutorials</a> & <a id="tutorials" href="https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md" target="_blank">List of tutorials</a></p>
-        <p>Any suggestions or improvements, send an email to <b>penpaplus@gmail.com</b> or create an issue <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a>.</p>
-        <p>Insructions to use the tool <a href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md" target="_blank">here</a>.</p>
-        <p>Some FAQs <a href="https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit" target="_blank">here</a>.
-            Changelogs <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md" target="_blank">here</a>.</p>
-        <p>Penpa+ Version 2.25.2, <a href="https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md" target="_blank">Credits</a></p>
+        <p>Penpa+ Version 2.25.15 &copy; 2020-2021 </p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -697,6 +719,8 @@
                 <span id="div_all"><label class="label_nb" id="nb_sudoku3_lb">Sandwich</label></span>
                 <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
                 <br>
+                <span id="div_all"><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
+                <input type="checkbox" name="nb_sudoku8" id="nb_sudoku8">
                 <span id="div_all"><label class="label_nb" id="nb_sudoku5_lb">Size 6x6</label></span>
                 <input type="checkbox" name="nb_sudoku5" id="nb_sudoku5">
                 <span id="div_all"><label class="label_nb" id="nb_sudoku6_lb">Size 8x8</label></span>
@@ -730,7 +754,7 @@
                 <input type="number" pattern="\d*" name="nb_size3" id="nb_size3" value="38" min="12" max="90" step="2">
             </span>
             <br>
-            <h4 id="div_all"><label class="label_nb" id="nb_grid_lb">Grid:</label></h4>
+            <h4 id="div_all"><label class="label_nb" id="nb_grid_lb">Gridlines:</label></h4>
             <input type="radio" name="nb_grid" value="1" id="nb_grid1" checked="checked">
             <label for="nb_grid1" class="label" id="nb_grid1_lb">Solid line</label>
             <input type="radio" name="nb_grid" value="2" id="nb_grid2">
@@ -809,6 +833,8 @@
                 <label for="nb_type1" class="label" id="nb_type1_lb">png</label>
                 <input type="radio" name="nb_type" value="2" id="nb_type2">
                 <label for="nb_type2" class="label" id="nb_type2_lb">jpeg</label>
+                <input type="radio" name="nb_type" value="3" id="nb_type3">
+                <label for="nb_type3" class="label" id="nb_type3_lb">svg</label>
                 <br><br>
                 <span id="saveimagename_lb">File name:<input type="text" placeholder="sample_name" id="saveimagename"></span>
             </div>
@@ -846,7 +872,7 @@
             <br>
             <div class="nb_button">
                 <h4 id="div_all"><label id="rt4_lb">Add/Remove Rows/Columns:</label></h4>
-                <p><label id="rt5_lb">*Works only in Square Board Type, it also resets undo/redo</label></p>
+                <p><label id="rt5_lb">*Works only in Square Board Type, it also resets undo/redo. Ensure empty row/column before removing.</label></p>
                 <input type="button" id="rt_addtop" value="Top +" />
                 <input type="button" id="rt_subtop" value="Top -" /><br>
                 <input type="button" id="rt_addbottom" value="Bottom +" />
@@ -868,20 +894,22 @@
                 <h3 id="savetexttitle">Share URL</h3>
             </div>
             <div id="modal-save-info">
-                <span>Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <span class="DM">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
-                <span>Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
+                <span class="DM">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
                 <br>
-                <span>Rules:<textarea rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <span class="DM">Rules:<textarea rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>
-                <span>Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
+                <span class="DM">Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
                 <br>
                 <span id="sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
             </div>
             <div class="nb_button">
                 <input type="button" id="address_edit" value="URL for editing" />
                 <input type="button" id="address_solve" value="URL for solving" />
-                <input type="button" id="expansion" value="Extra options" />
+                <!--For Competitive Solving-->
+                <input type="button" id="address_comp" value="URL for contests" />
+                <input type="button" id="expansion" value="URL with answer check / Extra options" />
             </div>
             <div>
                 <span id="div_all"><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>
@@ -889,7 +917,7 @@
             </div>
             <div id="modal-save-body">
                 <textarea readonly rows="1" cols="50" id="savetextarea"></textarea>
-                <span>Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
+                <span class="DM">Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">
                 <input type="button" id="closeBtn_save1" value="Copy" />
@@ -911,15 +939,28 @@
             </div>
             <div id="modal-save2-solution">
                 <h3 id="save3texttitle">Solution will check only following:</h3>
-                <h5 id="answerwarning">*Default (none selected) it checks for all</h5>
+                <h5 id="answerwarning">*Default (none selected) it checks for all. Choose either AND or OR column, if both are selected, AND will be given preference.</h5>
                 <div class="nb_button">
-                    <table id="answersetting">
+                    <table id="answersetting" class="center">
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_and_lb">AND</label></span>
+                            </td>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_or_lb">OR</label></span>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <span id="div_all"><label class="solutiontext" id="sol_surface_lb">Shading - Dark Grey, Black: </label></span>
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_surface" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_surface" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -929,6 +970,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_number" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_number" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -936,6 +980,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopline" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_loopline" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -945,6 +992,17 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopedge" class="solcheck">
                             </td>
+                            <td rowspan="2">
+                                <input type="checkbox" name="solution_or" id="sol_or_loopedge" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_ignoreborder_lb">Ignore Edges on Grid Border / Givens: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_ignoreborder" class="solcheck">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -952,6 +1010,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_wall" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_wall" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -961,6 +1022,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_square" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_square" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -968,6 +1032,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_circle" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_circle" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -977,6 +1044,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_tri" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_tri" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -984,6 +1054,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_arrow" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_arrow" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -993,6 +1066,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_math" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_math" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1000,6 +1076,9 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_battleship" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_battleship" class="solcheck_or">
                             </td>
                         </tr>
                         <tr>
@@ -1009,6 +1088,9 @@
                             <td>
                                 <input type="checkbox" name="solution" id="sol_tent" class="solcheck">
                             </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_tent" class="solcheck_or">
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -1016,6 +1098,20 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_star" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_star" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_akari_lb">Shape - Special 2 - Lightbulb - Option 3: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_akari" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_akari" class="solcheck_or">
                             </td>
                         </tr>
                     </table>
@@ -1025,7 +1121,7 @@
             </div>
             <div id="modal-save2-pp" style="display:none;">
                 <h5 id="save5texttitle">Header</h5>
-                <textarea rows="1" cols="50" id="savetextarea_pp"></textarea>
+                <textarea rows="1" cols="50" placeholder="e.g. classicsudoku or cs" id="savetextarea_pp"></textarea>
                 <div class="nb_button">
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
@@ -1073,7 +1169,72 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
+    <div id="modal-settings" class="modal">
+        <div id="modal-settings-content">
+            <div id="modal-header">
+                <h3 id="save7texttitle">General Settings</h3>
+            </div>
+            <div id="modal-settings-body">
+                <h4 id="div_all"><label class="label_settings" id="theme_mode_lb">Display Theme:</label></h4>
+                <input type="radio" name="theme_mode" value="1" id="light_mode" checked="checked">
+                <label for="light_mode" class="label" id="light_mode_lb">LIGHT</label>
+                <input type="radio" name="theme_mode" value="2" id="dark_mode">
+                <label for="dark_mode" class="label" id="dark_mode_lb">DARK</label>
+                <br>
+                <h4 id="div_all"><label class="label_settings" id="custom_color_lb">Custom Colors (Beta): </label></h4>
+                <input type="radio" name="custom_color" value="1" id="custom_color_yes">
+                <label for="custom_color" class="label" id="custom_color_yes_lb">Yes</label>
+                <input type="radio" name="custom_color" value="2" id="custom_color_no" checked="checked">
+                <label for="custom_color" class="label" id="custom_color_no_lb">No</label>
+                <br>
+                <h4 id="div_all"><label class="label_settings" id="save_settings_lb">Save Settings:
+                        <br>
+                        Theme, Tab, Reload, Gridtype</label></h4>
+                <input type="radio" name="save_settings" value="1" id="save_settings_yes">
+                <label for="save_settings" class="label" id="save_settings_yes_lb">Yes</label>
+                <input type="radio" name="save_settings" value="2" id="save_settings_no" checked="checked">
+                <label for="save_settings" class="label" id="save_settings_no_lb">No</label>
+            </div>
+        </div>
+    </div>
+    <div id="modal-help" class="modal">
+        <div id="modal-help-content">
+            <div id="modal-header">
+                <h3 id="save8texttitle">Helpful Links</h3>
+            </div>
+            <div id="modal-help-body">
+                <div class="nb_button">
+                    <input type="button" id="load_about" value="About Penpa+" onclick="load_about();" />
+                    <br>
+                    <input type="button" id="load_readme" value="Tool Instructions" onclick="load_readme();" />
+                    <br>
+                    <input type="button" id="load_youtube" value="Youtube Tutorials" onclick="load_youtube();" />
+                    <br>
+                    <input type="button" id="load_list" value="List of Youtube Tutorials" onclick="load_list();" />
+                    <br>
+                    <input type="button" id="load_wiki" value="Steps to Create a Sudoku/Puzzle" onclick="load_wiki();" />
+                    <br>
+                    <input type="button" id="load_rules" value="Sudoku/Puzzle Rulesets" onclick="load_rules();" />
+                    <br>
+                    <input type="button" id="load_faqs" value="Frequently Asked Questions" onclick="load_faqs();" />
+                    <br>
+                    <input type="button" id="load_discord" value="Discord Channel" onclick="load_discord();" />
+                    <br>
+                    <input type="button" id="load_feedback" value="Provide Feedback" onclick="load_feedback();" />
+                    <br>
+                    <input type="button" id="load_contribute" value="Contribute to Project" onclick="load_contribute();" />
+                    <br>
+                    <input type="button" id="load_todolist" value="Ongoing TO-DO list" onclick="load_todolist();" />
+                    <br>
+                    <input type="button" id="load_changelogs" value="Changelogs" onclick="load_changelogs();" />
+                    <br>
+                    <input type="button" id="load_credits" value="Credits" onclick="load_credits();" />
+                    <br>
+                    <input type="button" id="load_license" value="License" onclick="load_license();" />
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="./js/libs/easytimer.min.js"></script>
     <script type="text/javascript" src="./js/timer.js"></script>
 </body>

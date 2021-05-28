@@ -25,14 +25,48 @@ function boot_parameters() {
 }
 
 function create() {
-    var gridtype = document.getElementById("gridtype").value;
+    let gridtype = getCookie("gridtype");
+    if (gridtype == null) {
+        gridtype = document.getElementById("gridtype").value;
+    }
     pu = make_class(gridtype);
     pu.reset_frame();
+
     // Drawing Panel
     panel_pu = new Panel();
     panel_pu.draw_panel();
     pu.mode_set("surface"); //include redraw
+
+    // Check cookies
+    let theme_cookie = getCookie("color_theme");
+    if (theme_cookie !== null && theme_cookie == 2) {
+        document.getElementById("dark_mode").checked = true;
+        document.getElementById("color_theme").href = "./css/dark_theme.css";
+        pu.set_redoundocolor();
+    }
+    let reload_cookie = getCookie("reload_button");
+    if (reload_cookie !== null) {
+        document.getElementById('reload_button').textContent = reload_cookie;
+    }
+    let tab_cookie = getCookie("tab_settings");
+    if (tab_cookie !== null) {
+        this.usertab_choices = tab_cookie;
+    }
+    pu.redraw();
 }
+
+function getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+}
+
+function setCookie(name, value, days) {
+    var d = new Date;
+    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+}
+
+function deleteCookie(name) { setCookie(name, '', -1); }
 
 function create_newboard() {
 
@@ -80,7 +114,8 @@ function make_class(gridtype, loadtype = 'new') {
                 "nb_sudoku4_lb", "nb_sudoku4",
                 "nb_sudoku5_lb", "nb_sudoku5",
                 "nb_sudoku6_lb", "nb_sudoku6",
-                "nb_sudoku7_lb"
+                "nb_sudoku7_lb",
+                "nb_sudoku8_lb", "nb_sudoku8"
             ]; // of sudoku
             for (var i of type4) {
                 document.getElementById(i).style.display = "none";
@@ -168,6 +203,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         var nx = 8;
                         var ny = 8;
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        var nx = 6;
+                        var ny = 6;
                     } else { // Default 9x9 grid
                         var nx = 11;
                         var ny = 11;
@@ -183,6 +221,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         var nx = 7;
                         var ny = 7;
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        var nx = 5;
+                        var ny = 5;
                     } else { // Default 9x9 grid
                         var nx = 10;
                         var ny = 10;
@@ -198,6 +239,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         var nx = 6;
                         var ny = 6;
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        var nx = 4;
+                        var ny = 4;
                     } else { // Default 9x9 grid
                         var nx = 9;
                         var ny = 9;
@@ -224,6 +268,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         rows = [4, 6];
                         cols = [5];
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        rows = [4];
+                        cols = [4];
                     } else { // Default 9x9 grid
                         rows = [5, 8];
                         cols = [5, 8];
@@ -250,6 +297,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         rows = [4, 6];
                         cols = [5];
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        rows = [4];
+                        cols = [4];
                     } else { // Default 9x9 grid
                         rows = [5, 8];
                         cols = [5, 8];
@@ -276,6 +326,9 @@ function make_class(gridtype, loadtype = 'new') {
                     } else if (document.getElementById("nb_sudoku5").checked === true) { // 6x6 grid
                         rows = [3, 5];
                         cols = [4];
+                    } else if (document.getElementById("nb_sudoku8").checked === true) { // 4x4 grid
+                        rows = [3];
+                        cols = [3];
                     } else { // Default 9x9 grid
                         rows = [4, 7];
                         cols = [4, 7];
@@ -386,7 +439,8 @@ function changetype() {
         "nb_sudoku4_lb", "nb_sudoku4",
         "nb_sudoku5_lb", "nb_sudoku5",
         "nb_sudoku6_lb", "nb_sudoku6",
-        "nb_sudoku7_lb"
+        "nb_sudoku7_lb",
+        "nb_sudoku8_lb", "nb_sudoku8"
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     switch (gridtype) {
@@ -517,6 +571,7 @@ function changetype() {
             document.getElementById("nb_sudoku4").checked = false;
             document.getElementById("nb_sudoku5").checked = false;
             document.getElementById("nb_sudoku6").checked = false;
+            document.getElementById("nb_sudoku8").checked = false;
             break;
         case "kakuro":
             for (var i of type) {
@@ -597,7 +652,7 @@ function rotation() {
 
 function CreateCheck() {
     Swal.fire({
-        title: 'Are you sure want to reset the current board? To only change display size and grid lines use "Change grid" button',
+        title: 'Are you sure want to reset the current board? To only change display size and grid lines use "Update display" button',
         html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
         icon: 'warning',
         showCancelButton: true,
@@ -884,6 +939,10 @@ function saveimage_download() {
         if (filename.slice(-4) != ".jpg") {
             filename += ".jpg";
         }
+    } else if (document.getElementById("nb_type3").checked) {
+        if (filename.slice(-4) != ".svg") {
+            filename += ".svg";
+        }
     }
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
@@ -894,13 +953,32 @@ function saveimage_download() {
     }
 
     if (valid_name) {
-        if (pu.canvas.msToBlob) { // For IE
-            var blob = pu.canvas.msToBlob();
-            window.navigator.msSaveBlob(blob, filename);
-        } else { // Other browsers
-            downloadLink.href = pu.resizecanvas();
-            downloadLink.download = filename;
-            downloadLink.click();
+        if (document.getElementById("nb_type3").checked) {
+            var text = pu.resizecanvas();
+            var downloadLink = document.getElementById('download_link');
+            var blob = new Blob([text], { type: "text/plain" });
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
+                //safari
+                window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+            } else if (window.navigator.msSaveBlob) {
+                // for IE
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.target = "_blank";
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        } else {
+            if (pu.canvas.msToBlob) { // For IE
+                var blob = pu.canvas.msToBlob();
+                window.navigator.msSaveBlob(blob, filename);
+            } else { // Other browsers
+                downloadLink.href = pu.resizecanvas();
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
         }
     } else {
         Swal.fire({
@@ -934,6 +1012,14 @@ function i_url() {
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button.";
 }
 
+function p_settings() {
+    document.getElementById("modal-settings").style.display = 'block';
+}
+
+function help() {
+    document.getElementById("modal-help").style.display = 'block';
+}
+
 function expansion() {
     document.getElementById("modal-save2").style.display = 'block';
 }
@@ -958,19 +1044,27 @@ function savetext_solve() {
     document.getElementById("savetextarea").value = text;
 }
 
+function savetext_comp() {
+    var text = pu.maketext_compsolve();
+    document.getElementById("savetextarea").value = text;
+}
+
 function savetext_withsolution() {
     var text = pu.maketext_solve_solution();
     document.getElementById("savetextarea").value = text;
+    document.getElementById("modal-save2").style.display = 'none';
 }
 
 function make_ppfile() {
     var text = pu.maketext_ppfile();
     document.getElementById("savetextarea").value = text;
+    document.getElementById("modal-save2").style.display = 'none';
 }
 
 function make_gmpfile() {
     var text = pu.maketext_gmpfile();
     document.getElementById("savetextarea").value = text;
+    document.getElementById("modal-save2").style.display = 'none';
 }
 
 function savetext_copy() {
@@ -1120,8 +1214,8 @@ function export_sudoku() {
 function import_url() {
     let urlstring = document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("github.io/penpa-edit/?") !== -1) {
-            urlstring = urlstring.split("github.io/penpa-edit/?")[1];
+        if (urlstring.indexOf("/penpa-edit/?") !== -1) {
+            urlstring = urlstring.split("/penpa-edit/?")[1];
             load(urlstring);
             document.getElementById("modal-load").style.display = 'none';
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
@@ -1133,6 +1227,74 @@ function import_url() {
     } else {
         document.getElementById("urlstring").value = "Error: Invalid URL";
     }
+}
+
+function load_about() {
+    Swal.fire({
+        title: 'About',
+        html: '<h2 class="info">Welcome to Penpa+ Tool. <br> Its a web application to create and solve Sudokus and Puzzles.<br> Its a Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. <br> You can download your puzzle as images and save the puzzle link in the form of URL to share with others.</h2>',
+        icon: 'info'
+    })
+}
+
+function load_youtube() {
+    window.open('https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos', '_blank');
+}
+
+function load_list() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md', '_blank');
+}
+
+function load_readme() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/README.md', '_blank');
+}
+
+function load_wiki() {
+    window.open('https://github.com/swaroopg92/penpa-edit/wiki/Steps-to-Create-Sudoku-or-Puzzle-in-Penpa', '_blank');
+}
+
+function load_rules() {
+    Swal.fire({
+        title: 'Sudoku/Puzzle Rulesets',
+        html: '<h2 class="info"><a href="https://tinyurl.com/puzzlerules" target="_blank"> Eric Fox - Dictioniary of Rulesets </a> <br> <a href="https://wpcunofficial.miraheze.org/wiki/Category:Puzzle_Types" target="_blank"> Ryotaro Chiba - WPC Puzzles </a> <br> <a href="http://logicmastersindia.com/lmitests/dl.asp?attachmentid=669&v1" target="_blank"> LMI - WSC IB (Sudoku Variants)</a> <br> <a href="http://www.puzzleduel.club/archive/types" target="_blank">Puzzle Duel Club</a> <br> <a href="http://www.logic-puzzles.ropeko.ch/php/db/search.php" target="_blank">Ropeko - Logic Puzzles List</a></h2> <br> <h3>Note :- This is by no means an exhaustive list. Penpa+ is not affiliated with these sources. Please contact respective owners for any further information. If you have any additional interesting sources which I can add here, send me an email to penpaplus@gmail.com</h3>',
+        icon: 'info'
+    })
+}
+
+function load_faqs() {
+    window.open('https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit', '_blank');
+}
+
+function load_discord() {
+    window.open('https://discord.gg/BbN89j5', '_blank');
+}
+
+function load_feedback() {
+    Swal.fire({
+        title: 'Feedback',
+        html: '<h2 class="info"><p>Any suggestions or improvements, send an email to <b> penpaplus@gmail.com </b> <br> or <br> Create an issue on github <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a> <br> or <br> Join discussions in #penpa-plus channel in the Discord Server <a href="https://discord.gg/BbN89j5" target="_blank">here</a>.</p></h2>',
+        icon: 'info'
+    })
+}
+
+function load_contribute() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CONTRIBUTING.md', '_blank');
+}
+
+function load_todolist() {
+    window.open('https://github.com/swaroopg92/penpa-edit/projects/1', '_blank');
+}
+
+function load_changelogs() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md', '_blank');
+}
+
+function load_credits() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md', '_blank');
+}
+
+function load_license() {
+    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
 function load(urlParam) {
@@ -1208,6 +1370,18 @@ function load(urlParam) {
         document.getElementById('edge_button').textContent = "ON";
     }
 
+    // multisolution status
+    if (rtext_para[20] && rtext_para[20] === "true") {
+        pu.multisolution = true;
+    }
+
+    // version save
+    if (typeof rtext[10] !== 'undefined') {
+        pu.version = JSON.parse(rtext[10]);
+    } else {
+        pu.version = [0, 0, 0]; // To handle all the old links
+    }
+
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);
     pu.reflect[1] = parseInt(rtext_para[6]);
@@ -1225,6 +1399,17 @@ function load(urlParam) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
+
+        // submode, style settings
+        if (typeof rtext[11] !== 'undefined') {
+            rtext[11] = rtext[11].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
+
+        // custom colors, only checking for 14 as 14 and 15 will appear together or never
+        if (typeof rtext[14] !== 'undefined') {
+            rtext[14] = rtext[14].split(pu.replace[i][1]).join(pu.replace[i][0]);
+            rtext[15] = rtext[15].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
     }
     rtext[5] = JSON.parse(rtext[5]);
     for (var i = 1; i < rtext[5].length; i++) {
@@ -1245,12 +1430,26 @@ function load(urlParam) {
         }
         pu.pu_q = JSON.parse(rtext[3]);
         pu.pu_a = JSON.parse(rtext[4]);
-        if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; }
+        if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; } // not sure yet, why these lines exist
         if (!pu.pu_a.polygon) { pu.pu_a.polygon = []; }
+
+        // custom color
+        if (typeof rtext[13] !== 'undefined') {
+            if (JSON.parse(rtext[13]) === "true") {
+                document.getElementById("custom_color_yes").checked = true;
+            }
+        }
+        if (typeof rtext[14] !== 'undefined') {
+            pu.pu_q_col = JSON.parse(rtext[14]);
+            pu.pu_a_col = JSON.parse(rtext[15]);
+            if (!pu.pu_q_col.polygon) { pu.pu_q_col.polygon = []; } // not sure yet, why these lines exist
+            if (!pu.pu_a_col.polygon) { pu.pu_a_col.polygon = []; }
+        }
+
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q", "pu_a"]) {
+        for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
             for (var j of ["command_redo", "command_undo"]) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
@@ -1258,7 +1457,7 @@ function load(urlParam) {
             }
         }
 
-        if (paramArray.l === "solvedup") { // Basically clone of solve mode when answer check is enabled
+        if (paramArray.l === "solvedup") { // Basically clone of solve mode
             set_solvemode();
 
             // Decrypt a
@@ -1268,9 +1467,17 @@ function load(urlParam) {
                 var inflate = new Zlib.RawInflate(ab);
                 var plain = inflate.decompress();
                 var atext = new TextDecoder().decode(plain);
-                pu.solution = atext;
-                // Visually showcase answer check is enabled
-                document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+
+                if (pu.multisolution) {
+                    pu.solution = JSON.parse(atext);
+                } else {
+                    pu.solution = atext;
+                }
+
+                // Solution button
+                document.getElementById("pu_a_label").style.display = "inline-block";
+                document.getElementById("pu_a_label").style.marginLeft = "6px";
+                document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             }
 
@@ -1291,16 +1498,20 @@ function load(urlParam) {
 
             if (typeof rtext[8] !== 'undefined') {
                 // set the answer check settings
-                var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+                var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
                 var answersetting = JSON.parse(rtext[8]);
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
             }
+
+            if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+                set_contestmode();
+            }
         } else {
             if (typeof rtext[7] !== 'undefined') {
                 // set the answer check settings
-                var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+                var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
                 var answersetting = JSON.parse(rtext[7]);
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
@@ -1317,10 +1528,23 @@ function load(urlParam) {
         pu.mode_set("surface");
         pu.pu_q = JSON.parse(rtext[3]);
         if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; }
+
+        // custom color
+        if (typeof rtext[13] !== 'undefined') {
+            if (JSON.parse(rtext[13]) === "true") {
+                document.getElementById("custom_color_yes").checked = true;
+            }
+        }
+
+        if (typeof rtext[14] !== 'undefined') {
+            pu.pu_q_col = JSON.parse(rtext[14]);
+            if (!pu.pu_q_col.polygon) { pu.pu_q_col.polygon = []; } // not sure yet, why these lines exist
+        }
+
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q"]) {
+        for (var i of ["pu_q", "pu_q_col"]) {
             for (var j of ["command_redo", "command_undo"]) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
@@ -1335,18 +1559,28 @@ function load(urlParam) {
             var inflate = new Zlib.RawInflate(ab);
             var plain = inflate.decompress();
             var atext = new TextDecoder().decode(plain);
-            pu.solution = atext;
-            // Visually showcase answer check is enabled
-            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+            if (pu.multisolution) {
+                pu.solution = JSON.parse(atext);
+            } else {
+                pu.solution = atext;
+            }
+
+            // Solution button
+            document.getElementById("pu_a_label").style.display = "inline-block";
+            document.getElementById("pu_a_label").style.marginLeft = "6px";
+            document.getElementById("pu_a_label").innerHTML = "Check Solution";
             document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings
-            var settingstatus = document.getElementById("answersetting").getElementsByTagName("INPUT");
+            var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
             var answersetting = JSON.parse(rtext[7]);
             for (var i = 0; i < settingstatus.length; i++) {
                 settingstatus[i].checked = answersetting[settingstatus[i].id];
             }
+        }
+        if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+            set_contestmode();
         }
         sw_timer.start({ precision: 'secondTenths' });
     }
@@ -1368,6 +1602,15 @@ function load(urlParam) {
     }
     pu.make_frameline(); // Draw Board
     panel_pu.draw_panel();
+
+    // submode, style settings
+    if (typeof rtext[11] !== 'undefined') {
+        pu.mode = JSON.parse(rtext[11]);
+        if (paramArray.m === "solve") {
+            pu.mode.qa = "pu_a";
+        }
+    }
+
     pu.mode_qa(pu.mode.qa); //include redraw
     if (paramArray.m === "solve") {
         // Saving the solve mode
@@ -1381,7 +1624,28 @@ function load(urlParam) {
             }
         }
     }
-    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //include redraw
+
+    pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
+
+    // Theme
+    if (typeof rtext[12] !== 'undefined') {
+        if (JSON.parse(rtext[12]) === 'dark') {
+            document.getElementById("dark_mode").checked = true;
+            document.getElementById("color_theme").href = "./css/dark_theme.css";
+            pu.set_redoundocolor();
+            pu.redraw();
+        }
+    }
+
+    // answerchecking settings for "OR"
+    if (typeof rtext[16] !== 'undefined' && rtext[16] !== "") { // for some reason old links had 16th entry as empty
+        // set the answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = JSON.parse(rtext[16]);
+        for (var i = 0; i < settingstatus.length; i++) {
+            settingstatus[i].checked = answersetting[settingstatus[i].id];
+        }
+    }
 }
 
 function loadver1(paramArray, rtext) {
@@ -1819,17 +2083,17 @@ function set_solvemode() {
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
+    document.getElementById("edit_txt").style.display = "none";
     document.getElementById("pu_q_label").style.display = "none";
+    document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
-    document.getElementById("mo_cage_lb").style.display = "none";
-    document.getElementById("mo_special_lb").style.display = "none";
+    // document.getElementById("mo_cage_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
     // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";
-    document.getElementById("tb_delete").value = "Delete all";
 
     // Hide Visibility button
     document.getElementById("visibility_button0").style.display = "none";
@@ -1837,6 +2101,33 @@ function set_solvemode() {
 
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
+
+    // custom color
+    document.getElementById('colorpicker_special').style.display = 'none';
+    document.getElementById('custom_color_lb').style.display = 'none';
+    document.getElementById('custom_color_yes_lb').style.display = 'none';
+    document.getElementById('custom_color_no_lb').style.display = 'none';
+
+    // Save settings
+    document.getElementById('save_settings_lb').style.display = 'none';
+    document.getElementById('save_settings_yes_lb').style.display = 'none';
+    document.getElementById('save_settings_no_lb').style.display = 'none';
+}
+
+function set_contestmode() {
+    // Disable Share, Undo/Redo buttons, IO sudoku
+    document.getElementById("title").innerHTML = "Contest mode"
+    document.getElementById("savetext").style.display = "none";
+    document.getElementById("input_sudoku").style.display = "none";
+    document.getElementById("tb_undo").style.display = "none";
+    document.getElementById("tb_redo").style.display = "none";
+    document.getElementById("tb_reset").style.display = "none";
+    document.getElementById("tb_delete").style.display = "none";
+    document.getElementById("mo_move_lb").style.display = "none";
+    document.getElementById("puzzlesourcelink").style.display = "none";
+    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+    pu.undoredo_disable = true;
+    pu.comp = true;
 }
 
 function isEmpty(obj) {

@@ -1,6 +1,77 @@
 ## History
-* 2021/02/12 ver2.25.2
-	* New board added "tetrakis square"
+* 2021/05/23 ver2.25.15
+	* Added "SVG" graphic support.
+	* Added Bulbless Thermo support.
+	* Improved Battleship Composite mode (rewrote from scratch).
+* 2021/05/20 ver2.25.14
+	* Added Help Button and seggregated all the Penpa help tools and cleaned up main html page footer.
+	* Improved labels of some buttons.
+	* Enabled corner submode in Triangle grid type.
+	* Added MIT license.
+	* Improved bounding box for edge feature in Sudoku solving mode.
+	* Improved Sudoku solving mode in setter mode.
+* 2021/04/24 ver2.25.13
+	* Added Akari composite mode.
+	* Added Minesweeper composite mode.
+	* Added edge support to Sudoku Solving Mode to resemble Paper Solving.
+* 2021/04/22 ver2.25.12
+	* Improved answerchecking code by allowing userclick button. Improved answerchecking display color and message.
+	* Cleaned up display of contest mode.
+	* Cleaned up make URL text code.
+	* Killer cage submode in Cage mode. Automatically drawing killer cages.
+	* Increased Panel Size.
+	* Fixed Unicode/Tofu problem with Normal submode.
+	* Fixed bug in multisolution feature for duplicate function.
+	* Fixed bug in Custom Color for Undo.
+* 2021/04/12 ver2.25.11
+	* Cookies Feature - User can now save Grid Type, Tab Settings, Theme and Reload button status locally by clicking Save Settings: YES in the Settings Button. When penpa loads, it will use the User preferences. 
+	* Number shortcuts to switch between different styles for Surface mode.
+	* Improvement to multisolution feature to detect changes in the grid.
+	* Improved Freeline submode answer checking.
+	* Improved switching between Surface and Sudoku mode. Sudoku mode now remembers the last visited valid cell in the surface mode.
+* 2021/04/08 ver2.25.10
+	* Multiple solution feature.
+	* Added cookies to store user preference regarding reload button, theme and tab_settings.
+	* Fixed undo bug for special mode.
+	* Added Thermo and Arrow submodes to the tab settings.
+	* Fixed bug of Handling null Thermo and Arrow arrays.
+	* Updated Readme.
+* 2021/03/27 ver2.25.9
+	* Improved composite modes linex and edgex. Right click and drag for crosses (x).
+	* Undo/Redo buttons greyed in Dark Mode.
+	* Added shortcut/tab Icon (favicon).
+	* Fixed a bug for gmpuzzle output from Sudoku board.
+	* Fill sudoku arrowsums with white space.
+* 2021/03/20 ver2.25.8
+	* Introducing custom colors for some modes (Surface, Line, Edge, Wall, Special, Frame - Eventually for everything else).
+	* Automatic closing of window after generating URL with answer check / gmpuzzle output text.
+	* Bug fixed for Transform button for Add Top/Bottom for Side sub-mode (i.e. NumberS elements).
+	* Updated Readme.
+* 2021/03/17 ver2.25.7
+	* Warning message for URL too long
+	* Fixed label color display in Surface Mode for GR abd LG.
+	* Initializing GMPuzzle Theme
+* 2021/02/28 ver2.25.6
+	* light bulbs for akari (Shape -> Special2 -> Sun, Moon, Bulb).
+	* Added light bulb to solution check option.
+	* Added Ignore Edges option to Solution Check (useful for araf, pentominous type of puzzles).
+* 2021/02/26 ver2.25.5
+	* Added 4x4 sudoku support (for kids in the school)
+	* Cross Helper feature added to Yajilin Composite Mode (Right click on Edges)
+	* Settings button, Dark Theme
+* 2021/02/21 ver2.25.4
+	* Added "Edge Free" and "Line Free" to tab settings.
+	* Made some improvements to "URL for contests".
+	* Load URL now accepts gmpuzzles link as well.
+* 2021/02/21 ver2.25.3
+	* Improved "Star battle" composite mode. One can mark dots between two/four cells.
+	* Enabled "Special" mode in Solving mode.
+	* Improved Sudoku Solving mode for French Keyboard Layout and possibly any keyboard layout.
+* 2021/02/16 ver2.25.2
+	* Added URL for competitive solving button.
+	* Save submode, style settings for various modes.
+	* Implemented Edge x composite mode.
+	* Fixed SHIFT + number bug (hopefully).
 * 2021/02/07 ver2.25.1
 	* Added Right Triangle, Left triangle and Darts to the Shapes. Merging the latest changes from upupstream.
 * 2021/01/19 ver2.24.22

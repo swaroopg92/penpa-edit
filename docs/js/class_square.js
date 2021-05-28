@@ -255,7 +255,11 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "cage":
-                type = [4];
+                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "1") {
+                    type = [0];
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                    type = [4];
+                }
                 break;
             case "special":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
@@ -268,18 +272,21 @@ class Puzzle_square extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "yajilin":
+                    case "akari":
                         type = [0, 2, 3];
                         break;
+                    case "edgex":
                     case "edgexoi":
+                    case "star":
+                    case "mines":
                         type = [0, 1, 2, 3];
                         break;
                     case "blpo":
                     case "blwh":
                     case "battleship":
-                    case "star":
                     case "magnets":
                     case "lineox":
-                    case "yajilin":
                     case "hashi":
                     case "arrowS":
                     case "shaka":
@@ -293,7 +300,11 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudoku":
-                type = [0];
+                if (document.getElementById('edge_button').textContent === "ON") {
+                    type = [0, 2, 3];
+                } else {
+                    type = [0];
+                }
                 break;
         }
         return type;
@@ -533,6 +544,25 @@ class Puzzle_square extends Puzzle {
         return a;
     }
 
+    direction_battleship4(x, y, x0, y0) {
+        var angle = Math.atan2(y - y0, x - x0) * 360 / 2 / Math.PI + 180;
+        if (this.reflect[0] === -1) { angle = (180 - angle + 360) % 360; }
+        if (this.reflect[1] === -1) { angle = (360 - angle + 360) % 360; }
+        angle = (angle - this.theta + 360) % 360;
+        angle -= 180;
+        var a;
+        if ((angle >= -225 && angle < -135) || (angle >= 135 && angle < 225)) {
+            a = 1;
+        } else if ((angle >= -135 && angle < -45) || (angle >= 225 && angle < 315)) {
+            a = 0;
+        } else if ((angle >= -45 && angle < 45) || (angle >= 315 && angle < 405)) {
+            a = 3;
+        } else if (angle >= 45 && angle <= 135) {
+            a = 2;
+        }
+        return a;
+    }
+
     ////////////////draw/////////////////////
 
     draw() {
@@ -545,12 +575,16 @@ class Puzzle_square extends Puzzle {
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
             this.draw_thermo("pu_a");
+            this.draw_nobulbthermo("pu_q");
+            this.draw_nobulbthermo("pu_a");
             this.draw_arrowsp("pu_q");
             this.draw_arrowsp("pu_a");
             this.draw_symbol("pu_q", 1);
             this.draw_symbol("pu_a", 1);
             this.draw_wall("pu_q");
             this.draw_wall("pu_a");
+            this.draw_direction("pu_q");
+            this.draw_direction("pu_a");
             this.draw_frame();
             this.draw_polygonsp("pu_q");
             this.draw_polygonsp("pu_a");
@@ -558,8 +592,6 @@ class Puzzle_square extends Puzzle {
             this.draw_freeline("pu_a");
             this.draw_line("pu_q");
             this.draw_line("pu_a");
-            this.draw_direction("pu_q");
-            this.draw_direction("pu_a");
             this.draw_lattice();
             this.draw_selection();
             this.draw_symbol("pu_q", 2);
@@ -575,6 +607,7 @@ class Puzzle_square extends Puzzle {
             this.draw_surface("pu_q");
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
+            this.draw_nobulbthermo("pu_q");
             this.draw_arrowsp("pu_q");
             this.draw_symbol("pu_q", 1);
             this.draw_wall("pu_q");
@@ -630,6 +663,9 @@ class Puzzle_square extends Puzzle {
         for (var k = 0; k < keys.length; k++) {
             var i = keys[k];
             set_surface_style(this.ctx, this[pu].surface[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].surface[i]) {
+                this.ctx.fillStyle = this[pu + "_col"].surface[i];
+            }
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
             for (var j = 1; j < this.point[i].surround.length; j++) {
@@ -672,7 +708,11 @@ class Puzzle_square extends Puzzle {
             if (this[pu].squareframe[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                this.ctx.strokeStyle = Color.GREY_LIGHT;
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].squareframe[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].squareframe[i];
+                } else {
+                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                }
                 this.ctx.lineWidth = this.size * 0.8;
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[this[pu].squareframe[i][0]].x, this.point[this[pu].squareframe[i][0]].y);
@@ -692,11 +732,19 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    this.ctx.fillStyle = Color.GREY_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                        this.ctx.fillStyle = this[pu + "_col"].thermo[i];
+                    } else {
+                        this.ctx.fillStyle = Color.GREY_LIGHT;
+                    }
                     this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].thermo[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    }
                     this.ctx.lineWidth = this.size * 0.4;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y);
@@ -736,14 +784,86 @@ class Puzzle_square extends Puzzle {
         }
     }
 
+    draw_nobulbthermo(pu) {
+        if (this[pu].nobulbthermo) {
+            let xdirection, ydirection, commonend; // x is column, y is row
+            let reduce_straight = 0.44 * this.size,
+                reduce_diagonal = 0.316 * this.size;
+            for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
+                if (this[pu].nobulbthermo[i] && this[pu].nobulbthermo[i][0]) {
+                    this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].nobulbthermo[i]) {
+                        this.ctx.fillStyle = this[pu + "_col"].nobulbthermo[i];
+                    } else {
+                        this.ctx.fillStyle = Color.GREY_LIGHT;
+                    }
+                    this.ctx.setLineDash([]);
+                    this.ctx.lineCap = "square";
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].nobulbthermo[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].nobulbthermo[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_LIGHT;
+                    }
+                    this.ctx.lineWidth = this.size * 0.4;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[this[pu].nobulbthermo[i][0]].x, this.point[this[pu].nobulbthermo[i][0]].y);
+                    for (var j = 1; j < this[pu].nobulbthermo[i].length; j++) {
+                        if (j < (this[pu].nobulbthermo[i].length - 1)) {
+                            this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                        } else {
+                            commonend = this.find_common(pu, i, this[pu].nobulbthermo[i][j], "nobulbthermo");
+                            if (commonend) {
+                                xdirection = this.point[this[pu].nobulbthermo[i][j]].x - this.point[this[pu].nobulbthermo[i][j - 1]].x;
+                                ydirection = this.point[this[pu].nobulbthermo[i][j]].y - this.point[this[pu].nobulbthermo[i][j - 1]].y;
+                                if (xdirection == 0 && ydirection < 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y + reduce_straight);
+                                } else if (xdirection < 0 && ydirection > 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x + reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y - reduce_diagonal);
+                                } else if (xdirection > 0 && ydirection == 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x - reduce_straight, this.point[this[pu].nobulbthermo[i][j]].y);
+                                } else if (xdirection > 0 && ydirection > 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x - reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y - reduce_diagonal);
+                                } else if (xdirection == 0 && ydirection > 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y - reduce_straight);
+                                } else if (xdirection > 0 && ydirection < 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x - reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y + reduce_diagonal);
+                                } else if (xdirection < 0 && ydirection == 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x + reduce_straight, this.point[this[pu].nobulbthermo[i][j]].y);
+                                } else if (xdirection < 0 && ydirection < 0) {
+                                    this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x + reduce_diagonal, this.point[this[pu].nobulbthermo[i][j]].y + reduce_diagonal);
+                                }
+                            } else {
+                                this.ctx.lineTo(this.point[this[pu].nobulbthermo[i][j]].x, this.point[this[pu].nobulbthermo[i][j]].y);
+                            }
+                        }
+                    }
+                    this.ctx.stroke();
+                }
+            }
+        }
+    }
+
     find_common(pu, i, endpoint, symboltype) {
-        if (symboltype === "thermo") {
+        if (symboltype === "thermo" || symboltype === "nobulbthermo") {
             if (this[pu].thermo) {
                 for (var k = 0; k < this[pu].thermo.length; k++) {
                     if (k != i) {
                         if (this[pu].thermo[k]) {
                             for (var m = 1; m < this[pu].thermo[k].length; m++) {
                                 if (this[pu].thermo[k][m] === endpoint) {
+                                    return 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (this[pu].nobulbthermo) {
+                for (var k = 0; k < this[pu].nobulbthermo.length; k++) {
+                    if (k != i) {
+                        if (this[pu].nobulbthermo[k]) {
+                            for (var m = 1; m < this[pu].nobulbthermo[k].length; m++) {
+                                if (this[pu].nobulbthermo[k][m] === endpoint) {
                                     return 1;
                                 }
                             }
@@ -789,7 +909,11 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].arrows[i] && this[pu].arrows[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    }
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
                     this.ctx.moveTo(this.point[this[pu].arrows[i][0]].x, this.point[this[pu].arrows[i][0]].y);
@@ -819,7 +943,11 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                        if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                            this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
+                        } else {
+                            this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                        }
                         this.ctx.fillStyle = Color.WHITE;
                         this.ctx.lineWidth = 3;
 
@@ -841,7 +969,11 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].direction[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].direction[i]) {
+                        this.ctx.strokeStyle = this[pu + "_col"].direction[i];
+                    } else {
+                        this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                    }
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
 
@@ -974,6 +1106,9 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].line[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].line[i];
+                }
                 this.ctx.beginPath();
                 this.ctx.moveTo(x + r * Math.cos(45 * (Math.PI / 180)) * this.size, y + r * Math.sin(45 * (Math.PI / 180)) * this.size);
                 this.ctx.lineTo(x + r * Math.cos(225 * (Math.PI / 180)) * this.size, y + r * Math.sin(225 * (Math.PI / 180)) * this.size);
@@ -984,6 +1119,9 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].line[i]);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].line[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].line[i];
+                }
                 var i1 = i.split(",")[0];
                 var i2 = i.split(",")[1];
                 this.ctx.beginPath();
@@ -1029,6 +1167,9 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].lineE[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
+                }
                 this.ctx.beginPath();
                 this.ctx.moveTo(x + r * Math.cos(45 * (Math.PI / 180)) * this.size, y + r * Math.sin(45 * (Math.PI / 180)) * this.size);
                 this.ctx.lineTo(x + r * Math.cos(225 * (Math.PI / 180)) * this.size, y + r * Math.sin(225 * (Math.PI / 180)) * this.size);
@@ -1039,6 +1180,9 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].lineE[i]);
+                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].lineE[i]) {
+                    this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
+                }
                 var i1 = i.split(",")[0];
                 var i2 = i.split(",")[1];
                 this.ctx.beginPath();
@@ -1065,6 +1209,9 @@ class Puzzle_square extends Puzzle {
         /*freeline*/
         for (var i in this[pu].freeline) {
             set_line_style(this.ctx, this[pu].freeline[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].freeline[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].freeline[i];
+            }
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
             this.ctx.beginPath();
@@ -1086,6 +1233,9 @@ class Puzzle_square extends Puzzle {
         }
         for (var i in this[pu].freelineE) {
             set_line_style(this.ctx, this[pu].freelineE[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].freelineE[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].freelineE[i];
+            }
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
             this.ctx.beginPath();
@@ -1110,6 +1260,9 @@ class Puzzle_square extends Puzzle {
     draw_wall(pu) {
         for (var i in this[pu].wall) {
             set_line_style(this.ctx, this[pu].wall[i]);
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].wall[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].wall[i];
+            }
             this.ctx.lineCap = "butt";
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
@@ -1176,6 +1329,9 @@ class Puzzle_square extends Puzzle {
                 set_line_style(this.ctx, this[pu].cage[i] + 100);
             } else {
                 set_line_style(this.ctx, this[pu].cage[i]);
+            }
+            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].cage[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].cage[i];
             }
             this.ctx.beginPath();
             this.ctx.moveTo(x1, y1);
@@ -1324,24 +1480,25 @@ class Puzzle_square extends Puzzle {
                     break;
                 case "4": //tapa
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.44);
-                    if (this[pu].number[i][0].length === 1) {
+                    let values = [...this[pu].number[i][0]]; // This is to handle unicode symbols.
+                    if (values.length === 1) {
                         set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
-                    } else if (this[pu].number[i][0].length === 2) {
+                        this.ctx.text(values[0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
+                    } else if (values.length === 2) {
                         set_font_style(this.ctx, 0.48 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(this[pu].number[i][0].slice(0, 1), p_x - 0.16 * this.size, p_y - 0.15 * this.size, this.size * 0.8);
-                        this.ctx.text(this[pu].number[i][0].slice(1, 2), p_x + 0.18 * this.size, p_y + 0.19 * this.size, this.size * 0.8);
-                    } else if (this[pu].number[i][0].length === 3) {
+                        this.ctx.text(values[0], p_x - 0.16 * this.size, p_y - 0.15 * this.size, this.size * 0.8);
+                        this.ctx.text(values[1], p_x + 0.18 * this.size, p_y + 0.19 * this.size, this.size * 0.8);
+                    } else if (values.length === 3) {
                         set_font_style(this.ctx, 0.45 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(this[pu].number[i][0].slice(0, 1), p_x - 0.22 * this.size, p_y - 0.14 * this.size, this.size * 0.8);
-                        this.ctx.text(this[pu].number[i][0].slice(1, 2), p_x + 0.24 * this.size, p_y - 0.05 * this.size, this.size * 0.8);
-                        this.ctx.text(this[pu].number[i][0].slice(2, 3), p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
-                    } else if (this[pu].number[i][0].length === 4) {
+                        this.ctx.text(values[0], p_x - 0.22 * this.size, p_y - 0.14 * this.size, this.size * 0.8);
+                        this.ctx.text(values[1], p_x + 0.24 * this.size, p_y - 0.05 * this.size, this.size * 0.8);
+                        this.ctx.text(values[2], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
+                    } else if (values.length === 4) {
                         set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(this[pu].number[i][0].slice(0, 1), p_x - 0.0 * this.size, p_y - 0.22 * this.size, this.size * 0.8);
-                        this.ctx.text(this[pu].number[i][0].slice(1, 2), p_x - 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
-                        this.ctx.text(this[pu].number[i][0].slice(2, 3), p_x + 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
-                        this.ctx.text(this[pu].number[i][0].slice(3, 4), p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
+                        this.ctx.text(values[0], p_x - 0.0 * this.size, p_y - 0.22 * this.size, this.size * 0.8);
+                        this.ctx.text(values[1], p_x - 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
+                        this.ctx.text(values[2], p_x + 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
+                        this.ctx.text(values[3], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
                     }
                     break;
                 case "5": //small
@@ -2966,6 +3123,14 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.fill();
                 break;
+            case 3:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.7 * pu.size, this.size * 0.8);
+                break;
+            case 4:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.7 * pu.size, this.size * 0.8);
+                break;
         }
     }
 
@@ -3173,7 +3338,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3186,6 +3355,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
             case 2:
@@ -3197,7 +3367,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3210,6 +3384,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
             case 3:
@@ -3221,7 +3396,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3234,6 +3413,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
             case 4:
@@ -3245,7 +3425,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                    ctx.fillStyle = Color.TRANSPARENTBLACK;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.strokeStyle = Color.GREY_DARK_LIGHT;
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
@@ -3258,6 +3442,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x, y + r);
                 ctx.arcTo(x, y, x + r, y, r);
                 ctx.closePath();
+                ctx.fill();
                 ctx.stroke();
                 break;
         }
