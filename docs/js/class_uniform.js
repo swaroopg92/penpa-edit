@@ -2993,6 +2993,62 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
         }
         this.redraw();
     }
+
+    draw_firefly(ctx, num, x, y) {
+        var r1 = 0.36,
+            r2 = 0.09;
+        ctx.setLineDash([]);
+        ctx.lineCap = "butt";
+        switch (num) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                var th = this.rotate_theta((num - 1) * 45 - 180);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 9:
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                break;
+        }
+    }
+
+    draw_sun_moon(ctx, num, x, y) {
+        var r1 = 0.22,
+            r2 = 0.20;
+        switch (num) {
+            case 1:
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                break;
+            case 2:
+                set_circle_style(ctx, 2);
+                ctx.beginPath();
+                ctx.arc(x, y, r1 * pu.size, -0.34 * Math.PI, 0.73 * Math.PI, false);
+                ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
+                ctx.closePath();
+                ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.5 * pu.size, this.size * 0.6);
+                break;
+            case 4:
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.5 * pu.size, this.size * 0.6);
+                break;
+        }
+    }
 }
 
 class Puzzle_snub_square extends Puzzle_truncated_square {

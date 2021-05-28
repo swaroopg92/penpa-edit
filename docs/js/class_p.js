@@ -59,7 +59,7 @@ class Puzzle {
             "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
             "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb", "combili_akari", "combili_mines",
             "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb", "input_sudoku"
+            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb", "input_sudoku",
             "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
             "sub_cage1_lb"
         ];

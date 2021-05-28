@@ -386,7 +386,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "tetrakis_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0) {
+            if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
                 Swal.fire({
@@ -611,9 +611,16 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
-            document.getElementById("nb_sudoku3_lb").style.display = "none";
             document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 32;
             break;
