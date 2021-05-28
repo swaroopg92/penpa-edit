@@ -170,7 +170,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 15];
+        this.version = [2, 25, 16];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
