@@ -2090,15 +2090,7 @@ class Puzzle {
     }
 
     mode_set(mode, loadtype = 'new') {
-
-        // Handle invalid modes based on grid type, Hard coded for immediate resolution, later think of better automated way
-        if (this.gridtype === "iso" && this.mode[this.mode.qa].edit_mode === "combi" && this.mode[this.mode.qa][mode][0] === "star") {
-            this.mode[this.mode.qa].edit_mode = "surface"; // set main mode to surface
-            this.mode[this.mode.qa][mode][0] = "blpo"; // set combi star submode to yinyang
-        } else {
-            this.mode[this.mode.qa].edit_mode = mode;
-        }
-
+        this.mode[this.mode.qa].edit_mode = mode;
         this.submode_reset();
         if (document.getElementById('mode_' + mode)) {
             document.getElementById('mode_' + mode).style.display = 'inline-block';
