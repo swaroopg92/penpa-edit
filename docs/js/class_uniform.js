@@ -2318,7 +2318,7 @@ class Puzzle_truncated_square extends Puzzle {
     }
 
     draw_firefly(ctx, num, x, y) {
-        var r1 = 0.36,
+        var r1 = 0.25,
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
@@ -2342,7 +2342,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 3:
-                var th = this.rotate_theta(-30);
+                var th = this.rotate_theta(-45);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
@@ -2351,7 +2351,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 4:
-                var th = this.rotate_theta(30);
+                var th = this.rotate_theta(45);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
@@ -2360,7 +2360,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 5:
-                var th = this.rotate_theta(-210);
+                var th = this.rotate_theta(-225);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
@@ -2369,7 +2369,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 6:
-                var th = this.rotate_theta(210);
+                var th = this.rotate_theta(225);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
@@ -2378,7 +2378,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 7:
-                var th = this.rotate_theta(150);
+                var th = this.rotate_theta(135);
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
@@ -2387,6 +2387,24 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 8:
+                var th = this.rotate_theta(180);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 9:
+                var th = this.rotate_theta(0);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 0:
                 set_circle_style(ctx, 1);
                 this.draw_circle(ctx, x, y, r1);
                 break;
@@ -3739,6 +3757,105 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 break;
         }
     }
+
+    draw_firefly(ctx, num, x, y) {
+        var r1 = 0.25,
+            r2 = 0.09;
+        ctx.setLineDash([]);
+        ctx.lineCap = "butt";
+        switch (num) {
+            case 1:
+                var th = this.rotate_theta(-90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 2:
+                var th = this.rotate_theta(90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 3:
+                var th = this.rotate_theta(-30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 4:
+                var th = this.rotate_theta(60);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 5:
+                var th = this.rotate_theta(150);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 6:
+                var th = this.rotate_theta(240);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 7:
+                var th = this.rotate_theta(210);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 8:
+                var th = this.rotate_theta(180);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 9:
+                var th = this.rotate_theta(0);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 0:
+                var th = this.rotate_theta(30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+        }
+    }
 }
 
 class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
@@ -4316,6 +4433,105 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_x(ctx, x, y, r)
+                break;
+        }
+    }
+
+    draw_firefly(ctx, num, x, y) {
+        var r1 = 0.25,
+            r2 = 0.09;
+        ctx.setLineDash([]);
+        ctx.lineCap = "butt";
+        switch (num) {
+            case 1:
+                var th = this.rotate_theta(-90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 2:
+                var th = this.rotate_theta(90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 3:
+                var th = this.rotate_theta(-30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 4:
+                var th = this.rotate_theta(60);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 5:
+                var th = this.rotate_theta(150);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 6:
+                var th = this.rotate_theta(240);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 7:
+                var th = this.rotate_theta(210);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 8:
+                var th = this.rotate_theta(180);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 9:
+                var th = this.rotate_theta(0);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 0:
+                var th = this.rotate_theta(30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
         }
     }
@@ -5399,6 +5615,82 @@ class Puzzle_iso extends Puzzle_truncated_square {
             case 4:
                 set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
                 ctx.text("💣", x, y, 0.6 * pu.size, this.size * 0.7);
+                break;
+        }
+    }
+
+    draw_firefly(ctx, num, x, y) {
+        var r1 = 0.36,
+            r2 = 0.09;
+        ctx.setLineDash([]);
+        ctx.lineCap = "butt";
+        switch (num) {
+            case 1:
+                var th = this.rotate_theta(-90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 2:
+                var th = this.rotate_theta(90);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 3:
+                var th = this.rotate_theta(-30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 4:
+                var th = this.rotate_theta(30);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 5:
+                var th = this.rotate_theta(-210);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 6:
+                var th = this.rotate_theta(210);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 7:
+                var th = this.rotate_theta(150);
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 2;
+                this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
+                break;
+            case 8:
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
                 break;
         }
     }
