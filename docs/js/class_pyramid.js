@@ -280,7 +280,7 @@ class Puzzle_pyramid extends Puzzle {
                         type = [0, 2, 3];
                         break;
                     case "mines":
-                        type = [0, 1, 2];
+                        type = [0, 1, 2, 3];
                         break;
                 }
                 break;
