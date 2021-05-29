@@ -57,13 +57,13 @@ class Puzzle {
         //square
         this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
             "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
-            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb", "combili_akari", "combili_mines",
+            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
             "sub_sudoku2_lb", "input_sudoku",
             "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
             "sub_cage1_lb"
         ];
         //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4", "subc4"];
+        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4"];
         //square,tri,hex
         this.group3 = ["sub_line5_lb"];
         //square,hex
@@ -138,7 +138,18 @@ class Puzzle {
         this.undoredo_counter = 0;
         this.loop_counter = false;
         this.rules = "";
-        this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
+        this.gridmax = {
+            'square': 60,
+            'hex': 20,
+            'tri': 20,
+            'pyramid': 20,
+            'cube': 20,
+            'kakuro': 60,
+            'tetrakis': 20,
+            'truncated': 20,
+            'snub': 20,
+            'cairo': 20
+        }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
             ["\"pu_q\"", "zQ"],
@@ -8173,7 +8184,8 @@ class Puzzle {
         } else if (this.mouse_mode === "move") {
             // if the first selected position is edge then do not consider move
             if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
-                this.gridtype !== "iso" && this.gridtype !== "tetrakis_square") {
+                this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
+                this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal") {
                 // do nothing
             } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);
@@ -9986,25 +9998,63 @@ class Puzzle {
 
     get_neighbors(num, options = 'all') {
         let neighbors;
+        let neighbors2;
         let col_num = (num % (this.nx0));
         let row_num = parseInt(num / this.nx0);
+        // if (options === 'edges') {
+        //     neighbors2 = [(row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+        //         row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+        //     ]
+        // } else {
+        //     neighbors2 = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
+        //         (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
+        //         row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
+        //         row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
+        //         (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+        //         row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+        //     ]
+        // }
+        //Improved and simplified version
         if (options === 'edges') {
-            neighbors = [(row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
-                row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
-            ]
+            neighbors = this.point[num].neighbor;
         } else {
-            neighbors = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
-                (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
-                row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
-                row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
-                (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
-                row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
-            ]
+            if (this.gridtype === "cairo_pentagonal") {
+                // neighbors = this.point[num].neighbor; // Currently eliminating some other cell markings so ignore for now
+                neighbors = [];
+            } else if (this.gridtype === "pyramid") {
+                let offset;
+                if (row_num % 2 === 0) { // even row
+                    offset = 0;
+                } else { // odd row
+                    offset = 2;
+                }
+                neighbors2 = [row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+                    row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num, // right middle,
+                    4 * this.nx0 * this.ny0 + num * 2, // bottom left middle
+                    4 * this.nx0 * this.ny0 + num * 2 + 1, // bottom right middle
+                    4 * this.nx0 * this.ny0 + num * 2 - this.nx0 * 2 - 1 + offset, // top left middle
+                    4 * this.nx0 * this.ny0 + num * 2 + 1 - this.nx0 * 2 - 1 + offset // top right middle
+                ]
+                neighbors = neighbors2.concat(this.point[num].surround);
+            } else if (this.gridtype === "tetrakis_square") {
+                // let tol = 0.01;
+                // if (Math.abs(this.point[this.point[num].surround[0]].y - this.point[this.point[num].surround[2]].y) <= tol) {
+                //     neighbors2 = [num + this.nx0 * 2,
+                //         num + this.nx0 * 2 + 1,
+                //     ];
+                // }
+                neighbors = this.point[num].surround.concat(this.point[num].neighbor);
+            } else {
+                neighbors = this.point[num].surround.concat(this.point[num].neighbor);
+            }
         }
+        console.log(this.pu_q)
+        console.log(this.point[num]);
+        console.log(neighbors);
         return neighbors;
     }
 
@@ -10660,7 +10710,7 @@ class Puzzle {
                 } else if (this.gridtype === "iso") {
                     factor = 0;
                     offset = 0;
-                } else if (this.gridtype === "tetrakis_square") {
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
                     factor = 0;
                     offset = 0;
                 } else {
@@ -10672,7 +10722,6 @@ class Puzzle {
                 // Shadow for the selected cell
                 this.ctx.shadowBlur = 10;
                 this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
-
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 if (factor < 1) {
@@ -10691,6 +10740,10 @@ class Puzzle {
                             case 3:
                                 this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
                                 break;
+                            case 4:
+                                // only useful and hard coded for cairo_pentagonal
+                                this.ctx.lineTo(this.point[this.point[k].surround[4]].x + offset, this.point[this.point[k].surround[4]].y - offset);
+                                break;
                         }
                     }
                     this.ctx.closePath();
@@ -10698,6 +10751,7 @@ class Puzzle {
                     this.ctx.stroke();
                 } else {
                     let r, n, th;
+                    let tol = 0.01; // error tolerance
                     if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
                         r = 0.2;
                         n = 4;
@@ -10718,6 +10772,46 @@ class Puzzle {
                         r = 0.6;
                         n = 4;
                         th = 45;
+                    } else if (this.gridtype === "truncated_square") {
+                        if (parseInt(k % 2) === 0) { // Even numbers are octa shape, odd numbers are square shape
+                            r = 0.65;
+                            n = 8;
+                            th = 22.5;
+                        } else {
+                            r = 0.3;
+                            n = 4;
+                            th = 45;
+                        }
+                    } else if (this.gridtype === "snub_square") {
+                        if (this.point[k].surround.length === 3) { // Even numbers are octa shape, odd numbers are square shape
+                            if (Math.abs(this.point[this.point[k].surround[a[0]]].y - this.point[this.point[k].surround[a[1]]].y) <= tol) {
+                                r = 0.4;
+                                n = 3;
+                                th = 90;
+                            } else if (Math.abs(this.point[this.point[k].surround[a[0]]].x - this.point[this.point[k].surround[a[2]]].x) <= tol) {
+                                r = 0.4;
+                                n = 3;
+                                th = 0;
+                            } else if (Math.abs(this.point[this.point[k].surround[a[1]]].y - this.point[this.point[k].surround[a[2]]].y) <= tol) {
+                                r = 0.4;
+                                n = 3;
+                                th = 30;
+                            } else {
+                                r = 0.4;
+                                n = 3;
+                                th = 60;
+                            }
+                        } else if (this.point[k].surround.length === 4) {
+                            if (Math.abs(this.point[this.point[k].surround[a[0]]].y - this.point[this.point[k].surround[a[1]]].y) <= tol) {
+                                r = 0.6;
+                                n = 4;
+                                th = 45;
+                            } else {
+                                r = 0.6;
+                                n = 4;
+                                th = 105;
+                            }
+                        }
                     }
                     let x = this.point[k].x;
                     let y = this.point[k].y

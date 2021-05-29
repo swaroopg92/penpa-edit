@@ -276,6 +276,12 @@ class Puzzle_pyramid extends Puzzle {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 2, 3];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2];
+                        break;
                 }
                 break;
             case "sudoku":

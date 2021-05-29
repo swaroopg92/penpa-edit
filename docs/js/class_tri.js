@@ -2239,7 +2239,7 @@ class Puzzle_tri extends Puzzle {
     }
 
     draw_star(ctx, num, x, y) {
-        var r1 = 0.38;
+        var r1 = 0.25;
         var r2 = 0.382 * r1;
         switch (num) {
             case 1:
@@ -2315,7 +2315,7 @@ class Puzzle_tri extends Puzzle {
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
             case 0:
-                var r = 0.4;
+                var r = 0.3;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.GREY;

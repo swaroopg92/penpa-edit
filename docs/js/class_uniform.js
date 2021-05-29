@@ -35,6 +35,30 @@ class Puzzle_truncated_square extends Puzzle {
         this.erase_buttons();
     }
 
+    erase_buttons() {
+        for (var i of this.group1) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group2) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group3) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group4) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group5) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "none";
+        }
+    }
+
     create_point() {
         var k = 0,
             k0;
@@ -308,7 +332,16 @@ class Puzzle_truncated_square extends Puzzle {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 2];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2];
+                        break;
                 }
+                break;
+            case "sudoku":
+                type = [0];
                 break;
         }
         return type;
@@ -550,6 +583,7 @@ class Puzzle_truncated_square extends Puzzle {
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
@@ -565,6 +599,7 @@ class Puzzle_truncated_square extends Puzzle {
             this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
@@ -825,7 +860,7 @@ class Puzzle_truncated_square extends Puzzle {
                 p_y = this.point[i].y;
             }
             if (this[pu].symbol[i][2] === layer) {
-                this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1]);
+                this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1], i);
             }
         }
     }
@@ -1071,7 +1106,7 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    draw_symbol_select(ctx, x, y, num, sym) {
+    draw_symbol_select(ctx, x, y, num, sym, loc = 0) {
         switch (sym) {
             /* figure */
             case "circle_L":
@@ -1331,7 +1366,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_compass(ctx, num, x, y);
                 break;
             case "star":
-                this.draw_star(ctx, num, x, y);
+                this.draw_star(ctx, num, x, y, loc);
                 break;
             case "tents":
                 this.draw_tents(ctx, num, x, y);
@@ -1360,7 +1395,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_firefly(ctx, num, x, y);
                 break;
             case "sun_moon":
-                this.draw_sun_moon(ctx, num, x, y);
+                this.draw_sun_moon(ctx, num, x, y, loc);
                 break;
             case "sudokuetc":
                 this.draw_sudokuetc(ctx, num, x, y);
@@ -2144,8 +2179,14 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    draw_star(ctx, num, x, y) {
-        var r1 = 0.38;
+    draw_star(ctx, num, x, y, loc) {
+        if (parseInt(loc % 2) === 0) { // Even numbers are octa shape, odd numbers are square shape
+            var r1 = 0.5;
+            var r = 0.5;
+        } else {
+            var r = 0.3;
+            var r1 = 0.25;
+        }
         var r2 = 0.382 * r1;
         switch (num) {
             case 1:
@@ -2221,7 +2262,6 @@ class Puzzle_truncated_square extends Puzzle {
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
             case 0:
-                var r = 0.4;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
@@ -2353,9 +2393,20 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    draw_sun_moon(ctx, num, x, y) {
-        var r1 = 0.36,
-            r2 = 0.34;
+    draw_sun_moon(ctx, num, x, y, loc) {
+        if (this.point[loc].surround.length === 4) {
+            var r1 = 0.24,
+                r2 = 0.22,
+                alp1 = 0.4,
+                alp2 = 0.5,
+                alp3 = 0.6;
+        } else {
+            var r1 = 0.45,
+                r2 = 0.43,
+                alp1 = 0.6,
+                alp2 = 0.7,
+                alp3 = 0.8;
+        }
         switch (num) {
             case 1:
                 set_circle_style(ctx, 1);
@@ -2370,12 +2421,12 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.fill();
                 break;
             case 3:
-                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
-                ctx.text("💡", x, y, 0.6 * pu.size, this.size * 0.7);
+                set_font_style(ctx, alp1 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, alp2 * pu.size, this.size * alp3);
                 break;
             case 4:
-                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
-                ctx.text("💣", x, y, 0.6 * pu.size, this.size * 0.7);
+                set_font_style(ctx, alp1 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, alp2 * pu.size, this.size * alp3);
                 break;
         }
     }
@@ -2543,7 +2594,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of this.group7) {
-            // document.getElementById(i).style.listStyleType = 'none';
             document.getElementById(i).style.display = "none";
         }
     }
@@ -2835,6 +2885,12 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 3, 4];
+                        break;
+                    case "mines":
+                        type = [0, 1, 3, 4];
+                        break;
                 }
                 break;
             case "sudoku":
@@ -3054,6 +3110,29 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 break;
         }
     }
+
+    draw_star(ctx, num, x, y) {
+        var r1 = 0.25;
+        var r2 = 0.382 * r1;
+        switch (num) {
+            case 1:
+                ctx.fillStyle = Color.WHITE;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
+                break;
+            case 0:
+                var r = 0.25;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_x(ctx, x, y, r)
+                break;
+        }
+    }
 }
 
 class Puzzle_snub_square extends Puzzle_truncated_square {
@@ -3092,6 +3171,30 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
         };
         this.reset();
         this.erase_buttons();
+    }
+
+    erase_buttons() {
+        for (var i of this.group1) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group2) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group3) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group4) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group5) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "none";
+        }
     }
 
     create_point() {
@@ -3452,7 +3555,16 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 2];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2];
+                        break;
                 }
+                break;
+            case "sudoku":
+                type = [0];
                 break;
         }
         return type;
@@ -3529,6 +3641,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
@@ -3544,6 +3657,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
@@ -3558,6 +3672,72 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
         if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
         th = th / 180 * Math.PI;
         return th;
+    }
+
+    draw_star(ctx, num, x, y, loc) {
+        if (this.point[loc].surround.length === 3) {
+            var r1 = 0.2;
+            var r = 0.2;
+        } else {
+            var r1 = 0.4;
+            var r = 0.4;
+        }
+        var r2 = 0.382 * r1;
+        switch (num) {
+            case 1:
+                ctx.fillStyle = Color.WHITE;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
+                break;
+            case 0:
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_x(ctx, x, y, r)
+                break;
+        }
+    }
+
+    draw_sun_moon(ctx, num, x, y, loc) {
+        if (this.point[loc].surround.length === 3) {
+            var r1 = 0.26,
+                r2 = 0.24,
+                alp1 = 0.4,
+                alp2 = 0.5,
+                alp3 = 0.6;
+        } else {
+            var r1 = 0.36,
+                r2 = 0.34,
+                alp1 = 0.5,
+                alp2 = 0.6,
+                alp3 = 0.7;
+        }
+        switch (num) {
+            case 1:
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                break;
+            case 2:
+                set_circle_style(ctx, 2);
+                ctx.beginPath();
+                ctx.arc(x, y, r1 * pu.size, -0.34 * Math.PI, 0.73 * Math.PI, false);
+                ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
+                ctx.closePath();
+                ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, alp1 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, alp2 * pu.size, this.size * alp3);
+                break;
+            case 4:
+                set_font_style(ctx, alp1 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, alp2 * pu.size, this.size * alp3);
+                break;
+        }
     }
 }
 
@@ -3597,6 +3777,30 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
         };
         this.reset();
         this.erase_buttons();
+    }
+
+    erase_buttons() {
+        for (var i of this.group1) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group2) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group3) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group4) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group5) {
+            document.getElementById(i).style.display = "none";
+        }
+        for (var i of this.group6) {
+            document.getElementById(i).style.display = "inline-block";
+        }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "none";
+        }
     }
 
     create_point() {
@@ -3974,7 +4178,16 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 2];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2];
+                        break;
                 }
+                break;
+            case "sudoku":
+                type = [0];
                 break;
         }
         return type;
@@ -4051,6 +4264,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
@@ -4066,6 +4280,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_frameBold();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
@@ -4080,6 +4295,29 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
         if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
         th = th / 180 * Math.PI;
         return th;
+    }
+
+    draw_star(ctx, num, x, y) {
+        var r1 = 0.4
+        var r2 = 0.382 * r1;
+        var r = 0.4;
+        switch (num) {
+            case 1:
+                ctx.fillStyle = Color.WHITE;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
+                break;
+            case 0:
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_x(ctx, x, y, r)
+                break;
+        }
     }
 }
 
@@ -4497,6 +4735,12 @@ class Puzzle_iso extends Puzzle_truncated_square {
                         break;
                     case "edgesub":
                         type = [0, 1];
+                        break;
+                    case "akari":
+                        type = [0, 2];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2];
                         break;
                 }
                 break;
@@ -5043,5 +5287,119 @@ class Puzzle_iso extends Puzzle_truncated_square {
         if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
         th = th / 180 * Math.PI;
         return th;
+    }
+
+    draw_star(ctx, num, x, y) {
+        var r1 = 0.38;
+        var r2 = 0.382 * r1;
+        switch (num) {
+            case 1:
+                ctx.fillStyle = Color.WHITE;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
+                break;
+            case 2:
+                ctx.fillStyle = Color.BLACK;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
+                break;
+            case 3:
+                ctx.fillStyle = Color.GREY;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
+                break;
+            case 4:
+                ctx.fillStyle = Color.WHITE;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
+                break;
+            case 5:
+                ctx.fillStyle = Color.BLACK;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
+                break;
+            case 6:
+                ctx.fillStyle = Color.GREY;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
+                break;
+            case 7:
+                ctx.fillStyle = Color.WHITE;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
+                break;
+            case 8:
+                ctx.fillStyle = Color.BLACK;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
+                break;
+            case 9:
+                ctx.fillStyle = Color.GREY;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.TRANSPARENTBLACK;
+                ctx.lineWidth = 1;
+                this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
+                break;
+            case 0:
+                var r = 0.4;
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 1;
+                this.draw_x(ctx, x, y, r)
+                break;
+        }
+    }
+
+    draw_sun_moon(ctx, num, x, y) {
+        var r1 = 0.36,
+            r2 = 0.34;
+        switch (num) {
+            case 1:
+                set_circle_style(ctx, 1);
+                this.draw_circle(ctx, x, y, r1);
+                break;
+            case 2:
+                set_circle_style(ctx, 2);
+                ctx.beginPath();
+                ctx.arc(x, y, r1 * pu.size, -0.34 * Math.PI, 0.73 * Math.PI, false);
+                ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
+                ctx.closePath();
+                ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.6 * pu.size, this.size * 0.7);
+                break;
+            case 4:
+                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.6 * pu.size, this.size * 0.7);
+                break;
+        }
     }
 }
