@@ -9993,6 +9993,7 @@ class Puzzle {
         let neighbors2;
         let col_num = (num % (this.nx0));
         let row_num = parseInt(num / this.nx0);
+
         // if (options === 'edges') {
         //     neighbors2 = [(row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
         //         row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
@@ -10010,6 +10011,7 @@ class Puzzle {
         //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
         //     ]
         // }
+
         //Improved and simplified version
         if (options === 'edges') {
             neighbors = this.point[num].neighbor;
@@ -10044,9 +10046,6 @@ class Puzzle {
                 neighbors = this.point[num].surround.concat(this.point[num].neighbor);
             }
         }
-        console.log(this.pu_q)
-        console.log(this.point[num]);
-        console.log(neighbors);
         return neighbors;
     }
 
