@@ -3368,6 +3368,11 @@ class Puzzle {
                                 sol[5].push(i + "," + this[pu].symbol[i][0] + "H");
                             }
                         }
+                        if (document.getElementById("sol_mine").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 4) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "I");
+                            }
+                        }
                         break;
                 }
             }
@@ -3571,6 +3576,16 @@ class Puzzle {
                             for (var i in this[pu].symbol) {
                                 if (this[pu].symbol[i][1] === "sun_moon" &&
                                     this[pu].symbol[i][0] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "mine":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "sun_moon" &&
+                                    this[pu].symbol[i][0] === 4) {
                                     temp_sol.push(i);
                                 }
                             }
