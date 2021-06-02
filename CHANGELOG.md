@@ -7,6 +7,8 @@
 	* Added Sun, Moon, Mine, Bulb, firefly, Angle loop to all the non-square grids.
 	* Added object composite mode to all the non-square grids.
 	* Answer check added to Minesweeper.
+	* Added CTRL+DEL shortcut to delete center marks in Sudoku Solving Mode.
+	* Added SHIFT+DEL shortcut to delete corner marks in Sudoku Solving Mode.
 * 2021/05/23 ver2.25.15
 	* Added "SVG" graphic support.
 	* Added Bulbless Thermo support.

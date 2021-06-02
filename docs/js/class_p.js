@@ -7435,7 +7435,7 @@ class Puzzle {
         return clean_flag;
     }
 
-    key_space(keypressed = 0) {
+    key_space(keypressed = 0, shift_key = false, ctrl_key = false) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                 this.record("numberS", this.cursolS);
@@ -7474,27 +7474,59 @@ class Puzzle {
                     this.undoredo_counter = this.undoredo_counter + 1;
                 }
                 if (this.selection.length > 0) {
-                    for (var k of this.selection) {
+                    if (!ctrl_key && !shift_key) {
+                        for (var k of this.selection) {
 
-                        if (this[this.mode.qa].number[k]) {
-                            this.record("number", k, this.undoredo_counter);
-                            delete this[this.mode.qa].number[k];
-                        }
+                            if (this[this.mode.qa].number[k]) {
+                                this.record("number", k, this.undoredo_counter);
+                                delete this[this.mode.qa].number[k];
+                            }
 
-                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-                        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                        for (var j = 0; j < 4; j++) {
-                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                            for (var j = 0; j < 4; j++) {
+                                if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                    delete this[this.mode.qa].numberS[corner_cursor + j];
+                                }
+                            }
+
+                            for (var j = 0; j < 4; j++) {
+                                if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                    this.record("numberS", side_cursor + j, this.undoredo_counter);
+                                    delete this[this.mode.qa].numberS[side_cursor + j];
+                                }
                             }
                         }
+                    } else if (ctrl_key && !shift_key) {
+                        if (this.selection.length > 0) {
+                            for (var k of this.selection) {
+                                if (this[this.mode.qa].number[k] && (this[this.mode.qa].number[k][2] === "5" || this[this.mode.qa].number[k][2] === "6")) {
+                                    this.record("number", k, this.undoredo_counter);
+                                    delete this[this.mode.qa].number[k];
+                                }
+                            }
+                        }
+                    } else if (shift_key && !ctrl_key) {
+                        if (this.selection.length > 0) {
+                            for (var k of this.selection) {
+                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                        for (var j = 0; j < 4; j++) {
-                            if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                this.record("numberS", side_cursor + j, this.undoredo_counter);
-                                delete this[this.mode.qa].numberS[side_cursor + j];
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                        this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                        delete this[this.mode.qa].numberS[corner_cursor + j];
+                                    }
+                                }
+
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                        this.record("numberS", side_cursor + j, this.undoredo_counter);
+                                        delete this[this.mode.qa].numberS[side_cursor + j];
+                                    }
+                                }
                             }
                         }
                     }

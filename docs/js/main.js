@@ -339,12 +339,19 @@ onload = function() {
                 } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                     // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                     // Sudoku mode, I have assigned it to Delete
-                    pu.key_space(keycode);
+                    pu.key_space(keycode, shift_key, ctrl_key);
                     event.returnValue = false;
                 } else if (key === "Backspace") {
                     pu.key_backspace();
                     event.returnValue = false;
                 }
+            }
+
+            if (ctrl_key && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
+                // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
+                // Sudoku mode, I have assigned it to Delete
+                pu.key_space(keycode, shift_key, ctrl_key);
+                event.returnValue = false;
             }
 
             if (ctrl_key && !shift_key && !alt_key) {
