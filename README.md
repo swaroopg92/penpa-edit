@@ -28,14 +28,16 @@ Depending on the browser you can update the page without using the cache with "C
 * F3: Solution mode
 * TAB/ENTER: checkout the TAB section below in "Current functions". Tab settings are now retained in the shared URL.
 * In Sudoku Mode
-	* Z - Normal Submode
-	* X - Corner Submode
-	* C - Centre Submode
-	* V - Shading (Surface Mode)
-	* SHIFT - For Temporary Corner Submode
+	* Z : Normal Submode
+	* X : Corner Submode
+	* C : Centre Submode
+	* V : Shading (Surface Mode)
+	* SHIFT : For Temporary Corner Submode
+	* SHIFT + DEL : Deletes only corner pencil marks from the selected cells
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
-	* DEL - To delete all the contents of the cell
-	* SPACEBAR - To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
+	* CTRL + DEL : Deletes only centre pencil marks from the selected cells
+	* DEL : To delete all the contents of the cell
+	* SPACEBAR : To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
 	* Drag the mouse pressing left click / drag your finger holding down on Mobile or Ipad for multiple cell selection
 	* Border: ON - will allow you to write digits on the edges
 * In Surface Mode
@@ -85,6 +87,14 @@ Depending on the browser you can update the page without using the cache with "C
 * Kakuro
 	* Rows
 	* Columns
+* Tetrakis Square
+	* Side
+* Truncated Square
+	* Side
+* Snub Square
+	* Side
+* Cairo Pentagonal
+	* Side
 
 ### Surface
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
@@ -184,7 +194,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Area / Field:
 	* Edge/Aux line: An auxiliary line that represents the connection between the edge and the square
 * Object:
-	* Battleships: Click twice to change the shape according to the condition of the surrounding ships.
+	* Battleships: Left click will rotate between circle, square, dot and water. Drag in a direction for that directional ship segment. Right click and drag - multiple water. Once you have a single dot, you can left click and drag to multiple cells. Once you have a water, you can left click and drag to multiple cells as well.
 	* Star Battle: Left click - star, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
 	* Tents: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 	* Magnets: +, - and black square
@@ -203,13 +213,16 @@ Depending on the browser you can update the page without using the cache with "C
 	* You can also use keyboard Arrow Keys to move around
 	* CTRL key to do multiple selection of cells (Useful if you need to select distinct/far apart cells)
 * Shortcuts to switch between sub-modes
-	* Z - Normal Submode - Normal sized numbers
-	* X - Corner Submode - Small digits placed on corners or sides of the cell
-	* C - Centre Submode - Small digits placed in the centre of the cell
-	* V - Shading (Surface Mode) - For coloring the cells (12 color choices)
-	* SHIFT - For Temporary Corner Submode
+	* Z : Normal Submode - Normal sized numbers
+	* X : Corner Submode - Small digits placed on corners or sides of the cell
+	* C : Centre Submode - Small digits placed in the centre of the cell
+	* V : Shading (Surface Mode) - For coloring the cells (12 color choices)
+	* SHIFT : For Temporary Corner Submode
+	* SHIFT + DEL : Deletes only corner pencil marks from the selected cells
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
-	* SPACEBAR - To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
+	* CTRL + DEL : Deletes only centre pencil marks from the selected cells
+	* DEL : To delete all the contents of the cell
+	* SPACEBAR : To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
 * Border: ON
 	* IF border is ON then you can write digits on the edges of the cells.
 * 6 Color choices for User Solving

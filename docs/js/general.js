@@ -77,6 +77,12 @@ function create_newboard() {
         pu = make_class(gridtype);
         pu.mode = mode;
 
+        // update default composite mode for special grids
+        if (!(gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro")) {
+            pu.mode["pu_q"]["combi"] = ["linex", ""];
+            pu.mode["pu_a"]["combi"] = ["linex", ""];
+        }
+
         pu.reset_frame(); // Draw the board
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
@@ -93,7 +99,18 @@ function create_newboard() {
 
 function make_class(gridtype, loadtype = 'new') {
     var size = parseInt(document.getElementById("nb_size3").value);
-    var gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in class_p.js
+    var gridmax = {
+        'square': 60,
+        'hex': 20,
+        'tri': 20,
+        'pyramid': 20,
+        'cube': 20,
+        'kakuro': 60,
+        'tetrakis': 20,
+        'truncated': 20,
+        'snub': 20,
+        'cairo': 20
+    }; // also defined in class_p.js
     switch (gridtype) {
         case "square":
             var nx = parseInt(document.getElementById("nb_size1").value, 10);
@@ -367,12 +384,12 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0) {
+            if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'Error:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['truncated'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'OK',
                 })
@@ -380,12 +397,12 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "tetrakis_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0) {
+            if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'Error:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['tetrakis'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'OK',
                 })
@@ -393,12 +410,12 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "snub_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0) {
+            if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'Error:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['snub'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'OK',
                 })
@@ -406,12 +423,12 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "cairo_pentagonal":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 10 && n0 > 0) {
+            if (n0 <= 20 && n0 > 0) {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
                 Swal.fire({
                     title: 'Error:',
-                    html: 'Side Size must be in the range <h2 class="warn">1-10</h2>',
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['cairo'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'OK',
                 })
@@ -594,10 +611,18 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
-            document.getElementById("nb_size1").value = 5;
-            document.getElementById("nb_size3").value = 32;
-            break;
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size3").value = 38;
         case "tetrakis_square":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -605,9 +630,18 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
             document.getElementById("nb_size1").value = 4;
-            document.getElementById("nb_size3").value = 32;
+            document.getElementById("nb_size3").value = 38;
             break;
         case "snub_square":
             for (var i of type) {
@@ -616,10 +650,18 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
-            break;
         case "cairo_pentagonal":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -627,10 +669,18 @@ function changetype() {
             for (var i of type2) {
                 document.getElementById(i).style.display = "none";
             }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
             document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
-            break;
     }
 }
 

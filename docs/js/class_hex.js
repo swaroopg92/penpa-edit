@@ -46,6 +46,9 @@ class Puzzle_hex extends Puzzle {
         for (var i of this.group5) {
             document.getElementById(i).style.display = "inline-block";
         }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {
@@ -285,6 +288,12 @@ class Puzzle_hex extends Puzzle {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 2, 3, 4];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2, 3, 4];
+                        break;
                 }
                 break;
             case "sudoku":
@@ -521,6 +530,7 @@ class Puzzle_hex extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_direction("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_cage("pu_q");
@@ -544,6 +554,7 @@ class Puzzle_hex extends Puzzle {
             this.draw_line("pu_q");
             this.draw_direction("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_cage("pu_q");
             this.draw_number("pu_q");
@@ -2630,6 +2641,14 @@ class Puzzle_hex extends Puzzle {
                 ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
                 ctx.closePath();
                 ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.7 * pu.size, this.size * 0.8);
+                break;
+            case 4:
+                set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.7 * pu.size, this.size * 0.8);
                 break;
         }
     }

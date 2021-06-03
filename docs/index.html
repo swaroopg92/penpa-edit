@@ -58,7 +58,7 @@
             <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
             <input type="button" id="input_url" value="Load" class="button" />
             <input type="button" id="page_settings" value="Settings" class="button" />
-            <input type="button" id="page_help" value="Help" class="button" />
+            <input type="button" id="page_help" value="" class="button" />
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -230,7 +230,7 @@
                                 <li><span id="ms_line">Lines</span></li>
                                 <li><span id="ms_frameline">Cage Lines</span></li>
                                 <li><span id="ms1_bars">Bars &#x25AE; &#x25AF;</span>
-                                    <ul>
+                                    <ul id="ul_bars">
                                         <li><span id="ms_bars_B">Black</span></li>
                                         <li><span id="ms_bars_G">Gray</span></li>
                                         <li><span id="ms_bars_W">White</span></li>
@@ -249,7 +249,7 @@
                                 </li>
                                 <li><span id="ms_inequality">&#xFF1C; &#xFF1E; ^ v </span></li>
                                 <li><span id="ms1_degital">&brvbar;-&brvbar; &brvbar; '-&brvbar;</span>
-                                    <ul>
+                                    <ul id="ul_degital">
                                         <li><span id="ms_degital_B">Black</span></li>
                                         <li><span id="ms_degital_E">Green</span></li>
                                         <li><span id="ms_degital_G">Gray</span></li>
@@ -621,7 +621,7 @@
                 <button id="sw_reset" class="button sw">Reset</button>
             </div>
         </div>
-        <p>Penpa+ Version 2.25.15 &copy; 2020-2021 </p>
+        <p>Penpa+ Version 2.25.16 &copy; 2020-2021 </p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -696,6 +696,10 @@
                     <option value="iso" id="nb_type5_lb">Cube</option>
                     <option value="sudoku" id="nb_type6_lb">Sudoku</option>
                     <option value="kakuro" id="nb_type7_lb">Kakuro</option>
+                    <option value="tetrakis_square" id="nb_type8_lb"> Tetrakis square </option>
+                    <option value="truncated_square" id="nb_type9_lb"> Truncated square </option>
+                    <option value="snub_square" id="nb_type10_lb"> Snub square </option>
+                    <option value="cairo_pentagonal" id="nb_type11_lb"> Cairo pentagonal </option>
                 </select>
             </span><br>
             <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -1107,6 +1111,17 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution_or" id="sol_or_akari" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="div_all"><label class="solutiontext" id="sol_mine_lb">Shape - Special 2 - Minesweeper - Option 4: </label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_mine" class="solcheck">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution_or" id="sol_or_mine" class="solcheck_or">
                             </td>
                         </tr>
                     </table>

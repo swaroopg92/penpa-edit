@@ -56,15 +56,14 @@ class Puzzle {
         this.obj = document.getElementById("dvique");
         //square
         this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
-            "ms_slovak", "ms_arc", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
-            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb", "combili_akari", "combili_mines",
-            "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-            "st_sudoku1_lb", "st_sudoku2_lb", "st_sudoku8_lb", "st_sudoku3_lb", "st_sudoku9_lb", "st_sudoku10_lb",
+            "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
+            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
+            "sub_sudoku2_lb", "input_sudoku",
             "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
             "sub_cage1_lb"
         ];
         //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4", "ms5", "subc4"];
+        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4"];
         //square,tri,hex
         this.group3 = ["sub_line5_lb"];
         //square,hex
@@ -73,6 +72,12 @@ class Puzzle {
         this.group5 = ["sub_specialthermo_lb", "sub_specialnobulbthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb", "sub_number3_lb"];
         // tri, cube
         this.group6 = ["sub_number10_lb"];
+        // tetrakis (only want in others and not in tetrakis)
+        this.group7 = ["rotation", "mo_move_lb", //main buttons
+            "sub_number7_lb", "sub_number2_lb", "sub_number4_lb", // number mode
+            "ms1_degital", "ul_degital", "ms_frameline", "ms1_bars", "ul_bars", "ms_degital_f", "ms_dice", "ms_pills", // shape mode
+            "subc5"
+        ];
 
         // Drawing position
         this.mouse_mode = "";
@@ -133,7 +138,18 @@ class Puzzle {
         this.undoredo_counter = 0;
         this.loop_counter = false;
         this.rules = "";
-        this.gridmax = { 'square': 60, 'hex': 20, 'tri': 20, 'pyramid': 20, 'cube': 20, 'kakuro': 60 }; // also defined in general.js
+        this.gridmax = {
+            'square': 60,
+            'hex': 20,
+            'tri': 20,
+            'pyramid': 20,
+            'cube': 20,
+            'kakuro': 60,
+            'tetrakis': 20,
+            'truncated': 20,
+            'snub': 20,
+            'cairo': 20
+        }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
             ["\"pu_q\"", "zQ"],
@@ -165,7 +181,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 15];
+        this.version = [2, 25, 16];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -2074,15 +2090,7 @@ class Puzzle {
     }
 
     mode_set(mode, loadtype = 'new') {
-
-        // Handle invalid modes based on grid type, Hard coded for immediate resolution, later think of better automated way
-        if (this.gridtype === "iso" && this.mode[this.mode.qa].edit_mode === "combi" && this.mode[this.mode.qa][mode][0] === "star") {
-            this.mode[this.mode.qa].edit_mode = "surface"; // set main mode to surface
-            this.mode[this.mode.qa][mode][0] = "blpo"; // set combi star submode to yinyang
-        } else {
-            this.mode[this.mode.qa].edit_mode = mode;
-        }
-
+        this.mode[this.mode.qa].edit_mode = mode;
         this.submode_reset();
         if (document.getElementById('mode_' + mode)) {
             document.getElementById('mode_' + mode).style.display = 'inline-block';
@@ -3360,6 +3368,11 @@ class Puzzle {
                                 sol[5].push(i + "," + this[pu].symbol[i][0] + "H");
                             }
                         }
+                        if (document.getElementById("sol_mine").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] === 4) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "I");
+                            }
+                        }
                         break;
                 }
             }
@@ -3563,6 +3576,16 @@ class Puzzle {
                             for (var i in this[pu].symbol) {
                                 if (this[pu].symbol[i][1] === "sun_moon" &&
                                     this[pu].symbol[i][0] === 3) {
+                                    temp_sol.push(i);
+                                }
+                            }
+                            temp_sol.sort();
+                            sol[sol_count] = temp_sol;
+                            break;
+                        case "mine":
+                            for (var i in this[pu].symbol) {
+                                if (this[pu].symbol[i][1] === "sun_moon" &&
+                                    this[pu].symbol[i][0] === 4) {
                                     temp_sol.push(i);
                                 }
                             }
@@ -7161,123 +7184,125 @@ class Puzzle {
                     }
                     break;
                 case "2": // Corner mode
-                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                    if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                        if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
 
-                        if (this.selection.length === 1) {
-                            this.undoredo_counter = 0;
+                            if (this.selection.length === 1) {
+                                this.undoredo_counter = 0;
 
-                            // if the selected cell is on the edge then do not proceed
-                            if (parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
-                                break;
-                            }
-                        } else {
-                            this.undoredo_counter = this.undoredo_counter + 1;
-                        }
-                        var j_start = 0;
-                        var length_limit = 8;
-
-                        // if any element present in numberS mode then
-                        // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
-                        if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
-                            length_limit = 6;
-                            j_start = 1;
-                        }
-
-                        for (var k of this.selection) {
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
-                                    this.selection.length > 1) ||
-                                this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
-                                var single_digit = true;
-                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
-                                // This is for single digit obtained from candidate submode in Problem
-                                var sum = 0;
-                                for (var j = 0; j < 10; j++) {
-                                    if (this["pu_q"].number[k][0][j] === 1) {
-                                        sum += 1;
-                                    }
-                                }
-                                if (sum === 1) {
-                                    var single_digit = true;
-                                } else {
-                                    var single_digit = false;
-                                }
-                            } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
-                                // This is for digits obtained from candidate submode in Solution
-                                var sum = 0;
-                                for (var j = 0; j < 10; j++) {
-                                    if (this["pu_a"].number[k][0][j] === 1) {
-                                        sum += 1;
-                                        con += (j + 1).toString();
-                                    }
-                                }
-                                if (sum === 1) {
-                                    var single_digit = true;
-                                } else {
-                                    var single_digit = false;
+                                // if the selected cell is on the edge then do not proceed
+                                if (parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
+                                    break;
                                 }
                             } else {
-                                var single_digit = false;
+                                this.undoredo_counter = this.undoredo_counter + 1;
                             }
-                            if (!single_digit) {
-                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-                                con = "";
+                            var j_start = 0;
+                            var length_limit = 8;
 
-                                // Read all the existing digits from the corner and sides
-                                for (var j = j_start; j < 4; j++) {
-                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                        con += this[this.mode.qa].numberS[corner_cursor + j][0];
-                                    }
-                                }
-                                for (var j = j_start; j < 4; j++) {
-                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                        con += this[this.mode.qa].numberS[side_cursor + j][0];
-                                    }
-                                }
+                            // if any element present in numberS mode then
+                            // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
+                            if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
+                                length_limit = 6;
+                                j_start = 1;
+                            }
 
-                                if (con.indexOf(key) != -1) { // if digit already exists
-                                    con = con.replace(key, '');
-
-                                    // remove the last digit from old location
-                                    if ((con.length + 1) < (5 - j_start)) {
-                                        this.record("numberS", corner_cursor + con.length + j_start, this.undoredo_counter);
-                                        delete this[this.mode.qa].numberS[corner_cursor + con.length + j_start];
-                                    } else {
-                                        this.record("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
-                                        delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
-                                    }
-
-                                    if (con) {
-                                        if (con.length < (5 - j_start)) {
-                                            for (var j = j_start; j < (con.length + j_start); j++) {
-                                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            }
-                                        } else {
-                                            for (var j = j_start; j < 4; j++) {
-                                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                                this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            }
-                                            for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
-                                                this.record("numberS", side_cursor + j - 4, this.undoredo_counter);
-                                                this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            }
+                            for (var k of this.selection) {
+                                if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
+                                        Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
+                                        this.selection.length > 1) ||
+                                    this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
+                                    var single_digit = true;
+                                } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
+                                    // This is for single digit obtained from candidate submode in Problem
+                                    var sum = 0;
+                                    for (var j = 0; j < 10; j++) {
+                                        if (this["pu_q"].number[k][0][j] === 1) {
+                                            sum += 1;
                                         }
                                     }
-                                } else if (con.length < length_limit) { // If digit doesnt exist in the cell
-                                    con += key;
-                                    if (con.length < (5 - j_start)) {
-                                        this.record("numberS", corner_cursor + con.length - 1 + j_start, this.undoredo_counter);
-                                        this[this.mode.qa].numberS[corner_cursor + con.length - 1 + j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                    if (sum === 1) {
+                                        var single_digit = true;
                                     } else {
-                                        this.record("numberS", side_cursor + con.length - 5 + 2 * j_start, this.undoredo_counter);
-                                        this[this.mode.qa].numberS[side_cursor + con.length - 5 + 2 * j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        var single_digit = false;
+                                    }
+                                } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
+                                    // This is for digits obtained from candidate submode in Solution
+                                    var sum = 0;
+                                    for (var j = 0; j < 10; j++) {
+                                        if (this["pu_a"].number[k][0][j] === 1) {
+                                            sum += 1;
+                                            con += (j + 1).toString();
+                                        }
+                                    }
+                                    if (sum === 1) {
+                                        var single_digit = true;
+                                    } else {
+                                        var single_digit = false;
+                                    }
+                                } else {
+                                    var single_digit = false;
+                                }
+                                if (!single_digit) {
+                                    var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                    var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                                    con = "";
+
+                                    // Read all the existing digits from the corner and sides
+                                    for (var j = j_start; j < 4; j++) {
+                                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                            con += this[this.mode.qa].numberS[corner_cursor + j][0];
+                                        }
+                                    }
+                                    for (var j = j_start; j < 4; j++) {
+                                        if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                            con += this[this.mode.qa].numberS[side_cursor + j][0];
+                                        }
+                                    }
+
+                                    if (con.indexOf(key) != -1) { // if digit already exists
+                                        con = con.replace(key, '');
+
+                                        // remove the last digit from old location
+                                        if ((con.length + 1) < (5 - j_start)) {
+                                            this.record("numberS", corner_cursor + con.length + j_start, this.undoredo_counter);
+                                            delete this[this.mode.qa].numberS[corner_cursor + con.length + j_start];
+                                        } else {
+                                            this.record("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
+                                            delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
+                                        }
+
+                                        if (con) {
+                                            if (con.length < (5 - j_start)) {
+                                                for (var j = j_start; j < (con.length + j_start); j++) {
+                                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                                    this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                }
+                                            } else {
+                                                for (var j = j_start; j < 4; j++) {
+                                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                                    this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                }
+                                                for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
+                                                    this.record("numberS", side_cursor + j - 4, this.undoredo_counter);
+                                                    this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                                }
+                                            }
+                                        }
+                                    } else if (con.length < length_limit) { // If digit doesnt exist in the cell
+                                        con += key;
+                                        if (con.length < (5 - j_start)) {
+                                            this.record("numberS", corner_cursor + con.length - 1 + j_start, this.undoredo_counter);
+                                            this[this.mode.qa].numberS[corner_cursor + con.length - 1 + j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        } else {
+                                            this.record("numberS", side_cursor + con.length - 5 + 2 * j_start, this.undoredo_counter);
+                                            this[this.mode.qa].numberS[side_cursor + con.length - 5 + 2 * j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                                        }
                                     }
                                 }
                             }
-                        }
 
+                        }
                     }
                     break;
                 case "3": // Centre mode
@@ -7410,7 +7435,7 @@ class Puzzle {
         return clean_flag;
     }
 
-    key_space(keypressed = 0) {
+    key_space(keypressed = 0, shift_key = false, ctrl_key = false) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                 this.record("numberS", this.cursolS);
@@ -7449,27 +7474,59 @@ class Puzzle {
                     this.undoredo_counter = this.undoredo_counter + 1;
                 }
                 if (this.selection.length > 0) {
-                    for (var k of this.selection) {
+                    if (!ctrl_key && !shift_key) {
+                        for (var k of this.selection) {
 
-                        if (this[this.mode.qa].number[k]) {
-                            this.record("number", k, this.undoredo_counter);
-                            delete this[this.mode.qa].number[k];
-                        }
+                            if (this[this.mode.qa].number[k]) {
+                                this.record("number", k, this.undoredo_counter);
+                                delete this[this.mode.qa].number[k];
+                            }
 
-                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-                        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                        for (var j = 0; j < 4; j++) {
-                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                            for (var j = 0; j < 4; j++) {
+                                if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                    delete this[this.mode.qa].numberS[corner_cursor + j];
+                                }
+                            }
+
+                            for (var j = 0; j < 4; j++) {
+                                if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                    this.record("numberS", side_cursor + j, this.undoredo_counter);
+                                    delete this[this.mode.qa].numberS[side_cursor + j];
+                                }
                             }
                         }
+                    } else if (ctrl_key && !shift_key) {
+                        if (this.selection.length > 0) {
+                            for (var k of this.selection) {
+                                if (this[this.mode.qa].number[k] && (this[this.mode.qa].number[k][2] === "5" || this[this.mode.qa].number[k][2] === "6")) {
+                                    this.record("number", k, this.undoredo_counter);
+                                    delete this[this.mode.qa].number[k];
+                                }
+                            }
+                        }
+                    } else if (shift_key && !ctrl_key) {
+                        if (this.selection.length > 0) {
+                            for (var k of this.selection) {
+                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                        for (var j = 0; j < 4; j++) {
-                            if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                this.record("numberS", side_cursor + j, this.undoredo_counter);
-                                delete this[this.mode.qa].numberS[side_cursor + j];
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                        this.record("numberS", corner_cursor + j, this.undoredo_counter);
+                                        delete this[this.mode.qa].numberS[corner_cursor + j];
+                                    }
+                                }
+
+                                for (var j = 0; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                        this.record("numberS", side_cursor + j, this.undoredo_counter);
+                                        delete this[this.mode.qa].numberS[side_cursor + j];
+                                    }
+                                }
                             }
                         }
                     }
@@ -8165,7 +8222,9 @@ class Puzzle {
             this.redraw();
         } else if (this.mouse_mode === "move") {
             // if the first selected position is edge then do not consider move
-            if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0) {
+            if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
+                this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
+                this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal") {
                 // do nothing
             } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);
@@ -9978,24 +10037,61 @@ class Puzzle {
 
     get_neighbors(num, options = 'all') {
         let neighbors;
+        let neighbors2;
         let col_num = (num % (this.nx0));
         let row_num = parseInt(num / this.nx0);
+
+        // if (options === 'edges') {
+        //     neighbors2 = [(row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+        //         row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+        //     ]
+        // } else {
+        //     neighbors2 = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
+        //         (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
+        //         row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
+        //         row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
+        //         (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
+        //         row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+        //         row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
+        //     ]
+        // }
+
+        //Improved and simplified version
         if (options === 'edges') {
-            neighbors = [(row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
-                row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
-            ]
+            neighbors = this.point[num].neighbor;
         } else {
-            neighbors = [(row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // top left corner
-                (row_num - 1) * this.nx0 + this.nx0 * this.ny0 + col_num, // top right corner
-                row_num * this.nx0 + this.nx0 * this.ny0 + col_num - 1, // bottom left corner
-                row_num * this.nx0 + this.nx0 * this.ny0 + col_num, // bottom right corner
-                (row_num - 1) * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // top middle
-                row_num * this.nx0 + 2 * this.nx0 * this.ny0 + col_num, // bottom middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num // right middle
-            ]
+            if (this.gridtype === "cairo_pentagonal") {
+                // neighbors = this.point[num].neighbor; // Currently eliminating some other cell markings so ignore for now
+                neighbors = [];
+            } else if (this.gridtype === "pyramid") {
+                let offset;
+                if (row_num % 2 === 0) { // even row
+                    offset = 0;
+                } else { // odd row
+                    offset = 2;
+                }
+                neighbors2 = [row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
+                    row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num, // right middle,
+                    4 * this.nx0 * this.ny0 + num * 2, // bottom left middle
+                    4 * this.nx0 * this.ny0 + num * 2 + 1, // bottom right middle
+                    4 * this.nx0 * this.ny0 + num * 2 - this.nx0 * 2 - 1 + offset, // top left middle
+                    4 * this.nx0 * this.ny0 + num * 2 + 1 - this.nx0 * 2 - 1 + offset // top right middle
+                ]
+                neighbors = neighbors2.concat(this.point[num].surround);
+            } else if (this.gridtype === "tetrakis_square") {
+                // let tol = 0.01;
+                // if (Math.abs(this.point[this.point[num].surround[0]].y - this.point[this.point[num].surround[2]].y) <= tol) {
+                //     neighbors2 = [num + this.nx0 * 2,
+                //         num + this.nx0 * 2 + 1,
+                //     ];
+                // }
+                neighbors = this.point[num].surround.concat(this.point[num].neighbor);
+            } else {
+                neighbors = this.point[num].surround.concat(this.point[num].neighbor);
+            }
         }
         return neighbors;
     }
@@ -10645,21 +10741,29 @@ class Puzzle {
                 a[2] = c;
             }
             for (var k of this.selection) {
-                let factor = parseInt(k / (this.nx0 * this.ny0));
+                let factor, offset;
+                if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                    factor = parseInt(k / (this.nx0 * this.ny0));
+                    offset = 3;
+                } else if (this.gridtype === "iso") {
+                    factor = 0;
+                    offset = 0;
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
+                    factor = 0;
+                    offset = 0;
+                } else {
+                    factor = 2;
+                }
                 // Color of selected cell
                 // set_surface_style(this.ctx, 13);
 
                 // Shadow for the selected cell
                 this.ctx.shadowBlur = 10;
                 this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
-
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
-
                 if (factor < 1) {
-                    let offset = 3;
                     this.ctx.beginPath();
-
                     for (var j = 0; j < this.point[k].surround.length; j++) {
                         switch (j) {
                             case 0:
@@ -10674,15 +10778,79 @@ class Puzzle {
                             case 3:
                                 this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
                                 break;
+                            case 4:
+                                // only useful and hard coded for cairo_pentagonal
+                                this.ctx.lineTo(this.point[this.point[k].surround[4]].x + offset, this.point[this.point[k].surround[4]].y - offset);
+                                break;
                         }
                     }
                     this.ctx.closePath();
                     // this.ctx.fill();
                     this.ctx.stroke();
                 } else {
-                    let r = 0.2;
-                    let n = 4;
-                    let th = 45;
+                    let r, n, th;
+                    let tol = 0.01; // error tolerance
+                    if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                        r = 0.2;
+                        n = 4;
+                        th = 45;
+                    } else if (this.gridtype === "hex") {
+                        r = 0.5;
+                        n = 6;
+                        th = 30;
+                    } else if (this.gridtype === "tri") {
+                        r = 0.5;
+                        n = 3;
+                        if (parseInt(k / (this.n0) ** 2) === 1) {
+                            th = 90;
+                        } else if (parseInt(k / (this.n0) ** 2) === 2) {
+                            th = 150;
+                        }
+                    } else if (this.gridtype === "pyramid") {
+                        r = 0.6;
+                        n = 4;
+                        th = 45;
+                    } else if (this.gridtype === "truncated_square") {
+                        if (parseInt(k % 2) === 0) { // Even numbers are octa shape, odd numbers are square shape
+                            r = 0.65;
+                            n = 8;
+                            th = 22.5;
+                        } else {
+                            r = 0.3;
+                            n = 4;
+                            th = 45;
+                        }
+                    } else if (this.gridtype === "snub_square") {
+                        if (this.point[k].surround.length === 3) { // Even numbers are octa shape, odd numbers are square shape
+                            if (Math.abs(this.point[this.point[k].surround[a[0]]].y - this.point[this.point[k].surround[a[1]]].y) <= tol) {
+                                r = 0.4;
+                                n = 3;
+                                th = 90;
+                            } else if (Math.abs(this.point[this.point[k].surround[a[0]]].x - this.point[this.point[k].surround[a[2]]].x) <= tol) {
+                                r = 0.4;
+                                n = 3;
+                                th = 0;
+                            } else if (Math.abs(this.point[this.point[k].surround[a[1]]].y - this.point[this.point[k].surround[a[2]]].y) <= tol) {
+                                r = 0.4;
+                                n = 3;
+                                th = 30;
+                            } else {
+                                r = 0.4;
+                                n = 3;
+                                th = 60;
+                            }
+                        } else if (this.point[k].surround.length === 4) {
+                            if (Math.abs(this.point[this.point[k].surround[a[0]]].y - this.point[this.point[k].surround[a[1]]].y) <= tol) {
+                                r = 0.6;
+                                n = 4;
+                                th = 45;
+                            } else {
+                                r = 0.6;
+                                n = 4;
+                                th = 105;
+                            }
+                        }
+                    }
                     let x = this.point[k].x;
                     let y = this.point[k].y
 

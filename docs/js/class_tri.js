@@ -52,6 +52,9 @@ class Puzzle_tri extends Puzzle {
         for (var i of this.group6) {
             document.getElementById(i).style.display = "inline-block";
         }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {
@@ -297,6 +300,12 @@ class Puzzle_tri extends Puzzle {
                     case "edgesub":
                         type = [0, 1];
                         break;
+                    case "akari":
+                        type = [0, 2, 3, 4];
+                        break;
+                    case "mines":
+                        type = [0, 1, 2, 3, 4];
+                        break;
                 }
                 break;
             case "sudoku":
@@ -460,6 +469,7 @@ class Puzzle_tri extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_direction("pu_a");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_number("pu_q");
@@ -480,6 +490,7 @@ class Puzzle_tri extends Puzzle {
             this.draw_line("pu_q");
             this.draw_direction("pu_q");
             this.draw_lattice();
+            this.draw_selection();
             this.draw_symbol("pu_q", 2);
             this.draw_number("pu_q");
             this.draw_cursol();
@@ -2234,7 +2245,7 @@ class Puzzle_tri extends Puzzle {
     }
 
     draw_star(ctx, num, x, y) {
-        var r1 = 0.38;
+        var r1 = 0.25;
         var r2 = 0.382 * r1;
         switch (num) {
             case 1:
@@ -2310,7 +2321,7 @@ class Puzzle_tri extends Puzzle {
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
             case 0:
-                var r = 0.4;
+                var r = 0.3;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.GREY;
@@ -2451,8 +2462,8 @@ class Puzzle_tri extends Puzzle {
     }
 
     draw_sun_moon(ctx, num, x, y) {
-        var r1 = 0.36,
-            r2 = 0.34;
+        var r1 = 0.22,
+            r2 = 0.20;
         switch (num) {
             case 1:
                 set_circle_style(ctx, 1);
@@ -2465,6 +2476,14 @@ class Puzzle_tri extends Puzzle {
                 ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
                 ctx.closePath();
                 ctx.fill();
+                break;
+            case 3:
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 10);
+                ctx.text("💡", x, y, 0.5 * pu.size, this.size * 0.6);
+                break;
+            case 4:
+                set_font_style(ctx, 0.4 * pu.size.toString(10), 10);
+                ctx.text("💣", x, y, 0.5 * pu.size, this.size * 0.6);
                 break;
         }
     }

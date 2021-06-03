@@ -4,3 +4,4 @@
 * Thanks to Ropeko for restructuring all the colors in the code.
 * Thanks to Alice for restructuring all the files in the code.
 * NewYear Image by <a href="https://pixabay.com/users/christy1-30666/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=102971">Christine Aubé</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=102971">Pixabay</a>
+* Help icon made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>

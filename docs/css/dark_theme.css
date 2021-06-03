@@ -1062,7 +1062,7 @@ textarea {
 #modal-save2-content {
     background-color: var(--black);
     width: 360px;
-    height: 550px;
+    height: 600px;
     margin: 0 auto;
     margin-top: 100px;
     border-radius: 20px;
@@ -1380,4 +1380,15 @@ sup {
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+}
+
+#page_help {
+    background: url(images/help_icon.png);
+    margin-top: 7px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    vertical-align: top;
+    width: 30px;
+    border: none;
 }

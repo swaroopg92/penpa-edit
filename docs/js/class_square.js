@@ -58,6 +58,9 @@ class Puzzle_square extends Puzzle {
         for (var i of this.group5) {
             document.getElementById(i).style.display = "inline-block";
         }
+        for (var i of this.group7) {
+            document.getElementById(i).style.display = "inline-block";
+        }
     }
 
     create_point() {
