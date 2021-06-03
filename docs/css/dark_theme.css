@@ -1378,3 +1378,14 @@ sup {
     margin-top: 30px;
     border-radius: 20px;
 }
+
+#page_help {
+    background: url(images/help_icon.png);
+    margin-top: 7px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    vertical-align: top;
+    width: 30px;
+    border: none;
+}
