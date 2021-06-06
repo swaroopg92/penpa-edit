@@ -10005,11 +10005,11 @@ class Puzzle {
             if (this.drawing_mode === 1) {
                 if (!this[this.mode.qa].symbol[num]) {
                     this.record("symbol", num);
-                    this[this.mode.qa].symbol[this.last] = [1, "battleship_B", 2];
-                } else if (this[this.mode.qa].symbol[num][0] === 1) {
-                    this.record("symbol", num);
                     this[this.mode.qa].symbol[this.last] = [2, "battleship_B", 2];
                 } else if (this[this.mode.qa].symbol[num][0] === 2) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[this.last] = [1, "battleship_B", 2];
+                } else if (this[this.mode.qa].symbol[num][0] === 1) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[this.last] = [8, "battleship_B", 2];
                 } else {

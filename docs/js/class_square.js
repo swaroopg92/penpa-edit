@@ -1922,12 +1922,14 @@ class Puzzle_square extends Puzzle {
                 break;
             case "battleship_B":
                 set_circle_style(ctx, 2);
-                this.draw_battleship(ctx, num, x, y);
+                var font_style_type = 1;
+                this.draw_battleship(ctx, num, x, y, font_style_type);
                 break;
             case "battleship_G":
                 set_circle_style(ctx, 3);
                 ctx.fillStyle = Color.GREY;
-                this.draw_battleship(ctx, num, x, y);
+                font_style_type = 3;
+                this.draw_battleship(ctx, num, x, y, font_style_type);
                 break;
             case "battleship_W":
                 ctx.setLineDash([]);
@@ -2996,7 +2998,7 @@ class Puzzle_square extends Puzzle {
         ctx.stroke();
     }
 
-    draw_battleship(ctx, num, x, y) {
+    draw_battleship(ctx, num, x, y, color_type = 1) {
         var r = 0.4;
         var th;
         switch (num) {
@@ -3023,7 +3025,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_battleship_tip(ctx, x, y, 270);
                 break;
             case 7:
-                set_font_style(ctx, 0.8 * pu.size.toString(10), 1);
+                set_font_style(ctx, 0.8 * pu.size.toString(10), color_type);
                 ctx.text("～", x, y - 0.11 * pu.size);
                 ctx.text("～", x, y + 0.09 * pu.size);
                 ctx.text("～", x, y + 0.29 * pu.size);
@@ -3032,7 +3034,11 @@ class Puzzle_square extends Puzzle {
                 r = 0.05;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.BLACK;
+                if (color_type === 3) {
+                    ctx.fillStyle = Color.GREY;
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                }
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x, y, r);
