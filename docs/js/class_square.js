@@ -1352,7 +1352,7 @@ class Puzzle_square extends Puzzle {
                 p_y = this.point[i].y;
             }
             if (this[pu].symbol[i][2] === layer) {
-                this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1]);
+                this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1], i);
             }
         }
     }
@@ -1595,7 +1595,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_symbol_select(ctx, x, y, num, sym) {
+    draw_symbol_select(ctx, x, y, num, sym, i) {
         switch (sym) {
             /* figure */
             case "circle_L":
@@ -1604,7 +1604,12 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.43);
                     this.draw_circle(ctx, x, y, 0.32);
                 } else {
-                    set_circle_style(ctx, num);
+                    if (document.getElementById("custom_color_yes").checked &&
+                        this[this.mode.qa + "_col"].symbol[i]) {
+                        set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                    } else {
+                        set_circle_style(ctx, num);
+                    }
                     this.draw_circle(ctx, x, y, 0.43);
                 }
                 break;
@@ -1614,7 +1619,12 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.35);
                     this.draw_circle(ctx, x, y, 0.25);
                 } else {
-                    set_circle_style(ctx, num);
+                    if (document.getElementById("custom_color_yes").checked &&
+                        this[this.mode.qa + "_col"].symbol[i]) {
+                        set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                    } else {
+                        set_circle_style(ctx, num);
+                    }
                     this.draw_circle(ctx, x, y, 0.35);
                 }
                 break;
@@ -1624,7 +1634,12 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.22);
                     this.draw_circle(ctx, x, y, 0.14);
                 } else {
-                    set_circle_style(ctx, num);
+                    if (document.getElementById("custom_color_yes").checked &&
+                        this[this.mode.qa + "_col"].symbol[i]) {
+                        set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                    } else {
+                        set_circle_style(ctx, num);
+                    }
                     this.draw_circle(ctx, x, y, 0.22);
                 }
                 break;
@@ -1634,95 +1649,205 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.13);
                     this.draw_circle(ctx, x, y, 0.07);
                 } else {
-                    set_circle_style(ctx, num);
+                    if (document.getElementById("custom_color_yes").checked &&
+                        this[this.mode.qa + "_col"].symbol[i]) {
+                        set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                    } else {
+                        set_circle_style(ctx, num);
+                    }
                     this.draw_circle(ctx, x, y, 0.13);
                 }
                 break;
             case "square_LL":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, 45);
                 break;
             case "square_L":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.4 * Math.sqrt(2), 4, 45);
                 break;
             case "square_M":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.35 * Math.sqrt(2), 4, 45);
                 break;
             case "square_S":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.22 * Math.sqrt(2), 4, 45);
                 break;
             case "square_SS":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.13 * Math.sqrt(2), 4, 45);
                 break;
             case "triup_L":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y + 0.5 * 0.25 * this.size, 0.5, 3, 90);
                 break;
             case "triup_M":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y + 0.4 * 0.25 * this.size, 0.4, 3, 90);
                 break;
             case "triup_SS":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y + 0.16 * 0.25 * this.size, 0.16, 3, 90);
                 break;
             case "tridown_L":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y - 0.5 * 0.25 * this.size, 0.5, 3, -90);
                 break;
             case "tridown_M":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y - 0.4 * 0.25 * this.size, 0.4, 3, -90);
                 break;
             case "tridown_SS":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y - 0.16 * 0.25 * this.size, 0.16, 3, -90);
                 break;
             case "triright_L":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x - 0.5 * 0.25 * this.size, y, 0.5, 3, 180);
                 break;
             case "triright_M":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x - 0.4 * 0.25 * this.size, y, 0.4, 3, 180);
                 break;
             case "triright_SS":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x - 0.16 * 0.25 * this.size, y, 0.16, 3, 180);
                 break;
             case "trileft_L":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x + 0.5 * 0.25 * this.size, y, 0.5, 3, 0);
                 break;
             case "trileft_M":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x + 0.4 * 0.25 * this.size, y, 0.4, 3, 0);
                 break;
             case "trileft_SS":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x + 0.16 * 0.25 * this.size, y, 0.16, 3, 0);
                 break;
             case "diamond_L":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.43, 4, 0);
                 break;
             case "diamond_M":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
                 break;
             case "diamond_SS":
-                set_circle_style(ctx, num);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
                 break;
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTWHITE;
-                ctx.strokeStyle = Color.BLACK;
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    ctx.strokeStyle = this[this.mode.qa + "_col"].symbol[i];
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.lineWidth = 2;
                 this.draw_ox(ctx, num, x, y);
                 break;
@@ -1743,34 +1868,66 @@ class Puzzle_square extends Puzzle {
                 this.draw_ox(ctx, num, x, y);
                 break;
             case "tri":
-                this.draw_tri(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_tri(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_tri(ctx, num, x, y);
+                }
                 break;
             case "cross":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                ctx.strokeStyle = Color.BLACK;
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    ctx.strokeStyle = this[this.mode.qa + "_col"].symbol[i];
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.lineWidth = 3;
                 this.draw_cross(ctx, num, x, y);
                 break;
             case "line":
-                this.draw_linesym(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_linesym(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_linesym(ctx, num, x, y);
+                }
                 break;
             case "frameline":
-                this.draw_framelinesym(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_framelinesym(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                    console.log('enters here');
+                } else {
+                    this.draw_framelinesym(ctx, num, x, y);
+                }
                 break;
             case "bars_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.BLACK;
-                ctx.strokeStyle = Color.BLACK;
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    ctx.fillStyle = this[this.mode.qa + "_col"].symbol[i];
+                    ctx.strokeStyle = this[this.mode.qa + "_col"].symbol[i];
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.lineWidth = 1;
                 this.draw_bars(ctx, num, x, y);
                 break;
             case "bars_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.fillStyle = Color.GREY_LIGHT;
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    ctx.fillStyle = this[this.mode.qa + "_col"].symbol[i];
+                } else {
+                    ctx.fillStyle = Color.GREY_LIGHT;
+                }
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_bars(ctx, num, x, y);
@@ -2068,7 +2225,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_tri(ctx, num, x, y) {
+    draw_tri(ctx, num, x, y, ccolor = "none") {
         var r = 0.5,
             th;
         switch (num) {
@@ -2076,7 +2233,7 @@ class Puzzle_square extends Puzzle {
             case 2:
             case 3:
             case 4:
-                set_circle_style(ctx, 2);
+                set_circle_style(ctx, 2, ccolor);
                 th = this.rotate_theta(-90 * (num - 1));
                 ctx.beginPath();
                 ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
@@ -2086,7 +2243,7 @@ class Puzzle_square extends Puzzle {
                 ctx.fill();
                 break;
             case 5:
-                set_circle_style(ctx, 2);
+                set_circle_style(ctx, 2, ccolor);
                 this.draw_polygon(ctx, x, y, r * Math.sqrt(2), 4, 45);
                 break;
             case 6:
@@ -2123,12 +2280,16 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_linesym(ctx, num, x, y) {
+    draw_linesym(ctx, num, x, y, ccolor = "none") {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
         ctx.fillStyle = Color.TRANSPARENTBLACK;
-        ctx.strokeStyle = Color.BLACK;
+        if (ccolor !== "none") {
+            ctx.strokeStyle = ccolor;
+        } else {
+            ctx.strokeStyle = Color.BLACK;
+        }
         ctx.lineWidth = 3;
         switch (num) {
             case 1:
@@ -2189,7 +2350,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_framelinesym(ctx, num, x, y) {
+    draw_framelinesym(ctx, num, x, y, ccolor = "none") {
         var r = 0.32;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
@@ -2198,7 +2359,7 @@ class Puzzle_square extends Puzzle {
         ctx.lineWidth = 3;
         switch (num) {
             case 1:
-                set_line_style(ctx, 115)
+                set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x + r * pu.size, y - r * pu.size);
@@ -2207,7 +2368,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 2:
-                set_line_style(ctx, 15)
+                set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x + r * pu.size, y - r * pu.size);
@@ -2216,7 +2377,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 3:
-                set_line_style(ctx, 16)
+                set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x + r * pu.size, y - r * pu.size);
@@ -2225,7 +2386,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 4:
-                set_line_style(ctx, 110)
+                set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x + r * pu.size, y - r * pu.size);
@@ -2234,7 +2395,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 5:
-                set_line_style(ctx, 115)
+                set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x - r * pu.size, y - r * pu.size);
@@ -2243,7 +2404,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 6:
-                set_line_style(ctx, 15)
+                set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x - r * pu.size, y - r * pu.size);
@@ -2252,7 +2413,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 7:
-                set_line_style(ctx, 16)
+                set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x - r * pu.size, y - r * pu.size);
@@ -2261,7 +2422,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 8:
-                set_line_style(ctx, 110)
+                set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
                 ctx.moveTo(x - r * pu.size, y - r * pu.size);

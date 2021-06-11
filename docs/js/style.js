@@ -89,7 +89,7 @@ function set_surface_style(ctx, type) {
     ctx.strokeStyle = ctx.fillStyle;
 }
 
-function set_line_style(ctx, type) {
+function set_line_style(ctx, type, ccolor = "none") {
     //Initialization
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
@@ -163,7 +163,11 @@ function set_line_style(ctx, type) {
             ctx.setLineDash([b, w]);
             ctx.lineDashOffset = b * 0.5;
             ctx.lineCap = "round";
-            ctx.strokeStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.strokeStyle = Color.BLACK;
+            }
             ctx.lineWidth = 1;
             break;
         case 11: //grid dash
@@ -204,7 +208,11 @@ function set_line_style(ctx, type) {
             ctx.setLineDash([b, w]);
             ctx.lineDashOffset = b * 0.5;
             ctx.lineCap = "round";
-            ctx.strokeStyle = Color.GREY_DARK;
+            if (ccolor !== "none") {
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.strokeStyle = Color.GREY_DARK;
+            }
             ctx.lineWidth = 1;
             break;
         case 115: //cage dash
@@ -213,13 +221,21 @@ function set_line_style(ctx, type) {
             ctx.setLineDash([b, w]);
             ctx.lineDashOffset = b * 0.5;
             ctx.lineCap = "round";
-            ctx.strokeStyle = Color.GREY_DARK;
+            if (ccolor !== "none") {
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.strokeStyle = Color.GREY_DARK;
+            }
             ctx.lineWidth = 1;
             break;
         case 16: // cage
         case 116:
             ctx.lineCap = "round";
-            ctx.strokeStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.strokeStyle = Color.BLACK;
+            }
             ctx.lineWidth = 1;
             break;
         case 17: //bold dash for wall
@@ -328,7 +344,7 @@ function set_font_style(ctx, size, type) {
     }
 }
 
-function set_circle_style(ctx, num) {
+function set_circle_style(ctx, num, ccolor = "none") {
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
     ctx.lineCap = "butt";
@@ -336,48 +352,86 @@ function set_circle_style(ctx, num) {
     ctx.lineWidth = 1;
     switch (num) {
         case 1:
-            ctx.fillStyle = Color.WHITE;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.WHITE;
+            }
             ctx.strokeStyle = Color.BLACK;
             ctx.lineWidth = 1;
             break;
         case 2:
-            ctx.fillStyle = Color.BLACK;
-            ctx.strokeStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.BLACK;
+                ctx.strokeStyle = Color.BLACK;
+            }
             ctx.lineWidth = 1;
             break;
         case 3:
-            ctx.fillStyle = Color.GREY_LIGHT;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.GREY_LIGHT;
+            }
             ctx.strokeStyle = Color.TRANSPARENTBLACK;
             ctx.lineWidth = 1;
             break;
         case 4:
             ctx.setLineDash([4, 4]);
-            ctx.fillStyle = Color.TRANSPARENTWHITE;
-            ctx.strokeStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = Color.BLACK;
+            }
             ctx.lineWidth = 1;
             break;
         case 5:
-            ctx.fillStyle = Color.GREY_LIGHT;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.GREY_LIGHT;
+            }
             ctx.strokeStyle = Color.BLACK;
             ctx.lineWidth = 1;
             break;
         case 6:
-            ctx.fillStyle = Color.WHITE;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.WHITE;
+            }
             ctx.strokeStyle = Color.GREY;
             ctx.lineWidth = 2;
             break;
         case 7:
-            ctx.fillStyle = Color.WHITE;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.WHITE;
+            }
             ctx.strokeStyle = Color.TRANSPARENTWHITE;
             ctx.lineWidth = 1;
             break;
         case 8:
-            ctx.fillStyle = Color.WHITE;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.WHITE;
+            }
             ctx.strokeStyle = Color.BLACK;
             ctx.lineWidth = 2;
             break;
         case 9:
-            ctx.fillStyle = Color.GREY_LIGHT;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.GREY_LIGHT;
+            }
             ctx.strokeStyle = Color.BLACK;
             ctx.lineWidth = 2;
             break;
