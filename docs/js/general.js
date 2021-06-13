@@ -771,6 +771,10 @@ function panel_onoff() {
             document.getElementById('float-key-header').style.left = 0 + "px";
             document.getElementById('float-key-header').style.top = 0 + "px";
         }
+        // If panel is ON, show Mode info on it.
+        if (document.getElementById('panel_button').textContent === "ON") {
+            document.getElementById('float-key-header-lb').innerHTML = "Mode: " + pu.mode[pu.mode.qa].edit_mode;
+        }
     } else {
         document.getElementById('panel_button').textContent = "OFF";
         document.getElementById('float-key').style.display = "none";
