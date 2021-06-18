@@ -10886,7 +10886,7 @@ class Puzzle {
                             // timer: 5000
                         })
                     }, 20)
-                    sw_timer.stop();
+                    sw_timer.pause();
                     // this.mouse_mode = "out";
                     // this.mouseevent(0, 0, 0);
                     this.sol_flag = 1;
@@ -10915,7 +10915,7 @@ class Puzzle {
                                     confirmButtonText: 'Hurray!',
                                 })
                             }, 20)
-                            sw_timer.stop();
+                            sw_timer.pause();
                             this.sol_flag = 1;
                             document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                             document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
