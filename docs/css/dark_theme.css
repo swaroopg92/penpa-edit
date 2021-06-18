@@ -173,15 +173,11 @@ hr.newgridhrline {
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
+    margin-left: 5px;
     color: var(--white);
     font-size: 14px;
     text-align: center;
     line-height: 28px;
-}
-
-.label_mode_2 {
-    display: inline;
-    padding-right: 46px;
 }
 
 .label {
@@ -190,6 +186,7 @@ hr.newgridhrline {
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
+    margin-left: 5px;
     margin-bottom: 5px;
     color: var(--white);
     font-size: 14px;
@@ -211,7 +208,7 @@ hr.newgridhrline {
     font-size: 14px;
     text-align: center;
     line-height: 28px;
-    border: 2px solid var(--red);
+    border: 2px solid var(--blueDark);
     border-radius: 3px;
 }
 
@@ -550,7 +547,8 @@ body textarea {
 #edge_button0,
 #reload_button0,
 #panel_buttons0,
-#panel_buttonc0 {
+#panel_buttonc0,
+#advance_button0 {
     width: auto;
     border: none;
     background: none;
@@ -560,7 +558,8 @@ body textarea {
 #panel_button,
 #visibility_button,
 #reload_button,
-#edge_button {
+#edge_button,
+#advance_button {
     width: 25px;
     border: 1px solid var(--greyLight);
     background: none;
@@ -571,7 +570,8 @@ body textarea {
 #panel_button:hover,
 #visibility_button:hover,
 #reload_button:hover,
-#edge_button:hover {
+#edge_button:hover,
+#advance_button:hover {
     background: var(--greyLight);
 }
 

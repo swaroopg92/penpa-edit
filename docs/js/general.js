@@ -806,6 +806,120 @@ function reloadcheck_onoff() {
     }
 }
 
+function advancecontrol_onoff(loadtype = "new") {
+    if (document.getElementById('advance_button').textContent === "ON") {
+        // Lite Version OFF, Display all the modes
+        document.getElementById('advance_button').textContent = "OFF";
+        advancecontrol_on();
+    } else {
+        // Lite Version ON, so turn off extra modes
+        if (loadtype === "url") {
+            document.getElementById('advance_button').textContent = "ON";
+            advancecontrol_off(loadtype);
+        } else {
+            let user_choices = getValues('mode_choices');
+            if (user_choices.length !== 0) {
+                document.getElementById('advance_button').textContent = "ON";
+                advancecontrol_off(loadtype);
+            } else {
+                Swal.fire({
+                    title: 'Advance/Basic Mode',
+                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Click "PenpaLite" button to turn "ON"</h2>',
+                    icon: 'info'
+                })
+            }
+        }
+    }
+}
+
+function advancecontrol_off(loadtype) {
+    // Check for this only for first time when loading url
+    let user_choices;
+    if (loadtype === "url") {
+        user_choices = this.usertab_choices;
+    } else {
+        user_choices = getValues('mode_choices');
+    }
+    if (user_choices.indexOf("Surface") === -1) {
+        document.getElementById("mo_surface_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Line Normal") === -1 &&
+        user_choices.indexOf("Line Diagonal") === -1 &&
+        user_choices.indexOf("Line Free") === -1 &&
+        user_choices.indexOf("Line Middle") === -1 &&
+        user_choices.indexOf("Line Helper") === -1) {
+        document.getElementById("mo_line_lb").style.display = "none";
+    } else {
+        document.getElementById("st_line80_lb").style.display = "none";
+        document.getElementById("st_line12_lb").style.display = "none";
+        document.getElementById("st_line13_lb").style.display = "none";
+        document.getElementById("st_line40_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Edge Normal") === -1 &&
+        user_choices.indexOf("Edge Diagonal") === -1 &&
+        user_choices.indexOf("Edge Free") === -1 &&
+        user_choices.indexOf("Edge Helper") === -1) {
+        document.getElementById("mo_lineE_lb").style.display = "none";
+    } else {
+        document.getElementById("st_lineE80_lb").style.display = "none";
+        document.getElementById("st_lineE12_lb").style.display = "none";
+        document.getElementById("st_lineE13_lb").style.display = "none";
+        document.getElementById("st_lineE21_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Wall") === -1) {
+        document.getElementById("mo_wall_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Number Normal") === -1 &&
+        user_choices.indexOf("Number L") === -1 &&
+        user_choices.indexOf("Number M") === -1 &&
+        user_choices.indexOf("Number S") === -1 &&
+        user_choices.indexOf("Number 1/4") === -1 &&
+        user_choices.indexOf("Number Side") === -1 &&
+        user_choices.indexOf("Candidates") === -1) {
+        document.getElementById("mo_number_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Shape") === -1) {
+        document.getElementById("mo_symbol_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Thermo") === -1 &&
+        user_choices.indexOf("Sudoku Arrow") === -1) {
+        document.getElementById("mo_special_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Cage") === -1) {
+        document.getElementById("mo_cage_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Composite") === -1) {
+        document.getElementById("mo_combi_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Sudoku Normal") === -1 &&
+        user_choices.indexOf("Sudoku Corner") === -1 &&
+        user_choices.indexOf("Sudoku Centre") === -1) {
+        document.getElementById("mo_sudoku_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Box") === -1) {
+        document.getElementById("mo_board_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Move") === -1) {
+        document.getElementById("mo_move_lb").style.display = "none";
+    }
+}
+
+function advancecontrol_on() {
+    let modes = ["surface", "line", "lineE", "wall", "number", "symbol", "special", "cage", "combi", "sudoku", "board", "move"];
+    let submodes = [
+        "line80", "line12", "line13", "line40", // Line submodes
+        "lineE21", "lineE80", "lineE12", "lineE13" // Edge submodes
+    ];
+
+    for (var i = 0; i < modes.length; i++) {
+        document.getElementById("mo_" + modes[i] + "_lb").style.display = "inline-block";
+    }
+
+    for (var i = 0; i < submodes.length; i++) {
+        document.getElementById("st_" + submodes[i] + "_lb").style.display = "inline-block";
+    }
+}
+
 function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "LINE") {
         if (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === '4') {
@@ -1461,6 +1575,14 @@ function load(urlParam) {
     // Tab settings
     if (typeof rtext[6] !== 'undefined') {
         this.usertab_choices = rtext[6];
+
+        // Advance Control Setting
+        // Do this only for latest version 2.25.17 and above
+        if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
+            if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+                advancecontrol_onoff("url");
+            }
+        }
     }
 
     if (paramArray.m === "edit") { //edit_mode
@@ -2154,6 +2276,10 @@ function set_solvemode() {
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_yes_lb').style.display = 'none';
     document.getElementById('save_settings_no_lb').style.display = 'none';
+
+    // // Advance button
+    // document.getElementById('advance_button').style.display = 'inline-block';
+    // document.getElementById('advance_button0').style.display = 'inline-block';
 }
 
 function set_contestmode() {
