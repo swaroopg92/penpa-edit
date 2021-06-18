@@ -868,6 +868,11 @@ function advancecontrol_off(loadtype) {
     }
     if (user_choices.indexOf("Wall") === -1) {
         document.getElementById("mo_wall_lb").style.display = "none";
+    } else {
+        document.getElementById("st_wall1_lb").style.display = "none";
+        document.getElementById("st_wall12_lb").style.display = "none";
+        document.getElementById("st_wall17_lb").style.display = "none";
+        document.getElementById("st_wall14_lb").style.display = "none";
     }
     if (user_choices.indexOf("Number Normal") === -1 &&
         user_choices.indexOf("Number L") === -1 &&
@@ -908,7 +913,8 @@ function advancecontrol_on() {
     let modes = ["surface", "line", "lineE", "wall", "number", "symbol", "special", "cage", "combi", "sudoku", "board", "move"];
     let submodes = [
         "line80", "line12", "line13", "line40", // Line submodes
-        "lineE21", "lineE80", "lineE12", "lineE13" // Edge submodes
+        "lineE21", "lineE80", "lineE12", "lineE13", // Edge submodes
+        "wall1", "wall12", "wall17", "wall14" // Wall submodes
     ];
 
     for (var i = 0; i < modes.length; i++) {
