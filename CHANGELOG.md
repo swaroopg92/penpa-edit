@@ -1,4 +1,6 @@
 ## History
+* 2021/**/** ver 2.25.17
+	* Improvements to Timer (only seconds are updated, 1/10th second is shown when paused or solution is complete)
 * 2021/06/02 ver 2.25.16
 	* Added Alpha Version of New Board type "Tetrakis Square".
 	* Added Alpha Version of New Board type "Truncated Square".
