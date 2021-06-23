@@ -2169,7 +2169,6 @@ class Puzzle {
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
-
         if (document.getElementById("custom_color_yes").checked) {
             // set the custom color to default
             switch (name) {
@@ -2352,6 +2351,53 @@ class Puzzle {
     subsymbolmode(mode) {
         this.mode[this.mode.qa].symbol[0] = mode;
         document.getElementById("symmode_content").innerHTML = mode;
+        if (document.getElementById("custom_color_yes").checked) {
+            // set the custom color to default
+            switch ("ms_" + mode) {
+                case "ms_circle_L":
+                case "ms_circle_M":
+                case "ms_circle_S":
+                case "ms_circle_SS":
+                case "ms_square_LL":
+                case "ms_square_L":
+                case "ms_square_M":
+                case "ms_square_S":
+                case "ms_square_SS":
+                case "ms_triup_L":
+                case "ms_triup_M":
+                case "ms_triup_SS":
+                case "ms_tridown_L":
+                case "ms_tridown_M":
+                case "ms_tridown_SS":
+                case "ms_triright_L":
+                case "ms_triright_M":
+                case "ms_triright_SS":
+                case "ms_trileft_L":
+                case "ms_trileft_M":
+                case "ms_trileft_SS":
+                case "ms_diamond_L":
+                case "ms_diamond_M":
+                case "ms_diamond_SS":
+                case "ms_star":
+                case "ms_firefly":
+                case "ms_sun_moon":
+                case "ms_slovak":
+                    $("#colorpicker_special").spectrum("set", Color.WHITE);
+                    break;
+                case "ms_frameline":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "ms_pills":
+                case "ms_tents":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "ms_sudokuetc":
+                case "ms_polyomino":
+                case "ms_neighbors":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+            }
+        }
         panel_pu.draw_panel();
         this.redraw();
     }

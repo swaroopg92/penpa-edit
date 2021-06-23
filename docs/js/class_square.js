@@ -1900,7 +1900,6 @@ class Puzzle_square extends Puzzle {
                 if (document.getElementById("custom_color_yes").checked &&
                     this[this.mode.qa + "_col"].symbol[i]) {
                     this.draw_framelinesym(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
-                    console.log('enters here');
                 } else {
                     this.draw_framelinesym(ctx, num, x, y);
                 }
