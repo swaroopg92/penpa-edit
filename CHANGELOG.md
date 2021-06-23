@@ -5,6 +5,7 @@
 	* Improvements to Panel Header (Shows Current Mode information).
 	* Improvements to available modes/submodes.
 	* Improvements to display.
+	* Custom color for Shape mode completed.
 	* Code improvement by creating separate modes.js file which summarizes supported modes for each grid type.
 * 2021/06/02 ver 2.25.16
 	* Added Alpha Version of New Board type "Tetrakis Square".

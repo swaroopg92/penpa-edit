@@ -2129,7 +2129,7 @@ class Puzzle {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
         if ((document.getElementById("custom_color_yes").checked) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
-            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special")) {
+            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
             document.getElementById('style_special').style.display = 'inline';
         } else {
             document.getElementById('style_special').style.display = 'none';
@@ -2152,7 +2152,6 @@ class Puzzle {
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
-
         if (document.getElementById("custom_color_yes").checked) {
             // set the custom color to default
             switch (name) {
@@ -2335,6 +2334,53 @@ class Puzzle {
     subsymbolmode(mode) {
         this.mode[this.mode.qa].symbol[0] = mode;
         document.getElementById("symmode_content").innerHTML = mode;
+        if (document.getElementById("custom_color_yes").checked) {
+            // set the custom color to default
+            switch ("ms_" + mode) {
+                case "ms_circle_L":
+                case "ms_circle_M":
+                case "ms_circle_S":
+                case "ms_circle_SS":
+                case "ms_square_LL":
+                case "ms_square_L":
+                case "ms_square_M":
+                case "ms_square_S":
+                case "ms_square_SS":
+                case "ms_triup_L":
+                case "ms_triup_M":
+                case "ms_triup_SS":
+                case "ms_tridown_L":
+                case "ms_tridown_M":
+                case "ms_tridown_SS":
+                case "ms_triright_L":
+                case "ms_triright_M":
+                case "ms_triright_SS":
+                case "ms_trileft_L":
+                case "ms_trileft_M":
+                case "ms_trileft_SS":
+                case "ms_diamond_L":
+                case "ms_diamond_M":
+                case "ms_diamond_SS":
+                case "ms_star":
+                case "ms_firefly":
+                case "ms_sun_moon":
+                case "ms_slovak":
+                    $("#colorpicker_special").spectrum("set", Color.WHITE);
+                    break;
+                case "ms_frameline":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
+                    break;
+                case "ms_pills":
+                case "ms_tents":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+                case "ms_sudokuetc":
+                case "ms_polyomino":
+                case "ms_neighbors":
+                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
+                    break;
+            }
+        }
         panel_pu.draw_panel();
         this.redraw();
     }
@@ -6808,7 +6854,7 @@ class Puzzle {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
                         if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
                                 arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
@@ -6817,7 +6863,7 @@ class Puzzle {
                     } else {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
                         if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
                                 arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
@@ -6859,7 +6905,7 @@ class Puzzle {
                     if (groupcounter === 0) {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
                         if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
                                 arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
@@ -6868,7 +6914,7 @@ class Puzzle {
                     } else {
                         this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
                         if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" ||
+                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
                                 arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
                             this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
@@ -7092,6 +7138,9 @@ class Puzzle {
                     number = parseInt(key, 10);
                 }
                 this[this.mode.qa].symbol[this.cursol] = [number, this.mode[this.mode.qa].symbol[0], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                if (document.getElementById("custom_color_yes").checked) {
+                    this[this.mode.qa + "_col"].symbol[this.cursol] = this.get_customcolor();
+                }
             }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
@@ -7449,6 +7498,9 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
             delete this[this.mode.qa].symbol[this.cursol];
+            if (document.getElementById("custom_color_yes").checked) {
+                delete this[this.mode.qa + "_col"].symbol[this.cursol];
+            }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             if (keypressed === 46 || keypressed === 8 || this.ondown_key === "touchstart") {
                 if (this.selection.length === 1) {
