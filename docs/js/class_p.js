@@ -2135,9 +2135,11 @@ class Puzzle {
             document.getElementById('style_special').style.display = 'none';
         }
 
-        // If panel is ON, show Mode info on it.
+        // If panel is ON, show Mode info on header
         if (document.getElementById('panel_button').textContent === "ON") {
-            document.getElementById('float-key-header-lb').innerHTML = "Mode: " + mode;
+            let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
+            let mode_loc = penpa_modes["square"]["mode"].indexOf(mode);
+            document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
         }
         this.redraw();
     }
