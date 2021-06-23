@@ -460,8 +460,13 @@ function set_circle_style(ctx, num, ccolor = "none") {
             ctx.lineWidth = 1;
             break;
         case 13:
-            ctx.fillStyle = Color.TRANSPARENTWHITE;
-            ctx.strokeStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.TRANSPARENTWHITE;
+                ctx.strokeStyle = Color.BLACK;
+            }
             ctx.lineWidth = 1;
             break;
         default:

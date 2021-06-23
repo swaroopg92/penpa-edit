@@ -3454,23 +3454,27 @@ class Puzzle_square extends Puzzle {
         ctx.stroke();
     }
 
-    draw_angleloop(ctx, num, x, y) {
+    draw_angleloop(ctx, num, x, y, ccolor = "none") {
         var r;
         switch (num) {
             case 1:
                 r = 0.24;
-                set_circle_style(ctx, 2);
+                set_circle_style(ctx, 2, ccolor);
                 this.draw_polygon(ctx, x, y, r, 3, 90);
                 break;
             case 2:
                 r = 0.24;
                 set_circle_style(ctx, 5);
-                ctx.fillStyle = Color.GREY;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.GREY;
+                }
                 this.draw_polygon(ctx, x, y, r, 4, 45);
                 break;
             case 3:
                 r = 0.215;
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, r, 5, 90);
                 break;
@@ -3483,7 +3487,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_firefly(ctx, num, x, y) {
+    draw_firefly(ctx, num, x, y, ccolor = "none") {
         var r1 = 0.36,
             r2 = 0.09;
         ctx.setLineDash([]);
@@ -3494,7 +3498,7 @@ class Puzzle_square extends Puzzle {
             case 3:
             case 4:
                 var th = this.rotate_theta((num - 1) * 90 - 180);
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x, y, r1);
                 ctx.fillStyle = Color.BLACK;
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
@@ -3508,16 +3512,16 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_sun_moon(ctx, num, x, y) {
+    draw_sun_moon(ctx, num, x, y, ccolor = "none") {
         var r1 = 0.36,
             r2 = 0.34;
         switch (num) {
             case 1:
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x, y, r1);
                 break;
             case 2:
-                set_circle_style(ctx, 2);
+                set_circle_style(ctx, 2, ccolor);
                 ctx.beginPath();
                 ctx.arc(x, y, r1 * pu.size, -0.34 * Math.PI, 0.73 * Math.PI, false);
                 ctx.arc(x - 0.12 * pu.size, y - 0.08 * pu.size, r2 * pu.size, 0.67 * Math.PI, -0.28 * Math.PI, true);
@@ -3535,13 +3539,18 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_pencils(ctx, num, x, y) {
+    draw_pencils(ctx, num, x, y, ccolor = "none") {
         var r = 0.2,
             th;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        ctx.fillStyle = Color.BLACK;
-        ctx.strokeStyle = Color.BLACK;
+        if (ccolor !== "none") {
+            ctx.fillStyle = ccolor;
+            ctx.strokeStyle = ccolor;
+        } else {
+            ctx.fillStyle = Color.BLACK;
+            ctx.strokeStyle = Color.BLACK;
+        }
         ctx.lineWidth = 2;
         ctx.lineJoin = "bevel"
         switch (num) {
@@ -3565,34 +3574,34 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_slovak(ctx, num, x, y) {
+    draw_slovak(ctx, num, x, y, ccolor = "none") {
         var r = 0.09,
             h = 0.37;
         switch (num) {
             case 1:
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x, y + h * pu.size, r);
                 break;
             case 2:
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x - 0.2 * pu.size, y + h * pu.size, r);
                 this.draw_circle(ctx, x + 0.2 * pu.size, y + h * pu.size, r);
                 break;
             case 3:
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x - 0.25 * pu.size, y + h * pu.size, r);
                 this.draw_circle(ctx, x + 0.0 * pu.size, y + h * pu.size, r);
                 this.draw_circle(ctx, x + 0.25 * pu.size, y + h * pu.size, r);
                 break;
             case 4:
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x - 0.36 * pu.size, y + h * pu.size, r);
                 this.draw_circle(ctx, x - 0.12 * pu.size, y + h * pu.size, r);
                 this.draw_circle(ctx, x + 0.12 * pu.size, y + h * pu.size, r);
                 this.draw_circle(ctx, x + 0.36 * pu.size, y + h * pu.size, r);
                 break;
             case 5:
-                set_font_style(ctx, 0.35 * pu.size.toString(10), 1);
+                set_font_style(ctx, 0.35 * pu.size.toString(10), 1, ccolor);
                 ctx.text("?", x, y + h * pu.size);
                 break;
         }
@@ -3894,8 +3903,13 @@ class Puzzle_square extends Puzzle {
             th;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        ctx.fillStyle = Color.BLACK;
-        ctx.strokeStyle = Color.BLACK;
+        if (ccolor !== "none") {
+            ctx.fillStyle = ccolor;
+            ctx.strokeStyle = ccolor;
+        } else {
+            ctx.fillStyle = Color.BLACK;
+            ctx.strokeStyle = Color.BLACK;
+        }
         ctx.lineWidth = 3;
         ctx.lineJoin = "bevel"
         switch (num) {
@@ -3920,7 +3934,7 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_darts(ctx, num, x, y, ccolor = "none") {
-        set_circle_style(ctx, 13);
+        set_circle_style(ctx, 13, ccolor);
         if (1 <= num, num <= 4) {
             for (var i = 1; i <= num; i++) {
                 this.draw_circle(ctx, x, y, Math.sqrt(2) * 0.5 * (2 * i - 1));
@@ -3963,7 +3977,11 @@ class Puzzle_square extends Puzzle {
                 set_circle_style(ctx, 1);
                 ctx.fillStyle = Color.GREY;
                 this.draw_polygon(ctx, x, y, 1 / Math.sqrt(2), 4, 45);
-                ctx.fillStyle = Color.GREY_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.GREY_LIGHT;
+                }
                 this.draw_polygon(ctx, x, y, r / Math.sqrt(2), 4, 45);
                 break;
         }
