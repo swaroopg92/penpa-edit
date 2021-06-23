@@ -65,7 +65,7 @@ class Puzzle_square extends Puzzle {
             document.getElementById("ms4_" + i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
-            document.getElementById(i).style.display = "none";
+            document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
             document.getElementById("combisub_" + i).style.display = "inline-block";
