@@ -1,4 +1,11 @@
 ## History
+* 2021/**/** ver 2.25.17
+	* Implemented PenpaLite feature.
+	* Improvements to Timer (only seconds are updated, 1/10th second is shown when paused or solution is complete).
+	* Improvements to Panel Header (Shows Current Mode information).
+	* Improvements to available modes/submodes.
+	* Improvements to display.
+	* Code improvement by creating separate modes.js file which summarizes supported modes for each grid type.
 * 2021/06/02 ver 2.25.16
 	* Added Alpha Version of New Board type "Tetrakis Square".
 	* Added Alpha Version of New Board type "Truncated Square".
