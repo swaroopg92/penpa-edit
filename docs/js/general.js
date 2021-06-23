@@ -51,6 +51,7 @@ function create() {
     let tab_cookie = getCookie("tab_settings");
     if (tab_cookie !== null) {
         this.usertab_choices = tab_cookie;
+        advancecontrol_onoff("url");
     }
     pu.redraw();
 }
