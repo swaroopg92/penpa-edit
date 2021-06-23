@@ -2018,7 +2018,12 @@ class Puzzle_square extends Puzzle {
 
                 /* arrow */
             case "arrow_B_B":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowB(ctx, num, x, y);
                 break;
             case "arrow_B_G":
@@ -2030,7 +2035,12 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowB(ctx, num, x, y);
                 break;
             case "arrow_N_B":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowN(ctx, num, x, y);
                 break;
             case "arrow_N_G":
@@ -2042,23 +2052,48 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowN(ctx, num, x, y);
                 break;
             case "arrow_S":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowS(ctx, num, x, y);
                 break;
             case "arrow_GP":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowGP(ctx, num, x, y);
                 break;
             case "arrow_GP_C":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowGP_C(ctx, num, x, y);
                 break;
             case "arrow_Short":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowShort(ctx, num, x, y);
                 break;
             case "arrow_tri_B":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowtri(ctx, num, x, y);
                 break;
             case "arrow_tri_G":
@@ -2070,19 +2105,39 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowtri(ctx, num, x, y);
                 break;
             case "arrow_cross":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowcross(ctx, num, x, y);
                 break;
             case "arrow_eight":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arroweight(ctx, num, x, y);
                 break;
             case "arrow_fourtip":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_arrowfourtip(ctx, num, x, y);
                 break;
             case "arrow_fouredge_B":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
