@@ -19,13 +19,16 @@ const penpa_modes = {
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4', 'subc5'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms4', 'ms5'],
         // shapes
         'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
             'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
             'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
         'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
         'ms4': ['battleship'],
         // styles
@@ -40,34 +43,44 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': ['custom_color_lb', 'custom_color_no_lb', 'custom_color_yes_lb'],
+        'top_buttons': ['input_sudoku', 'rotation'],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': ['ms0_arrow_fouredge',
+            'msli_triright', 'msli_trileft', 'msli_degital',
+            'combili_shaka', 'combili_battleship', 'combili_arrowS',
+            'ul_degital', 'ul_bars'
+        ]
     },
     'hex': {
         //modes
         'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
+        'sub': ['line1', 'line3', 'line5', 'line4',
+            'lineE1', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number4', 'number2', 'number8',
             'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4', 'subc5'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms4', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox', 'degital'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
         'ms4': ['battleship'],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
@@ -81,35 +94,41 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': ['rotation'],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': ['msli_degital', 'ul_degital']
     },
     'tri': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
+        'sub': ['line1', 'line3', 'line5', 'line4',
+            'lineE1', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number6', 'number5', 'number7', 'number3', 'number4', 'number2', 'number8',
             'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4', 'subc5'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms4', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
-        'ms4': ['battleship'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox', 'degital'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
+        'ms4': [],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
             'line3', 'line2', 'line5', 'line8', 'line9', 'line80', 'line12', 'line13', 'line40', 'line30',
@@ -122,34 +141,40 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': ['rotation'],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': ['msli_degital', 'ul_degital']
     },
     'pyramid': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
+        'sub': ['line1', 'line3', 'line4',
+            'lineE1', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number4', 'number2', 'number8',
             'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4', 'subc5'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms4', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox', 'degital'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
         'ms4': ['battleship'],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
@@ -163,35 +188,41 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': ['rotation'],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': ['msli_degital', 'ul_degital']
     },
     'iso': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
-            'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+        'sub': ['line1', 'line3', 'line4',
+            'lineE1', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number10', 'number6', 'number5', 'number7', 'number4', 'number2', 'number8',
+            'specialpolygon',
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4', 'subc5'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
-        'ms4': ['battleship'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox', 'degital'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
+        'ms4': [],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
             'line3', 'line2', 'line5', 'line8', 'line9', 'line80', 'line12', 'line13', 'line40', 'line30',
@@ -204,35 +235,41 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': ['rotation'],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': ['msli_degital', 'ul_degital']
     },
     'tetrakis_square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
-            'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+        'sub': ['line1', 'line3', 'line4',
+            'lineE1', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number10', 'number6', 'number5', 'number7', 'number4', 'number2', 'number8',
+            'specialpolygon',
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
-        'ms4': ['battleship'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
+        'ms4': [],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
             'line3', 'line2', 'line5', 'line8', 'line9', 'line80', 'line12', 'line13', 'line40', 'line30',
@@ -245,35 +282,41 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': [],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': []
     },
     'truncated_square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
-            'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+        'sub': ['line1', 'line3', 'line4',
+            'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number6', 'number5', 'number8',
+            'specialpolygon',
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'inequality', 'degital_f',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
-        'ms4': ['battleship'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
+        'ms4': [],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
             'line3', 'line2', 'line5', 'line8', 'line9', 'line80', 'line12', 'line13', 'line40', 'line30',
@@ -286,35 +329,41 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': [],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': []
     },
     'snub_square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
-            'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+        'sub': ['line1', 'line3', 'line4',
+            'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number6', 'number5', 'number8',
+            'specialpolygon',
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'inequality', 'degital_f',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
-        'ms4': ['battleship'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
+        'ms4': [],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
             'line3', 'line2', 'line5', 'line8', 'line9', 'line80', 'line12', 'line13', 'line40', 'line30',
@@ -327,35 +376,41 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': [],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': []
     },
     'cairo_pentagonal': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
-        'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
-            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
-            'number1', 'number10', 'number6', 'number5', 'number7', 'number3', 'number9', 'number4', 'number2', 'number8', 'number11',
-            'specialthermo', 'specialnobulbthermo', 'specialarrows', 'specialdirection', 'specialsquareframe', 'specialpolygon',
-            'cage1', 'cage2', 'move1', 'move2', 'move3',
-            'sudoku1', 'sudoku2', 'sudoku3'
+        'sub': ['line1', 'line3', 'line4',
+            'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
+            'number1', 'number6', 'number5', 'number8',
+            'specialpolygon',
+            'cage2', 'move1', 'move2', 'move3',
+            'sudoku1', 'sudoku3'
         ],
         //composite modes
-        'combisub': ['blpo', 'blwh', 'shaka',
+        'combisub': ['blpo', 'blwh',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'edgesub',
-            'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS',
+            'star', 'tents', 'magnets', 'mines', 'akari',
             'numfl', 'alfl'
         ],
+        //composite mode headers
+        'subcombi': ['subc1', 'subc2', 'subc3', 'subc4'],
+        'shapemodes': ['ms1', 'ms2', 'ms3', 'ms5'],
         // shapes
-        'ms': ['cross', 'line', 'frameline', 'tri', 'inequality', 'degital_f', 'dice', 'pills',
-            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip',
+        'ms': ['cross', 'line', 'inequality', 'degital_f',
+            'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'angleloop', 'firefly', 'sun_moon', 'pencils', 'slovak', 'arc', 'darts', 'spans', 'neighbors'
+            'angleloop', 'firefly', 'sun_moon'
         ],
-        'ms1': ['cirlce', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'ox', 'bars', 'degital'],
-        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_fouredge', 'arrow_GP'],
-        'ms4': ['battleship'],
+        'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox'],
+        'ms3': ['math', 'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP'],
+        'ms4': [],
         // styles
         'st': ['surface1', 'surface8', 'surface3', 'surface4', 'surface2', 'surface5', 'surface6', 'surface7', 'surface9', 'surface10', 'surface11', 'surface12',
             'line3', 'line2', 'line5', 'line8', 'line9', 'line80', 'line12', 'line13', 'line40', 'line30',
@@ -368,6 +423,9 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['colorpicker_special']
+        'customcolor': [],
+        'top_buttons': [],
+        // unique IDs that doesn't follow regular id naming
+        'exceptions': []
     },
 };

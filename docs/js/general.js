@@ -910,20 +910,7 @@ function advancecontrol_off(loadtype) {
 }
 
 function advancecontrol_on() {
-    let modes = ["surface", "line", "lineE", "wall", "number", "symbol", "special", "cage", "combi", "sudoku", "board", "move"];
-    let submodes = [
-        "line80", "line12", "line13", "line40", // Line submodes
-        "lineE21", "lineE80", "lineE12", "lineE13", // Edge submodes
-        "wall1", "wall12", "wall17", "wall14" // Wall submodes
-    ];
-
-    for (var i = 0; i < modes.length; i++) {
-        document.getElementById("mo_" + modes[i] + "_lb").style.display = "inline-block";
-    }
-
-    for (var i = 0; i < submodes.length; i++) {
-        document.getElementById("st_" + submodes[i] + "_lb").style.display = "inline-block";
-    }
+    pu.erase_buttons();
 }
 
 function ResetCheck() {
@@ -2258,9 +2245,7 @@ function set_solvemode() {
     document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
-    // document.getElementById("mo_cage_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
-    // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";
@@ -2282,10 +2267,6 @@ function set_solvemode() {
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_yes_lb').style.display = 'none';
     document.getElementById('save_settings_no_lb').style.display = 'none';
-
-    // // Advance button
-    // document.getElementById('advance_button').style.display = 'inline-block';
-    // document.getElementById('advance_button0').style.display = 'inline-block';
 }
 
 function set_contestmode() {

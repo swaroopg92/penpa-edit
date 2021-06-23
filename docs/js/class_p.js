@@ -54,30 +54,6 @@ class Puzzle {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
-        //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
-            "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
-            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
-            "sub_sudoku2_lb", "input_sudoku",
-            "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
-            "sub_cage1_lb"
-        ];
-        //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4"];
-        //square,tri,hex
-        this.group3 = ["sub_line5_lb"];
-        //square,hex
-        this.group4 = ["mo_cage_lb"];
-        //square,tri,hex,pyramid,
-        this.group5 = ["sub_specialthermo_lb", "sub_specialnobulbthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb", "sub_number3_lb"];
-        // tri, cube
-        this.group6 = ["sub_number10_lb"];
-        // tetrakis (only want in others and not in tetrakis)
-        this.group7 = ["rotation", "mo_move_lb", //main buttons
-            "sub_number7_lb", "sub_number2_lb", "sub_number4_lb", // number mode
-            "ms1_degital", "ul_degital", "ms_frameline", "ms1_bars", "ul_bars", "ms_degital_f", "ms_dice", "ms_pills", // shape mode
-            "subc5"
-        ];
 
         // Drawing position
         this.mouse_mode = "";
