@@ -2156,21 +2156,47 @@ class Puzzle_square extends Puzzle {
 
                 /* special */
             case "kakuro":
-                this.draw_kakuro(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_kakuro(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_kakuro(ctx, num, x, y);
+                }
                 break;
             case "compass":
-                this.draw_compass(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_compass(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_compass(ctx, num, x, y);
+                }
                 break;
             case "star":
-                this.draw_star(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_star(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_star(ctx, num, x, y);
+                }
                 break;
             case "tents":
-                this.draw_tents(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_tents(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_tents(ctx, num, x, y);
+                }
                 break;
             case "battleship_B":
-                set_circle_style(ctx, 2);
                 var font_style_type = 1;
-                this.draw_battleship(ctx, num, x, y, font_style_type);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                    this.draw_battleship(ctx, num, x, y, font_style_type, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                    this.draw_battleship(ctx, num, x, y, font_style_type);
+                }
                 break;
             case "battleship_G":
                 set_circle_style(ctx, 3);
@@ -2187,40 +2213,100 @@ class Puzzle_square extends Puzzle {
                 this.draw_battleship(ctx, num, x, y);
                 break;
             case "angleloop":
-                this.draw_angleloop(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_angleloop(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_angleloop(ctx, num, x, y);
+                }
                 break;
             case "firefly":
-                this.draw_firefly(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_firefly(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_firefly(ctx, num, x, y);
+                }
                 break;
             case "sun_moon":
-                this.draw_sun_moon(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_sun_moon(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_sun_moon(ctx, num, x, y);
+                }
                 break;
             case "sudokuetc":
-                this.draw_sudokuetc(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_sudokuetc(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_sudokuetc(ctx, num, x, y);
+                }
                 break;
             case "sudokumore":
-                this.draw_sudokumore(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_sudokumore(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_sudokumore(ctx, num, x, y);
+                }
                 break;
             case "polyomino":
-                this.draw_polyomino(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_polyomino(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_polyomino(ctx, num, x, y);
+                }
                 break;
             case "pencils":
-                this.draw_pencils(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_pencils(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_pencils(ctx, num, x, y);
+                }
                 break;
             case "slovak":
-                this.draw_slovak(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_slovak(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_slovak(ctx, num, x, y);
+                }
                 break;
             case "arc":
-                this.draw_arc(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_arc(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_arc(ctx, num, x, y);
+                }
                 break;
             case "darts":
-                this.draw_darts(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_darts(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_darts(ctx, num, x, y);
+                }
                 break;
             case "spans":
-                this.draw_spans(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_spans(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_spans(ctx, num, x, y);
+                }
                 break;
             case "neighbors":
-                this.draw_neighbors(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_neighbors(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_neighbors(ctx, num, x, y);
+                }
                 break;
         }
     }
@@ -2981,11 +3067,15 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_kakuro(ctx, num, x, y) {
+    draw_kakuro(ctx, num, x, y, ccolor = "none") {
         var th = this.rotate_theta(45) * 180 / Math.PI;
         switch (num) {
             case 1:
-                ctx.fillStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                }
                 ctx.strokeStyle = Color.TRANSPARENTWHITE;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, th);
@@ -3039,13 +3129,17 @@ class Puzzle_square extends Puzzle {
     }
 
 
-    draw_compass(ctx, num, x, y) {
+    draw_compass(ctx, num, x, y, ccolor = "none") {
         switch (num) {
             case 1:
                 var r = 0.5;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.lineWidth = 1;
                 this.draw_ast(ctx, x, y, r * Math.sqrt(2));
                 break;
@@ -3053,7 +3147,11 @@ class Puzzle_square extends Puzzle {
                 var r = 0.33;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.lineWidth = 1;
                 this.draw_ast(ctx, x, y, r * Math.sqrt(2));
                 break;
@@ -3068,7 +3166,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_tents(ctx, num, x, y) {
+    draw_tents(ctx, num, x, y, ccolor = "none") {
         switch (num) {
             case 1:
                 var r1;
@@ -3088,13 +3186,16 @@ class Puzzle_square extends Puzzle {
                 ctx.lineTo(x - r1 * pu.size, y);
                 ctx.fill();
                 ctx.stroke();
-
                 r1 = 0.2;
                 r2 = 0.4;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
-                ctx.fillStyle = Color.GREY;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.GREY;
+                }
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(x - r1 * Math.cos(90 * (Math.PI / 180)) * pu.size, y - (r1 * Math.sin(90 * (Math.PI / 180)) + 0) * pu.size);
@@ -3112,7 +3213,11 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
-                ctx.fillStyle = Color.GREY_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.GREY_LIGHT;
+                }
                 ctx.lineWidth = 1;
                 r1 = 0.3;
                 r2 = 0.4;
@@ -3128,7 +3233,11 @@ class Puzzle_square extends Puzzle {
             case 3: //anglers
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -3140,7 +3249,7 @@ class Puzzle_square extends Puzzle {
                 ctx.stroke();
                 break;
             case 4:
-                set_font_style(ctx, 0.8 * pu.size.toString(10), 1);
+                set_font_style(ctx, 0.8 * pu.size.toString(10), 1, ccolor);
                 ctx.text("～", x, y - 0.11 * pu.size);
                 ctx.text("～", x, y + 0.09 * pu.size);
                 ctx.text("～", x, y + 0.29 * pu.size);
@@ -3148,12 +3257,16 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_star(ctx, num, x, y) {
+    draw_star(ctx, num, x, y, ccolor = "none") {
         var r1 = 0.38;
         var r2 = 0.382 * r1;
         switch (num) {
             case 1:
-                ctx.fillStyle = Color.WHITE;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
@@ -3161,7 +3274,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
             case 2:
-                ctx.fillStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                }
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
@@ -3177,7 +3294,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_star0(ctx, x, y + 0.03 * pu.size, r1, r2, 5);
                 break;
             case 4:
-                ctx.fillStyle = Color.WHITE;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
@@ -3185,7 +3306,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
             case 5:
-                ctx.fillStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                }
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
@@ -3201,7 +3326,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_star0(ctx, x, y, r1, r2 * 0.9, 4);
                 break;
             case 7:
-                ctx.fillStyle = Color.WHITE;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.WHITE;
+                }
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.BLACK;
@@ -3209,7 +3338,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_star0(ctx, x, y, r2 * 0.9, r1, 4);
                 break;
             case 8:
-                ctx.fillStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                }
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
@@ -3228,7 +3361,11 @@ class Puzzle_square extends Puzzle {
                 var r = 0.4;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.lineWidth = 1;
                 this.draw_x(ctx, x, y, r)
                 break;
@@ -3252,7 +3389,7 @@ class Puzzle_square extends Puzzle {
         ctx.stroke();
     }
 
-    draw_battleship(ctx, num, x, y, color_type = 1) {
+    draw_battleship(ctx, num, x, y, color_type = 1, ccolor = "none") {
         var r = 0.4;
         var th;
         switch (num) {
@@ -3279,7 +3416,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_battleship_tip(ctx, x, y, 270);
                 break;
             case 7:
-                set_font_style(ctx, 0.8 * pu.size.toString(10), color_type);
+                set_font_style(ctx, 0.8 * pu.size.toString(10), color_type, ccolor);
                 ctx.text("～", x, y - 0.11 * pu.size);
                 ctx.text("～", x, y + 0.09 * pu.size);
                 ctx.text("～", x, y + 0.29 * pu.size);
@@ -3288,10 +3425,14 @@ class Puzzle_square extends Puzzle {
                 r = 0.05;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                if (color_type === 3) {
-                    ctx.fillStyle = Color.GREY;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
                 } else {
-                    ctx.fillStyle = Color.BLACK;
+                    if (color_type === 3) {
+                        ctx.fillStyle = Color.GREY;
+                    } else {
+                        ctx.fillStyle = Color.BLACK;
+                    }
                 }
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
@@ -3457,12 +3598,16 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_sudokuetc(ctx, num, x, y) {
+    draw_sudokuetc(ctx, num, x, y, ccolor = "none") {
         switch (num) {
             case 1:
                 var r = 0.14;
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                ctx.fillStyle = Color.GREY_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.GREY_LIGHT;
+                }
                 this.draw_polygon(ctx, x - r * pu.size, y + r * pu.size, r * Math.sqrt(2), 4, 45);
                 this.draw_polygon(ctx, x + r * pu.size, y - r * pu.size, r * Math.sqrt(2), 4, 45);
                 ctx.fillStyle = Color.GREY_DARK;
@@ -3473,13 +3618,17 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                ctx.strokeStyle = Color.GREY_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.GREY_LIGHT;
+                }
                 ctx.lineWidth = 4;
                 this.draw_circle(ctx, x, y, 0.71);
                 break;
             case 3:
                 var r = 0.99;
-                set_circle_style(ctx, 3);
+                set_circle_style(ctx, 3, ccolor);
                 ctx.beginPath();
                 ctx.moveTo(x, y + r * pu.size);
                 ctx.lineTo(x + r * pu.size, y);
@@ -3498,7 +3647,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3522,7 +3675,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3546,7 +3703,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3570,7 +3731,11 @@ class Puzzle_square extends Puzzle {
                 ctx.lineWidth = 2;
                 ctx.setLineDash([]);
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                ctx.strokeStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.BLACK;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3587,7 +3752,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_sudokumore(ctx, num, x, y) {
+    draw_sudokumore(ctx, num, x, y, ccolor = "none") {
         switch (num) {
             case 1:
                 var r = 0.4 * pu.size;
@@ -3603,7 +3768,11 @@ class Puzzle_square extends Puzzle {
                 } else {
                     ctx.fillStyle = Color.WHITE;
                 }
-                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3632,7 +3801,11 @@ class Puzzle_square extends Puzzle {
                 } else {
                     ctx.fillStyle = Color.WHITE;
                 }
-                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3661,7 +3834,11 @@ class Puzzle_square extends Puzzle {
                 } else {
                     ctx.fillStyle = Color.WHITE;
                 }
-                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3690,7 +3867,11 @@ class Puzzle_square extends Puzzle {
                 } else {
                     ctx.fillStyle = Color.WHITE;
                 }
-                ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                }
                 ctx.beginPath()
                 ctx.moveTo(x + r, y);
                 ctx.lineTo(x + w - r, y);
@@ -3708,7 +3889,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_arc(ctx, num, x, y) {
+    draw_arc(ctx, num, x, y, ccolor = "none") {
         var r = 0.2,
             th;
         ctx.setLineDash([]);
@@ -3738,7 +3919,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_darts(ctx, num, x, y) {
+    draw_darts(ctx, num, x, y, ccolor = "none") {
         set_circle_style(ctx, 13);
         if (1 <= num, num <= 4) {
             for (var i = 1; i <= num; i++) {
@@ -3753,7 +3934,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_spans(ctx, num, x, y) {
+    draw_spans(ctx, num, x, y, ccolor = "none") {
         var h = 0.15;
         switch (num) {
             case 1:
@@ -3775,7 +3956,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_neighbors(ctx, num, x, y) {
+    draw_neighbors(ctx, num, x, y, ccolor = "none") {
         var r = 0.85;
         switch (num) {
             case 1:
@@ -3788,9 +3969,13 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_polyomino(ctx, num, x, y) {
+    draw_polyomino(ctx, num, x, y, ccolor = "none") {
         ctx.setLineDash([]);
-        ctx.fillStyle = Color.GREY_LIGHT;
+        if (ccolor !== "none") {
+            ctx.fillStyle = ccolor;
+        } else {
+            ctx.fillStyle = Color.GREY_LIGHT;
+        }
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 1.2;
         ctx.lineCap = "butt";
