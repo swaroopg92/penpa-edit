@@ -51,6 +51,7 @@ function create() {
     let tab_cookie = getCookie("tab_settings");
     if (tab_cookie !== null) {
         this.usertab_choices = tab_cookie;
+        advancecontrol_onoff("url");
     }
     pu.redraw();
 }
@@ -771,6 +772,10 @@ function panel_onoff() {
             document.getElementById('float-key-header').style.left = 0 + "px";
             document.getElementById('float-key-header').style.top = 0 + "px";
         }
+        // Show Mode info on Panel Header
+        let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
+        let mode_loc = penpa_modes["square"]["mode"].indexOf(pu.mode[pu.mode.qa].edit_mode);
+        document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
     } else {
         document.getElementById('panel_button').textContent = "OFF";
         document.getElementById('float-key').style.display = "none";
@@ -804,6 +809,113 @@ function reloadcheck_onoff() {
     } else {
         document.getElementById('reload_button').textContent = "ON";
     }
+}
+
+function advancecontrol_onoff(loadtype = "new") {
+    if (document.getElementById('advance_button').textContent === "ON") {
+        // Lite Version OFF, Display all the modes
+        document.getElementById('advance_button').textContent = "OFF";
+        advancecontrol_on();
+    } else {
+        // Lite Version ON, so turn off extra modes
+        if (loadtype === "url") {
+            document.getElementById('advance_button').textContent = "ON";
+            advancecontrol_off(loadtype);
+        } else {
+            let user_choices = getValues('mode_choices');
+            if (user_choices.length !== 0) {
+                document.getElementById('advance_button').textContent = "ON";
+                advancecontrol_off(loadtype);
+            } else {
+                Swal.fire({
+                    title: 'Advance/Basic Mode',
+                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Click "PenpaLite" button to turn "ON"</h2>',
+                    icon: 'info'
+                })
+            }
+        }
+    }
+}
+
+function advancecontrol_off(loadtype) {
+    // Check for this only for first time when loading url
+    let user_choices;
+    if (loadtype === "url") {
+        user_choices = this.usertab_choices;
+    } else {
+        user_choices = getValues('mode_choices');
+    }
+    if (user_choices.indexOf("Surface") === -1) {
+        document.getElementById("mo_surface_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Line Normal") === -1 &&
+        user_choices.indexOf("Line Diagonal") === -1 &&
+        user_choices.indexOf("Line Free") === -1 &&
+        user_choices.indexOf("Line Middle") === -1 &&
+        user_choices.indexOf("Line Helper") === -1) {
+        document.getElementById("mo_line_lb").style.display = "none";
+    } else {
+        document.getElementById("st_line80_lb").style.display = "none";
+        document.getElementById("st_line12_lb").style.display = "none";
+        document.getElementById("st_line13_lb").style.display = "none";
+        document.getElementById("st_line40_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Edge Normal") === -1 &&
+        user_choices.indexOf("Edge Diagonal") === -1 &&
+        user_choices.indexOf("Edge Free") === -1 &&
+        user_choices.indexOf("Edge Helper") === -1) {
+        document.getElementById("mo_lineE_lb").style.display = "none";
+    } else {
+        document.getElementById("st_lineE80_lb").style.display = "none";
+        document.getElementById("st_lineE12_lb").style.display = "none";
+        document.getElementById("st_lineE13_lb").style.display = "none";
+        document.getElementById("st_lineE21_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Wall") === -1) {
+        document.getElementById("mo_wall_lb").style.display = "none";
+    } else {
+        document.getElementById("st_wall1_lb").style.display = "none";
+        document.getElementById("st_wall12_lb").style.display = "none";
+        document.getElementById("st_wall17_lb").style.display = "none";
+        document.getElementById("st_wall14_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Number Normal") === -1 &&
+        user_choices.indexOf("Number L") === -1 &&
+        user_choices.indexOf("Number M") === -1 &&
+        user_choices.indexOf("Number S") === -1 &&
+        user_choices.indexOf("Number 1/4") === -1 &&
+        user_choices.indexOf("Number Side") === -1 &&
+        user_choices.indexOf("Candidates") === -1) {
+        document.getElementById("mo_number_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Shape") === -1) {
+        document.getElementById("mo_symbol_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Thermo") === -1 &&
+        user_choices.indexOf("Sudoku Arrow") === -1) {
+        document.getElementById("mo_special_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Cage") === -1) {
+        document.getElementById("mo_cage_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Composite") === -1) {
+        document.getElementById("mo_combi_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Sudoku Normal") === -1 &&
+        user_choices.indexOf("Sudoku Corner") === -1 &&
+        user_choices.indexOf("Sudoku Centre") === -1) {
+        document.getElementById("mo_sudoku_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Box") === -1) {
+        document.getElementById("mo_board_lb").style.display = "none";
+    }
+    if (user_choices.indexOf("Move") === -1) {
+        document.getElementById("mo_move_lb").style.display = "none";
+    }
+}
+
+function advancecontrol_on() {
+    pu.erase_buttons();
 }
 
 function ResetCheck() {
@@ -1461,6 +1573,14 @@ function load(urlParam) {
     // Tab settings
     if (typeof rtext[6] !== 'undefined') {
         this.usertab_choices = rtext[6];
+
+        // Advance Control Setting
+        // Do this only for latest version 2.25.17 and above
+        if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
+            if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+                advancecontrol_onoff("url");
+            }
+        }
     }
 
     if (paramArray.m === "edit") { //edit_mode
@@ -2130,9 +2250,7 @@ function set_solvemode() {
     document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
-    // document.getElementById("mo_cage_lb").style.display = "none";
     document.getElementById("mo_board_lb").style.display = "none";
-    // document.getElementById("sub_lineE5_lb").style.display = "none"; // Edge Erase button
     document.getElementById("sub_number2_lb").style.display = "none";
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";

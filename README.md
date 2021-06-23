@@ -54,6 +54,7 @@ Depending on the browser you can update the page without using the cache with "C
 * R: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
 * Border: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
 * Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
+* PenpaLite: Turning on this button will remove all the non-preferred modes from the display thereby simplfiying the display. The preferred modes are determined through tab setting. Select your preferrable modes under "Tab/↵" and then turn "ON" PenpaLite.
 
 ## Current functions
 

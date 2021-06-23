@@ -22,6 +22,7 @@
     <script type="text/javascript" src="./js/libs/fabric.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- rest -->
+    <script type="text/javascript" src="./js/modes.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/class_p.js"></script>
     <script type="text/javascript" src="./js/class_square.js"></script>
@@ -55,7 +56,6 @@
             <input type="button" id="savetext" value="Share" class="button" />
             <a id="download_link"></a>
             <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
-            <br>
             <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
             <input type="button" id="input_url" value="Load" class="button" />
             <input type="button" id="page_settings" value="Settings" class="button" />
@@ -77,6 +77,8 @@
                 <span id="edge_button" class="label">OFF</span>
                 <span id="reload_button0" class="label tooltip">Reload:<span id="reload_text" class="tooltiptext">Ask confirmation to reload or close the page?</span></span>
                 <span id="reload_button" class="label">OFF</span>
+                <span id="advance_button0" class="label tooltip">PenpaLite:<span id="reload_text" class="tooltiptext">Switch between Lite/Full Controls</span></span>
+                <span id="advance_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
                 <label class="label_mode" id="mode_txt">Mode:</label>
@@ -88,15 +90,6 @@
                 <label for="mo_lineE" class="label" id="mo_lineE_lb">Edge</label>
                 <input type="radio" name="mode" id="mo_wall" />
                 <label for="mo_wall" class="label" id="mo_wall_lb">Wall</label>
-                <input type="radio" name="mode" id="mo_board" />
-                <label for="mo_board" class="label_option" id="mo_board_lb">Box</label>
-                <span class="tab" id="tab_selection">
-                    <select id="mode_choices" multiple size="0"></select>
-                </span>
-                <input type="radio" name="mode" id="mo_move" />
-                <label for="mo_move" class="label_option" id="mo_move_lb">Move</label>
-                <br>
-                <label class="label_mode" id="mode_txt_space">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
                 <input type="radio" name="mode" id="mo_number" />
                 <label for="mo_number" class="label" id="mo_number_lb">Number</label>
                 <input type="radio" name="mode" id="mo_symbol" />
@@ -109,7 +102,13 @@
                 <label for="mo_combi" class="label_option" id="mo_combi_lb">Composite</label>
                 <input type="radio" name="mode" id="mo_sudoku" />
                 <label for="mo_sudoku" class="label_option" id="mo_sudoku_lb">Sudoku</label>
-                <br>
+                <input type="radio" name="mode" id="mo_board" />
+                <label for="mo_board" class="label_option" id="mo_board_lb">Box</label>
+                <input type="radio" name="mode" id="mo_move" />
+                <label for="mo_move" class="label_option" id="mo_move_lb">Move</label>
+                <span class="tab" id="tab_selection">
+                    <select id="mode_choices" multiple size="0"></select>
+                </span>
             </div>
             <hr size=1 noshade>
             <div id="submode_button" class="submode_button">
@@ -144,7 +143,7 @@
                     <input type="radio" name="mode_number" value="1" id="sub_number1" checked="checked">
                     <label for="sub_number1" class="labelL" id="sub_number1_lb">Normal</label>
                     <input type="radio" name="mode_number" value="10" id="sub_number10">
-                    <label for="sub_number10" class="label" id="sub_number10_lb">L</label>
+                    <label for="sub_number10" class="labelL" id="sub_number10_lb">L</label>
                     <input type="radio" name="mode_number" value="6" id="sub_number6">
                     <label for="sub_number6" class="labelL" id="sub_number6_lb">M</label>
                     <input type="radio" name="mode_number" value="5" id="sub_number5">
@@ -249,7 +248,7 @@
                                     </ul>
                                 </li>
                                 <li><span id="ms_inequality">&#xFF1C; &#xFF1E; ^ v </span></li>
-                                <li><span id="ms1_degital">&brvbar;-&brvbar; &brvbar; '-&brvbar;</span>
+                                <li id=msli_degital><span id="ms1_degital">&brvbar;-&brvbar; &brvbar; '-&brvbar;</span>
                                     <ul id="ul_degital">
                                         <li><span id="ms_degital_B">Black</span></li>
                                         <li><span id="ms_degital_E">Green</span></li>
@@ -614,7 +613,7 @@
         </span>
         <br><br>
         <div id="stop_watch">
-            <h1 class="values">00:00:00:00</h1>
+            <h1 class="values">00:00:00:0</h1>
             <div>
                 <button id="sw_start" class="button sw">Start</button>
                 <button id="sw_pause" class="button sw">Pause</button>
@@ -622,7 +621,7 @@
                 <button id="sw_reset" class="button sw">Reset</button>
             </div>
         </div>
-        <p>Penpa+ Version 2.25.16 &copy; 2020-2021 </p>
+        <p>Penpa+ Version 2.25.17 &copy; 2020-2021 </p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">

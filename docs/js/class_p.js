@@ -54,30 +54,6 @@ class Puzzle {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
-        //square
-        this.group1 = ["sub_line2_lb", "sub_lineE2_lb", "sub_number9_lb", "msli_triright", "msli_trileft", "ms_tri", "ms_pencils",
-            "ms_slovak", "ms_arc", "ms_darts", "ms_spans", "ms_neighbors", "ms_arrow_fourtip", "ms0_arrow_fouredge",
-            "combili_shaka", "combili_battleship", "combili_arrowS", "sub_number11_lb",
-            "sub_sudoku2_lb", "input_sudoku",
-            "custom_color_lb", "custom_color_yes_lb", "custom_color_no_lb",
-            "sub_cage1_lb"
-        ];
-        //square,pyramid,hex
-        this.group2 = ["mo_wall_lb", "sub_number10_lb", "ms4"];
-        //square,tri,hex
-        this.group3 = ["sub_line5_lb"];
-        //square,hex
-        this.group4 = ["mo_cage_lb"];
-        //square,tri,hex,pyramid,
-        this.group5 = ["sub_specialthermo_lb", "sub_specialnobulbthermo_lb", "sub_specialarrows_lb", "sub_specialdirection_lb", "sub_specialsquareframe_lb", "sub_number3_lb"];
-        // tri, cube
-        this.group6 = ["sub_number10_lb"];
-        // tetrakis (only want in others and not in tetrakis)
-        this.group7 = ["rotation", "mo_move_lb", //main buttons
-            "sub_number7_lb", "sub_number2_lb", "sub_number4_lb", // number mode
-            "ms1_degital", "ul_degital", "ms_frameline", "ms1_bars", "ul_bars", "ms_degital_f", "ms_dice", "ms_pills", // shape mode
-            "subc5"
-        ];
 
         // Drawing position
         this.mouse_mode = "";
@@ -181,7 +157,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 16];
+        this.version = [2, 25, 17];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -2157,6 +2133,13 @@ class Puzzle {
             document.getElementById('style_special').style.display = 'inline';
         } else {
             document.getElementById('style_special').style.display = 'none';
+        }
+
+        // If panel is ON, show Mode info on header
+        if (document.getElementById('panel_button').textContent === "ON") {
+            let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
+            let mode_loc = penpa_modes["square"]["mode"].indexOf(mode);
+            document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
         }
         this.redraw();
     }
@@ -10938,7 +10921,7 @@ class Puzzle {
                             // timer: 5000
                         })
                     }, 20)
-                    sw_timer.stop();
+                    sw_timer.pause();
                     // this.mouse_mode = "out";
                     // this.mouseevent(0, 0, 0);
                     this.sol_flag = 1;
@@ -10967,7 +10950,7 @@ class Puzzle {
                                     confirmButtonText: 'Hurray!',
                                 })
                             }, 20)
-                            sw_timer.stop();
+                            sw_timer.pause();
                             this.sol_flag = 1;
                             document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                             document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;

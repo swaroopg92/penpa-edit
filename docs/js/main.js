@@ -1653,6 +1653,10 @@ onload = function() {
                 reloadcheck_onoff();
                 e.preventDefault();
                 break;
+            case "advance_button":
+                advancecontrol_onoff();
+                e.preventDefault();
+                break;
             case "pu_q_label":
                 pu.mode_qa("pu_q");
                 e.preventDefault();
@@ -1849,7 +1853,7 @@ onload = function() {
     }
     selectBox = new vanillaSelectBox("#mode_choices", {
         "disableSelectAll": false,
-        "maxHeight": 135,
+        "maxHeight": 250,
         "search": true,
         "translations": { "all": "All", "items": "items", "selectAll": "Check All", "clearAll": "Clear All" }
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
