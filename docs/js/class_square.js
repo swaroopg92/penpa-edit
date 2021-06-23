@@ -1942,11 +1942,21 @@ class Puzzle_square extends Puzzle {
                 break;
                 //number
             case "inequality":
-                set_circle_style(ctx, 10);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 10, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 10);
+                }
                 this.draw_inequality(ctx, num, x, y);
                 break;
             case "math":
-                set_font_style(ctx, 0.8 * pu.size.toString(10), 1);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_font_style(ctx, 0.8 * pu.size.toString(10), 1, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_font_style(ctx, 0.8 * pu.size.toString(10), 1);
+                }
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
             case "math_G":
@@ -1954,11 +1964,21 @@ class Puzzle_square extends Puzzle {
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
             case "degital":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_B":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_E":
@@ -1970,15 +1990,30 @@ class Puzzle_square extends Puzzle {
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_f":
-                this.draw_degital_f(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_degital_f(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_degital_f(ctx, num, x, y);
+                }
                 break;
             case "dice":
-                set_circle_style(ctx, 2);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, 2);
+                }
                 this.draw_dice(ctx, num, x, y);
                 break;
             case "pills":
                 set_circle_style(ctx, 3);
-                this.draw_pills(ctx, num, x, y);
+                if (document.getElementById("custom_color_yes").checked &&
+                    this[this.mode.qa + "_col"].symbol[i]) {
+                    this.draw_pills(ctx, num, x, y, this[this.mode.qa + "_col"].symbol[i]);
+                } else {
+                    this.draw_pills(ctx, num, x, y);
+                }
                 break;
 
                 /* arrow */
@@ -2474,7 +2509,6 @@ class Puzzle_square extends Puzzle {
             case 7:
             case 8:
                 len = 0.12;
-                set_circle_style(ctx, 10);
                 ctx.beginPath();
                 th = this.rotate_theta((num - 1) * 90 + 80);
                 ctx.moveTo(x + len * Math.sqrt(2) * pu.size * Math.cos(th), y + len * Math.sqrt(2) * pu.size * Math.sin(th));
@@ -2594,7 +2628,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_degital_f(ctx, num, x, y) {
+    draw_degital_f(ctx, num, x, y, ccolor = "none") {
         set_circle_style(ctx, 3);
         var w1, w2, w3, w4, z1, z2;
         z1 = 0.17;
@@ -2653,7 +2687,7 @@ class Puzzle_square extends Puzzle {
         ctx.fill();
 
         //contents
-        set_circle_style(ctx, 2);
+        set_circle_style(ctx, 2, ccolor);
         this.draw_degital(ctx, num, x, y);
     }
 
@@ -2665,9 +2699,13 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_pills(ctx, num, x, y) {
+    draw_pills(ctx, num, x, y, ccolor = "none") {
         var r = 0.15;
-        ctx.fillStyle = Color.GREY
+        if (ccolor !== "none") {
+            ctx.fillStyle = ccolor;
+        } else {
+            ctx.fillStyle = Color.GREY;
+        }
         switch (num) {
             case 1:
                 this.draw_circle(ctx, x, y, r);

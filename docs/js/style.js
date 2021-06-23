@@ -283,7 +283,7 @@ function set_line_style(ctx, type, ccolor = "none") {
     }
 }
 
-function set_font_style(ctx, size, type) {
+function set_font_style(ctx, size, type, ccolor = "none") {
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
     ctx.setLineDash([]);
@@ -296,7 +296,11 @@ function set_font_style(ctx, size, type) {
             ctx.lineWidth = 0.5;
             break;
         case 1:
-            ctx.fillStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.fillStyle = ccolor;
+            } else {
+                ctx.fillStyle = Color.BLACK;
+            }
             ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
         case 2:
@@ -438,6 +442,11 @@ function set_circle_style(ctx, num, ccolor = "none") {
         case 10:
             ctx.fillStyle = Color.WHITE;
             ctx.strokeStyle = Color.BLACK;
+            if (ccolor !== "none") {
+                ctx.strokeStyle = ccolor;
+            } else {
+                ctx.strokeStyle = Color.BLACK;
+            }
             ctx.lineWidth = 2;
             break;
         case 11:
