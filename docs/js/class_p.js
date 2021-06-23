@@ -2134,6 +2134,11 @@ class Puzzle {
         } else {
             document.getElementById('style_special').style.display = 'none';
         }
+
+        // If panel is ON, show Mode info on it.
+        if (document.getElementById('panel_button').textContent === "ON") {
+            document.getElementById('float-key-header-lb').innerHTML = "Mode: " + mode;
+        }
         this.redraw();
     }
 
