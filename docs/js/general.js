@@ -1637,10 +1637,12 @@ function load(urlParam) {
                 }
 
                 // Solution button
-                document.getElementById("pu_a_label").style.display = "inline-block";
-                document.getElementById("pu_a_label").style.marginLeft = "6px";
-                document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+                // document.getElementById("pu_a_label").style.display = "inline-block";
+                // document.getElementById("pu_a_label").style.marginLeft = "6px";
+                // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
+                document.getElementById("title").style.color = Color.BLUE;
             }
 
             if (rtext[7] !== "undefined") {
@@ -1728,10 +1730,12 @@ function load(urlParam) {
             }
 
             // Solution button
-            document.getElementById("pu_a_label").style.display = "inline-block";
-            document.getElementById("pu_a_label").style.marginLeft = "6px";
-            document.getElementById("pu_a_label").innerHTML = "Check Solution";
-            document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+            // document.getElementById("pu_a_label").style.display = "inline-block";
+            // document.getElementById("pu_a_label").style.marginLeft = "6px";
+            // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+            // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
+            document.getElementById("title").style.color = Color.BLUE;
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings

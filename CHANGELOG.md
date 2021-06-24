@@ -8,6 +8,7 @@
 	* Custom color for Shape mode completed.
 	* Alphabet support added to Sudoku mode.
 	* Code improvement by creating separate modes.js file which summarizes supported modes for each grid type.
+	* Minor bug fixes.
 * 2021/06/02 ver 2.25.16
 	* Added Alpha Version of New Board type "Tetrakis Square".
 	* Added Alpha Version of New Board type "Truncated Square".
