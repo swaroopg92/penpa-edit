@@ -51,7 +51,9 @@ function create() {
     let tab_cookie = getCookie("tab_settings");
     if (tab_cookie !== null) {
         this.usertab_choices = tab_cookie;
-        advancecontrol_onoff("url");
+        if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+            advancecontrol_onoff("url");
+        }
     }
     pu.redraw();
 }
@@ -1630,10 +1632,12 @@ function load(urlParam) {
                 }
 
                 // Solution button
-                document.getElementById("pu_a_label").style.display = "inline-block";
-                document.getElementById("pu_a_label").style.marginLeft = "6px";
-                document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+                // document.getElementById("pu_a_label").style.display = "inline-block";
+                // document.getElementById("pu_a_label").style.marginLeft = "6px";
+                // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
+                document.getElementById("title").style.color = Color.BLUE;
             }
 
             if (rtext[7] !== "undefined") {
@@ -1721,10 +1725,12 @@ function load(urlParam) {
             }
 
             // Solution button
-            document.getElementById("pu_a_label").style.display = "inline-block";
-            document.getElementById("pu_a_label").style.marginLeft = "6px";
-            document.getElementById("pu_a_label").innerHTML = "Check Solution";
-            document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+            // document.getElementById("pu_a_label").style.display = "inline-block";
+            // document.getElementById("pu_a_label").style.marginLeft = "6px";
+            // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+            // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
+            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
+            document.getElementById("title").style.color = Color.BLUE;
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings

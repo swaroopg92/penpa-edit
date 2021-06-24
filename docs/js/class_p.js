@@ -6946,6 +6946,7 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
+        var str_all = "1234567890qwertyuiopasdfghjklbnmQWERTYUIOPASDFGHJKLBNMZXCV";
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
@@ -7145,7 +7146,7 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1": // Normal mode
-                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                    if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
                         if (this.selection.length === 1) {
                             let clean_flag = this.check_neighbors(this.selection[0]);
                             if (!clean_flag) {
@@ -7217,7 +7218,7 @@ class Puzzle {
                     break;
                 case "2": // Corner mode
                     if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
-                        if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                        if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
 
                             if (this.selection.length === 1) {
                                 this.undoredo_counter = 0;
@@ -7338,7 +7339,7 @@ class Puzzle {
                     }
                     break;
                 case "3": // Centre mode
-                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                    if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
                         if (this.selection.length === 1) {
                             this.undoredo_counter = 0;
                         } else {
@@ -10925,12 +10926,12 @@ class Puzzle {
                     // this.mouse_mode = "out";
                     // this.mouseevent(0, 0, 0);
                     this.sol_flag = 1;
-                    document.getElementById("pu_a_label").innerHTML = "Correct Solution";
-                    document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                    // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
+                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                 } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
                     this.sol_flag = 0;
-                    document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                 }
             }
         } else {
@@ -10952,8 +10953,8 @@ class Puzzle {
                             }, 20)
                             sw_timer.pause();
                             this.sol_flag = 1;
-                            document.getElementById("pu_a_label").innerHTML = "Correct Solution";
-                            document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                            // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
+                            // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                             i = this.solution.length; // to break the outer for loop
                             break;
                         } else if (user_sol === author_sol && this.sol_flag === 1) {
@@ -10966,8 +10967,8 @@ class Puzzle {
                     // If there was any change in the grid and none of the solution matches then reset the flag
                     // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
                     this.sol_flag = 0;
-                    document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                 }
             }
         }

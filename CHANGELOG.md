@@ -1,12 +1,14 @@
 ## History
-* 2021/06/22 ver 2.25.17
+* 2021/06/24 ver 2.25.17
 	* Implemented PenpaLite feature.
 	* Improvements to Timer (only seconds are updated, 1/10th second is shown when paused or solution is complete).
 	* Improvements to Panel Header (Shows Current Mode information).
 	* Improvements to available modes/submodes.
 	* Improvements to display.
 	* Custom color for Shape mode completed.
+	* Alphabet support added to Sudoku mode.
 	* Code improvement by creating separate modes.js file which summarizes supported modes for each grid type.
+	* Minor bug fixes.
 * 2021/06/02 ver 2.25.16
 	* Added Alpha Version of New Board type "Tetrakis Square".
 	* Added Alpha Version of New Board type "Truncated Square".
