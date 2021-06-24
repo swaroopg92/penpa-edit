@@ -294,16 +294,45 @@ class Panel {
                 this.ctxf.strokeRect((i_n % this.nxf) * (this.sizef + this.spacef), (i_n / this.nxf | 0) * (this.sizef + this.spacef), this.sizef, this.sizef);
             }
         } else if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            this.panelmode = "number";
-            this.nxf = 4;
-            this.nyf = 3;
-            this.sizef = 50;
-            this.canvas_size_setting(45);
-            this.fkb.style.paddingTop = "0px";
-            this.fkb.style.display = "block";
-            this.fkm.style.display = "flex";
-            this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "\u{232B}", "\u{2421}"];
-            this.draw_number();
+            switch (this.panelmode) {
+                case "number":
+                    this.nxf = 4;
+                    this.nyf = 3;
+                    this.sizef = 50;
+                    this.canvas_size_setting(45);
+                    this.fkb.style.paddingTop = "0px";
+                    this.fkb.style.display = "block";
+                    this.fkm.style.display = "flex";
+                    this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "\u{232B}", "\u{2421}"];
+                    this.draw_number();
+                    break;
+                case "alphabet":
+                    this.nxf = 6;
+                    this.nyf = 5;
+                    this.sizef = 40;
+                    this.canvas_size_setting(45);
+                    this.fkb.style.paddingTop = "0px";
+                    this.fkb.style.display = "block";
+                    this.fkm.style.display = "flex";
+                    this.cont = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+                        "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "", "", "\u{2423}", "\u{2421}"
+                    ];
+                    this.draw_number();
+                    break;
+                case "alphabet_s":
+                    this.nxf = 6;
+                    this.nyf = 5;
+                    this.sizef = 40;
+                    this.canvas_size_setting(45);
+                    this.fkb.style.paddingTop = "0px";
+                    this.fkb.style.display = "block";
+                    this.fkm.style.display = "flex";
+                    this.cont = ["a", "b", "", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
+                        "p", "q", "r", "s", "t", "u", "", "w", "", "y", "", "", "", "\u{2423}", "\u{2421}"
+                    ];
+                    this.draw_number();
+                    break;
+            }
         } else {
             this.fkb.style.display = "none";
         }

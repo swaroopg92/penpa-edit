@@ -6946,6 +6946,7 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
+        var str_all = "1234567890qwertyuiopasdfghjklbnmQWERTYUIOPASDFGHJKLBNMZXCV";
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
@@ -7145,7 +7146,7 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                 case "1": // Normal mode
-                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                    if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
                         if (this.selection.length === 1) {
                             let clean_flag = this.check_neighbors(this.selection[0]);
                             if (!clean_flag) {
@@ -7217,7 +7218,7 @@ class Puzzle {
                     break;
                 case "2": // Corner mode
                     if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
-                        if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                        if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
 
                             if (this.selection.length === 1) {
                                 this.undoredo_counter = 0;
@@ -7338,7 +7339,7 @@ class Puzzle {
                     }
                     break;
                 case "3": // Centre mode
-                    if (this.selection.length > 0 && str_num.indexOf(key) != -1) {
+                    if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
                         if (this.selection.length === 1) {
                             this.undoredo_counter = 0;
                         } else {

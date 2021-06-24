@@ -481,7 +481,7 @@ onload = function() {
             if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 switch (key) {
                     case "z":
-                    case "Z":
+                        // case "Z":
                         present_mode = document.getElementById("mo_sudoku").checked;
                         if (!present_mode) {
                             pu.mode_set("sudoku");
@@ -495,7 +495,7 @@ onload = function() {
                         event.returnValue = false;
                         break;
                     case "x":
-                    case "X":
+                        // case "X":
                         present_mode = document.getElementById("mo_sudoku").checked;
                         if (!present_mode) {
                             pu.mode_set("sudoku");
@@ -509,7 +509,7 @@ onload = function() {
                         event.returnValue = false;
                         break;
                     case "c":
-                    case "C":
+                        // case "C":
                         present_mode = document.getElementById("mo_sudoku").checked;
                         if (!present_mode) {
                             pu.mode_set("sudoku");
@@ -523,7 +523,7 @@ onload = function() {
                         event.returnValue = false;
                         break;
                     case "v":
-                    case "V":
+                        // case "V":
                         present_mode = document.getElementById("mo_surface").checked;
                         if (!present_mode) {
                             pu.mode_set("surface");
