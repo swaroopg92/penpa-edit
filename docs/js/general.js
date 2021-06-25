@@ -1578,11 +1578,11 @@ function load(urlParam) {
 
         // Advance Control Setting
         // Do this only for latest version 2.25.17 and above
-        if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
-            if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
-                advancecontrol_onoff("url");
-            }
+        // if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
+        if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+            advancecontrol_onoff("url");
         }
+        // }
     }
 
     if (paramArray.m === "edit") { //edit_mode
