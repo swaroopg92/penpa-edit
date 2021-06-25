@@ -857,10 +857,10 @@ function advancecontrol_off(loadtype) {
         user_choices.indexOf("Line Helper") === -1) {
         document.getElementById("mo_line_lb").style.display = "none";
     } else {
-        document.getElementById("st_line80_lb").style.display = "none";
-        document.getElementById("st_line12_lb").style.display = "none";
-        document.getElementById("st_line13_lb").style.display = "none";
-        document.getElementById("st_line40_lb").style.display = "none";
+        // document.getElementById("st_line80_lb").style.display = "none";
+        // document.getElementById("st_line12_lb").style.display = "none";
+        // document.getElementById("st_line13_lb").style.display = "none";
+        // document.getElementById("st_line40_lb").style.display = "none";
     }
     if (user_choices.indexOf("Edge Normal") === -1 &&
         user_choices.indexOf("Edge Diagonal") === -1 &&
@@ -868,18 +868,18 @@ function advancecontrol_off(loadtype) {
         user_choices.indexOf("Edge Helper") === -1) {
         document.getElementById("mo_lineE_lb").style.display = "none";
     } else {
-        document.getElementById("st_lineE80_lb").style.display = "none";
-        document.getElementById("st_lineE12_lb").style.display = "none";
-        document.getElementById("st_lineE13_lb").style.display = "none";
-        document.getElementById("st_lineE21_lb").style.display = "none";
+        // document.getElementById("st_lineE80_lb").style.display = "none";
+        // document.getElementById("st_lineE12_lb").style.display = "none";
+        // document.getElementById("st_lineE13_lb").style.display = "none";
+        // document.getElementById("st_lineE21_lb").style.display = "none";
     }
     if (user_choices.indexOf("Wall") === -1) {
         document.getElementById("mo_wall_lb").style.display = "none";
     } else {
-        document.getElementById("st_wall1_lb").style.display = "none";
-        document.getElementById("st_wall12_lb").style.display = "none";
-        document.getElementById("st_wall17_lb").style.display = "none";
-        document.getElementById("st_wall14_lb").style.display = "none";
+        // document.getElementById("st_wall1_lb").style.display = "none";
+        // document.getElementById("st_wall12_lb").style.display = "none";
+        // document.getElementById("st_wall17_lb").style.display = "none";
+        // document.getElementById("st_wall14_lb").style.display = "none";
     }
     if (user_choices.indexOf("Number Normal") === -1 &&
         user_choices.indexOf("Number L") === -1 &&
