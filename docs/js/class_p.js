@@ -601,7 +601,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -978,7 +978,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
 
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
@@ -1250,7 +1250,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -1630,7 +1630,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
