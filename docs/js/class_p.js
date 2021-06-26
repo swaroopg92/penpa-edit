@@ -271,15 +271,23 @@ class Puzzle {
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
                 this[this.mode.qa].surface = {};
+                this[this.mode.qa + "_col"].surface = {};
                 break;
             case "line":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "4") {
                     this[this.mode.qa].line = {};
                     this[this.mode.qa].freeline = {};
+                    this[this.mode.qa + "_col"].line = {};
+                    this[this.mode.qa + "_col"].freeline = {};
                 } else {
                     for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] === 98) {
                             delete this[this.mode.qa].line[i];
+                        }
+                    }
+                    for (var i in this[this.mode.qa + "_col"].line) {
+                        if (this[this.mode.qa + "_col"].line[i] === 98) {
+                            delete this[this.mode.qa + "_col"].line[i];
                         }
                     }
                 }
@@ -291,29 +299,41 @@ class Puzzle {
                             delete this[this.mode.qa].lineE[i];
                         }
                     }
+                    for (var i in this[this.mode.qa + "_col"].lineE) {
+                        if (this[this.mode.qa + "_col"].lineE[i] === 98) {
+                            delete this[this.mode.qa + "_col"].lineE[i];
+                        }
+                    }
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") {
                     this[this.mode.qa].deletelineE = {};
+                    this[this.mode.qa + "_col"].deletelineE = {};
                 } else {
                     this[this.mode.qa].lineE = {};
                     this[this.mode.qa].freelineE = {};
+                    this[this.mode.qa + "_col"].lineE = {};
+                    this[this.mode.qa + "_col"].freelineE = {};
                 }
                 break;
             case "wall":
                 this[this.mode.qa].wall = {};
+                this[this.mode.qa + "_col"].wall = {};
                 break;
             case "number":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "3") {
                     this[this.mode.qa].number = {};
+                    this[this.mode.qa + "_col"].number = {};
                 } else {
                     this[this.mode.qa].numberS = {};
+                    this[this.mode.qa + "_col"].numberS = {};
                 }
                 break;
             case "symbol":
                 this[this.mode.qa].symbol = {};
-                //this[this.mode.qa].symbol2 = {};
+                this[this.mode.qa + "_col"].symbol = {};
                 break;
             case "cage":
                 this[this.mode.qa].cage = {};
+                this[this.mode.qa + "_col"].cage = {};
                 break;
             case "special":
                 this[this.mode.qa][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
@@ -581,7 +601,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -958,7 +978,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
 
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
@@ -1230,7 +1250,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -1610,7 +1630,7 @@ class Puzzle {
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
 
-            for (var i of ["pu_q", "pu_a"]) {
+            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 

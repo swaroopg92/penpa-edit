@@ -861,6 +861,7 @@ function advancecontrol_off(loadtype) {
         document.getElementById("st_line12_lb").style.display = "none";
         document.getElementById("st_line13_lb").style.display = "none";
         document.getElementById("st_line40_lb").style.display = "none";
+        document.getElementById("st_line30_lb").style.display = "none";
     }
     if (user_choices.indexOf("Edge Normal") === -1 &&
         user_choices.indexOf("Edge Diagonal") === -1 &&
@@ -872,6 +873,7 @@ function advancecontrol_off(loadtype) {
         document.getElementById("st_lineE12_lb").style.display = "none";
         document.getElementById("st_lineE13_lb").style.display = "none";
         document.getElementById("st_lineE21_lb").style.display = "none";
+        document.getElementById("st_lineE30_lb").style.display = "none";
     }
     if (user_choices.indexOf("Wall") === -1) {
         document.getElementById("mo_wall_lb").style.display = "none";
