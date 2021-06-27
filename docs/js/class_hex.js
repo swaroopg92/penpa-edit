@@ -2540,7 +2540,7 @@ class Puzzle_hex extends Puzzle {
                 var r = 0.4;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.GREY;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_x(ctx, x, y, r)
                 break;

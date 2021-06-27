@@ -2372,7 +2372,7 @@ class Puzzle_tri extends Puzzle {
                 var r = 0.3;
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                ctx.strokeStyle = Color.GREY;
+                ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 1;
                 this.draw_x(ctx, x, y, r)
                 break;
