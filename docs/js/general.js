@@ -40,7 +40,7 @@ function create() {
     // Check cookies
     let theme_cookie = getCookie("color_theme");
     if (theme_cookie !== null && theme_cookie == 2) {
-        document.getElementById("dark_mode").checked = true;
+        document.getElementById("theme_mode_opt").value = 2;
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
@@ -54,6 +54,10 @@ function create() {
         if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
             advancecontrol_onoff("url");
         }
+    }
+    let sudoku_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
     }
     pu.redraw();
 }
@@ -817,16 +821,25 @@ function advancecontrol_onoff(loadtype = "new") {
     if (document.getElementById('advance_button').textContent === "ON") {
         // Lite Version OFF, Display all the modes
         document.getElementById('advance_button').textContent = "OFF";
+        // Display the mode break line again
+        document.getElementById("mode_break").style.display = "inline";
+        document.getElementById("mode_txt_space").style.display = "inline";
         advancecontrol_on();
     } else {
         // Lite Version ON, so turn off extra modes
         if (loadtype === "url") {
             document.getElementById('advance_button').textContent = "ON";
+            // Remove the mode break line again
+            document.getElementById("mode_break").style.display = "none";
+            document.getElementById("mode_txt_space").style.display = "none";
             advancecontrol_off(loadtype);
         } else {
             let user_choices = getValues('mode_choices');
             if (user_choices.length !== 0) {
                 document.getElementById('advance_button').textContent = "ON";
+                // Remove the mode break line again
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
                 advancecontrol_off(loadtype);
             } else {
                 Swal.fire({
@@ -1513,6 +1526,22 @@ function load(urlParam) {
 
     make_class(rtext_para[0], 'url');
 
+    // Check cookies
+    let theme_cookie = getCookie("color_theme");
+    if (theme_cookie !== null && theme_cookie == 2) {
+        document.getElementById("theme_mode_opt").value = 2;
+        document.getElementById("color_theme").href = "./css/dark_theme.css";
+        pu.set_redoundocolor();
+    }
+    let reload_cookie = getCookie("reload_button");
+    if (reload_cookie !== null) {
+        document.getElementById('reload_button').textContent = reload_cookie;
+    }
+    let sudoku_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    }
+
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
@@ -1595,7 +1624,7 @@ function load(urlParam) {
         // custom color
         if (typeof rtext[13] !== 'undefined') {
             if (JSON.parse(rtext[13]) === "true") {
-                document.getElementById("custom_color_yes").checked = true;
+                document.getElementById("custom_color_opt").value = 2;
             }
         }
         if (typeof rtext[14] !== 'undefined') {
@@ -1638,8 +1667,8 @@ function load(urlParam) {
                 // document.getElementById("pu_a_label").style.marginLeft = "6px";
                 // document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
-                document.getElementById("title").style.color = Color.BLUE;
+                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
+                document.getElementById("title").classList.add("info");
             }
 
             if (rtext[7] !== "undefined") {
@@ -1693,7 +1722,7 @@ function load(urlParam) {
         // custom color
         if (typeof rtext[13] !== 'undefined') {
             if (JSON.parse(rtext[13]) === "true") {
-                document.getElementById("custom_color_yes").checked = true;
+                document.getElementById("custom_color_opt").value = 2;
             }
         }
 
@@ -1731,8 +1760,8 @@ function load(urlParam) {
             // document.getElementById("pu_a_label").style.marginLeft = "6px";
             // document.getElementById("pu_a_label").innerHTML = "Check Solution";
             // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
-            document.getElementById("title").style.color = Color.BLUE;
+            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
+            document.getElementById("title").classList.add("info");
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings
@@ -1793,7 +1822,7 @@ function load(urlParam) {
     // Theme
     if (typeof rtext[12] !== 'undefined') {
         if (JSON.parse(rtext[12]) === 'dark') {
-            document.getElementById("dark_mode").checked = true;
+            document.getElementById("theme_mode_opt").value = 2;
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
@@ -2266,13 +2295,11 @@ function set_solvemode() {
     // custom color
     document.getElementById('colorpicker_special').style.display = 'none';
     document.getElementById('custom_color_lb').style.display = 'none';
-    document.getElementById('custom_color_yes_lb').style.display = 'none';
-    document.getElementById('custom_color_no_lb').style.display = 'none';
+    document.getElementById('custom_color_opt').style.display = 'none';
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
-    document.getElementById('save_settings_yes_lb').style.display = 'none';
-    document.getElementById('save_settings_no_lb').style.display = 'none';
+    document.getElementById('save_settings_opt').style.display = 'none';
 }
 
 function set_contestmode() {

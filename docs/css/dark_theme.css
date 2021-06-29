@@ -1191,6 +1191,11 @@ input[type=number] {
     margin-left: -95px;
 }
 
+#penpalite_text.tooltiptext {
+    width: 160px;
+    margin-left: -88px;
+}
+
 #sub_text.tooltiptext {
     width: 230px;
     margin-left: -15px;
@@ -1240,6 +1245,10 @@ input[type=number] {
     left: 90%;
 }
 
+#penpalite_text.tooltiptext::after {
+    left: 90%;
+}
+
 #sub_text.tooltiptext::after {
     left: 5%;
 }
@@ -1282,7 +1291,8 @@ input[type=number] {
 #ignore_pencilmarks_lb,
 #theme_mode_lb,
 #custom_color_lb,
-#save_settings_lb {
+#save_settings_lb,
+#sudoku_settings_lb {
     color: var(--white);
 }
 
@@ -1331,15 +1341,19 @@ a:active {
     color: var(--white);
 }
 
-table,
-td,
-tr {
+.answerset {
     border-collapse: collapse;
-    border: 1px solid var(--white);
+    border: 1px solid var(--black);
     padding: 1px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-table.center {
+.generalset {
+    border-collapse: collapse;
+    border: none;
+    padding: 3px;
+    font-size: 105%;
     margin-left: auto;
     margin-right: auto;
 }

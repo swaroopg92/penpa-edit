@@ -43,7 +43,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['custom_color_lb', 'custom_color_no_lb', 'custom_color_yes_lb'],
+        'customcolor': ['custom_color_lb', 'custom_color_opt'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['ms0_arrow_fouredge',
@@ -94,7 +94,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['custom_color_lb', 'custom_color_no_lb', 'custom_color_yes_lb'],
+        'customcolor': ['custom_color_lb', 'custom_color_opt'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['ms0_arrow_fouredge',
@@ -145,7 +145,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['custom_color_lb', 'custom_color_no_lb', 'custom_color_yes_lb'],
+        'customcolor': ['custom_color_lb', 'custom_color_opt'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['ms0_arrow_fouredge',
