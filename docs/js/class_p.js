@@ -2656,12 +2656,8 @@ class Puzzle {
         // Save submode/style/combi settings
         text += JSON.stringify(this.mode) + "\n";
 
-        // Theme Setting
-        if (document.getElementById("theme_mode_opt").value === "1") {
-            text += JSON.stringify("light") + "\n";
-        } else if (document.getElementById("theme_mode_opt").value === "2") {
-            text += JSON.stringify("dark") + "\n";
-        }
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x") + "\n";
 
         // Custom Colors
         if (document.getElementById("custom_color_opt").value === "2") {
@@ -2822,12 +2818,8 @@ class Puzzle {
         // Save submode/style/combi settings
         text += JSON.stringify(this.mode) + "\n";
 
-        // Theme Setting
-        if (document.getElementById("theme_mode_opt").value === "1") {
-            text += JSON.stringify("light") + "\n";
-        } else if (document.getElementById("theme_mode_opt").value === "2") {
-            text += JSON.stringify("dark") + "\n";
-        }
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x") + "\n";
 
         // Custom Colors
         if (document.getElementById("custom_color_opt").value === "2") {
@@ -7423,10 +7415,17 @@ class Puzzle {
                                 }
                                 this.record("number", k, this.undoredo_counter);
                                 // S submode is 5, M submode is 6
-                                if (number.length > 5) {
-                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
-                                } else {
+                                // dynamic (i.e. upto 5 digits larger size and then smaller size)
+                                if (document.getElementById("sudoku_settings_opt").value === "1") {
+                                    if (number.length > 5) {
+                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
+                                    } else {
+                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                    }
+                                } else if (document.getElementById("sudoku_settings_opt").value === "2") { // all large
                                     this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                } else if (document.getElementById("sudoku_settings_opt").value === "3") { // all small
+                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                 }
                             }
                         }

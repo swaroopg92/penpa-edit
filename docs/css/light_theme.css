@@ -1250,7 +1250,7 @@ input[type=number] {
     border-collapse: collapse;
     border: none;
     padding: 3px;
-    font-size: 110%;
+    font-size: 18px;
     margin-left: auto;
     margin-right: auto;
 }

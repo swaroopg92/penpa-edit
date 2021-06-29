@@ -1877,11 +1877,13 @@ onload = function() {
             deleteCookie("reload_button");
             deleteCookie("tab_settings");
             deleteCookie("gridtype");
+            deleteCookie("sudoku_centre_size");
         } else if (document.getElementById("save_settings_opt").value === "2") {
             setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
             setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
             setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
+            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
         }
     }
 };

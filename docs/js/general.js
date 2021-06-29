@@ -40,7 +40,7 @@ function create() {
     // Check cookies
     let theme_cookie = getCookie("color_theme");
     if (theme_cookie !== null && theme_cookie == 2) {
-        document.getElementById("theme_mode_opt").value = "2";
+        document.getElementById("theme_mode_opt").value = 2;
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
@@ -54,6 +54,10 @@ function create() {
         if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
             advancecontrol_onoff("url");
         }
+    }
+    let sudoku_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
     }
     pu.redraw();
 }
@@ -1515,6 +1519,22 @@ function load(urlParam) {
 
     make_class(rtext_para[0], 'url');
 
+    // Check cookies
+    let theme_cookie = getCookie("color_theme");
+    if (theme_cookie !== null && theme_cookie == 2) {
+        document.getElementById("theme_mode_opt").value = 2;
+        document.getElementById("color_theme").href = "./css/dark_theme.css";
+        pu.set_redoundocolor();
+    }
+    let reload_cookie = getCookie("reload_button");
+    if (reload_cookie !== null) {
+        document.getElementById('reload_button').textContent = reload_cookie;
+    }
+    let sudoku_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    }
+
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
@@ -1798,7 +1818,7 @@ function load(urlParam) {
     // Theme
     if (typeof rtext[12] !== 'undefined') {
         if (JSON.parse(rtext[12]) === 'dark') {
-            document.getElementById("theme_mode_opt").value = "2";
+            document.getElementById("theme_mode_opt").value = 2;
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
