@@ -2148,7 +2148,7 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "combi") {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
-        if ((document.getElementById("custom_color_yes").checked) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
+        if ((document.getElementById("custom_color_opt").value === "2") && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro")) &&
             (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
             document.getElementById('style_special').style.display = 'inline';
         } else {
@@ -2172,7 +2172,7 @@ class Puzzle {
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             // set the custom color to default
             switch (name) {
                 case "sub_specialthermo":
@@ -2209,7 +2209,7 @@ class Puzzle {
             panel_pu.draw_panel(); // Panel update
         }
 
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             // set the custom color to default
             switch (name) {
                 case "st_surface1":
@@ -2354,7 +2354,7 @@ class Puzzle {
     subsymbolmode(mode) {
         this.mode[this.mode.qa].symbol[0] = mode;
         document.getElementById("symmode_content").innerHTML = mode;
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             // set the custom color to default
             switch ("ms_" + mode) {
                 case "ms_circle_L":
@@ -2657,14 +2657,14 @@ class Puzzle {
         text += JSON.stringify(this.mode) + "\n";
 
         // Theme Setting
-        if (document.getElementById("light_mode").checked) {
+        if (document.getElementById("theme_mode_opt").value === "1") {
             text += JSON.stringify("light") + "\n";
-        } else if (document.getElementById("dark_mode").checked) {
+        } else if (document.getElementById("theme_mode_opt").value === "2") {
             text += JSON.stringify("dark") + "\n";
         }
 
         // Custom Colors
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             text += JSON.stringify("true") + "\n"
         } else {
             text += JSON.stringify("false") + "\n"
@@ -2823,14 +2823,14 @@ class Puzzle {
         text += JSON.stringify(this.mode) + "\n";
 
         // Theme Setting
-        if (document.getElementById("light_mode").checked) {
+        if (document.getElementById("theme_mode_opt").value === "1") {
             text += JSON.stringify("light") + "\n";
-        } else if (document.getElementById("dark_mode").checked) {
+        } else if (document.getElementById("theme_mode_opt").value === "2") {
             text += JSON.stringify("dark") + "\n";
         }
 
         // Custom Colors
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             text += JSON.stringify("true") + "\n"
         } else {
             text += JSON.stringify("false") + "\n"
@@ -2991,7 +2991,7 @@ class Puzzle {
         text += JSON.stringify("x") + "\n";
 
         // Custom Colors
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             text += JSON.stringify("true") + "\n"
         } else {
             text += JSON.stringify("false") + "\n"
@@ -3114,7 +3114,7 @@ class Puzzle {
         text += JSON.stringify("x") + "\n";
 
         // Custom Colors
-        if (document.getElementById("custom_color_yes").checked) {
+        if (document.getElementById("custom_color_opt").value === "2") {
             text += JSON.stringify("true") + "\n"
         } else {
             text += JSON.stringify("false") + "\n"
@@ -7159,7 +7159,7 @@ class Puzzle {
                     number = parseInt(key, 10);
                 }
                 this[this.mode.qa].symbol[this.cursol] = [number, this.mode[this.mode.qa].symbol[0], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                if (document.getElementById("custom_color_yes").checked) {
+                if (document.getElementById("custom_color_opt").value === "2") {
                     this[this.mode.qa + "_col"].symbol[this.cursol] = this.get_customcolor();
                 }
             }
@@ -7519,7 +7519,7 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
             delete this[this.mode.qa].symbol[this.cursol];
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].symbol[this.cursol];
             }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
@@ -7800,19 +7800,19 @@ class Puzzle {
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 1 && color === 1) {
             this[this.mode.qa].surface[num] = 2;
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
             }
             this.drawing_mode = 2;
         } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && color === 1))) {
             delete this[this.mode.qa].surface[num];
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].surface[num];
             }
             this.drawing_mode = 0;
         } else {
             this[this.mode.qa].surface[num] = color;
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
             }
             this.drawing_mode = color;
@@ -7824,13 +7824,13 @@ class Puzzle {
         this.record("surface", num);
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 2) {
             delete this[this.mode.qa].surface[num];
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].surface[num];
             }
             this.drawing_mode = 0;
         } else {
             this[this.mode.qa].surface[num] = 2;
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
             }
             this.drawing_mode = 2;
@@ -7844,7 +7844,7 @@ class Puzzle {
                 if (this[this.mode.qa].surface[num]) {
                     this.record("surface", num);
                     delete this[this.mode.qa].surface[num];
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         delete this[this.mode.qa + "_col"].surface[num];
                     }
                     this.redraw();
@@ -7853,7 +7853,7 @@ class Puzzle {
                 if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode) {
                     this.record("surface", num);
                     this[this.mode.qa].surface[num] = this.drawing_mode;
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         if (this.drawing_mode === 2) {
                             this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
                         } else {
@@ -7902,12 +7902,12 @@ class Puzzle {
                 }
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         delete this["pu_q_col"][array][num];
                     }
                 } else {
                     delete this[this.mode.qa][array][num];
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         delete this[this.mode.qa + "_col"][array][num];
                     }
                 }
@@ -7918,12 +7918,12 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         delete this["pu_q_col"][array][num];
                     }
                 } else {
                     delete this[this.mode.qa][array][num];
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         delete this[this.mode.qa + "_col"][array][num];
                     }
                 }
@@ -7937,12 +7937,12 @@ class Puzzle {
                 }
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         this["pu_q_col"][array][num] = this.get_customcolor();
                     }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
@@ -7953,12 +7953,12 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         this["pu_q_col"][array][num] = this.get_customcolor();
                     }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
@@ -8027,12 +8027,12 @@ class Puzzle {
             this.record("freeline", key);
             if (this[this.mode.qa].freeline[key]) {
                 delete this[this.mode.qa].freeline[key];
-                if (document.getElementById("custom_color_yes").checked) {
+                if (document.getElementById("custom_color_opt").value === "2") {
                     delete this[this.mode.qa + "_col"].freeline[key];
                 }
             } else {
                 this[this.mode.qa].freeline[key] = this.drawing_mode;
-                if (document.getElementById("custom_color_yes").checked) {
+                if (document.getElementById("custom_color_opt").value === "2") {
                     this[this.mode.qa + "_col"].freeline[key] = this.get_customcolor();
                 }
             }
@@ -8049,13 +8049,13 @@ class Puzzle {
         if (this[this.mode.qa].line[num] && this[this.mode.qa].line[num] === 98) { // Cross mark (x)
             this.record("line", num);
             delete this[this.mode.qa].line[num];
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].line[num];
             }
         } else {
             this.record("line", num);
             this[this.mode.qa].line[num] = 98;
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].line[num] = this.get_customcolor();
             }
         }
@@ -8148,12 +8148,12 @@ class Puzzle {
             this.record("freelineE", key);
             if (this[this.mode.qa].freelineE[key]) {
                 delete this[this.mode.qa].freelineE[key];
-                if (document.getElementById("custom_color_yes").checked) {
+                if (document.getElementById("custom_color_opt").value === "2") {
                     delete this[this.mode.qa + "_col"].freelineE[key];
                 }
             } else {
                 this[this.mode.qa].freelineE[key] = this.drawing_mode;
-                if (document.getElementById("custom_color_yes").checked) {
+                if (document.getElementById("custom_color_opt").value === "2") {
                     this[this.mode.qa + "_col"].freelineE[key] = this.get_customcolor();
                 }
             }
@@ -8170,13 +8170,13 @@ class Puzzle {
         if (this[this.mode.qa].lineE[num] && this[this.mode.qa].lineE[num] === 98) { //×印
             this.record("lineE", num);
             delete this[this.mode.qa].lineE[num];
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].lineE[num];
             }
         } else {
             this.record("lineE", num);
             this[this.mode.qa].lineE[num] = 98;
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].lineE[num] = this.get_customcolor();
             }
         }
@@ -8783,7 +8783,7 @@ class Puzzle {
                             // Save the current killercage and then delete
                             this.record(arraykill, cageexist_loc, this.undoredo_counter);
                             this[this.mode.qa][arraykill][cageexist_loc] = [];
-                            if (document.getElementById("custom_color_yes").checked) {
+                            if (document.getElementById("custom_color_opt").value === "2") {
                                 this[this.mode.qa + "_col"][arraykill][cageexist_loc] = [];
                             }
                             this.drawing_mode = draw_mode;
@@ -8891,7 +8891,7 @@ class Puzzle {
             this.last = num;
         }
         if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length > 1) {
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
             }
         }
@@ -8903,7 +8903,7 @@ class Puzzle {
             //*********SPECIAL CASE of EMPTY STARTS HERE***************
             // If the mouse was released back on the starting cell, basically no thermo then remove the custom color entry as well.
             // This accounts for the case when user dragged the thermo but came back to starting point.
-            if (document.getElementById("custom_color_yes").checked && this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1]) {
+            if (document.getElementById("custom_color_opt").value === "2" && this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1]) {
                 this[this.mode.qa + "_col"][arr].pop();
             }
             if (this.mode.qa === "pu_q") {
@@ -8919,7 +8919,7 @@ class Puzzle {
                 if (this[this.mode.qa][arr][i] && this[this.mode.qa][arr][i][0] === num) {
                     this.record(arr, i);
                     this[this.mode.qa][arr][i] = [];
-                    if (document.getElementById("custom_color_yes").checked) {
+                    if (document.getElementById("custom_color_opt").value === "2") {
                         this[this.mode.qa + "_col"][arr][i] = [];
                     }
                     break;
@@ -8933,7 +8933,7 @@ class Puzzle {
         this.freelinecircle_g[1] = num;
         if (this.drawing) {
             this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length - 1] = num;
-            if (document.getElementById("custom_color_yes").checked) {
+            if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
             }
         }
@@ -10606,26 +10606,26 @@ class Puzzle {
     set_redoundocolor() {
         if (this.mode.qa === "pu_q") {
             if (this.pu_q.command_redo.__a.length === 0) {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_redo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.WHITE;
                 }
             }
             if (this.pu_q.command_undo.__a.length === 0) {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_undo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.WHITE;
@@ -10633,26 +10633,26 @@ class Puzzle {
             }
         } else {
             if (this.pu_a.command_redo.__a.length === 0) {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_redo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.WHITE;
                 }
             }
             if (this.pu_a.command_undo.__a.length === 0) {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById('light_mode').checked) {
+                if (document.getElementById("theme_mode_opt").value === "1") {
                     document.getElementById('tb_undo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.WHITE;
@@ -10704,7 +10704,7 @@ class Puzzle {
             if (this[pu].polygon[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].polygon[i]) {
+                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].polygon[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].polygon[i];
                     this.ctx.fillStyle = this[pu + "_col"].polygon[i];
                 } else {

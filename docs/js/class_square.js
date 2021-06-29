@@ -681,7 +681,7 @@ class Puzzle_square extends Puzzle {
         for (var k = 0; k < keys.length; k++) {
             var i = keys[k];
             set_surface_style(this.ctx, this[pu].surface[i]);
-            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].surface[i]) {
+            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].surface[i]) {
                 this.ctx.fillStyle = this[pu + "_col"].surface[i];
             }
             this.ctx.beginPath();
@@ -726,7 +726,7 @@ class Puzzle_square extends Puzzle {
             if (this[pu].squareframe[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].squareframe[i]) {
+                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].squareframe[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].squareframe[i];
                 } else {
                     this.ctx.strokeStyle = Color.GREY_LIGHT;
@@ -750,7 +750,7 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].thermo[i]) {
                         this.ctx.fillStyle = this[pu + "_col"].thermo[i];
                     } else {
                         this.ctx.fillStyle = Color.GREY_LIGHT;
@@ -758,7 +758,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].thermo[i]) {
+                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].thermo[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].thermo[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_LIGHT;
@@ -810,14 +810,14 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
                 if (this[pu].nobulbthermo[i] && this[pu].nobulbthermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].nobulbthermo[i]) {
+                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].nobulbthermo[i]) {
                         this.ctx.fillStyle = this[pu + "_col"].nobulbthermo[i];
                     } else {
                         this.ctx.fillStyle = Color.GREY_LIGHT;
                     }
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].nobulbthermo[i]) {
+                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].nobulbthermo[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].nobulbthermo[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_LIGHT;
@@ -927,7 +927,7 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].arrows[i] && this[pu].arrows[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].arrows[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
@@ -961,7 +961,7 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].arrows[i]) {
+                        if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].arrows[i]) {
                             this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
                         } else {
                             this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
@@ -987,7 +987,7 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].direction[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].direction[i]) {
+                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].direction[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].direction[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
@@ -1124,7 +1124,7 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
-                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].line[i]) {
+                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].line[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].line[i];
                 }
                 this.ctx.beginPath();
@@ -1137,7 +1137,7 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].line[i]);
-                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].line[i]) {
+                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].line[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].line[i];
                 }
                 var i1 = i.split(",")[0];
@@ -1185,7 +1185,7 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
-                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].lineE[i]) {
+                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].lineE[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
                 }
                 this.ctx.beginPath();
@@ -1198,7 +1198,7 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].lineE[i]);
-                if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].lineE[i]) {
+                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].lineE[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
                 }
                 var i1 = i.split(",")[0];
@@ -1227,7 +1227,7 @@ class Puzzle_square extends Puzzle {
         /*freeline*/
         for (var i in this[pu].freeline) {
             set_line_style(this.ctx, this[pu].freeline[i]);
-            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].freeline[i]) {
+            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].freeline[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].freeline[i];
             }
             var i1 = i.split(",")[0];
@@ -1251,7 +1251,7 @@ class Puzzle_square extends Puzzle {
         }
         for (var i in this[pu].freelineE) {
             set_line_style(this.ctx, this[pu].freelineE[i]);
-            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].freelineE[i]) {
+            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].freelineE[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].freelineE[i];
             }
             var i1 = i.split(",")[0];
@@ -1278,7 +1278,7 @@ class Puzzle_square extends Puzzle {
     draw_wall(pu) {
         for (var i in this[pu].wall) {
             set_line_style(this.ctx, this[pu].wall[i]);
-            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].wall[i]) {
+            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].wall[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].wall[i];
             }
             this.ctx.lineCap = "butt";
@@ -1348,7 +1348,7 @@ class Puzzle_square extends Puzzle {
             } else {
                 set_line_style(this.ctx, this[pu].cage[i]);
             }
-            if (document.getElementById("custom_color_yes").checked && this[pu + "_col"].cage[i]) {
+            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].cage[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].cage[i];
             }
             this.ctx.beginPath();
@@ -1622,7 +1622,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.43);
                     this.draw_circle(ctx, x, y, 0.32);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1637,7 +1637,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.35);
                     this.draw_circle(ctx, x, y, 0.25);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1652,7 +1652,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.22);
                     this.draw_circle(ctx, x, y, 0.14);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1667,7 +1667,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.13);
                     this.draw_circle(ctx, x, y, 0.07);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1677,7 +1677,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "square_LL":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1686,7 +1686,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, 45);
                 break;
             case "square_L":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1695,7 +1695,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.4 * Math.sqrt(2), 4, 45);
                 break;
             case "square_M":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1704,7 +1704,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.35 * Math.sqrt(2), 4, 45);
                 break;
             case "square_S":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1713,7 +1713,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.22 * Math.sqrt(2), 4, 45);
                 break;
             case "square_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1722,7 +1722,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.13 * Math.sqrt(2), 4, 45);
                 break;
             case "triup_L":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1731,7 +1731,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.5 * 0.25 * this.size, 0.5, 3, 90);
                 break;
             case "triup_M":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1740,7 +1740,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.4 * 0.25 * this.size, 0.4, 3, 90);
                 break;
             case "triup_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1749,7 +1749,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.16 * 0.25 * this.size, 0.16, 3, 90);
                 break;
             case "tridown_L":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1758,7 +1758,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.5 * 0.25 * this.size, 0.5, 3, -90);
                 break;
             case "tridown_M":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1767,7 +1767,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.4 * 0.25 * this.size, 0.4, 3, -90);
                 break;
             case "tridown_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1776,7 +1776,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.16 * 0.25 * this.size, 0.16, 3, -90);
                 break;
             case "triright_L":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1785,7 +1785,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.5 * 0.25 * this.size, y, 0.5, 3, 180);
                 break;
             case "triright_M":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1794,7 +1794,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.4 * 0.25 * this.size, y, 0.4, 3, 180);
                 break;
             case "triright_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1803,7 +1803,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.16 * 0.25 * this.size, y, 0.16, 3, 180);
                 break;
             case "trileft_L":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1812,7 +1812,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.5 * 0.25 * this.size, y, 0.5, 3, 0);
                 break;
             case "trileft_M":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1821,7 +1821,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.4 * 0.25 * this.size, y, 0.4, 3, 0);
                 break;
             case "trileft_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1830,7 +1830,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.16 * 0.25 * this.size, y, 0.16, 3, 0);
                 break;
             case "diamond_L":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1839,7 +1839,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.43, 4, 0);
                 break;
             case "diamond_M":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1848,7 +1848,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
                 break;
             case "diamond_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1860,7 +1860,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTWHITE;
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.strokeStyle = this[qamode + "_col"].symbol[i];
                 } else {
@@ -1886,7 +1886,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_ox(ctx, num, x, y);
                 break;
             case "tri":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_tri(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1897,7 +1897,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.strokeStyle = this[qamode + "_col"].symbol[i];
                 } else {
@@ -1907,7 +1907,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_cross(ctx, num, x, y);
                 break;
             case "line":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_linesym(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1915,7 +1915,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "frameline":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_framelinesym(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1925,7 +1925,7 @@ class Puzzle_square extends Puzzle {
             case "bars_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.fillStyle = this[qamode + "_col"].symbol[i];
                     ctx.strokeStyle = this[qamode + "_col"].symbol[i];
@@ -1939,7 +1939,7 @@ class Puzzle_square extends Puzzle {
             case "bars_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.fillStyle = this[qamode + "_col"].symbol[i];
                 } else {
@@ -1959,7 +1959,7 @@ class Puzzle_square extends Puzzle {
                 break;
                 //number
             case "inequality":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 10, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1968,7 +1968,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_inequality(ctx, num, x, y);
                 break;
             case "math":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_font_style(ctx, 0.8 * pu.size.toString(10), 1, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1981,7 +1981,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
             case "degital":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1990,7 +1990,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_B":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2007,7 +2007,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_f":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_degital_f(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2015,7 +2015,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "dice":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2025,7 +2025,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "pills":
                 set_circle_style(ctx, 3);
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_pills(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2035,7 +2035,7 @@ class Puzzle_square extends Puzzle {
 
                 /* arrow */
             case "arrow_B_B":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2052,7 +2052,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowB(ctx, num, x, y);
                 break;
             case "arrow_N_B":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2069,7 +2069,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowN(ctx, num, x, y);
                 break;
             case "arrow_S":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2078,7 +2078,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowS(ctx, num, x, y);
                 break;
             case "arrow_GP":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2087,7 +2087,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowGP(ctx, num, x, y);
                 break;
             case "arrow_GP_C":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2096,7 +2096,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowGP_C(ctx, num, x, y);
                 break;
             case "arrow_Short":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2105,7 +2105,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowShort(ctx, num, x, y);
                 break;
             case "arrow_tri_B":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2122,7 +2122,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowtri(ctx, num, x, y);
                 break;
             case "arrow_cross":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2131,7 +2131,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowcross(ctx, num, x, y);
                 break;
             case "arrow_eight":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2140,7 +2140,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arroweight(ctx, num, x, y);
                 break;
             case "arrow_fourtip":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2149,7 +2149,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowfourtip(ctx, num, x, y);
                 break;
             case "arrow_fouredge_B":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2173,7 +2173,7 @@ class Puzzle_square extends Puzzle {
 
                 /* special */
             case "kakuro":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_kakuro(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2181,7 +2181,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "compass":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_compass(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2189,7 +2189,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "star":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_star(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2197,7 +2197,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "tents":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_tents(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2206,7 +2206,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "battleship_B":
                 var font_style_type = 1;
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                     this.draw_battleship(ctx, num, x, y, font_style_type, this[qamode + "_col"].symbol[i]);
@@ -2230,7 +2230,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_battleship(ctx, num, x, y);
                 break;
             case "angleloop":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_angleloop(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2238,7 +2238,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "firefly":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_firefly(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2246,7 +2246,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sun_moon":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_sun_moon(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2254,7 +2254,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudokuetc":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_sudokuetc(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2262,7 +2262,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudokumore":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_sudokumore(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2270,7 +2270,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "polyomino":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_polyomino(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2278,7 +2278,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "pencils":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_pencils(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2286,7 +2286,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "slovak":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_slovak(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2294,7 +2294,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "arc":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_arc(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2302,7 +2302,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "darts":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_darts(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2310,7 +2310,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "spans":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_spans(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2318,7 +2318,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "neighbors":
-                if (i !== 'panel' && document.getElementById("custom_color_yes").checked &&
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_neighbors(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {

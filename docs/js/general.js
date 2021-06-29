@@ -40,7 +40,7 @@ function create() {
     // Check cookies
     let theme_cookie = getCookie("color_theme");
     if (theme_cookie !== null && theme_cookie == 2) {
-        document.getElementById("dark_mode").checked = true;
+        document.getElementById("theme_mode_opt").value = "2";
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
@@ -1600,7 +1600,7 @@ function load(urlParam) {
         // custom color
         if (typeof rtext[13] !== 'undefined') {
             if (JSON.parse(rtext[13]) === "true") {
-                document.getElementById("custom_color_yes").checked = true;
+                document.getElementById("custom_color_opt").value = 2;
             }
         }
         if (typeof rtext[14] !== 'undefined') {
@@ -1698,7 +1698,7 @@ function load(urlParam) {
         // custom color
         if (typeof rtext[13] !== 'undefined') {
             if (JSON.parse(rtext[13]) === "true") {
-                document.getElementById("custom_color_yes").checked = true;
+                document.getElementById("custom_color_opt").value = 2;
             }
         }
 
@@ -1798,7 +1798,7 @@ function load(urlParam) {
     // Theme
     if (typeof rtext[12] !== 'undefined') {
         if (JSON.parse(rtext[12]) === 'dark') {
-            document.getElementById("dark_mode").checked = true;
+            document.getElementById("theme_mode_opt").value = "2";
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
@@ -2271,13 +2271,11 @@ function set_solvemode() {
     // custom color
     document.getElementById('colorpicker_special').style.display = 'none';
     document.getElementById('custom_color_lb').style.display = 'none';
-    document.getElementById('custom_color_yes_lb').style.display = 'none';
-    document.getElementById('custom_color_no_lb').style.display = 'none';
+    document.getElementById('custom_color_opt').style.display = 'none';
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
-    document.getElementById('save_settings_yes_lb').style.display = 'none';
-    document.getElementById('save_settings_no_lb').style.display = 'none';
+    document.getElementById('save_settings_opt').style.display = 'none';
 }
 
 function set_contestmode() {

@@ -1238,15 +1238,19 @@ input[type=number] {
     color: var(--blue);
 }
 
-table,
-td,
-tr {
+.answerset {
     border-collapse: collapse;
     border: 1px solid var(--black);
     padding: 1px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-table.center {
+.generalset {
+    border-collapse: collapse;
+    border: none;
+    padding: 3px;
+    font-size: 110%;
     margin-left: auto;
     margin-right: auto;
 }

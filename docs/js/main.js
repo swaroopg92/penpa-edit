@@ -1521,60 +1521,6 @@ onload = function() {
                 document.getElementById("nb_margin2").checked = true;
                 e.preventDefault();
                 break;
-                // theme setting
-            case "light_mode_lb":
-                document.getElementById("light_mode").checked = true;
-                document.getElementById("color_theme").href = "./css/light_theme.css";
-                pu.set_redoundocolor();
-                pu.redraw();
-                e.preventDefault();
-                break;
-            case "dark_mode_lb":
-                document.getElementById("dark_mode").checked = true;
-                document.getElementById("color_theme").href = "./css/dark_theme.css";
-                pu.set_redoundocolor();
-                pu.redraw();
-                e.preventDefault();
-                break;
-                // custom color
-            case "custom_color_yes_lb":
-                document.getElementById("custom_color_yes").checked = true;
-                let mode = pu.mode[pu.mode.qa].edit_mode;
-                if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
-                    (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
-                    document.getElementById('style_special').style.display = 'inline';
-                }
-                pu.redraw();
-                e.preventDefault();
-                break;
-            case "custom_color_no_lb":
-                document.getElementById("custom_color_no").checked = true;
-                document.getElementById('style_special').style.display = 'none';
-                pu.redraw();
-                e.preventDefault();
-                break;
-            case "save_settings_yes_lb":
-                document.getElementById("save_settings_yes").checked = true;
-                const theme = document.querySelectorAll('input[name="theme_mode"]');
-                for (const th of theme) {
-                    if (th.checked) {
-                        setCookie("color_theme", th.value, 2147483647);
-                        break;
-                    }
-                }
-                setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
-                setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
-                setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
-                e.preventDefault();
-                break;
-            case "save_settings_no_lb":
-                document.getElementById("save_settings_no").checked = true;
-                deleteCookie("color_theme");
-                deleteCookie("reload_button");
-                deleteCookie("tab_settings");
-                deleteCookie("gridtype");
-                e.preventDefault();
-                break;
             case "saveimagename":
                 return;
             case "closeBtn_image2":
@@ -1894,4 +1840,48 @@ onload = function() {
         ],
         localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
+
+    // Adding on change events for general settings
+    // Theme Setting
+    document.getElementById("theme_mode_opt").onchange = function() {
+        if (document.getElementById("theme_mode_opt").value === "1") {
+            document.getElementById("color_theme").href = "./css/light_theme.css";
+            pu.set_redoundocolor();
+            pu.redraw();
+        } else if (document.getElementById("theme_mode_opt").value === "2") {
+            document.getElementById("color_theme").href = "./css/dark_theme.css";
+            pu.set_redoundocolor();
+            pu.redraw();
+        }
+    }
+
+    // Custom Color Setting
+    document.getElementById("custom_color_opt").onchange = function() {
+        if (document.getElementById("custom_color_opt").value === "1") {
+            document.getElementById('style_special').style.display = 'none';
+            pu.redraw();
+        } else if (document.getElementById("custom_color_opt").value === "2") {
+            let mode = pu.mode[pu.mode.qa].edit_mode;
+            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
+                (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
+                document.getElementById('style_special').style.display = 'inline';
+            }
+            pu.redraw();
+        }
+    }
+
+    // Save Setting
+    document.getElementById("save_settings_opt").onchange = function() {
+        if (document.getElementById("save_settings_opt").value === "1") {
+            deleteCookie("color_theme");
+            deleteCookie("reload_button");
+            deleteCookie("tab_settings");
+            deleteCookie("gridtype");
+        } else if (document.getElementById("save_settings_opt").value === "2") {
+            setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
+            setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
+            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
+            setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
+        }
+    }
 };
