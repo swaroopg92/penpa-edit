@@ -1,4 +1,8 @@
 ## History
+* 2021/**/** ver 2.25.18
+	* Improved General Settings Display
+	* Improved Mode Display
+	* Added Sudoku PencilMarks option
 * 2021/06/24 ver 2.25.17
 	* Implemented PenpaLite feature.
 	* Improvements to Timer (only seconds are updated, 1/10th second is shown when paused or solution is complete).

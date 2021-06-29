@@ -821,16 +821,25 @@ function advancecontrol_onoff(loadtype = "new") {
     if (document.getElementById('advance_button').textContent === "ON") {
         // Lite Version OFF, Display all the modes
         document.getElementById('advance_button').textContent = "OFF";
+        // Display the mode break line again
+        document.getElementById("mode_break").style.display = "inline";
+        document.getElementById("mode_txt_space").style.display = "inline";
         advancecontrol_on();
     } else {
         // Lite Version ON, so turn off extra modes
         if (loadtype === "url") {
             document.getElementById('advance_button').textContent = "ON";
+            // Remove the mode break line again
+            document.getElementById("mode_break").style.display = "none";
+            document.getElementById("mode_txt_space").style.display = "none";
             advancecontrol_off(loadtype);
         } else {
             let user_choices = getValues('mode_choices');
             if (user_choices.length !== 0) {
                 document.getElementById('advance_button').textContent = "ON";
+                // Remove the mode break line again
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
                 advancecontrol_off(loadtype);
             } else {
                 Swal.fire({
@@ -1663,8 +1672,8 @@ function load(urlParam) {
                 // document.getElementById("pu_a_label").style.marginLeft = "6px";
                 // document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
-                document.getElementById("title").style.color = Color.BLUE;
+                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
+                document.getElementById("title").classList.add("info");
             }
 
             if (rtext[7] !== "undefined") {
@@ -1756,8 +1765,8 @@ function load(urlParam) {
             // document.getElementById("pu_a_label").style.marginLeft = "6px";
             // document.getElementById("pu_a_label").innerHTML = "Check Solution";
             // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)"
-            document.getElementById("title").style.color = Color.BLUE;
+            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
+            document.getElementById("title").classList.add("info");
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings

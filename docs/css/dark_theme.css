@@ -1189,6 +1189,11 @@ input[type=number] {
     margin-left: -95px;
 }
 
+#penpalite_text.tooltiptext {
+    width: 160px;
+    margin-left: -88px;
+}
+
 #sub_text.tooltiptext {
     width: 230px;
     margin-left: -15px;
@@ -1235,6 +1240,10 @@ input[type=number] {
 }
 
 #reload_text.tooltiptext::after {
+    left: 90%;
+}
+
+#penpalite_text.tooltiptext::after {
     left: 90%;
 }
 

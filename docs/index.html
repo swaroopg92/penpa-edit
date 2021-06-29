@@ -69,15 +69,15 @@
                 <input type="radio" name="mode_qa" id="pu_a" value=2 />
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
                 <br>
-                <span id="visibility_button0" class="label tooltip">Visibility:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
+                <span id="visibility_button0" class="label_mode tooltip">Visibility:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
                 <span id="visibility_button" class="label">ON</span>
-                <span id="panel_button0" class="label tooltip">Panel:<span id="panel_text" class="tooltiptext">Panel for Shape and Number Mode</span></span>
+                <span id="panel_button0" class="label_mode tooltip">Panel:<span id="panel_text" class="tooltiptext">Panel for Shape and Number Mode</span></span>
                 <span id="panel_button" class="label">OFF</span>
-                <span id="edge_button0" class="label tooltip">Border:<span id="border_text" class="tooltiptext">To enter numbers/symbols on edges/corners of the grid</span></span>
+                <span id="edge_button0" class="label_mode tooltip">Border:<span id="border_text" class="tooltiptext">To enter numbers/symbols on edges/corners of the grid</span></span>
                 <span id="edge_button" class="label">OFF</span>
-                <span id="reload_button0" class="label tooltip">Reload:<span id="reload_text" class="tooltiptext">Ask confirmation to reload or close the page?</span></span>
+                <span id="reload_button0" class="label_mode tooltip">Reload:<span id="reload_text" class="tooltiptext">Ask confirmation to reload or close the page?</span></span>
                 <span id="reload_button" class="label">OFF</span>
-                <span id="advance_button0" class="label tooltip">PenpaLite:<span id="reload_text" class="tooltiptext">Switch between Lite/Full Controls</span></span>
+                <span id="advance_button0" class="label_mode tooltip">PenpaLite:<span id="penpalite_text" class="tooltiptext">Switch between Lite/Full Controls</span></span>
                 <span id="advance_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -90,22 +90,24 @@
                 <label for="mo_lineE" class="label" id="mo_lineE_lb">Edge</label>
                 <input type="radio" name="mode" id="mo_wall" />
                 <label for="mo_wall" class="label" id="mo_wall_lb">Wall</label>
-                <input type="radio" name="mode" id="mo_number" />
-                <label for="mo_number" class="label" id="mo_number_lb">Number</label>
-                <input type="radio" name="mode" id="mo_symbol" />
-                <label for="mo_symbol" class="label" id="mo_symbol_lb">Shape</label>
-                <input type="radio" name="mode" id="mo_special" />
-                <label for="mo_special" class="label" id="mo_special_lb">Special</label>
                 <input type="radio" name="mode" id="mo_cage" />
                 <label for="mo_cage" class="label" id="mo_cage_lb">Cage</label>
-                <input type="radio" name="mode" id="mo_combi" />
-                <label for="mo_combi" class="label_option" id="mo_combi_lb">Composite</label>
-                <input type="radio" name="mode" id="mo_sudoku" />
-                <label for="mo_sudoku" class="label_option" id="mo_sudoku_lb">Sudoku</label>
                 <input type="radio" name="mode" id="mo_board" />
                 <label for="mo_board" class="label_option" id="mo_board_lb">Box</label>
                 <input type="radio" name="mode" id="mo_move" />
                 <label for="mo_move" class="label_option" id="mo_move_lb">Move</label>
+                <br id="mode_break">
+                <label class="label_mode" id="mode_txt_space">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                <input type="radio" name="mode" id="mo_number" />
+                <label for="mo_number" class="label" id="mo_number_lb">Number</label>
+                <input type="radio" name="mode" id="mo_sudoku" />
+                <label for="mo_sudoku" class="label_option" id="mo_sudoku_lb">Sudoku</label>
+                <input type="radio" name="mode" id="mo_symbol" />
+                <label for="mo_symbol" class="label" id="mo_symbol_lb">Shape</label>
+                <input type="radio" name="mode" id="mo_special" />
+                <label for="mo_special" class="label" id="mo_special_lb">Special</label>
+                <input type="radio" name="mode" id="mo_combi" />
+                <label for="mo_combi" class="label_option" id="mo_combi_lb">Composite</label>
                 <span class="tab" id="tab_selection">
                     <select id="mode_choices" multiple size="0"></select>
                 </span>
@@ -621,7 +623,7 @@
                 <button id="sw_reset" class="button sw">Reset</button>
             </div>
         </div>
-        <p>Penpa+ Version 2.25.17 &copy; 2020-2021 </p>
+        <p>Penpa+ Version 2.25.18 &copy; 2020-2021 </p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -1214,7 +1216,7 @@
                         </td>
                         <td class="generalset">
                             <select name="save_settings" id="save_settings_opt">
-                                <option value="3" selected="selected">None</option>
+                                <option value="3" selected="selected"></option>
                                 <option value="1">No</option>
                                 <option value="2">Yes</option>
                             </select>
