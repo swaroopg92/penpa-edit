@@ -3,6 +3,7 @@
 	* Improved General Settings Display
 	* Improved Mode Display
 	* Added Sudoku PencilMarks option
+	* Added Diagonal equal to sign in Shape -> Shape -> Lines
 * 2021/06/24 ver 2.25.17
 	* Implemented PenpaLite feature.
 	* Improvements to Timer (only seconds are updated, 1/10th second is shown when paused or solution is complete).

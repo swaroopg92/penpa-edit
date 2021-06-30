@@ -2540,6 +2540,30 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.stroke();
                 break;
+            case 7:
+                ctx.save();
+                set_font_style(ctx, 0.8 * pu.size.toString(10), 1, ctx.strokeStyle);
+                ctx.font = 0.8 * pu.size.toString(10) + "px Helvetica,Arial";
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                ctx.translate(x, y);
+                ctx.rotate(-Math.PI / 4);
+                ctx.translate(-x, -y);
+                ctx.fillText("＝", x, y + r / 10 * pu.size);
+                ctx.restore();
+                break;
+            case 8:
+                ctx.save();
+                set_font_style(ctx, 0.8 * pu.size.toString(10), 1, ctx.strokeStyle);
+                ctx.font = 0.8 * pu.size.toString(10) + "px Helvetica,Arial";
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                ctx.translate(x, y);
+                ctx.rotate(Math.PI / 4);
+                ctx.translate(-x, -y);
+                ctx.fillText("＝", x, y + r / 10 * pu.size);
+                ctx.restore();
+                break;
         }
     }
 
