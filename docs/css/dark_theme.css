@@ -739,7 +739,7 @@ body textarea {
 
 #float-key-header {
     width: 200px;
-    height: 20px;
+    height: 40px;
     text-align: center;
     background: var(--grey);
     padding-top: 0px;
@@ -765,9 +765,14 @@ body textarea {
     height: 20px;
     text-align: center;
     background: var(--greyLight);
-    padding-top: 20px;
+    padding-top: 40px;
     border-radius: 5px 5px 0px 0px;
 }
+
+#float-key-header-lb{
+    vertical-align: middle;
+}
+
 
 .panel_menu {
     display: flex;
