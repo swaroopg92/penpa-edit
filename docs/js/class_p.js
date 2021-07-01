@@ -3234,7 +3234,8 @@ class Puzzle {
 
             if (document.getElementById("sol_surface").checked === true || checkall) {
                 for (var i in this[pu].surface) {
-                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
+                    // 1 is DG, 8 is GR, 3 is LG, 4 is BL
+                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
                         sol[0].push(i);
                     }
                 }
@@ -3443,7 +3444,8 @@ class Puzzle {
                     switch (sol_id) {
                         case "surface":
                             for (var i in this[pu].surface) {
-                                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 4) {
+                                // 1 is DG, 8 is GR, 3 is LG, 4 is BL
+                                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
                                     temp_sol.push(i);
                                 }
                             }
