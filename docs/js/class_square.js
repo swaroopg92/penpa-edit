@@ -589,6 +589,8 @@ class Puzzle_square extends Puzzle {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
+            this.draw_symbol("pu_q", 1);
+            this.draw_symbol("pu_a", 1);
             this.draw_squareframe("pu_q");
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
@@ -597,8 +599,6 @@ class Puzzle_square extends Puzzle {
             this.draw_nobulbthermo("pu_a");
             this.draw_arrowsp("pu_q");
             this.draw_arrowsp("pu_a");
-            this.draw_symbol("pu_q", 1);
-            this.draw_symbol("pu_a", 1);
             this.draw_wall("pu_q");
             this.draw_wall("pu_a");
             this.draw_direction("pu_q");
@@ -623,6 +623,7 @@ class Puzzle_square extends Puzzle {
         } else {
             this.draw_frameBold();
             this.draw_surface("pu_q");
+            this.draw_symbol("pu_q", 1);
             this.draw_squareframe("pu_q");
             this.draw_thermo("pu_q");
             this.draw_nobulbthermo("pu_q");
