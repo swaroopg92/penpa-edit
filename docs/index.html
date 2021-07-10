@@ -23,6 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- rest -->
     <script type="text/javascript" src="./js/modes.js"></script>
+    <script type="text/javascript" src="./js/constraints.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/class_p.js"></script>
     <script type="text/javascript" src="./js/class_square.js"></script>
@@ -68,6 +69,8 @@
                 <label for="pu_q" class="label" id="pu_q_label">Problem</label>
                 <input type="radio" name="mode_qa" id="pu_a" value=2 />
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
+                <label class="label_mode" id="constraints">Constraints (Beta):</label>
+                <select name="constraints_settings" id="constraints_settings_opt"> </select>
                 <br>
                 <span id="visibility_button0" class="label_mode tooltip">Visibility:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
                 <span id="visibility_button" class="label">ON</span>
@@ -307,20 +310,20 @@
                         </li>
                         <li><span id="ms4">Special 1</span>
                             <ul id="mode_symbolul4">
-                                <li><span id="ms4_battleship">Battleship</span>
+                                <li id="li_battleship"><span id="ms4_battleship">Battleship</span>
                                     <ul>
                                         <li><span id="ms_battleship_B">Black</span></li>
                                         <li><span id="ms_battleship_G">Grey</span></li>
                                         <li><span id="ms_battleship_W">White</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="ms_kakuro">Kakuro</span></li>
-                                <li><span id="ms_tents">&#127794; &#9650; &#8779; &#128031;</span></li>
-                                <li><span id="ms_star">&#10022; &#9734; &#9733;</span></li>
-                                <li><span id="ms_compass">Compass</span></li>
-                                <li><span id="ms_sudokuetc">Sudoku</span></li>
-                                <li><span id="ms_sudokumore">ArrowSums</span></li>
-                                <li><span id="ms_polyomino">Polyomino</span></li>
+                                <li id="li_kakuro"><span id="ms_kakuro">Kakuro</span></li>
+                                <li id="li_tents"><span id="ms_tents">&#127794; &#9650; &#8779; &#128031;</span></li>
+                                <li id="li_star"><span id="ms_star">&#10022; &#9734; &#9733;</span></li>
+                                <li id="li_compass"><span id="ms_compass">Compass</span></li>
+                                <li id="li_sudokuetc"><span id="ms_sudokuetc">Sudoku</span></li>
+                                <li id="li_sudokumore"><span id="ms_sudokumore">ArrowSums</span></li>
+                                <li id="li_polyomino"><span id="ms_polyomino">Polyomino</span></li>
                             </ul>
                         </li>
                         <li><span id="ms5">Special 2</span>

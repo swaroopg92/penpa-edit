@@ -59,6 +59,26 @@ function create() {
     if (sudoku_cookie !== null) {
         document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
     }
+
+    // Populate Constraints list
+    let constraints = document.getElementById('constraints_settings_opt');
+    penpa_constraints['options_groups'].forEach(function(element, index) {
+        let optgroup = document.createElement("optgroup");
+        optgroup.label = element;
+
+        penpa_constraints['options'][element].forEach(function(subelement, subindex) {
+            let opt = document.createElement("option");
+            opt.value = subelement;
+            opt.innerHTML = subelement;
+
+            if (subelement === "all") {
+                opt.setAttribute("selected", true);
+            }
+            optgroup.appendChild(opt);
+        });
+        constraints.appendChild(optgroup);
+    });
+
     pu.redraw();
 }
 

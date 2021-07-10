@@ -140,6 +140,14 @@ onload = function() {
         "Thermo", "Sudoku Arrow"
     ];
 
+    let modes_text = ["Surface", "Wall", "Shape", "Composite",
+        "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
+        "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
+        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
+        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
+        "Thermo", "Sudoku Arrow"
+    ];
+
     let modes_mapping = ["surface", "wall", "symbol", "combi",
         "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4",
@@ -1787,7 +1795,7 @@ onload = function() {
     for (var i = 0; i < modes.length; i++) {
         var option = document.createElement("option");
         option.value = modes[i];
-        option.text = modes[i];
+        option.text = modes_text[i];
         if (this.usertab_choices) {
 
             // Load the author defined tab settings if any
@@ -1884,6 +1892,41 @@ onload = function() {
             setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
+        }
+    }
+
+    document.getElementById("constraints_settings_opt").onchange = function() {
+        let current_constraint = document.getElementById("constraints_settings_opt").value;
+        if (current_constraint === "all") {
+            // Display the mode break line
+            document.getElementById("mode_break").style.display = "inline";
+            document.getElementById("mode_txt_space").style.display = "inline";
+
+            // Display all modes
+            pu.set_allmodes("inline-block");
+
+        } else {
+            // Remove all modes, default is none
+            pu.set_allmodes();
+
+            // Remove the mode break line
+            document.getElementById("mode_break").style.display = "none";
+            document.getElementById("mode_txt_space").style.display = "none";
+
+            // Display generic ones
+            for (var i of penpa_constraints["setting"]["general"]) {
+                document.getElementById(i).style.display = "inline-block";
+            }
+
+            // Display only the selected ones
+            for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
+                document.getElementById(i).style.display = "inline-block";
+            }
+
+            // set the mode
+
+
+            // set the submode
         }
     }
 };

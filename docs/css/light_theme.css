@@ -24,6 +24,7 @@
     --pinkLight: #ffb3ff;
     --purpleLight: #cc99ff;
     --red: #ff0000;
+    --redDark: #dd0000;
     --redLight: #ffa3a3;
     --transparentBlack: rgba(0, 0, 0, 0);
     --transparentWhite: rgba(255, 255, 255, 0);
@@ -749,7 +750,7 @@ body textarea {
     border-radius: 5px 5px 0px 0px;
 }
 
-#float-key-header-lb{
+#float-key-header-lb {
     vertical-align: middle;
 }
 
@@ -1315,4 +1316,11 @@ sup {
     vertical-align: top;
     width: 30px;
     border: none;
+}
+
+#constraints_settings_opt {
+    padding: 4px;
+    border: 2px solid var(--redDark);
+    border-radius: 3px;
+    text-align-last: center;
 }
