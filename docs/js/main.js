@@ -1895,6 +1895,13 @@ onload = function() {
         }
     }
 
+    $(document).ready(function() {
+        $('#constraints_settings_opt').chosen({
+            disable_search_threshold: 10,
+            no_results_text: "Oops, nothing found!"
+        });
+    });
+
     document.getElementById("constraints_settings_opt").onchange = function() {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
         if (current_constraint === "all") {

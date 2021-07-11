@@ -1408,10 +1408,3 @@ sup {
     width: 30px;
     border: none;
 }
-
-#constraints_settings_opt {
-    padding: 4px;
-    border: 2px solid var(--redDark);
-    border-radius: 3px;
-    text-align-last: center;
-}

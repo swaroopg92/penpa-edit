@@ -3,7 +3,7 @@ const penpa_constraints = {
     'options': {
         'general': ['all'],
         'sudoku': ['classic', 'arrow', 'thermo'],
-        'puzzle': []
+        'puzzle': ['slitherlink']
     },
     'setting': {
         'all': [],
