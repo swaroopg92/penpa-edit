@@ -41,7 +41,9 @@ const penpa_modes = {
             'cage10', 'cage7', 'cage15', 'cage16',
             'sudoku1', 'sudoku2', 'sudoku8', 'sudoku3', 'sudoku9', 'sudoku10'
         ],
-        'li': ['battleship', 'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino'],
+        'li': ['battleship', 'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
+            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi'
+        ],
         'symmode': ['content'],
         'combimode': ['content'],
         'customcolor': ['custom_color_lb', 'custom_color_opt'],
