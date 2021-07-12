@@ -2408,6 +2408,22 @@ class Puzzle {
     subcombimode(mode) {
         this.mode[this.mode.qa].combi[0] = mode;
         document.getElementById("combimode_content").innerHTML = mode;
+        if (document.getElementById("custom_color_opt").value === "2") {
+            // set the custom color to default
+            switch (mode) {
+                case "linex":
+                case "lineox":
+                case "edgex":
+                case "edgexoi":
+                case "yajilin":
+                case "hashi":
+                    $("#colorpicker_special").spectrum("set", Color.GREEN);
+                    break;
+                case "edgesub":
+                    $("#colorpicker_special").spectrum("set", Color.GREY);
+                    break;
+            }
+        }
         this.type = this.type_set();
         this.redraw();
     }
