@@ -16,6 +16,35 @@ onload = function() {
     }
     this.ondown_key = ondown_key;
 
+    // Declare custom color picker
+    $(colorpicker_special).spectrum({
+        type: "component",
+        preferredFormat: "hex",
+        showInput: true,
+        chooseText: "OK",
+        // cancelText: "No way",
+        // showAlpha: true,
+        // allowAlpha: true,
+        // allowEmpty: true,
+        togglePaletteOnly: true,
+        togglePaletteMoreText: 'more',
+        togglePaletteLessText: 'less',
+        showPalette: true,
+        hideAfterPaletteSelect: true,
+        maxSelectionSize: 8,
+        showSelectionPalette: true,
+        palette: [
+            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+            ["#00008b", "#187bcd", "#c0e0ff", "#3085d6", "#eecab1", "#208020", "#4c9900", "#b3ffb3"],
+            ["#ffcc80", "#777777", "#b3b3b3", "#ffa3a3", "#ffffa3", "#f0f0f0", "#ffb3ff", "#cc99ff"]
+        ],
+        localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
+    });
+
     boot();
 
     document.addEventListener("beforeunload", function(eve) {
@@ -1811,34 +1840,6 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
-    });
-
-    $(colorpicker_special).spectrum({
-        type: "component",
-        preferredFormat: "hex",
-        showInput: true,
-        chooseText: "OK",
-        // cancelText: "No way",
-        // showAlpha: true,
-        // allowAlpha: true,
-        // allowEmpty: true,
-        togglePaletteOnly: true,
-        togglePaletteMoreText: 'more',
-        togglePaletteLessText: 'less',
-        showPalette: true,
-        hideAfterPaletteSelect: true,
-        maxSelectionSize: 8,
-        showSelectionPalette: true,
-        palette: [
-            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
-            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
-            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
-            ["#00008b", "#187bcd", "#c0e0ff", "#3085d6", "#eecab1", "#208020", "#4c9900", "#b3ffb3"],
-            ["#ffcc80", "#777777", "#b3b3b3", "#ffa3a3", "#ffffa3", "#f0f0f0", "#ffb3ff", "#cc99ff"]
-        ],
-        localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
 
     // Adding on change events for general settings
