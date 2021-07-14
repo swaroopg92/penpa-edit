@@ -931,6 +931,21 @@ function advancecontrol_off(loadtype) {
 
 function advancecontrol_on() {
     pu.erase_buttons();
+
+    // Set the solve mode
+    if (pu.mmode === "solve") {
+        set_solvemode();
+
+        // answer check then reset the title
+        if (pu.solution !== "") {
+            set_solvemodetitle();
+        }
+
+        // Set the contest mode
+        if (pu.undoredo_disable) {
+            set_contestmode();
+        }
+    }
 }
 
 function ResetCheck() {
@@ -1672,8 +1687,7 @@ function load(urlParam) {
                 // document.getElementById("pu_a_label").style.marginLeft = "6px";
                 // document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-                document.getElementById("title").classList.add("info");
+                set_solvemodetitle();
             }
 
             if (rtext[7] !== "undefined") {
@@ -1765,8 +1779,7 @@ function load(urlParam) {
             // document.getElementById("pu_a_label").style.marginLeft = "6px";
             // document.getElementById("pu_a_label").innerHTML = "Check Solution";
             // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-            document.getElementById("title").classList.add("info");
+            set_solvemodetitle();
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings
@@ -2321,6 +2334,11 @@ function set_contestmode() {
     document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
     pu.undoredo_disable = true;
     pu.comp = true;
+}
+
+function set_solvemodetitle() {
+    document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
+    document.getElementById("title").classList.add("info");
 }
 
 function isEmpty(obj) {
