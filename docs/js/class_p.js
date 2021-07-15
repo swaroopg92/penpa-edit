@@ -10868,9 +10868,9 @@ class Puzzle {
                         n = 4;
                         th = 45;
                     } else if (this.gridtype === "hex") {
-                        r = 0.5;
+                        r = 0.45;
                         n = 6;
-                        th = 30;
+                        th = 30 + this.theta;
                     } else if (this.gridtype === "tri") {
                         r = 0.5;
                         n = 3;
