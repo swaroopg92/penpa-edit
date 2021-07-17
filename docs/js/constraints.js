@@ -4,19 +4,18 @@ const penpa_constraints = {
         "general": ["all"],
         "sudoku": [
             "classic",
-            "even",
-            "odd",
+            "odd even",
             "arrow",
             "thermo",
             "little killer",
             "killer",
+            "difference",
+            "consecutive",
             "palindrome",
             "sandwich",
             "quadruple",
             "XV",
-            "between line",
-            "consecutive",
-            "kropki"
+            "between line"
         ],
         "puzzle": [
             "slitherlink",
@@ -39,6 +38,21 @@ const penpa_constraints = {
     "setting": {
         "all": [],
         "general": ["input_sudoku", "rotation", "custom_color_lb", "custom_color_opt"],
+        "classic": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb"
+            ],
+            "modeset": ["sudoku"],
+            "submodeset": ["1"]
+        },
+        "odd even": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_circle", "ms1_square", "li_circle_L", "li_square_L", "li_square", "li_circle"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "circle_L"]
+        },
         "arrow": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
@@ -48,13 +62,6 @@ const penpa_constraints = {
             "modeset": ["sudoku", "symbol", "special"],
             "submodeset": ["1", "sudokumore", "arrows"]
         },
-        "classic": {
-            "show": ["mo_surface_lb",
-                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb"
-            ],
-            "modeset": ["sudoku"],
-            "submodeset": ["1"]
-        },
         "thermo": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
@@ -62,6 +69,39 @@ const penpa_constraints = {
             ],
             "modeset": ["sudoku", "special"],
             "submodeset": ["1", "thermo"]
+        },
+        "little killer": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms3", "li_arrow_eight"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "arrow_eight"]
+        },
+        "killer": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_cage_lb", "sub_cage1_lb", "sub_cage2_lb",
+                "mo_number_lb", "sub_number11_lb", "sub_number3_lb"
+            ],
+            "modeset": ["sudoku", "number"],
+            "submodeset": ["1", "11"]
+        },
+        "difference": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_circle", "li_circle", "li_circle_SS"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "circle_SS"]
+        },
+        "consecutive": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_circle", "li_circle_SS", "ms1_bars", "li_circle", "li_bars", "ul_bars"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "circle_SS"]
         },
         "slitherlink": {
             "show": ["mo_surface_lb",
