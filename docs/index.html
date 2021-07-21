@@ -11,9 +11,7 @@
     <link href="./css/light_theme.css" rel="stylesheet" type="text/css" id="color_theme">
     <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
     <link href="./css/spectrum.css" rel="stylesheet" type="text/css">
-    <link href="./css/prism.css" rel="stylesheet" type="text/css">
-    <link href="./css/chosen.css" rel="stylesheet" type="text/css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
+    <link href="./css/select2.css" rel="stylesheet" type="text/css">
     <!-- SCRIPTS -->
     <!-- libs -->
     <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
@@ -22,11 +20,7 @@
     <script type="text/javascript" src="./js/libs/vanillaSelectBox.js"></script>
     <script type="text/javascript" src="./js/libs/zlib.js"></script>
     <script type="text/javascript" src="./js/libs/spectrum.js"></script>
-    <script type="text/javascript" src="./js/libs/fabric.min.js"></script>
-    <script type="text/javascript" src="./js/libs/chosen.jquery.js"></script>
-    <script type="text/javascript" src="./js/libs/prism.js"></script>
-    <script type="text/javascript" src="./js/libs/init.js"></script>
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+    <script type="text/javascript" src="./js/libs/select2.full.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- rest -->
     <script type="text/javascript" src="./js/modes.js"></script>
@@ -79,15 +73,15 @@
                 <label class="label_mode" id="constraints">Constraints (Beta):</label>
                 <select name="constraints_settings" id="constraints_settings_opt"> </select>
                 <br>
-                <span id="visibility_button0" class="label_mode tooltip">Visibility:<span id="visibility_text" class="tooltiptext">To visualize solution in the Problem mode</span></span>
+                <span id="visibility_button0" class="label_mode tooltip">Visibility:</span>
                 <span id="visibility_button" class="label">ON</span>
-                <span id="panel_button0" class="label_mode tooltip">Panel:<span id="panel_text" class="tooltiptext">Panel for Shape and Number Mode</span></span>
+                <span id="panel_button0" class="label_mode tooltip">Panel:</span>
                 <span id="panel_button" class="label">OFF</span>
-                <span id="edge_button0" class="label_mode tooltip">Border:<span id="border_text" class="tooltiptext">To enter numbers/symbols on edges/corners of the grid</span></span>
+                <span id="edge_button0" class="label_mode tooltip">Border:</span>
                 <span id="edge_button" class="label">OFF</span>
-                <span id="reload_button0" class="label_mode tooltip">Reload:<span id="reload_text" class="tooltiptext">Ask confirmation to reload or close the page?</span></span>
+                <span id="reload_button0" class="label_mode tooltip">Reload:</span>
                 <span id="reload_button" class="label">OFF</span>
-                <span id="advance_button0" class="label_mode tooltip">PenpaLite:<span id="penpalite_text" class="tooltiptext">Switch between Lite/Full Controls</span></span>
+                <span id="advance_button0" class="label_mode tooltip">PenpaLite:</span>
                 <span id="advance_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
@@ -103,21 +97,21 @@
                 <input type="radio" name="mode" id="mo_cage" />
                 <label for="mo_cage" class="label" id="mo_cage_lb">Cage</label>
                 <input type="radio" name="mode" id="mo_board" />
-                <label for="mo_board" class="label_option" id="mo_board_lb">Box</label>
+                <label for="mo_board" class="label" id="mo_board_lb">Box</label>
                 <input type="radio" name="mode" id="mo_move" />
-                <label for="mo_move" class="label_option" id="mo_move_lb">Move</label>
+                <label for="mo_move" class="label" id="mo_move_lb">Move</label>
                 <br id="mode_break">
                 <label class="label_mode" id="mode_txt_space">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
                 <input type="radio" name="mode" id="mo_number" />
                 <label for="mo_number" class="label" id="mo_number_lb">Number</label>
                 <input type="radio" name="mode" id="mo_sudoku" />
-                <label for="mo_sudoku" class="label_option" id="mo_sudoku_lb">Sudoku</label>
+                <label for="mo_sudoku" class="label" id="mo_sudoku_lb">Sudoku</label>
                 <input type="radio" name="mode" id="mo_symbol" />
                 <label for="mo_symbol" class="label" id="mo_symbol_lb">Shape</label>
                 <input type="radio" name="mode" id="mo_special" />
                 <label for="mo_special" class="label" id="mo_special_lb">Special</label>
                 <input type="radio" name="mode" id="mo_combi" />
-                <label for="mo_combi" class="label_option" id="mo_combi_lb">Composite</label>
+                <label for="mo_combi" class="label" id="mo_combi_lb">Composite</label>
                 <span class="tab" id="tab_selection">
                     <select id="mode_choices" multiple size="0"></select>
                 </span>

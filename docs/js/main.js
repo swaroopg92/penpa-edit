@@ -1896,11 +1896,19 @@ onload = function() {
     }
 
     $(document).ready(function() {
-        $('#constraints_settings_opt').chosen({
-            disable_search_threshold: 5,
-            no_results_text: "Oops, nothing found!",
-            width: "25%"
-        });
+        if (pu.mmode !== "solve") {
+            $('#constraints_settings_opt').select2({
+                'minimumResultsForSearch': Infinity,
+                'width': "25%"
+            });
+        }
+    });
+
+    $(document).on("select2:open", () => {
+        let allFound = document.querySelectorAll(
+            ".select2-container--open .select2-search__field"
+        );
+        allFound[allFound.length - 1].focus();
     });
 
     document.getElementById("constraints_settings_opt").onchange = function() {
@@ -1935,7 +1943,11 @@ onload = function() {
             for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
                 let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
                 let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
+                let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
                 pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                if (styleset !== "") {
+                    pu.mode[pu.mode.qa][modeset][1] = styleset;
+                }
             }
         }
         pu.redraw();

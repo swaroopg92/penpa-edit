@@ -61,6 +61,25 @@ function create() {
     }
 
     // Populate Constraints list
+    add_constraints();
+
+    pu.redraw();
+}
+
+function getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+}
+
+function setCookie(name, value, days) {
+    var d = new Date;
+    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+}
+
+function deleteCookie(name) { setCookie(name, '', -1); }
+
+function add_constraints() {
     let constraints = document.getElementById('constraints_settings_opt');
     penpa_constraints['options_groups'].forEach(function(element, index) {
         let optgroup = document.createElement("optgroup");
@@ -78,22 +97,7 @@ function create() {
         });
         constraints.appendChild(optgroup);
     });
-
-    pu.redraw();
 }
-
-function getCookie(name) {
-    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return v ? v[2] : null;
-}
-
-function setCookie(name, value, days) {
-    var d = new Date;
-    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
-    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
-}
-
-function deleteCookie(name) { setCookie(name, '', -1); }
 
 function create_newboard() {
 
@@ -1732,6 +1736,9 @@ function load(urlParam) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
             }
+
+            // Populate Constraints list
+            add_constraints();
         }
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
@@ -2325,6 +2332,10 @@ function set_solvemode() {
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_opt').style.display = 'none';
+
+    // Constraints
+    document.getElementById('constraints').style.display = 'none';
+    document.getElementById('constraints_settings_opt').style.display = 'none';
 }
 
 function set_contestmode() {
