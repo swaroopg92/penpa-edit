@@ -1502,7 +1502,7 @@ S2.define('select2/selection/base',[
       self.$selection.removeAttr('aria-activedescendant');
       self.$selection.removeAttr('aria-owns');
 
-      self.$selection.trigger('focus');
+      // self.$selection.trigger('focus');
 
       self._detachCloseHandler(container);
     });
