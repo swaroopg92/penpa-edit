@@ -1942,6 +1942,16 @@ onload = function() {
                     pu.mode[pu.mode.qa][modeset][1] = styleset;
                 }
             }
+
+            // Display 1 time Info regarding border setting
+            if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
+                pu.borderwarning = false;
+                Swal.fire({
+                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
+                    timer: 4000,
+                    icon: 'info'
+                })
+            }
         }
         pu.redraw();
     }

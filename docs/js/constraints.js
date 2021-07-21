@@ -35,6 +35,7 @@ const penpa_constraints = {
             // "yajilin"
         ]
     },
+    "border": ["difference", "kropki", "quadruple", "xv"], // puzzle types that involves placing clues on edges and corners
     "setting": {
         "all": [],
         "general": ["input_sudoku", "rotation", "custom_color_lb", "custom_color_opt"],

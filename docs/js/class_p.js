@@ -161,6 +161,7 @@ class Puzzle {
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
+        this.borderwarning = true;
     }
 
     reset() {
