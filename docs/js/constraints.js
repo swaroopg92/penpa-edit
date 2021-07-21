@@ -150,11 +150,13 @@ const penpa_constraints = {
         },
         "between line": {
             "show": ["mo_surface_lb",
-                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb"
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_circle", "li_circle_L", "li_circle",
+                "mo_line_lb", "sub_line1_lb", "sub_line2_lb", "sub_line3_lb"
             ],
-            "modeset": ["sudoku"],
-            "submodeset": ["1"],
-            "styleset": [""],
+            "modeset": ["sudoku", "symbol", "line"],
+            "submodeset": ["1", "circle_L", "2"],
+            "styleset": ["", "", 5],
         },
         "slitherlink": {
             "show": ["mo_surface_lb",
