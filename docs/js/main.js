@@ -177,6 +177,7 @@ onload = function() {
             e.target.id === "savetextarea_pp" ||
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
+            e.target.id === "select2_search" ||
             e.target.id === "saveinforules" ||
             e.target.id === "urlstring") {
             // For input form
@@ -1898,17 +1899,9 @@ onload = function() {
     $(document).ready(function() {
         if (pu.mmode !== "solve") {
             $('#constraints_settings_opt').select2({
-                'minimumResultsForSearch': Infinity,
                 'width': "25%"
             });
         }
-    });
-
-    $(document).on("select2:open", () => {
-        let allFound = document.querySelectorAll(
-            ".select2-container--open .select2-search__field"
-        );
-        allFound[allFound.length - 1].focus();
     });
 
     document.getElementById("constraints_settings_opt").onchange = function() {
