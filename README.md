@@ -440,7 +440,18 @@ Depending on the browser you can update the page without using the cache with "C
 * This function is to provide Penpa-site general settings like theme, custom color etc.
 	* Display Theme: It currently offers only two options (light and dark).
 	* Custom Colors: To enable custom colors in certain modes.
-	* Save Settings: Selecting yes, will save the theme, tab settings, reload button status, gridtype in the browser cookies. When the user returns to fresh Penpa page, these settings are recovered.
+	* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
+		* Dynamic - Upto 5 digits its larger size and then it becomes small.
+		* Large - All digits are large.
+		* Small - All digits are small.
+	* Save Settings: Selecting yes, will save the following items in the browser cookies:
+		* Theme
+		* Tab settings
+		* Reload button status
+		* Gridtype
+		* Displaysize
+		* Sudoku PencilMarks setting
+		When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.
