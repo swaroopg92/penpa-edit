@@ -9197,6 +9197,11 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
+                        if (document.getElementById("starbattle_settings_opt").value === "3") {
+                            num = this.coord_p_edgex_star(x, y, 0);
+                        } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                            num = this.coord_p_edgex_star(x, y, 0.2);
+                        }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
                     }
                     break;
