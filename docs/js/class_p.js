@@ -157,7 +157,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 18];
+        this.version = [2, 26, 1];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;

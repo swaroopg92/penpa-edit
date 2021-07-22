@@ -1,10 +1,20 @@
 ## History
-* 2021/**/** ver 2.25.18
+* 2021/07/21 ver 2.26.1
+	* Implemented Constraints feature in Square grid types.
+	* Added new Sudoku Normal digits position option in Settings. User can select if the digits must be centered or shifted downward to avoid clash with Killer type clues.
+	* Added display size to cookies.
+	* Added Battleship+ to Shape Mode (changes from upstream branch).
+	* Improvements to PenpaLite feature for Contest and Solve mode.
+	* Default custom color of combi (composite) mode fixed.
+	* Improvements to Sudoku Solving mode in Hex Grids.
+	* Modified the order of display components for square grid.
+* 2021/06/30 ver 2.25.18
 	* Improved General Settings Display.
 	* Improved Mode Display.
 	* Added Sudoku PencilMarks option.
 	* Added Diagonal equal to sign in Shape -> Shape -> Lines.
 	* Added GR, LG to Surface answer check.
+	* Increased Panel Header Size.
 * 2021/06/24 ver 2.25.17
 	* Implemented PenpaLite feature.
 	* Improvements to Timer (only seconds are updated, 1/10th second is shown when paused or solution is complete).

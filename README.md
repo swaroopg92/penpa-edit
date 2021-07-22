@@ -55,6 +55,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Border: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
 * Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
 * PenpaLite: Turning on this button will remove all the non-preferred modes from the display thereby simplfiying the display. The preferred modes are determined through tab setting. Select your preferrable modes under "Tab/↵" and then turn "ON" PenpaLite.
+* Constraints (Beta): This feature is to aid puzzle constructors to find certain elements quickly for well known puzzle types. [ Note - I will frequently add new types but if you have certain genre in mind, you can send a request to penpaplus@gmail.com or contact via other options available through "i" information button on the top right]
 
 ## Current functions
 
@@ -444,6 +445,9 @@ Depending on the browser you can update the page without using the cache with "C
 		* Dynamic - Upto 5 digits its larger size and then it becomes small.
 		* Large - All digits are large.
 		* Small - All digits are small.
+	* Sudoku Normal: User preference for "Normal" digits in "Sudoku" mode.
+		* Centered - All digits are centered to the cell.
+		* Bottom - All digits are shifted downward and close to the bottom of the cell. (Useful to avoid overlap with Killer clues)
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
 		* Theme
 		* Tab settings
@@ -451,6 +455,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Gridtype
 		* Displaysize
 		* Sudoku PencilMarks setting
+		* Sudoku Normal setting
 		When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch
