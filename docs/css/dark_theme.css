@@ -1296,7 +1296,8 @@ input[type=number] {
 #custom_color_lb,
 #save_settings_lb,
 #sudoku_settings_lb,
-#sudoku_settings_normal_lb {
+#sudoku_settings_normal_lb,
+#starbattle_settings_lb {
     color: var(--white);
 }
 

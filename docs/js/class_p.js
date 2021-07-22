@@ -9249,6 +9249,11 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
+                    if (document.getElementById("starbattle_settings_opt").value === "3") {
+                        num = this.coord_p_edgex_star(x, y, 0);
+                    } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                        num = this.coord_p_edgex_star(x, y, 0.2);
+                    }
                     this.re_combi_star_downright(num);
                     break;
                 case "mines":

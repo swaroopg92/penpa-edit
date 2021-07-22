@@ -67,6 +67,10 @@ function create() {
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
+    let starbattle_dots_cookie = getCookie("starbattle_dots");
+    if (starbattle_dots_cookie !== null) {
+        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
+    }
 
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
@@ -1608,6 +1612,10 @@ function load(urlParam) {
     let sudoku_normal_cookie = getCookie("sudoku_centre_size");
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
+    }
+    let starbattle_dots_cookie = getCookie("starbattle_dots");
+    if (starbattle_dots_cookie !== null) {
+        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
 
     if (rtext_para[18] && rtext_para[18] !== "") {

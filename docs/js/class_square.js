@@ -348,6 +348,26 @@ class Puzzle_square extends Puzzle {
         return parseInt(num);
     }
 
+    coord_p_edgex_star(x, y, hitboxfactor) {
+        var min0, min = 10e6;
+        var num = 0;
+        for (var i = 0; i < this.point.length; i++) {
+            if (this.type.indexOf(this.point[i].type) != -1) {
+                min0 = (x - this.point[i].x) ** 2 + (y - this.point[i].y) ** 2;
+                if (min0 < min) {
+                    if (this.point[i].type === 1 || this.point[i].type === 2 || this.point[i].type === 3) {
+                        if (min0 > (hitboxfactor * this.size) ** 2) {
+                            break;
+                        }
+                    }
+                    min = min0;
+                    num = i;
+                }
+            }
+        }
+        return parseInt(num);
+    }
+
     rotate_left() {
         this.theta = (this.theta - 90 * this.reflect[0] * this.reflect[1] + 360) % 360;
         this.point_move(0, 0, -90);
