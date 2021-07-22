@@ -3398,6 +3398,13 @@ class Puzzle {
                             }
                         }
                         break;
+                    case "battleship_B+":
+                        if (document.getElementById("sol_battleship").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "D+");
+                            }
+                        }
+                        break;
                     case "star": //any star
                         if (document.getElementById("sol_star").checked === true || checkall) {
                             if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
@@ -3603,8 +3610,10 @@ class Puzzle {
                             break;
                         case "battleship":
                             for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "battleship_B" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
+                                if ((this[pu].symbol[i][1] === "battleship_B" &&
+                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) ||
+                                    (this[pu].symbol[i][1] === "battleship_B+" &&
+                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4)) {
                                     temp_sol.push(i);
                                 }
                             }
