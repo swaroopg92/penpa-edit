@@ -157,10 +157,11 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 25, 18];
+        this.version = [2, 26, 1];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
+        this.borderwarning = true;
     }
 
     reset() {
@@ -3421,6 +3422,13 @@ class Puzzle {
                             }
                         }
                         break;
+                    case "battleship_B+":
+                        if (document.getElementById("sol_battleship").checked === true || checkall) {
+                            if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                sol[5].push(i + "," + this[pu].symbol[i][0] + "D+");
+                            }
+                        }
+                        break;
                     case "star": //any star
                         if (document.getElementById("sol_star").checked === true || checkall) {
                             if (this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
@@ -3626,8 +3634,10 @@ class Puzzle {
                             break;
                         case "battleship":
                             for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "battleship_B" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) {
+                                if ((this[pu].symbol[i][1] === "battleship_B" &&
+                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) ||
+                                    (this[pu].symbol[i][1] === "battleship_B+" &&
+                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4)) {
                                     temp_sol.push(i);
                                 }
                             }
@@ -9210,6 +9220,11 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
+                        if (document.getElementById("starbattle_settings_opt").value === "3") {
+                            num = this.coord_p_edgex_star(x, y, 0);
+                        } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                            num = this.coord_p_edgex_star(x, y, 0.2);
+                        }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
                     }
                     break;
@@ -9262,6 +9277,11 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
+                    if (document.getElementById("starbattle_settings_opt").value === "3") {
+                        num = this.coord_p_edgex_star(x, y, 0);
+                    } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                        num = this.coord_p_edgex_star(x, y, 0.2);
+                    }
                     this.re_combi_star_downright(num);
                     break;
                 case "mines":
@@ -11242,5 +11262,44 @@ class Puzzle {
     get_customcolor() {
         let customcolor = $("#colorpicker_special").spectrum("get");
         return "rgba(" + customcolor._r + "," + customcolor._g + "," + customcolor._b + "," + customcolor._a + ")";
+    }
+
+    set_allmodes(displaytype = "none") {
+        for (var i of penpa_modes["square"]['mode']) {
+            document.getElementById("mo_" + i + "_lb").style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['sub']) {
+            document.getElementById("sub_" + i + "_lb").style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['customcolor']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['ms']) {
+            document.getElementById("ms_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['ms1']) {
+            document.getElementById("ms1_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['ms3']) {
+            document.getElementById("ms3_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['shapemodes']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['combisub']) {
+            document.getElementById("combisub_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['subcombi']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['top_buttons']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['exceptions']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['li']) {
+            document.getElementById("li_" + i).style.display = displaytype;
+        }
     }
 }

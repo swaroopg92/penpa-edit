@@ -348,6 +348,26 @@ class Puzzle_square extends Puzzle {
         return parseInt(num);
     }
 
+    coord_p_edgex_star(x, y, hitboxfactor) {
+        var min0, min = 10e6;
+        var num = 0;
+        for (var i = 0; i < this.point.length; i++) {
+            if (this.type.indexOf(this.point[i].type) != -1) {
+                min0 = (x - this.point[i].x) ** 2 + (y - this.point[i].y) ** 2;
+                if (min0 < min) {
+                    if (this.point[i].type === 1 || this.point[i].type === 2 || this.point[i].type === 3) {
+                        if (min0 > (hitboxfactor * this.size) ** 2) {
+                            break;
+                        }
+                    }
+                    min = min0;
+                    num = i;
+                }
+            }
+        }
+        return parseInt(num);
+    }
+
     rotate_left() {
         this.theta = (this.theta - 90 * this.reflect[0] * this.reflect[1] + 360) % 360;
         this.point_move(0, 0, -90);
@@ -1400,7 +1420,7 @@ class Puzzle_square extends Puzzle {
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
 
                     // if some numbers present in the corner (like Killer sudoku etc) then displace the numbers slightly lower to avoid overlap
-                    if (Object.keys(this["pu_q"].numberS).length != 0) {
+                    if (document.getElementById("sudoku_settings_normal_opt").value === "2") {
                         this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.16 * factor * this.size, this.size * 0.8);
                     } else {
                         this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.06 * factor * this.size, this.size * 0.8);
@@ -2235,6 +2255,29 @@ class Puzzle_square extends Puzzle {
                 ctx.strokeStyle = Color.BLACK;
                 ctx.lineWidth = 2;
                 this.draw_battleship(ctx, num, x, y);
+                break;
+            case "battleship_B+":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
+                    this.draw_battleshipplus(ctx, num, x, y);
+                } else {
+                    set_circle_style(ctx, 2);
+                    this.draw_battleshipplus(ctx, num, x, y);
+                }
+                break;
+            case "battleship_G+":
+                set_circle_style(ctx, 3);
+                ctx.fillStyle = Color.GREY;
+                this.draw_battleshipplus(ctx, num, x, y);
+                break;
+            case "battleship_W+":
+                ctx.setLineDash([]);
+                ctx.lineCap = "butt";
+                ctx.fillStyle = Color.TRANSPARENTBLACK;
+                ctx.strokeStyle = Color.BLACK;
+                ctx.lineWidth = 2;
+                this.draw_battleshipplus(ctx, num, x, y);
                 break;
             case "angleloop":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
@@ -3498,6 +3541,39 @@ class Puzzle_square extends Puzzle {
         ctx.lineTo(x + r * Math.sqrt(2) * pu.size * Math.sin(th + 45 / 180 * Math.PI), y - r * Math.sqrt(2) * pu.size * Math.cos(th + 45 / 180 * Math.PI));
         ctx.lineTo(x + r * Math.sqrt(2) * pu.size * Math.sin(th + 135 / 180 * Math.PI), y - r * Math.sqrt(2) * pu.size * Math.cos(th + 135 / 180 * Math.PI));
         ctx.lineTo(x + r * pu.size * Math.sin(th + Math.PI), y - r * pu.size * Math.cos(th + Math.PI));
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    draw_battleshipplus(ctx, num, x, y) {
+        var r = 0.4;
+        var th;
+        switch (num) {
+            case 1:
+                this.draw_battleship_tipplus(ctx, x, y, 0);
+                break;
+            case 2:
+                this.draw_battleship_tipplus(ctx, x, y, 90);
+                break;
+            case 3:
+                this.draw_battleship_tipplus(ctx, x, y, 180);
+                break;
+            case 4:
+                this.draw_battleship_tipplus(ctx, x, y, 270);
+                break;
+        }
+    }
+
+    draw_battleship_tipplus(ctx, x, y, th) {
+        var r = 0.36;
+        th = this.rotate_theta(th);
+        ctx.beginPath();
+        ctx.arc(x, y, r * pu.size, Math.PI * 0.5 + th, Math.PI * 1.0 + th, false);
+        ctx.moveTo(x - r * pu.size * Math.sin(th), y + r * pu.size * Math.cos(th));
+        ctx.lineTo(x + r * Math.sqrt(2) * pu.size * Math.sin(-th + 45 / 180 * Math.PI), y + r * Math.sqrt(2) * pu.size * Math.cos(-th + 45 / 180 * Math.PI));
+        ctx.lineTo(x + r * Math.sqrt(2) * pu.size * Math.sin(-th + 135 / 180 * Math.PI), y + r * Math.sqrt(2) * pu.size * Math.cos(-th + 135 / 180 * Math.PI));
+        ctx.lineTo(x + r * Math.sqrt(2) * pu.size * Math.sin(-th + 225 / 180 * Math.PI), y + r * Math.sqrt(2) * pu.size * Math.cos(-th + 225 / 180 * Math.PI));
+        ctx.lineTo(x - r * pu.size * Math.sin(-th + 0.5 * Math.PI), y - r * pu.size * Math.cos(-th + 0.5 * Math.PI));
         ctx.fill();
         ctx.stroke();
     }

@@ -29,6 +29,10 @@ function create() {
     if (gridtype == null) {
         gridtype = document.getElementById("gridtype").value;
     }
+    let displaysize_cookie = getCookie("displaysize");
+    if (displaysize_cookie !== null) {
+        document.getElementById("nb_size3").value = displaysize_cookie;
+    }
     pu = make_class(gridtype);
     pu.reset_frame();
 
@@ -55,10 +59,28 @@ function create() {
             advancecontrol_onoff("url");
         }
     }
-    let sudoku_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    let sudoku_center_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_center_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
     }
+    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_normal_cookie !== null) {
+        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
+    }
+    let starbattle_dots_cookie = getCookie("starbattle_dots");
+    if (starbattle_dots_cookie !== null) {
+        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
+    }
+
+    // Populate Constraints list
+    if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+        add_constraints();
+    } else {
+        // Constraints
+        document.getElementById('constraints').style.display = 'none';
+        document.getElementById('constraints_settings_opt').style.display = 'none';
+    }
+
     pu.redraw();
 }
 
@@ -74,6 +96,26 @@ function setCookie(name, value, days) {
 }
 
 function deleteCookie(name) { setCookie(name, '', -1); }
+
+function add_constraints() {
+    let constraints = document.getElementById('constraints_settings_opt');
+    penpa_constraints['options_groups'].forEach(function(element, index) {
+        let optgroup = document.createElement("optgroup");
+        optgroup.label = element;
+
+        penpa_constraints['options'][element].forEach(function(subelement, subindex) {
+            let opt = document.createElement("option");
+            opt.value = subelement;
+            opt.innerHTML = subelement;
+
+            if (subelement === "all") {
+                opt.setAttribute("selected", true);
+            }
+            optgroup.appendChild(opt);
+        });
+        constraints.appendChild(optgroup);
+    });
+}
 
 function create_newboard() {
 
@@ -94,6 +136,15 @@ function create_newboard() {
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
+
+        // constraints
+        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+            document.getElementById('constraints').style.display = 'inline';
+            $('select').toggleSelect2(true);
+        } else {
+            $('select').toggleSelect2(false);
+            document.getElementById('constraints').style.display = 'none';
+        }
     } else {
         Swal.fire({
             title: 'Swaroop says:',
@@ -1554,9 +1605,17 @@ function load(urlParam) {
     if (reload_cookie !== null) {
         document.getElementById('reload_button').textContent = reload_cookie;
     }
-    let sudoku_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    let sudoku_center_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_center_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
+    }
+    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_normal_cookie !== null) {
+        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
+    }
+    let starbattle_dots_cookie = getCookie("starbattle_dots");
+    if (starbattle_dots_cookie !== null) {
+        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
 
     if (rtext_para[18] && rtext_para[18] !== "") {
@@ -1725,6 +1784,15 @@ function load(urlParam) {
                 for (var i = 0; i < settingstatus.length; i++) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
+            }
+
+            // Populate Constraints list
+            if (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro") {
+                add_constraints();
+            } else {
+                // Constraints
+                document.getElementById('constraints').style.display = 'none';
+                document.getElementById('constraints_settings_opt').style.display = 'none';
             }
         }
     } else if (paramArray.m === "solve") { //solve_mode
@@ -2318,6 +2386,10 @@ function set_solvemode() {
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_opt').style.display = 'none';
+
+    // Constraints
+    document.getElementById('constraints').style.display = 'none';
+    document.getElementById('constraints_settings_opt').style.display = 'none';
 }
 
 function set_contestmode() {
