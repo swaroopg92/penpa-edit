@@ -1995,24 +1995,47 @@ class Puzzle {
         } else if (document.getElementById("nb_type2").checked) {
             var canvastext = resizedCanvas.toDataURL("image/jpeg");
         } else if (document.getElementById("nb_type3").checked) {
-            var svg_canvas = new fabric.Canvas()
-            var imginstance = new fabric.Image(this.canvas, {
-                left: 0,
-                top: 0,
-                width: this.canvas.width,
-                height: this.canvas.height
-            });
-            svg_canvas.add(imginstance);
-            var canvastext = svg_canvas.toSVG({
-                width: "100%",
-                height: "100%",
-                viewBox: {
-                    x: 0,
-                    y: 0,
-                    width: this.canvas.width,
-                    height: this.canvas.height
+            var svg_canvas = new C2S(this.canvasx, this.canvasy);
+            svg_canvas.text = function(text, x, y, width = 1e4) {
+                var fontsize = parseFloat(this.font.split("px")[0]);
+                this.strokeText(text, x, y + 0.28 * fontsize, width);
+                this.fillText(text, x, y + 0.28 * fontsize, width);
+            };
+            svg_canvas.arrow = function(startX, startY, endX, endY, controlPoints) {
+                var dx = endX - startX;
+                var dy = endY - startY;
+                var len = Math.sqrt(dx * dx + dy * dy);
+                var sin = dy / len;
+                var cos = dx / len;
+                var a = [];
+                a.push(0, 0);
+                for (var i = 0; i < controlPoints.length; i += 2) {
+                    var x = controlPoints[i];
+                    var y = controlPoints[i + 1];
+                    a.push(x < 0 ? len + x : x, y);
                 }
-            });
+                a.push(len, 0);
+                for (var i = controlPoints.length; i > 0; i -= 2) {
+                    var x = controlPoints[i - 2];
+                    var y = controlPoints[i - 1];
+                    a.push(x < 0 ? len + x : x, -y);
+                }
+                a.push(0, 0);
+                for (var i = 0; i < a.length; i += 2) {
+                    var x = a[i] * cos - a[i + 1] * sin + startX;
+                    var y = a[i] * sin + a[i + 1] * cos + startY;
+                    if (i === 0) this.moveTo(x, y);
+                    else this.lineTo(x, y);
+                }
+            };
+
+            var old_canvas = this.ctx;
+            this.ctx = svg_canvas;
+
+            this.redraw();
+
+            this.ctx = old_canvas;
+            return svg_canvas.getSerializedSvg(true);
         }
         this.mode[this.mode.qa].edit_mode = mode;
 
