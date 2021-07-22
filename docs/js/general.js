@@ -29,6 +29,10 @@ function create() {
     if (gridtype == null) {
         gridtype = document.getElementById("gridtype").value;
     }
+    let displaysize_cookie = getCookie("displaysize");
+    if (displaysize_cookie !== null) {
+        document.getElementById("nb_size3").value = displaysize_cookie;
+    }
     pu = make_class(gridtype);
     pu.reset_frame();
 
