@@ -1451,7 +1451,7 @@ function import_url() {
     if (urlstring !== "") {
         if (urlstring.indexOf("/penpa-edit/?") !== -1) {
             urlstring = urlstring.split("/penpa-edit/?")[1];
-            load(urlstring);
+            load(urlstring, 'local');
             document.getElementById("modal-load").style.display = 'none';
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
                 selectBox.setValue(JSON.parse(this.usertab_choices));
@@ -1532,7 +1532,7 @@ function load_license() {
     window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
-function load(urlParam) {
+function load(urlParam, type = 'url') {
     var param = urlParam.split('&');
     var paramArray = [];
 
@@ -1725,7 +1725,7 @@ function load(urlParam) {
         }
 
         if (paramArray.l === "solvedup") { // Basically clone of solve mode
-            set_solvemode();
+            set_solvemode(type);
 
             // Decrypt a
             if (paramArray.a) {
@@ -1792,11 +1792,15 @@ function load(urlParam) {
             } else {
                 // Constraints
                 document.getElementById('constraints').style.display = 'none';
-                document.getElementById('constraints_settings_opt').style.display = 'none';
+                if (type === "local") {
+                    $('select').toggleSelect2(false);
+                } else {
+                    document.getElementById('constraints_settings_opt').style.display = 'none';
+                }
             }
         }
     } else if (paramArray.m === "solve") { //solve_mode
-        set_solvemode()
+        set_solvemode(type)
         pu.mode.qa = "pu_a";
 
         // mode initialization
@@ -2354,7 +2358,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
     }
 }
 
-function set_solvemode() {
+function set_solvemode(type = "url") {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
     document.getElementById("title").innerHTML = "Solver mode"
@@ -2389,7 +2393,11 @@ function set_solvemode() {
 
     // Constraints
     document.getElementById('constraints').style.display = 'none';
-    document.getElementById('constraints_settings_opt').style.display = 'none';
+    if (type === "local") {
+        $('select').toggleSelect2(false);
+    } else {
+        document.getElementById('constraints_settings_opt').style.display = 'none';
+    }
 }
 
 function set_contestmode() {
