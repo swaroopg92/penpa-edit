@@ -59,9 +59,13 @@ function create() {
             advancecontrol_onoff("url");
         }
     }
-    let sudoku_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    let sudoku_center_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_center_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
+    }
+    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_normal_cookie !== null) {
+        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
     pu.redraw();
 }
@@ -1558,9 +1562,13 @@ function load(urlParam) {
     if (reload_cookie !== null) {
         document.getElementById('reload_button').textContent = reload_cookie;
     }
-    let sudoku_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    let sudoku_center_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_center_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
+    }
+    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_normal_cookie !== null) {
+        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
 
     if (rtext_para[18] && rtext_para[18] !== "") {

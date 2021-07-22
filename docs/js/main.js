@@ -1880,6 +1880,7 @@ onload = function() {
             deleteCookie("gridtype");
             deleteCookie("sudoku_centre_size");
             deleteCookie("displaysize");
+            deleteCookie("sudoku_normal_size");
         } else if (document.getElementById("save_settings_opt").value === "2") {
             setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
             setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
@@ -1887,6 +1888,7 @@ onload = function() {
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
             setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
         }
     }
 };
