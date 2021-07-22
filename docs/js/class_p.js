@@ -161,6 +161,7 @@ class Puzzle {
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
+        this.borderwarning = true;
     }
 
     reset() {
@@ -11228,5 +11229,44 @@ class Puzzle {
     get_customcolor() {
         let customcolor = $("#colorpicker_special").spectrum("get");
         return "rgba(" + customcolor._r + "," + customcolor._g + "," + customcolor._b + "," + customcolor._a + ")";
+    }
+
+    set_allmodes(displaytype = "none") {
+        for (var i of penpa_modes["square"]['mode']) {
+            document.getElementById("mo_" + i + "_lb").style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['sub']) {
+            document.getElementById("sub_" + i + "_lb").style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['customcolor']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['ms']) {
+            document.getElementById("ms_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['ms1']) {
+            document.getElementById("ms1_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['ms3']) {
+            document.getElementById("ms3_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['shapemodes']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['combisub']) {
+            document.getElementById("combisub_" + i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['subcombi']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['top_buttons']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['exceptions']) {
+            document.getElementById(i).style.display = displaytype;
+        }
+        for (var i of penpa_modes["square"]['li']) {
+            document.getElementById("li_" + i).style.display = displaytype;
+        }
     }
 }

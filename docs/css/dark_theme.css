@@ -769,7 +769,7 @@ body textarea {
     border-radius: 5px 5px 0px 0px;
 }
 
-#float-key-header-lb{
+#float-key-header-lb {
     vertical-align: middle;
 }
 
@@ -1408,4 +1408,27 @@ sup {
     vertical-align: top;
     width: 30px;
     border: none;
+}
+
+.select2-dropdown {
+    font-size: 14px !important;
+}
+
+.select2-container--default .select2-results>.select2-results__options {
+    max-height: 340px !important;
+}
+
+.select2-container--default .select2-selection--single {
+    border: 2px solid #d00 !important;
+    border-radius: 3px !important;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--black) !important;
+    font-size: 14px;
 }

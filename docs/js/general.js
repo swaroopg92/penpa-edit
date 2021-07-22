@@ -67,6 +67,16 @@ function create() {
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
+
+    // Populate Constraints list
+    if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+        add_constraints();
+    } else {
+        // Constraints
+        document.getElementById('constraints').style.display = 'none';
+        document.getElementById('constraints_settings_opt').style.display = 'none';
+    }
+
     pu.redraw();
 }
 
@@ -82,6 +92,26 @@ function setCookie(name, value, days) {
 }
 
 function deleteCookie(name) { setCookie(name, '', -1); }
+
+function add_constraints() {
+    let constraints = document.getElementById('constraints_settings_opt');
+    penpa_constraints['options_groups'].forEach(function(element, index) {
+        let optgroup = document.createElement("optgroup");
+        optgroup.label = element;
+
+        penpa_constraints['options'][element].forEach(function(subelement, subindex) {
+            let opt = document.createElement("option");
+            opt.value = subelement;
+            opt.innerHTML = subelement;
+
+            if (subelement === "all") {
+                opt.setAttribute("selected", true);
+            }
+            optgroup.appendChild(opt);
+        });
+        constraints.appendChild(optgroup);
+    });
+}
 
 function create_newboard() {
 
@@ -102,6 +132,15 @@ function create_newboard() {
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
+
+        // constraints
+        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+            document.getElementById('constraints').style.display = 'inline';
+            $('select').toggleSelect2(true);
+        } else {
+            $('select').toggleSelect2(false);
+            document.getElementById('constraints').style.display = 'none';
+        }
     } else {
         Swal.fire({
             title: 'Swaroop says:',
@@ -1738,6 +1777,15 @@ function load(urlParam) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
             }
+
+            // Populate Constraints list
+            if (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro") {
+                add_constraints();
+            } else {
+                // Constraints
+                document.getElementById('constraints').style.display = 'none';
+                document.getElementById('constraints_settings_opt').style.display = 'none';
+            }
         }
     } else if (paramArray.m === "solve") { //solve_mode
         set_solvemode()
@@ -2330,6 +2378,10 @@ function set_solvemode() {
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_opt').style.display = 'none';
+
+    // Constraints
+    document.getElementById('constraints').style.display = 'none';
+    document.getElementById('constraints_settings_opt').style.display = 'none';
 }
 
 function set_contestmode() {
