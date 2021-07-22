@@ -164,8 +164,7 @@ const penpa_modes = {
         'customcolor': ['custom_color_lb', 'custom_color_opt'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': ['ms0_arrow_fouredge',
-            'li_triright', 'li_trileft', 'msli_degital',
+        'exceptions': ['msli_degital',
             'combili_shaka', 'combili_battleship', 'combili_arrowS',
             'ul_degital', 'ul_bars'
         ]

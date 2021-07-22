@@ -1897,12 +1897,18 @@ onload = function() {
     }
 
     $(document).ready(function() {
-        if (pu.mmode !== "solve") {
+        if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
                 'width': "25%"
             });
         }
     });
+
+    $.fn.toggleSelect2 = function(state) {
+        return this.each(function() {
+            $.fn[state ? 'show' : 'hide'].apply($(this).next('.select2-container'));
+        });
+    };
 
     document.getElementById("constraints_settings_opt").onchange = function() {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
