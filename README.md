@@ -448,6 +448,10 @@ Depending on the browser you can update the page without using the cache with "C
 	* Sudoku Normal: User preference for "Normal" digits in "Sudoku" mode.
 		* Centered - All digits are centered to the cell.
 		* Bottom - All digits are shifted downward and close to the bottom of the cell. (Useful to avoid overlap with Killer clues)
+	* Starbattle Dots: User preference for Right Click dots in Star battle composite mode.
+		* High Range - Default.
+		* Low Range - User needs to click much closer to corners and edges for dots.
+		* Disable - Completely disable the dot feature and only have Star/Cross.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
 		* Theme
 		* Tab settings
