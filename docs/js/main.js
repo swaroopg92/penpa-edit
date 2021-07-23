@@ -1923,9 +1923,21 @@ onload = function() {
             document.getElementById("mode_break").style.display = "inline";
             document.getElementById("mode_txt_space").style.display = "inline";
 
+            // set the default submode
+            for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
+                let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
+                let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
+                let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
+                if (submodeset !== "") {
+                    pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                }
+                if (styleset !== "") {
+                    pu.mode[pu.mode.qa][modeset][1] = styleset;
+                }
+            }
+
             // Display all modes
             pu.set_allmodes("inline-block");
-
         } else {
             // Remove all modes, default is none
             pu.set_allmodes();
@@ -1949,7 +1961,9 @@ onload = function() {
                 let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
                 let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
                 let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
-                pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                if (submodeset !== "") {
+                    pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                }
                 if (styleset !== "") {
                     pu.mode[pu.mode.qa][modeset][1] = styleset;
                 }
