@@ -736,11 +736,12 @@ onload = function() {
                     if (previous_length != user_choices.length) {
                         previous_length = user_choices.length;
                         counter_index = 0; // reset the counter
-                    } else if (counter_index < (previous_length - 1)) {
-                        counter_index++;
+                    } else if (shift_key) { // if SHIFT is held down cycle backward
+                        counter_index--;
                     } else {
-                        counter_index = 0; // reset the counter
+                        counter_index++;
                     }
+                    counter_index %= previous_length
                     let mode_loc = modes.indexOf(user_choices[counter_index]);
                     if (mode_loc < 4) { // Hard coded, '4', Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
                         pu.mode_set(modes_mapping[mode_loc])
