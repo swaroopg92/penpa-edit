@@ -80,6 +80,7 @@ class Panel {
     }
 
     draw_panel() {
+        var canvas_size_setting_constant = 65;
         this.select_close();
         document.getElementById("float-key-board").style.display = "inline";
         document.getElementById("float-key-text").style.display = "none";
@@ -89,7 +90,7 @@ class Panel {
                     this.nxf = 4;
                     this.nyf = 3;
                     this.sizef = 36;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -100,7 +101,7 @@ class Panel {
                     this.nxf = 4;
                     this.nyf = 3;
                     this.sizef = 50;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(65);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -111,7 +112,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 5;
                     this.sizef = 36;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -124,7 +125,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 5;
                     this.sizef = 36;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -137,7 +138,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 5;
                     this.sizef = 36;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -149,7 +150,7 @@ class Panel {
                     this.nxf = 10;
                     this.nyf = 9;
                     this.sizef = 28;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -162,7 +163,7 @@ class Panel {
                     this.nxf = 10;
                     this.nyf = 9;
                     this.sizef = 28;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -175,7 +176,7 @@ class Panel {
                     this.nxf = 10;
                     this.nyf = 9;
                     this.sizef = 28;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -188,7 +189,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 4;
                     this.sizef = 36;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -200,7 +201,7 @@ class Panel {
                     this.nxf = 8;
                     this.nyf = 6;
                     this.sizef = 28;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -212,7 +213,7 @@ class Panel {
                     this.nxf = 7;
                     this.nyf = 5;
                     this.sizef = 28;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -224,7 +225,7 @@ class Panel {
                     this.nxf = 7;
                     this.nyf = 6;
                     this.sizef = 28;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -236,7 +237,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 8;
                     this.sizef = 32;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -248,7 +249,7 @@ class Panel {
                     this.nxf = 4;
                     this.nyf = 6;
                     this.sizef = 32;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -262,7 +263,7 @@ class Panel {
             this.nyf = 3;
             this.sizef = 50;
             this.canvas_size_setting(5);
-            this.fkb.style.paddingTop = "20px";
+            this.fkb.style.paddingTop = "40px";
             this.fkb.style.display = "block";
             this.fkm.style.display = "none";
 
@@ -299,7 +300,7 @@ class Panel {
                     this.nxf = 4;
                     this.nyf = 3;
                     this.sizef = 50;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -310,7 +311,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 5;
                     this.sizef = 40;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";
@@ -323,7 +324,7 @@ class Panel {
                     this.nxf = 6;
                     this.nyf = 5;
                     this.sizef = 40;
-                    this.canvas_size_setting(45);
+                    this.canvas_size_setting(canvas_size_setting_constant);
                     this.fkb.style.paddingTop = "0px";
                     this.fkb.style.display = "block";
                     this.fkm.style.display = "flex";

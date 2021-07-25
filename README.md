@@ -55,6 +55,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Border: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
 * Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
 * PenpaLite: Turning on this button will remove all the non-preferred modes from the display thereby simplfiying the display. The preferred modes are determined through tab setting. Select your preferrable modes under "Tab/↵" and then turn "ON" PenpaLite.
+* Constraints (Beta): This feature is to aid puzzle constructors to find certain elements quickly for well known puzzle types. It is currently supported for square grid type. [Note - I will frequently add new types and expand the support to other grid types but if you have a certain genre in mind, you can send a request to penpaplus@gmail.com or contact via other options available through "i" information button on the top right]
 
 ## Current functions
 
@@ -440,7 +441,26 @@ Depending on the browser you can update the page without using the cache with "C
 * This function is to provide Penpa-site general settings like theme, custom color etc.
 	* Display Theme: It currently offers only two options (light and dark).
 	* Custom Colors: To enable custom colors in certain modes.
-	* Save Settings: Selecting yes, will save the theme, tab settings, reload button status, gridtype in the browser cookies. When the user returns to fresh Penpa page, these settings are recovered.
+	* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
+		* Dynamic - Upto 5 digits its larger size and then it becomes small.
+		* Large - All digits are large.
+		* Small - All digits are small.
+	* Sudoku Normal: User preference for "Normal" digits in "Sudoku" mode.
+		* Centered - All digits are centered to the cell.
+		* Bottom - All digits are shifted downward and close to the bottom of the cell. (Useful to avoid overlap with Killer clues)
+	* Starbattle Dots: User preference for Right Click dots in Star battle composite mode.
+		* High Range - Default.
+		* Low Range - User needs to click much closer to corners and edges for dots.
+		* Disable - Completely disable the dot feature and only have Star/Cross.
+	* Save Settings: Selecting yes, will save the following items in the browser cookies:
+		* Theme
+		* Tab settings
+		* Reload button status
+		* Gridtype
+		* Displaysize
+		* Sudoku PencilMarks setting
+		* Sudoku Normal setting
+		When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.

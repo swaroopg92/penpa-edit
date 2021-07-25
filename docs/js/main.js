@@ -16,6 +16,35 @@ onload = function() {
     }
     this.ondown_key = ondown_key;
 
+    // Declare custom color picker
+    $(colorpicker_special).spectrum({
+        type: "component",
+        preferredFormat: "hex",
+        showInput: true,
+        chooseText: "OK",
+        // cancelText: "No way",
+        // showAlpha: true,
+        // allowAlpha: true,
+        // allowEmpty: true,
+        togglePaletteOnly: true,
+        togglePaletteMoreText: 'more',
+        togglePaletteLessText: 'less',
+        showPalette: true,
+        hideAfterPaletteSelect: true,
+        maxSelectionSize: 8,
+        showSelectionPalette: true,
+        palette: [
+            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+            ["#00008b", "#187bcd", "#c0e0ff", "#3085d6", "#eecab1", "#208020", "#4c9900", "#b3ffb3"],
+            ["#ffcc80", "#777777", "#b3b3b3", "#ffa3a3", "#ffffa3", "#f0f0f0", "#ffb3ff", "#cc99ff"]
+        ],
+        localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
+    });
+
     boot();
 
     document.addEventListener("beforeunload", function(eve) {
@@ -140,6 +169,14 @@ onload = function() {
         "Thermo", "Sudoku Arrow"
     ];
 
+    let modes_text = ["Surface", "Wall", "Shape", "Composite",
+        "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
+        "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
+        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
+        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
+        "Thermo", "Sudoku Arrow"
+    ];
+
     let modes_mapping = ["surface", "wall", "symbol", "combi",
         "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4",
@@ -169,6 +206,7 @@ onload = function() {
             e.target.id === "savetextarea_pp" ||
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
+            e.target.id === "select2_search" ||
             e.target.id === "saveinforules" ||
             e.target.id === "urlstring") {
             // For input form
@@ -1787,7 +1825,7 @@ onload = function() {
     for (var i = 0; i < modes.length; i++) {
         var option = document.createElement("option");
         option.value = modes[i];
-        option.text = modes[i];
+        option.text = modes_text[i];
         if (this.usertab_choices) {
 
             // Load the author defined tab settings if any
@@ -1811,34 +1849,6 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
-    });
-
-    $(colorpicker_special).spectrum({
-        type: "component",
-        preferredFormat: "hex",
-        showInput: true,
-        chooseText: "OK",
-        // cancelText: "No way",
-        // showAlpha: true,
-        // allowAlpha: true,
-        // allowEmpty: true,
-        togglePaletteOnly: true,
-        togglePaletteMoreText: 'more',
-        togglePaletteLessText: 'less',
-        showPalette: true,
-        hideAfterPaletteSelect: true,
-        maxSelectionSize: 8,
-        showSelectionPalette: true,
-        palette: [
-            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
-            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
-            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
-            ["#00008b", "#187bcd", "#c0e0ff", "#3085d6", "#eecab1", "#208020", "#4c9900", "#b3ffb3"],
-            ["#ffcc80", "#777777", "#b3b3b3", "#ffa3a3", "#ffffa3", "#f0f0f0", "#ffb3ff", "#cc99ff"]
-        ],
-        localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
 
     // Adding on change events for general settings
@@ -1878,12 +1888,97 @@ onload = function() {
             deleteCookie("tab_settings");
             deleteCookie("gridtype");
             deleteCookie("sudoku_centre_size");
+            deleteCookie("displaysize");
+            deleteCookie("sudoku_normal_size");
+            deleteCookie("starbattle_dots");
         } else if (document.getElementById("save_settings_opt").value === "2") {
             setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
             setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
             setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
+            setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
+            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
         }
+    }
+
+    $(document).ready(function() {
+        if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
+            $('#constraints_settings_opt').select2({
+                'width': "25%"
+            });
+        }
+    });
+
+    $.fn.toggleSelect2 = function(state) {
+        return this.each(function() {
+            $.fn[state ? 'show' : 'hide'].apply($(this).next('.select2-container'));
+        });
+    };
+
+    document.getElementById("constraints_settings_opt").onchange = function() {
+        let current_constraint = document.getElementById("constraints_settings_opt").value;
+        if (current_constraint === "all") {
+            // Display the mode break line
+            document.getElementById("mode_break").style.display = "inline";
+            document.getElementById("mode_txt_space").style.display = "inline";
+
+            // set the default submode
+            for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
+                let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
+                let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
+                let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
+                if (submodeset !== "") {
+                    pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                }
+                if (styleset !== "") {
+                    pu.mode[pu.mode.qa][modeset][1] = styleset;
+                }
+            }
+
+            // Display all modes
+            pu.set_allmodes("inline-block");
+        } else {
+            // Remove all modes, default is none
+            pu.set_allmodes();
+
+            // Remove the mode break line
+            document.getElementById("mode_break").style.display = "none";
+            document.getElementById("mode_txt_space").style.display = "none";
+
+            // Display generic ones
+            for (var i of penpa_constraints["setting"]["general"]) {
+                document.getElementById(i).style.display = "inline-block";
+            }
+
+            // Display only the selected ones
+            for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
+                document.getElementById(i).style.display = "inline-block";
+            }
+
+            // set the default submode
+            for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
+                let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
+                let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
+                let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
+                if (submodeset !== "") {
+                    pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                }
+                if (styleset !== "") {
+                    pu.mode[pu.mode.qa][modeset][1] = styleset;
+                }
+            }
+
+            // Display 1 time Info regarding border setting
+            if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
+                pu.borderwarning = false;
+                Swal.fire({
+                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
+                    timer: 4000,
+                    icon: 'info'
+                })
+            }
+        }
+        pu.redraw();
     }
 };

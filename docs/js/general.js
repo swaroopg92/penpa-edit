@@ -29,6 +29,10 @@ function create() {
     if (gridtype == null) {
         gridtype = document.getElementById("gridtype").value;
     }
+    let displaysize_cookie = getCookie("displaysize");
+    if (displaysize_cookie !== null) {
+        document.getElementById("nb_size3").value = displaysize_cookie;
+    }
     pu = make_class(gridtype);
     pu.reset_frame();
 
@@ -55,10 +59,28 @@ function create() {
             advancecontrol_onoff("url");
         }
     }
-    let sudoku_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    let sudoku_center_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_center_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
     }
+    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_normal_cookie !== null) {
+        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
+    }
+    let starbattle_dots_cookie = getCookie("starbattle_dots");
+    if (starbattle_dots_cookie !== null) {
+        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
+    }
+
+    // Populate Constraints list
+    if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+        add_constraints();
+    } else {
+        // Constraints
+        document.getElementById('constraints').style.display = 'none';
+        document.getElementById('constraints_settings_opt').style.display = 'none';
+    }
+
     pu.redraw();
 }
 
@@ -74,6 +96,26 @@ function setCookie(name, value, days) {
 }
 
 function deleteCookie(name) { setCookie(name, '', -1); }
+
+function add_constraints() {
+    let constraints = document.getElementById('constraints_settings_opt');
+    penpa_constraints['options_groups'].forEach(function(element, index) {
+        let optgroup = document.createElement("optgroup");
+        optgroup.label = element;
+
+        penpa_constraints['options'][element].forEach(function(subelement, subindex) {
+            let opt = document.createElement("option");
+            opt.value = subelement;
+            opt.innerHTML = subelement;
+
+            if (subelement === "all") {
+                opt.setAttribute("selected", true);
+            }
+            optgroup.appendChild(opt);
+        });
+        constraints.appendChild(optgroup);
+    });
+}
 
 function create_newboard() {
 
@@ -94,6 +136,15 @@ function create_newboard() {
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
+
+        // constraints
+        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+            document.getElementById('constraints').style.display = 'inline';
+            $('select').toggleSelect2(true);
+        } else {
+            $('select').toggleSelect2(false);
+            document.getElementById('constraints').style.display = 'none';
+        }
     } else {
         Swal.fire({
             title: 'Error:',
@@ -933,6 +984,21 @@ function advancecontrol_off(loadtype) {
 
 function advancecontrol_on() {
     pu.erase_buttons();
+
+    // Set the solve mode
+    if (pu.mmode === "solve") {
+        set_solvemode();
+
+        // answer check then reset the title
+        if (pu.solution !== "") {
+            set_solvemodetitle();
+        }
+
+        // Set the contest mode
+        if (pu.undoredo_disable) {
+            set_contestmode();
+        }
+    }
 }
 
 function ResetCheck() {
@@ -1387,7 +1453,7 @@ function import_url() {
     if (urlstring !== "") {
         if (urlstring.indexOf("/penpa-edit/?") !== -1) {
             urlstring = urlstring.split("/penpa-edit/?")[1];
-            load(urlstring);
+            load(urlstring, 'local');
             document.getElementById("modal-load").style.display = 'none';
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
                 selectBox.setValue(JSON.parse(this.usertab_choices));
@@ -1464,7 +1530,7 @@ function load_license() {
     window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
-function load(urlParam) {
+function load(urlParam, type = 'url') {
     var param = urlParam.split('&');
     var paramArray = [];
 
@@ -1537,9 +1603,17 @@ function load(urlParam) {
     if (reload_cookie !== null) {
         document.getElementById('reload_button').textContent = reload_cookie;
     }
-    let sudoku_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_cookie;
+    let sudoku_center_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_center_cookie !== null) {
+        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
+    }
+    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    if (sudoku_normal_cookie !== null) {
+        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
+    }
+    let starbattle_dots_cookie = getCookie("starbattle_dots");
+    if (starbattle_dots_cookie !== null) {
+        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
 
     if (rtext_para[18] && rtext_para[18] !== "") {
@@ -1646,7 +1720,7 @@ function load(urlParam) {
         }
 
         if (paramArray.l === "solvedup") { // Basically clone of solve mode
-            set_solvemode();
+            set_solvemode(type);
 
             // Decrypt a
             if (paramArray.a) {
@@ -1667,8 +1741,7 @@ function load(urlParam) {
                 // document.getElementById("pu_a_label").style.marginLeft = "6px";
                 // document.getElementById("pu_a_label").innerHTML = "Check Solution";
                 // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-                document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-                document.getElementById("title").classList.add("info");
+                set_solvemodetitle();
             }
 
             if (rtext[7] !== "undefined") {
@@ -1707,9 +1780,22 @@ function load(urlParam) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
             }
+
+            // Populate Constraints list
+            if (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro") {
+                add_constraints();
+            } else {
+                // Constraints
+                document.getElementById('constraints').style.display = 'none';
+                if (type === "local") {
+                    $('select').toggleSelect2(false);
+                } else {
+                    document.getElementById('constraints_settings_opt').style.display = 'none';
+                }
+            }
         }
     } else if (paramArray.m === "solve") { //solve_mode
-        set_solvemode()
+        set_solvemode(type)
         pu.mode.qa = "pu_a";
 
         // mode initialization
@@ -1760,8 +1846,7 @@ function load(urlParam) {
             // document.getElementById("pu_a_label").style.marginLeft = "6px";
             // document.getElementById("pu_a_label").innerHTML = "Check Solution";
             // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
-            document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-            document.getElementById("title").classList.add("info");
+            set_solvemodetitle();
         }
         if (typeof rtext[7] !== 'undefined') {
             // set the answer check settings
@@ -2268,7 +2353,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
     }
 }
 
-function set_solvemode() {
+function set_solvemode(type = "url") {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
     document.getElementById("title").innerHTML = "Solver mode"
@@ -2300,6 +2385,14 @@ function set_solvemode() {
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_opt').style.display = 'none';
+
+    // Constraints
+    document.getElementById('constraints').style.display = 'none';
+    if (type === "local") {
+        $('select').toggleSelect2(false);
+    } else {
+        document.getElementById('constraints_settings_opt').style.display = 'none';
+    }
 }
 
 function set_contestmode() {
@@ -2316,6 +2409,11 @@ function set_contestmode() {
     document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
     pu.undoredo_disable = true;
     pu.comp = true;
+}
+
+function set_solvemodetitle() {
+    document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
+    document.getElementById("title").classList.add("info");
 }
 
 function isEmpty(obj) {
