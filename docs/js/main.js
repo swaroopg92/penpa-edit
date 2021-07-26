@@ -834,6 +834,7 @@ onload = function() {
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "doublemines") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 type = pu.type;
@@ -857,6 +858,7 @@ onload = function() {
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "doublemines") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 pu.type = type;
