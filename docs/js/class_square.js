@@ -298,6 +298,7 @@ class Puzzle_square extends Puzzle {
                     case "edgexoi":
                     case "star":
                     case "mines":
+                    case "doublemines":
                         type = [0, 1, 2, 3];
                         break;
                     case "blpo":
@@ -3658,7 +3659,11 @@ class Puzzle_square extends Puzzle {
                 break;
             case 4:
                 set_font_style(ctx, 0.6 * pu.size.toString(10), 10);
-                ctx.text("💣", x, y, 0.7 * pu.size, this.size * 0.8);
+                ctx.text("💣", x + 0.04 * pu.size, y + 0.04 * pu.size, 0.7 * pu.size, this.size * 0.8);
+                break;
+            case 5:
+                set_font_style(ctx, 0.5 * pu.size.toString(10), 10);
+                ctx.text("💣💣", x + 0.02 * pu.size, y + 0.02 * pu.size, 0.7 * pu.size, this.size * 0.8);
                 break;
         }
     }

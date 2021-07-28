@@ -1,6 +1,7 @@
 ## History
-* 2021/07/24 ver 2.26.2
+* 2021/07/** ver 2.26.2
 	* Added option to cycle forward or backward with TAB
+	* Added doublemines shape and doublemines composite mode.
 * 2021/07/21 ver 2.26.1
 	* Implemented Constraints feature in Square grid types.
 	* Added new Sudoku Normal digits position option in Settings. User can select if the digits must be centered or shifted downward to avoid clash with Killer type clues.

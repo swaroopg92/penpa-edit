@@ -157,7 +157,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 1];
+        this.version = [2, 26, 2];
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -3435,7 +3435,7 @@ class Puzzle {
                             }
                         }
                         if (document.getElementById("sol_mine").checked === true || checkall) {
-                            if (this[pu].symbol[i][0] === 4) {
+                            if (this[pu].symbol[i][0] === 4 || this[pu].symbol[i][0] === 5) {
                                 sol[5].push(i + "," + this[pu].symbol[i][0] + "I");
                             }
                         }
@@ -3654,7 +3654,7 @@ class Puzzle {
                         case "mine":
                             for (var i in this[pu].symbol) {
                                 if (this[pu].symbol[i][1] === "sun_moon" &&
-                                    this[pu].symbol[i][0] === 4) {
+                                    (this[pu].symbol[i][0] === 4 || this[pu].symbol[i][0] === 5)) {
                                     temp_sol.push(i);
                                 }
                             }
@@ -9222,6 +9222,13 @@ class Puzzle {
                         this.re_combi_mines(num); // Behave as normal when ipad and phone
                     }
                     break;
+                case "doublemines":
+                    if (this.ondown_key === "mousedown") { // do only mine when on laptop
+                        this.re_combi_doublemines_reduced(num);
+                    } else {
+                        this.re_combi_doublemines(num); // Behave as normal when ipad and phone
+                    }
+                    break;
                 case "akari":
                     this.re_combi_akari(num);
                     break;
@@ -9262,6 +9269,7 @@ class Puzzle {
                     this.re_combi_star_downright(num);
                     break;
                 case "mines":
+                case "doublemines":
                     this.re_combi_mines_downright(num);
                     break;
                 case "battleship":
@@ -9310,6 +9318,7 @@ class Puzzle {
                     this.re_combi_tents_move(num);
                     break;
                 case "mines":
+                case "doublemines":
                     this.re_combi_mines_move(num);
                     break;
                 case "akari":
@@ -9333,6 +9342,7 @@ class Puzzle {
                 case "hashi":
                 case "star":
                 case "mines":
+                case "doublemines":
                 case "magnets":
                     this.drawing_mode = -1;
                     break;
@@ -10349,6 +10359,84 @@ class Puzzle {
                     this.record("symbol", num, this.undoredo_counter);
                     this[this.mode.qa].symbol[num] = [4, "sun_moon", 2];
                 } else if (this[this.mode.qa].symbol[num][0] === 4) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [0, "star", 2];
+                    this.drawing_mode = 1;
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.drawing_mode = 2;
+                }
+                this.redraw();
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [12, "circle_SS", 2];
+                } else {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+                this.redraw();
+                break;
+        }
+    }
+
+    re_combi_doublemines_reduced(num) {
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].symbol[num]) {
+                if (this.undoredo_counter > 3) {
+                    this.undoredo_counter = 1;
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let neighbors = this.get_neighbors(num);
+                for (let i = 0; i < neighbors.length; i++) {
+                    if (this[this.mode.qa].symbol[neighbors[i]]) {
+                        this.record("symbol", neighbors[i], this.undoredo_counter);
+                        delete this[this.mode.qa].symbol[neighbors[i]];
+                    }
+                }
+                this.record("symbol", num, this.undoredo_counter);
+                this[this.mode.qa].symbol[num] = [4, "sun_moon", 2];
+            } else if (this[this.mode.qa].symbol[num][0] === 4) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [5, "sun_moon", 2];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 2;
+            }
+            this.redraw();
+        }
+    }
+
+    re_combi_doublemines(num) {
+        switch (this.point[num].type) {
+            case 0:
+                if (!this[this.mode.qa].symbol[num]) {
+                    if (this.undoredo_counter > 3) {
+                        this.undoredo_counter = 1;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                    let neighbors = this.get_neighbors(num);
+                    for (let i = 0; i < neighbors.length; i++) {
+                        if (this[this.mode.qa].symbol[neighbors[i]]) {
+                            this.record("symbol", neighbors[i], this.undoredo_counter);
+                            delete this[this.mode.qa].symbol[neighbors[i]];
+                        }
+                    }
+                    this.record("symbol", num, this.undoredo_counter);
+                    this[this.mode.qa].symbol[num] = [4, "sun_moon", 2];
+                } else if (this[this.mode.qa].symbol[num][0] === 4) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [5, "sun_moon", 2];
+                    this.drawing_mode = 1;
+                } else if (this[this.mode.qa].symbol[num][0] === 5) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [0, "star", 2];
                     this.drawing_mode = 1;
