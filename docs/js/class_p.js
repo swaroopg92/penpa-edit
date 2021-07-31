@@ -10435,7 +10435,6 @@ class Puzzle {
                 } else if (this[this.mode.qa].symbol[num][0] === 4) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [5, "sun_moon", 2];
-                    this.drawing_mode = 1;
                 } else if (this[this.mode.qa].symbol[num][0] === 5) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [0, "star", 2];
