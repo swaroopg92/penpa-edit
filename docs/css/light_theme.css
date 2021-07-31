@@ -33,6 +33,8 @@
     --transparent70: rgba(0, 0, 0, 0.3);
     --white: #ffffff;
     --yellow: #ffffa3;
+    /*constant widths*/
+    --popup_width: 330px;
 }
 
 * {
@@ -844,8 +846,8 @@ body textarea {
 
 #modal-content {
     background-color: var(--white);
-    width: 300px;
-    height: 420px;
+    width: var(--popup_width);
+    height: 450px;
     margin: 0 auto;
     margin-top: 15px;
     border-radius: 20px;
@@ -865,7 +867,7 @@ body textarea {
 
 #modal-newsize-content {
     background-color: var(--white);
-    width: 300px;
+    width: var(--popup_width);
     height: 270px;
     margin: 0 auto;
     margin-top: 40px;
@@ -891,7 +893,7 @@ body textarea {
 
 #modal-image-content {
     background-color: var(--white);
-    width: 300px;
+    width: var(--popup_width);
     height: 230px;
     margin: 0 auto;
     margin-top: 30px;
@@ -924,7 +926,7 @@ body textarea {
 
 #modal-rotate-content {
     background-color: var(--white);
-    width: 300px;
+    width: var(--popup_width);
     height: 400px;
     margin: 0 auto;
     margin-top: 30px;
@@ -964,7 +966,7 @@ body textarea {
 
 #modal-save-content {
     background-color: var(--white);
-    width: 300px;
+    width: var(--popup_width);
     height: 545px;
     margin: 0 auto;
     margin-top: 30px;
@@ -990,7 +992,7 @@ body textarea {
 #modal-load-content,
 #modal-settings-content {
     background-color: var(--white);
-    width: 300px;
+    width: var(--popup_width);
     height: 280px;
     margin: 0 auto;
     margin-top: 30px;
@@ -1013,7 +1015,7 @@ body textarea {
 textarea {
     min-width: 200px;
     min-height: 80px;
-    max-width: 280px;
+    max-width: 310px;
     max-height: 130px;
 }
 
@@ -1061,7 +1063,7 @@ textarea {
 }
 
 #modal-header {
-    width: 300px;
+    width: var(--popup_width);
     height: 30px;
     text-align: center;
     background: var(--greyLight);

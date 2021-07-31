@@ -1,5 +1,6 @@
 ## History
-* 2021/07/21 ver 2.26.2
+* 2021/07/** ver 2.26.2
+	* Added option to cycle forward or backward with TAB
 	* Added doublemines shape and doublemines composite mode.
 * 2021/07/21 ver 2.26.1
 	* Implemented Constraints feature in Square grid types.
