@@ -33,6 +33,8 @@
     --transparent70: rgba(0, 0, 0, 0.3);
     --white: #ffffff;
     --yellow: #ffffa3;
+    /*constant widths*/
+    --popup_width: 330px;
 }
 
 * {
@@ -863,7 +865,7 @@ body textarea {
 
 #modal-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 420px;
     margin: 0 auto;
     margin-top: 15px;
@@ -884,7 +886,7 @@ body textarea {
 
 #modal-newsize-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 270px;
     margin: 0 auto;
     margin-top: 40px;
@@ -910,7 +912,7 @@ body textarea {
 
 #modal-image-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 230px;
     margin: 0 auto;
     margin-top: 30px;
@@ -943,7 +945,7 @@ body textarea {
 
 #modal-rotate-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 400px;
     margin: 0 auto;
     margin-top: 30px;
@@ -983,7 +985,7 @@ body textarea {
 
 #modal-save-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 545px;
     margin: 0 auto;
     margin-top: 30px;
@@ -1009,7 +1011,7 @@ body textarea {
 #modal-load-content,
 #modal-settings-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 280px;
     margin: 0 auto;
     margin-top: 30px;
@@ -1067,7 +1069,7 @@ textarea {
 #modal-save2-content {
     background-color: var(--black);
     width: 360px;
-    height: 600px;
+    height: 650px;
     margin: 0 auto;
     margin-top: 100px;
     border-radius: 20px;
@@ -1080,7 +1082,7 @@ textarea {
 }
 
 #modal-header {
-    width: 300px;
+    width: var(--popup_width);
     height: 30px;
     text-align: center;
     background: var(--greyLight);
@@ -1396,7 +1398,7 @@ sup {
 
 #modal-help-content {
     background-color: var(--black);
-    width: 300px;
+    width: var(--popup_width);
     height: 440px;
     margin: 0 auto;
     margin-top: 30px;
