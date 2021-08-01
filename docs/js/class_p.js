@@ -3269,19 +3269,59 @@ class Puzzle {
             }
 
             if (document.getElementById("sol_loopline").checked === true || checkall) {
-                for (var i in this[pu].line) {
-                    if (this[pu].line[i] === 3) {
-                        sol[1].push(i + ",1");
-                    } else if (this[pu].line[i] === 30) {
-                        sol[1].push(i + ",2");
+                if (document.getElementById("sol_ignoreloopline").checked === true) {
+                    for (var i in this[pu].line) {
+                        if ((this["pu_q"].line[i] &&
+                                (this["pu_q"].line[i] === 2 || // Black color
+                                    this["pu_q"].line[i] === 5 || // Grey Color
+                                    this["pu_q"].line[i] === 80 || // Thin
+                                    this["pu_q"].line[i] === 12 || // Dotted
+                                    this["pu_q"].line[i] === 13 // Fat dots
+                                ))) {
+                            // Ignore the line
+                        } else {
+                            if (this[pu].line[i] === 3) {
+                                sol[1].push(i + ",1");
+                            } else if (this[pu].line[i] === 30) {
+                                sol[1].push(i + ",2");
+                            }
+                        }
+                    }
+                } else {
+                    for (var i in this[pu].line) {
+                        if (this[pu].line[i] === 3) {
+                            sol[1].push(i + ",1");
+                        } else if (this[pu].line[i] === 30) {
+                            sol[1].push(i + ",2");
+                        }
                     }
                 }
 
-                for (var i in this[pu].freeline) {
-                    if (this[pu].freeline[i] === 3) {
-                        sol[1].push(i + ",1");
-                    } else if (this[pu].freeline[i] === 30) {
-                        sol[1].push(i + ",2");
+                if (document.getElementById("sol_ignoreloopline").checked === true) {
+                    for (var i in this[pu].freeline) {
+                        if ((this["pu_q"].freeline[i] &&
+                                (this["pu_q"].freeline[i] === 2 || // Black color
+                                    this["pu_q"].freeline[i] === 5 || // Grey Color
+                                    this["pu_q"].freeline[i] === 80 || // Thin
+                                    this["pu_q"].freeline[i] === 12 || // Dotted
+                                    this["pu_q"].freeline[i] === 13 // Fat dots
+                                ))) {
+                            // Ignore the line
+                        } else {
+                            if (this[pu].freeline[i] === 3) {
+                                sol[1].push(i + ",1");
+                            } else if (this[pu].freeline[i] === 30) {
+                                sol[1].push(i + ",2");
+                            }
+                        }
+                    }
+                } else {
+                    for (var i in this[pu].freeline) {
+                        if (this[pu].freeline[i] === 3) {
+                            sol[1].push(i + ",1");
+                        } else if (this[pu].freeline[i] === 30) {
+                            sol[1].push(i + ",2");
+                        }
                     }
                 }
             }
@@ -3506,18 +3546,38 @@ class Puzzle {
                             break;
                         case "loopline":
                             for (var i in this[pu].line) {
-                                if (this[pu].line[i] === 3) {
-                                    temp_sol.push(i + ",1");
-                                } else if (this[pu].line[i] === 30) {
-                                    temp_sol.push(i + ",2");
+                                if ((this["pu_q"].line[i] &&
+                                        (this["pu_q"].line[i] === 2 || // Black color
+                                            this["pu_q"].line[i] === 5 || // Grey Color
+                                            this["pu_q"].line[i] === 80 || // Thin
+                                            this["pu_q"].line[i] === 12 || // Dotted
+                                            this["pu_q"].line[i] === 13 // Fat dots
+                                        ))) {
+                                    // Ignore the line
+                                } else {
+                                    if (this[pu].line[i] === 3) {
+                                        temp_sol.push(i + ",1");
+                                    } else if (this[pu].line[i] === 30) {
+                                        temp_sol.push(i + ",2");
+                                    }
                                 }
                             }
 
                             for (var i in this[pu].freeline) {
-                                if (this[pu].freeline[i] === 3) {
-                                    temp_sol.push(i + ",1");
-                                } else if (this[pu].freeline[i] === 30) {
-                                    temp_sol.push(i + ",2");
+                                if ((this["pu_q"].freeline[i] &&
+                                        (this["pu_q"].freeline[i] === 2 || // Black color
+                                            this["pu_q"].freeline[i] === 5 || // Grey Color
+                                            this["pu_q"].freeline[i] === 80 || // Thin
+                                            this["pu_q"].freeline[i] === 12 || // Dotted
+                                            this["pu_q"].freeline[i] === 13 // Fat dots
+                                        ))) {
+                                    // Ignore the line
+                                } else {
+                                    if (this[pu].freeline[i] === 3) {
+                                        temp_sol.push(i + ",1");
+                                    } else if (this[pu].freeline[i] === 30) {
+                                        temp_sol.push(i + ",2");
+                                    }
                                 }
                             }
                             temp_sol.sort();
