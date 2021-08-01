@@ -8,16 +8,33 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=480">
     <!-- STYLES -->
-    <link href="./css/light_theme.css" rel="stylesheet" type="text/css" id="color_theme">
-    <link href="./css/vanillaSelectBox.css" rel="stylesheet" type="text/css">
-    <link href="./css/spectrum.css" rel="stylesheet" type="text/css">
-    <link href="./css/select2.css" rel="stylesheet" type="text/css">
+    <script>
+    var ver = 2263; // Also defined in class_p.js
+    let style_sources = ["./css/light_theme.css",
+        "./css/vanillaSelectBox.css",
+        "./css/spectrum.css",
+        "./css/select2.css"
+    ];
+    let style_sources_ids = ["color_theme",
+        "tab_setting_css",
+        "custom_color_css",
+        "constraints_settings_css"
+    ];
+    for (let i = 0; i < style_sources.length; i++) {
+        let style = document.createElement('link');
+        style.rel = "stylesheet";
+        style.type = "text/css";
+        style.id = style_sources_ids[i];
+        style.href = style_sources[i] + "?v=" + ver;
+        style.async = false;
+        document.head.appendChild(style);
+    }
+    </script>
     <!-- SCRIPTS -->
     <!-- Legacy libs -->
     <script type="text/javascript" src="./js/libs/jquery-3.5.1.min.js"></script>
     <!-- other local libs -->
     <script type="text/javascript">
-    let ver = 2263; // Also defined in class_p.js
     let library_sources = ["./js/libs/jquery-3.5.1.min.js",
         "./js/libs/CanvasRenderingContext2D.ext.js",
         "./js/libs/encoding.js",
