@@ -1,4 +1,7 @@
 ## History
+* 2021/08/** ver 2.26.3
+	* Added ignore line segments option to answer check.
+	* Minor display improvements.
 * 2021/07/28 ver 2.26.2
 	* Added option to cycle forward or backward with TAB.
 	* Added doublemines shape and doublemines composite mode.
