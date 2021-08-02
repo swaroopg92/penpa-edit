@@ -174,6 +174,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* There is search option available.
 	* Search is case-insensitive.
 * Then you can either press Tab or Enter (closer to the numpad) to rotate between the selected modes.
+* SHIFT + Tab, SHIFT + Enter will rotate between the selected modes in the backward direction.
 * To clear all selections - Click twice on Select All (It changes to Clear ALL on first click).
 
 ### Move
@@ -203,6 +204,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Minesweeper: Left click - mine, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
 	* Akari: Left mouse click - Light bulb, Left mouse click drag - dotted black line, Right click - dot in center, cross (x) on edges
 	* Arrows: Left click drag to draw an arrow in one of the eight directions in a square.
+	* DoubleMines: Left click once - 1 mine, Left click twice - 2 mines, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
 * Number logic:
 	* Numerical flick: Input the numerical flick. 123456789 from top left to bottom right.
 	* Alphabet flick: Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter '-' in the lower right corner.

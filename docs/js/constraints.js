@@ -37,7 +37,11 @@ const penpa_constraints = {
     },
     "border": ["difference", "kropki", "quadruple", "xv"], // puzzle types that involves placing clues on edges and corners
     "setting": {
-        "all": [],
+        "all": {
+            "modeset": ["surface", "line", "lineE", "wall", "cage", "number", "symbol", "special", "combi", "sudoku"],
+            "submodeset": ["", "1", "1", "", "1", "1", "circle_L", "thermo", "battleship", "1"],
+            "styleset": [1, 2, 2, 2, 10, 1, 2, "", "", 1]
+        },
         "general": ["input_sudoku", "rotation", "custom_color_lb", "custom_color_opt"],
         "classic": {
             "show": ["mo_surface_lb",
@@ -92,7 +96,7 @@ const penpa_constraints = {
             ],
             "modeset": ["sudoku", "number"],
             "submodeset": ["1", "11"],
-            "styleset": ["", ""]
+            "styleset": ["", 1]
         },
         "difference": {
             "show": ["mo_surface_lb",
@@ -128,7 +132,7 @@ const penpa_constraints = {
             ],
             "modeset": ["sudoku", "number"],
             "submodeset": ["1", "1"],
-            "styleset": ["", ""]
+            "styleset": ["", 1]
         },
         "quadruple": {
             "show": ["mo_surface_lb",
@@ -167,7 +171,7 @@ const penpa_constraints = {
             ],
             "modeset": ["number", "combi"],
             "submodeset": ["1", "edgex"],
-            "styleset": ["", ""]
+            "styleset": [1, ""]
         },
         "tapa": {
             "show": ["mo_surface_lb",
@@ -175,7 +179,7 @@ const penpa_constraints = {
             ],
             "modeset": ["number"],
             "submodeset": ["4"],
-            "styleset": [""]
+            "styleset": [1]
         },
     },
     "solving": {

@@ -736,11 +736,12 @@ onload = function() {
                     if (previous_length != user_choices.length) {
                         previous_length = user_choices.length;
                         counter_index = 0; // reset the counter
-                    } else if (counter_index < (previous_length - 1)) {
-                        counter_index++;
+                    } else if (shift_key) { // if SHIFT is held down cycle backward
+                        counter_index += user_choices.length - 1;
                     } else {
-                        counter_index = 0; // reset the counter
+                        counter_index++;
                     }
+                    counter_index %= user_choices.length
                     let mode_loc = modes.indexOf(user_choices[counter_index]);
                     if (mode_loc < 4) { // Hard coded, '4', Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
                         pu.mode_set(modes_mapping[mode_loc])
@@ -834,6 +835,7 @@ onload = function() {
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "doublemines") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 type = pu.type;
@@ -857,6 +859,7 @@ onload = function() {
                     ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
+                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "doublemines") ||
                         (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 pu.type = type;
@@ -1923,9 +1926,21 @@ onload = function() {
             document.getElementById("mode_break").style.display = "inline";
             document.getElementById("mode_txt_space").style.display = "inline";
 
+            // set the default submode
+            for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
+                let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
+                let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
+                let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
+                if (submodeset !== "") {
+                    pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                }
+                if (styleset !== "") {
+                    pu.mode[pu.mode.qa][modeset][1] = styleset;
+                }
+            }
+
             // Display all modes
             pu.set_allmodes("inline-block");
-
         } else {
             // Remove all modes, default is none
             pu.set_allmodes();
@@ -1949,7 +1964,9 @@ onload = function() {
                 let modeset = penpa_constraints["setting"][current_constraint]["modeset"][i];
                 let submodeset = penpa_constraints["setting"][current_constraint]["submodeset"][i];
                 let styleset = penpa_constraints["setting"][current_constraint]["styleset"][i];
-                pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                if (submodeset !== "") {
+                    pu.mode[pu.mode.qa][modeset][0] = submodeset;
+                }
                 if (styleset !== "") {
                     pu.mode[pu.mode.qa][modeset][1] = styleset;
                 }
