@@ -1191,11 +1191,11 @@ function saveimage_download() {
         if (document.getElementById("nb_type3").checked) {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
-            var blob = new Blob([text], { type: "text/plain" });
+            var blob = new Blob([text], { type: "image/svg+xml" });
             var ua = window.navigator.userAgent.toLowerCase();
             if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
                 //safari
-                window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+                window.open('data:image/svg+xml;base64,' + window.Base64.encode(text), '_blank');
             } else if (window.navigator.msSaveBlob) {
                 // for IE
                 window.navigator.msSaveBlob(blob, filename);
