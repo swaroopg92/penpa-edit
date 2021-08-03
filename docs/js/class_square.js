@@ -649,7 +649,6 @@ class Puzzle_square extends Puzzle {
             this.draw_thermo("pu_q");
             this.draw_nobulbthermo("pu_q");
             this.draw_arrowsp("pu_q");
-            this.draw_symbol("pu_q", 1);
             this.draw_wall("pu_q");
             this.draw_frame();
             this.draw_polygonsp("pu_q");
