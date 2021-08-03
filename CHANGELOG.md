@@ -1,4 +1,7 @@
 ## History
+* 2021/08/03 ver 2.26.4
+	* Fixed display order glitch.
+	* New SVG image code. Merged PR.
 * 2021/08/01 ver 2.26.3
 	* Added ignore line segments option to answer check.
 	* Minor display improvements.
