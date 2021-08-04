@@ -2032,10 +2032,10 @@ class Puzzle {
 
             var old_canvas = this.ctx;
             this.ctx = svg_canvas;
-
-            this.redraw();
-
+            this.redraw(true); // Reflects SVG elements
             this.ctx = old_canvas;
+            this.redraw(); // Back to original display
+
             return svg_canvas.getSerializedSvg(true);
         }
         this.mode[this.mode.qa].edit_mode = mode;
@@ -10838,8 +10838,8 @@ class Puzzle {
     /////////////////////////////////
 
 
-    redraw() {
-        this.flushcanvas();
+    redraw(svgcall = false) {
+        this.flushcanvas(svgcall);
         panel_pu.draw_panel();
         this.draw();
         this.set_redoundocolor();
@@ -10904,9 +10904,14 @@ class Puzzle {
         }
     }
 
-    flushcanvas() {
-        this.ctx.fillStyle = Color.WHITE;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    flushcanvas(svgcall) {
+        if (svgcall) {
+            this.ctx.fillStyle = Color.TRANSPARENTWHITE;
+            this.ctx.fillRect(0, 0, this.canvasx, this.canvasy);
+        } else {
+            this.ctx.fillStyle = Color.WHITE;
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     }
 
     draw() {
