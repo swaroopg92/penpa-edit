@@ -394,7 +394,8 @@ class Puzzle_square extends Puzzle {
     }
 
     key_arrow(key_code, ctrl_key = false) {
-        var a, b, c;
+        var a, a1, a2;
+        var b, c;
         if (this.theta === 0) { b = [0, 1, 2, 3]; } else if (this.theta === 90) { b = [3, 0, 1, 2]; } else if (this.theta === 180) { b = [2, 3, 0, 1]; } else if (this.theta === 270) { b = [1, 2, 3, 0]; }
         if (this.reflect[0] === -1) {
             c = b[0];
@@ -464,51 +465,107 @@ class Puzzle_square extends Puzzle {
                     var current_cursor = this.cursol;
                     switch (c) {
                         case 0:
-                            a = current_cursor - 1;
-                            if (this.point[a].use === 1) {
-                                if (!ctrl_key) {
-                                    this.selection = [];
+                            a1 = current_cursor - 1;
+                            a2 = current_cursor - 2;
+                            if (this.point[a1].use === 1) {
+                                if (this.point[a2].use === 1) {
+                                    if (!ctrl_key) {
+                                        this.selection = [];
+                                    }
+                                    if (!this.selection.includes(a1)) {
+                                        this.selection.push(a1);
+                                    }
+                                    this.cursol = a1;
+                                } else {
+                                    a2 = current_cursor - 1 + this.nx;
+                                    if (this.point[a2].use === 1) {
+                                        if (!ctrl_key) {
+                                            this.selection = [];
+                                        }
+                                        if (!this.selection.includes(a2)) {
+                                            this.selection.push(a2);
+                                        }
+                                        this.cursol = a2;
+                                    }
                                 }
-                                if (!this.selection.includes(a)) {
-                                    this.selection.push(a);
-                                }
-                                this.cursol = a;
                             }
                             break;
                         case 1:
-                            a = current_cursor - this.nx0;
-                            if (this.point[a].use === 1) {
-                                if (!ctrl_key) {
-                                    this.selection = [];
+                            a1 = current_cursor - this.ny0;
+                            a2 = current_cursor - 2 * this.ny0;
+                            if (this.point[a1].use === 1) {
+                                if (this.point[a2].use === 1) {
+                                    if (!ctrl_key) {
+                                        this.selection = [];
+                                    }
+                                    if (!this.selection.includes(a1)) {
+                                        this.selection.push(a1);
+                                    }
+                                    this.cursol = a1;
+                                } else {
+                                    a2 = current_cursor + (this.ny - 1) * this.ny0;
+                                    if (this.point[a2].use === 1) {
+                                        if (!ctrl_key) {
+                                            this.selection = [];
+                                        }
+                                        if (!this.selection.includes(a2)) {
+                                            this.selection.push(a2);
+                                        }
+                                        this.cursol = a2;
+                                    }
                                 }
-                                if (!this.selection.includes(a)) {
-                                    this.selection.push(a);
-                                }
-                                this.cursol = a;
                             }
                             break;
                         case 2:
-                            a = current_cursor + 1;
-                            if (this.point[a].use === 1) {
-                                if (!ctrl_key) {
-                                    this.selection = [];
+                            a1 = current_cursor + 1;
+                            a2 = current_cursor + 2;
+                            if (this.point[a1].use === 1) {
+                                if (this.point[a2].use === 1) {
+                                    if (!ctrl_key) {
+                                        this.selection = [];
+                                    }
+                                    if (!this.selection.includes(a1)) {
+                                        this.selection.push(a1);
+                                    }
+                                    this.cursol = a1;
+                                } else {
+                                    a2 = current_cursor + 1 - this.nx;
+                                    if (this.point[a2].use === 1) {
+                                        if (!ctrl_key) {
+                                            this.selection = [];
+                                        }
+                                        if (!this.selection.includes(a2)) {
+                                            this.selection.push(a2);
+                                        }
+                                        this.cursol = a2;
+                                    }
                                 }
-                                if (!this.selection.includes(a)) {
-                                    this.selection.push(a);
-                                }
-                                this.cursol = a;
                             }
                             break;
                         case 3:
-                            a = current_cursor + this.nx0;
-                            if (this.point[a].use === 1) {
-                                if (!ctrl_key) {
-                                    this.selection = [];
+                            a1 = current_cursor + this.ny0;
+                            a2 = current_cursor + 2 * this.ny0;
+                            if (this.point[a1].use === 1) {
+                                if (this.point[a2].use === 1) {
+                                    if (!ctrl_key) {
+                                        this.selection = [];
+                                    }
+                                    if (!this.selection.includes(a1)) {
+                                        this.selection.push(a1);
+                                    }
+                                    this.cursol = a1;
+                                } else {
+                                    a2 = current_cursor - (this.ny - 1) * this.ny0;
+                                    if (this.point[a2].use === 1) {
+                                        if (!ctrl_key) {
+                                            this.selection = [];
+                                        }
+                                        if (!this.selection.includes(a2)) {
+                                            this.selection.push(a2);
+                                        }
+                                        this.cursol = a2;
+                                    }
                                 }
-                                if (!this.selection.includes(a)) {
-                                    this.selection.push(a);
-                                }
-                                this.cursol = a;
                             }
                             break;
                     }
