@@ -1,5 +1,6 @@
 ## History
 * 2021/08/15 ver 2.26.5
+	* Improved Sudoku Solving mode - Now the cursor moves toroidal and comes back from the other side of the grid
 	* Fixing Minor bugs to support old Firefox Browsers.
 * 2021/08/03 ver 2.26.4
 	* Fixed display order glitch.
