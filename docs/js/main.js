@@ -1901,6 +1901,7 @@ onload = function() {
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
             setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
             setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
         }
     }

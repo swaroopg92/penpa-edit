@@ -63,7 +63,7 @@ function create() {
     if (sudoku_center_cookie !== null) {
         document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
     }
-    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    let sudoku_normal_cookie = getCookie("sudoku_normal_size");
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
@@ -1609,7 +1609,7 @@ function load(urlParam, type = 'url') {
     if (sudoku_center_cookie !== null) {
         document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
     }
-    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    let sudoku_normal_cookie = getCookie("sudoku_normal_size");
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
