@@ -491,8 +491,8 @@ class Puzzle_square extends Puzzle {
                             }
                             break;
                         case 1:
-                            a1 = current_cursor - this.ny0;
-                            a2 = current_cursor - 2 * this.ny0;
+                            a1 = current_cursor - this.nx0;
+                            a2 = current_cursor - 2 * this.nx0;
                             if (this.point[a1].use === 1) {
                                 if (this.point[a2].use === 1) {
                                     if (!ctrl_key) {
@@ -503,7 +503,7 @@ class Puzzle_square extends Puzzle {
                                     }
                                     this.cursol = a1;
                                 } else {
-                                    a2 = current_cursor + (this.ny - 1) * this.ny0;
+                                    a2 = current_cursor + (this.ny - 1) * this.nx0;
                                     if (this.point[a2].use === 1) {
                                         if (!ctrl_key) {
                                             this.selection = [];
@@ -543,8 +543,8 @@ class Puzzle_square extends Puzzle {
                             }
                             break;
                         case 3:
-                            a1 = current_cursor + this.ny0;
-                            a2 = current_cursor + 2 * this.ny0;
+                            a1 = current_cursor + this.nx0;
+                            a2 = current_cursor + 2 * this.nx0;
                             if (this.point[a1].use === 1) {
                                 if (this.point[a2].use === 1) {
                                     if (!ctrl_key) {
@@ -555,7 +555,7 @@ class Puzzle_square extends Puzzle {
                                     }
                                     this.cursol = a1;
                                 } else {
-                                    a2 = current_cursor - (this.ny - 1) * this.ny0;
+                                    a2 = current_cursor - (this.ny - 1) * this.nx0;
                                     if (this.point[a2].use === 1) {
                                         if (!ctrl_key) {
                                             this.selection = [];
