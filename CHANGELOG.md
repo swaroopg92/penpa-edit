@@ -3,6 +3,7 @@
 	* Improved Sudoku Solving mode - Now the cursor moves toroidal and comes back from the other side of the grid
 	* Fixing Minor bugs to support old Firefox Browsers.
 	* Increased timer precision to days.
+	* Improved canvas2svg library to handle decimal RGB values.
 * 2021/08/03 ver 2.26.4
 	* Fixed display order glitch.
 	* New SVG image code. Merged PR.
