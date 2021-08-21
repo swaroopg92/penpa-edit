@@ -2863,7 +2863,7 @@ class Puzzle {
 
         // Save timer
         if (this.mmode === "solve") {
-            text += sw_timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']) + "\n";
+            text += sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']) + "\n";
         }
 
         // save answer check settings
