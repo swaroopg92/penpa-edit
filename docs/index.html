@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=480">
     <!-- STYLES -->
     <script>
-    var ver = 2263; // Also defined in class_p.js
+    var ver = 2266; // Also defined in class_p.js
     let style_sources = ["./css/light_theme.css",
         "./css/vanillaSelectBox.css",
         "./css/spectrum.css",
@@ -40,7 +40,7 @@
         "./js/libs/vanillaSelectBox.js",
         "./js/libs/zlib.js",
         "./js/libs/spectrum.js",
-        "./js/libs/fabric.min.js",
+        "./js/libs/canvas2svg.js",
         "./js/libs/select2.full.js"
     ];
     for (let i = 0; i < library_sources.length; i++) {
@@ -641,7 +641,9 @@
         <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
         <div><label id="solution_check" class="info" /></label></div>
     </div>
-    <div id="dvique" class="dvique"></div>
+    <div id="dvique" class="dvique">
+        <canvas id="pause_canvas" style="display:none;"></canvas>
+    </div>
     <div id="contestinfo">
         <div><label id="answer_key" class="info" /></label></div>
     </div>
@@ -664,15 +666,16 @@
         </span>
         <br><br>
         <div id="stop_watch">
-            <h1 class="values">00:00:00:0</h1>
+            <h1 id="timer" class="values">00:00:00:00:0</h1>
             <div>
                 <button id="sw_start" class="button sw">Start</button>
                 <button id="sw_pause" class="button sw">Pause</button>
                 <button id="sw_stop" class="button sw">Stop</button>
                 <button id="sw_reset" class="button sw">Reset</button>
+                <button id="sw_hide" class="button sw">Hide</button>
             </div>
         </div>
-        <p>Penpa+ Version 2.26.3 &copy; 2020-2021 </p>
+        <p>Penpa+ Version 2.26.6 &copy; 2020-2021 </p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -1350,8 +1353,18 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="./js/libs/easytimer.min.js"></script>
-    <script type="text/javascript" src="./js/timer.js"></script>
+    <script type="text/javascript">
+    script_sources = ["./js/libs/easytimer.min.js",
+        "./js/timer.js"
+    ];
+    for (let i = 0; i < script_sources.length; i++) {
+        let script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = script_sources[i] + "?v=" + ver;
+        script.async = false;
+        document.head.appendChild(script);
+    }
+    </script>
 </body>
 
 </html>

@@ -63,7 +63,7 @@ function create() {
     if (sudoku_center_cookie !== null) {
         document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
     }
-    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    let sudoku_normal_cookie = getCookie("sudoku_normal_size");
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
@@ -763,6 +763,9 @@ function CreateCheck() {
         if (result.isConfirmed) {
             create_newboard();
             pu.redraw();
+            if (sw_timer.isPaused()) {
+                pu.show_pause_layer();
+            }
         }
     })
 }
@@ -774,6 +777,9 @@ function newgrid() {
         pu.redraw();
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
+        if (sw_timer.isPaused()) {
+            pu.show_pause_layer();
+        }
     } else {
         Swal.fire({
             title: 'Error:',
@@ -793,6 +799,9 @@ function newgrid_r() {
         pu.redraw();
         panel_pu.draw_panel();
         document.getElementById('modal-newsize').style.display = 'none';
+        if (sw_timer.isPaused()) {
+            pu.show_pause_layer();
+        }
     } else {
         Swal.fire({
             title: 'Error:',
@@ -1193,11 +1202,11 @@ function saveimage_download() {
         if (document.getElementById("nb_type3").checked) {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
-            var blob = new Blob([text], { type: "text/plain" });
+            var blob = new Blob([text], { type: "image/svg+xml" });
             var ua = window.navigator.userAgent.toLowerCase();
             if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
                 //safari
-                window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
+                window.open('data:image/svg+xml;base64,' + window.Base64.encode(text), '_blank');
             } else if (window.navigator.msSaveBlob) {
                 // for IE
                 window.navigator.msSaveBlob(blob, filename);
@@ -1607,7 +1616,7 @@ function load(urlParam, type = 'url') {
     if (sudoku_center_cookie !== null) {
         document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
     }
-    let sudoku_normal_cookie = getCookie("sudoku_centre_size");
+    let sudoku_normal_cookie = getCookie("sudoku_normal_size");
     if (sudoku_normal_cookie !== null) {
         document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
     }
@@ -1746,15 +1755,30 @@ function load(urlParam, type = 'url') {
 
             if (rtext[7] !== "undefined") {
                 let starttime = rtext[7].split(":");
-                sw_timer.start({
-                    precision: 'secondTenths',
-                    startValues: {
-                        hours: parseInt(starttime[0]),
-                        minutes: parseInt(starttime[1]),
-                        seconds: parseInt(starttime[2]),
-                        secondTenths: parseInt(starttime[3])
-                    }
-                });
+                if (starttime.length === 4) {
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            hours: parseInt(starttime[0]),
+                            minutes: parseInt(starttime[1]),
+                            seconds: parseInt(starttime[2]),
+                            secondTenths: parseInt(starttime[3])
+                        }
+                    });
+                } else if (starttime.length === 5) { // added "days" precision in the recent update
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            days: parseInt(starttime[0]),
+                            hours: parseInt(starttime[1]),
+                            minutes: parseInt(starttime[2]),
+                            seconds: parseInt(starttime[3]),
+                            secondTenths: parseInt(starttime[4])
+                        }
+                    });
+                } else {
+                    sw_timer.start({ precision: 'secondTenths' });
+                }
             } else {
                 sw_timer.start({ precision: 'secondTenths' });
             }

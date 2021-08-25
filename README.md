@@ -26,6 +26,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Shift + space: Enter a space (Works in "Number" Mode => "L", "M", "S" and Long" SubMode options only)
 * F2: Problem mode
 * F3: Solution mode
+* F4: Hide/Show Timer
 * TAB/ENTER: checkout the TAB section below in "Current functions". Tab settings are now retained in the shared URL.
 * In Sudoku Mode
 	* Z : Normal Submode
@@ -469,6 +470,7 @@ Depending on the browser you can update the page without using the cache with "C
 * pause - pauses the timer. click on start again to continue.
 * stop - stops the timer. click on start again to restart the timer. click on reset to set the timer back to 00:00.
 * reset - resets the timer to 00:00.
+* hide/show - hide/show the timer.
 
 ## LICENSE
 Released under MIT license. Check https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE.

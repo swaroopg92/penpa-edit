@@ -12,6 +12,7 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * Sudoku Solving in Penpa - https://youtu.be/b9H2QvouU_A
 * Import and Export Sudoku (I/O Sudoku) in Penpa - https://youtu.be/f-Lw0QuXa2c
 * Enhancing the Solver Experience in Penpa - https://youtu.be/azNx2lQmANg
+* What does PenpaLite do? What is this Constraints for? - https://youtu.be/2OczdnF5LmY
 
 ## Puzzles
 * How to Create a Thermo Sudoku? - https://youtu.be/ynZOz057mKA

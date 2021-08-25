@@ -157,7 +157,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -357,6 +357,48 @@ class Puzzle {
             this.point_reflect_UD();
         }
         this.make_frameline();
+    }
+
+    reset_pause_layer() {
+        // pause-unpause layer
+        let pause_canvas = document.getElementById("pause_canvas");
+        let pause_ctx = pause_canvas.getContext("2d");
+        pause_canvas.style.width = this.canvasx.toString() + "px";
+        pause_canvas.style.height = this.canvasy.toString() + "px";
+        pause_canvas.width = this.resol * this.canvasx;
+        pause_canvas.height = this.resol * this.canvasy;
+    }
+
+    show_pause_layer() {
+        let pause_canvas = document.getElementById("pause_canvas");
+        let pause_ctx = pause_canvas.getContext("2d");
+        this.reset_pause_layer();
+
+        // set the style and font
+        pause_ctx.filleStyle = Color.BLUE;
+        let font_size = 0.09 * pause_canvas.height; // 90 % of display size/ height of canvas
+        pause_ctx.font = font_size + 'px sans-serif';
+        let lineheight = 1.2 * font_size;
+        let textstring = "Paused\nClick on \"Start\"\nor \"F4\"";
+        let lines = textstring.split('\n');
+        let textwidth;
+
+        for (var j = 0; j < lines.length; j++) {
+            textwidth = pause_ctx.measureText(lines[j]).width;
+            pause_ctx.fillText(lines[j], (pause_canvas.width) / 2 - (textwidth / 2), (j + 1) * (pause_canvas.height / (lines.length + 1)));
+        }
+        document.getElementById("pause_canvas").style.display = "inline-block";
+    }
+
+    hide_pause_layer() {
+        // Clean the pause canvas
+        let pause_canvas = document.getElementById("pause_canvas");
+        let pause_ctx = pause_canvas.getContext("2d");
+        this.reset_pause_layer();
+        pause_ctx.fillStyle = Color.TRANSPARENTWHITE;
+        pause_ctx.fillRect(0, 0, this.canvasx, this.canvasy);
+
+        document.getElementById("pause_canvas").style.display = "none";
     }
 
     make_frameline() {
@@ -1996,24 +2038,47 @@ class Puzzle {
         } else if (document.getElementById("nb_type2").checked) {
             var canvastext = resizedCanvas.toDataURL("image/jpeg");
         } else if (document.getElementById("nb_type3").checked) {
-            var svg_canvas = new fabric.Canvas()
-            var imginstance = new fabric.Image(this.canvas, {
-                left: 0,
-                top: 0,
-                width: this.canvas.width,
-                height: this.canvas.height
-            });
-            svg_canvas.add(imginstance);
-            var canvastext = svg_canvas.toSVG({
-                width: "100%",
-                height: "100%",
-                viewBox: {
-                    x: 0,
-                    y: 0,
-                    width: this.canvas.width,
-                    height: this.canvas.height
+            var svg_canvas = new C2S(this.canvasx, this.canvasy);
+            svg_canvas.text = function(text, x, y, width = 1e4) {
+                var fontsize = parseFloat(this.font.split("px")[0]);
+                this.strokeText(text, x, y + 0.28 * fontsize, width);
+                this.fillText(text, x, y + 0.28 * fontsize, width);
+            };
+            svg_canvas.arrow = function(startX, startY, endX, endY, controlPoints) {
+                var dx = endX - startX;
+                var dy = endY - startY;
+                var len = Math.sqrt(dx * dx + dy * dy);
+                var sin = dy / len;
+                var cos = dx / len;
+                var a = [];
+                a.push(0, 0);
+                for (var i = 0; i < controlPoints.length; i += 2) {
+                    var x = controlPoints[i];
+                    var y = controlPoints[i + 1];
+                    a.push(x < 0 ? len + x : x, y);
                 }
-            });
+                a.push(len, 0);
+                for (var i = controlPoints.length; i > 0; i -= 2) {
+                    var x = controlPoints[i - 2];
+                    var y = controlPoints[i - 1];
+                    a.push(x < 0 ? len + x : x, -y);
+                }
+                a.push(0, 0);
+                for (var i = 0; i < a.length; i += 2) {
+                    var x = a[i] * cos - a[i + 1] * sin + startX;
+                    var y = a[i] * sin + a[i + 1] * cos + startY;
+                    if (i === 0) this.moveTo(x, y);
+                    else this.lineTo(x, y);
+                }
+            };
+
+            var old_canvas = this.ctx;
+            this.ctx = svg_canvas;
+            this.redraw(true); // Reflects SVG elements
+            this.ctx = old_canvas;
+            this.redraw(); // Back to original display
+
+            return svg_canvas.getSerializedSvg(true);
         }
         this.mode[this.mode.qa].edit_mode = mode;
 
@@ -2474,19 +2539,31 @@ class Puzzle {
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
                 this[this.mode.qa].surface = {};
+                if (document.getElementById("custom_color_opt").value === "2") {
+                    this[this.mode.qa + "_col"].surface = {};
+                }
                 break;
             case "line":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "4") {
                     for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] !== 98) {
                             delete this[this.mode.qa].line[i];
+                            if (document.getElementById("custom_color_opt").value === "2") {
+                                delete this[this.mode.qa + "_col"].line[i];
+                            }
                         }
                     }
                     this[this.mode.qa].freeline = {};
+                    if (document.getElementById("custom_color_opt").value === "2") {
+                        this[this.mode.qa + "_col"].freeline = {};
+                    }
                 } else {
                     for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] === 98) {
                             delete this[this.mode.qa].line[i];
+                            if (document.getElementById("custom_color_opt").value === "2") {
+                                delete this[this.mode.qa + "_col"].line[i];
+                            }
                         }
                     }
                 }
@@ -2496,21 +2573,36 @@ class Puzzle {
                     for (var i in this[this.mode.qa].lineE) {
                         if (this[this.mode.qa].lineE[i] === 98) {
                             delete this[this.mode.qa].lineE[i];
+                            if (document.getElementById("custom_color_opt").value === "2") {
+                                delete this[this.mode.qa + "_col"].lineE[i];
+                            }
                         }
                     }
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") {
                     this[this.mode.qa].deletelineE = {};
+                    if (document.getElementById("custom_color_opt").value === "2") {
+                        this[this.mode.qa + "_col"].deletelineE = {};
+                    }
                 } else {
                     for (var i in this[this.mode.qa].lineE) {
                         if (this[this.mode.qa].lineE[i] !== 98) {
                             delete this[this.mode.qa].lineE[i];
+                            if (document.getElementById("custom_color_opt").value === "2") {
+                                delete this[this.mode.qa + "_col"].lineE[i];
+                            }
                         }
                     }
                     this[this.mode.qa].freelineE = {};
+                    if (document.getElementById("custom_color_opt").value === "2") {
+                        this[this.mode.qa + "_col"].freelineE = {};
+                    }
                 }
                 break;
             case "wall":
                 this[this.mode.qa].wall = {};
+                if (document.getElementById("custom_color_opt").value === "2") {
+                    this[this.mode.qa + "_col"].wall = {};
+                }
                 break;
             case "number":
                 if ((this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") ||
@@ -2522,6 +2614,9 @@ class Puzzle {
                 break;
             case "symbol":
                 this[this.mode.qa].symbol = {};
+                if (document.getElementById("custom_color_opt").value === "2") {
+                    this[this.mode.qa + "_col"].symbol = {};
+                }
                 break;
             case "sudoku":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
@@ -2541,9 +2636,15 @@ class Puzzle {
                 break;
             case "cage":
                 this[this.mode.qa].cage = {};
+                if (document.getElementById("custom_color_opt").value === "2") {
+                    this[this.mode.qa + "_col"].cage = {};
+                }
                 break;
             case "special":
                 this[this.mode.qa][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
+                if (document.getElementById("custom_color_opt").value === "2") {
+                    this[this.mode.qa + "_col"][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
+                }
                 break;
             case "combi":
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
@@ -2804,7 +2905,7 @@ class Puzzle {
 
         // Save timer
         if (this.mmode === "solve") {
-            text += sw_timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']) + "\n";
+            text += sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']) + "\n";
         }
 
         // save answer check settings
@@ -10779,8 +10880,8 @@ class Puzzle {
     /////////////////////////////////
 
 
-    redraw() {
-        this.flushcanvas();
+    redraw(svgcall = false) {
+        this.flushcanvas(svgcall);
         panel_pu.draw_panel();
         this.draw();
         this.set_redoundocolor();
@@ -10845,9 +10946,14 @@ class Puzzle {
         }
     }
 
-    flushcanvas() {
-        this.ctx.fillStyle = Color.WHITE;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    flushcanvas(svgcall) {
+        if (svgcall) {
+            this.ctx.fillStyle = Color.TRANSPARENTWHITE;
+            this.ctx.fillRect(0, 0, this.canvasx, this.canvasy);
+        } else {
+            this.ctx.fillStyle = Color.WHITE;
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     }
 
     draw() {
@@ -11385,7 +11491,7 @@ class Puzzle {
 
     get_customcolor() {
         let customcolor = $("#colorpicker_special").spectrum("get");
-        return "rgba(" + customcolor._r + "," + customcolor._g + "," + customcolor._b + "," + customcolor._a + ")";
+        return "rgba(" + Math.round(customcolor._r) + "," + Math.round(customcolor._g) + "," + Math.round(customcolor._b) + "," + customcolor._a + ")";
     }
 
     set_allmodes(displaytype = "none") {

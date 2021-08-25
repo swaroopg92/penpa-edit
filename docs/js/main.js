@@ -287,15 +287,24 @@ onload = function() {
 
             if (key === "F2") { //function_key
                 pu.mode_qa("pu_q");
-                event.returnValue = false;
+                e.returnValue = false;
             } else if (key === "F3") {
                 pu.mode_qa("pu_a");
-                event.returnValue = false;
+                e.returnValue = false;
+            }
+
+            if (key === "F4") { //function_key
+                if (sw_timer.isPaused()) {
+                    startTimer();
+                } else {
+                    pauseTimer();
+                }
+                e.returnValue = false;
             }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
                 pu.key_arrow(key, ctrl_key);
-                event.returnValue = false;
+                e.returnValue = false;
             }
 
             if (key === "Shift") {
@@ -307,7 +316,7 @@ onload = function() {
                 if (present_submode !== 2) {
                     pu.submode_check("sub_sudoku2");
                 }
-                event.returnValue = false;
+                e.returnValue = false;
             }
 
             if (key === "Control") {
@@ -319,19 +328,19 @@ onload = function() {
                 if (present_submode !== 3) {
                     pu.submode_check("sub_sudoku3");
                 }
-                event.returnValue = false;
+                e.returnValue = false;
             }
 
             if (!ctrl_key && !alt_key) {
                 if (shift_key && key === " ") {
                     pu.key_number(key);
-                    event.returnValue = false;
+                    e.returnValue = false;
                 } else if (str_num.indexOf(key) != -1 ||
                     str_alph_low.indexOf(key) != -1 ||
                     str_alph_up.indexOf(key) != -1 ||
                     str_sym.indexOf(key) != -1 ||
                     (keycode >= 48 && keycode <= 57)) {
-                    event.preventDefault();
+                    e.preventDefault();
                     if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(String.fromCharCode(keycode));
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
@@ -378,10 +387,10 @@ onload = function() {
                     // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                     // Sudoku mode, I have assigned it to Delete
                     pu.key_space(keycode, shift_key, ctrl_key);
-                    event.returnValue = false;
+                    e.returnValue = false;
                 } else if (key === "Backspace") {
                     pu.key_backspace();
-                    event.returnValue = false;
+                    e.returnValue = false;
                 }
             }
 
@@ -389,7 +398,7 @@ onload = function() {
                 // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                 // Sudoku mode, I have assigned it to Delete
                 pu.key_space(keycode, shift_key, ctrl_key);
-                event.returnValue = false;
+                e.returnValue = false;
             }
 
             if (ctrl_key && !shift_key && !alt_key) {
@@ -432,25 +441,25 @@ onload = function() {
                         case "d": //Ctrl+d
                         case "D":
                             duplicate();
-                            event.returnValue = false;
+                            e.returnValue = false;
                             break;
                         case "y": //Ctrl+y
                         case "Y":
                             if (!pu.undoredo_disable) {
                                 pu.redo();
                             }
-                            event.returnValue = false;
+                            e.returnValue = false;
                             break;
                         case "z": //Ctrl+z
                         case "Z":
                             if (!pu.undoredo_disable) {
                                 pu.undo();
                             }
-                            event.returnValue = false;
+                            e.returnValue = false;
                             break;
                         case " ": //Ctrl+space
                             pu.key_shiftspace();
-                            event.returnValue = false;
+                            e.returnValue = false;
                             break;
                         case "i": //Ctrl+i
                         case "I":
@@ -492,7 +501,7 @@ onload = function() {
                                     }
                                 }
                             }
-                            event.returnValue = false;
+                            e.returnValue = false;
                             break;
                         case "0":
                         case "1":
@@ -508,11 +517,11 @@ onload = function() {
                                 e.preventDefault();
                             }
                             pu.key_number(key);
-                            event.returnValue = false;
+                            e.returnValue = false;
                             break;
                     }
                 } else {
-                    event.returnValue = false;
+                    e.returnValue = false;
                 }
             }
 
@@ -530,7 +539,7 @@ onload = function() {
                             pu.submode_check("sub_sudoku1");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "x":
                         // case "X":
@@ -544,7 +553,7 @@ onload = function() {
                             pu.submode_check("sub_sudoku2");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "c":
                         // case "C":
@@ -558,7 +567,7 @@ onload = function() {
                             pu.submode_check("sub_sudoku3");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "v":
                         // case "V":
@@ -567,10 +576,10 @@ onload = function() {
                             pu.mode_set("surface");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     default:
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                 }
             }
@@ -589,7 +598,7 @@ onload = function() {
                             pu.submode_check("sub_sudoku1");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "x":
                     case "X":
@@ -603,7 +612,7 @@ onload = function() {
                             pu.submode_check("sub_sudoku2");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "c":
                     case "C":
@@ -617,7 +626,7 @@ onload = function() {
                             pu.submode_check("sub_sudoku3");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "v":
                     case "V":
@@ -626,7 +635,7 @@ onload = function() {
                             pu.mode_set("surface");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "1":
                         present_style = document.getElementById("st_surface1").checked;
@@ -634,7 +643,7 @@ onload = function() {
                             pu.stylemode_check("st_surface1");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "2":
                         present_style = document.getElementById("st_surface8").checked;
@@ -642,7 +651,7 @@ onload = function() {
                             pu.stylemode_check("st_surface8");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "3":
                         present_style = document.getElementById("st_surface3").checked;
@@ -650,7 +659,7 @@ onload = function() {
                             pu.stylemode_check("st_surface3");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "4":
                         present_style = document.getElementById("st_surface4").checked;
@@ -658,7 +667,7 @@ onload = function() {
                             pu.stylemode_check("st_surface4");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "5":
                         present_style = document.getElementById("st_surface2").checked;
@@ -666,7 +675,7 @@ onload = function() {
                             pu.stylemode_check("st_surface2");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "6":
                         present_style = document.getElementById("st_surface5").checked;
@@ -674,7 +683,7 @@ onload = function() {
                             pu.stylemode_check("st_surface5");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "7":
                         present_style = document.getElementById("st_surface6").checked;
@@ -682,7 +691,7 @@ onload = function() {
                             pu.stylemode_check("st_surface6");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "8":
                         present_style = document.getElementById("st_surface7").checked;
@@ -690,7 +699,7 @@ onload = function() {
                             pu.stylemode_check("st_surface7");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "9":
                         present_style = document.getElementById("st_surface9").checked;
@@ -698,7 +707,7 @@ onload = function() {
                             pu.stylemode_check("st_surface9");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "0":
                         present_style = document.getElementById("st_surface10").checked;
@@ -706,7 +715,7 @@ onload = function() {
                             pu.stylemode_check("st_surface10");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "11":
                         present_style = document.getElementById("st_surface11").checked;
@@ -714,7 +723,7 @@ onload = function() {
                             pu.stylemode_check("st_surface11");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     case "12":
                         present_style = document.getElementById("st_surface12").checked;
@@ -722,10 +731,10 @@ onload = function() {
                             pu.stylemode_check("st_surface12");
                             e.preventDefault();
                         }
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                     default:
-                        event.returnValue = false;
+                        e.returnValue = false;
                         break;
                 }
             }
@@ -766,7 +775,7 @@ onload = function() {
                         pu.submode_check(modes_mapping[mode_loc]);
                         e.preventDefault();
                     }
-                    event.returnValue = false;
+                    e.returnValue = false;
                 }
             }
         }
@@ -794,7 +803,7 @@ onload = function() {
                 }
                 shift_counter = 0;
                 shift_release_time = Date.now();
-                event.returnValue = false;
+                e.returnValue = false;
             } else if (key === "Control" && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
@@ -805,16 +814,16 @@ onload = function() {
                 }
                 ctrl_counter = 0;
                 ctrl_release_time = Date.now();
-                event.returnValue = false;
+                e.returnValue = false;
             } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
                 if (key === "1") {
                     number_release_time = Date.now();
                     previousdigit1 = true;
-                    event.returnValue = false;
+                    e.returnValue = false;
                 } else {
                     previousdigit1 = false;
                     number_release_time = -1e5;
-                    event.returnValue = false;
+                    e.returnValue = false;
                 }
             }
 
@@ -1901,6 +1910,7 @@ onload = function() {
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
             setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
             setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
         }
     }
@@ -1977,11 +1987,25 @@ onload = function() {
                 pu.borderwarning = false;
                 Swal.fire({
                     html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
-                    timer: 4000,
+                    timer: 8000,
                     icon: 'info'
                 })
             }
         }
         pu.redraw();
+    }
+
+    // Timer pause and unpause
+    document.getElementById("sw_pause").addEventListener("click", pauseTimer);
+    document.getElementById("sw_start").addEventListener("click", startTimer);
+
+    function pauseTimer() {
+        pu.show_pause_layer();
+        sw_timer.pause();
+    }
+
+    function startTimer() {
+        pu.hide_pause_layer();
+        sw_timer.start({ precision: 'secondTenths' });
     }
 };
