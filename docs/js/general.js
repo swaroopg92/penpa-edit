@@ -1760,15 +1760,30 @@ function load(urlParam, type = 'url') {
 
             if (rtext[7] !== "undefined") {
                 let starttime = rtext[7].split(":");
-                sw_timer.start({
-                    precision: 'secondTenths',
-                    startValues: {
-                        hours: parseInt(starttime[0]),
-                        minutes: parseInt(starttime[1]),
-                        seconds: parseInt(starttime[2]),
-                        secondTenths: parseInt(starttime[3])
-                    }
-                });
+                if (starttime.length === 4) {
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            hours: parseInt(starttime[0]),
+                            minutes: parseInt(starttime[1]),
+                            seconds: parseInt(starttime[2]),
+                            secondTenths: parseInt(starttime[3])
+                        }
+                    });
+                } else if (starttime.length === 5) { // added "days" precision in the recent update
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            days: parseInt(starttime[0]),
+                            hours: parseInt(starttime[1]),
+                            minutes: parseInt(starttime[2]),
+                            seconds: parseInt(starttime[3]),
+                            secondTenths: parseInt(starttime[4])
+                        }
+                    });
+                } else {
+                    sw_timer.start({ precision: 'secondTenths' });
+                }
             } else {
                 sw_timer.start({ precision: 'secondTenths' });
             }
