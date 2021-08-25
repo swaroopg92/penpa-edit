@@ -1,4 +1,8 @@
 ## History
+* 2021/08/25 ver 2.26.6
+	* Pausing timer will now hide the grid.
+	* Hiding timer button.
+	* Bug Fixes.
 * 2021/08/15 ver 2.26.5
 	* Improved Sudoku Solving mode - Now the cursor moves toroidal and comes back from the other side of the grid
 	* Fixing Minor bugs to support old Firefox Browsers.

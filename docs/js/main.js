@@ -293,6 +293,15 @@ onload = function() {
                 e.returnValue = false;
             }
 
+            if (key === "F4") { //function_key
+                if (sw_timer.isPaused()) {
+                    startTimer();
+                } else {
+                    pauseTimer();
+                }
+                e.returnValue = false;
+            }
+
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
                 pu.key_arrow(key, ctrl_key);
                 e.returnValue = false;
@@ -1978,7 +1987,7 @@ onload = function() {
                 pu.borderwarning = false;
                 Swal.fire({
                     html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
-                    timer: 4000,
+                    timer: 8000,
                     icon: 'info'
                 })
             }
@@ -1987,13 +1996,16 @@ onload = function() {
     }
 
     // Timer pause and unpause
-    $('#stop_watch #sw_pause').click(function() {
+    document.getElementById("sw_pause").addEventListener("click", pauseTimer);
+    document.getElementById("sw_start").addEventListener("click", startTimer);
+
+    function pauseTimer() {
         pu.show_pause_layer();
         sw_timer.pause();
-    });
+    }
 
-    $('#stop_watch #sw_start').click(function() {
+    function startTimer() {
         pu.hide_pause_layer();
         sw_timer.start({ precision: 'secondTenths' });
-    });
+    }
 };
