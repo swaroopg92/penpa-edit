@@ -1985,4 +1985,15 @@ onload = function() {
         }
         pu.redraw();
     }
+
+    // Timer pause and unpause
+    $('#stop_watch #sw_pause').click(function() {
+        pu.show_pause_layer();
+        sw_timer.pause();
+    });
+
+    $('#stop_watch #sw_start').click(function() {
+        pu.hide_pause_layer();
+        sw_timer.start({ precision: 'secondTenths' });
+    });
 };

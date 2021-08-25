@@ -763,6 +763,9 @@ function CreateCheck() {
         if (result.isConfirmed) {
             create_newboard();
             pu.redraw();
+            if (sw_timer.isPaused()) {
+                pu.show_pause_layer();
+            }
         }
     })
 }
@@ -774,6 +777,9 @@ function newgrid() {
         pu.redraw();
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
+        if (sw_timer.isPaused()) {
+            pu.show_pause_layer();
+        }
     } else {
         Swal.fire({
             title: 'Swaroop says:',
@@ -793,6 +799,9 @@ function newgrid_r() {
         pu.redraw();
         panel_pu.draw_panel();
         document.getElementById('modal-newsize').style.display = 'none';
+        if (sw_timer.isPaused()) {
+            pu.show_pause_layer();
+        }
     } else {
         Swal.fire({
             title: 'Swaroop says:',

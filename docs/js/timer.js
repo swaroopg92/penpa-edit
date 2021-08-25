@@ -1,13 +1,5 @@
 var sw_timer = new easytimer.Timer();
 
-$('#stop_watch #sw_start').click(function() {
-    sw_timer.start({ precision: 'secondTenths' });
-});
-
-$('#stop_watch #sw_pause').click(function() {
-    sw_timer.pause();
-});
-
 $('#stop_watch #sw_stop').click(function() {
     sw_timer.stop();
 });

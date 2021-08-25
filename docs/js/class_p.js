@@ -359,6 +359,48 @@ class Puzzle {
         this.make_frameline();
     }
 
+    reset_pause_layer() {
+        // pause-unpause layer
+        let pause_canvas = document.getElementById("pause_canvas");
+        let pause_ctx = pause_canvas.getContext("2d");
+        pause_canvas.style.width = this.canvasx.toString() + "px";
+        pause_canvas.style.height = this.canvasy.toString() + "px";
+        pause_canvas.width = this.resol * this.canvasx;
+        pause_canvas.height = this.resol * this.canvasy;
+    }
+
+    show_pause_layer() {
+        let pause_canvas = document.getElementById("pause_canvas");
+        let pause_ctx = pause_canvas.getContext("2d");
+        this.reset_pause_layer();
+
+        // set the style and font
+        pause_ctx.filleStyle = Color.BLUE;
+        let font_size = 0.09 * pause_canvas.height; // 90 % of display size/ height of canvas
+        pause_ctx.font = font_size + 'px sans-serif';
+        let lineheight = 1.2 * font_size;
+        let textstring = "Click on\n\"Start\" to\nUNPAUSE";
+        let lines = textstring.split('\n');
+        let textwidth;
+
+        for (var j = 0; j < lines.length; j++) {
+            textwidth = pause_ctx.measureText(lines[j]).width;
+            pause_ctx.fillText(lines[j], (pause_canvas.width) / 2 - (textwidth / 2), (j + 1) * (pause_canvas.height / (lines.length + 1)));
+        }
+        document.getElementById("pause_canvas").style.display = "inline-block";
+    }
+
+    hide_pause_layer() {
+        // Clean the pause canvas
+        let pause_canvas = document.getElementById("pause_canvas");
+        let pause_ctx = pause_canvas.getContext("2d");
+        this.reset_pause_layer();
+        pause_ctx.fillStyle = Color.TRANSPARENTWHITE;
+        pause_ctx.fillRect(0, 0, this.canvasx, this.canvasy);
+
+        document.getElementById("pause_canvas").style.display = "none";
+    }
+
     make_frameline() {
         var gr = 1; //実線
         var ot = 2; //太線
