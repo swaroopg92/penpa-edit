@@ -723,6 +723,14 @@ body textarea {
     padding: 10px;
 }
 
+#pause_canvas {
+    background: var(--white);
+    border: 0px none black;
+    position: absolute;
+    margin: 0 auto;
+    padding: 5px;
+}
+
 #canvas {
     background: var(--black);
 }
