@@ -1235,10 +1235,25 @@ function saveimage_download() {
 }
 
 function saveimage_window() {
+    var win, url;
     var downloadLink = document.getElementById('download_link');
-    var win = window.open();
     var address = pu.resizecanvas();
-    win.document.write("<img src='" + address + "'/>");
+    if (document.getElementById("nb_type3").checked) { //svg
+        // store in a Blob
+        let blob = new Blob([address], { type: "image/svg+xml" });
+        var ua = window.navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
+            //safari
+            window.open('data:image/svg+xml;base64,' + window.Base64.encode(address), '_blank');
+        } else {
+            // create an URI pointing to that blob
+            url = URL.createObjectURL(blob);
+            window.open(url);
+        }
+    } else {
+        win = window.open();
+        win.document.write("<img src='" + address + "'/>");
+    }
 }
 
 function savetext() {
