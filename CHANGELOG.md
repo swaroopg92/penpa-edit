@@ -12,6 +12,7 @@
 	* Fixed display order glitch.
 	* New SVG image code. Merged PR.
 * 2021/08/01 ver 2.26.3
+	* Automatic Cache Refresh.
 	* Added ignore line segments option to answer check.
 	* Minor display improvements.
 * 2021/07/28 ver 2.26.2
