@@ -5593,7 +5593,41 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 case "5": //small
                     this.draw_numbercircle_iso(pu, i, 0.17);
                     set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
+                    let lines = this[pu].number[i][0].split('\\n');
+                    if (lines.length == 1) {
+                        this.ctx.text(this[pu].number[i][0], this.point[i].x, this.point[i].y + 0.02 * this.size, this.size * 0.8);
+                    } else {
+                        let offset_x, offset_y;
+                        let cube_side = this.find_cube_side(i);
+                        switch (cube_side) {
+                            case "top":
+                                offset_y = 0.3 * this.size * 0.8;
+                                for (let j = 0; j < lines.length; j++) {
+                                    if (lines[j]) {
+                                        this.ctx.text(lines[j], this.point[i].x, this.point[i].y + 0.02 * this.size + j * offset_y, this.size * 0.8);
+                                    }
+                                }
+                                break;
+                            case "left":
+                                offset_x = 0.23 * this.size * 0.8;
+                                offset_y = 0.4 * this.size * 0.8;
+                                for (let j = 0; j < lines.length; j++) {
+                                    if (lines[j]) {
+                                        this.ctx.text(lines[j], this.point[i].x + j * offset_x, this.point[i].y + 0.02 * this.size + j * offset_y, this.size * 0.8);
+                                    }
+                                }
+                                break;
+                            case "right":
+                                offset_x = 0.25 * this.size * 0.8;
+                                offset_y = 0.15 * this.size * 0.8;
+                                for (let j = 0; j < lines.length; j++) {
+                                    if (lines[j]) {
+                                        this.ctx.text(lines[j], this.point[i].x + j * offset_x, this.point[i].y + 0.02 * this.size + j * offset_y, this.size * 0.8);
+                                    }
+                                }
+                                break;
+                        }
+                    }
                     break;
                 case "6": //medium
                     this.draw_numbercircle_iso(pu, i, 0.25);
@@ -5656,6 +5690,29 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 this.ctx.textAlign = "center";
                 this.ctx.text(this[pu].numberS[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size, 0.3 * this.size);
             }
+        }
+    }
+
+    find_cube_side(i) {
+        let surround = this.point[i].surround;
+        let top = 0,
+            left = 0,
+            right = 0;
+        for (let j = 0; j < surround.length; j++) {
+            if (surround[j] % 27 === 0) {
+                top += 1;
+            } else if (surround[j] % 27 === 1) {
+                left += 1;
+            } else if (surround[j] % 27 === 2) {
+                right += 1;
+            }
+        }
+        if (right > 0) {
+            return "right";
+        } else if (left > 0) {
+            return "left";
+        } else {
+            return "top";
         }
     }
 
