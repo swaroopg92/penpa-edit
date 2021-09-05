@@ -82,6 +82,8 @@ function create() {
     }
 
     pu.redraw();
+    pu.decode_puzzlink('https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i');
+    // pu.decode_puzzlink('http://localhost:8000/p.html?ripple/3/2/k01g4h3')
 }
 
 function getCookie(name) {
@@ -1480,6 +1482,8 @@ function import_url() {
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
                 selectBox.setValue(JSON.parse(this.usertab_choices));
             }
+        } else if (urlstring.indexOf("/puzz.link/p?") !== -1) {
+            pu.decode_puzzlink(urlstring);
         } else {
             document.getElementById("urlstring").value = "Error: Invalid URL";
         }
@@ -1740,8 +1744,10 @@ function load(urlParam, type = 'url') {
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
-            for (var j of ["command_redo", "command_undo"]) {
+        let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
+        let undo_redo = ["command_redo", "command_undo"];
+        for (var i of pu_qa) {
+            for (var j of undo_redo) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
                 pu[i][j].set(t);
@@ -1864,8 +1870,10 @@ function load(urlParam, type = 'url') {
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q", "pu_q_col"]) {
-            for (var j of ["command_redo", "command_undo"]) {
+        let pu_qa = ["pu_q", "pu_q_col"];
+        let undo_redo = ["command_redo", "command_undo"];
+        for (var i of pu_qa) {
+            for (var j of undo_redo) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
                 pu[i][j].set(t);

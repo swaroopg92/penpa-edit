@@ -735,8 +735,7 @@ class Puzzle_truncated_square extends Puzzle {
                 this.ctx.lineJoin = "bevel";
                 this.ctx.beginPath();
                 this.ctx.arrow(this.point[this[pu].direction[i][j - 1]].x, this.point[this[pu].direction[i][j - 1]].y,
-                    this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y,
-                    [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
+                    this.point[this[pu].direction[i][j]].x, this.point[this[pu].direction[i][j]].y, [-0.00001, 0, -0.25 * this.size, 0.25 * this.size]);
                 this.ctx.stroke();
                 this.ctx.lineJoin = "miter";
             }
@@ -953,8 +952,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x + 0.0 * this.size, p_y + 0.15 * this.size, this.size * 0.8);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (arrowlength * 0.5 + 0.0) * this.size, p_y + (arrowlength * 0.0 - 0.3) * this.size,
-                                p_x + (-arrowlength * 0.5 + 0.0) * this.size, p_y + (-arrowlength * 0.0 - 0.3) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (-arrowlength * 0.5 + 0.0) * this.size, p_y + (-arrowlength * 0.0 - 0.3) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -962,8 +960,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x + 0.0 * this.size, p_y + 0.15 * this.size, this.size * 0.8);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x - (arrowlength * 0.5 + 0.0) * this.size, p_y + (arrowlength * 0.0 - 0.3) * this.size,
-                                p_x - (-arrowlength * 0.5 + 0.0) * this.size, p_y + (-arrowlength * 0.0 - 0.3) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x - (-arrowlength * 0.5 + 0.0) * this.size, p_y + (-arrowlength * 0.0 - 0.3) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -971,8 +968,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x - 0.1 * this.size, p_y + 0.05 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (arrowlength * 0.0 + 0.3) * this.size, p_y + (arrowlength * 0.5 - 0.0) * this.size,
-                                p_x + (-arrowlength * 0.0 + 0.3) * this.size, p_y + (-arrowlength * 0.5 - 0.0) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (-arrowlength * 0.0 + 0.3) * this.size, p_y + (-arrowlength * 0.5 - 0.0) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -980,8 +976,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x - 0.1 * this.size, p_y + 0.05 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (arrowlength * 0.0 + 0.3) * this.size, p_y + (-arrowlength * 0.5 - 0.0) * this.size,
-                                p_x + (-arrowlength * 0.0 + 0.3) * this.size, p_y + (arrowlength * 0.5 - 0.0) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (-arrowlength * 0.0 + 0.3) * this.size, p_y + (arrowlength * 0.5 - 0.0) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -989,8 +984,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x + 0.05 * this.size, p_y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (-arrowlength * 0.35 - 0.2) * this.size, p_y + (arrowlength * 0.35 - 0.2) * this.size,
-                                p_x + (arrowlength * 0.35 - 0.2) * this.size, p_y + (-arrowlength * 0.35 - 0.2) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (arrowlength * 0.35 - 0.2) * this.size, p_y + (-arrowlength * 0.35 - 0.2) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -998,8 +992,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x + 0.05 * this.size, p_y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (arrowlength * 0.35 - 0.2) * this.size, p_y + (-arrowlength * 0.35 - 0.2) * this.size,
-                                p_x + (-arrowlength * 0.35 - 0.2) * this.size, p_y + (arrowlength * 0.35 - 0.2) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (-arrowlength * 0.35 - 0.2) * this.size, p_y + (arrowlength * 0.35 - 0.2) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -1007,8 +1000,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x - 0.05 * this.size, p_y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (arrowlength * 0.35 + 0.2) * this.size, p_y + (arrowlength * 0.35 - 0.2) * this.size,
-                                p_x + (-arrowlength * 0.35 + 0.2) * this.size, p_y + (-arrowlength * 0.35 - 0.2) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (-arrowlength * 0.35 + 0.2) * this.size, p_y + (-arrowlength * 0.35 - 0.2) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -1016,8 +1008,7 @@ class Puzzle_truncated_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x - 0.05 * this.size, p_y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(p_x + (-arrowlength * 0.35 + 0.2) * this.size, p_y + (-arrowlength * 0.35 - 0.2) * this.size,
-                                p_x + (arrowlength * 0.35 + 0.2) * this.size, p_y + (arrowlength * 0.35 - 0.2) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                p_x + (arrowlength * 0.35 + 0.2) * this.size, p_y + (arrowlength * 0.35 - 0.2) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -1799,56 +1790,49 @@ class Puzzle_truncated_square extends Puzzle {
                 w1 = z1;
                 w2 = -2 * (z1 + z2);
                 ctx.beginPath();
-                ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
             if (num[1] === 1) {
                 w1 = -(z1 + z2);
                 w2 = -2 * z1;
                 ctx.beginPath();
-                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
             if (num[2] === 1) {
                 w1 = z1 + z2;
                 w2 = -2 * z1;
                 ctx.beginPath();
-                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
             if (num[3] === 1) {
                 w1 = z1;
                 w2 = 0;
                 ctx.beginPath();
-                ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
             if (num[4] === 1) {
                 w1 = -(z1 + z2);
                 w2 = 2 * z1;
                 ctx.beginPath();
-                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
             if (num[5] === 1) {
                 w1 = z1 + z2;
                 w2 = 2 * z1;
                 ctx.beginPath();
-                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
             if (num[6] === 1) {
                 w1 = z1;
                 w2 = 2 * (z1 + z2);
                 ctx.beginPath();
-                ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size,
-                    [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+                ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
                 ctx.fill();
             }
         }
@@ -1865,50 +1849,43 @@ class Puzzle_truncated_square extends Puzzle {
         w1 = z1;
         w2 = -2 * (z1 + z2);
         ctx.beginPath();
-        ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
         w1 = -(z1 + z2);
         w2 = -2 * z1;
         ctx.beginPath();
-        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
         w1 = z1 + z2;
         w2 = -2 * z1;
         ctx.beginPath();
-        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y - 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
         w1 = z1;
         w2 = 0;
         ctx.beginPath();
-        ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
         w1 = -(z1 + z2);
         w2 = 2 * z1;
         ctx.beginPath();
-        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
         w1 = z1 + z2;
         w2 = 2 * z1;
         ctx.beginPath();
-        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x + w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + 2 * z2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
         w1 = z1;
         w2 = 2 * (z1 + z2);
         ctx.beginPath();
-        ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size,
-            [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
+        ctx.arrow(x - w1 * pu.size, y + w2 * pu.size, x + w1 * pu.size, y + w2 * pu.size, [w3 * pu.size, w4 * pu.size, -w3 * pu.size, w4 * pu.size]);
         ctx.stroke();
         ctx.fill();
 
@@ -1997,8 +1974,7 @@ class Puzzle_truncated_square extends Puzzle {
         if (num > 0 && num <= 6) {
             th = this.rotate_theta((num - 1) * 60 - 150);
             ctx.beginPath();
-            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                [0, w1 * pu.size, r1 * pu.size, w1 * pu.size, r2 * pu.size, w2 * pu.size, r3 * pu.size, w3 * pu.size]);
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, r1 * pu.size, w1 * pu.size, r2 * pu.size, w2 * pu.size, r3 * pu.size, w3 * pu.size]);
             ctx.fill();
             ctx.stroke();
         }
@@ -2035,8 +2011,7 @@ class Puzzle_truncated_square extends Puzzle {
         if (num > 0 && num <= 8) {
             th = this.rotate_theta((num - 1) * 45 - 180);
             ctx.beginPath();
-            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
             ctx.fill();
             ctx.stroke();
         }
@@ -2053,8 +2028,7 @@ class Puzzle_truncated_square extends Puzzle {
             if (num[i] === 1) {
                 th = this.rotate_theta(i * 90 - 180);
                 ctx.beginPath();
-                ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
             }
         }
@@ -2082,8 +2056,7 @@ class Puzzle_truncated_square extends Puzzle {
         if (num > 0 && num <= 8) {
             th = this.rotate_theta((num - 1) * 45 - 180);
             ctx.beginPath();
-            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
             ctx.fill();
             ctx.stroke();
         }
@@ -2107,8 +2080,7 @@ class Puzzle_truncated_square extends Puzzle {
         if (num > 0 && num <= 4) {
             th = this.rotate_theta((num - 1) * 90);
             ctx.beginPath();
-            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
             ctx.fill();
             ctx.stroke();
         }
@@ -2128,8 +2100,7 @@ class Puzzle_truncated_square extends Puzzle {
                 th1 = this.rotate_theta(225 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.1 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.1 * pu.size * Math.sin(th2), x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.05 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.05 * pu.size * Math.sin(th2),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                ctx.arrow(x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.1 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.1 * pu.size * Math.sin(th2), x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.05 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.05 * pu.size * Math.sin(th2), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
                 ctx.stroke();
             }
@@ -2139,8 +2110,7 @@ class Puzzle_truncated_square extends Puzzle {
                 th1 = this.rotate_theta(225 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.1 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.1 * pu.size * Math.sin(th2), x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.05 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.05 * pu.size * Math.sin(th2),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                ctx.arrow(x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.1 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.1 * pu.size * Math.sin(th2), x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.05 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.05 * pu.size * Math.sin(th2), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
                 ctx.stroke();
             }
@@ -5458,8 +5428,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.1 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (arrowlength * 0.25 + 0.15) * this.size, this.point[i].y + (arrowlength * 0.25 * Math.sqrt(3) - 0.15) * this.size,
-                                this.point[i].x + (-arrowlength * 0.25 + 0.15) * this.size, this.point[i].y + (-arrowlength * 0.25 * Math.sqrt(3) - 0.15) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (-arrowlength * 0.25 + 0.15) * this.size, this.point[i].y + (-arrowlength * 0.25 * Math.sqrt(3) - 0.15) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5467,8 +5436,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.1 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (-arrowlength * 0.25 + 0.2) * this.size, this.point[i].y + (-arrowlength * 0.25 * Math.sqrt(3) - 0.1) * this.size,
-                                this.point[i].x + (arrowlength * 0.25 + 0.2) * this.size, this.point[i].y + (arrowlength * 0.25 * Math.sqrt(3) - 0.1) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (arrowlength * 0.25 + 0.2) * this.size, this.point[i].y + (arrowlength * 0.25 * Math.sqrt(3) - 0.1) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5476,8 +5444,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x + 0.1 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x - (arrowlength * 0.25 + 0.15) * this.size, this.point[i].y + (arrowlength * 0.25 * Math.sqrt(3) - 0.15) * this.size,
-                                this.point[i].x - (-arrowlength * 0.25 + 0.15) * this.size, this.point[i].y + (-arrowlength * 0.25 * Math.sqrt(3) - 0.15) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x - (-arrowlength * 0.25 + 0.15) * this.size, this.point[i].y + (-arrowlength * 0.25 * Math.sqrt(3) - 0.15) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5485,8 +5452,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x + 0.1 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x - (-arrowlength * 0.25 + 0.2) * this.size, this.point[i].y + (-arrowlength * 0.25 * Math.sqrt(3) - 0.1) * this.size,
-                                this.point[i].x - (arrowlength * 0.25 + 0.2) * this.size, this.point[i].y + (arrowlength * 0.25 * Math.sqrt(3) - 0.1) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x - (arrowlength * 0.25 + 0.2) * this.size, this.point[i].y + (arrowlength * 0.25 * Math.sqrt(3) - 0.1) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5494,8 +5460,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x + 0.0 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (arrowlength * 0.5 + 0.0) * this.size, this.point[i].y + (arrowlength * 0.0 - 0.3) * this.size,
-                                this.point[i].x + (-arrowlength * 0.5 + 0.0) * this.size, this.point[i].y + (-arrowlength * 0.0 - 0.3) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (-arrowlength * 0.5 + 0.0) * this.size, this.point[i].y + (-arrowlength * 0.0 - 0.3) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5503,8 +5468,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x + 0.0 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x - (arrowlength * 0.5 + 0.0) * this.size, this.point[i].y + (arrowlength * 0.0 - 0.3) * this.size,
-                                this.point[i].x - (-arrowlength * 0.5 + 0.0) * this.size, this.point[i].y + (-arrowlength * 0.0 - 0.3) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x - (-arrowlength * 0.5 + 0.0) * this.size, this.point[i].y + (-arrowlength * 0.0 - 0.3) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5512,8 +5476,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.0 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (arrowlength * 0.25 * Math.sqrt(3) + 0.1) * this.size, this.point[i].y + (arrowlength * 0.25 - 0.2) * this.size,
-                                this.point[i].x + (-arrowlength * 0.25 * Math.sqrt(3) + 0.1) * this.size, this.point[i].y + (-arrowlength * 0.25 - 0.2) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (-arrowlength * 0.25 * Math.sqrt(3) + 0.1) * this.size, this.point[i].y + (-arrowlength * 0.25 - 0.2) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5521,8 +5484,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.0 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (-arrowlength * 0.25 * Math.sqrt(3) + 0.15) * this.size, this.point[i].y + (-arrowlength * 0.25 - 0.15) * this.size,
-                                this.point[i].x + (arrowlength * 0.25 * Math.sqrt(3) + 0.15) * this.size, this.point[i].y + (arrowlength * 0.25 - 0.15) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (arrowlength * 0.25 * Math.sqrt(3) + 0.15) * this.size, this.point[i].y + (arrowlength * 0.25 - 0.15) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5530,8 +5492,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x + 0.0 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x - (arrowlength * 0.25 * Math.sqrt(3) + 0.1) * this.size, this.point[i].y + (arrowlength * 0.25 - 0.2) * this.size,
-                                this.point[i].x - (-arrowlength * 0.25 * Math.sqrt(3) + 0.1) * this.size, this.point[i].y + (-arrowlength * 0.25 - 0.2) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x - (-arrowlength * 0.25 * Math.sqrt(3) + 0.1) * this.size, this.point[i].y + (-arrowlength * 0.25 - 0.2) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5539,8 +5500,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x + 0.0 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x - (-arrowlength * 0.25 * Math.sqrt(3) + 0.15) * this.size, this.point[i].y + (-arrowlength * 0.25 - 0.15) * this.size,
-                                this.point[i].x - (arrowlength * 0.25 * Math.sqrt(3) + 0.15) * this.size, this.point[i].y + (arrowlength * 0.25 - 0.15) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x - (arrowlength * 0.25 * Math.sqrt(3) + 0.15) * this.size, this.point[i].y + (arrowlength * 0.25 - 0.15) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5548,8 +5508,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.1 * this.size, this.point[i].y + 0.05 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (arrowlength * 0.0 + 0.25) * this.size, this.point[i].y + (arrowlength * 0.5 - 0.0) * this.size,
-                                this.point[i].x + (-arrowlength * 0.0 + 0.25) * this.size, this.point[i].y + (-arrowlength * 0.5 - 0.0) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (-arrowlength * 0.0 + 0.25) * this.size, this.point[i].y + (-arrowlength * 0.5 - 0.0) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5557,8 +5516,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.1 * this.size, this.point[i].y + 0.05 * this.size, this.size * 0.7);
                             this.ctx.beginPath();
                             this.ctx.arrow(this.point[i].x + (arrowlength * 0.0 + 0.25) * this.size, this.point[i].y + (-arrowlength * 0.5 - 0.0) * this.size,
-                                this.point[i].x + (-arrowlength * 0.0 + 0.25) * this.size, this.point[i].y + (arrowlength * 0.5 - 0.0) * this.size,
-                                [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
+                                this.point[i].x + (-arrowlength * 0.0 + 0.25) * this.size, this.point[i].y + (arrowlength * 0.5 - 0.0) * this.size, [0, 1, -0.25 * this.size, 1, -0.25 * this.size, 3]);
                             this.ctx.stroke();
                             this.ctx.fill();
                             break;
@@ -5699,8 +5657,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
         if (num > 0 && num <= 6) {
             th = this.rotate_theta((num - 1) * 60 - 150);
             ctx.beginPath();
-            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+            ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
             ctx.fill();
             ctx.stroke();
         }
@@ -5717,8 +5674,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             if (num[i] === 1) {
                 th = this.rotate_theta(i * 60 - 150);
                 ctx.beginPath();
-                ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th), [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
             }
         }
