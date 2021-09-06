@@ -2505,6 +2505,7 @@ function decode_puzzlink(url) {
 
         switch (type) {
             case "ripple":
+            case "nanro":
                 info_edge = puzzlink_pu.decodeBorder();
                 info_number = puzzlink_pu.decodeNumber16();
 
@@ -2606,5 +2607,8 @@ function decode_puzzlink(url) {
                 })
                 break;
         }
+
+        // Set the Source
+        document.getElementById("saveinfosource").value = url;
     }
 }
