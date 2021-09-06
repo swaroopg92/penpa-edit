@@ -1480,8 +1480,9 @@ function import_url() {
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
                 selectBox.setValue(JSON.parse(this.usertab_choices));
             }
-        } else if (urlstring.indexOf("/puzz.link/p?") !== -1) {
+        } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p?") !== -1) {
             decode_puzzlink(urlstring);
+            document.getElementById("modal-load").style.display = 'none';
         } else {
             document.getElementById("urlstring").value = "Error: Invalid URL";
         }
