@@ -7717,12 +7717,12 @@ class Puzzle {
                 delete this[this.mode.qa + "_col"].symbol[this.cursol];
             }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (this.selection.length === 1) {
+                this.undoredo_counter = 0;
+            } else {
+                this.undoredo_counter = this.undoredo_counter + 1;
+            }
             if (keypressed === 46 || keypressed === 8 || this.ondown_key === "touchstart") {
-                if (this.selection.length === 1) {
-                    this.undoredo_counter = 0;
-                } else {
-                    this.undoredo_counter = this.undoredo_counter + 1;
-                }
                 if (this.selection.length > 0) {
                     if (!ctrl_key && !shift_key) {
                         for (var k of this.selection) {
