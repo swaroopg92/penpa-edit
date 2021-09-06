@@ -82,8 +82,6 @@ function create() {
     }
 
     pu.redraw();
-    decode_puzzlink('https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i');
-    // decode_puzzlink('http://localhost:8000/p.html?ripple/3/2/k01g4h3');
 }
 
 function getCookie(name) {
