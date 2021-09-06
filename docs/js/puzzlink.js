@@ -6,6 +6,7 @@ class Puzzlink {
     }
 
     decodeBorder() {
+        var border_list = {};
         var id,
             pos1,
             pos2,
@@ -23,7 +24,7 @@ class Puzzlink {
             var ca = parseInt(this.gridurl.charAt(i), 32);
             for (var w = 0; w < 5; w++) {
                 if (id < (this.cols - 1) * this.rows) {
-                    console.log(ca & twi[w] ? 1 : 0);
+                    border_list[id] = ca & twi[w] ? 1 : 0;
                     id++;
                 }
             }
@@ -35,15 +36,17 @@ class Puzzlink {
             var ca = parseInt(this.gridurl.charAt(i), 32);
             for (var w = 0; w < 5; w++) {
                 if (id < 2 * this.cols * this.rows - this.cols - this.rows) {
-                    console.log(ca & twi[w] ? 1 : 0);
+                    border_list[id] = ca & twi[w] ? 1 : 0;
                     id++;
                 }
             }
         }
+
+        return border_list;
     }
 
     decodeNumber16() {
-        let number_list = {};
+        var number_list = {};
         var i, pos1, pos2;
         var c = 0;
 
@@ -66,6 +69,7 @@ class Puzzlink {
                 i++;
             }
         }
+
         return number_list;
     }
 
@@ -81,7 +85,7 @@ class Puzzlink {
         } else if (ca === "%") {
             return [parseInt(this.gridurl.substr(i + 1, 3), 16) + 8192, 4];
         } else if (ca === ".") {
-            return [-2, 1];
+            return ['?', 1];
         } else {
             return [-1, 0];
         }

@@ -2503,7 +2503,8 @@ function decode_puzzlink(url) {
 
         switch (type) {
             case "ripple":
-                let info_edge, info_number;
+                let info_edge, info_number,
+                    row_ind, col_ind, cell, edge;
                 info_edge = puzzlink_pu.decodeBorder();
                 info_number = puzzlink_pu.decodeNumber16();
 
@@ -2518,17 +2519,43 @@ function decode_puzzlink(url) {
                 // Add numbers to grid
                 for (var i in info_number) {
                     // Determine which row and column
-                    let row_ind = parseInt(i / cols);
-                    let col_ind = i % cols;
-                    let cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                    pu[pu.mode.qa].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
                 }
 
                 // Add edges to grid
+                let edgex, edgey;
+                for (var i in info_edge) {
+                    if (info_edge[i] === 1) {
+                        // Determine Vertical Border or Horizontal
+                        if (i < (cols - 1) * rows) {
+                            row_ind = parseInt(i / (cols - 1));
+                            col_ind = i % (cols - 1);
+                            // plus 1 at end because the 0 reference is from column 1 due to inside border
+                            edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                            edgey = edgex + pu.nx0;
+                        } else {
+                            i = i - ((cols - 1) * rows); //offset to 0
+                            row_ind = parseInt(i / cols);
+                            col_ind = i % cols;
+                            // 2 + row_ind, as 1st horizontal is the 0 reference
+                            edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
+                            edgey = edgex + 1;
+                        }
+                        var key = edgex.toString() + "," + edgey.toString();
+                        pu["pu_q"]["line"][key] = 2; // 2 is for Black Style
+                    }
+                }
 
                 // Change to Solution Tab
                 pu.mode_qa("pu_a");
                 pu.mode_set("sudoku"); //include redraw
+
+                // Set PenpaLite
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab only useful for penpalite
+                advancecontrol_onoff("url");
 
                 // Redraw the grid
                 pu.redraw();
