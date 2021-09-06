@@ -42,18 +42,16 @@ class Puzzlink {
             }
         }
 
+        // Reduce the URL by removing the border information
+        this.gridurl = this.gridurl.substr(pos2);
+
         return border_list;
     }
 
     decodeNumber16() {
         var number_list = {};
-        var i, pos1, pos2;
+        var i = 0;
         var c = 0;
-
-        // Identifying how many characters of the url includes border information and exclude those
-        pos1 = Math.min((((this.cols - 1) * this.rows + 4) / 5) | 0, this.gridurl.length);
-        pos2 = Math.min((((this.cols * (this.rows - 1) + 4) / 5) | 0) + pos1, this.gridurl.length);
-        i = pos2;
 
         while (i < this.gridurl.length) {
             var ca = this.gridurl.charAt(i);

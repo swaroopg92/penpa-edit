@@ -2498,17 +2498,18 @@ function decode_puzzlink(url) {
             confirmButtonText: 'ok 🙂',
         })
     } else {
+        var info_edge, info_number, size,
+            row_ind, col_ind, cell,
+            edge, edgex, edgey;
         var puzzlink_pu = new Puzzlink(cols, rows, bstr);
 
         switch (type) {
             case "ripple":
-                let info_edge, info_number,
-                    row_ind, col_ind, cell, edge;
                 info_edge = puzzlink_pu.decodeBorder();
                 info_number = puzzlink_pu.decodeNumber16();
 
                 // Create Square Board of Size Cols, Rows
-                var size = parseInt(document.getElementById("nb_size3").value);
+                size = parseInt(document.getElementById("nb_size3").value);
                 pu = new Puzzle_square(parseInt(cols), parseInt(rows), size);
                 pu.reset_frame(); // Draw the board
                 panel_pu.draw_panel();
@@ -2525,7 +2526,6 @@ function decode_puzzlink(url) {
                 }
 
                 // Add edges to grid
-                let edgex, edgey;
                 for (var i in info_edge) {
                     if (info_edge[i] === 1) {
                         // Determine Vertical Border or Horizontal
@@ -2546,6 +2546,41 @@ function decode_puzzlink(url) {
                         var key = edgex.toString() + "," + edgey.toString();
                         pu["pu_q"]["line"][key] = 2; // 2 is for Black Style
                     }
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("sudoku"); //include redraw
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+            case "sudoku":
+                info_number = puzzlink_pu.decodeNumber16();
+
+                // Create Sudoku Board of Size Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_sudoku(parseInt(cols), parseInt(rows), size);
+                pu.draw_sudokugrid([4, 7], [4, 7], 1, 9, 2);
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("sudoku"); //include redraw
+
+                // Add numbers to grid
+                for (var i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
                 }
 
                 // Change to Solution Tab
