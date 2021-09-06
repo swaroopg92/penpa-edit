@@ -157,7 +157,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 7]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -165,9 +165,11 @@ class Puzzle {
     }
 
     reset() {
+        let pu_qa = ["pu_q", "pu_a"],
+            pu_qa_col = ["pu_q_col", "pu_a_col"];
 
         // Object and Array initialization
-        for (var i of ["pu_q", "pu_a"]) {
+        for (var i of pu_qa) {
             this[i] = {};
             this[i].command_redo = new Stack();
             this[i].command_undo = new Stack();
@@ -192,7 +194,7 @@ class Puzzle {
         }
 
         // Object and Array initialization for custom colors
-        for (var i of ["pu_q_col", "pu_a_col"]) {
+        for (var i of pu_qa_col) {
             this[i] = {};
             this[i].command_redo = new Stack();
             this[i].command_undo = new Stack();
@@ -597,7 +599,8 @@ class Puzzle {
             var old_centerlist = this.centerlist;
             var old_idealcenterlist = []; // If no box was missing
             for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
-                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
+                // the top and left edges are unused
+                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) {
                     old_idealcenterlist.push(i + j * (originalnx0));
                 }
             }
@@ -643,8 +646,9 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
-            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
+            for (var i of pu_qa) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -1020,9 +1024,9 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
-            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
-
+            for (var i of pu_qa) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -1292,8 +1296,9 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
-            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
+            for (var i of pu_qa) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -1672,8 +1677,9 @@ class Puzzle {
             this.make_frameline();
             this.cursol = this.centerlist[0];
             this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
-            for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
+            for (var i of pu_qa) {
                 this[i].command_redo = new Stack();
                 this[i].command_undo = new Stack();
 
@@ -7711,16 +7717,15 @@ class Puzzle {
                 delete this[this.mode.qa + "_col"].symbol[this.cursol];
             }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (this.selection.length === 1) {
+                this.undoredo_counter = 0;
+            } else {
+                this.undoredo_counter = this.undoredo_counter + 1;
+            }
             if (keypressed === 46 || keypressed === 8 || this.ondown_key === "touchstart") {
-                if (this.selection.length === 1) {
-                    this.undoredo_counter = 0;
-                } else {
-                    this.undoredo_counter = this.undoredo_counter + 1;
-                }
                 if (this.selection.length > 0) {
                     if (!ctrl_key && !shift_key) {
                         for (var k of this.selection) {
-
                             if (this[this.mode.qa].number[k]) {
                                 this.record("number", k, this.undoredo_counter);
                                 delete this[this.mode.qa].number[k];
@@ -8519,9 +8524,11 @@ class Puzzle {
 
     direction_arrow8(x, y) {} //override
     direction_arrow4(x, y) {} //override
+
     //////////////////////////
     // symbol
     //////////////////////////
+
     mouse_symbol(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.cursol = num;

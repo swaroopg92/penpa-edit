@@ -1,6 +1,11 @@
 ## History
+* 2021/09/05 ver 2.25.7
+	* Introducing Puzz.link support. Currently supports Ripple Effect and Sudoku.
+	* Feature to add TomTom clues to Cube Grid.
+	* Fixed spacebar bug for Sudoku mode.
+	* Fixed Firefox and Chrome issue with "Open in New Window" for SVG screenshot.
 * 2021/08/25 ver 2.26.6
-	* Pausing timer will now hide the grid.
+	* Pausing timer will now hide the grid. F4 shortcut to pause.
 	* Hiding timer button.
 	* Bug Fixes.
 * 2021/08/15 ver 2.26.5

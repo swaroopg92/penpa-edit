@@ -1482,6 +1482,9 @@ function import_url() {
             if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
                 selectBox.setValue(JSON.parse(this.usertab_choices));
             }
+        } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p?") !== -1) {
+            decode_puzzlink(urlstring);
+            document.getElementById("modal-load").style.display = 'none';
         } else {
             document.getElementById("urlstring").value = "Error: Invalid URL";
         }
@@ -1735,8 +1738,10 @@ function load(urlParam, type = 'url') {
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q", "pu_a", "pu_q_col", "pu_a_col"]) {
-            for (var j of ["command_redo", "command_undo"]) {
+        let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
+        let undo_redo = ["command_redo", "command_undo"];
+        for (var i of pu_qa) {
+            for (var j of undo_redo) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
                 pu[i][j].set(t);
@@ -1859,8 +1864,10 @@ function load(urlParam, type = 'url') {
         pu.centerlist = rtext[5];
 
         // Because class cannot be copied, its set in different way
-        for (var i of ["pu_q", "pu_q_col"]) {
-            for (var j of ["command_redo", "command_undo"]) {
+        let pu_qa = ["pu_q", "pu_q_col"];
+        let undo_redo = ["command_redo", "command_undo"];
+        for (var i of pu_qa) {
+            for (var j of undo_redo) {
                 var t = pu[i][j].__a;
                 pu[i][j] = new Stack();
                 pu[i][j].set(t);
@@ -2466,4 +2473,133 @@ function isEmptycontent(pu_qa, array, num, value) {
         }
     }
     return true;
+}
+
+function decode_puzzlink(url) {
+    var parts, urldata, type, cols, rows, bstr;
+
+    parts = url.split("?");
+    urldata = parts[1].split("/");
+    type = urldata[0];
+    cols = urldata[1];
+    rows = urldata[2];
+    bstr = urldata[3];
+
+    if ((cols > 60) || (rows > 60)) {
+        Swal.fire({
+            title: 'GMPuzzles says:',
+            html: 'Penpa+ do not support grid size greater than 60 rows or columns',
+            icon: 'error',
+            confirmButtonText: 'ok 🙂',
+        })
+    } else {
+        var info_edge, info_number, size,
+            row_ind, col_ind, cell,
+            edge, edgex, edgey;
+        var puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+        switch (type) {
+            case "ripple":
+                info_edge = puzzlink_pu.decodeBorder();
+                info_number = puzzlink_pu.decodeNumber16();
+
+                // Create Square Board of Size Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_square(parseInt(cols), parseInt(rows), size);
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("sudoku"); //include redraw
+
+                // Add numbers to grid
+                for (var i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
+                }
+
+                // Add edges to grid
+                for (var i in info_edge) {
+                    if (info_edge[i] === 1) {
+                        // Determine Vertical Border or Horizontal
+                        if (i < (cols - 1) * rows) {
+                            row_ind = parseInt(i / (cols - 1));
+                            col_ind = i % (cols - 1);
+                            // plus 1 at end because the 0 reference is from column 1 due to inside border
+                            edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                            edgey = edgex + pu.nx0;
+                        } else {
+                            i = i - ((cols - 1) * rows); //offset to 0
+                            row_ind = parseInt(i / cols);
+                            col_ind = i % cols;
+                            // 2 + row_ind, as 1st horizontal is the 0 reference
+                            edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
+                            edgey = edgex + 1;
+                        }
+                        var key = edgex.toString() + "," + edgey.toString();
+                        pu["pu_q"]["line"][key] = 2; // 2 is for Black Style
+                    }
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("sudoku"); //include redraw
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+            case "sudoku":
+                info_number = puzzlink_pu.decodeNumber16();
+
+                // Create Sudoku Board of Size Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_sudoku(parseInt(cols), parseInt(rows), size);
+                pu.draw_sudokugrid([4, 7], [4, 7], 1, 9, 2);
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("sudoku"); //include redraw
+
+                // Add numbers to grid
+                for (var i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("sudoku"); //include redraw
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+            default:
+                Swal.fire({
+                    title: 'GMPuzzles says:',
+                    html: 'It currently do not support puzzle type: ' + type,
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                })
+                break;
+        }
+    }
 }
