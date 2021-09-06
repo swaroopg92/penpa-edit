@@ -2597,6 +2597,14 @@ function decode_puzzlink(url) {
                 // Redraw the grid
                 pu.redraw();
                 break;
+            default:
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: 'It currently do not support puzzle type: ' + type,
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                })
+                break;
         }
     }
 }
