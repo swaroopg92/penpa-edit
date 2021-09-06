@@ -7726,7 +7726,6 @@ class Puzzle {
                 if (this.selection.length > 0) {
                     if (!ctrl_key && !shift_key) {
                         for (var k of this.selection) {
-
                             if (this[this.mode.qa].number[k]) {
                                 this.record("number", k, this.undoredo_counter);
                                 delete this[this.mode.qa].number[k];
@@ -11538,26 +11537,6 @@ class Puzzle {
         }
         for (var i of penpa_modes["square"]['li']) {
             document.getElementById("li_" + i).style.display = displaytype;
-        }
-    }
-
-    decode_puzzlink(url) {
-        var parts, urldata, type, cols, rows, bstr;
-
-        parts = url.split("?");
-        urldata = parts[1].split("/");
-        type = urldata[0];
-        cols = urldata[1];
-        rows = urldata[2];
-        bstr = urldata[3];
-
-        var puzzlink_pu = new Puzzlink(cols, rows, bstr);
-
-        switch (type) {
-            case "ripple":
-                puzzlink_pu.decodeBorder();
-                puzzlink_pu.decodeNumber16();
-                break;
         }
     }
 }

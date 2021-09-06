@@ -43,6 +43,7 @@ class Puzzlink {
     }
 
     decodeNumber16() {
+        let number_list = {};
         var i, pos1, pos2;
         var c = 0;
 
@@ -55,7 +56,7 @@ class Puzzlink {
             var ca = this.gridurl.charAt(i);
             var res = this.readNumber16(ca);
             if (res[0] !== -1) {
-                console.log('cell', c, 'value', res[0]);
+                number_list[c] = res[0];
                 i += res[1];
                 c++;
             } else if (ca >= "g" && ca <= "z") {
@@ -65,6 +66,7 @@ class Puzzlink {
                 i++;
             }
         }
+        return number_list;
     }
 
     readNumber16(ca) {

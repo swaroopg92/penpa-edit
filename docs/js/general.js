@@ -82,8 +82,8 @@ function create() {
     }
 
     pu.redraw();
-    pu.decode_puzzlink('https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i');
-    // pu.decode_puzzlink('http://localhost:8000/p.html?ripple/3/2/k01g4h3')
+    decode_puzzlink('https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i');
+    // decode_puzzlink('http://localhost:8000/p.html?ripple/3/2/k01g4h3');
 }
 
 function getCookie(name) {
@@ -1483,7 +1483,7 @@ function import_url() {
                 selectBox.setValue(JSON.parse(this.usertab_choices));
             }
         } else if (urlstring.indexOf("/puzz.link/p?") !== -1) {
-            pu.decode_puzzlink(urlstring);
+            decode_puzzlink(urlstring);
         } else {
             document.getElementById("urlstring").value = "Error: Invalid URL";
         }
@@ -2479,4 +2479,60 @@ function isEmptycontent(pu_qa, array, num, value) {
         }
     }
     return true;
+}
+
+function decode_puzzlink(url) {
+    var parts, urldata, type, cols, rows, bstr;
+
+    parts = url.split("?");
+    urldata = parts[1].split("/");
+    type = urldata[0];
+    cols = urldata[1];
+    rows = urldata[2];
+    bstr = urldata[3];
+
+    if ((cols > 60) || (rows > 60)) {
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'Penpa+ do not support grid size greater than 60 rows or columns',
+            icon: 'error',
+            confirmButtonText: 'ok 🙂',
+        })
+    } else {
+        var puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+        switch (type) {
+            case "ripple":
+                let info_edge, info_number;
+                info_edge = puzzlink_pu.decodeBorder();
+                info_number = puzzlink_pu.decodeNumber16();
+
+                // Create Square Board of Size Cols, Rows
+                var size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_square(parseInt(cols), parseInt(rows), size);
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("sudoku"); //include redraw
+
+                // Add numbers to grid
+                for (var i in info_number) {
+                    // Determine which row and column
+                    let row_ind = parseInt(i / cols);
+                    let col_ind = i % cols;
+                    let cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    pu[pu.mode.qa].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
+                }
+
+                // Add edges to grid
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("sudoku"); //include redraw
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+        }
+    }
 }
