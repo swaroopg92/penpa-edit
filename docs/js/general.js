@@ -2553,8 +2553,11 @@ function decode_puzzlink(url) {
                 pu.mode_set("sudoku"); //include redraw
 
                 // Set PenpaLite
-                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab only useful for penpalite
-                advancecontrol_onoff("url");
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
+                advancecontrol_off("url");
 
                 // Redraw the grid
                 pu.redraw();
