@@ -442,6 +442,7 @@ Depending on the browser you can update the page without using the cache with "C
 * Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
 	* Nanro
 	* Ripple Effect
+	* Skyscraper
 	* Star Battle
 	* Sudoku
 

@@ -2486,8 +2486,8 @@ function decode_puzzlink(url) {
     parts = url.split("?");
     urldata = parts[1].split("/");
     type = urldata[0];
-    cols = urldata[1];
-    rows = urldata[2];
+    cols = parseInt(urldata[1]);
+    rows = parseInt(urldata[2]);
 
     if ((cols > 60) || (rows > 60)) {
         Swal.fire({
@@ -2512,9 +2512,9 @@ function decode_puzzlink(url) {
                 info_edge = puzzlink_pu.decodeBorder();
                 info_number = puzzlink_pu.decodeNumber16();
 
-                // Create Square Board of Size Cols, Rows
+                // Create Square Board of Size, Cols, Rows
                 size = parseInt(document.getElementById("nb_size3").value);
-                pu = new Puzzle_square(parseInt(cols), parseInt(rows), size);
+                pu = new Puzzle_square(cols, rows, size);
                 pu.reset_frame(); // Draw the board
                 panel_pu.draw_panel();
                 document.getElementById('modal').style.display = 'none';
@@ -2574,9 +2574,9 @@ function decode_puzzlink(url) {
                 // Decode URL
                 info_number = puzzlink_pu.decodeNumber16();
 
-                // Create Sudoku Board of Size Cols, Rows
+                // Create Sudoku Board of Size, Cols, Rows
                 size = parseInt(document.getElementById("nb_size3").value);
-                pu = new Puzzle_sudoku(parseInt(cols), parseInt(rows), size);
+                pu = new Puzzle_sudoku(cols, rows, size);
                 pu.draw_sudokugrid([4, 7], [4, 7], 1, 9, 2);
                 pu.reset_frame(); // Draw the board
                 panel_pu.draw_panel();
@@ -2615,7 +2615,7 @@ function decode_puzzlink(url) {
                 // Decode URL
                 info_edge = puzzlink_pu.decodeBorder();
 
-                // Create Square Board of Size Cols, Rows
+                // Create Square Board of Size, Cols, Rows
                 size = parseInt(document.getElementById("nb_size3").value);
                 pu = new Puzzle_square(parseInt(cols), parseInt(rows), size);
                 pu.mode_grid("nb_grid2"); // change gridlines to dashes
@@ -2657,6 +2657,66 @@ function decode_puzzlink(url) {
                 document.getElementById("mode_break").style.display = "none";
                 document.getElementById("mode_txt_space").style.display = "none";
                 this.usertab_choices = ["Surface", "Composite"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+            case "building":
+                // create puzzlink object
+                bstr = urldata[3];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
+                info_number = puzzlink_pu.decodeNumber16ExCell();
+
+                // Create Square Board of Size, Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+
+                // Add white space for skyscraper clues
+                document.getElementById("nb_space1").value = 1;
+                document.getElementById("nb_space2").value = 1;
+                document.getElementById("nb_space3").value = 1;
+                document.getElementById("nb_space4").value = 1;
+
+                pu = new Puzzle_square(cols + 2, rows + 2, size);
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("sudoku"); //include redraw
+
+                // Add numbers to grid
+                let side, side_ind;
+                for (var i in info_number) {
+                    // Determine which row and column
+                    side = parseInt(i / cols);
+                    side_ind = i % cols;
+                    switch (side) {
+                        case 0: // Top Row
+                            cell = pu.nx0 * 2 + 2 + side_ind + 1;
+                            break;
+                        case 1: // Bottom Row
+                            cell = pu.nx0 * (2 + rows + 1) + 2 + side_ind + 1;
+                            break;
+                        case 2: // Left Column
+                            cell = pu.nx0 * (2 + side_ind + 1) + 2;
+                            break;
+                        case 3: // Right Column
+                            cell = pu.nx0 * (2 + side_ind + 1) + 2 + cols + 1;
+                            break;
+                    }
+                    pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("sudoku"); //include redraw
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
                 advancecontrol_off("url");
 
                 // Redraw the grid

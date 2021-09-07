@@ -1,6 +1,6 @@
 ## History
 * 2021/09/05 ver 2.25.7
-	* Introducing Puzz.link support. Currently supports Ripple Effect, Nanro, StarBattle and Sudoku.
+	* Introducing Puzz.link support. Currently supports Ripple Effect, Nanro, StarBattle, Skyscraper, Sudoku.
 	* Feature to add TomTom clues to Cube Grid.
 	* Fixed spacebar bug for Sudoku mode.
 	* Fixed Firefox and Chrome issue with "Open in New Window" for SVG screenshot.

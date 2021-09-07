@@ -92,4 +92,35 @@ class Puzzlink {
     include(ca, bottom, up) {
         return bottom <= ca && ca <= up;
     }
+
+    decodeNumber16ExCell() {
+        var number_list = {};
+        var ec = 0,
+            i = 0
+
+        // Top row, bottom row, left column and then right column
+        for (i = 0; i < this.gridurl.length; i++) {
+            var ca = this.gridurl.charAt(i)
+            if (this.include(ca, "0", "9") || this.include(ca, "a", "f")) {
+                number_list[ec] = parseInt(this.gridurl.substr(i, 1), 16);
+            } else if (ca === "-") {
+                number_list[ec] = parseInt(this.gridurl.substr(i + 1, 2), 16);
+                i += 2;
+            } else if (ca === ".") {
+                number_list[ec] = '?';
+            } else if (ca >= "g" && ca <= "z") {
+                ec += parseInt(ca, 36) - 16;
+            }
+
+            ec++;
+            if (ec >= this.rows * 4) {
+                break;
+            }
+        }
+
+        // Reduce the URL by removing the Number information
+        this.gridurl = this.gridurl.substr(i + 1);
+
+        return number_list;
+    }
 }
