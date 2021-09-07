@@ -2488,7 +2488,6 @@ function decode_puzzlink(url) {
     type = urldata[0];
     cols = urldata[1];
     rows = urldata[2];
-    bstr = urldata[3];
 
     if ((cols > 60) || (rows > 60)) {
         Swal.fire({
@@ -2498,14 +2497,18 @@ function decode_puzzlink(url) {
             confirmButtonText: 'ok 🙂',
         })
     } else {
-        var info_edge, info_number, size,
+        var info_edge, info_number, size, puzzlink_pu,
             row_ind, col_ind, cell,
             edge, edgex, edgey;
-        var puzzlink_pu = new Puzzlink(cols, rows, bstr);
 
         switch (type) {
             case "ripple":
             case "nanro":
+                // create puzzlink object
+                bstr = urldata[3];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
                 info_edge = puzzlink_pu.decodeBorder();
                 info_number = puzzlink_pu.decodeNumber16();
 
@@ -2564,6 +2567,11 @@ function decode_puzzlink(url) {
                 pu.redraw();
                 break;
             case "sudoku":
+                // create puzzlink object
+                bstr = urldata[3];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
                 info_number = puzzlink_pu.decodeNumber16();
 
                 // Create Sudoku Board of Size Cols, Rows
@@ -2593,6 +2601,62 @@ function decode_puzzlink(url) {
                 document.getElementById("mode_break").style.display = "none";
                 document.getElementById("mode_txt_space").style.display = "none";
                 this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+            case "starbattle":
+                // create puzzlink object
+                let stars = urldata[3];
+                bstr = urldata[4];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
+                info_edge = puzzlink_pu.decodeBorder();
+
+                // Create Square Board of Size Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_square(parseInt(cols), parseInt(rows), size);
+                pu.mode_grid("nb_grid2"); // change gridlines to dashes
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("lineE"); //include redraw
+
+                // Add edges to grid
+                for (var i in info_edge) {
+                    if (info_edge[i] === 1) {
+                        // Determine Vertical Border or Horizontal
+                        if (i < (cols - 1) * rows) {
+                            row_ind = parseInt(i / (cols - 1));
+                            col_ind = i % (cols - 1);
+                            // plus 1 at end because the 0 reference is from column 1 due to inside border
+                            edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                            edgey = edgex + pu.nx0;
+                        } else {
+                            i = i - ((cols - 1) * rows); //offset to 0
+                            row_ind = parseInt(i / cols);
+                            col_ind = i % cols;
+                            // 2 + row_ind, as 1st horizontal is the 0 reference
+                            edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
+                            edgey = edgex + 1;
+                        }
+                        var key = edgex.toString() + "," + edgey.toString();
+                        pu["pu_q"]["line"][key] = 2; // 2 is for Black Style
+                    }
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("combi"); //include redraw
+                pu.subcombimode("star");
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Composite"]; // this doesn't set the tab
                 advancecontrol_off("url");
 
                 // Redraw the grid
