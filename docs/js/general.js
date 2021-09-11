@@ -2723,6 +2723,49 @@ function decode_puzzlink(url) {
                 // Redraw the grid
                 pu.redraw();
                 break;
+            case "shakashaka":
+            case "akari":
+                // create puzzlink object
+                bstr = urldata[3];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
+                info_number = puzzlink_pu.decodeNumber4();
+
+                // Create Sudoku Board of Size, Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_square(cols, rows, size);
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+
+                // Add numbers to grid
+                for (i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    if (info_number[i] !== '?'){
+                        pu["pu_q"].number[cell] = [info_number[i], 7, "1"]; // Normal submode is 1
+                    }
+                    pu["pu_q"].surface[cell] = 4;
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("combi"); //include redraw
+                pu.subcombimode(type === 'shakashaka' ? 'shaka' : 'akari');
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Composite"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
             default:
                 Swal.fire({
                     title: 'Swaroop says:',
