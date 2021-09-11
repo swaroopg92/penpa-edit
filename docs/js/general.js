@@ -2662,7 +2662,8 @@ function decode_puzzlink(url) {
                 // Redraw the grid
                 pu.redraw();
                 break;
-            case "building":
+            case "building": // skyscrapers alias
+            case "skyscrapers":
                 // create puzzlink object
                 bstr = urldata[3];
                 puzzlink_pu = new Puzzlink(cols, rows, bstr);
