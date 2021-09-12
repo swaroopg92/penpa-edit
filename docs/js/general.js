@@ -2735,6 +2735,9 @@ function decode_puzzlink(url) {
                 // Create Sudoku Board of Size, Cols, Rows
                 size = parseInt(document.getElementById("nb_size3").value);
                 pu = new Puzzle_square(cols, rows, size);
+                if (type === 'shakashaka') {
+                    pu.mode_grid("nb_grid2"); // change gridlines to dashes
+                }
                 pu.reset_frame(); // Draw the board
                 panel_pu.draw_panel();
                 document.getElementById('modal').style.display = 'none';
@@ -2745,7 +2748,7 @@ function decode_puzzlink(url) {
                     row_ind = parseInt(i / cols);
                     col_ind = i % cols;
                     cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                    if (info_number[i] !== '?'){
+                    if (info_number[i] !== '?') {
                         pu["pu_q"].number[cell] = [info_number[i], 7, "1"]; // Normal submode is 1
                     }
                     pu["pu_q"].surface[cell] = 4;

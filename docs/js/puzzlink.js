@@ -125,7 +125,8 @@ class Puzzlink {
     }
 
     decodeNumber4() {
-        var number_list = {}, i = 0;
+        var number_list = {},
+            i = 0;
 
         for (var char of this.gridurl) {
             if (char === '.') {
