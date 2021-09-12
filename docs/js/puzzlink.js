@@ -200,4 +200,28 @@ class Puzzlink {
         }
         return -1;
     }
+
+    decodeNumber4() {
+        var number_list = {},
+            i = 0;
+
+        for (var char of this.gridurl) {
+            if (char === '.') {
+                number_list[i] = '?';
+            } else if (char >= "0" && char <= "4") {
+                number_list[i] = parseInt(char);
+            } else if (char >= "5" && char <= "9") {
+                number_list[i] = parseInt(char) - 5;
+                i += 1;
+            } else if (char >= "a" && char <= "e") {
+                number_list[i] = parseInt(char, 16) - 10;
+                i += 2;
+            } else if (char >= "g" && char <= "z") {
+                i += parseInt(char, 36) - 16;
+            }
+            i += 1;
+        }
+
+        return number_list;
+    }
 }

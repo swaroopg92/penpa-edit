@@ -2662,7 +2662,8 @@ function decode_puzzlink(url) {
                 // Redraw the grid
                 pu.redraw();
                 break;
-            case "building":
+            case "building": // skyscrapers alias
+            case "skyscrapers":
                 // create puzzlink object
                 bstr = urldata[3];
                 puzzlink_pu = new Puzzlink(cols, rows, bstr);
@@ -2721,6 +2722,134 @@ function decode_puzzlink(url) {
 
                 // Redraw the grid
                 pu.redraw();
+                break;
+            case "shakashaka":
+            case "akari":
+                // create puzzlink object
+                bstr = urldata[3];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
+                info_number = puzzlink_pu.decodeNumber4();
+
+                // Create Sudoku Board of Size, Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_square(cols, rows, size);
+                if (type === 'shakashaka') {
+                    pu.mode_grid("nb_grid2"); // change gridlines to dashes
+                }
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+
+                // Add numbers to grid
+                for (i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    if (info_number[i] !== '?') {
+                        pu["pu_q"].number[cell] = [info_number[i], 7, "1"]; // Normal submode is 1
+                    }
+                    pu["pu_q"].surface[cell] = 4;
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("combi"); //include redraw
+                pu.subcombimode(type === 'shakashaka' ? 'shaka' : 'akari');
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Composite"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+                break;
+            case "kakuro":
+                // create puzzlink object
+                bstr = urldata[3];
+                puzzlink_pu = new Puzzlink(cols, rows, bstr);
+
+                // Decode URL
+                info_number = puzzlink_pu.decodeKakuro();
+
+                // Create Kakuro Board of Size, Cols, Rows
+                size = parseInt(document.getElementById("nb_size3").value);
+                pu = new Puzzle_kakuro(cols + 1, rows + 1, size);
+                pu.draw_kakurogrid();
+                pu.reset_frame(); // Draw the board
+                panel_pu.draw_panel();
+                document.getElementById('modal').style.display = 'none';
+                pu.mode_set("sudoku"); //include redraw
+
+                // Add inner clues
+                for (var i in info_number.inner_clues) {
+                    row_ind = parseInt(i / cols) + 1;
+                    col_ind = (i % cols) + 1;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+
+                    // cell not part of grid, then 2nd element of list is undefined
+                    if (!info_number.inner_clues[i][1]) {
+                        pu["pu_q"].symbol[cell] = [1, 'kakuro', 2];
+                    } else {
+                        pu["pu_q"].symbol[cell] = [1, 'kakuro', 2];
+
+                        // Bottom left value
+                        value = info_number.inner_clues[i][0];
+                        if (value !== 0 && value !== -1) {
+                            corner_cursor = 4 * (cell + pu.nx0 * pu.ny0) + 2;
+                            pu["pu_q"].numberS[corner_cursor] = [value.toString(), 4];
+                        }
+
+                        // Top right value
+                        value = info_number.inner_clues[i][1];
+                        if (value !== 0 && value !== -1) {
+                            corner_cursor = 4 * (cell + pu.nx0 * pu.ny0) + 1;
+                            pu["pu_q"].numberS[corner_cursor] = [value.toString(), 4];
+                        }
+                    }
+                }
+
+                // Add Outer row
+                for (var i in info_number.outer_row) {
+                    col_ind = i % cols;
+                    cell = pu.nx0 * 2 + 2 + col_ind + 1;
+                    value = info_number.outer_row[i];
+                    if (value !== -1 && value !== 0) {
+                        corner_cursor = 4 * (cell + pu.nx0 * pu.ny0) + 2;
+                        pu["pu_q"].numberS[corner_cursor] = [value.toString(), 4];
+                    }
+                }
+
+                // Add Outer Column
+                for (var i in info_number.outer_column) {
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + col_ind + 1) + 2;
+                    value = info_number.outer_column[i];
+                    if (value !== -1 && value !== 0) {
+                        corner_cursor = 4 * (cell + pu.nx0 * pu.ny0) + 1;
+                        pu["pu_q"].numberS[corner_cursor] = [value.toString(), 4];
+                    }
+                }
+
+                // Change to Solution Tab
+                pu.mode_qa("pu_a");
+                pu.mode_set("sudoku"); //include redraw
+
+                // Set PenpaLite
+                document.getElementById('advance_button').textContent = "ON";
+                document.getElementById("mode_break").style.display = "none";
+                document.getElementById("mode_txt_space").style.display = "none";
+                this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
+                advancecontrol_off("url");
+
+                // Redraw the grid
+                pu.redraw();
+
                 break;
             default:
                 Swal.fire({
