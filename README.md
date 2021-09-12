@@ -445,6 +445,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Skyscraper
 	* Star Battle
 	* Sudoku
+	* Kakuro
 
 ### Settings
 * This function is to provide Penpa-site general settings like theme, custom color etc.

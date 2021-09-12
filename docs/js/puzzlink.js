@@ -96,7 +96,7 @@ class Puzzlink {
     decodeNumber16ExCell() {
         var number_list = {};
         var ec = 0,
-            i = 0
+            i = 0;
 
         // Top row, bottom row, left column and then right column
         for (i = 0; i < this.gridurl.length; i++) {
@@ -122,5 +122,82 @@ class Puzzlink {
         this.gridurl = this.gridurl.substr(i + 1);
 
         return number_list;
+    }
+
+    decodeKakuro() {
+        // 0 means no restiction
+        // first inner clues, then outer row clue and then outer column clue
+        // outer row and column will only have one values. Inner clue has two values. If not existence then it can be 0 or -1.
+        // dot means not part of grid
+        // outer row empty clue is not part of URL if adjacent cell is used, else it includes -1 in the URl.
+
+        var inner_clues = {},
+            outer_row = {},
+            outer_column = {};
+        var c = 0,
+            a = 0;
+
+        // Inner clues
+        for (var i = 0; i < this.gridurl.length; i++) {
+            var ca = this.gridurl.charAt(i);
+            if (ca >= "k" && ca <= "z") {
+                // Decodes cell position
+                c += parseInt(ca, 36) - 19;
+            } else {
+                // Decodes cell value
+                if (ca !== ".") {
+                    inner_clues[c] = [this.decval(ca), this.decval(this.gridurl.charAt(i + 1))];
+                    i++;
+                } else {
+                    inner_clues[c] = -1; // cell not part of grid
+                }
+                c++;
+            }
+            // break the loop after inner clues are done
+            if (c >= this.rows * this.cols) {
+                a = i + 1;
+                break;
+            }
+        }
+
+        // reset parameters
+        var i = a;
+
+        // Outer row
+        for (var bx = 0; bx < this.cols; bx++) {
+            if (bx in inner_clues) {
+                outer_row[bx] = -1;
+            } else {
+                outer_row[bx] = this.decval(this.gridurl.charAt(i));
+                i++;
+            }
+        }
+
+        // Outer column
+        for (var by = 0; by < this.rows; by++) {
+            if (by * this.cols in inner_clues) {
+                outer_column[by] = -1;
+            } else {
+                outer_column[by] = this.decval(this.gridurl.charAt(i));
+                i++;
+            }
+        }
+
+        var obj = new Object();
+        obj.inner_clues = inner_clues;
+        obj.outer_row = outer_row;
+        obj.outer_column = outer_column;
+        return obj;
+    }
+
+    decval(ca) {
+        if (ca >= "0" && ca <= "9") {
+            return parseInt(ca, 36);
+        } else if (ca >= "a" && ca <= "j") {
+            return parseInt(ca, 36);
+        } else if (ca >= "A" && ca <= "Z") {
+            return parseInt(ca, 36) + 10;
+        }
+        return -1;
     }
 }
