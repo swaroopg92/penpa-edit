@@ -1,4 +1,6 @@
 ## History
+* 2021/09/** ver 2.25.8
+	* Added Akari, Kakuro and ShakaShaka support for puzz.link.
 * 2021/09/05 ver 2.25.7
 	* Introducing Puzz.link support. Currently supports Ripple Effect, Nanro, StarBattle, Skyscraper, Sudoku.
 	* Feature to add TomTom clues to Cube Grid.
