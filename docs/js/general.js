@@ -81,6 +81,13 @@ function create() {
         document.getElementById('constraints_settings_opt').style.display = 'none';
     }
 
+    // Populate genre list
+    add_genre_tags(pu.user_tags);
+    $('#genre_tags_opt').select2({
+        placeholder: 'Search Area',
+        'width': "90%"
+    });
+
     pu.redraw();
 }
 
@@ -1744,6 +1751,16 @@ function load(urlParam, type = 'url') {
         // }
     }
 
+    // Populate and set genre tags
+    if (typeof rtext[17] !== 'undefined') {
+        pu.user_tags = JSON.parse(rtext[17]);
+    }
+    add_genre_tags(pu.user_tags);
+    $('#genre_tags_opt').select2({
+        placeholder: 'Search Area',
+        'width': "90%"
+    });
+
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {
@@ -2002,11 +2019,6 @@ function load(urlParam, type = 'url') {
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
         }
-    }
-
-    // Genre Tags
-    if (typeof rtext[17] !== 'undefined') {
-        pu.user_tags = JSON.parse(rtext[17]);
     }
 }
 
