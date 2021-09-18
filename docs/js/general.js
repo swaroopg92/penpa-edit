@@ -2733,7 +2733,7 @@ function decode_puzzlink(url) {
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
 
                 // cell not part of grid, then 2nd element of list is undefined
-                if (!info_number.inner_clues[i][1]) {
+                if (info_number.inner_clues[i][1] === undefined) {
                     pu["pu_q"].symbol[cell] = [1, 'kakuro', 2];
                 } else {
                     pu["pu_q"].symbol[cell] = [1, 'kakuro', 2];
