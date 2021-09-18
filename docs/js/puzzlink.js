@@ -48,6 +48,33 @@ class Puzzlink {
         return border_list;
     }
 
+    drawBorder(pu, info_edge, edge_style) {
+        var row_ind, col_ind, edgex, edgey;
+
+        // Add edges to grid
+        for (var i in info_edge) {
+            if (info_edge[i] === 1) {
+                // Determine Vertical Border or Horizontal
+                if (i < (this.cols - 1) * this.rows) {
+                    row_ind = parseInt(i / (this.cols - 1));
+                    col_ind = i % (this.cols - 1);
+                    // plus 1 at end because the 0 reference is from column 1 due to inside border
+                    edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                    edgey = edgex + pu.nx0;
+                } else {
+                    i -= (this.cols - 1) * this.rows; //offset to 0
+                    row_ind = parseInt(i / this.cols);
+                    col_ind = i % this.cols;
+                    // 2 + row_ind, as 1st horizontal is the 0 reference
+                    edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
+                    edgey = edgex + 1;
+                }
+                var key = edgex.toString() + "," + edgey.toString();
+                pu["pu_q"]["line"][key] = edge_style;
+            }
+        }
+    }
+
     decodeNumber16() {
         var number_list = {};
         var i = 0;

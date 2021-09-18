@@ -2526,6 +2526,7 @@ function decode_puzzlink(url) {
             info_edge = puzzlink_pu.decodeBorder();
             info_number = puzzlink_pu.decodeNumber16();
 
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
 
             // Add numbers to grid
             for (var i in info_number) {
@@ -2536,28 +2537,6 @@ function decode_puzzlink(url) {
                 pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
             }
 
-            // Add edges to grid
-            for (var i in info_edge) {
-                if (info_edge[i] === 1) {
-                    // Determine Vertical Border or Horizontal
-                    if (i < (cols - 1) * rows) {
-                        row_ind = parseInt(i / (cols - 1));
-                        col_ind = i % (cols - 1);
-                        // plus 1 at end because the 0 reference is from column 1 due to inside border
-                        edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
-                        edgey = edgex + pu.nx0;
-                    } else {
-                        i = i - ((cols - 1) * rows); //offset to 0
-                        row_ind = parseInt(i / cols);
-                        col_ind = i % cols;
-                        // 2 + row_ind, as 1st horizontal is the 0 reference
-                        edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
-                        edgey = edgex + 1;
-                    }
-                    var key = edgex.toString() + "," + edgey.toString();
-                    pu["pu_q"]["line"][key] = 2; // 2 is for Black Style
-                }
-            }
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
@@ -2615,29 +2594,7 @@ function decode_puzzlink(url) {
 
             // Decode URL
             info_edge = puzzlink_pu.decodeBorder();
-
-            // Add edges to grid
-            for (var i in info_edge) {
-                if (info_edge[i] === 1) {
-                    // Determine Vertical Border or Horizontal
-                    if (i < (cols - 1) * rows) {
-                        row_ind = parseInt(i / (cols - 1));
-                        col_ind = i % (cols - 1);
-                        // plus 1 at end because the 0 reference is from column 1 due to inside border
-                        edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
-                        edgey = edgex + pu.nx0;
-                    } else {
-                        i = i - ((cols - 1) * rows); //offset to 0
-                        row_ind = parseInt(i / cols);
-                        col_ind = i % cols;
-                        // 2 + row_ind, as 1st horizontal is the 0 reference
-                        edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
-                        edgey = edgex + 1;
-                    }
-                    var key = edgex.toString() + "," + edgey.toString();
-                    pu["pu_q"]["line"][key] = 2; // 2 is for Black Style
-                }
-            }
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
