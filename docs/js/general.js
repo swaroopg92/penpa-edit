@@ -2567,7 +2567,23 @@ function decode_puzzlink(url) {
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);
-            pu.draw_sudokugrid([4, 7], [4, 7], 1, 9, 2);
+            if (cols === 9 && rows === 9) {
+                pu.draw_sudokugrid([4, 7], [4, 7], 1, 9, 2);
+            } else if (cols === 6 && rows === 6) {
+                pu.draw_sudokugrid([3, 5], [4], 1, 6, 2);
+            } else if (cols === 4 && rows === 4) {
+                pu.draw_sudokugrid([3], [3], 1, 4, 2);
+            } else {
+                pu = new Puzzle_square(10, 10, size);
+                setupProblem(pu, "surface");
+                Swal.fire({
+                    title: 'Swaroop says:',
+                    html: `Sorry, sudoku grids of size: ${cols}x${rows} are not supported`,
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                });
+                break;
+            }
             setupProblem(pu, "sudoku");
 
             // Decode URL
