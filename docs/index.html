@@ -59,6 +59,7 @@
         let script_sources = [
             "./js/puzzlink.js",
             "./js/modes.js",
+            "./js/genre_tags.js",
             "./js/constraints.js",
             "./js/main.js",
             "./js/class_p.js",
@@ -735,7 +736,7 @@
                 <canvas id="float-canvas" class="float-canvas"></canvas>
             </div>
             <div id="float-key-text">
-                <textarea rows="1" cols="20" maxlength="100" id="inputtext"></textarea>
+                <textarea class="text_area" class="text_area" rows="1" cols="20" maxlength="100" id="inputtext"></textarea>
                 <input type="button" id="closeBtn_input1" value="Insert" />
                 <input type="button" id="closeBtn_input2" value="Clear" />
             </div>
@@ -957,7 +958,9 @@
                 <br>
                 <span class="DM">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
                 <br>
-                <span class="DM">Rules:<textarea rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <span class="DM">Rules:<textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <br>
+                <input type="button" id="saveinfogenre" value="Select genre/tags (Optional)" />
                 <br>
                 <span class="DM">Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
                 <br>
@@ -975,7 +978,7 @@
                 <input type="checkbox" name="save_undo" id="save_undo">
             </div>
             <div id="modal-save-body">
-                <textarea readonly rows="1" cols="50" id="savetextarea"></textarea>
+                <textarea class="text_area" readonly rows="1" cols="50" id="savetextarea"></textarea>
                 <span class="DM">Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">
@@ -984,6 +987,16 @@
                 <input type="button" id="closeBtn_save3" value="Open" onclick="savetext_window();" />
                 <input type="button" id="closeBtn_save6" value="URL_short" onclick="shorturl_tab();" />
                 <input type="button" id="closeBtn_save4" value="Cancel" />
+            </div>
+        </div>
+    </div>
+    <div id="modal-save-tag" class="modal">
+        <div id="modal-save-tag-content">
+            <div id="modal-header">
+                <h3 id="save7texttitle">Add/Remove Genre Tags</h3>
+            </div>
+            <div id="modal-save-tag-body">
+                <select name="genre_tags" id="genre_tags_opt" multiple="multiple"> </select>
             </div>
         </div>
     </div>
@@ -1199,7 +1212,7 @@
             </div>
             <div id="modal-save2-pp" style="display:none;">
                 <h5 id="save5texttitle">Header</h5>
-                <textarea rows="1" cols="50" placeholder="e.g. classicsudoku or cs" id="savetextarea_pp"></textarea>
+                <textarea class="text_area" rows="1" cols="50" placeholder="e.g. classicsudoku or cs" id="savetextarea_pp"></textarea>
                 <div class="nb_button">
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
@@ -1213,7 +1226,7 @@
                 <h3 id="save4texttitle">Input/Output sudoku string</h3>
             </div>
             <div id="modal-save-body">
-                <textarea rows="1" cols="81" id="iostring"></textarea>
+                <textarea class="text_area" rows="1" cols="81" id="iostring"></textarea>
             </div>
             <p id="modal-input-parameters-text">*Specify the location of the first cell of your sudoku grid and its size[optional]:</p>
             <div id="modal-input-parameters">
@@ -1240,7 +1253,7 @@
                 <h3 id="save6texttitle">Load URL</h3>
             </div>
             <div id="modal-save-body">
-                <textarea rows="1" cols="81" id="urlstring" value=""></textarea>
+                <textarea class="text_area" rows="1" cols="81" id="urlstring" value=""></textarea>
             </div>
             <div class="nb_button">
                 <input type="button" id="load_url" value="Load URL" onclick="import_url();" />

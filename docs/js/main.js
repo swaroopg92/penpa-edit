@@ -1144,6 +1144,10 @@ onload = function() {
                 }
                 break;
                 //savetext
+            case "saveinfogenre":
+                show_genretags();
+                e.preventDefault();
+                break;
             case "address_edit":
                 savetext_edit();
                 e.preventDefault();
@@ -1921,6 +1925,13 @@ onload = function() {
                 'width': "25%"
             });
         }
+
+        // Set options and attributes and then initialize
+        add_genre_tags(pu.user_tags);
+        $('#genre_tags_opt').select2({
+            placeholder: 'Search Area',
+            'width': "90%"
+        });
     });
 
     $.fn.toggleSelect2 = function(state) {

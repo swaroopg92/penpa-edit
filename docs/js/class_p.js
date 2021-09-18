@@ -162,6 +162,7 @@ class Puzzle {
         this.comp = false;
         this.multisolution = false;
         this.borderwarning = true;
+        this.user_tags = [];
     }
 
     reset() {
@@ -2821,7 +2822,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2977,7 +2981,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3130,7 +3137,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3253,7 +3263,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
