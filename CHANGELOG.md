@@ -1,4 +1,8 @@
 ## History
+* 2021/09/18 ver ***
+	* Added support for 4x4 and 6x6 Sudoku grids imported from puzz.link.
+	* Full Penpalite support for imported puzz.link puzzles.
+	* Bug fixes.
 * 2021/09/** ver 2.25.8
 	* Added Akari, Kakuro and ShakaShaka support for puzz.link.
 * 2021/09/05 ver 2.25.7
