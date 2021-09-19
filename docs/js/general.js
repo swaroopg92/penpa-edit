@@ -2529,12 +2529,10 @@ function decode_puzzlink(url) {
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
             puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Normal submode is 1
 
-
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
-
+            this.usertab_choices = ["Surface", "Sudoku Normal"];
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);
@@ -2564,8 +2562,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
-
+            this.usertab_choices = ["Surface", "Sudoku Normal"];
             break;
         case "starbattle":
             // starbattle is different than most
@@ -2584,8 +2581,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode("star");
-            this.usertab_choices = ["Surface", "Composite"]; // this doesn't set the tab
-
+            this.usertab_choices = ["Surface", "Composite"];
             break;
         case "building": // skyscrapers alias
         case "skyscrapers":
@@ -2626,8 +2622,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
-
+            this.usertab_choices = ["Surface", "Sudoku Normal"];
             break;
         case "shakashaka":
         case "akari":
@@ -2656,8 +2651,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode(type === 'shakashaka' ? 'shaka' : 'akari');
-            this.usertab_choices = ["Surface", "Composite"]; // this doesn't set the tab
-
+            this.usertab_choices = ["Surface", "Composite"];
             break;
         case "kakuro":
             // Decode URL
@@ -2720,8 +2714,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"]; // this doesn't set the tab
-
+            this.usertab_choices = ["Surface", "Sudoku Normal"];
             break;
         default:
             Swal.fire({
@@ -2738,6 +2731,23 @@ function decode_puzzlink(url) {
     document.getElementById("mode_break").style.display = "none";
     document.getElementById("mode_txt_space").style.display = "none";
     advancecontrol_off("url");
+
+    var tabSelect = document.querySelector('ul.multi');
+    for (var child of tabSelect.children) {
+        if (!child.dataset.value) {
+            continue;
+        }
+
+        if (this.usertab_choices.includes(child.dataset.value)) {
+            if (!child.classList.contains('active')) {
+                child.click()
+            }
+        } else {
+            if (child.classList.contains('active')) {
+                child.click()
+            }
+        }
+    }
 
     // Redraw the grid
     pu.redraw();
