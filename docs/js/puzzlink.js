@@ -116,6 +116,19 @@ class Puzzlink {
         }
     }
 
+    drawNumbers(pu, info_number, mode, sub_mode) {
+        var row_ind, col_ind, cell;
+
+        // Add numbers to grid
+        for (var i in info_number) {
+            // Determine which row and column
+            row_ind = parseInt(i / this.cols);
+            col_ind = i % this.cols;
+            cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            pu["pu_q"].number[cell] = [info_number[i], mode, sub_mode];
+        }
+    }
+
     include(ca, bottom, up) {
         return bottom <= ca && ca <= up;
     }

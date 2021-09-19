@@ -2527,15 +2527,7 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.decodeNumber16();
 
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-
-            // Add numbers to grid
-            for (var i in info_number) {
-                // Determine which row and column
-                row_ind = parseInt(i / cols);
-                col_ind = i % cols;
-                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
-            }
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Normal submode is 1
 
 
             // Change to Solution Tab
@@ -2567,15 +2559,7 @@ function decode_puzzlink(url) {
 
             // Decode URL
             info_number = puzzlink_pu.decodeNumber16();
-
-            // Add numbers to grid
-            for (var i in info_number) {
-                // Determine which row and column
-                row_ind = parseInt(i / cols);
-                col_ind = i % cols;
-                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
-            }
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1"); // Normal submode is 1
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
