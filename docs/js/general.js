@@ -2762,6 +2762,25 @@ function decode_puzzlink(url) {
             pu.mode_set("sudoku"); //include redraw
             this.usertab_choices = ["Surface", "Sudoku Normal"];
             break;
+        case "ayeheya":
+        case "heyawake":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            // Decode URL
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16();
+            info_number = puzzlink_pu.moveNumbersToRegionCorners(info_edge, info_number);
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Normal submode is 1
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface"); //include redraw
+            this.usertab_choices = ["Surface"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',

@@ -82,7 +82,7 @@ class Puzzlink {
 
         while (i < this.gridurl.length) {
             var ca = this.gridurl.charAt(i);
-            var res = this.readNumber16(ca);
+            var res = this.readNumber16(ca, i);
             if (res[0] !== -1) {
                 number_list[c] = res[0];
                 i += res[1];
@@ -98,7 +98,7 @@ class Puzzlink {
         return number_list;
     }
 
-    readNumber16(ca) {
+    readNumber16(ca, i) {
         if (this.include(ca, "0", "9") || this.include(ca, "a", "f")) {
             return [parseInt(ca, 16), 1];
         } else if (ca === "-") {
@@ -263,5 +263,92 @@ class Puzzlink {
         }
 
         return number_list;
+    }
+
+    moveNumbersToRegionCorners(info_edge, info_number) {
+        var cols = this.cols, rows = this.rows;
+        var ds = new DisjointSets(cols * rows);
+
+        var x, y, cell, right_edge = 0, bottom_edge = (cols - 1) * rows;
+        for (cell = 0; cell < cols * rows; cell++) {
+            x = cell % cols;
+            y = parseInt(cell / cols);
+            if (x !== cols - 1) {
+                if (!info_edge[right_edge]) {
+                    ds.combineSets(cell, cell + 1);
+                }
+                right_edge++;
+            }
+            if (y !== rows - 1) {
+                if (!info_edge[bottom_edge]) {
+                    ds.combineSets(cell, cell + cols);
+                }
+                bottom_edge++;
+            }
+        }
+
+        var regions = ds.getSets();
+
+        // Regions are ordered row-wise
+        regions.sort((region1, region2) => Math.min(...region1) - Math.min(...region2));
+
+        // But cells in each region are ordered column-wise for some reason
+        regions = regions.map(
+            (region) => region.sort((a, b) =>
+                100*(a % cols - b % cols) + (a / cols - b / cols))
+        );
+
+        // Put the numbers in the first cell of their respective region
+        var new_numbers = {};
+        for (var i in info_number) {
+            new_numbers[regions[i][0]] = info_number[i];
+        }
+        return new_numbers;
+    }
+}
+
+class DisjointSets {
+    constructor(max) {
+        this.map = {};
+        for (var i = 0; i < max; i++) {
+            this.map[i] = i;
+        }
+    }
+
+    combineSets (a, b) {
+        a += '';
+        b += '';
+        while (this.map[a] !== a) {
+            a = this.map[a];
+        }
+        while (this.map[b] !== b) {
+            b = this.map[b];
+        }
+
+        this.map[a] = b;
+    }
+
+    flattenMaps() {
+        for (var i in this.map) {
+            var indirectMaps = [];
+            while (this.map[i] !== this.map[this.map[i]]) {
+                indirectMaps.push(i);
+                i = this.map[i];
+            }
+            for (var j of indirectMaps) {
+                this.map[j] = this.map[i];
+            }
+        }
+    }
+
+    getSets () {
+        this.flattenMaps();
+        var inverted = {};
+        for (var i in this.map) {
+            var ind = this.map[i]
+            inverted[ind] = inverted[ind] || [];
+            inverted[ind].push(i);
+        }
+        return Object.values(inverted);
     }
 }
