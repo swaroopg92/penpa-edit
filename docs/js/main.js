@@ -1144,6 +1144,10 @@ onload = function() {
                 }
                 break;
                 //savetext
+            case "saveinfogenre":
+                show_genretags();
+                e.preventDefault();
+                break;
             case "address_edit":
                 savetext_edit();
                 e.preventDefault();

@@ -81,6 +81,13 @@ function create() {
         document.getElementById('constraints_settings_opt').style.display = 'none';
     }
 
+    // Populate genre list
+    add_genre_tags(pu.user_tags);
+    $('#genre_tags_opt').select2({
+        placeholder: 'Search Area',
+        'width': "90%"
+    });
+
     pu.redraw();
 }
 
@@ -115,6 +122,31 @@ function add_constraints() {
         });
         constraints.appendChild(optgroup);
     });
+}
+
+function add_genre_tags(user_tags) {
+    let genre_tags = document.getElementById('genre_tags_opt');
+    penpa_tags['options_groups'].forEach(function(element, index) {
+        let optgroup = document.createElement("optgroup");
+        optgroup.label = element;
+
+        penpa_tags['options'][element].forEach(function(subelement, subindex) {
+            let opt = document.createElement("option");
+            opt.value = subelement;
+            opt.innerHTML = subelement;
+
+            if (user_tags.includes(subelement)) {
+                opt.setAttribute("selected", true);
+            }
+            optgroup.appendChild(opt);
+        });
+        genre_tags.appendChild(optgroup);
+    });
+
+    // // to access each option
+    // $("#genre_tags_opt option").each(function() {
+    //     console.log($(this));
+    // });
 }
 
 function create_newboard() {
@@ -1293,6 +1325,10 @@ function pp_file_open() {
     document.getElementById("modal-save2-pp").style.display = 'block';
 }
 
+function show_genretags() {
+    document.getElementById("modal-save-tag").style.display = 'block';
+}
+
 function savetext_edit() {
     var text = pu.maketext();
     document.getElementById("savetextarea").value = text;
@@ -1714,6 +1750,16 @@ function load(urlParam, type = 'url') {
         }
         // }
     }
+
+    // Populate and set genre tags
+    if (typeof rtext[17] !== 'undefined') {
+        pu.user_tags = JSON.parse(rtext[17]);
+    }
+    add_genre_tags(pu.user_tags);
+    $('#genre_tags_opt').select2({
+        placeholder: 'Search Area',
+        'width': "90%"
+    });
 
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
