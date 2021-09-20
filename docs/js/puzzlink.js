@@ -116,8 +116,8 @@ class Puzzlink {
         }
     }
 
-    drawNumbers(pu, info_number, mode, sub_mode) {
-        var row_ind, col_ind, cell;
+    drawNumbers(pu, info_number, mode, sub_mode, hide_ques = true) {
+        var row_ind, col_ind, cell, number;
 
         // Add numbers to grid
         for (var i in info_number) {
@@ -125,7 +125,8 @@ class Puzzlink {
             row_ind = parseInt(i / this.cols);
             col_ind = i % this.cols;
             cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-            pu["pu_q"].number[cell] = [info_number[i], mode, sub_mode];
+            number = hide_ques && info_number[i] === "?" ? " " : info_number[i];
+            pu["pu_q"].number[cell] = [number, mode, sub_mode];
         }
     }
 

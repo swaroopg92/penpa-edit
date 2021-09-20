@@ -2559,7 +2559,7 @@ function decode_puzzlink(url) {
 
     var info_edge, info_number, size, puzzlink_pu,
         row_ind, col_ind, cell, value, corner_cursor,
-        edge, edgex, edgey;
+        number_mode;
 
     switch (type) {
         case "ripple":
@@ -2679,17 +2679,15 @@ function decode_puzzlink(url) {
             if (type === 'shakashaka') {
                 pu.mode_grid("nb_grid2"); // change gridlines to dashes
             }
-            setupProblem(pu, "sudoku")
+            setupProblem(pu, "combi");
+            puzzlink_pu.drawNumbers(pu, info_number, 7, "1");
 
-            // Add numbers to grid
+            // Draw black behind numbers
             for (i in info_number) {
                 // Determine which row and column
                 row_ind = parseInt(i / cols);
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                if (info_number[i] !== '?') {
-                    pu["pu_q"].number[cell] = [info_number[i], 7, "1"]; // Normal submode is 1
-                }
                 pu["pu_q"].surface[cell] = 4;
             }
 
@@ -2780,6 +2778,31 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("surface"); //include redraw
             this.usertab_choices = ["Surface"];
+            break;
+        case "kurochute":
+        case "kurodoko":
+        case "kurotto":
+        case "nurikabe":
+        case "nurimisaki":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            if (type !== "kurochute" && type !== "nurikabe") {
+                number_mode = 6;
+            } else {
+                number_mode = 1;
+            }
+
+            // Decode URL
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, number_mode, "1", type !== "nurikabe");
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blpo"); // Black square and Point
+            this.usertab_choices = ["Surface", "Composite"];
             break;
         default:
             Swal.fire({
