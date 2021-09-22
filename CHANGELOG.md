@@ -5,6 +5,7 @@
 	* Added answer check for tightfit sudoku tag.
 	* Added support for 4x4 and 6x6 Sudoku grids imported from puzz.link.
 	* Full Penpalite support for imported puzz.link puzzles.
+	* Added Heyawake, Ayeheya, Kurochute, Kurodoko, Kurotto, Nurikabe, Nurimisake support for puzz.link.
 * 2021/09/05 ver 2.26.7
 	* Introducing Puzz.link support. Currently supports Ripple Effect, Nanro, StarBattle, Skyscraper, Sudoku.
 	* Feature to add TomTom clues to Cube Grid.
