@@ -992,7 +992,7 @@ body textarea {
 #modal-save-content {
     background-color: var(--black);
     width: var(--popup_width);
-    height: 545px;
+    height: 600px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -1015,7 +1015,8 @@ body textarea {
 
 #modal-input-content,
 #modal-load-content,
-#modal-settings-content {
+#modal-settings-content,
+#modal-save-tag-content {
     background-color: var(--black);
     width: var(--popup_width);
     height: 280px;
@@ -1037,7 +1038,7 @@ body textarea {
     margin-bottom: 5px;
 }
 
-textarea {
+.text_area {
     min-width: 200px;
     min-height: 80px;
     max-width: 280px;
@@ -1060,7 +1061,8 @@ textarea {
     width: 40px;
 }
 
-#modal-save2 {
+#modal-save2,
+#modal-save-tag {
     display: none;
     position: fixed;
     z-index: 3;
@@ -1442,4 +1444,35 @@ sup {
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: var(--black) !important;
     font-size: 14px;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 2px solid #000 !important;
+    border-radius: 3px !important;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 5px;
+    text-align: center;
+}
+
+#saveinfogenre {
+    text-align: center;
+    margin-left: 20%;
+    height: 20px;
+}
+
+#modal-save-tag-body {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+#select2_search_multiple{
+    min-width: 287px;
+    max-width: 287px;
+    border: 2px solid #ccc !important;
+    border-radius: 3px !important;
+    margin-top: 15px;
+    margin-left: -7px;
+    color: var(--white);
 }

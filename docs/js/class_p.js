@@ -157,11 +157,12 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 7]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 8]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
         this.borderwarning = true;
+        this.user_tags = [];
     }
 
     reset() {
@@ -2821,7 +2822,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2977,7 +2981,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3130,7 +3137,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3253,7 +3263,10 @@ class Puzzle {
                 answersetting[settingstatus[i].id] = false;
             }
         }
-        text += JSON.stringify(answersetting);
+        text += JSON.stringify(answersetting) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3514,6 +3527,18 @@ class Puzzle {
                         }
                     }
                 }
+
+                // Tight Fit Sudoku
+                if ($('#genre_tags_opt').select2("val").includes("tightfit")) {
+                    for (var i in this[pu].numberS) {
+                        if (!isNaN(this[pu].numberS[i][0]) || !this[pu].numberS[i][0].match(/[^A-Za-z]+/)) {
+                            // (Green or light blue or dark blue or red)
+                            if ((this[pu].numberS[i][1] === 2 || this[pu].numberS[i][1] === 8 || this[pu].numberS[i][1] === 9 || this[pu].numberS[i][1] === 10)) {
+                                sol[4].push(i + "," + this[pu].numberS[i][0]);
+                            }
+                        }
+                    }
+                }
             }
 
             for (var i in this[pu].symbol) {
@@ -3645,6 +3670,18 @@ class Puzzle {
                                     // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
                                     if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
                                         temp_sol.push(i + "," + this[pu].number[i][0]);
+                                    }
+                                }
+                            }
+
+                            // Tight Fit Sudoku
+                            if ($('#genre_tags_opt').select2("val").includes("tightfit")) {
+                                for (var i in this[pu].numberS) {
+                                    if (!isNaN(this[pu].numberS[i][0]) || !this[pu].numberS[i][0].match(/[^A-Za-z]+/)) {
+                                        // (Green or light blue or dark blue or red)
+                                        if ((this[pu].numberS[i][1] === 2 || this[pu].numberS[i][1] === 8 || this[pu].numberS[i][1] === 9 || this[pu].numberS[i][1] === 10)) {
+                                            temp_sol.push(i + "," + this[pu].numberS[i][0]);
+                                        }
                                     }
                                 }
                             }

@@ -273,6 +273,8 @@ Depending on the browser you can update the page without using the cache with "C
 
 * Rules - Enter rules here
 
+* Genre/Tags - Select specific tags that suit your puzzle. These tags will be used for special answer checking features. (special answer checking features are still under construction)
+
 * Source - If you are not the author of the puzzle, specify the source URL
 
 * Save Undo/Redo (History) - If you checkmark this option, then your action history will be saved in the URL. This is effective only while using "URL for editing" button. Other options will automatically ignore history. Note: Saving history might make URL too big depending on your usage.
