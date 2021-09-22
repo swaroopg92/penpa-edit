@@ -2559,7 +2559,7 @@ function decode_puzzlink(url) {
 
     var info_edge, info_number, size, puzzlink_pu,
         row_ind, col_ind, cell, value, corner_cursor,
-        number_mode;
+        number_style;
 
     switch (type) {
         case "ripple":
@@ -2573,7 +2573,7 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.decodeNumber16();
 
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-            puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Normal submode is 1
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1"); // Normal submode is 1
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
@@ -2772,7 +2772,7 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.moveNumbersToRegionCorners(info_edge, info_number);
 
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-            puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Normal submode is 1
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Black Style, Normal submode is 1
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
@@ -2789,14 +2789,14 @@ function decode_puzzlink(url) {
             setupProblem(pu, "combi");
 
             if (type !== "kurochute" && type !== "nurikabe") {
-                number_mode = 6;
+                number_style = 6; // Black with White Circle
             } else {
-                number_mode = 1;
+                number_style = 1; // Black
             }
 
             // Decode URL
             info_number = puzzlink_pu.decodeNumber16();
-            puzzlink_pu.drawNumbers(pu, info_number, number_mode, "1", type !== "nurikabe");
+            puzzlink_pu.drawNumbers(pu, info_number, number_style, "1", type !== "nurikabe");
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
@@ -2828,11 +2828,11 @@ function decode_puzzlink(url) {
 
         if (this.usertab_choices.includes(child.dataset.value)) {
             if (!child.classList.contains('active')) {
-                child.click()
+                child.click();
             }
         } else {
             if (child.classList.contains('active')) {
-                child.click()
+                child.click();
             }
         }
     }
