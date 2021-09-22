@@ -443,8 +443,15 @@ Depending on the browser you can update the page without using the cache with "C
 * Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
 * Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
 	* Akari
+	* Ayeheya
+	* Heyawake
 	* Kakuro
+	* Kurochute
+	* Kurodoko
+	* Kurotto
 	* Nanro
+	* Nurikabe
+	* Nurimisake
 	* Ripple Effect
 	* Shakashaka
 	* Skyscraper
