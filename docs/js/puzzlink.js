@@ -116,7 +116,7 @@ class Puzzlink {
         }
     }
 
-    drawNumbers(pu, info_number, mode, sub_mode, hide_ques = true) {
+    drawNumbers(pu, info_number, style, sub_mode, hide_ques = true) {
         var row_ind, col_ind, cell, number;
 
         // Add numbers to grid
@@ -126,7 +126,7 @@ class Puzzlink {
             col_ind = i % this.cols;
             cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
             number = hide_ques && info_number[i] === "?" ? " " : info_number[i];
-            pu["pu_q"].number[cell] = [number, mode, sub_mode];
+            pu["pu_q"].number[cell] = [number, style, sub_mode];
         }
     }
 
@@ -166,9 +166,9 @@ class Puzzlink {
     }
 
     decodeKakuro() {
-        // 0 means no restiction
+        // 0 means no restriction
         // first inner clues, then outer row clue and then outer column clue
-        // outer row and column will only have one values. Inner clue has two values. If not existence then it can be 0 or -1.
+        // outer row and column will only have one values. Inner clue has two values. If not existing then it can be 0 or -1.
         // dot means not part of grid
         // outer row empty clue is not part of URL if adjacent cell is used, else it includes -1 in the URl.
 
@@ -267,10 +267,12 @@ class Puzzlink {
     }
 
     moveNumbersToRegionCorners(info_edge, info_number) {
-        var cols = this.cols, rows = this.rows;
+        var cols = this.cols,
+            rows = this.rows;
         var ds = new DisjointSets(cols * rows);
 
-        var x, y, cell, right_edge = 0, bottom_edge = (cols - 1) * rows;
+        var x, y, cell, right_edge = 0,
+            bottom_edge = (cols - 1) * rows;
         for (cell = 0; cell < cols * rows; cell++) {
             x = cell % cols;
             y = parseInt(cell / cols);
@@ -296,7 +298,7 @@ class Puzzlink {
         // But cells in each region are ordered column-wise for some reason
         regions = regions.map(
             (region) => region.sort((a, b) =>
-                100*(a % cols - b % cols) + (a / cols - b / cols))
+                100 * (a % cols - b % cols) + (a / cols - b / cols))
         );
 
         // Put the numbers in the first cell of their respective region
@@ -316,7 +318,7 @@ class DisjointSets {
         }
     }
 
-    combineSets (a, b) {
+    combineSets(a, b) {
         a += '';
         b += '';
         while (this.map[a] !== a) {
@@ -342,11 +344,11 @@ class DisjointSets {
         }
     }
 
-    getSets () {
+    getSets() {
         this.flattenMaps();
         var inverted = {};
         for (var i in this.map) {
-            var ind = this.map[i]
+            var ind = this.map[i];
             inverted[ind] = inverted[ind] || [];
             inverted[ind].push(i);
         }
