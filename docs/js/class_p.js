@@ -7548,7 +7548,6 @@ class Puzzle {
                                             this.record("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
                                             delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
                                         }
-
                                         if (con) {
                                             if (con.length < (5 - j_start)) {
                                                 for (var j = j_start; j < (con.length + j_start); j++) {
@@ -7646,18 +7645,24 @@ class Puzzle {
                                     number += key;
                                 }
                                 this.record("number", k, this.undoredo_counter);
-                                // S submode is 5, M submode is 6
-                                // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                if (document.getElementById("sudoku_settings_opt").value === "1") {
-                                    if (number.length > 5) {
-                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
-                                    } else {
+
+                                // if number empty then delete the entry
+                                if (number !== "") {
+                                    // S submode is 5, M submode is 6
+                                    // dynamic (i.e. upto 5 digits larger size and then smaller size)
+                                    if (document.getElementById("sudoku_settings_opt").value === "1") {
+                                        if (number.length > 5) {
+                                            this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
+                                        } else {
+                                            this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                        }
+                                    } else if (document.getElementById("sudoku_settings_opt").value === "2") { // all large
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                    } else if (document.getElementById("sudoku_settings_opt").value === "3") { // all small
+                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                     }
-                                } else if (document.getElementById("sudoku_settings_opt").value === "2") { // all large
-                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                } else if (document.getElementById("sudoku_settings_opt").value === "3") { // all small
-                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
+                                } else {
+                                    delete this[this.mode.qa].number[k];
                                 }
                             }
                         }
