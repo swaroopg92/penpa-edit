@@ -11074,6 +11074,14 @@ class Puzzle {
             }
             if (this.freelinecircle_g[1] != -1) {
                 this.draw_circle(this.ctx, this.point[this.freelinecircle_g[1]].x, this.point[this.freelinecircle_g[1]].y, 0.3);
+
+                // Preview the line
+                var i1 = this.freelinecircle_g[0];
+                var i2 = this.freelinecircle_g[1];
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
+                this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
+                this.ctx.stroke();
             }
         }
     }

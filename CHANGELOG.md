@@ -1,4 +1,7 @@
 ## History
+* 2021/**/** ver 2.26.9
+	* Fixed Sudoku center pencil marks bug. Previously it was storing empty array.
+	* Improved Free Line/Edge mode to preview the line.
 * 2021/09/18 ver 2.26.8
 	* Added Akari, Kakuro and ShakaShaka support for puzz.link.
 	* Introducing genre tagging feature.
