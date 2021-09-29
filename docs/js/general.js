@@ -2531,6 +2531,10 @@ function decode_puzzlink(url) {
 
     parts = url.split("?");
     urldata = parts[1].split("/");
+    if (urldata[1] === 'v:') {
+        urldata.splice(1, 1); // Ignore variant rules
+    }
+
     type = urldata[0];
     cols = parseInt(urldata[1]);
     rows = parseInt(urldata[2]);
