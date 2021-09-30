@@ -2568,21 +2568,36 @@ function decode_puzzlink(url) {
     switch (type) {
         case "ripple":
         case "nanro":
+        case "onsen":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);
-            setupProblem(pu, "sudoku");
+            if (type === "onsen") {
+                pu.mode_grid("nb_grid2"); // change gridlines to dashes
+                setupProblem(pu, "combi");
+            } else {
+                setupProblem(pu, "sudoku");
+            }
 
             // Decode URL
             info_edge = puzzlink_pu.decodeBorder();
             info_number = puzzlink_pu.decodeNumber16();
 
+            // 1 is normal, 6 has a circle background
+            number_style = type === "onsen" ? 6 : 1;
+
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-            puzzlink_pu.drawNumbers(pu, info_number, 1, "1"); // Normal submode is 1
+            puzzlink_pu.drawNumbers(pu, info_number, number_style, "1");
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
-            pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            if (type === "onsen") {
+                pu.mode_set("combi"); //include redraw
+                pu.subcombimode("linex");
+                this.usertab_choices = ["Surface", "Composite"];
+            } else {
+                pu.mode_set("sudoku"); //include redraw
+                this.usertab_choices = ["Surface", "Sudoku Normal"];
+            }
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);
