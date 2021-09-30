@@ -75,7 +75,7 @@ class Puzzlink {
         }
     }
 
-    decodeNumber16() {
+    decodeNumber16(max_iter = -1) {
         var number_list = {};
         var i = 0;
         var c = 0;
@@ -93,7 +93,15 @@ class Puzzlink {
             } else {
                 i++;
             }
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
         }
+
+        // Remove what was parsed so the next function call reads what is left
+        this.gridurl = this.gridurl.substr(i);
 
         return number_list;
     }

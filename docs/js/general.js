@@ -2874,6 +2874,28 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "haisu":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            // The "S" and "G" of the puzzle are stored at the beginning of the string
+            info_number = puzzlink_pu.decodeNumber16(4);
+            cell = pu.nx0 * (1 + info_number[1]) + 1 + info_number[0];
+            pu["pu_q"].number[cell] = ["S", 1, "1"];
+            cell = pu.nx0 * (1 + info_number[3]) + 1 + info_number[2];
+            pu["pu_q"].number[cell] = ["G", 1, "1"];
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16();
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
