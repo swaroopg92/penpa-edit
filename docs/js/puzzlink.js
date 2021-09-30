@@ -266,6 +266,21 @@ class Puzzlink {
         return number_list;
     }
 
+    decodeNumber3() {
+        var number_list = [];
+
+        for (var char of this.gridurl) {
+            var int = parseInt(char, 36);
+            number_list.push(
+                parseInt(int / 9) % 3,
+                parseInt(int / 3) % 3,
+                parseInt(int / 1) % 3,
+            );
+        }
+
+        return number_list;
+    }
+
     moveNumbersToRegionCorners(info_edge, info_number) {
         var cols = this.cols,
             rows = this.rows;

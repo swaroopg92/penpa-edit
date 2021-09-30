@@ -2847,6 +2847,33 @@ function decode_puzzlink(url) {
             pu.subcombimode("lineox");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "moonsun":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber3();
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            // Add moons and suns
+            for (i in info_number) {
+                if (info_number[i] === 0) {
+                    continue;
+                }
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].symbol[cell] = [info_number[i], "sun_moon", 1];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
