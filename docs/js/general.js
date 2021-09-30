@@ -2808,6 +2808,45 @@ function decode_puzzlink(url) {
             pu.subcombimode("blpo"); // Black square and Point
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "slitherlink":
+        case "slither": // slitherlink alias
+            pu = new Puzzle_square(cols, rows, size);
+            // Draw grid dots only
+            pu.mode_grid("nb_grid3");
+            pu.mode_grid("nb_lat1");
+            pu.mode_grid("nb_out2");
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber4();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "country":
+        case "detour":
+        case "maxi":
+            pu = new Puzzle_square(cols, rows, size);
+            if (type !== "country") {
+                pu.mode_grid("nb_grid2"); // Dashed gridlines
+            }
+            setupProblem(pu, "combi");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16();
+            info_number = puzzlink_pu.moveNumbersToRegionCorners(info_edge, info_number);
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+            number_style = type === "country" ? "1" : "6"; // Normal or Small number
+            puzzlink_pu.drawNumbers(pu, info_number, 1, number_style);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("lineox");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
