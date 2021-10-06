@@ -2863,16 +2863,21 @@ function decode_puzzlink(url) {
             this.usertab_choices = ["Surface", "Composite"];
             break;
         case "moonsun":
+        case "mashu": // masyu alias
+        case "masyu":
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed gridlines
             setupProblem(pu, "combi");
 
-            info_edge = puzzlink_pu.decodeBorder();
+            if (type === 'moonsun') {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2);
+            }
+
             info_number = puzzlink_pu.decodeNumber3();
 
-            puzzlink_pu.drawBorder(pu, info_edge, 2);
-
-            // Add moons and suns
+            // Add moons and suns or circles
+            value = type === "moonsun" ? "sun_moon" : "circle_L";
             for (i in info_number) {
                 if (info_number[i] === 0) {
                     continue;
@@ -2881,7 +2886,7 @@ function decode_puzzlink(url) {
                 row_ind = parseInt(i / cols);
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                pu["pu_q"].symbol[cell] = [info_number[i], "sun_moon", 1];
+                pu["pu_q"].symbol[cell] = [info_number[i], value, 1];
             }
 
             pu.mode_qa("pu_a");

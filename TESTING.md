@@ -103,6 +103,14 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Masyu</summary>
+
+* https://puzz.link/p?masyu/15/10/i0a02000000ik20620i6i0a021c049c209490j0100a0019329
+* https://puzz.link/p?mashu/13/9/013009k10a3a39310c9313693i016030j039a20
+* https://puzz.link/p?mashu/v:/10/10/000000060i23601000000001i200f90000
+
+</details>
+<details>
 <summary>Maxi Loop</summary>
 
 * https://puzz.link/p?maxi/10/10/37e0001tug030kdb00c2d00299pbgg3hg5j44s
