@@ -2854,8 +2854,19 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.moveNumbersToRegionCorners(info_edge, info_number);
 
             puzzlink_pu.drawBorder(pu, info_edge, 2);
-            number_style = type === "country" ? "1" : "6"; // Normal or Small number
-            puzzlink_pu.drawNumbers(pu, info_number, 1, number_style);
+
+            if (type === "country") {
+                puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+            } else {
+                // Draw numbers in the corner
+                for (var i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = 4 * (pu.ny0 * pu.nx0 + pu.nx0 * (2 + row_ind) + 2 + col_ind);
+                    pu["pu_q"].numberS[cell] = [info_number[i], 1];
+                }
+            }
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
