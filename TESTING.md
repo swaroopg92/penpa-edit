@@ -120,6 +120,14 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Mid-loop</summary>
+
+* https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz
+* https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg
+* https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi
+
+</details>
+<details>
 <summary>Maxi Loop</summary>
 
 * https://puzz.link/p?maxi/10/10/37e0001tug030kdb00c2d00299pbgg3hg5j44s

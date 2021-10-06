@@ -331,6 +331,54 @@ class Puzzlink {
         }
         return new_numbers;
     }
+
+    decodeMidloop() {
+        // Every cell, corner and edge is a point, unless it is on the grid edge.
+        // Small even digits are white dots. Small odd digits are black dots.
+        // Large digits/characters are spacing
+        var points = {};
+        var i = 0;
+        for (var char of this.gridurl) {
+            char = parseInt(char, 36);
+            if (0 <= char && char < 16) {
+                points[i] = char % 2;
+                i += parseInt(char / 2) + 1;
+            } else {
+                i += char - 15;
+            }
+        }
+        return points;
+    }
+
+    drawMidloop(pu, info, behind_line = 2) {
+        var row_ind, col_ind, cell;
+        for (var i in info) {
+            row_ind = parseInt(i / (2 * this.cols - 1));
+            col_ind = i % (2 * this.cols - 1);
+            if (row_ind % 2 === 0 && col_ind % 2 === 0) {
+                // cell center
+                row_ind = (row_ind) / 2;
+                col_ind = (col_ind) / 2;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            } else if (col_ind % 2 === 0) {
+                // vertical edge
+                row_ind = (row_ind - 1) / 2;
+                col_ind = (col_ind) / 2;
+                cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            } else if (row_ind % 2 === 0) {
+                // horizonal edge
+                row_ind = (row_ind) / 2;
+                col_ind = (col_ind - 1) / 2;
+                cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            } else {
+                // corner/vertex
+                row_ind = (row_ind - 1) / 2;
+                col_ind = (col_ind - 1) / 2;
+                cell = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            }
+            pu["pu_q"].symbol[cell] = [info[i] + 1, "circle_SS", behind_line];
+        }
+    }
 }
 
 class DisjointSets {

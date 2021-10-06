@@ -2938,6 +2938,19 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "midloop":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_edge = puzzlink_pu.decodeMidloop();
+            puzzlink_pu.drawMidloop(pu, info_edge);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
