@@ -28,6 +28,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Balance Loop</summary>
+
+* https://puzz.link/p?balance/9/9/dm1ich1o0i1pcpdido1h1i0m0
+* https://puzz.link/p?balance/5/2/kbg011
+* https://puzz.link/p?balance/9/9/-13i1i-13gdkds0g1i1idi1i0g7t1i1h-13m-13
+* https://puzz.link/p?balance/10/10/-24-22-20-1e-1c-1a-18-16-14g-25-23-21-1f-1d-1b-19-17-15zzzzg
+
+</details>
+<details>
 <summary>Country Road</summary>
 
 * https://puzz.link/p?country/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g
