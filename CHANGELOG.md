@@ -3,6 +3,7 @@
 	* Fixed Sudoku center pencil marks bug. Previously it was storing empty array.
 	* Improved Free Line/Edge mode to preview the line.
 	* Added moonsun, haisu, country road, detour, maxiloop, slitherlink, onsen, masyu, balance loop, mid loop.
+	* Color change of canvas border to differentiate Problem/Solution Mode
 * 2021/09/18 ver 2.26.8
 	* Added Akari, Kakuro and ShakaShaka support for puzz.link.
 	* Introducing genre tagging feature.

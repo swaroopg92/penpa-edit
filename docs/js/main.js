@@ -287,9 +287,11 @@ onload = function() {
 
             if (key === "F2") { //function_key
                 pu.mode_qa("pu_q");
+                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
                 e.returnValue = false;
             } else if (key === "F3") {
                 pu.mode_qa("pu_a");
+                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
                 e.returnValue = false;
             }
 

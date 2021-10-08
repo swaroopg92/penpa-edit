@@ -6,6 +6,7 @@
 // Colors: should be the same as in light_theme.css/dark_theme.css
 const Color = {
     BLACK: "#000000",
+    BLACK_LIGHT: "#232323",
     BLUE: "#0000ff",
     BLUE_DARK_VERY: "#00008b",
     BLUE_LIGHT: "#187bcd",
