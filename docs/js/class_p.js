@@ -163,6 +163,8 @@ class Puzzle {
         this.multisolution = false;
         this.borderwarning = true;
         this.user_tags = [];
+        this.conflicts = new Conflicts();
+        this.previous_sol = [];
     }
 
     reset() {
@@ -11010,6 +11012,7 @@ class Puzzle {
     }
 
     draw_frame() {
+        console.log(this.frame)
         for (var i in this.frame) {
             if (this.frame[i] && !this.pu_q.deletelineE[i]) {
                 set_line_style(this.ctx, this.frame[i]);
@@ -11278,27 +11281,30 @@ class Puzzle {
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
-                if (text === this.solution && this.sol_flag === 0) {
-                    setTimeout(() => {
-                        Swal.fire({
-                            title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                            html: '<h2 class="wish">Congratulations 🙂</h2>',
-                            background: 'url(js/images/new_year.jpg)',
-                            icon: 'success',
-                            confirmButtonText: 'Hurray!',
-                            // timer: 5000
-                        })
-                    }, 20)
-                    sw_timer.pause();
-                    // this.mouse_mode = "out";
-                    // this.mouseevent(0, 0, 0);
-                    this.sol_flag = 1;
-                    // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-                } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                    this.sol_flag = 0;
-                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                let conflict = this.check_conflict(text);
+                if (!conflict) {
+                    if (text === this.solution && this.sol_flag === 0) {
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                                html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                background: 'url(js/images/new_year.jpg)',
+                                icon: 'success',
+                                confirmButtonText: 'Hurray!',
+                                // timer: 5000
+                            })
+                        }, 20)
+                        sw_timer.pause();
+                        // this.mouse_mode = "out";
+                        // this.mouseevent(0, 0, 0);
+                        this.sol_flag = 1;
+                        // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
+                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                    } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                        this.sol_flag = 0;
+                        // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    }
                 }
             }
         } else {
@@ -11587,6 +11593,22 @@ class Puzzle {
         }
         for (var i of penpa_modes["square"]['li']) {
             document.getElementById("li_" + i).style.display = displaytype;
+        }
+    }
+
+    check_conflict(current_sol) {
+        if (this.user_tags) {
+            // Do only if current solution changed
+            if (current_sol !== this.previous_sol) {
+                for (var tag of this.user_tags) {
+                    switch (tag) {
+                        case 'classic':
+                            this.conflicts.check_classic(this);
+                            break;
+                    }
+                }
+                this.previous_sol = current_sol;
+            }
         }
     }
 }
