@@ -444,16 +444,26 @@ Depending on the browser you can update the page without using the cache with "C
 * Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
 	* Akari
 	* Ayeheya
+	* Balance Loop
+	* Country Road
+	* Detour
+	* Haisu
 	* Heyawake
 	* Kakuro
 	* Kurochute
 	* Kurodoko
 	* Kurotto
+	* Masyu
+	* Maxi Loop
+	* Midloop
+	* Moonsun
 	* Nanro
 	* Nurikabe
 	* Nurimisake
+	* Onsen
 	* Ripple Effect
 	* Shakashaka
+	* Slitherlink
 	* Skyscraper
 	* Star Battle
 	* Sudoku
