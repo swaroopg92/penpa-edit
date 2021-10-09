@@ -2059,7 +2059,7 @@ S2.define('select2/selection/search',[
     var searchLabel = this.options.get('translations').get('search');
     var $search = $(
       '<span class="select2-search select2-search--inline">' +
-        '<textarea id="select2_search" class="select2-search__field"'+
+        '<textarea id="select2_search_multiple" class="select2-search__field"'+
         ' type="search" tabindex="-1"' +
         ' autocorrect="off" autocapitalize="none"' +
         ' spellcheck="false" role="searchbox" aria-autocomplete="list" >' +

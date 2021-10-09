@@ -273,6 +273,8 @@ Depending on the browser you can update the page without using the cache with "C
 
 * Rules - Enter rules here
 
+* Genre/Tags - Select specific tags that suit your puzzle. These tags will be used for special answer checking features. (special answer checking features are still under construction)
+
 * Source - If you are not the author of the puzzle, specify the source URL
 
 * Save Undo/Redo (History) - If you checkmark this option, then your action history will be saved in the URL. This is effective only while using "URL for editing" button. Other options will automatically ignore history. Note: Saving history might make URL too big depending on your usage.
@@ -440,7 +442,30 @@ Depending on the browser you can update the page without using the cache with "C
 * If the puzzle is too big and contains a lot of elements, it generates a big URL and the size is limited by the internet. In order to address this issue, one can use this Load button option to copy the big URL and click "Load URL" button.
 * Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
 * Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
+	* Akari
+	* Ayeheya
+	* Balance Loop
+	* Country Road
+	* Detour
+	* Haisu
+	* Heyawake
+	* Kakuro
+	* Kurochute
+	* Kurodoko
+	* Kurotto
+	* Masyu
+	* Maxi Loop
+	* Midloop
+	* Moonsun
+	* Nanro
+	* Nurikabe
+	* Nurimisake
+	* Onsen
 	* Ripple Effect
+	* Shakashaka
+	* Slitherlink
+	* Skyscraper
+	* Star Battle
 	* Sudoku
 
 ### Settings
@@ -458,6 +483,8 @@ Depending on the browser you can update the page without using the cache with "C
 		* High Range - Default.
 		* Low Range - User needs to click much closer to corners and edges for dots.
 		* Disable - Completely disable the dot feature and only have Star/Cross.
+	* Mouse Middle Button: Shortcut to switch between Problem/Solution mode while in "setter mode". To activate, select YES.
+	* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
 		* Theme
 		* Tab settings
@@ -466,6 +493,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Displaysize
 		* Sudoku PencilMarks setting
 		* Sudoku Normal setting
+		* Mouse Middle Button choice
 		When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch

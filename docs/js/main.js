@@ -64,84 +64,90 @@ onload = function() {
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
     function onDown(e) {
-        if (e.type === "mousedown") {
-            var event = e;
-        } else {
-            var event = e.changedTouches[0];
-            e.preventDefault(); // When both mouse and touch start, only touch
-        }
-        var ctrl_key = e.ctrlKey;
-        if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
-            var obj = coord_point(event, 'flex');
-        } else {
-            var obj = coord_point(event);
-        }
-        var x = obj.x,
-            y = obj.y,
-            num = obj.num;
-        if (pu.point[num].use === 1) {
-            if (event.button === 2) { // right click
-                pu.mouse_mode = "down_right";
-                pu.mouse_click = 2;
-                pu.mouseevent(x, y, num, ctrl_key);
-            } else { // Left click or tap
-                pu.mouse_mode = "down_left";
-                pu.mouse_click = 0;
-                pu.mouseevent(x, y, num, ctrl_key);
+        if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
+            if (e.type === "mousedown") {
+                var event = e;
+            } else {
+                var event = e.changedTouches[0];
+                e.preventDefault(); // When both mouse and touch start, only touch
+            }
+            var ctrl_key = e.ctrlKey;
+            if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
+                var obj = coord_point(event, 'flex');
+            } else {
+                var obj = coord_point(event);
+            }
+            var x = obj.x,
+                y = obj.y,
+                num = obj.num;
+            if (pu.point[num].use === 1) {
+                if (event.button === 2) { // right click
+                    pu.mouse_mode = "down_right";
+                    pu.mouse_click = 2;
+                    pu.mouseevent(x, y, num, ctrl_key);
+                } else { // Left click or tap
+                    pu.mouse_mode = "down_left";
+                    pu.mouse_click = 0;
+                    pu.mouseevent(x, y, num, ctrl_key);
+                }
             }
         }
     }
 
     function onUp(e) {
-        if (e.type === "mouseup") {
-            var event = e;
-        } else {
-            var event = e.changedTouches[0];
-            e.preventDefault(); // When both mouse and touch start, only touch
-        }
-        if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") && // to handle mobile/ipad users for up events for certain modes
-            (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) {
-            var obj = coord_point(event, 'flex');
-        } else {
-            var obj = coord_point(event);
-        }
-        var x = obj.x,
-            y = obj.y,
-            num = obj.num;
-        pu.mouse_mode = "up";
-        pu.mouse_click = 0;
-        pu.mouseevent(x, y, num);
-    }
-
-    function onMove(e) {
-        if (e.type === "mousemove") {
-            var event = e;
-        } else {
-            var event = e.changedTouches[0];
-        }
-        e.preventDefault();
-        if (event.buttons === 2) { // Right click and moving
-            pu.mouse_click = 2;
-            var obj = coord_point(event, 'flex');
-        } else if ((ondown_key === "touchstart" || event.buttons === 1) && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click/Ipad and moving in Sudoku Mode
-            pu.mouse_click = 0;
-            var obj = coord_point(event, 'flex');
-        } else {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
+        if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
+            if (e.type === "mouseup") {
+                var event = e;
+            } else {
+                var event = e.changedTouches[0];
+                e.preventDefault(); // When both mouse and touch start, only touch
+            }
+            if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") && // to handle mobile/ipad users for up events for certain modes
+                (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
+                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
             }
+            var x = obj.x,
+                y = obj.y,
+                num = obj.num;
+            pu.mouse_mode = "up";
             pu.mouse_click = 0;
-        }
-        var x = obj.x,
-            y = obj.y,
-            num = obj.num;
-        if (pu.point[num].use === 1) {
-            pu.mouse_mode = "move";
             pu.mouseevent(x, y, num);
+        }
+    }
+
+    function onMove(e) {
+        if ((ondown_key === "mousedown" && e.buttons !== 4) || (ondown_key === "touchstart")) { // Ignore Middle button
+            if (e.type === "mousemove") {
+                var event = e;
+            } else {
+                var event = e.changedTouches[0];
+            }
+            e.preventDefault();
+            if (event.buttons === 2) { // Right click and moving
+                pu.mouse_click = 2;
+                var obj = coord_point(event, 'flex');
+            } else if ((ondown_key === "touchstart" || event.buttons === 1) && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click/Ipad and moving in Sudoku Mode
+                pu.mouse_click = 0;
+                var obj = coord_point(event, 'flex');
+            } else {
+                if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
+                        pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
+                    var obj = coord_point(event, 'flex');
+                } else {
+                    var obj = coord_point(event);
+                }
+                pu.mouse_click = 0;
+            }
+            var x = obj.x,
+                y = obj.y,
+                num = obj.num;
+            if (pu.point[num].use === 1) {
+                pu.mouse_mode = "move";
+                pu.mouseevent(x, y, num);
+            }
         }
     }
 
@@ -287,9 +293,11 @@ onload = function() {
 
             if (key === "F2") { //function_key
                 pu.mode_qa("pu_q");
+                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
                 e.returnValue = false;
             } else if (key === "F3") {
                 pu.mode_qa("pu_a");
+                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
                 e.returnValue = false;
             }
 
@@ -991,6 +999,24 @@ onload = function() {
             pu.selection = [];
             pu.redraw();
         }
+        // Middle click for switching problem and solution
+        // Applicable only in setter mode
+        if (document.getElementById("title").textContent.toLowerCase().includes("setter")) {
+            if (document.getElementById("mousemiddle_settings_opt").value === "2") { // If user setting is yes
+                if (ondown_key === "mousedown" && e.button === 1) {
+                    if (pu.mode.qa === "pu_a") {
+                        pu.mode_qa("pu_q");
+                        document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                        e.returnValue = false;
+                    } else {
+                        pu.mode_qa("pu_a");
+                        document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                        e.returnValue = false;
+                    }
+                }
+            }
+        }
+
         switch (e.target.id) {
             //canvas
             case "canvas":
@@ -1144,6 +1170,10 @@ onload = function() {
                 }
                 break;
                 //savetext
+            case "saveinfogenre":
+                show_genretags();
+                e.preventDefault();
+                break;
             case "address_edit":
                 savetext_edit();
                 e.preventDefault();
@@ -1903,6 +1933,8 @@ onload = function() {
             deleteCookie("displaysize");
             deleteCookie("sudoku_normal_size");
             deleteCookie("starbattle_dots");
+            deleteCookie("mousemiddle_button");
+            // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
             setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
             setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
@@ -1912,6 +1944,8 @@ onload = function() {
             setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
             setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
             setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
+            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, 2147483647);
+            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, 2147483647);
         }
     }
 
@@ -1993,6 +2027,14 @@ onload = function() {
             }
         }
         pu.redraw();
+    }
+
+    document.getElementById("mode_choices").onchange = function() {
+        // Dynamically updating the display of modes based on tab setting changes
+        if (document.getElementById('advance_button').textContent === "ON") {
+            advancecontrol_on(); // First display back everything
+            advancecontrol_off("new"); // apply new choices for penpa lite
+        }
     }
 
     // Timer pause and unpause

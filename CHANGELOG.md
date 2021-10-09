@@ -1,6 +1,21 @@
 ## History
-* 2021/09/05 ver 2.25.7
-	* Introducing Puzz.link support. Currently supports Ripple Effect and Sudoku.
+* 2021/10/09 ver 2.26.9
+	* Fixed Sudoku center pencil marks bug. Previously it was storing empty array.
+	* Improved Free Line/Edge mode to preview the line.
+	* Added moonsun, haisu, country road, detour, maxiloop, slitherlink, onsen, masyu, balance loop, mid loop.
+	* Color change of canvas border to differentiate Problem/Solution Mode.
+	* Mouse middle button shortcut for switching between Problem/Solution in Setter Mode.
+	* Secondary color choice for Surface Mode.
+	* Disabled cleaning of dots in star battle composite modes for mobile/ipad devices until better approach is implemented.
+* 2021/09/18 ver 2.26.8
+	* Added Akari, Kakuro and ShakaShaka support for puzz.link.
+	* Introducing genre tagging feature.
+	* Added answer check for tightfit sudoku tag.
+	* Added support for 4x4 and 6x6 Sudoku grids imported from puzz.link.
+	* Full Penpalite support for imported puzz.link puzzles.
+	* Added Heyawake, Ayeheya, Kurochute, Kurodoko, Kurotto, Nurikabe, Nurimisake support for puzz.link.
+* 2021/09/05 ver 2.26.7
+	* Introducing Puzz.link support. Currently supports Ripple Effect, Nanro, StarBattle, Skyscraper, Sudoku.
 	* Feature to add TomTom clues to Cube Grid.
 	* Fixed spacebar bug for Sudoku mode.
 	* Fixed Firefox and Chrome issue with "Open in New Window" for SVG screenshot.
