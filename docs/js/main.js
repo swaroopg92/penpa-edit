@@ -2029,6 +2029,14 @@ onload = function() {
         pu.redraw();
     }
 
+    document.getElementById("mode_choices").onchange = function() {
+        // Dynamically updating the display of modes based on tab setting changes
+        if (document.getElementById('advance_button').textContent === "ON") {
+            advancecontrol_on(); // First display back everything
+            advancecontrol_off("new"); // apply new choices for penpa lite
+        }
+    }
+
     // Timer pause and unpause
     document.getElementById("sw_pause").addEventListener("click", pauseTimer);
     document.getElementById("sw_start").addEventListener("click", startTimer);
