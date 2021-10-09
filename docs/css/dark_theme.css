@@ -1015,11 +1015,19 @@ body textarea {
 
 #modal-input-content,
 #modal-load-content,
-#modal-settings-content,
 #modal-save-tag-content {
     background-color: var(--black);
     width: var(--popup_width);
     height: 280px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 20px;
+}
+
+#modal-settings-content {
+    background-color: var(--black);
+    width: var(--popup_width);
+    height: 320px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -1309,7 +1317,10 @@ input[type=number] {
 #save_settings_lb,
 #sudoku_settings_lb,
 #sudoku_settings_normal_lb,
-#starbattle_settings_lb {
+#starbattle_settings_lb,
+#mousemiddle_settings_lb,
+#multitab_settings_lb,
+#secondcolor_settings_lb {
     color: var(--white);
 }
 

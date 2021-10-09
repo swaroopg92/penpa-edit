@@ -71,6 +71,10 @@ function create() {
     if (starbattle_dots_cookie !== null) {
         document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
+    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
+    if (mousemiddle_button_cookie !== null) {
+        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
 
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
@@ -1680,6 +1684,10 @@ function load(urlParam, type = 'url') {
     if (starbattle_dots_cookie !== null) {
         document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
+    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
+    if (mousemiddle_button_cookie !== null) {
+        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
 
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
@@ -2487,6 +2495,10 @@ function set_solvemode(type = "url") {
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_opt').style.display = 'none';
+
+    // Middle Button settings not applicable in Solve mode
+    document.getElementById('mousemiddle_settings_lb').style.display = 'none';
+    document.getElementById('mousemiddle_settings_opt').style.display = 'none';
 
     // Constraints
     document.getElementById('constraints').style.display = 'none';

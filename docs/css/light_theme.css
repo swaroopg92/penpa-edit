@@ -995,11 +995,19 @@ body textarea {
 
 #modal-input-content,
 #modal-load-content,
-#modal-settings-content,
 #modal-save-tag-content {
     background-color: var(--white);
     width: var(--popup_width);
     height: 280px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 20px;
+}
+
+#modal-settings-content{
+    background-color: var(--white);
+    width: var(--popup_width);
+    height: 320px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
