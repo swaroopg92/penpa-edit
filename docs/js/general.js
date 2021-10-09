@@ -1732,6 +1732,11 @@ function load(urlParam, type = 'url') {
             rtext[14] = rtext[14].split(pu.replace[i][1]).join(pu.replace[i][0]);
             rtext[15] = rtext[15].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
+
+        // genre tags
+        if (typeof rtext[17] !== 'undefined') {
+            rtext[17] = rtext[17].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
     }
     rtext[5] = JSON.parse(rtext[5]);
     for (var i = 1; i < rtext[5].length; i++) {
