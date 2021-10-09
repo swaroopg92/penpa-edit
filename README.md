@@ -483,6 +483,8 @@ Depending on the browser you can update the page without using the cache with "C
 		* High Range - Default.
 		* Low Range - User needs to click much closer to corners and edges for dots.
 		* Disable - Completely disable the dot feature and only have Star/Cross.
+	* Mouse Middle Button: Shortcut to switch between Problem/Solution mode while in "setter mode". To activate, select YES.
+	* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
 		* Theme
 		* Tab settings
@@ -491,6 +493,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Displaysize
 		* Sudoku PencilMarks setting
 		* Sudoku Normal setting
+		* Mouse Middle Button choice
 		When the user returns to fresh Penpa page, these settings are recovered.
 
 ### Stop Watch
