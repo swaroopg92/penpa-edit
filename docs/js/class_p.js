@@ -10453,6 +10453,7 @@ class Puzzle {
     }
 
     re_combi_star_reduced(num) {
+        let star_type = 2;
         if (this.point[num].type === 0) {
             if (!this[this.mode.qa].symbol[num]) {
                 if (this.undoredo_counter > 3) {
@@ -10468,7 +10469,7 @@ class Puzzle {
                     }
                 }
                 this.record("symbol", num, this.undoredo_counter);
-                this[this.mode.qa].symbol[num] = [1, "star", 2];
+                this[this.mode.qa].symbol[num] = [star_type, "star", 2];
             } else {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
@@ -10479,6 +10480,7 @@ class Puzzle {
     }
 
     re_combi_star(num) {
+        let star_type = 2;
         switch (this.point[num].type) {
             case 0:
                 if (!this[this.mode.qa].symbol[num]) {
@@ -10496,8 +10498,8 @@ class Puzzle {
                     //     }
                     // }
                     this.record("symbol", num, this.undoredo_counter);
-                    this[this.mode.qa].symbol[num] = [1, "star", 2];
-                } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                    this[this.mode.qa].symbol[num] = [star_type, "star", 2];
+                } else if (this[this.mode.qa].symbol[num][0] === star_type) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [0, "star", 2];
                     this.drawing_mode = 1;
