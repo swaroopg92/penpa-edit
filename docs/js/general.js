@@ -71,6 +71,10 @@ function create() {
     if (starbattle_dots_cookie !== null) {
         document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
+    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
+    if (mousemiddle_button_cookie !== null) {
+        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
 
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
@@ -1680,6 +1684,10 @@ function load(urlParam, type = 'url') {
     if (starbattle_dots_cookie !== null) {
         document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
     }
+    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
+    if (mousemiddle_button_cookie !== null) {
+        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
 
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
@@ -1731,6 +1739,11 @@ function load(urlParam, type = 'url') {
         if (typeof rtext[14] !== 'undefined') {
             rtext[14] = rtext[14].split(pu.replace[i][1]).join(pu.replace[i][0]);
             rtext[15] = rtext[15].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        }
+
+        // genre tags
+        if (typeof rtext[17] !== 'undefined') {
+            rtext[17] = rtext[17].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
     }
     rtext[5] = JSON.parse(rtext[5]);
@@ -2483,6 +2496,10 @@ function set_solvemode(type = "url") {
     document.getElementById('save_settings_lb').style.display = 'none';
     document.getElementById('save_settings_opt').style.display = 'none';
 
+    // Middle Button settings not applicable in Solve mode
+    document.getElementById('mousemiddle_settings_lb').style.display = 'none';
+    document.getElementById('mousemiddle_settings_opt').style.display = 'none';
+
     // Constraints
     document.getElementById('constraints').style.display = 'none';
     if (type === "local") {
@@ -2531,6 +2548,10 @@ function decode_puzzlink(url) {
 
     parts = url.split("?");
     urldata = parts[1].split("/");
+    if (urldata[1] === 'v:') {
+        urldata.splice(1, 1); // Ignore variant rules
+    }
+
     type = urldata[0];
     cols = parseInt(urldata[1]);
     rows = parseInt(urldata[2]);
@@ -2564,21 +2585,36 @@ function decode_puzzlink(url) {
     switch (type) {
         case "ripple":
         case "nanro":
+        case "onsen":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);
-            setupProblem(pu, "sudoku");
+            if (type === "onsen") {
+                pu.mode_grid("nb_grid2"); // change gridlines to dashes
+                setupProblem(pu, "combi");
+            } else {
+                setupProblem(pu, "sudoku");
+            }
 
             // Decode URL
             info_edge = puzzlink_pu.decodeBorder();
             info_number = puzzlink_pu.decodeNumber16();
 
+            // 1 is normal, 6 has a circle background
+            number_style = type === "onsen" ? 6 : 1;
+
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-            puzzlink_pu.drawNumbers(pu, info_number, 1, "1"); // Normal submode is 1
+            puzzlink_pu.drawNumbers(pu, info_number, number_style, "1");
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
-            pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            if (type === "onsen") {
+                pu.mode_set("combi"); //include redraw
+                pu.subcombimode("linex");
+                this.usertab_choices = ["Surface", "Composite"];
+            } else {
+                pu.mode_set("sudoku"); //include redraw
+                this.usertab_choices = ["Surface", "Sudoku Normal"];
+            }
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);
@@ -2802,6 +2838,145 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo"); // Black square and Point
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "slitherlink":
+        case "slither": // slitherlink alias
+            pu = new Puzzle_square(cols, rows, size);
+            // Draw grid dots only
+            pu.mode_grid("nb_grid3");
+            pu.mode_grid("nb_lat1");
+            pu.mode_grid("nb_out2");
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber4();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "country":
+        case "detour":
+        case "maxi":
+            pu = new Puzzle_square(cols, rows, size);
+            if (type !== "country") {
+                pu.mode_grid("nb_grid2"); // Dashed gridlines
+            }
+            setupProblem(pu, "combi");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16();
+            info_number = puzzlink_pu.moveNumbersToRegionCorners(info_edge, info_number);
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            if (type === "country") {
+                puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+            } else {
+                // Draw numbers in the corner
+                for (var i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = 4 * (pu.ny0 * pu.nx0 + pu.nx0 * (2 + row_ind) + 2 + col_ind);
+                    pu["pu_q"].numberS[cell] = [info_number[i], 1];
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("lineox");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "moonsun":
+        case "mashu": // masyu alias
+        case "masyu":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            if (type === 'moonsun') {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2);
+            }
+
+            info_number = puzzlink_pu.decodeNumber3();
+
+            // Add moons and suns or circles
+            value = type === "moonsun" ? "sun_moon" : "circle_L";
+            for (i in info_number) {
+                if (info_number[i] === 0) {
+                    continue;
+                }
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].symbol[cell] = [info_number[i], value, 1];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "haisu":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            // The "S" and "G" of the puzzle are stored at the beginning of the string
+            info_number = puzzlink_pu.decodeNumber16(4);
+            cell = pu.nx0 * (1 + info_number[1]) + 1 + info_number[0];
+            pu["pu_q"].number[cell] = ["S", 1, "1"];
+            cell = pu.nx0 * (1 + info_number[3]) + 1 + info_number[2];
+            pu["pu_q"].number[cell] = ["G", 1, "1"];
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16();
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "balance":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+
+            for (i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                number = parseInt(info_number[i] / 2) || " ";
+                pu["pu_q"].symbol[cell] = [info_number[i] % 2 + 1, "circle_L", 1];
+                pu["pu_q"].number[cell] = [number, info_number[i] % 2 ? 4 : 1, "1"];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "midloop":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_edge = puzzlink_pu.decodeMidloop();
+            puzzlink_pu.drawMidloop(pu, info_edge);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
             this.usertab_choices = ["Surface", "Composite"];
             break;
         default:
