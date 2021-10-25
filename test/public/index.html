@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penpa+ Tests</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+
+    <!-- Reload page on file changes -->
+    <script type="text/javascript" src="https://livejs.com/live.js"></script>
+</head>
+
+<body>
+    <!-- Since most of the codebase relies on DOM state, it is easier to load the whole page as an iframe. -->
+    <iframe id="penpa" src="../../docs/index.html"></iframe>
+
+    <button id="run-tests">Loading...</button>
+    <label for="update-snapshots">Update Snapshots</label>
+    <input id="update-snapshots" type="checkbox" />
+
+    <!-- Include Mocha testing library. The list of test results are put in div#mocha -->
+    <div id="mocha"></div>
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+
+    <!-- Init Mocha -->
+    <script>
+        mocha.setup({
+            ui: "bdd",
+            inlineDiffs: true,
+            cleanReferencesAfterRun: false,
+        });
+    </script>
+
+    <!-- Include test files -->
+    <script src="./utils.js"></script>
+    <script src="./puzz_link_parser.js"></script>
+
+    <script>
+        window.onload = () => {
+            const button = document.querySelector("#run-tests");
+            button.textContent = "Run tests";
+
+            button.onclick = () => {
+                // Clear the last test result from the DOM
+                const testReport = document.querySelector("div#mocha");
+                testReport.innerHTML = "";
+                // Run the test suite
+                mocha.run();
+            };
+        }
+    </script>
+</body>
+
+</html>
