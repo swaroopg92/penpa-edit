@@ -37,7 +37,11 @@ describe("puzz.link parser", () => {
     forEach(testCases, (_, puzzlink_url, filename) => async () => {
         penpa.decode_puzzlink(puzzlink_url);
 
-        const data = penpa.pu.pu_q;
+        const data = {
+            mode: penpa.pu.mode,
+            pu_q: penpa.pu.pu_q,
+            usertab_choices: penpa.usertab_choices,
+        };
         const body = {
             filename,
             data: JSON.stringify(data),
