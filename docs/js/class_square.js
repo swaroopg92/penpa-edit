@@ -667,6 +667,7 @@ class Puzzle_square extends Puzzle {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
+            this.draw_conflicts();
             this.draw_symbol("pu_q", 1);
             this.draw_symbol("pu_a", 1);
             this.draw_squareframe("pu_q");

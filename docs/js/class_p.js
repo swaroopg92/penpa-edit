@@ -165,6 +165,7 @@ class Puzzle {
         this.user_tags = [];
         this.conflicts = new Conflicts();
         this.previous_sol = [];
+        this.conflict_cells = [];
     }
 
     reset() {
@@ -10977,12 +10978,14 @@ class Puzzle {
     /////////////////////////////////
 
 
-    redraw(svgcall = false) {
+    redraw(svgcall = false, check_sol = true) {
         this.flushcanvas(svgcall);
         panel_pu.draw_panel();
         this.draw();
         this.set_redoundocolor();
-        this.check_solution();
+        if (check_sol) {
+            this.check_solution();
+        }
     }
 
     set_redoundocolor() {
@@ -11058,7 +11061,6 @@ class Puzzle {
     }
 
     draw_frame() {
-        console.log(this.frame)
         for (var i in this.frame) {
             if (this.frame[i] && !this.pu_q.deletelineE[i]) {
                 set_line_style(this.ctx, this.frame[i]);
@@ -11157,6 +11159,22 @@ class Puzzle {
                 this.ctx.stroke();
                 this.ctx.fill();
             }
+        }
+    }
+
+    draw_conflicts() {
+        let keys = this.conflict_cells;
+        for (var k = 0; k < keys.length; k++) {
+            var i = keys[k];
+            set_surface_style(this.ctx, 100);
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
+            for (var j = 1; j < this.point[i].surround.length; j++) {
+                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
         }
     }
 
@@ -11352,6 +11370,7 @@ class Puzzle {
                         // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                     }
                 }
+                this.redraw(false, false);
             }
         } else {
             var text = this.make_solution();
@@ -11649,11 +11668,24 @@ class Puzzle {
                 for (var tag of this.user_tags) {
                     switch (tag) {
                         case 'classic':
-                            this.conflicts.check_classic(this);
+                            this.conflict_cells = this.conflicts.check_classic(this);
+                            break;
+                        case 'consecutive':
+                            this.conflict_cells = this.conflicts.check_classic(this);
+
+                            // check consecutive only if no classic conflict
+                            if (this.conflict_cells.length === 0) {
+                                this.conflict_cells = this.conflicts.check_consecutive(this);
+                            }
                             break;
                     }
                 }
                 this.previous_sol = current_sol;
+                if (this.conflict_cells) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }
