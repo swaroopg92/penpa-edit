@@ -64,7 +64,6 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 <summary>Heyawake</summary>
 
 * https://puzz.link/p?heyawake/10/10/0k18ih52a4k9800000003g00000000vv00008g57b
-* https://puzz.link/p?heyawake/10/10/0k18ih52a4k9800000003g00000000vv00008g57b
 * https://puzz.link/p?heyawake/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11
 * https://puzz.link/p?heyawake/10/10/bgn1e2s1g3071e2s5o00of00ufu00fu00f000g5g3g32g0g2g
 * https://puzz.link/p?heyawake/10/8/4k94j266sdc488g0206rv300cro0074g321g26
@@ -224,7 +223,6 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 <summary>Starbattle</summary>
 
 * https://puzz.link/p?starbattle/10/10/2/5g252c2qkgbakk98igse7g88cp3730so000u
-* https://puzz.link/p?starbattle/10/10/2/l95las9vb5mmurbelo2m849c5gp068ci9029
 * https://puzz.link/p?starbattle/10/10/2/l95las9vb5mmurbelo2m849c5gp068ci9029
 * https://puzz.link/p?starbattle/12/12/2/g0410igil9ck6q3l12glrcp12c081pu07do1ge6c0g0m0628gdkcn0
 * https://puzz.link/p?starbattle/13/13/2/40142jhssb4ij4491m8d6b0io4k8ab003vosuc02181v3e00o00fo3g00073phsg
