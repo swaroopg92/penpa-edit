@@ -45,7 +45,7 @@ describe("puzz.link parser", () => {
         ["Heyawake 3", "https://puzz.link/p?heyawake/12/12/5k2q1d0mgb85k2q0d06g381k0q00000u0001vg0007ou0ofg3tg00065g63242362i"],
         ["Heyawake 4", "https://puzz.link/p?heyawake/17/17/ju1vv0vvnm0bv07vg3gfvv7vvhvvuvvvevvnfv07vg3vo003001g00oe1v00fsvs17vo1vpvfufo001g03g0006001g1vs01v00fvvvvvsvvv0s2zj2k2m"],
         // Kakuro
-        // ["Kakuro 1", "https://puzz.link/p?kakuro/10/16/70Z3lg7ma0.sE0ladnQapgOoJgo6aoSfoZ0.ofgmJ0mcCvVim0EmCOoD0bho77oIfoa0ogJp4Knhal0Zs.0am0gl..5IDccZ4HhiDBcgd"],
+        ["Kakuro 1", "https://puzz.link/p?kakuro/10/16/70Z3lg7ma0.sE0ladnQapgOoJgo6aoSfoZ0.ofgmJ0mcCvVim0EmCOoD0bho77oIfoa0ogJp4Knhal0Zs.0am0gl..5IDccZ4HhiDBcgd"],
         ["Kakuro 2", "https://puzz.link/p?kakuro/11/11/.6Bn.HDm4go3Er6go70mFOqj0Can6apOclg4lfapabna0h0qAdm3ModAr0Oo.m.0an..geajgTga74CIac"],
         ["Kakuro 3", "https://puzz.link/p?kakuro/2/2/k...-5"],
         ["Kakuro 4", "https://puzz.link/p?kakuro/5/5/kC-e-c-z..-8lff-giO"],

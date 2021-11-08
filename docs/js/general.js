@@ -106,15 +106,17 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
 }
 
-function deleteCookie(name) { setCookie(name, '', -1); }
+function deleteCookie(name) {
+    setCookie(name, '', -1);
+}
 
 function add_constraints() {
     let constraints = document.getElementById('constraints_settings_opt');
-    penpa_constraints['options_groups'].forEach(function(element, index) {
+    penpa_constraints['options_groups'].forEach(function (element, index) {
         let optgroup = document.createElement("optgroup");
         optgroup.label = element;
 
-        penpa_constraints['options'][element].forEach(function(subelement, subindex) {
+        penpa_constraints['options'][element].forEach(function (subelement, subindex) {
             let opt = document.createElement("option");
             opt.value = subelement;
             opt.innerHTML = subelement;
@@ -130,11 +132,11 @@ function add_constraints() {
 
 function add_genre_tags(user_tags) {
     let genre_tags = document.getElementById('genre_tags_opt');
-    penpa_tags['options_groups'].forEach(function(element, index) {
+    penpa_tags['options_groups'].forEach(function (element, index) {
         let optgroup = document.createElement("optgroup");
         optgroup.label = element;
 
-        penpa_tags['options'][element].forEach(function(subelement, subindex) {
+        penpa_tags['options'][element].forEach(function (subelement, subindex) {
             let opt = document.createElement("option");
             opt.value = subelement;
             opt.innerHTML = subelement;
@@ -1236,7 +1238,9 @@ function saveimage_download() {
         if (document.getElementById("nb_type3").checked) {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
-            var blob = new Blob([text], { type: "image/svg+xml" });
+            var blob = new Blob([text], {
+                type: "image/svg+xml"
+            });
             var ua = window.navigator.userAgent.toLowerCase();
             if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
                 //safari
@@ -1276,7 +1280,9 @@ function saveimage_window() {
     var address = pu.resizecanvas();
     if (document.getElementById("nb_type3").checked) { //svg
         // store in a Blob
-        let blob = new Blob([address], { type: "image/svg+xml" });
+        let blob = new Blob([address], {
+            type: "image/svg+xml"
+        });
         var ua = window.navigator.userAgent.toLowerCase();
         if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
             //safari
@@ -1393,7 +1399,9 @@ function savetext_download() {
     if (filename.indexOf(".") === -1) {
         filename += ".txt";
     }
-    var blob = new Blob([text], { type: "text/plain" });
+    var blob = new Blob([text], {
+        type: "text/plain"
+    });
     var ua = window.navigator.userAgent.toLowerCase();
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
@@ -1448,7 +1456,7 @@ function shorturl_tab() {
 function getValues(id) {
     let result = [];
     let collection = document.querySelectorAll("#" + id + " option");
-    collection.forEach(function(x) {
+    collection.forEach(function (x) {
         if (x.selected) {
             result.push(x.value);
         }
@@ -1635,10 +1643,18 @@ function load(urlParam, type = 'url') {
     document.getElementById("nb_space2").value = JSON.parse(rtext[1])[1];
     document.getElementById("nb_space3").value = JSON.parse(rtext[1])[2];
     document.getElementById("nb_space4").value = JSON.parse(rtext[1])[3];
-    if (!rtext_para[11] === 'undefined' && rtext_para[11] == "1") { document.getElementById("nb_sudoku1").checked = true; }
-    if (!rtext_para[12] === 'undefined' && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
-    if (!rtext_para[13] === 'undefined' && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
-    if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
+    if (!rtext_para[11] === 'undefined' && rtext_para[11] == "1") {
+        document.getElementById("nb_sudoku1").checked = true;
+    }
+    if (!rtext_para[12] === 'undefined' && rtext_para[12] == "1") {
+        document.getElementById("nb_sudoku2").checked = true;
+    }
+    if (!rtext_para[13] === 'undefined' && rtext_para[13] == "1") {
+        document.getElementById("nb_sudoku3").checked = true;
+    }
+    if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") {
+        document.getElementById("nb_sudoku4").checked = true;
+    }
     if (rtext_para[15]) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
         if (ptitle !== "Title: ") {
@@ -1783,8 +1799,12 @@ function load(urlParam, type = 'url') {
         }
         pu.pu_q = JSON.parse(rtext[3]);
         pu.pu_a = JSON.parse(rtext[4]);
-        if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; } // not sure yet, why these lines exist
-        if (!pu.pu_a.polygon) { pu.pu_a.polygon = []; }
+        if (!pu.pu_q.polygon) {
+            pu.pu_q.polygon = [];
+        } // not sure yet, why these lines exist
+        if (!pu.pu_a.polygon) {
+            pu.pu_a.polygon = [];
+        }
 
         // custom color
         if (typeof rtext[13] !== 'undefined') {
@@ -1795,8 +1815,12 @@ function load(urlParam, type = 'url') {
         if (typeof rtext[14] !== 'undefined') {
             pu.pu_q_col = JSON.parse(rtext[14]);
             pu.pu_a_col = JSON.parse(rtext[15]);
-            if (!pu.pu_q_col.polygon) { pu.pu_q_col.polygon = []; } // not sure yet, why these lines exist
-            if (!pu.pu_a_col.polygon) { pu.pu_a_col.polygon = []; }
+            if (!pu.pu_q_col.polygon) {
+                pu.pu_q_col.polygon = [];
+            } // not sure yet, why these lines exist
+            if (!pu.pu_a_col.polygon) {
+                pu.pu_a_col.polygon = [];
+            }
         }
 
         pu.centerlist = rtext[5];
@@ -1861,10 +1885,14 @@ function load(urlParam, type = 'url') {
                         }
                     });
                 } else {
-                    sw_timer.start({ precision: 'secondTenths' });
+                    sw_timer.start({
+                        precision: 'secondTenths'
+                    });
                 }
             } else {
-                sw_timer.start({ precision: 'secondTenths' });
+                sw_timer.start({
+                    precision: 'secondTenths'
+                });
             }
 
             if (typeof rtext[8] !== 'undefined') {
@@ -1911,7 +1939,9 @@ function load(urlParam, type = 'url') {
         pu.mode.grid = JSON.parse(rtext_mode[0]);
         pu.mode_set("surface");
         pu.pu_q = JSON.parse(rtext[3]);
-        if (!pu.pu_q.polygon) { pu.pu_q.polygon = []; }
+        if (!pu.pu_q.polygon) {
+            pu.pu_q.polygon = [];
+        }
 
         // custom color
         if (typeof rtext[13] !== 'undefined') {
@@ -1922,7 +1952,9 @@ function load(urlParam, type = 'url') {
 
         if (typeof rtext[14] !== 'undefined') {
             pu.pu_q_col = JSON.parse(rtext[14]);
-            if (!pu.pu_q_col.polygon) { pu.pu_q_col.polygon = []; } // not sure yet, why these lines exist
+            if (!pu.pu_q_col.polygon) {
+                pu.pu_q_col.polygon = [];
+            } // not sure yet, why these lines exist
         }
 
         pu.centerlist = rtext[5];
@@ -1969,7 +2001,9 @@ function load(urlParam, type = 'url') {
         if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
             set_contestmode();
         }
-        sw_timer.start({ precision: 'secondTenths' });
+        sw_timer.start({
+            precision: 'secondTenths'
+        });
     }
 
     document.getElementById("nb_grid" + pu.mode.grid[0]).checked = true;
@@ -2065,7 +2099,10 @@ function loadver1(paramArray, rtext) {
     if (!paramArray.m) { //edit_mode
         var rtext_q = JSON.parse(rtext[1]);
         var rtext_a = JSON.parse(rtext[2]);
-        var rtext_qa = { "pu_q": rtext_q, "pu_a": rtext_a };
+        var rtext_qa = {
+            "pu_q": rtext_q,
+            "pu_a": rtext_a
+        };
         pu.reset_frame();
 
         var pre_centerlist = pu.centerlist;
@@ -2084,7 +2121,9 @@ function loadver1(paramArray, rtext) {
         pu.mode.qa = "pu_a";
         pu.mode_set("surface");
         var rtext_q = JSON.parse(rtext[1]);
-        var rtext_qa = { "pu_q": rtext_q };
+        var rtext_qa = {
+            "pu_q": rtext_q
+        };
         pu.reset_frame();
 
         var pre_centerlist = pu.centerlist;
@@ -2777,7 +2816,7 @@ function decode_puzzlink(url) {
 
             // Add Outer row
             for (var i in info_number.outer_row) {
-                col_ind = i % cols;
+                col_ind = parseInt(i);
                 cell = pu.nx0 * 2 + 2 + col_ind + 1;
                 value = info_number.outer_row[i];
                 if (value !== -1 && value !== 0) {
@@ -2788,7 +2827,7 @@ function decode_puzzlink(url) {
 
             // Add Outer Column
             for (var i in info_number.outer_column) {
-                col_ind = i % cols;
+                col_ind = parseInt(i);
                 cell = pu.nx0 * (2 + col_ind + 1) + 2;
                 value = info_number.outer_column[i];
                 if (value !== -1 && value !== 0) {
