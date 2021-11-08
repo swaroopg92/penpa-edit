@@ -51,7 +51,7 @@ describe("puzz.link parser", () => {
         ["Kakuro 4", "https://puzz.link/p?kakuro/5/5/kC-e-c-z..-8lff-giO"],
         ["Kakuro 5", "https://puzz.link/p?kakuro/6/6/m-eoI5lD-t.l-co-bm8-e-i97ggc"],
         // Kurochute
-        // ["Kurochute 1", "https://puzz.link/p?kurochute/13/13/31i33j13h3g3g47k.h1k71j4h1i2i2m2m531j1g53m1h13k33i3i6g1k34m1j1i5h3n4k41k39h1g32i13"],
+        ["Kurochute 1", "https://puzz.link/p?kurochute/13/13/31i33j13h3g3g47k.h1k71j4h1i2i2m2m531j1g53m1h13k33i3i6g1k34m1j1i5h3n4k41k39h1g32i13"],
         ["Kurochute 2", "https://puzz.link/p?kurochute/6/7/h12341p1l2p21234h"],
         ["Kurochute 3", "https://puzz.link/p?kurochute/9/9/h1h22k32h1h351j25i2h1g3g1k13i2h1h222j2i33h1i2h33h"],
         // Kurodoko
