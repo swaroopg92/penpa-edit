@@ -2844,8 +2844,9 @@ function decode_puzzlink(url) {
         case "country":
         case "detour":
         case "maxi":
+        case "yajilin-regions":
             pu = new Puzzle_square(cols, rows, size);
-            if (type !== "country") {
+            if (type === "detour" || type === "maxi") {
                 pu.mode_grid("nb_grid2"); // Dashed gridlines
             }
             setupProblem(pu, "combi");
@@ -2871,7 +2872,11 @@ function decode_puzzlink(url) {
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
-            pu.subcombimode("lineox");
+            if (type === "yajilin-regions") {
+                pu.subcombimode("linex");
+            } else {
+                pu.subcombimode("lineox");
+            }
             this.usertab_choices = ["Surface", "Composite"];
             break;
         case "moonsun":
