@@ -2669,24 +2669,17 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.decodeNumber16ExCell();
 
             // Add numbers to grid
-            let side, side_ind;
             for (var i in info_number) {
-                // Determine which row and column
-                side = parseInt(i / cols);
-                side_ind = i % cols;
-                switch (side) {
-                    case 0: // Top Row
-                        cell = pu.nx0 * 2 + 2 + side_ind + 1;
-                        break;
-                    case 1: // Bottom Row
-                        cell = pu.nx0 * (2 + rows + 1) + 2 + side_ind + 1;
-                        break;
-                    case 2: // Left Column
-                        cell = pu.nx0 * (2 + side_ind + 1) + 2;
-                        break;
-                    case 3: // Right Column
-                        cell = pu.nx0 * (2 + side_ind + 1) + 2 + cols + 1;
-                        break;
+                i = parseInt(i);
+                // Top row, bottom row, left column and then right column
+                if (i < cols) { // Top Row
+                    cell = pu.nx0 * 2 + 2 + i + 1;
+                } else if (i < 2 * cols) { // Bottom Row
+                    cell = pu.nx0 * (2 + rows + 1) + 2 + (i - cols) + 1;
+                } else if (i < 2 * cols + rows) { // Left Column 
+                    cell = pu.nx0 * (2 + (i - 2 * cols) + 1) + 2;
+                } else {
+                    cell = pu.nx0 * (2 + (i - 2 * cols - rows) + 1) + 2 + cols + 1;
                 }
                 pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
             }

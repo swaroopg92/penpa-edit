@@ -110,9 +110,10 @@ describe("puzz.link parser", () => {
         ["Shakashaka 4", "https://puzz.link/p?shakashaka/17/17/bmbibw.g.ibh.l.n1.ch.g.ibh.z.kbm.pck.g.o.g.mcncmei.y.kboal00aj.ibzi.kbm"],
         ["Shakashaka 5", "https://puzz.link/p?shakashaka/25/9/lcici.k.zl.111.h..ccg72....jbgbg.g.i.i.l.ibg.h.gbh.j.g.ibg.h.gbhbi.k.1.jbg.1.1.zlbi.kci.l"],
         // Skyscrapers
-        // ["Skyscrapers 1", "https://puzz.link/p?skyscrapers/2/1/j1g"],
-        ["Skyscrapers 2", "https://puzz.link/p?skyscrapers/5/5/g2l4g2h4h4h2"],
+        ["Skyscrapers 1", "https://puzz.link/p?skyscrapers/2/1/j1g"],
+        ["Skyscrapers 2", "https://puzz.link/p?building/5/5/g2l4g2h4h4h2"],
         ["Skyscrapers 3", "https://puzz.link/p?skyscrapers/6/6/h4j2h2g3g3h4g5g2g2"],
+        ["Skyscrapers 4", "https://puzz.link/p?skyscrapers/3/5/1235433212312321"],
         // Slitherlink
         ["Slitherlink 1", "https://puzz.link/p?slither/12/10/6b2b76cbbc6ah7656d76dd1dcg6bh56b516b8dcc6bgbbg62d0a3c"],
         ["Slitherlink 2", "https://puzz.link/p?slitherlink/9/9/233333332dk388583d8d38cg73d7c38212173d7c3721317c"],
