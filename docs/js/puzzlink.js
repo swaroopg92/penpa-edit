@@ -162,7 +162,7 @@ class Puzzlink {
             }
 
             ec++;
-            if (ec >= this.rows * 4) {
+            if (ec >= this.rows * 2 + this.cols * 2) {
                 break;
             }
         }
