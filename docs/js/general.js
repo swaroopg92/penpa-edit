@@ -2822,7 +2822,8 @@ function decode_puzzlink(url) {
 
             // Decode URL
             info_number = puzzlink_pu.decodeNumber16();
-            puzzlink_pu.drawNumbers(pu, info_number, number_style, "1", type !== "nurikabe");
+            hide_question = type !== "nurikabe" && type !== "kurochute"
+            puzzlink_pu.drawNumbers(pu, info_number, number_style, "1", hide_question);
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
