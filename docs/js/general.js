@@ -2516,6 +2516,12 @@ function decode_puzzlink(url) {
     puzzlink_pu = new Puzzlink(cols, rows, bstr);
     size = parseInt(document.getElementById("nb_size3").value);
 
+    // Set border whitespace to 0 for consistency
+    document.getElementById("nb_space1").value = 0;
+    document.getElementById("nb_space2").value = 0;
+    document.getElementById("nb_space3").value = 0;
+    document.getElementById("nb_space4").value = 0;
+
     function setupProblem(puzzle, mode) {
         puzzle.reset_frame(); // Draw the board
         panel_pu.draw_panel();
