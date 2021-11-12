@@ -1611,7 +1611,7 @@ class Puzzle_square extends Puzzle {
                 case "6": //medium
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
                     set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.9);
                     break;
                 case "10": //big
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
