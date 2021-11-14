@@ -2788,8 +2788,11 @@ function decode_puzzlink(url) {
             pu.mode_set("sudoku"); //include redraw
             this.usertab_choices = ["Surface", "Sudoku Normal"];
             break;
+        case "aqre":
         case "ayeheya":
         case "heyawake":
+        case "shimaguni":
+        case "stostone":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "surface");
@@ -2852,10 +2855,13 @@ function decode_puzzlink(url) {
             break;
         case "country":
         case "detour":
+        case "factors":
+        case "juosan":
         case "maxi":
+        case "nagenawa":
         case "yajilin-regions":
             pu = new Puzzle_square(cols, rows, size);
-            if (type === "detour" || type === "maxi") {
+            if (type === "detour" || type === "maxi" || type === "nagenawa" || type === "juosan") {
                 pu.mode_grid("nb_grid2"); // Dashed gridlines
             }
             setupProblem(pu, "combi");
@@ -2880,13 +2886,21 @@ function decode_puzzlink(url) {
             }
 
             pu.mode_qa("pu_a");
-            pu.mode_set("combi");
             if (type === "yajilin-regions") {
+                pu.mode_set("combi");
                 pu.subcombimode("linex");
+                this.usertab_choices = ["Surface", "Composite"];
+            } else if (type === "factors") {
+                pu.mode_set("number");
+                this.usertab_choices = ["Surface", "Number Normal"];
+            } else if (type === "juosan") {
+                pu.mode_set("wall");
+                this.usertab_choices = ["Surface", "Wall"];
             } else {
+                pu.mode_set("combi");
                 pu.subcombimode("lineox");
+                this.usertab_choices = ["Surface", "Composite"];
             }
-            this.usertab_choices = ["Surface", "Composite"];
             break;
         case "moonsun":
         case "mashu": // masyu alias
