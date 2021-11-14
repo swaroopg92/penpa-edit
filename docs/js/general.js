@@ -2649,6 +2649,15 @@ function decode_puzzlink(url) {
             info_edge = puzzlink_pu.decodeBorder();
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
 
+            // Display the number of stars per row and column
+            pu.resize_top(1, "white");
+            pu.resize_right(1, "white");
+            pu.resize_bottom(1, "white");
+            pu.resize_left(1, "white");
+            cell = pu.nx0 * 2 + cols + 1;
+            pu["pu_q"].number[cell] = [urldata[3], 1, "1"];
+            pu["pu_q"].symbol[cell + 1] = [2, "star", 2];
+
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw

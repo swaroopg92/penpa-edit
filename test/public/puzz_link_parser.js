@@ -129,7 +129,7 @@ describe("puzz.link parser", () => {
         ["Starbattle 2", "https://puzz.link/p?starbattle/10/10/2/l95las9vb5mmurbelo2m849c5gp068ci9029"],
         ["Starbattle 3", "https://puzz.link/p?starbattle/12/12/2/g0410igil9ck6q3l12glrcp12c081pu07do1ge6c0g0m0628gdkcn0"],
         ["Starbattle 4", "https://puzz.link/p?starbattle/13/13/2/40142jhssb4ij4491m8d6b0io4k8ab003vosuc02181v3e00o00fo3g00073phsg"],
-        ["Starbattle 5", "https://puzz.link/p?starbattle/9/9/2/12a955kh37khi20fe0g13toea1c07g"],
+        ["Starbattle 5", "https://puzz.link/p?starbattle/9/9/42/12a955kh37khi20fe0g13toea1c07g"],
         // Sudoku
         ["Sudoku 4x4 1", "https://puzz.link/p?sudoku/4/4/g2j1h1j3g"],
         ["Sudoku 4x4 2", "https://puzz.link/p?sudoku/4/4/i1g2j4g3i"],
