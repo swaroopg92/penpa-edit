@@ -70,7 +70,7 @@ class Puzzlink {
                     edgey = edgex + 1;
                 }
                 var key = edgex.toString() + "," + edgey.toString();
-                pu["pu_q"]["line"][key] = edge_style;
+                pu["pu_q"]["lineE"][key] = edge_style;
             }
         }
     }

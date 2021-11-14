@@ -151,9 +151,7 @@ describe("puzz.link parser", () => {
         penpa.decode_puzzlink(puzzlink_url);
 
         const data = {
-            mode: penpa.pu.mode,
-            pu_q: penpa.pu.pu_q,
-            usertab_choices: penpa.usertab_choices,
+            edit_url: penpa.pu.maketext().split("?")[1],
         };
         const body = {
             filename,
