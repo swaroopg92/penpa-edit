@@ -41,9 +41,9 @@ describe("puzz.link parser", () => {
         ["Detour 2", "https://puzz.link/p?detour/8/8/10820g41g4000s000007v01g5gcg2"],
         ["Detour 3", "https://puzz.link/p?detour/8/8/a2gh4928h49000vs00o0vg00g1g435h5"],
         // Factors
-        // ["Factors 1", "https://puzz.link/p?factors/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
+        ["Factors 1", "https://puzz.link/p?factors/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
         ["Factors 2", "https://puzz.link/p?factors/9/9/nbuurdjudmrrun8cv6pvvdtnvsr7pg39-2d-2a-308-20-38f8-1e-1267-1c7-1e-48-18-18-2d983a-303e-30fc9-23-36287-48-15-30-14"],
-        // ["Factors 3", "https://puzz.link/p?factors/9/9/bvftapbukqlvnugu0fvvmbujfvvg3o-202-18-1b-28-2338-3f-368-12e-282-48*6950-12696-1c-1bf-30-2a-10-2d98-23-28c-122-207-36"],
+        ["Factors 3", "https://puzz.link/p?factors/9/9/bvftapbukqlvnugu0fvvmbujfvvg3o-202-18-1b-28-2338-3f-368-12e-282-48*6950-12696-1c-1bf-30-2a-10-2d98-23-28c-122-207-36"],
         // Haisu
         ["Haisu 1", "https://puzz.link/p?haisu/18/18/511-120000000g014009002800i004g014009002800i004g014009002800g00000000000vvu000000000000000000000000000000000000000000000007vvg00009j2zzg1o5p6zs8zx2j8n7y3z4o4zh7zzh6h5h3zs5q"],
         ["Haisu 2", "https://puzz.link/p?haisu/4/4/44216n8d902m1m"],

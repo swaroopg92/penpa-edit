@@ -117,6 +117,10 @@ class Puzzlink {
             return [parseInt(this.gridurl.substr(i + 1, 3), 16) + 4096, 4];
         } else if (ca === "%") {
             return [parseInt(this.gridurl.substr(i + 1, 3), 16) + 8192, 4];
+        } else if (ca === "*") {
+            return [parseInt(this.gridurl.substr(i + 1, 4), 16) + 12240, 5];
+        } else if (ca === "$") {
+            return [parseInt(this.gridurl.substr(i + 1, 5), 16) + 77776, 6];
         } else if (ca === ".") {
             return ['?', 1];
         } else {
