@@ -1,3 +1,5 @@
+let isCtrlKey = e => e.ctrlKey||e.metaKey;
+
 onload = function() {
 
     // Detect mobile or Ipad beforing booting
