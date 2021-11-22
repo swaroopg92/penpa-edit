@@ -73,7 +73,6 @@ onload = function() {
                 var event = e.changedTouches[0];
                 e.preventDefault(); // When both mouse and touch start, only touch
             }
-            var ctrl_key = e.ctrlKey;
             if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
                 var obj = coord_point(event, 'flex');
             } else {
@@ -86,11 +85,11 @@ onload = function() {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
-                    pu.mouseevent(x, y, num, ctrl_key);
+                    pu.mouseevent(x, y, num, isCtrlKey(e));
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
-                    pu.mouseevent(x, y, num, ctrl_key);
+                    pu.mouseevent(x, y, num, isCtrlKey(e));
                 }
             }
         }
@@ -224,7 +223,6 @@ onload = function() {
             var code = e.code;
             var keylocation = e.location;
             var shift_key = e.shiftKey;
-            var ctrl_key = e.ctrlKey;
             var alt_key = e.altKey;
             var str_num = "1234567890";
             var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
@@ -248,7 +246,7 @@ onload = function() {
 
             // For shift shortcut in Sudoku mode, modify the numpad keys
             // keylocation 3 indicates numlock is ON and number pad is being used
-            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && key !== "Shift" && keylocation === 3 && !ctrl_key && !alt_key) {
+            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && key !== "Shift" && keylocation === 3 && !isCtrlKey(e) && !alt_key) {
                 switch (keycode) {
                     case 45:
                         key = "0";
@@ -313,7 +311,7 @@ onload = function() {
             }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
-                pu.key_arrow(key, ctrl_key);
+                pu.key_arrow(key, isCtrlKey(e));
                 e.returnValue = false;
             }
 
@@ -321,7 +319,7 @@ onload = function() {
                 shift_counter = shift_counter + 1;
             }
 
-            if (key === "Shift" && shift_counter === 1 && !ctrl_key && !alt_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (key === "Shift" && shift_counter === 1 && !isCtrlKey(e) && !alt_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
                 if (present_submode !== 2) {
                     pu.submode_check("sub_sudoku2");
@@ -341,7 +339,7 @@ onload = function() {
                 e.returnValue = false;
             }
 
-            if (!ctrl_key && !alt_key) {
+            if (!isCtrlKey(e) && !alt_key) {
                 if (shift_key && key === " ") {
                     pu.key_number(key);
                     e.returnValue = false;
@@ -396,7 +394,7 @@ onload = function() {
                 } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                     // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                     // Sudoku mode, I have assigned it to Delete
-                    pu.key_space(keycode, shift_key, ctrl_key);
+                    pu.key_space(keycode, shift_key, isCtrlKey(e));
                     e.returnValue = false;
                 } else if (key === "Backspace") {
                     pu.key_backspace();
@@ -404,14 +402,14 @@ onload = function() {
                 }
             }
 
-            if (ctrl_key && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
+            if (isCtrlKey(e) && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
                 // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                 // Sudoku mode, I have assigned it to Delete
-                pu.key_space(keycode, shift_key, ctrl_key);
+                pu.key_space(keycode, shift_key, isCtrlKey(e));
                 e.returnValue = false;
             }
 
-            if (ctrl_key && !shift_key && !alt_key) {
+            if (isCtrlKey(e) && !shift_key && !alt_key) {
                 if (key != "Control") {
                     if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         switch (code) {
@@ -535,7 +533,7 @@ onload = function() {
                 }
             }
 
-            if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (!isCtrlKey(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 switch (key) {
                     case "z":
                         // case "Z":
@@ -594,7 +592,7 @@ onload = function() {
                 }
             }
 
-            if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "surface") {
+            if (!isCtrlKey(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
                 switch (key) {
                     case "z":
                     case "Z":
@@ -996,7 +994,7 @@ onload = function() {
             pu.ondown_key = ondown_key;
         }
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
-            e.target.id != "float-canvas" && !e.ctrlKey) {
+            e.target.id != "float-canvas" && !isCtrlKey(e)) {
             // clear selection
             pu.selection = [];
             pu.redraw();
