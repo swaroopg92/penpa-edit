@@ -1,3 +1,4 @@
+// Including meta allows CMD to work on Mac
 let isCtrlKey = e => e.ctrlKey||e.metaKey;
 
 onload = function() {
