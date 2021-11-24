@@ -1690,6 +1690,9 @@ onload = function() {
                 display_rules();
                 e.preventDefault();
                 break;
+            case "submit_sol":
+                e.preventDefault();
+                break;
         }
         // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {

@@ -2522,7 +2522,8 @@ function set_contestmode() {
     document.getElementById("tb_delete").style.display = "none";
     document.getElementById("mo_move_lb").style.display = "none";
     document.getElementById("puzzlesourcelink").style.display = "none";
-    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+    // document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+    document.getElementById("submit_sol").style.display = "inline";
     pu.undoredo_disable = true;
     pu.comp = true;
 }
