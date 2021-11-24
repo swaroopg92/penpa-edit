@@ -1,4 +1,10 @@
 ## History
+* 2021/11/24 ver 2.26.10
+	* Reset button now automatically starts time from 0
+	* Cmd Key is treated equivalent to Ctrl Key for Macbooks
+	* Changed star style in Star Battle composite mode
+	* Increased width for Center/Small/M sized numbers to fix overflow issues in Chrome. It has improved but bug still exists (most likely its a deep rooted browser issue, as this bug is not seen on any other browser)
+	* Cleaning up display area by moving some buttons to general settings
 * 2021/10/09 ver 2.26.9
 	* Fixed Sudoku center pencil marks bug. Previously it was storing empty array.
 	* Improved Free Line/Edge mode to preview the line.
