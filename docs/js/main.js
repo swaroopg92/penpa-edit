@@ -1691,6 +1691,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "submit_sol":
+                submit_solution();
                 e.preventDefault();
                 break;
         }

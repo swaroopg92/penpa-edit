@@ -866,6 +866,10 @@ function display_rules() {
     })
 }
 
+function submit_solution(){
+    console.log('testing');
+}
+
 function panel_onoff() {
     if (document.getElementById('panel_button').value === "1") {
         document.getElementById('float-key').style.display = "block";
