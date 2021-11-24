@@ -544,24 +544,16 @@ body textarea {
     user-select: text;
 }
 
-#panel_button0,
 #visibility_button0,
-#edge_button0,
-#reload_button0,
 #panel_buttons0,
-#panel_buttonc0,
-#advance_button0 {
+#panel_buttonc0 {
     width: auto;
     border: none;
     background: none;
     padding-left: 5px;
 }
 
-#panel_button,
-#visibility_button,
-#reload_button,
-#edge_button,
-#advance_button {
+#visibility_button {
     width: 25px;
     border: 1px solid var(--greyLight);
     background: none;
@@ -569,11 +561,7 @@ body textarea {
     border-radius: 1px;
 }
 
-#panel_button:hover,
-#visibility_button:hover,
-#reload_button:hover,
-#edge_button:hover,
-#advance_button:hover {
+#visibility_button:hover {
     background: var(--greyLight);
 }
 
@@ -1027,7 +1015,7 @@ body textarea {
 #modal-settings-content {
     background-color: var(--black);
     width: var(--popup_width);
-    height: 320px;
+    height: 450px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -1478,7 +1466,7 @@ sup {
     align-items: center
 }
 
-#select2_search_multiple{
+#select2_search_multiple {
     min-width: 287px;
     max-width: 287px;
     border: 2px solid #ccc !important;

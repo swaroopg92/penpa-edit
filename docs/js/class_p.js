@@ -2171,8 +2171,8 @@ class Puzzle {
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
         if (mode === "symbol" && !this.panelflag) {
             // Show the panel on the first time landing and then respect user's choice
-            if (document.getElementById('panel_button').textContent === "OFF") {
-                document.getElementById('panel_button').textContent = "ON";
+            if (document.getElementById('panel_button').value === "2") {
+                document.getElementById('panel_button').value = "1";
                 document.getElementById('float-key').style.display = "block";
                 if (window.panel_toplast && window.panel_leftlast) {
                     document.getElementById('float-key-body').style.left = window.panel_leftlast;
@@ -2190,8 +2190,8 @@ class Puzzle {
         } else if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
             // Automatically show panel while in number or shape or sudoku mode on the Mobile/Ipad device
-            if (document.getElementById('panel_button').textContent === "OFF") {
-                document.getElementById('panel_button').textContent = "ON";
+            if (document.getElementById('panel_button').value === "2") {
+                document.getElementById('panel_button').value = "1";
                 document.getElementById('float-key').style.display = "block";
                 if (window.panel_toplast && window.panel_leftlast) {
                     document.getElementById('float-key-body').style.left = window.panel_leftlast;
@@ -2207,7 +2207,7 @@ class Puzzle {
             }
         } else if (this.ondown_key === "touchstart") {
             // Turn off panel while switching to other modes on Mobile/Ipad
-            document.getElementById('panel_button').textContent = "OFF";
+            document.getElementById('panel_button').value = "2";
             document.getElementById('float-key').style.display = "none";
         }
         if (mode === "symbol") {
@@ -2229,7 +2229,7 @@ class Puzzle {
         }
 
         // If panel is ON, show Mode info on header
-        if (document.getElementById('panel_button').textContent === "ON") {
+        if (document.getElementById('panel_button').textContent === "1") {
             let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
             let mode_loc = penpa_modes["square"]["mode"].indexOf(mode);
             document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
@@ -2719,7 +2719,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        text += "," + document.getElementById('edge_button').value;
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false + "\n";
@@ -2873,7 +2873,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        text += "," + document.getElementById('edge_button').value;
 
         // if solution check exists, then read multisolution variable or else set to false
         if (this.solution) {
@@ -3055,7 +3055,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        text += "," + document.getElementById('edge_button').value;
 
         // if solution check exists, then read multisolution variable or else set to false
         if (type === "answercheck") {
@@ -3188,7 +3188,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        text += "," + document.getElementById('edge_button').value;
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false + "\n";
@@ -8617,7 +8617,7 @@ class Puzzle {
     mouse_symbol(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.cursol = num;
-            if (document.getElementById('panel_button').textContent === "ON" && !this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) {
+            if (document.getElementById('panel_button').textContent === "1" && !this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     this.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -11142,7 +11142,7 @@ class Puzzle {
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             if (this.mode[this.mode.qa].edit_mode === "number" && (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9")) {
                 this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
-            } else if (document.getElementById('edge_button').textContent === "ON") {
+            } else if (document.getElementById('edge_button').value === "1") {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.ctx.beginPath();

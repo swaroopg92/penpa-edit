@@ -118,17 +118,8 @@
                 <label for="pu_a" class="label" id="pu_a_label">Solution</label>
                 <label class="label_mode" id="constraints">Constraints (Beta):</label>
                 <select name="constraints_settings" id="constraints_settings_opt"> </select>
-                <br>
                 <span id="visibility_button0" class="label_mode tooltip">Visibility:</span>
                 <span id="visibility_button" class="label">ON</span>
-                <span id="panel_button0" class="label_mode tooltip">Panel:</span>
-                <span id="panel_button" class="label">OFF</span>
-                <span id="edge_button0" class="label_mode tooltip">Border:</span>
-                <span id="edge_button" class="label">OFF</span>
-                <span id="reload_button0" class="label_mode tooltip">Reload:</span>
-                <span id="reload_button" class="label">OFF</span>
-                <span id="advance_button0" class="label_mode tooltip">PenpaLite:</span>
-                <span id="advance_button" class="label">OFF</span>
             </div>
             <div id="mode_button" class="mode_button">
                 <label class="label_mode" id="mode_txt">Mode:</label>
@@ -1364,6 +1355,50 @@
                                 <option value="10">Orange</option>
                                 <option value="11">Purple</option>
                                 <option value="12">Brown</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="generalset">
+                        <td class="generalset">
+                            <h4 id="div_all"><label class="label_settings" id="panel_button0">Panel: </label></h4>
+                        </td>
+                        <td class="generalset">
+                            <select name="panelbutton" id="panel_button">
+                                <option value="1">ON</option>
+                                <option value="2" selected="selected">OFF</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="generalset">
+                        <td class="generalset">
+                            <h4 id="div_all"><label class="label_settings" id="edge_button0">Draw on Edges/Corners: </label></h4>
+                        </td>
+                        <td class="generalset">
+                            <select name="edgebutton" id="edge_button">
+                                <option value="1">ON</option>
+                                <option value="2" selected="selected">OFF</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="generalset">
+                        <td class="generalset">
+                            <h4 id="div_all"><label class="label_settings" id="reload_button0">Reload Protection: </label></h4>
+                        </td>
+                        <td class="generalset">
+                            <select name="reloadbutton" id="reload_button">
+                                <option value="1">ON</option>
+                                <option value="2" selected="selected">OFF</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="generalset">
+                        <td class="generalset">
+                            <h4 id="div_all"><label class="label_settings" id="advance_button0">PenpaLite: </label></h4>
+                        </td>
+                        <td class="generalset">
+                            <select name="advancebutton" id="advance_button">
+                                <option value="1">ON</option>
+                                <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
                     </tr>

@@ -50,12 +50,19 @@ function create() {
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
-        document.getElementById('reload_button').textContent = reload_cookie;
+        // to address old versions where the stored value was ON and OFF
+        if (reload_cookie === "ON") {
+            reload_cookie = "1"
+        } else if (reload_cookie === "OFF") {
+            reload_cookie = "2"
+        }
+        document.getElementById('reload_button').value = reload_cookie;
     }
     let tab_cookie = getCookie("tab_settings");
     if (tab_cookie !== null) {
         this.usertab_choices = tab_cookie;
         if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+            document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
         }
     }
@@ -860,8 +867,7 @@ function display_rules() {
 }
 
 function panel_onoff() {
-    if (document.getElementById('panel_button').textContent === "OFF") {
-        document.getElementById('panel_button').textContent = "ON";
+    if (document.getElementById('panel_button').value === "1") {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
             document.getElementById('float-key-body').style.left = window.panel_leftlast;
@@ -879,17 +885,13 @@ function panel_onoff() {
         let mode_loc = penpa_modes["square"]["mode"].indexOf(pu.mode[pu.mode.qa].edit_mode);
         document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
     } else {
-        document.getElementById('panel_button').textContent = "OFF";
         document.getElementById('float-key').style.display = "none";
     }
     pu.redraw();
 }
 
 function edge_onoff() {
-    if (document.getElementById('edge_button').textContent === "OFF") {
-        document.getElementById('edge_button').textContent = "ON";
-    } else {
-        document.getElementById('edge_button').textContent = "OFF";
+    if (document.getElementById('edge_button').value === "2") {
         pu.cursol = pu.centerlist[0];
     }
     pu.type = pu.type_set();
@@ -905,18 +907,9 @@ function solutionvisible_onoff() {
     pu.redraw();
 }
 
-function reloadcheck_onoff() {
-    if (document.getElementById('reload_button').textContent === "ON") {
-        document.getElementById('reload_button').textContent = "OFF";
-    } else {
-        document.getElementById('reload_button').textContent = "ON";
-    }
-}
-
 function advancecontrol_onoff(loadtype = "new") {
-    if (document.getElementById('advance_button').textContent === "ON") {
+    if (document.getElementById('advance_button').value === "2") {
         // Lite Version OFF, Display all the modes
-        document.getElementById('advance_button').textContent = "OFF";
         // Display the mode break line again
         document.getElementById("mode_break").style.display = "inline";
         document.getElementById("mode_txt_space").style.display = "inline";
@@ -924,7 +917,6 @@ function advancecontrol_onoff(loadtype = "new") {
     } else {
         // Lite Version ON, so turn off extra modes
         if (loadtype === "url") {
-            document.getElementById('advance_button').textContent = "ON";
             // Remove the mode break line again
             document.getElementById("mode_break").style.display = "none";
             document.getElementById("mode_txt_space").style.display = "none";
@@ -932,15 +924,15 @@ function advancecontrol_onoff(loadtype = "new") {
         } else {
             let user_choices = getValues('mode_choices');
             if (user_choices.length !== 0) {
-                document.getElementById('advance_button').textContent = "ON";
                 // Remove the mode break line again
                 document.getElementById("mode_break").style.display = "none";
                 document.getElementById("mode_txt_space").style.display = "none";
                 advancecontrol_off(loadtype);
             } else {
+                document.getElementById('advance_button').value = "2";
                 Swal.fire({
                     title: 'Advance/Basic Mode',
-                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Click "PenpaLite" button to turn "ON"</h2>',
+                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Set "PenpaLite" setting to turn "ON"</h2>',
                     icon: 'info'
                 })
             }
@@ -1670,7 +1662,13 @@ function load(urlParam, type = 'url') {
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
-        document.getElementById('reload_button').textContent = reload_cookie;
+        // to address old versions where the stored value was ON and OFF
+        if (reload_cookie === "ON") {
+            reload_cookie = "1"
+        } else if (reload_cookie === "OFF") {
+            reload_cookie = "2"
+        }
+        document.getElementById('reload_button').value = reload_cookie;
     }
     let sudoku_center_cookie = getCookie("sudoku_centre_size");
     if (sudoku_center_cookie !== null) {
@@ -1696,8 +1694,11 @@ function load(urlParam, type = 'url') {
     }
 
     // Border button status
-    if (rtext_para[19] && rtext_para[19] === "ON") {
-        document.getElementById('edge_button').textContent = "ON";
+    if (rtext_para[19]) {
+        // to address old versions where the stored value was ON and OFF
+        if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
+            document.getElementById('edge_button').value = "1";
+        }
     }
 
     // multisolution status
@@ -1759,6 +1760,7 @@ function load(urlParam, type = 'url') {
         // Do this only for latest version 2.25.17 and above
         // if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
         if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+            document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
         }
         // }
@@ -2990,7 +2992,7 @@ function decode_puzzlink(url) {
     }
 
     // Set PenpaLite
-    document.getElementById('advance_button').textContent = "ON";
+    document.getElementById('advance_button').value = "1";
     document.getElementById("mode_break").style.display = "none";
     document.getElementById("mode_txt_space").style.display = "none";
     advancecontrol_off("url");

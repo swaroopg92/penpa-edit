@@ -1,5 +1,5 @@
 // Including meta allows CMD to work on Mac
-let isCtrlKey = e => e.ctrlKey||e.metaKey;
+let isCtrlKey = e => e.ctrlKey || e.metaKey;
 
 onload = function() {
 
@@ -472,7 +472,7 @@ onload = function() {
                             break;
                         case "i": //Ctrl+i
                         case "I":
-                            if ((document.getElementById('panel_button').textContent === "ON") &&
+                            if ((document.getElementById('panel_button').value === "1") &&
                                 (typeof panel_select !== "undefined") &&
                                 (panel_select < panel_pu.cont.length) &&
                                 pu.mode[pu.mode.qa].edit_mode !== "symbol") {
@@ -1663,25 +1663,8 @@ onload = function() {
                 mdown(e);
                 e.preventDefault();
                 break;
-                //buttons
-            case "panel_button":
-                panel_onoff();
-                e.preventDefault();
-                break;
-            case "edge_button":
-                edge_onoff();
-                e.preventDefault();
-                break;
             case "visibility_button":
                 solutionvisible_onoff();
-                e.preventDefault();
-                break;
-            case "reload_button":
-                reloadcheck_onoff();
-                e.preventDefault();
-                break;
-            case "advance_button":
-                advancecontrol_onoff();
                 e.preventDefault();
                 break;
             case "pu_q_label":
@@ -1823,7 +1806,7 @@ onload = function() {
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
             panel_pu.edit_num = n;
-            if (document.getElementById('panel_button').textContent === "ON" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
+            if (document.getElementById('panel_button').value === "1" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     pu.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -1886,7 +1869,7 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
-        if (document.getElementById('reload_button').textContent === "ON") {
+        if (document.getElementById('reload_button').value === "1") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
             // Chrome requires returnValue to be set
@@ -1938,7 +1921,7 @@ onload = function() {
             // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
             setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
-            setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
+            setCookie("reload_button", document.getElementById('reload_button').value, 2147483647);
             setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
@@ -2032,10 +2015,25 @@ onload = function() {
 
     document.getElementById("mode_choices").onchange = function() {
         // Dynamically updating the display of modes based on tab setting changes
-        if (document.getElementById('advance_button').textContent === "ON") {
+        if (document.getElementById('advance_button').value === "1") {
             advancecontrol_on(); // First display back everything
             advancecontrol_off("new"); // apply new choices for penpa lite
         }
+    }
+
+    // Panel Setting
+    document.getElementById("panel_button").onchange = function() {
+        panel_onoff();
+    }
+
+    // Border Setting
+    document.getElementById("edge_button").onchange = function() {
+        edge_onoff();
+    }
+
+    // PenpaLite Setting
+    document.getElementById("advance_button").onchange = function() {
+        advancecontrol_onoff();
     }
 
     // Timer pause and unpause
