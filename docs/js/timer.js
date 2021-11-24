@@ -6,6 +6,7 @@ $('#stop_watch #sw_stop').click(function() {
 
 $('#stop_watch #sw_reset').click(function() {
     sw_timer.reset();
+    sw_timer.start();
 });
 
 $('#stop_watch #sw_hide').click(function() {
