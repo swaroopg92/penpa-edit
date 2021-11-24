@@ -2229,7 +2229,7 @@ class Puzzle {
         }
 
         // If panel is ON, show Mode info on header
-        if (document.getElementById('panel_button').textContent === "1") {
+        if (document.getElementById('panel_button').value === "1") {
             let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
             let mode_loc = penpa_modes["square"]["mode"].indexOf(mode);
             document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
@@ -8617,7 +8617,7 @@ class Puzzle {
     mouse_symbol(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.cursol = num;
-            if (document.getElementById('panel_button').textContent === "1" && !this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) {
+            if (document.getElementById('panel_button').value === "1" && !this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     this.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -11136,7 +11136,7 @@ class Puzzle {
         /*cursol*/
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
             set_line_style(this.ctx, 99);
-            if (this.mode[this.mode.qa].edit_mode === "symbol" && document.getElementById('panel_button').textContent === "ON" && !pu.onoff_symbolmode_list[pu.mode[this.mode.qa].symbol[0]]) {
+            if (this.mode[this.mode.qa].edit_mode === "symbol" && document.getElementById('panel_button').value === "1" && !pu.onoff_symbolmode_list[pu.mode[this.mode.qa].symbol[0]]) {
                 this.ctx.strokeStyle = Color.BLUE_DARK_VERY;
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
