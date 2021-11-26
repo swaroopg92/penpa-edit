@@ -2991,6 +2991,108 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "castle":
+        case "yajikazu":
+        case "yajilin":
+            // Yajikazu and some Yajilin puzzles don't shade cells
+            var skip_shading = type !== "castle";
+
+            // Yajilin changes the url format to indicate shading or not
+            if (urldata[1] === "b") {
+                skip_shading = false;
+                cols = parseInt(urldata[2]);
+                rows = parseInt(urldata[3]);
+                puzzlink_pu = new Puzzlink(cols, rows, urldata[4]);
+            }
+            pu = new Puzzle_square(cols, rows, size);
+            if (type === "yajikazu") {
+                pu.mode_grid("nb_grid2");
+            }
+            setupProblem(pu, "combi");
+
+            var arrows = puzzlink_pu.decodeYajilinArrows(type === "castle");
+
+            for (var i in arrows) {
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                var number = arrows[i][1] || (skip_shading ? "?" : "");
+
+                // Not all numbers have arrows
+                if (arrows[i][0] !== 0 && number) {
+                    switch (arrows[i][0]) {
+                        case 1: // up
+                            number += "_" + 0;
+                            break;
+                        case 2: // down
+                            number += "_" + 3;
+                            break;
+                        case 3: // left
+                            number += "_" + 1;
+                            break;
+                        case 4: // right
+                            number += "_" + 2;
+                            break;
+                    }
+                }
+
+                if (skip_shading) {
+                    pu["pu_q"].number[cell] = [number, 1, "2"];
+                    continue;
+                }
+
+                // Add arrow and number
+                var shading = arrows[i][2];
+                pu["pu_q"].number[cell] = [number, shading === 2 ? 7 : 1, "2"];
+
+                // Background shading
+                if (shading === 0) { // Light gray background
+                    pu["pu_q"].surface[cell] = 3;
+                } else if (shading === 2) { // Black background
+                    pu["pu_q"].surface[cell] = 4;
+                }
+
+                var cell_edges = [
+                    [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind, pu.nx0], // Left
+                    [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 2 + col_ind, pu.nx0], // Right
+                    [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind, 1], // Above
+                    [pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind, 1], // Below
+                ];
+
+                // Borders
+                var edgex, edgey;
+                for (var e of cell_edges) {
+                    edgex = e[0];
+                    edgey = e[0] + e[1];
+                    var key = edgex.toString() + "," + edgey.toString();
+
+                    if (key in pu.pu_q.lineE) {
+                        if (type === "castle") {
+                            // Only remove the edge if the adjacent cell is the same shading (castle only)
+                            var adjacent = cell - (pu.nx0 + 1 - e[1]);
+                            if (pu.pu_q.surface[cell] === pu.pu_q.surface[adjacent]) {
+                                delete pu.pu_q.lineE[key];
+                                pu.pu_q.deletelineE[key] = 1;
+                            }
+                        } else {
+                            delete pu.pu_q.lineE[key];
+                        }
+                    } else {
+                        pu.pu_q.lineE[key] = 2;
+                    }
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            if (type === "yajikazu") {
+                pu.mode_set("surface");
+                this.usertab_choices = ["Surface"];
+            } else {
+                pu.mode_set("combi");
+                pu.subcombimode("linex");
+                this.usertab_choices = ["Surface", "Composite"];
+            }
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',

@@ -32,6 +32,13 @@ describe("puzz.link parser", () => {
         ["Balance Loop 1", "https://puzz.link/p?balance/9/9/dm1ich1o0i1pcpdido1h1i0m0"],
         ["Balance Loop 2", "https://puzz.link/p?balance/5/2/kbg011"],
         ["Balance Loop 3", "https://puzz.link/p?balance/10/10/-24-22-20-1e-1c-1a-18-16-14g-25-23-21-1f-1d-1b-19-17-15zzzzg"],
+        // Castle
+        ["Castle 1", "https://puzz.link/p?castle/12/12/k223d142b141f224f234o212h236i133d123b243o034a122d131q136d145d215d246k"],
+        ["Castle 2", "https://puzz.link/p?castle/10/10/k14110.10.10.03200.00.00.b10.b10.00.10.10.00.b10.b10.00.10.10.00.b10.10.10.10.00.00.00.00.b01300.00.00.22420.20.20.b00.20.20.00.22.00.00.20.b00.20.a00.22.00.a20.b00.00.00.00.20.20.20.20.k"],
+        ["Castle 3", "https://puzz.link/p?castle/9/5/242g232b00.c00.c00.a00.a00.10.00.c00.c00.b242g232"],
+        ["Castle 4", "https://puzz.link/p?castle/17/17/20.22922722d22822722922822b22b22a22b22a22a22722822f249p243p247p249p246p245p247p247p247p246p244p245p244p248p247p248p"],
+        ["Castle 5", "https://puzz.link/p?castle/10/10/c224g243f123e122123p242d233d222d232p11311.e114f233g213c"],
+        ["Castle 6", "https://puzz.link/p?castle/6/3/011022033044000a11.12.13.14.10.a2-13e32-23e42-33e529622563a"],
         // Country Road
         ["Country Road 1", "https://puzz.link/p?country/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g"],
         ["Country Road 2", "https://puzz.link/p?country/20/15/10156ggr62indoe611d38431oonjrhv7hltmb6t90d6hdme4rc8jcp26ge7vo7vvo32vk8tv1v7uefro67hg208e82hg953tva7tu0fg0fv6m1u0ei5g24k54g2l7g557k92h3g3g2g3"],
@@ -165,6 +172,20 @@ describe("puzz.link parser", () => {
         ["Sudoku 9x9 1", "https://puzz.link/p?sudoku/9/9/123456789789123456456789123231564897897231564564897231312645978978312645645978312"],
         ["Sudoku 9x9 2", "https://puzz.link/p?sudoku/9/9/15i96l17i7g65i42k1g5368h2i7g2p3h5g48g2g9k3h7i6"],
         ["Sudoku 9x9 3", "https://puzz.link/p?sudoku/9/9/91h8h343m5i1g3k1i3h5i9i8h7i5k7g5i6m787h4h26"],
+        // Yajikazu (Yajisan-Kazusan)
+        ["Yajikazu 1", "https://puzz.link/p?yajikazu/6/6/912a912b912c912b912a912b912d912c912c912b912a912"],
+        ["Yajikazu 2", "https://puzz.link/p?yajikazu/10/10/f32i32b23f32i32b213ab3ab3ab3a11b11b11b33i3313b13b131312b14b14b14l"],
+        ["Yajikazu 3", "https://puzz.link/p?yajikazu/10/10/21-33e7a4222e44f21b41j31e33g22h31g11e33j34b42f35e3041a1413"],
+        ["Yajikazu 4", "https://puzz.link/p?yajikazu/7/7/c42e4142f42d12d22c32f3213e32c"],
+        ["Yajikazu 5", "https://puzz.link/p?yajikazu/6/3/1122334400a1.2.3.4.0.a-13e3-23e4-33e5962563"],
+        // Yajilin
+        ["Yajilin 1", "https://puzz.link/p?yajilin/b/10/10/n2222c11b42r11f21b11f21r12b41c3112n"],
+        ["Yajilin 2", "https://puzz.link/p?yajilin/b/9/9/a21220.c212242h41h0.d0.f0.k0.f11d41h42h"],
+        ["Yajilin 3", "https://puzz.link/p?yajilin/9/9/a21220.0.0.0.212242h42h0.d0.c0.b0.e0.e0.b0.c0.d41h41h"],
+        ["Yajilin 4", "https://puzz.link/p?yajilin/11/11/zq33k1241111111221111zi34m12c11d"],
+        ["Yajilin 5", "https://puzz.link/p?yajilin/10/10/40u23k10h20l10h20k13l40i"],
+        ["Yajilin 6", "https://puzz.link/p?yajilin/b/11/11/m31e23e23c23g10a22i32j12j32j40j31j31p"],
+        ["Yajilin 7", "https://puzz.link/p?yajilin/6/3/1122334400a1.2.3.4.0.a-13e3-23e4-33e5962563"],
     ];
     const testCases = [];
 

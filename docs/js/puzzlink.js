@@ -383,6 +383,50 @@ class Puzzlink {
             pu["pu_q"].symbol[cell] = [info[i] + 1, "circle_SS", behind_line];
         }
     }
+
+    decodeYajilinArrows(parsing_castle = false) {
+        // Arrows start with one number giving direction and the next giving the number
+        var arrows = {};
+        var i = 0;
+        var c = 0;
+        var shading = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            if ("a" <= ca && ca <= "z") {
+                c += parseInt(ca, 36) - 9;
+                i++;
+                continue;
+            }
+
+            if (parsing_castle) {
+                shading = parseInt(ca);
+                i++;
+                ca = this.gridurl.charAt(i);
+            }
+
+            var number_length = ca === "-" ? 3 : 1;
+            if (ca === "-") {
+                i++;
+                ca = this.gridurl.charAt(i);
+            }
+
+            var direc = parseInt(ca);
+            number_length += parseInt(direc / 5);
+
+            var cell_value = this.gridurl.substr(i + 1, number_length);
+            if (cell_value === ".") {
+                cell_value = "";
+            } else {
+                cell_value = "" + parseInt(cell_value, 16);
+            }
+            arrows[c] = [direc % 5, cell_value, shading]; // [direction, number, shading]
+            c += 1;
+            i += number_length + 1;
+        }
+
+        return arrows;
+    }
 }
 
 class DisjointSets {
