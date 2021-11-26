@@ -1655,6 +1655,15 @@ function load(urlParam, type = 'url') {
 
     make_class(rtext_para[0], 'url');
 
+    // Decode Contest ID, Puzzle ID, Puzzle Info
+    if (paramArray.q) {
+        let qstr = atob(paramArray.q);
+        pu.puzzle_info = JSON.parse(qstr);
+
+        // Update title
+        document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+    }
+
     // Check cookies
     let theme_cookie = getCookie("color_theme");
     if (theme_cookie !== null && theme_cookie == 2) {
@@ -2529,8 +2538,25 @@ function set_contestmode() {
     document.getElementById("tb_delete").style.display = "none";
     document.getElementById("mo_move_lb").style.display = "none";
     document.getElementById("puzzlesourcelink").style.display = "none";
-    // document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
-    document.getElementById("submit_sol").style.display = "inline";
+    document.getElementById("saveinfotitle_lb").style.display = "none";
+    document.getElementById("saveinfotitle").style.display = "none";
+
+    if (pu.puzzle_info['als']) {
+
+        document.getElementById("contestinfo").style.display = "block";
+
+        // display answer key boxes
+        document.getElementById("answerkey_box1_lb").style.display = "inline";
+        document.getElementById("answerkey_box1").style.display = "inline";
+        document.getElementById("answerkey_box2_lb").style.display = "inline";
+        document.getElementById("answerkey_box2").style.display = "inline";
+        document.getElementById("answerkey_box3_lb").style.display = "inline";
+        document.getElementById("answerkey_box3").style.display = "inline";
+        document.getElementById("answerkey_box4_lb").style.display = "inline";
+        document.getElementById("answerkey_box4").style.display = "inline";
+
+        document.getElementById("submit_sol").style.display = "inline";
+    }
     pu.undoredo_disable = true;
     pu.comp = true;
 }

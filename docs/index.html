@@ -640,7 +640,15 @@
     <div id="dvique" class="dvique">
         <canvas id="pause_canvas" style="display:none;"></canvas>
     </div>
-    <div id="contestinfo">
+    <div id="contestinfo" style="display:none;">
+        <span class="DM" id="answerkey_box1_lb" style="display:none;">A: <input type="text" placeholder="Enter 9 digits" value="" id="answerkey_box1" style="display:none;"></span>
+        <br>
+        <span class="DM" id="answerkey_box2_lb" style="display:none;">B: <input type="text" placeholder="Enter 9 digits" value="" id="answerkey_box2" style="display:none;"></span>
+        <br>
+        <span class="DM" id="answerkey_box3_lb" style="display:none;">C: <input type="text" placeholder="Enter 9 digits" value="" id="answerkey_box3" style="display:none;"></span>
+        <br>
+        <span class="DM" id="answerkey_box4_lb" style="display:none;">D: <input type="text" placeholder="Enter 9 digits" value="" id="answerkey_box4" style="display:none;"></span>
+        <br>
         <div><input type="button" id="submit_sol" value="Submit Solution" style="display:none;" /></div>
         <div><label id="answer_key" class="info" /></label> </div>
     </div>
@@ -661,7 +669,6 @@
             <input type="button" id="tb_delete" value="Delete all" class="button" />
             <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
         </span>
-        <br><br>
         <div id="stop_watch">
             <h1 id="timer" class="values">00:00:00:00:0</h1>
             <div>
@@ -944,15 +951,15 @@
                 <h3 id="savetexttitle">Share URL</h3>
             </div>
             <div id="modal-save-info">
-                <span class="DM">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <span class="DM" id="saveinfotitle_lb">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
-                <span class="DM">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
+                <span class="DM" id="saveinfoauthor_lb">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
                 <br>
-                <span class="DM">Rules:<textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <span class="DM" id="saveinforules_lb">Rules:<textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>
                 <input type="button" id="saveinfogenre" value="Select genre/tags (Optional)" />
                 <br>
-                <span class="DM">Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
+                <span class="DM" id="saveinfosource_lb">Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
                 <br>
                 <span id="sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
             </div>
