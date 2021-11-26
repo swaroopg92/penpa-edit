@@ -866,9 +866,7 @@ function display_rules() {
     })
 }
 
-function submit_solution(){
-    console.log('testing');
-}
+function submit_solution() {}
 
 function panel_onoff() {
     if (document.getElementById('panel_button').value === "1") {
@@ -2518,7 +2516,12 @@ function set_solvemode(type = "url") {
 function set_contestmode() {
     // Disable Share, Undo/Redo buttons, IO sudoku
     document.getElementById("title").innerHTML = "Contest mode"
-    document.getElementById("savetext").style.display = "none";
+    document.getElementById("address_edit").style.display = "none";
+    document.getElementById("address_solve").style.display = "none";
+    document.getElementById("expansion").style.display = "none";
+    document.getElementById("save_undo_lb").style.display = "none";
+    document.getElementById("save_undo").style.display = "none";
+    document.getElementById("expansion").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
     document.getElementById("tb_redo").style.display = "none";
