@@ -1308,7 +1308,11 @@ input[type=number] {
 #starbattle_settings_lb,
 #mousemiddle_settings_lb,
 #multitab_settings_lb,
-#secondcolor_settings_lb {
+#secondcolor_settings_lb,
+#edge_button0,
+#panel_button0,
+#reload_button0,
+#advance_button0 {
     color: var(--white);
 }
 
