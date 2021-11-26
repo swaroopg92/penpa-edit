@@ -1309,8 +1309,8 @@ input[type=number] {
 #mousemiddle_settings_lb,
 #multitab_settings_lb,
 #secondcolor_settings_lb,
-#panel_button0,
 #edge_button0,
+#panel_button0,
 #reload_button0,
 #advance_button0 {
     color: var(--white);
