@@ -866,7 +866,39 @@ function display_rules() {
     })
 }
 
-function submit_solution() {}
+function submit_solution(){
+	const puzzle = {
+		name: pu.puzzle_info.pid, 
+		answer:['random','answer','string']
+	},
+	data = {
+		contest: pu.puzzle_info.cid,
+    submitall: false,
+    puzzles: []
+  };
+  data.puzzles.push(puzzle);
+	const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(data)
+  };
+	console.log(data);
+  request = new Request('/live/submit', options);
+	fetch(request)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (response) {
+	  console.log(response);
+    })
+    .catch(function (err) {
+      console.log("Something went wrong!", err);
+    }
+	);
+}
+
 
 function panel_onoff() {
     if (document.getElementById('panel_button').value === "1") {
