@@ -3018,7 +3018,14 @@ class Puzzle {
                     confirmButtonText: 'ok',
                 })
             }
-            return url + "?m=edit&p=" + ba + "&a=" + ba_s;
+            // if LMI server info exist
+            if (pu.puzzle_info) {
+                let qstr = JSON.stringify(pu.puzzle_info);
+                let ba_q = btoa(qstr);
+                return url + "?m=edit&p=" + ba + "&a=" + ba_s + "&q=" + ba_q;
+            } else {
+                return url + "?m=edit&p=" + ba + "&a=" + ba_s;
+            }
         } else {
             // Warning Long URL
             if (ba.length >= 7360) {
@@ -3029,7 +3036,14 @@ class Puzzle {
                     confirmButtonText: 'ok',
                 })
             }
-            return url + "?m=edit&p=" + ba;
+            // if LMI server info exist
+            if (pu.puzzle_info) {
+                let qstr = JSON.stringify(pu.puzzle_info);
+                let ba_q = btoa(qstr);
+                return url + "?m=edit&p=" + ba + "&q=" + ba_q;
+            } else {
+                return url + "?m=edit&p=" + ba;
+            }
         }
     }
 

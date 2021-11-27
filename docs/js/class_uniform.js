@@ -3116,7 +3116,6 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 break;
         }
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
-            console.log(this.cursol);
             // switch (c) {
             //     case 0:
             //         a = this.cursol - 1;
