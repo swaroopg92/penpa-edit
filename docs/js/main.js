@@ -1021,10 +1021,7 @@ onload = function() {
             //canvas
             case "canvas":
                 document.getElementById("inputtext").blur(); // Remove focus from text box
-                document.getElementById("answerkey_box1").blur(); // Remove focus from answer key box
-                document.getElementById("answerkey_box2").blur(); // Remove focus from answer key box
-                document.getElementById("answerkey_box3").blur(); // Remove focus from answer key box
-                document.getElementById("answerkey_box4").blur(); // Remove focus from answer key box
+								document.querySelectorAll('.lmi-puzzle-input').forEach(el => el.blur()); // Remove focus from answer key box
                 onDown(e);
                 if (checkms === 0) {
                     e.preventDefault();
