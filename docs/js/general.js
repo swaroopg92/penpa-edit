@@ -867,9 +867,12 @@ function display_rules() {
 }
 
 function submit_solution() {
+	const inputs = document.querySelectorAll('.lmi-puzzle-input'),
+		answer = [];
+  inputs.forEach(el => answer.push(el.value));
     const puzzle = {
             name: pu.puzzle_info.pid,
-            answer: ['random', 'answer', 'string']
+		answer: answer
         },
         data = {
             contest: pu.puzzle_info.cid,
@@ -891,11 +894,21 @@ function submit_solution() {
             return response.json();
         })
         .then(function(response) {
+			const subStatus = response.puzzles[0];
+			if (subStatus.correct) {
+				document.getElementById('submit_sol').style.display = 'none';
+			} else {
+				if (subStatus.cPoints !== undefined) {
+				  pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
+          document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+			  }
+			}
             console.log(response);
         })
         .catch(function(err) {
             console.log("Something went wrong!", err);
-        });
+    }
+	);
 }
 
 
@@ -1693,6 +1706,23 @@ function load(urlParam, type = 'url') {
 
         // Update title
         document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+				const contestinfo = document.getElementById("contestinfo"),
+					inputContents =	pu.puzzle_info.inputs.reduce((a, c, i) => {
+						return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
+						  <input type="text" aria-label="A" 
+							pattern="${c.Restriction}"
+							data-sum=${c.TSum || 0} 
+							class="lmi-puzzle-input"
+							id="answerkey_box${i}"
+							placeholder="${c.RestrictionError}"
+							${this.disableInputs ? "readonly" : ""}
+							style="display: inline;"
+							value="${c.Answer}"/></span>
+							`;
+					}, ''),
+					submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;	
+				contestinfo.innerHTML = inputContents + submitContents;
+				contestinfo.style.display = "block";
     }
 
     // Check cookies
@@ -2572,22 +2602,6 @@ function set_contestmode() {
     document.getElementById("saveinfotitle_lb").style.display = "none";
     document.getElementById("saveinfotitle").style.display = "none";
 
-    if (pu.puzzle_info && pu.puzzle_info['als']) {
-
-        document.getElementById("contestinfo").style.display = "block";
-
-        // display answer key boxes
-        document.getElementById("answerkey_box1_lb").style.display = "inline";
-        document.getElementById("answerkey_box1").style.display = "inline";
-        document.getElementById("answerkey_box2_lb").style.display = "inline";
-        document.getElementById("answerkey_box2").style.display = "inline";
-        document.getElementById("answerkey_box3_lb").style.display = "inline";
-        document.getElementById("answerkey_box3").style.display = "inline";
-        document.getElementById("answerkey_box4_lb").style.display = "inline";
-        document.getElementById("answerkey_box4").style.display = "inline";
-
-        document.getElementById("submit_sol").style.display = "inline";
-    }
     pu.undoredo_disable = true;
     pu.comp = true;
 }
