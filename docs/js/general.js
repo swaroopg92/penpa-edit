@@ -866,37 +866,36 @@ function display_rules() {
     })
 }
 
-function submit_solution(){
-	const puzzle = {
-		name: pu.puzzle_info.pid, 
-		answer:['random','answer','string']
-	},
-	data = {
-		contest: pu.puzzle_info.cid,
-    submitall: false,
-    puzzles: []
-  };
-  data.puzzles.push(puzzle);
-	const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(data)
-  };
-	console.log(data);
-  request = new Request('/live/submit', options);
-	fetch(request)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (response) {
-	  console.log(response);
-    })
-    .catch(function (err) {
-      console.log("Something went wrong!", err);
-    }
-	);
+function submit_solution() {
+    const puzzle = {
+            name: pu.puzzle_info.pid,
+            answer: ['random', 'answer', 'string']
+        },
+        data = {
+            contest: pu.puzzle_info.cid,
+            submitall: false,
+            puzzles: []
+        };
+    data.puzzles.push(puzzle);
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(data)
+    };
+    console.log(data);
+    request = new Request('/live/submit', options);
+    fetch(request)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(response) {
+            console.log(response);
+        })
+        .catch(function(err) {
+            console.log("Something went wrong!", err);
+        });
 }
 
 
@@ -2573,7 +2572,7 @@ function set_contestmode() {
     document.getElementById("saveinfotitle_lb").style.display = "none";
     document.getElementById("saveinfotitle").style.display = "none";
 
-    if (pu.puzzle_info['als']) {
+    if (pu.puzzle_info && pu.puzzle_info['als']) {
 
         document.getElementById("contestinfo").style.display = "block";
 
