@@ -897,31 +897,35 @@ function submit_solution() {
             const subStatus = response.puzzles[0];
             if (subStatus.correct) {
                 document.getElementById('submit_sol').style.display = 'none';
+							Swal.fire({
+									title: '<h3 class="wish">Solution is correct</h3>',
+									html: '<h2 class="wish">Congratulations 🙂</h2>',
+									background: 'url(js/images/new_year.jpg)',
+									icon: 'success',
+									confirmButtonText: 'Hurray!'
+							});
             } else {
                 if (subStatus.cPoints !== undefined) {
                     pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
                     document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
                 }
+							Swal.fire({
+									title: '<h3 class="warn">Solution is wrong</h3>',
+									html: '<h2 class="warn">Try again</h2>',
+									icon: 'error',
+									confirmButtonText: 'Try Again',
+									timer: 3000
+							});
             }
-            console.log(response);
-            Swal.fire({
-                title: '<h3 class="wish">Solution Submitted</h3>',
-                html: '<h2 class="wish">Congratulations 🙂</h2>',
-                background: 'url(js/images/new_year.jpg)',
-                icon: 'success',
-                confirmButtonText: 'Hurray!',
-                timer: 3000
-            })
         })
         .catch(function(err) {
             Swal.fire({
-                title: '<h3 class="wish">Something went wrong</h3>',
-                background: 'url(js/images/new_year.jpg)',
+                title: '<h3 class="warn">Something went wrong</h3>',
+								html: '<h2 class="warn">Try again</h2>',
                 icon: 'error',
-                confirmButtonText: 'Ok',
+                confirmButtonText: 'Try Again',
                 timer: 3000
-            })
-            console.log("Something went wrong!", err);
+            });
         });
 }
 
