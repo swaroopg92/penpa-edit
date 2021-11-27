@@ -867,12 +867,12 @@ function display_rules() {
 }
 
 function submit_solution() {
-	const inputs = document.querySelectorAll('.lmi-puzzle-input'),
-		answer = [];
-  inputs.forEach(el => answer.push(el.value));
+    const inputs = document.querySelectorAll('.lmi-puzzle-input'),
+        answer = [];
+    inputs.forEach(el => answer.push(el.value));
     const puzzle = {
             name: pu.puzzle_info.pid,
-		answer: answer
+            answer: answer
         },
         data = {
             contest: pu.puzzle_info.cid,
@@ -894,21 +894,35 @@ function submit_solution() {
             return response.json();
         })
         .then(function(response) {
-			const subStatus = response.puzzles[0];
-			if (subStatus.correct) {
-				document.getElementById('submit_sol').style.display = 'none';
-			} else {
-				if (subStatus.cPoints !== undefined) {
-				  pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
-          document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-			  }
-			}
+            const subStatus = response.puzzles[0];
+            if (subStatus.correct) {
+                document.getElementById('submit_sol').style.display = 'none';
+            } else {
+                if (subStatus.cPoints !== undefined) {
+                    pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
+                    document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+                }
+            }
             console.log(response);
+            Swal.fire({
+                title: '<h3 class="wish">Solution Submitted</h3>',
+                html: '<h2 class="wish">Congratulations 🙂</h2>',
+                background: 'url(js/images/new_year.jpg)',
+                icon: 'success',
+                confirmButtonText: 'Hurray!',
+                timer: 3000
+            })
         })
         .catch(function(err) {
+            Swal.fire({
+                title: '<h3 class="wish">Something went wrong</h3>',
+                background: 'url(js/images/new_year.jpg)',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                timer: 3000
+            })
             console.log("Something went wrong!", err);
-    }
-	);
+        });
 }
 
 
@@ -1706,23 +1720,23 @@ function load(urlParam, type = 'url') {
 
         // Update title
         document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-				const contestinfo = document.getElementById("contestinfo"),
-					inputContents =	pu.puzzle_info.inputs.reduce((a, c, i) => {
-						return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
-						  <input type="text" aria-label="A" 
-							pattern="${c.Restriction}"
-							data-sum=${c.TSum || 0} 
-							class="lmi-puzzle-input"
-							id="answerkey_box${i}"
-							placeholder="${c.RestrictionError}"
-							${this.disableInputs ? "readonly" : ""}
-							style="display: inline;"
-							value="${c.Answer}"/></span>
-							`;
-					}, ''),
-					submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;	
-				contestinfo.innerHTML = inputContents + submitContents;
-				contestinfo.style.display = "block";
+        const contestinfo = document.getElementById("contestinfo"),
+            inputContents = pu.puzzle_info.inputs.reduce((a, c, i) => {
+                return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
+                          <input type="text" aria-label="A"
+                            pattern="${c.Restriction}"
+                            data-sum=${c.TSum || 0}
+                            class="lmi-puzzle-input"
+                            id="answerkey_box${i}"
+                            placeholder="${c.RestrictionError}"
+                            ${this.disableInputs ? "readonly" : ""}
+                            style="display: inline;"
+                            value="${c.Answer}"/></span>
+                            `;
+            }, ''),
+            submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
+        contestinfo.innerHTML = inputContents + submitContents;
+        contestinfo.style.display = "block";
     }
 
     // Check cookies

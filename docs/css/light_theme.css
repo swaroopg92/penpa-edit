@@ -1380,18 +1380,6 @@ sup {
     margin-left: -7px;
 }
 
-#answerkey_box1_lb,
-#answerkey_box1,
-#answerkey_box2_lb,
-#answerkey_box2,
-#answerkey_box3_lb,
-#answerkey_box3,
-#answerkey_box4_lb,
-#answerkey_box4 {
-    margin: 2px auto;
-    width: 40%;
-}
-
 #submit_sol{
     margin: 2px auto;
 }
