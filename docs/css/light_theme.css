@@ -1323,7 +1323,9 @@ sup {
     background-size: 100% 100%;
     background-position: center;
     vertical-align: top;
-    width: 30px;
+    width: 24px;
+    height: 24px;
+    aspect-ratio: 1;
     border: none;
 }
 
