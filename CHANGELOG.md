@@ -1,4 +1,7 @@
 ## History
+* 2021/11/30 ver 2.26.11
+	* Fix aspect ratio of info icon
+	* Fix minor CSS linting issues
 * 2021/11/24 ver 2.26.10
 	* Reset button now automatically starts time from 0
 	* Cmd Key is treated equivalent to Ctrl Key for Macbooks
