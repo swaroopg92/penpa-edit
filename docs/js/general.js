@@ -897,31 +897,31 @@ function submit_solution() {
             const subStatus = response.puzzles[0];
             if (subStatus.correct) {
                 document.getElementById('submit_sol').style.display = 'none';
-							Swal.fire({
-									title: '<h3 class="wish">Solution is correct</h3>',
-									html: '<h2 class="wish">Congratulations 🙂</h2>',
-									background: 'url(js/images/new_year.jpg)',
-									icon: 'success',
-									confirmButtonText: 'Hurray!'
-							});
+                Swal.fire({
+                    title: '<h3 class="wish">Solution is correct</h3>',
+                    html: '<h2 class="wish">Congratulations 🙂</h2>',
+                    background: 'url(js/images/new_year.jpg)',
+                    icon: 'success',
+                    confirmButtonText: 'Hurray!'
+                });
             } else {
                 if (subStatus.cPoints !== undefined) {
                     pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
                     document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
                 }
-							Swal.fire({
-									title: '<h3 class="warn">Solution is wrong</h3>',
-									html: '<h2 class="warn">Try again</h2>',
-									icon: 'error',
-									confirmButtonText: 'Try Again',
-									timer: 3000
-							});
+                Swal.fire({
+                    title: '<h3 class="warn">Solution is wrong</h3>',
+                    html: '<h2 class="warn">Try again</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                    timer: 3000
+                });
             }
         })
         .catch(function(err) {
             Swal.fire({
                 title: '<h3 class="warn">Something went wrong</h3>',
-								html: '<h2 class="warn">Try again</h2>',
+                html: '<h2 class="warn">Try again</h2>',
                 icon: 'error',
                 confirmButtonText: 'Try Again',
                 timer: 3000
@@ -1929,36 +1929,6 @@ function load(urlParam, type = 'url') {
                 set_solvemodetitle();
             }
 
-            if (rtext[7] !== "undefined") {
-                let starttime = rtext[7].split(":");
-                if (starttime.length === 4) {
-                    sw_timer.start({
-                        precision: 'secondTenths',
-                        startValues: {
-                            hours: parseInt(starttime[0]),
-                            minutes: parseInt(starttime[1]),
-                            seconds: parseInt(starttime[2]),
-                            secondTenths: parseInt(starttime[3])
-                        }
-                    });
-                } else if (starttime.length === 5) { // added "days" precision in the recent update
-                    sw_timer.start({
-                        precision: 'secondTenths',
-                        startValues: {
-                            days: parseInt(starttime[0]),
-                            hours: parseInt(starttime[1]),
-                            minutes: parseInt(starttime[2]),
-                            seconds: parseInt(starttime[3]),
-                            secondTenths: parseInt(starttime[4])
-                        }
-                    });
-                } else {
-                    sw_timer.start({ precision: 'secondTenths' });
-                }
-            } else {
-                sw_timer.start({ precision: 'secondTenths' });
-            }
-
             if (typeof rtext[8] !== 'undefined') {
                 // set the answer check settings
                 var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
@@ -2061,7 +2031,6 @@ function load(urlParam, type = 'url') {
         if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
             set_contestmode();
         }
-        sw_timer.start({ precision: 'secondTenths' });
     }
 
     document.getElementById("nb_grid" + pu.mode.grid[0]).checked = true;
@@ -2619,6 +2588,14 @@ function set_contestmode() {
     document.getElementById("puzzlesourcelink").style.display = "none";
     document.getElementById("saveinfotitle_lb").style.display = "none";
     document.getElementById("saveinfotitle").style.display = "none";
+
+    // Hide timer
+    document.getElementById("timer").style.display = "none";
+    document.getElementById("sw_start").style.display = "none";
+    document.getElementById("sw_pause").style.display = "none";
+    document.getElementById("sw_stop").style.display = "none";
+    document.getElementById("sw_reset").style.display = "none";
+    document.getElementById("sw_hide").style.display = "none";
 
     pu.undoredo_disable = true;
     pu.comp = true;
