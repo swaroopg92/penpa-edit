@@ -41,6 +41,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
+    user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: var(--transparentBlack);
     touch-action: manipulation;
@@ -51,6 +52,7 @@
 
 input {
     -webkit-user-select: auto;
+    user-select: auto;
 }
 
 body {
