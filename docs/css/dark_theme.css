@@ -54,8 +54,9 @@ header {
     color: var(--greyLight);
 }
 
-.button {
-    background: var(--black);
+.button,
+#top_button button {
+    background-color: var(--black);
     color: var(--white);
 }
 
@@ -192,27 +193,18 @@ header {
     background-color: var(--greyLight);
 }
 
-#modal-content,
+.modal-content,
 #modal-image-content,
-#modal-rotate-content,
 #modal-newsize-content,
 #modal-save-content,
 #modal-input-content,
 #modal-load-content,
 #modal-save-tag-content,
-#modal-settings-content {
-    background-color: var(--black);
-}
-
 #modal-save2-content {
     background-color: var(--black);
 }
 
-#modal-header {
-    background: var(--greyLight);
-}
-
-#save2texttitle {
+.modal-header {
     background: var(--greyLight);
 }
 
@@ -306,8 +298,4 @@ a:active {
 #puzzlesource,
 #solution_check {
     color: var(--white);
-}
-
-#modal-help-content {
-    background-color: var(--black);
 }

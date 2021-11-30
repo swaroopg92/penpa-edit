@@ -41,7 +41,8 @@ hr.newgridhrline {
     padding-bottom: 10px;
 }
 
-.button {
+.button,
+#top_button button {
     display: inline-block;
     padding: 2px 5px;
     text-decoration: none;
@@ -705,15 +706,12 @@ body textarea {
     z-index: 101;
 }
 
-#modal,
+.modal,
 #modal-image,
 #modal-save,
-#modal-rotate,
 #modal-newsize,
 #modal-input,
-#modal-load,
-#modal-settings,
-#modal-help {
+#modal-load {
     display: none;
     position: fixed;
     z-index: 2;
@@ -738,16 +736,21 @@ body textarea {
     background-color: var(--transparent50);
 }
 
-#modal-content {
-    width: var(--popup_width);
-    height: 420px;
-    margin: 0 auto;
-    margin-top: 15px;
+.modal-content {
+    position:relative;
+    min-width: var(--popup_width);
+    width: 60%;
+    max-height: 500px;
+    margin: 15px auto 0;
+    padding: 40px 10px 10px;
     border-radius: 20px;
+    overflow: auto;
 }
 
 #modal-newsize-content {
+    position: relative;
     width: var(--popup_width);
+    padding:40px 10px 10px;
     height: 270px;
     margin: 0 auto;
     margin-top: 40px;
@@ -755,23 +758,19 @@ body textarea {
 }
 
 #modal-image-content {
+    position: relative;
     width: var(--popup_width);
+    padding:40px 10px 10px;
     height: 230px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
 }
 
-#modal-rotate-content {
-    width: var(--popup_width);
-    height: 400px;
-    margin: 0 auto;
-    margin-top: 30px;
-    border-radius: 20px;
-}
-
 #modal-save-content {
+    position: relative;
     width: var(--popup_width);
+    padding:40px 10px 10px;
     height: 600px;
     margin: 0 auto;
     margin-top: 30px;
@@ -781,16 +780,10 @@ body textarea {
 #modal-input-content,
 #modal-load-content,
 #modal-save-tag-content {
+    position: relative;
     width: var(--popup_width);
+    padding:40px 10px 10px;
     height: 280px;
-    margin: 0 auto;
-    margin-top: 30px;
-    border-radius: 20px;
-}
-
-#modal-settings-content {
-    width: var(--popup_width);
-    height: 450px;
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
@@ -798,9 +791,7 @@ body textarea {
 
 #modal-image-body,
 #modal-save-body,
-#modal-save-info,
-#modal-settings-body,
-#modal-help-body {
+#modal-save-info {
     padding-left: 10px;
     padding-top: 10px;
 }
@@ -864,34 +855,23 @@ body textarea {
     width: 40px;
 }
 
-#modal-save2-content {
-    width: 360px;
-    height: 650px;
-    margin: 0 auto;
-    margin-top: 100px;
-    border-radius: 20px;
-}
-
 #modal-save2-solution {
     padding-left: 5px;
     padding-right: 5px;
     padding-top: 10px;
 }
 
-#modal-header {
-    width: var(--popup_width);
+.modal-header {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
     height: 30px;
+    line-height:30px;
     text-align: center;
-    padding-top: 0px;
-    border-radius: 20px 20px 0px 0px;
-}
-
-#save2texttitle {
-    width: 360px;
-    height: 30px;
-    text-align: center;
-    padding-top: 0px;
-    border-radius: 20px 20px 0px 0px;
+    margin: 0;
+    padding: 0;
+    border-radius: 20px 20px 0 0;
 }
 
 .solcheck,
@@ -1112,14 +1092,6 @@ sup {
     margin-top: 2px;
     margin-bottom: 2px;
     font-size: 15px;
-}
-
-#modal-help-content {
-    width: var(--popup_width);
-    height: 440px;
-    margin: 0 auto;
-    margin-top: 30px;
-    border-radius: 20px;
 }
 
 #page_help {

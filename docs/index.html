@@ -101,17 +101,17 @@
     <header>
         <h3 id="title">Setter mode</h3>
         <div id="top_button">
-            <input type="button" id="newboard" value="New grid / Update" class="button" />
-            <input type="button" id="rotation" value="Transform" class="button" />
-            <input type="button" id="newsize" value="Resize" class="button" style="display:none;" />
-            <input type="button" id="saveimage" value="Screenshot" class="button" />
-            <input type="button" id="savetext" value="Share" class="button" />
+            <button id="newboard">New Grid / Update</button>
+            <button id="rotation">Transform</button>
+            <button id="newsize" style="display:none;">Resize</button>
+            <button id="saveimage">Screenshot</button>
+            <button id="savetext">Share</button>
             <a id="download_link"></a>
-            <input type="button" id="duplicate" value="Clone" class="button" onclick="duplicate();" />
-            <input type="button" id="input_sudoku" value="I/O Sudoku" class="button" />
-            <input type="button" id="input_url" value="Load" class="button" />
-            <input type="button" id="page_settings" value="Settings" class="button" />
-            <input type="button" id="page_help" value="" class="button" />
+            <button id="duplicate" onclick="duplicate();">Clone</button>
+            <button id="input_sudoku">I/O Sudoku</button>
+            <button id="input_url">Load</button>
+            <button id="page_settings">Settings</button>
+            <button id="page_help"></button>
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -738,10 +738,8 @@
         </div>
     </div>
     <div id="modal" class="modal">
-        <div id="modal-content">
-            <div id="modal-header">
-                <h3 id="modal_lb">New grid</h3>
-            </div>
+        <div id="modal-new-content" class="modal-content">
+            <h3 class="modal-header">New Grid</h3>
             <span id="modal-grid">
                 <h4 id="div_all"><label class="label_nb" id="nb_type_lb">Board type:</label></h4>
                 <select id="gridtype" onchange="changetype()">
@@ -838,9 +836,7 @@
     </div>
     <div id="modal-newsize" class="modal">
         <div id="modal-newsize-content">
-            <div id="modal-header">
-                <h3 id="modal-newsize_lb">Resize</h3>
-            </div>
+            <h3 class="modal-header" id="modal-newsize_lb">Resize</h3>
             <span id="modal-sizeA">
                 <span><label class="label_nb" id="modal-newsize_size_lb">Display size:</label></span>
                 <input type="number" pattern="\d*" name="nb_size3_r" id="nb_size3_r" value="38" min="12" max="90" step="2">
@@ -867,9 +863,7 @@
     </div>
     <div id="modal-image" class="modal">
         <div id="modal-image-content">
-            <div id="modal-header">
-                <h3 id="saveimagetitle">Save screenshot</h3>
-            </div>
+            <h3 class="modal-header" id="saveimagetitle">Save screenshot</h3>
             <div id="modal-image-body">
                 <h4 id="div_all"><label class="label_imagespace" id="nb_margin_lb">White border:</label></h4>
                 <input type="radio" name="nb_margin" value="1" id="nb_margin1" checked="checked">
@@ -902,10 +896,8 @@
         </div>
     </div>
     <div id="modal-rotate" class="modal">
-        <div id="modal-rotate-content">
-            <div id="modal-header">
-                <h3 id="savetexttitle">Rotate / Move / Add / Remove</h3>
-            </div>
+        <div id="modal-rotate-content" class="modal-content">
+            <h3 class="modal-header" id="savetexttitle">Rotate / Move / Add / Remove</h3>
             <div class="nb_button">
                 <h4 id="div_all"><label id="rt1_lb">Rotate:</label></h4>
                 <input type="button" id="rt_left" value="&larr;" />
@@ -945,9 +937,7 @@
     </div>
     <div id="modal-save" class="modal">
         <div id="modal-save-content">
-            <div id="modal-header">
-                <h3 id="savetexttitle">Share URL</h3>
-            </div>
+            <h3 class="modal-header" id="savetexttitle">Share URL</h3>
             <div id="modal-save-info">
                 <span class="DM">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
@@ -987,19 +977,15 @@
     </div>
     <div id="modal-save-tag" class="modal">
         <div id="modal-save-tag-content">
-            <div id="modal-header">
-                <h3 id="save7texttitle">Add/Remove Genre Tags</h3>
-            </div>
+            <h3 class="modal-header" id="save7texttitle">Add/Remove Genre Tags</h3>
             <div id="modal-save-tag-body">
                 <select name="genre_tags" id="genre_tags_opt" multiple="multiple"> </select>
             </div>
         </div>
     </div>
     <div id="modal-save2" class="modal">
-        <div id="modal-save2-content">
-            <div id="modal-header">
-                <h3 id="save2texttitle">Extended output</h3>
-            </div>
+        <div id="modal-save2-content" class="modal-content">
+            <h3 class="modal-header">Extended Output</h3>
             <div class="nb_button">
                 <input type="button" id="solution_open" value="Answer check" />
                 <input type="button" id="pp_file_open" style="margin-top: 5px;" value="puzzle_output_file" />
@@ -1217,9 +1203,7 @@
     </div>
     <div id="modal-input" class="modal">
         <div id="modal-input-content">
-            <div id="modal-header">
-                <h3 id="save4texttitle">Input/Output sudoku string</h3>
-            </div>
+            <h3 class="modal-header" id="save4texttitle">Input/Output sudoku string</h3>
             <div id="modal-save-body">
                 <textarea class="text_area" rows="1" cols="81" id="iostring"></textarea>
             </div>
@@ -1244,9 +1228,7 @@
     </div>
     <div id="modal-load" class="modal">
         <div id="modal-load-content">
-            <div id="modal-header">
-                <h3 id="save6texttitle">Load URL</h3>
-            </div>
+            <h3 class="modal-header" id="save6texttitle">Load URL</h3>
             <div id="modal-save-body">
                 <textarea class="text_area" rows="1" cols="81" id="urlstring" value=""></textarea>
             </div>
@@ -1256,10 +1238,8 @@
         </div>
     </div>
     <div id="modal-settings" class="modal">
-        <div id="modal-settings-content">
-            <div id="modal-header">
-                <h3 id="save7texttitle">General Settings</h3>
-            </div>
+        <div id="modal-settings-content" class="modal-content">
+            <h3 class="modal-header" id="save7texttitle">General Settings</h3>
             <div id="modal-settings-body">
                 <table id="generalsetting" class="generalset">
                     <tr class="generalset">
@@ -1423,10 +1403,8 @@
         </div>
     </div>
     <div id="modal-help" class="modal">
-        <div id="modal-help-content">
-            <div id="modal-header">
-                <h3 id="save8texttitle">Helpful Links</h3>
-            </div>
+        <div id="modal-help-content" class="modal-content">
+            <h3 class="modal-header" id="save8texttitle">Helpful Links</h3>
             <div id="modal-help-body">
                 <div class="nb_button">
                     <input type="button" id="load_about" value="About Penpa+" onclick="load_about();" />

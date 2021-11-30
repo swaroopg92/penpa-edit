@@ -51,11 +51,12 @@ header {
 
 #tb_undo,
 #tb_redo {
-    color: var(--greyLight);
+    color: var(--transparent40);
 }
 
-.button {
-    background: var(--white);
+.button,
+#top_button button {
+    background-color: var(--white);
     color: var(--black);
 }
 
@@ -189,27 +190,18 @@ header {
     background-color: var(--greyLight);
 }
 
-#modal-content,
+.modal-content,
 #modal-image-content,
-#modal-rotate-content,
 #modal-newsize-content,
 #modal-save-content,
 #modal-input-content,
 #modal-load-content,
 #modal-save-tag-content,
-#modal-settings-content {
-    background-color: var(--white);
-}
-
 #modal-save2-content {
     background-color: var(--white);
 }
 
-#modal-header {
-    background: var(--greyLight);
-}
-
-#save2texttitle {
+.modal-header {
     background: var(--greyLight);
 }
 
@@ -259,8 +251,4 @@ header {
 #reload_button0,
 #advance_button0 {
     color: var(--black);
-}
-
-#modal-help-content {
-    background-color: var(--white);
 }
