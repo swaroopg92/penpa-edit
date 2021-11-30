@@ -2589,14 +2589,6 @@ function set_contestmode() {
     document.getElementById("saveinfotitle_lb").style.display = "none";
     document.getElementById("saveinfotitle").style.display = "none";
 
-    // Hide timer
-    document.getElementById("timer").style.display = "none";
-    document.getElementById("sw_start").style.display = "none";
-    document.getElementById("sw_pause").style.display = "none";
-    document.getElementById("sw_stop").style.display = "none";
-    document.getElementById("sw_reset").style.display = "none";
-    document.getElementById("sw_hide").style.display = "none";
-
     pu.undoredo_disable = true;
     pu.comp = true;
 }
