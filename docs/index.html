@@ -850,14 +850,17 @@
             <div class="nb_button">
                 <h4 id="div_all"><label id="rt4_lb_r">Add/Remove Rows/Columns:</label></h4>
                 <p><label id="rt5_lb_r">*Works only in Square Board Type, it also resets undo/redo. Answer checking if enabled, will only work with original grid size.</label></p>
-                <input type="button" id="rt_addtop_r" value="Top +" />
-                <input type="button" id="rt_subtop_r" value="Top -" /><br>
-                <input type="button" id="rt_addbottom_r" value="Bottom +" />
-                <input type="button" id="rt_subbottom_r" value="Bottom -" /><br>
-                <input type="button" id="rt_addleft_r" value="Left +" />
-                <input type="button" id="rt_subleft_r" value="Left -" /><br>
-                <input type="button" id="rt_addright_r" value="Right +" />
-                <input type="button" id="rt_subright_r" value="Right -" />
+                <div class="resize-grid-buttons">
+                    <div class="existing-grid">Existing Grid</div>
+                    <button class="addtop" id="rt_addtop_r">+ &#9650;</button>
+                    <button class="subtop" id="rt_subtop_r">&ndash; &#9660;</button>
+                    <button class="addleft" id="rt_addleft_r">+ &#9664;</button>
+                    <button class="subleft" id="rt_subleft_r">&ndash; &#9654;</button>
+                    <button class="addright" id="rt_addright_r">+ &#9654;</button>
+                    <button class="subright" id="rt_subright_r">&ndash; &#9664;</button>
+                    <button class="addbottom" id="rt_addbottom_r">+ &#9660;</button>
+                    <button class="subbottom" id="rt_subbottom_r">&ndash; &#9650;</button>
+                </div>
             </div>
         </div>
     </div>
@@ -920,14 +923,17 @@
             <div class="nb_button">
                 <h4 id="div_all"><label id="rt4_lb">Add/Remove Rows/Columns:</label></h4>
                 <p><label id="rt5_lb">*Works only in Square Board Type, it also resets undo/redo. Ensure empty row/column before removing.</label></p>
-                <input type="button" id="rt_addtop" value="Top +" />
-                <input type="button" id="rt_subtop" value="Top -" /><br>
-                <input type="button" id="rt_addbottom" value="Bottom +" />
-                <input type="button" id="rt_subbottom" value="Bottom -" /><br>
-                <input type="button" id="rt_addleft" value="Left +" />
-                <input type="button" id="rt_subleft" value="Left -" /><br>
-                <input type="button" id="rt_addright" value="Right +" />
-                <input type="button" id="rt_subright" value="Right -" />
+                <div class="resize-grid-buttons">
+                    <div class="existing-grid">Existing Grid</div>
+                    <button class="addtop" id="rt_addtop">+ &#9650;</button>
+                    <button class="subtop" id="rt_subtop">&ndash; &#9660;</button>
+                    <button class="addleft" id="rt_addleft">+ &#9664;</button>
+                    <button class="subleft" id="rt_subleft">&ndash; &#9654;</button>
+                    <button class="addright" id="rt_addright">+ &#9654;</button>
+                    <button class="subright" id="rt_subright">&ndash; &#9664;</button>
+                    <button class="addbottom" id="rt_addbottom">+ &#9660;</button>
+                    <button class="subbottom" id="rt_subbottom">&ndash; &#9650;</button>
+                </div>
             </div>
             <br>
             <div class="nb_button">
