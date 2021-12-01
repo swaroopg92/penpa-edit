@@ -56,6 +56,18 @@ hr.newgridhrline {
     border-radius: 4px;
 }
 
+#modal-help-body p {
+    font-size: .8em;
+    margin: .5em;
+}
+
+#modal-help-body a.button {
+    display: block;
+    margin: 5px;
+    padding: 3px 10px;
+    font-size: .8em;
+}
+
 .resize-grid-buttons {
     display: grid;
     grid-template-columns: 1.5em 1.5em 4em 1.5em 1.5em;
@@ -943,6 +955,15 @@ body textarea {
     margin: 0;
     padding: 0;
     border-radius: 20px 20px 0 0;
+}
+
+.modal-subheader {
+    height: 20px;
+    line-height: 20px;
+    font-size:16px;
+    text-align: center;
+    margin: 1em 0 0;
+    padding: 0;
 }
 
 .solcheck,

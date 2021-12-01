@@ -58,6 +58,16 @@ header {
     color: var(--black);
 }
 
+#modal-help-body a.button {
+    background: var(--greyLightVery);
+    border: 1px solid var(--greyLight);
+    color: var(--black) !important;
+}
+
+#modal-help-body a.button:hover {
+    background: var(--greyLight);
+}
+
 .sw {
     background-color: var(--blueLight);
     color: var(--white);
@@ -199,7 +209,8 @@ header {
     background-color: var(--white);
 }
 
-.modal-header {
+.modal-header,
+.modal-subheader {
     background: var(--greyLight);
 }
 
