@@ -1940,6 +1940,11 @@ function load(urlParam, type = 'url') {
 
             if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
                 set_contestmode();
+                if (document.getElementById("saveinfosource").value) {
+                    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+                } else {
+                    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to Contest Page and enter in the Submissions Box*";
+                }
             }
         } else {
             if (typeof rtext[7] !== 'undefined') {
