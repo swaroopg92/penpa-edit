@@ -34,13 +34,15 @@
     --transparent70: rgba(0, 0, 0, 0.3);
     --white: #ffffff;
     --yellow: #ffffa3;
-    
+
     --bgPage: var(--blackLight);
     --bgMain: var(--black);
     --fgMain: var(--white);
 }
 
-.solving { background: var(--blueDark); }
+.solving {
+    background: var(--blueDark);
+}
 
 #tb_undo,
 #tb_redo {

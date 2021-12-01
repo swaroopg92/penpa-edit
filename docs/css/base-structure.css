@@ -35,16 +35,16 @@ input {
 }
 
 header {
-    display:grid;
-    position:fixed;
+    display: grid;
+    position: fixed;
     top: 0;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
     height: 1.5em;
     line-height: 1.5em;
     font-size: .9em;
     grid-template-columns: 1fr 300px 300px 1fr;
-    overflow:hidden;
+    overflow: hidden;
     z-index: 1;
 }
 
@@ -52,8 +52,15 @@ header {
     color: var(--fgMain);
 }
 
-#title { grid-area: 1 / 2 / 2 / 3; text-align: left;; }
-#version-info { grid-area: 1 / 3 / 2 / 4; text-align: right; }
+#title {
+    grid-area: 1 / 2 / 2 / 3;
+    text-align: left;
+}
+
+#version-info {
+    grid-area: 1 / 3 / 2 / 4;
+    text-align: right;
+}
 
 #tool-holder {
     width: 100%;
@@ -990,7 +997,7 @@ body textarea {
 .modal-subheader {
     height: 20px;
     line-height: 20px;
-    font-size:16px;
+    font-size: 16px;
     text-align: center;
     margin: 1em 0 0;
     padding: 0;
@@ -1230,7 +1237,7 @@ sup {
 
 #page_help {
     position: relative;
-    top:-1px;
+    top: -1px;
     background: url(images/help_icon.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -1239,7 +1246,7 @@ sup {
     width: 1.2em;
     height: 1.2em;
     margin: 0;
-    padding:0;
+    padding: 0;
     aspect-ratio: 1;
     border: none;
     cursor: pointer;
