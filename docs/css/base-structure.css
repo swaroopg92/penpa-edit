@@ -894,7 +894,9 @@ body textarea {
 }
 
 #modal-save2-content {
-    width: 420px;
+    width: 450px;
+    max-height: none;
+    margin: 15px auto;
 }
 
 #modal-input-content,
@@ -1018,10 +1020,6 @@ h4 {
     max-width: 340px;
     max-height: 60px;
     margin-left: 10px;
-}
-
-.solutiontext {
-    font-size: 12px;
 }
 
 input[type=number] {
@@ -1181,11 +1179,12 @@ input[type=number] {
     border-collapse: collapse;
     border: 3px solid var(--fgMain);
     margin: 1em auto;
+    font-size: .75em;
 }
 
 #answersetting td {
     border: 1px solid var(--fgMain);
-    padding: 2px;
+    padding: 3px 10px;
     height: 1.3em;
 }
 
@@ -1214,25 +1213,6 @@ input[type=number] {
 sup {
     line-height: 0;
     vertical-align: center;
-}
-
-#load_about,
-#load_youtube,
-#load_list,
-#load_readme,
-#load_wiki,
-#load_rules,
-#load_faqs,
-#load_discord,
-#load_feedback,
-#load_contribute,
-#load_todolist,
-#load_changelogs,
-#load_credits,
-#load_license {
-    margin-top: 2px;
-    margin-bottom: 2px;
-    font-size: 15px;
 }
 
 #page_help {
