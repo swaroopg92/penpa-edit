@@ -1771,11 +1771,6 @@ function load(urlParam, type = 'url') {
                     pu.solution = atext;
                 }
 
-                // Solution button
-                // document.getElementById("pu_a_label").style.display = "inline-block";
-                // document.getElementById("pu_a_label").style.marginLeft = "6px";
-                // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
                 set_solvemodetitle();
             }
 
@@ -1893,11 +1888,6 @@ function load(urlParam, type = 'url') {
                 pu.solution = atext;
             }
 
-            // Solution button
-            // document.getElementById("pu_a_label").style.display = "inline-block";
-            // document.getElementById("pu_a_label").style.marginLeft = "6px";
-            // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-            // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             set_solvemodetitle();
         }
         if (typeof rtext[7] !== 'undefined') {
@@ -2408,7 +2398,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
 function set_solvemode(type = "url") {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
-    document.getElementById("title").innerHTML = "Solver mode"
+    document.getElementById("title").innerHTML = "Solver Mode"
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
@@ -2453,7 +2443,7 @@ function set_solvemode(type = "url") {
 
 function set_contestmode() {
     // Disable Share, Undo/Redo buttons, IO sudoku
-    document.getElementById("title").innerHTML = "Contest mode"
+    document.getElementById("title").innerHTML = "Contest Mode"
     document.getElementById("savetext").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
@@ -2468,8 +2458,8 @@ function set_contestmode() {
 }
 
 function set_solvemodetitle() {
-    document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-    document.getElementById("title").classList.add("info");
+    document.getElementById("title").innerHTML = "Solver Mode (Answer Checking Enabled)";
+    document.getElementById("header").classList.add("solving");
 }
 
 function isEmpty(obj) {

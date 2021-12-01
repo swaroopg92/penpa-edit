@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=480">
     <!-- STYLES -->
     <script>
-        var ver = 22611; // Also defined in class_p.js
+        var ver = "2.26.12"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -98,8 +98,11 @@
 </head>
 
 <body>
-    <header>
-        <h3 id="title">Setter mode</h3>
+    <header id="header">
+        <span id="title">Setter Mode</span>
+        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2021 <button id="page_help"></button></span>
+    </header>
+    <div id="tool-holder">
         <div id="top_button">
             <button id="newboard">New Grid / Update</button>
             <button id="rotation">Transform</button>
@@ -111,7 +114,6 @@
             <button id="input_sudoku">I/O Sudoku</button>
             <button id="input_url">Load</button>
             <button id="page_settings">Settings</button>
-            <button id="page_help"></button>
         </div>
         <div id="buttons">
             <div id="edit_button" class="mode_button">
@@ -468,7 +470,7 @@
                 </span>
             </div>
             <div id="stylemode_button" class="stylemode_button">
-                <span id="div_all">
+                <span>
                     <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
                 </span>
                 <span id="style_surface" style="display:'inline-block';">
@@ -522,7 +524,7 @@
                 </span>
                 <span id="style_lineE" style="display:none;">
                     <input type="radio" name="style_lineE" value="3" id="st_lineE3" checked="checked">
-                    <label for="st_lineE3" class="labelL" id="st_lineE3_lb">G </label>
+                    <label for="st_lineE3" class="labelL" id="st_lineE3_lb">G</label>
                     <input type="radio" name="style_lineE" value="2" id="st_lineE2">
                     <label for="st_lineE2" class="labelL" id="st_lineE2_lb">B</label>
                     <input type="radio" name="style_lineE" value="5" id="st_lineE5">
@@ -633,7 +635,7 @@
                 </span>
             </div>
         </div>
-    </header>
+    </div>
     <div id="puzzleinfo">
         <div><label id="puzzletitle" class="info"></label></div>
         <div><label id="puzzleauthor" class="info"></label></div>
@@ -677,7 +679,6 @@
                 <button id="sw_hide" class="button sw">Hide</button>
             </div>
         </div>
-        <p>Penpa+ Version 2.26.11 &copy; 2020-2021 </p>
     </div>
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
@@ -686,7 +687,7 @@
         <div id="float-key-body">
             <div id="float-key-menu">
                 <ul class="panel_menu">
-                    <li><span id="panel_1"><label for="panel_1" id="panel_1_lbmenu" class="label_menu"> 1 </label></span></li>
+                    <li><span id="panel_1"><label for="panel_1" id="panel_1_lbmenu" class="label_menu"> 1</label></span></li>
                     <li><span id="panel_A"><label for="panel_A" id="panel_A_lbmenu" class="label_menu">A</label></span></li>
                     <li><span id="panel_a"><label for="panel_a" id="panel_a_lbmenu" class="label_menu">a</label></span></li>
                     <li><span id="panel_Text"><label for="panel_Text" id="panel_Text_lbmenu" class="label_menu">Text</label></span></li>
@@ -741,7 +742,7 @@
         <div id="modal-new-content" class="modal-content">
             <h3 class="modal-header">New Grid</h3>
             <span id="modal-grid">
-                <h4 id="div_all"><label class="label_nb" id="nb_type_lb">Board type:</label></h4>
+                <h4><label class="label_nb" id="nb_type_lb">Board type:</label></h4>
                 <select id="gridtype" onchange="changetype()">
                     <option value="square" id="nb_type1_lb" selected="selected">Square</option>
                     <option value="hex" id="nb_type2_lb">Hexagon</option>
@@ -756,58 +757,58 @@
                     <option value="cairo_pentagonal" id="nb_type11_lb"> Cairo pentagonal </option>
                 </select>
             </span><br>
-            <h4 id="div_all"><label class="label_nb" id="nb_size_lb">Size:</label></h4>
+            <h4><label class="label_nb" id="nb_size_lb">Size:</label></h4>
             <span>
-                <span id="div_all"><label class="label_nb" id="name_size2">Rows:</label></span>
+                <span><label class="label_nb" id="name_size2">Rows:</label></span>
                 <input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="60" step="1">
-                <span id="div_all"><label class="label_nb" id="name_size1">Columns:</label></span>
+                <span><label class="label_nb" id="name_size1">Columns:</label></span>
                 <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="60" step="1">
-                <span id="div_all"><label class="label_nb" id="nb_sudoku1_lb">Diagonal &#x27CD;</label></span>
+                <span><label class="label_nb" id="nb_sudoku1_lb">Diagonal &#x27CD;</label></span>
                 <input type="checkbox" name="nb_sudoku1" id="nb_sudoku1">
-                <span id="div_all"><label class="label_nb" id="nb_sudoku4_lb">Diagonal &#x27CB;</label></span>
+                <span><label class="label_nb" id="nb_sudoku4_lb">Diagonal &#x27CB;</label></span>
                 <input type="checkbox" name="nb_sudoku4" id="nb_sudoku4">
                 <br>
-                <span id="div_all"><label class="label_nb" id="nb_sudoku2_lb">Skyscraper/Little Killer</label></span>
+                <span><label class="label_nb" id="nb_sudoku2_lb">Skyscraper/Little Killer</label></span>
                 <input type="checkbox" name="nb_sudoku2" id="nb_sudoku2">
-                <span id="div_all"><label class="label_nb" id="nb_sudoku3_lb">Sandwich</label></span>
+                <span><label class="label_nb" id="nb_sudoku3_lb">Sandwich</label></span>
                 <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
                 <br>
-                <span id="div_all"><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
+                <span><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
                 <input type="checkbox" name="nb_sudoku8" id="nb_sudoku8">
-                <span id="div_all"><label class="label_nb" id="nb_sudoku5_lb">Size 6x6</label></span>
+                <span><label class="label_nb" id="nb_sudoku5_lb">Size 6x6</label></span>
                 <input type="checkbox" name="nb_sudoku5" id="nb_sudoku5">
-                <span id="div_all"><label class="label_nb" id="nb_sudoku6_lb">Size 8x8</label></span>
+                <span><label class="label_nb" id="nb_sudoku6_lb">Size 8x8</label></span>
                 <input type="checkbox" name="nb_sudoku6" id="nb_sudoku6">
                 <br>
-                <span id="div_all"><label class="label_nb" id="nb_sudoku7_lb"></label></span>
+                <span><label class="label_nb" id="nb_sudoku7_lb"></label></span>
             </span>
             <br>
-            <h4 id="div_all"><label class="label_nb" id="nb_space_lb">White space:</label></h4>
+            <h4><label class="label_nb" id="nb_space_lb">White space:</label></h4>
             <!--Mode Setting-->
             <span id="modal-spaceud" style="display:inline;">
-                <span id="div_all"><label class="label_nb" id="name_space1">Over:</label></span>
+                <span><label class="label_nb" id="name_space1">Over:</label></span>
                 <input type="number" pattern="\d*" name="nb_space1" id="nb_space1" value="0" min="0" max="20" step="1">
-                <span id="div_all"><label class="label_nb" id="name_space2">Under</label></span>
+                <span><label class="label_nb" id="name_space2">Under</label></span>
                 <input type="number" pattern="\d*" name="nb_space2" id="nb_space2" value="0" min="0" max="20" step="1">
             </span>
             <br>
-            <h4 id="div_all"><label class="label_nb">　　　</label></h4>
+            <h4><label class="label_nb">　　　</label></h4>
             <span id="modal-spacelr" style="display:inline;">
-                <span id="div_all"><label class="label_nb" id="name_space3">Left:</label></span>
+                <span><label class="label_nb" id="name_space3">Left:</label></span>
                 <input type="number" pattern="\d*" name="nb_space3" id="nb_space3" value="0" min="0" max="20" step="1">
-                <span id="div_all"><label class="label_nb" id="name_space4">Right:</label></span>
+                <span><label class="label_nb" id="name_space4">Right:</label></span>
                 <input type="number" pattern="\d*" name="nb_space4" id="nb_space4" value="0" min="0" max="20" step="1">
             </span>
             <br>
             <hr size=1 noshade class="newgridhrline">
             <h5><label id="nb_note">*Update display* button only affects the following properties:</label></h5>
             <br>
-            <h4 id="div_all"><label class="label_nb">Display size:</label></h4>
+            <h4><label class="label_nb">Display size:</label></h4>
             <span id="">
                 <input type="number" pattern="\d*" name="nb_size3" id="nb_size3" value="38" min="12" max="90" step="2">
             </span>
             <br>
-            <h4 id="div_all"><label class="label_nb" id="nb_grid_lb">Gridlines:</label></h4>
+            <h4><label class="label_nb" id="nb_grid_lb">Gridlines:</label></h4>
             <input type="radio" name="nb_grid" value="1" id="nb_grid1" checked="checked">
             <label for="nb_grid1" class="label" id="nb_grid1_lb">Solid line</label>
             <input type="radio" name="nb_grid" value="2" id="nb_grid2">
@@ -815,13 +816,13 @@
             <input type="radio" name="nb_grid" value="3" id="nb_grid3">
             <label for="nb_grid3" class="label" id="nb_grid3_lb">None</label>
             <br>
-            <h4 id="div_all"><label class="label_nb" id="nb_lat_lb">Gridpoints:</label></h4>
+            <h4><label class="label_nb" id="nb_lat_lb">Gridpoints:</label></h4>
             <input type="radio" name="nb_lat" value="1" id="nb_lat1">
             <label for="nb_lat1" class="label" id="nb_lat1_lb">Yes</label>
             <input type="radio" name="nb_lat" value="2" id="nb_lat2" checked="checked">
             <label for="nb_lat2" class="label" id="nb_lat2_lb">No</label>
             <br>
-            <h4 id="div_all"><label class="label_nb" id="nb_out_lb">Outside frame:</label></h4>
+            <h4><label class="label_nb" id="nb_out_lb">Outside frame:</label></h4>
             <input type="radio" name="nb_out" value="1" id="nb_out1" checked="checked">
             <label for="nb_out1" class="label" id="nb_out1_lb">Yes</label>
             <input type="radio" name="nb_out" value="2" id="nb_out2">
@@ -848,7 +849,7 @@
             </div>
             <br>
             <div class="nb_button">
-                <h4 id="div_all"><label id="rt4_lb_r">Add/Remove Rows/Columns:</label></h4>
+                <h4><label id="rt4_lb_r">Add/Remove Rows/Columns:</label></h4>
                 <p><label id="rt5_lb_r">*Works only in Square Board Type, it also resets undo/redo. Answer checking if enabled, will only work with original grid size.</label></p>
                 <div class="resize-grid-buttons">
                     <div class="existing-grid">Existing Grid</div>
@@ -868,19 +869,19 @@
         <div id="modal-image-content">
             <h3 class="modal-header" id="saveimagetitle">Save screenshot</h3>
             <div id="modal-image-body">
-                <h4 id="div_all"><label class="label_imagespace" id="nb_margin_lb">White border:</label></h4>
+                <h4><label class="label_imagespace" id="nb_margin_lb">White border:</label></h4>
                 <input type="radio" name="nb_margin" value="1" id="nb_margin1" checked="checked">
                 <label for="nb_margin1" class="label" id="nb_margin1_lb">Yes</label>
                 <input type="radio" name="nb_margin" value="2" id="nb_margin2">
                 <label for="nb_margin2" class="label" id="nb_margin2_lb">No</label>
                 <br>
-                <h4 id="div_all"><label class="label_imagespace" id="nb_quality_lb">Image quality:</label></h4>
+                <h4><label class="label_imagespace" id="nb_quality_lb">Image quality:</label></h4>
                 <input type="radio" name="nb_quality" value="1" id="nb_quality1" checked="checked">
                 <label for="nb_quality1" class="label" id="nb_quality1_lb">High</label>
                 <input type="radio" name="nb_quality" value="2" id="nb_quality2">
                 <label for="nb_quality2" class="label" id="nb_quality2_lb">Low</label>
                 <br>
-                <h4 id="div_all"><label class="label_imagespace" id="nb_type_lb">File Type:</label></h4>
+                <h4><label class="label_imagespace" id="nb_type_lb">File Type:</label></h4>
                 <input type="radio" name="nb_type" value="1" id="nb_type1" checked="checked">
                 <label for="nb_type1" class="label" id="nb_type1_lb">png</label>
                 <input type="radio" name="nb_type" value="2" id="nb_type2">
@@ -902,18 +903,18 @@
         <div id="modal-rotate-content" class="modal-content">
             <h3 class="modal-header" id="savetexttitle">Rotate / Move / Add / Remove</h3>
             <div class="nb_button">
-                <h4 id="div_all"><label id="rt1_lb">Rotate:</label></h4>
+                <h4><label id="rt1_lb">Rotate:</label></h4>
                 <input type="button" id="rt_left" value="&larr;" />
                 <input type="button" id="rt_right" value="&rarr;" />
             </div>
             <div class="nb_button">
-                <h4 id="div_all"><label id="rt2_lb">Flip:</label></h4>
+                <h4><label id="rt2_lb">Flip:</label></h4>
                 <input type="button" id="rt_LR" value="&harr;" />
                 <input type="button" id="rt_UD" value="&#8597;" />
             </div>
             <br>
             <div class="nb_button">
-                <h4 id="div_all"><label id="rt3_lb">Move:</label></h4>
+                <h4><label id="rt3_lb">Move:</label></h4>
                 <br>
                 <input type="button" id="rt_center" value="Move board to center" /><br>
                 <input type="button" id="rt_size" value="Fit window to board" /><br>
@@ -921,7 +922,7 @@
             </div>
             <br>
             <div class="nb_button">
-                <h4 id="div_all"><label id="rt4_lb">Add/Remove Rows/Columns:</label></h4>
+                <h4><label id="rt4_lb">Add/Remove Rows/Columns:</label></h4>
                 <p><label id="rt5_lb">*Works only in Square Board Type, it also resets undo/redo. Ensure empty row/column before removing.</label></p>
                 <div class="resize-grid-buttons">
                     <div class="existing-grid">Existing Grid</div>
@@ -965,7 +966,7 @@
                 <input type="button" id="expansion" value="URL with answer check / Extra options" />
             </div>
             <div>
-                <span id="div_all"><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>
+                <span><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>
                 <input type="checkbox" name="save_undo" id="save_undo">
             </div>
             <div id="modal-save-body">
@@ -1005,15 +1006,15 @@
                             <td class="answerset">
                             </td>
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_and_lb">AND</label></span>
+                                <span><label class="solutiontext" id="sol_and_lb">AND</label></span>
                             </td>
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_or_lb">OR</label></span>
+                                <span><label class="solutiontext" id="sol_or_lb">OR</label></span>
                             </td>
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_surface_lb">Shading - DG (Dark Grey), GR, LG, BL (Black): </label></span>
+                                <span><label class="solutiontext" id="sol_surface_lb">Shading - DG (Dark Grey), GR, LG, BL (Black):</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_surface" class="solcheck">
@@ -1024,7 +1025,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_number_lb">Number - Normal, L, M, S - Green, Blue, Red <br> Sudoku - Normal, Centre - Green, Blue, Red: </label></span>
+                                <span><label class="solutiontext" id="sol_number_lb">Number - Normal, L, M, S - Green, Blue, Red <br> Sudoku - Normal, Centre - Green, Blue, Red:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_number" class="solcheck">
@@ -1035,7 +1036,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_loopline_lb">Line - Green, Double: </label></span>
+                                <span><label class="solutiontext" id="sol_loopline_lb">Line - Green, Double:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_loopline" class="solcheck">
@@ -1046,7 +1047,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_ignoreloopline_lb">Line - Ignore Given Line Segments: </label></span>
+                                <span><label class="solutiontext" id="sol_ignoreloopline_lb">Line - Ignore Given Line Segments:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_ignoreloopline" class="solcheck">
@@ -1054,7 +1055,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_loopedge_lb">Edge - Green, Double: </label></span>
+                                <span><label class="solutiontext" id="sol_loopedge_lb">Edge - Green, Double:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_loopedge" class="solcheck">
@@ -1065,7 +1066,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_ignoreborder_lb">Edge - Ignore Edges on Grid Border / Givens: </label></span>
+                                <span><label class="solutiontext" id="sol_ignoreborder_lb">Edge - Ignore Edges on Grid Border / Givens:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_ignoreborder" class="solcheck">
@@ -1073,7 +1074,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_wall_lb">Wall - Green: </label></span>
+                                <span><label class="solutiontext" id="sol_wall_lb">Wall - Green:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_wall" class="solcheck">
@@ -1084,7 +1085,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_square_lb">Shape - Shape - Square - Option 2: </label></span>
+                                <span><label class="solutiontext" id="sol_square_lb">Shape - Shape - Square - Option 2:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_square" class="solcheck">
@@ -1095,7 +1096,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_circle_lb">Shape - Shape - Circle - M size - Options 1 & 2: </label></span>
+                                <span><label class="solutiontext" id="sol_circle_lb">Shape - Shape - Circle - M size - Options 1 & 2:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_circle" class="solcheck">
@@ -1106,7 +1107,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_tri_lb">Shape - Shape - Corner triangle - Options 1 to 4: </label></span>
+                                <span><label class="solutiontext" id="sol_tri_lb">Shape - Shape - Corner triangle - Options 1 to 4:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_tri" class="solcheck">
@@ -1117,7 +1118,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_arrow_lb">Shape - Arrow - Small - Options 1 to 8: </label></span>
+                                <span><label class="solutiontext" id="sol_arrow_lb">Shape - Arrow - Small - Options 1 to 8:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_arrow" class="solcheck">
@@ -1128,7 +1129,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_math_lb">Shape - Number - Math - Black, Green - Options 2 & 3: </label></span>
+                                <span><label class="solutiontext" id="sol_math_lb">Shape - Number - Math - Black, Green - Options 2 & 3:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_math" class="solcheck">
@@ -1139,7 +1140,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_battleship_lb">Shape - Special 1 - Battleship - Black - Options 1 to 6 <br> and Curvy Black - Options 1 to 4: </label></span>
+                                <span><label class="solutiontext" id="sol_battleship_lb">Shape - Special 1 - Battleship - Black - Options 1 to 6 <br> and Curvy Black - Options 1 to 4:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_battleship" class="solcheck">
@@ -1150,7 +1151,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_tent_lb">Shape - Special 1 - Tent - Option 2: </label></span>
+                                <span><label class="solutiontext" id="sol_tent_lb">Shape - Special 1 - Tent - Option 2:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_tent" class="solcheck">
@@ -1161,7 +1162,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_star_lb">Shape - Special 1 - Star - Options 1 to 3: </label></span>
+                                <span><label class="solutiontext" id="sol_star_lb">Shape - Special 1 - Star - Options 1 to 3:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_star" class="solcheck">
@@ -1172,7 +1173,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_akari_lb">Shape - Special 2 - Lightbulb - Option 3: </label></span>
+                                <span><label class="solutiontext" id="sol_akari_lb">Shape - Special 2 - Lightbulb - Option 3:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_akari" class="solcheck">
@@ -1183,7 +1184,7 @@
                         </tr>
                         <tr class="answerset">
                             <td class="answerset">
-                                <span id="div_all"><label class="solutiontext" id="sol_mine_lb">Shape - Special 2 - Minesweeper - Option 4: </label></span>
+                                <span><label class="solutiontext" id="sol_mine_lb">Shape - Special 2 - Minesweeper - Option 4:</label></span>
                             </td>
                             <td class="answerset">
                                 <input type="checkbox" name="solution" id="sol_mine" class="solcheck">
@@ -1215,15 +1216,15 @@
             </div>
             <p id="modal-input-parameters-text">*Specify the location of the first cell of your sudoku grid and its size[optional]:</p>
             <div id="modal-input-parameters">
-                <span id="div_all"><label class="label_nb" id="firstcell_row_lb">Row:</label></span>
+                <span><label class="label_nb" id="firstcell_row_lb">Row:</label></span>
                 <input type="number" pattern="\d*" name="firstcell_row" id="firstcell_row" value="" min="1" max="60" step="1" placeholder="1">
-                <span id="div_all"><label class="label_nb" id="firstcell_column_lb">Col:</label></span>
+                <span><label class="label_nb" id="firstcell_column_lb">Col:</label></span>
                 <input type="number" pattern="\d*" name="firstcell_column" id="firstcell_column" value="" min="1" max="60" step="1" placeholder="1">
-                <span id="div_all"><label class="label_nb" id="sudokusize_lb">Size:</label></span>
+                <span><label class="label_nb" id="sudokusize_lb">Size:</label></span>
                 <input type="number" pattern="\d*" name="sudokusize" id="sudokusize" value="" min="1" max="9" step="1" placeholder="9">
             </div>
             <div>
-                <span id="div_all"><label class="label_nb" id="ignore_pencilmarks_lb">Ignore Pencil Marks (L, M, S values)</label></span>
+                <span><label class="label_nb" id="ignore_pencilmarks_lb">Ignore Pencil Marks (L, M, S values)</label></span>
                 <input type="checkbox" name="ignore_pencilmarks" id="ignore_pencilmarks">
             </div>
             <div class="nb_button">
@@ -1247,34 +1248,34 @@
         <div id="modal-settings-content" class="modal-content">
             <h3 class="modal-header" id="save7texttitle">General Settings</h3>
             <div id="modal-settings-body">
-                <table id="generalsetting" class="generalset">
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="theme_mode_lb">Display Theme:</label></h4>
+                <table id="settings-table">
+                    <tr>
+                        <td>
+                            <label>Display Theme:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="theme_mode" id="theme_mode_opt">
                                 <option value="1" selected="selected">Light</option>
                                 <option value="2">Dark</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="custom_color_lb">Custom Colors (Beta): </label></h4>
+                    <tr id="custom_color_lb">
+                        <td>
+                            <label>Custom Colors (Beta):</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="custom_color" id="custom_color_opt">
                                 <option value="1" selected="selected">No</option>
                                 <option value="2">Yes</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="sudoku_settings_lb">Sudoku PencilMarks: </label></h4>
+                    <tr>
+                        <td>
+                            <label>Sudoku Pencil Marks:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="sudoku_settings" id="sudoku_settings_opt">
                                 <option value="1" selected="selected">Dynamic</option>
                                 <option value="2">Large</option>
@@ -1282,22 +1283,22 @@
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="sudoku_settings_normal_lb">Sudoku Normal: </label></h4>
+                    <tr>
+                        <td>
+                            <label>Sudoku Normal:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="sudoku_settings_normal" id="sudoku_settings_normal_opt">
                                 <option value="1" selected="selected">Centered</option>
                                 <option value="2">Bottom</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="starbattle_settings_lb">Starbattle dots: </label></h4>
+                    <tr>
+                        <td>
+                            <label>Star Battle Dots:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="starbattle_settings" id="starbattle_settings_opt">
                                 <option value="1" selected="selected">High Range</option>
                                 <option value="2">Low Range</option>
@@ -1305,33 +1306,33 @@
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="mousemiddle_settings_lb">Mouse Middle Button: </label></h4>
+                    <tr id="mousemiddle_settings_lb">
+                        <td>
+                            <label>Mouse Middle Button:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="mousemiddle" id="mousemiddle_settings_opt">
                                 <option value="1" selected="selected">No</option>
                                 <option value="2">Yes</option>
                             </select>
                         </td>
                     </tr>
-                    <!-- <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="multitab_settings_lb">Solution Tab Setting: </label></h4>
+                    <!-- <tr>
+                        <td>
+                            <h4><label id="multitab_settings_lb">Solution Tab Setting:</label></h4>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="multitab_settings" id="multitab_settings_opt">
                                 <option value="1" selected="selected">No</option>
                                 <option value="2">Yes</option>
                             </select>
                         </td>
                     </tr> -->
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="secondcolor_settings_lb">Surface Second Color: </label></h4>
+                    <tr id="secondcolor_settings_lb">
+                        <td>
+                            <label>Surface Second Color:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="secondcolor_settings" id="secondcolor_settings_opt">
                                 <option value="1">Dark Grey</option>
                                 <option value="8">Grey</option>
@@ -1348,55 +1349,55 @@
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="panel_button0">Panel: </label></h4>
+                    <tr>
+                        <td>
+                            <label>Panel:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="panelbutton" id="panel_button">
                                 <option value="1">ON</option>
                                 <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="edge_button0">Draw on Edges/Corners: </label></h4>
+                    <tr>
+                        <td>
+                            <label>Draw on Edges/Corners:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="edgebutton" id="edge_button">
                                 <option value="1">ON</option>
                                 <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="reload_button0">Reload Protection: </label></h4>
+                    <tr>
+                        <td>
+                            <label>Reload Protection:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="reloadbutton" id="reload_button">
                                 <option value="1">ON</option>
                                 <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="advance_button0">PenpaLite: </label></h4>
+                    <tr>
+                        <td>
+                            <label>PenpaLite:</label>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="advancebutton" id="advance_button">
                                 <option value="1">ON</option>
                                 <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="generalset">
-                        <td class="generalset">
-                            <h4 id="div_all"><label class="label_settings" id="save_settings_lb">Save Settings: </label></h4>
+                    <tr>
+                        <td>
+                            <h4><label id="save_settings_lb">Save Settings:</label></h4>
                         </td>
-                        <td class="generalset">
+                        <td>
                             <select name="save_settings" id="save_settings_opt">
                                 <option value="3" selected="selected"></option>
                                 <option value="1">No</option>
@@ -1454,6 +1455,7 @@
             script.async = false;
             document.head.appendChild(script);
         }
+        document.getElementById('version-number').innerHTML = ver;
     </script>
 </body>
 

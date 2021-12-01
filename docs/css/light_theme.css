@@ -7,6 +7,7 @@
     --blue: #0000ff;
     --blueDark: #1e50a2;
     --blueLight: #187bcd;
+    --blueLightMedium: #4795d4;
     --blueLightVery: #c0e0ff;
     --bluesky: #3085d6;
     --brownLight: #eecab1;
@@ -33,29 +34,19 @@
     --transparent70: rgba(0, 0, 0, 0.3);
     --white: #ffffff;
     --yellow: #ffffa3;
+
+    --bgPage: var(--greyLightVery);
+    --bgMain: var(--white);
+    --fgMain: var(--black);
 }
 
-body {
-    background: var(--white);
-}
-
-p {
-    color: var(--black);
-}
-
-header {
-    background: var(--white);
+.solving {
+    background: var(--blueLightVery);
 }
 
 #tb_undo,
 #tb_redo {
     color: var(--transparent40);
-}
-
-.button,
-#top_button button {
-    background-color: var(--white);
-    color: var(--black);
 }
 
 #modal-help-body a.button {
@@ -71,10 +62,6 @@ header {
 .sw {
     background-color: var(--blueLight);
     color: var(--white);
-}
-
-.values {
-    color: var(--black);
 }
 
 #buttons {
@@ -148,7 +135,6 @@ header {
 
 #puzzleinfo,
 #contestinfo {
-    background: var(--white);
     color: var(--blue);
 }
 
@@ -209,6 +195,7 @@ header {
     background-color: var(--white);
 }
 
+header,
 .modal-header,
 .modal-subheader {
     background: var(--greyLight);
@@ -230,34 +217,4 @@ header {
 
 .tooltip .tooltiptext::after {
     border-color: var(--greyDarkVery) transparent transparent transparent;
-}
-
-/*Modal display labels*/
-#rt1_lb,
-#rt2_lb,
-#rt3_lb,
-#rt4_lb,
-#nb_margin_lb,
-#nb_quality_lb,
-#nb_type_lb,
-#saveimagename_lb,
-#save_undo_lb,
-#firstcell_row_lb,
-#firstcell_column_lb,
-#sudokusize_lb,
-#ignore_pencilmarks_lb,
-#theme_mode_lb,
-#custom_color_lb,
-#save_settings_lb,
-#sudoku_settings_lb,
-#sudoku_settings_normal_lb,
-#starbattle_settings_lb,
-#mousemiddle_settings_lb,
-#multitab_settings_lb,
-#secondcolor_settings_lb,
-#edge_button0,
-#panel_button0,
-#reload_button0,
-#advance_button0 {
-    color: var(--black);
 }
