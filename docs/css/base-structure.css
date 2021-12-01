@@ -1,3 +1,9 @@
+:root {
+    /*constant widths*/
+    --popup_width: 330px;
+    --popup_width_larger: calc(var(--popup_width) + 30px);
+}
+
 * {
     -moz-user-select: none;
     -ms-user-select: none;
@@ -800,7 +806,7 @@ body textarea {
 .modal-content {
     position: relative;
     min-width: var(--popup_width);
-    width: 60%;
+    width: var(--popup_width_larger);
     max-height: 500px;
     margin: 15px auto 0;
     padding: 40px 10px 10px;
@@ -836,6 +842,10 @@ body textarea {
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+}
+
+#modal-save2-content {
+    width: 420px;
 }
 
 #modal-input-content,

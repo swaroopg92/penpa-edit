@@ -33,8 +33,6 @@
     --transparent70: rgba(0, 0, 0, 0.3);
     --white: #ffffff;
     --yellow: #ffffa3;
-    /*constant widths*/
-    --popup_width: 330px;
 }
 
 body {
