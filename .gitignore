@@ -1,6 +1,9 @@
 flowcharts/
 videos/
 old_images/
+temp/
+tmp/
+.DS_Store
 
 *.log
 

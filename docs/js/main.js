@@ -1,5 +1,10 @@
 // Including meta allows CMD to work on Mac
-let isCtrlKey = e => e.ctrlKey || e.metaKey;
+let isCtrlKeyHeld = e => e.ctrlKey||e.metaKey;
+let isCtrlKeyPressed = key => key === "Control" || key === "Meta";
+let isShiftKeyHeld = e => e.shiftKey;
+let isShiftKeyPressed = key => key === "Shift";
+let isAltKeyHeld = e => e.altKey;
+let isAltKeyPressed = key => key === "Alt";
 
 onload = function() {
 
@@ -86,11 +91,11 @@ onload = function() {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
-                    pu.mouseevent(x, y, num, isCtrlKey(e));
+                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
-                    pu.mouseevent(x, y, num, isCtrlKey(e));
+                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
                 }
             }
         }
@@ -223,8 +228,6 @@ onload = function() {
             var keycode = e.keyCode;
             var code = e.code;
             var keylocation = e.location;
-            var shift_key = e.shiftKey;
-            var alt_key = e.altKey;
             var str_num = "1234567890";
             var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
             var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -247,7 +250,7 @@ onload = function() {
 
             // For shift shortcut in Sudoku mode, modify the numpad keys
             // keylocation 3 indicates numlock is ON and number pad is being used
-            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && key !== "Shift" && keylocation === 3 && !isCtrlKey(e) && !alt_key) {
+            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && !isShiftKeyPressed(key) && keylocation === 3 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
                 switch (keycode) {
                     case 45:
                         key = "0";
@@ -312,15 +315,15 @@ onload = function() {
             }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
-                pu.key_arrow(key, isCtrlKey(e));
+                pu.key_arrow(key, isCtrlKeyHeld(e));
                 e.returnValue = false;
             }
 
-            if (key === "Shift") {
+            if (isShiftKeyPressed(key)) {
                 shift_counter = shift_counter + 1;
             }
 
-            if (key === "Shift" && shift_counter === 1 && !isCtrlKey(e) && !alt_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isShiftKeyPressed(key) && shift_counter === 1 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
                 if (present_submode !== 2) {
                     pu.submode_check("sub_sudoku2");
@@ -328,11 +331,11 @@ onload = function() {
                 e.returnValue = false;
             }
 
-            if (key === "Control") {
+            if (isCtrlKeyPressed(key)) {
                 ctrl_counter = ctrl_counter + 1;
             }
 
-            if (key === "Control" && ctrl_counter === 1 && !shift_key && !alt_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isCtrlKeyPressed(key) && ctrl_counter === 1 && !isShiftKeyHeld(e) && !isAltKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
                 if (present_submode !== 3) {
                     pu.submode_check("sub_sudoku3");
@@ -340,8 +343,8 @@ onload = function() {
                 e.returnValue = false;
             }
 
-            if (!isCtrlKey(e) && !alt_key) {
-                if (shift_key && key === " ") {
+            if (!isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
+                if (isShiftKeyHeld(e) && key === " ") {
                     pu.key_number(key);
                     e.returnValue = false;
                 } else if (str_num.indexOf(key) != -1 ||
@@ -350,7 +353,7 @@ onload = function() {
                     str_sym.indexOf(key) != -1 ||
                     (keycode >= 48 && keycode <= 57)) {
                     e.preventDefault();
-                    if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                    if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(String.fromCharCode(keycode));
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(key);
@@ -395,7 +398,7 @@ onload = function() {
                 } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                     // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                     // Sudoku mode, I have assigned it to Delete
-                    pu.key_space(keycode, shift_key, isCtrlKey(e));
+                    pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
                     e.returnValue = false;
                 } else if (key === "Backspace") {
                     pu.key_backspace();
@@ -403,15 +406,15 @@ onload = function() {
                 }
             }
 
-            if (isCtrlKey(e) && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
+            if (isCtrlKeyHeld(e) && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
                 // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                 // Sudoku mode, I have assigned it to Delete
-                pu.key_space(keycode, shift_key, isCtrlKey(e));
+                pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
                 e.returnValue = false;
             }
 
-            if (isCtrlKey(e) && !shift_key && !alt_key) {
-                if (key != "Control") {
+            if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
+                if (!isCtrlKeyPressed(key)) {
                     if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         switch (code) {
                             case "Digit0":
@@ -534,7 +537,7 @@ onload = function() {
                 }
             }
 
-            if (!isCtrlKey(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 switch (key) {
                     case "z":
                         // case "Z":
@@ -593,7 +596,7 @@ onload = function() {
                 }
             }
 
-            if (!isCtrlKey(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
+            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
                 switch (key) {
                     case "z":
                     case "Z":
@@ -754,7 +757,7 @@ onload = function() {
                     if (previous_length != user_choices.length) {
                         previous_length = user_choices.length;
                         counter_index = 0; // reset the counter
-                    } else if (shift_key) { // if SHIFT is held down cycle backward
+                    } else if (isShiftKeyHeld(e)) { // if SHIFT is held down cycle backward
                         counter_index += user_choices.length - 1;
                     } else {
                         counter_index++;
@@ -802,7 +805,7 @@ onload = function() {
         } else {
             var key = e.key;
             var keylocation = e.location;
-            if (key === "Shift" && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
                 } else if (present_submode === "2") {
@@ -813,7 +816,7 @@ onload = function() {
                 shift_counter = 0;
                 shift_release_time = Date.now();
                 e.returnValue = false;
-            } else if (key === "Control" && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
                 } else if (present_submode === "2") {
@@ -995,7 +998,7 @@ onload = function() {
             pu.ondown_key = ondown_key;
         }
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
-            e.target.id != "float-canvas" && !isCtrlKey(e)) {
+            e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
             pu.selection = [];
             pu.redraw();
