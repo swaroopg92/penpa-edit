@@ -1180,12 +1180,16 @@ input[type=number] {
     color: var(--blue);
 }
 
-.answerset {
+#answersetting {
     border-collapse: collapse;
-    border: 1px solid var(--black);
-    padding: 1px;
-    margin-left: auto;
-    margin-right: auto;
+    border: 3px solid var(--fgMain);
+    margin: 1em auto;
+}
+
+#answersetting td {
+    border: 1px solid var(--fgMain);
+    padding: 2px;
+    height: 1.3em;
 }
 
 #settings-table {
