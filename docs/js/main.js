@@ -1077,6 +1077,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "tb_delete":
+            case "tb_delete_top":
                 DeleteCheck();
                 e.preventDefault();
                 break;

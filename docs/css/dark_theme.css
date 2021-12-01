@@ -1479,3 +1479,7 @@ sup {
     margin-left: -7px;
     color: var(--white);
 }
+
+#tb_delete_top{
+    background-color: var(--red);
+}

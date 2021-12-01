@@ -1383,3 +1383,8 @@ sup {
 #submit_sol{
     margin: 2px auto;
 }
+
+#tb_delete_top{
+    background-color: var(--red);
+    color:  var(--white);
+}

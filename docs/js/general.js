@@ -2589,6 +2589,7 @@ function set_contestmode() {
     document.getElementById("tb_redo").style.display = "none";
     document.getElementById("tb_reset").style.display = "none";
     document.getElementById("tb_delete").style.display = "none";
+    document.getElementById("tb_delete_top").style.display = "inline-block";
     document.getElementById("mo_move_lb").style.display = "none";
     document.getElementById("puzzlesourcelink").style.display = "none";
     document.getElementById("saveinfotitle_lb").style.display = "none";
