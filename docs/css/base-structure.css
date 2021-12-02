@@ -866,16 +866,6 @@ body textarea {
     overflow: auto;
 }
 
-#modal-newsize-content {
-    position: relative;
-    width: var(--popup_width);
-    padding: 40px 10px 10px;
-    height: 270px;
-    margin: 0 auto;
-    margin-top: 40px;
-    border-radius: 20px;
-}
-
 #modal-image-content {
     position: relative;
     width: var(--popup_width);
