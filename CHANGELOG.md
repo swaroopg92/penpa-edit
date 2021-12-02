@@ -1,11 +1,12 @@
 ## History
-* 2021/11/30 ver 2.26.11
+* 2021/12/02 ver 2.26.11
 	* Fix aspect ratio of info icon
 	* Fix minor CSS linting issues
 	* Separated structural CSS from color-scheme CSS
 	* Clean up modal code and fix sizing issues that affect some browser/OS combinations
 	* Prettify the GUI for adding or removing rows and columns
 	* Redesign the help modal and make links able to be right-clicked and copied
+	* Initial cleanup efforts toward a responsive design
 * 2021/11/24 ver 2.26.10
 	* Reset button now automatically starts time from 0
 	* Cmd Key is treated equivalent to Ctrl Key for Macbooks
