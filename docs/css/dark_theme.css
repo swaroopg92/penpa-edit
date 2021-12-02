@@ -10,6 +10,7 @@
     --blueLightMedium: #4795d4;
     --blueLightVery: #c0e0ff;
     --bluesky: #3085d6;
+    --blueskyMedium: #00BDFE;
     --brownLight: #eecab1;
     --green: #208020;
     --greenLight: #4c9900;
@@ -72,7 +73,7 @@
 
 .label {
     color: var(--white);
-    border: 1px solid var(--blueDark);
+    border: 1px solid var(--blueskyMedium);
 }
 
 .label_option {
