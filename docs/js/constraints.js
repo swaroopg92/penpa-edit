@@ -42,7 +42,7 @@ const penpa_constraints = {
             "submodeset": ["", "1", "1", "", "1", "1", "circle_L", "thermo", "battleship", "1"],
             "styleset": [1, 2, 2, 2, 10, 1, 2, "", "", 1]
         },
-        "general": ["input_sudoku", "rotation", "custom_color_lb", "custom_color_opt"],
+        "general": ["input_sudoku", "rotation", "custom_color_lb"],
         "classic": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb"

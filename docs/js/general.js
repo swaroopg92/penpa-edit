@@ -2422,7 +2422,6 @@ function set_solvemode(type = "url") {
     // custom color
     document.getElementById('colorpicker_special').style.display = 'none';
     document.getElementById('custom_color_lb').style.display = 'none';
-    document.getElementById('custom_color_opt').style.display = 'none';
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
