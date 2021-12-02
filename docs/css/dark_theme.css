@@ -37,10 +37,12 @@
 
     --bgPage: var(--blackLight);
     --bgMain: var(--black);
+    --bgMedium: var(--greyDarkVery);
     --fgMain: var(--white);
 }
 
-.solving {
+.solving,
+#stop_watch {
     background: var(--blueDark);
 }
 
@@ -59,13 +61,9 @@
     background: var(--greyDark);
 }
 
-.sw {
+.button.sw {
     background-color: var(--blueLight);
     color: var(--white);
-}
-
-#buttons {
-    border: 1px solid var(--white);
 }
 
 .label_mode {

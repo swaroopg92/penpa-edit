@@ -102,582 +102,588 @@
         <span id="title">Setter Mode</span>
         <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2021 <button id="page_help"></button></span>
     </header>
-    <div id="tool-holder">
-        <div id="top_button">
-            <button id="newboard">New Grid / Update</button>
-            <button id="rotation">Transform</button>
-            <button id="newsize" style="display:none;">Resize</button>
-            <button id="saveimage">Screenshot</button>
-            <button id="savetext">Share</button>
-            <a id="download_link"></a>
-            <button id="duplicate" onclick="duplicate();">Clone</button>
-            <button id="input_sudoku">I/O Sudoku</button>
-            <button id="input_url">Load</button>
-            <button id="page_settings">Settings</button>
+    <div id="app-container">
+        <div id="tool-container">
+            <div id="tool-holder">
+                <div id="top_button">
+                    <button id="newboard">New Grid / Update</button>
+                    <button id="rotation">Transform</button>
+                    <button id="newsize" style="display:none;">Resize</button>
+                    <button id="saveimage">Screenshot</button>
+                    <button id="savetext">Share</button>
+                    <a id="download_link"></a>
+                    <button id="duplicate" onclick="duplicate();">Clone</button>
+                    <button id="input_sudoku">I/O Sudoku</button>
+                    <button id="input_url">Load</button>
+                    <button id="page_settings">Settings</button>
+                </div>
+                <div id="buttons">
+                    <div id="edit_button" class="mode_button">
+                        <label class="label_mode" id="edit_txt">Edit:</label>
+                        <input type="radio" name="mode_qa" id="pu_q" value=1 checked="checked" />
+                        <label for="pu_q" class="label" id="pu_q_label">Problem</label>
+                        <input type="radio" name="mode_qa" id="pu_a" value=2 />
+                        <label for="pu_a" class="label" id="pu_a_label">Solution</label>
+                        <label class="label_mode" id="constraints">Constraints (Beta):</label>
+                        <select name="constraints_settings" id="constraints_settings_opt"> </select>
+                        <span id="visibility_button0" class="label_mode tooltip">Visibility:</span>
+                        <span id="visibility_button" class="label">ON</span>
+                    </div>
+                    <div id="mode_button" class="mode_button">
+                        <label class="label_mode" id="mode_txt">Mode:</label>
+                        <input type="radio" name="mode" id="mo_surface" checked="checked" />
+                        <label for="mo_surface" class="label" id="mo_surface_lb">Surface</label>
+                        <input type="radio" name="mode" id="mo_line" />
+                        <label for="mo_line" class="label" id="mo_line_lb">Line</label>
+                        <input type="radio" name="mode" id="mo_lineE" />
+                        <label for="mo_lineE" class="label" id="mo_lineE_lb">Edge</label>
+                        <input type="radio" name="mode" id="mo_wall" />
+                        <label for="mo_wall" class="label" id="mo_wall_lb">Wall</label>
+                        <input type="radio" name="mode" id="mo_cage" />
+                        <label for="mo_cage" class="label" id="mo_cage_lb">Cage</label>
+                        <input type="radio" name="mode" id="mo_board" />
+                        <label for="mo_board" class="label" id="mo_board_lb">Box</label>
+                        <input type="radio" name="mode" id="mo_move" />
+                        <label for="mo_move" class="label" id="mo_move_lb">Move</label>
+                        <br id="mode_break">
+                        <label class="label_mode" id="mode_txt_space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="radio" name="mode" id="mo_number" />
+                        <label for="mo_number" class="label" id="mo_number_lb">Number</label>
+                        <input type="radio" name="mode" id="mo_sudoku" />
+                        <label for="mo_sudoku" class="label" id="mo_sudoku_lb">Sudoku</label>
+                        <input type="radio" name="mode" id="mo_symbol" />
+                        <label for="mo_symbol" class="label" id="mo_symbol_lb">Shape</label>
+                        <input type="radio" name="mode" id="mo_special" />
+                        <label for="mo_special" class="label" id="mo_special_lb">Special</label>
+                        <input type="radio" name="mode" id="mo_combi" />
+                        <label for="mo_combi" class="label" id="mo_combi_lb">Composite</label>
+                        <span class="tab" id="tab_selection">
+                            <select id="mode_choices" multiple size="0"></select>
+                        </span>
+                    </div>
+                    <hr size="1" noshade>
+                    <div id="submode_button">
+                        <span id="div_sub">
+                            <label class="label_mode tooltip" id="sub_txt">Sub:&nbsp;&nbsp;<span id="sub_text" class="tooltiptext">Choose one sub-mode wherever applicable</span></label>
+                        </span>
+                        <span id="mode_line" style="display:none;">
+                            <input type="radio" name="mode_line" value="1" id="sub_line1" checked="checked">
+                            <label for="sub_line1" class="label" id="sub_line1_lb">Normal</label>
+                            <input type="radio" name="mode_line" value="2" id="sub_line2">
+                            <label for="sub_line2" class="label" id="sub_line2_lb">Diagonal</label>
+                            <input type="radio" name="mode_line" value="3" id="sub_line3">
+                            <label for="sub_line3" class="label" id="sub_line3_lb">Free</label>
+                            <input type="radio" name="mode_line" value="5" id="sub_line5">
+                            <label for="sub_line5" class="label" id="sub_line5_lb">Middle</label>
+                            <input type="radio" name="mode_line" value="4" id="sub_line4">
+                            <label for="sub_line4" class="label" id="sub_line4_lb">Helper (x)</label>
+                        </span>
+                        <span id="mode_lineE" style="display:none;">
+                            <input type="radio" name="mode_lineE" value="1" id="sub_lineE1" checked="checked">
+                            <label for="sub_lineE1" class="label" id="sub_lineE1_lb">Normal</label>
+                            <input type="radio" name="mode_lineE" value="2" id="sub_lineE2">
+                            <label for="sub_lineE2" class="label" id="sub_lineE2_lb">Diagonal</label>
+                            <input type="radio" name="mode_lineE" value="3" id="sub_lineE3">
+                            <label for="sub_lineE3" class="label" id="sub_lineE3_lb">Free</label>
+                            <input type="radio" name="mode_lineE" value="4" id="sub_lineE4">
+                            <label for="sub_lineE4" class="label" id="sub_lineE4_lb">Helper (x)</label>
+                            <input type="radio" name="mode_lineE" value="5" id="sub_lineE5">
+                            <label for="sub_lineE5" class="label" id="sub_lineE5_lb">Erase</label>
+                        </span>
+                        <span id="mode_number" style="display:none;">
+                            <input type="radio" name="mode_number" value="1" id="sub_number1" checked="checked">
+                            <label for="sub_number1" class="labelL" id="sub_number1_lb">Normal</label>
+                            <input type="radio" name="mode_number" value="10" id="sub_number10">
+                            <label for="sub_number10" class="labelL" id="sub_number10_lb">L</label>
+                            <input type="radio" name="mode_number" value="6" id="sub_number6">
+                            <label for="sub_number6" class="labelL" id="sub_number6_lb">M</label>
+                            <input type="radio" name="mode_number" value="5" id="sub_number5">
+                            <label for="sub_number5" class="labelL" id="sub_number5_lb">S</label>
+                            <input type="radio" name="mode_number" value="7" id="sub_number7">
+                            <label for="sub_number7" class="labelL" id="sub_number7_lb">Candidates</label>
+                            <input type="radio" name="mode_number" value="3" id="sub_number3">
+                            <label for="sub_number3" class="labelL" id="sub_number3_lb"></label>
+                            <input type="radio" name="mode_number" value="9" id="sub_number9">
+                            <label for="sub_number9" class="labelL" id="sub_number9_lb"></label>
+                            <input type="radio" name="mode_number" value="4" id="sub_number4">
+                            <label for="sub_number4" class="labelL" id="sub_number4_lb">Tapa</label>
+                            <input type="radio" name="mode_number" value="2" id="sub_number2">
+                            <label for="sub_number2" class="labelL" id="sub_number2_lb">Arrow</label>
+                            <input type="radio" name="mode_number" value="8" id="sub_number8">
+                            <label for="sub_number8" class="labelL" id="sub_number8_lb">Long</label>
+                            <input type="radio" name="mode_number" value="11" id="sub_number11">
+                            <label for="sub_number11" class="labelL" id="sub_number11_lb">Killer</label>
+                        </span>
+                        <span id="mode_symbol" style="display:none;">
+                            <ul class="nav">
+                                <li><span id="ms1">Shape</span>
+                                    <ul id="mode_symbolul1">
+                                        <li id="li_circle"><span id="ms1_circle">&#x26AB; &#x26AA; &#x25CF; &#x25CB;</span>
+                                            <ul>
+                                                <li id="li_circle_L"><span id="ms_circle_L">L</span></li>
+                                                <li id="li_circle_M"><span id="ms_circle_M">M</span></li>
+                                                <li id="li_circle_S"><span id="ms_circle_S">S</span></li>
+                                                <li id="li_circle_SS"><span id="ms_circle_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_square"><span id="ms1_square">&#x2B1B; &#x2B1C; &#x25FC; &#x25FB;</span>
+                                            <ul>
+                                                <li id="li_square_LL"><span id="ms_square_LL">XL</span></li>
+                                                <li id="li_square_L"><span id="ms_square_L">L</span></li>
+                                                <li id="li_square_M"><span id="ms_square_M">M</span></li>
+                                                <li id="li_square_S"><span id="ms_square_S">S</span></li>
+                                                <li id="li_square_SS"><span id="ms_square_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_triup"><span id="ms1_triup">&#x25B2; &#x25B3; &#x25B4; &#x25B5;</span>
+                                            <ul>
+                                                <li><span id="ms_triup_L">L</span></li>
+                                                <li><span id="ms_triup_M">M</span></li>
+                                                <li><span id="ms_triup_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_tridown"><span id="ms1_tridown">&#x25BC; &#x25BD; &#x25BE; &#x25BF;</span>
+                                            <ul>
+                                                <li><span id="ms_tridown_L">L</span></li>
+                                                <li><span id="ms_tridown_M">M</span></li>
+                                                <li><span id="ms_tridown_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_triright"><span id="ms1_triright">&#9655; &#11208; &#9657; &#9656;</span>
+                                            <ul>
+                                                <li><span id="ms_triright_L">L</span></li>
+                                                <li><span id="ms_triright_M">M</span></li>
+                                                <li><span id="ms_triright_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_trileft"><span id="ms1_trileft">&#9665; &#11207; &#9667; &#9666;</span>
+                                            <ul>
+                                                <li><span id="ms_trileft_L">L</span></li>
+                                                <li><span id="ms_trileft_M">M</span></li>
+                                                <li><span id="ms_trileft_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_diamond"><span id="ms1_diamond">&#x2B25; &#x2B26; &#x25C6; &#x25C7;</span>
+                                            <ul>
+                                                <li><span id="ms_diamond_L">L</span></li>
+                                                <li><span id="ms_diamond_M">M</span></li>
+                                                <li><span id="ms_diamond_SS">XS</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_ox"><span id="ms1_ox">○△□×</span>
+                                            <ul>
+                                                <li><span id="ms_ox_B">Black</span></li>
+                                                <li><span id="ms_ox_E">Green</span></li>
+                                                <li><span id="ms_ox_G">Gray</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_cross"><span id="ms_cross">Cross</span></li>
+                                        <li id="li_line"><span id="ms_line">Lines</span></li>
+                                        <li id="li_frameline"><span id="ms_frameline">Cage Lines</span></li>
+                                        <li id="li_bars"><span id="ms1_bars">Bars &#x25AE; &#x25AF;</span>
+                                            <ul id="ul_bars">
+                                                <li><span id="ms_bars_B">Black</span></li>
+                                                <li><span id="ms_bars_G">Gray</span></li>
+                                                <li><span id="ms_bars_W">White</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_tri"><span id="ms_tri">&#x25E2; &#x25E3; &#x25E4; &#x25E5;</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="ms2">Number</span>
+                                    <ul id="mode_symbolul2">
+                                        <li><span id="ms3_math">Math</span>
+                                            <ul>
+                                                <li><span id="ms_math">Black</span></li>
+                                                <li><span id="ms_math_G">Green</span></li>
+                                            </ul>
+                                        </li>
+                                        <li><span id="ms_inequality">&#xFF1C; &#xFF1E; ^ v </span></li>
+                                        <li id=msli_degital><span id="ms1_degital">&brvbar;-&brvbar; &brvbar; '-&brvbar;</span>
+                                            <ul id="ul_degital">
+                                                <li><span id="ms_degital_B">Black</span></li>
+                                                <li><span id="ms_degital_E">Green</span></li>
+                                                <li><span id="ms_degital_G">Gray</span></li>
+                                            </ul>
+                                        </li>
+                                        <li><span id="ms_degital_f">Digital Frame</span></li>
+                                        <li><span id="ms_dice">⚀ ⚂ ⚅</span></li>
+                                        <li><span id="ms_pills">Pills</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="ms3">Arrow</span>
+                                    <ul id="mode_symbolul3">
+                                        <li id="li_arrow_B"><span id="ms3_arrow_B">Fat</span>
+                                            <ul>
+                                                <li><span id="ms_arrow_B_B">Black</span></li>
+                                                <li><span id="ms_arrow_B_G">Grey</span></li>
+                                                <li><span id="ms_arrow_B_W">White</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_arrow_N"><span id="ms3_arrow_N">Thin</span>
+                                            <ul>
+                                                <li><span id="ms_arrow_N_B">Black</span></li>
+                                                <li><span id="ms_arrow_N_G">Grey</span></li>
+                                                <li><span id="ms_arrow_N_W">White</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_arrow_tri"><span id="ms3_arrow_tri">Triangular</span>
+                                            <ul>
+                                                <li><span id="ms_arrow_tri_B">Black</span></li>
+                                                <li><span id="ms_arrow_tri_G">Grey</span></li>
+                                                <li><span id="ms_arrow_tri_W">White</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_arrow_fouredge"><span id="ms3_arrow_fouredge">Four edge</span>
+                                            <ul>
+                                                <li><span id="ms_arrow_fouredge_B">Black</span></li>
+                                                <li><span id="ms_arrow_fouredge_G">Grey</span></li>
+                                                <li><span id="ms_arrow_fouredge_E">Green</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_arrow_GP"><span id="ms3_arrow_GP">GP</span>
+                                            <ul>
+                                                <li><span id="ms_arrow_GP">Normal</span></li>
+                                                <li><span id="ms_arrow_GP_C">With circle</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_arrow_Short"><span id="ms_arrow_Short">Short and fat</span></li>
+                                        <li id="li_arrow_S"><span id="ms_arrow_S">Small</span></li>
+                                        <li id="li_arrow_cross"><span id="ms_arrow_cross">Cross</span></li>
+                                        <li id="li_arrow_eight"><span id="ms_arrow_eight">8-way</span></li>
+                                        <li id="li_arrow_fourtip"><span id="ms_arrow_fourtip">Arrow tips</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="ms4">Special 1</span>
+                                    <ul id="mode_symbolul4">
+                                        <li id="li_battleship"><span id="ms4_battleship">Battleship</span>
+                                            <ul>
+                                                <li><span id="ms_battleship_B">Black</span></li>
+                                                <li><span id="ms_battleship_G">Grey</span></li>
+                                                <li><span id="ms_battleship_W">White</span></li>
+                                                <li><span id="ms_battleship_B+">Curvy Black</span></li>
+                                                <li><span id="ms_battleship_G+">Curvy Grey</span></li>
+                                                <li><span id="ms_battleship_W+">Curvy White</span></li>
+                                            </ul>
+                                        </li>
+                                        <li id="li_kakuro"><span id="ms_kakuro">Kakuro</span></li>
+                                        <li id="li_tents"><span id="ms_tents">&#127794; &#9650; &#8779; &#128031;</span></li>
+                                        <li id="li_star"><span id="ms_star">&#10022; &#9734; &#9733;</span></li>
+                                        <li id="li_compass"><span id="ms_compass">Compass</span></li>
+                                        <li id="li_sudokuetc"><span id="ms_sudokuetc">Sudoku</span></li>
+                                        <li id="li_sudokumore"><span id="ms_sudokumore">ArrowSums</span></li>
+                                        <li id="li_polyomino"><span id="ms_polyomino">Polyomino</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="ms5">Special 2</span>
+                                    <ul id="mode_symbolul5">
+                                        <li><span id="ms_angleloop">Angle Loop</span></li>
+                                        <li><span id="ms_firefly">Firefly</span></li>
+                                        <li><span id="ms_sun_moon">☼ 🌙 💡 💣</span></li>
+                                        <li><span id="ms_pencils">Pencils</span></li>
+                                        <li><span id="ms_slovak">Slovak Sums</span></li>
+                                        <li><span id="ms_arc">Arc</span></li>
+                                        <li><span id="ms_darts">Darts</span></li>
+                                        <li><span id="ms_spans">Spans</span></li>
+                                        <li><span id="ms_neighbors">Neighbors</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </span>
+                        <span id="mode_special" style="display:none;">
+                            <input type="radio" name="mode_special" value="thermo" id="sub_specialthermo" checked="checked">
+                            <label for="sub_specialthermo" class="label" id="sub_specialthermo_lb">Thermo</label>
+                            <input type="radio" name="mode_special" value="nobulbthermo" id="sub_specialnobulbthermo">
+                            <label for="sub_specialnobulbthermo" class="label" id="sub_specialnobulbthermo_lb">No Bulb Thermo</label>
+                            <input type="radio" name="mode_special" value="arrows" id="sub_specialarrows">
+                            <label for="sub_specialarrows" class="label" id="sub_specialarrows_lb">Sudoku Arrow</label>
+                            <input type="radio" name="mode_special" value="direction" id="sub_specialdirection">
+                            <label for="sub_specialdirection" class="label" id="sub_specialdirection_lb">Arrow</label>
+                            <input type="radio" name="mode_special" value="squareframe" id="sub_specialsquareframe">
+                            <label for="sub_specialsquareframe" class="label" id="sub_specialsquareframe_lb">Rectangle frame</label>
+                            <input type="radio" name="mode_special" value="polygon" id="sub_specialpolygon">
+                            <label for="sub_specialpolygon" class="label" id="sub_specialpolygon_lb">Polygon</label>
+                        </span>
+                        <span id="mode_cage" style="display:none;">
+                            <input type="radio" name="mode_cage" value="1" id="sub_cage1" checked="checked">
+                            <label for="sub_cage1" class="label" id="sub_cage1_lb">Killer</label>
+                            <input type="radio" name="mode_cage" value="2" id="sub_cage2">
+                            <label for="sub_cage2" class="label" id="sub_cage2_lb">Free</label>
+                        </span>
+                        <span id="mode_move" style="display:none;">
+                            <input type="radio" name="mode_move" value="1" id="sub_move1" checked="checked">
+                            <label for="sub_move1" class="label" id="sub_move1_lb">All</label>
+                            <input type="radio" name="mode_move" value="2" id="sub_move2">
+                            <label for="sub_move2" class="label" id="sub_move2_lb">Numbers</label>
+                            <input type="radio" name="mode_move" value="3" id="sub_move3">
+                            <label for="sub_move3" class="label" id="sub_move3_lb">Shapes</label>
+                        </span>
+                        <span id="mode_combi" style="display:none;">
+                            <ul class="nav">
+                                <li><span id="subc1">Paint</span>
+                                    <ul>
+                                        <li><span id="combisub_blpo">Black / dot</span></li>
+                                        <li><span id="combisub_blwh">Yin-Yang</span></li>
+                                        <li id="combili_shaka"><span id="combisub_shaka">Shakashaka</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="subc2">Loop</span>
+                                    <ul>
+                                        <li id="li_linex"><span id="combisub_linex">Line or x</span></li>
+                                        <li id="li_lineox"><span id="combisub_lineox">Line or OX</span></li>
+                                        <li id="li_edgex"><span id="combisub_edgex">Edge x</span></li>
+                                        <li id="li_edgexoi"><span id="combisub_edgexoi">Edge IO</span></li>
+                                        <li id="li_yajilin"><span id="combisub_yajilin">Yajilin</span></li>
+                                        <li id="li_hashi"><span id="combisub_hashi">Hashi</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="subc3">Area / Field</span>
+                                    <ul>
+                                        <li><span id="combisub_edgesub">Edge/Aux line</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="subc4">Object</span>
+                                    <ul>
+                                        <li id="combili_battleship"><span id="combisub_battleship">Battleship</span></li>
+                                        <li><span id="combisub_star">Star Battle</span></li>
+                                        <li><span id="combisub_tents">Tent</span></li>
+                                        <li><span id="combisub_magnets">Magnets</span></li>
+                                        <li id="combili_mines"><span id="combisub_mines">Minesweeper</span></li>
+                                        <li id="combili_akari"><span id="combisub_akari">Akari</span></li>
+                                        <li id="combili_arrowS"><span id="combisub_arrowS">Arrows</span></li>
+                                        <li id="combili_doublemines"><span id="combisub_doublemines">DoubleMines</span></li>
+                                    </ul>
+                                </li>
+                                <li><span id="subc5">Number logic</span>
+                                    <ul>
+                                        <li><span id="combisub_numfl">Number flick</span></li>
+                                        <li><span id="combisub_alfl">Alphabet flick</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </span>
+                        <span id="mode_sudoku" style="display:none;">
+                            <input type="radio" name="mode_sudoku" value="1" id="sub_sudoku1" checked="checked">
+                            <label for="sub_sudoku1" class="label" id="sub_sudoku1_lb">Normal</label>
+                            <input type="radio" name="mode_sudoku" value="2" id="sub_sudoku2">
+                            <label for="sub_sudoku2" class="label" id="sub_sudoku2_lb">Corner</label>
+                            <input type="radio" name="mode_sudoku" value="3" id="sub_sudoku3">
+                            <label for="sub_sudoku3" class="label" id="sub_sudoku3_lb">Centre</label>
+                        </span>
+                    </div>
+                    <div id="stylemode_button">
+                        <span>
+                            <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
+                        </span>
+                        <span id="style_surface" style="display:'inline-block';">
+                            <!-- Adding superscript was affecting the color selection as it did not had id, so defined new id and followed same structure as parent. Its important to have only two characters at the end after _ because of the way, window_click is setup in main.js for stylemode_check-->
+                            <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
+                            <label for="st_surface1" class="labelL" id="st_surface1_lb">DG<sup id="st_surface1_sp">1</sup></label>
+                            <input type="radio" name="style_surface" value="8" id="st_surface8">
+                            <label for="st_surface8" class="labelL" id="st_surface8_lb">GR<sup id="st_surface8_sp">2</sup></label>
+                            <input type="radio" name="style_surface" value="3" id="st_surface3">
+                            <label for="st_surface3" class="labelL" id="st_surface3_lb">LG<sup id="st_surface3_sp">3</sup></label>
+                            <input type="radio" name="style_surface" value="4" id="st_surface4">
+                            <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
+                            <input type="radio" name="style_surface" value="2" id="st_surface2">
+                            <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
+                            <input type="radio" name="style_surface" value="5" id="st_surface5">
+                            <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
+                            <input type="radio" name="style_surface" value="6" id="st_surface6">
+                            <label for="st_surface6" class="labelL" id="st_surface6_lb">RE<sup id="st_surface6_sp">7</sup></label>
+                            <input type="radio" name="style_surface" value="7" id="st_surface7">
+                            <label for="st_surface7" class="labelL" id="st_surface7_lb">YE<sup id="st_surface7_sp">8</sup></label>
+                            <input type="radio" name="style_surface" value="9" id="st_surface9">
+                            <label for="st_surface9" class="labelL" id="st_surface9_lb">PI<sup id="st_surface9_sp">9</sup></label>
+                            <input type="radio" name="style_surface" value="10" id="st_surface10">
+                            <label for="st_surface10" class="labelL" id="st_surface10_lb">OR<sup id="st_surface10_sp">0</sup></label>
+                            <input type="radio" name="style_surface" value="11" id="st_surface11">
+                            <label for="st_surface11" class="labelL" id="st_surface11_lb">PU<sup id="st_surface11_sp">11</sup></label>
+                            <input type="radio" name="style_surface" value="12" id="st_surface12">
+                            <label for="st_surface12" class="labelL" id="st_surface12_lb">BR<sup id="st_surface12_sp">12</sup></label>
+                        </span>
+                        <span id="style_line" style="display:none;">
+                            <input type="radio" name="style_line" value="3" id="st_line3" checked="checked">
+                            <label for="st_line3" class="labelL" id="st_line3_lb">G</label>
+                            <input type="radio" name="style_line" value="2" id="st_line2">
+                            <label for="st_line2" class="labelL" id="st_line2_lb">B</label>
+                            <input type="radio" name="style_line" value="5" id="st_line5">
+                            <label for="st_line5" class="labelL" id="st_line5_lb">G</label>
+                            <input type="radio" name="style_line" value="8" id="st_line8">
+                            <label for="st_line8" class="labelL" id="st_line8_lb">R</label>
+                            <input type="radio" name="style_line" value="9" id="st_line9">
+                            <label for="st_line9" class="labelL" id="st_line9_lb">B</label>
+                            <input type="radio" name="style_line" value="80" id="st_line80">
+                            <label for="st_line80" class="labelL" id="st_line80_lb">Thin</label>
+                            <input type="radio" name="style_line" value="12" id="st_line12">
+                            <label for="st_line12" class="labelL" id="st_line12_lb">Dotted</label>
+                            <input type="radio" name="style_line" value="13" id="st_line13">
+                            <label for="st_line13" class="labelL" id="st_line13_lb">Fat dots</label>
+                            <input type="radio" name="style_line" value="40" id="st_line40">
+                            <label for="st_line40" class="labelL" id="st_line40_lb">Short</label>
+                            <input type="radio" name="style_line" value="30" id="st_line30">
+                            <label for="st_line30" class="labelL" id="st_line30_lb">Double</label>
+                        </span>
+                        <span id="style_lineE" style="display:none;">
+                            <input type="radio" name="style_lineE" value="3" id="st_lineE3" checked="checked">
+                            <label for="st_lineE3" class="labelL" id="st_lineE3_lb">G</label>
+                            <input type="radio" name="style_lineE" value="2" id="st_lineE2">
+                            <label for="st_lineE2" class="labelL" id="st_lineE2_lb">B</label>
+                            <input type="radio" name="style_lineE" value="5" id="st_lineE5">
+                            <label for="st_lineE5" class="labelL" id="st_lineE5_lb">G</label>
+                            <input type="radio" name="style_lineE" value="8" id="st_lineE8">
+                            <label for="st_lineE8" class="labelL" id="st_lineE8_lb">R</label>
+                            <input type="radio" name="style_lineE" value="9" id="st_lineE9">
+                            <label for="st_lineE9" class="labelL" id="st_lineE9_lb">B</label>
+                            <input type="radio" name="style_lineE" value="21" id="st_lineE21">
+                            <label for="st_lineE21" class="labelL" id="st_lineE21_lb">Thicker</label>
+                            <input type="radio" name="style_lineE" value="80" id="st_lineE80">
+                            <label for="st_lineE80" class="labelL" id="st_lineE80_lb">Thin</label>
+                            <input type="radio" name="style_lineE" value="12" id="st_lineE12">
+                            <label for="st_lineE12" class="labelL" id="st_lineE12_lb">Dotted</label>
+                            <input type="radio" name="style_lineE" value="13" id="st_lineE13">
+                            <label for="st_lineE13" class="labelL" id="st_lineE13_lb">Fat dots</label>
+                            <input type="radio" name="style_lineE" value="30" id="st_lineE30">
+                            <label for="st_lineE30" class="labelL" id="st_lineE30_lb">Double</label>
+                        </span>
+                        <span id="style_wall" style="display:none;">
+                            <input type="radio" name="style_wall" value="3" id="st_wall3" checked="checked">
+                            <label for="st_wall3" class="labelL" id="st_wall3_lb">G</label>
+                            <input type="radio" name="style_wall" value="2" id="st_wall2">
+                            <label for="st_wall2" class="labelL" id="st_wall2_lb">B</label>
+                            <input type="radio" name="style_wall" value="5" id="st_wall5">
+                            <label for="st_wall5" class="labelL" id="st_wall5_lb">G</label>
+                            <input type="radio" name="style_wall" value="8" id="st_wall8">
+                            <label for="st_wall8" class="labelL" id="st_wall8_lb">R</label>
+                            <input type="radio" name="style_wall" value="9" id="st_wall9">
+                            <label for="st_wall9" class="labelL" id="st_wall9_lb">B</label>
+                            <input type="radio" name="style_wall" value="1" id="st_wall1">
+                            <label for="st_wall1" class="labelL" id="st_wall1_lb">Thin</label>
+                            <input type="radio" name="style_wall" value="12" id="st_wall12">
+                            <label for="st_wall12" class="labelL" id="st_wall12_lb">Dotted</label>
+                            <input type="radio" name="style_wall" value="17" id="st_wall17">
+                            <label for="st_wall17" class="labelL" id="st_wall17_lb">Fat dots</label>
+                            <input type="radio" name="style_wall" value="14" id="st_wall14">
+                            <label for="st_wall14" class="labelL" id="st_wall14_lb">Grey dot</label>
+                        </span>
+                        <span id="style_number" style="display:none;">
+                            <input type="radio" name="style_number" value="1" id="st_number1" checked="checked">
+                            <label for="st_number1" class="labelL" id="st_number1_lb">B</label>
+                            <input type="radio" name="style_number" value="2" id="st_number2">
+                            <label for="st_number2" class="labelL" id="st_number2_lb">G</label>
+                            <input type="radio" name="style_number" value="8" id="st_number8">
+                            <label for="st_number8" class="labelL" id="st_number8_lb">B</label>
+                            <input type="radio" name="style_number" value="3" id="st_number3">
+                            <label for="st_number3" class="labelL" id="st_number3_lb">G</label>
+                            <input type="radio" name="style_number" value="9" id="st_number9">
+                            <label for="st_number9" class="labelL" id="st_number9_lb">B</label>
+                            <input type="radio" name="style_number" value="10" id="st_number10">
+                            <label for="st_number10" class="labelL" id="st_number10_lb">R</label>
+                            <input type="radio" name="style_number" value="4" id="st_number4">
+                            <label for="st_number4" class="labelL" id="st_number4_lb">W</label>
+                            <input type="radio" name="style_number" value="0" id="st_number0">
+                            <label for="st_number0" class="labelL" id="st_number0_lb"></label>
+                            <input type="radio" name="style_number" value="6" id="st_number6">
+                            <label for="st_number6" class="labelL" id="st_number6_lb"></label>
+                            <input type="radio" name="style_number" value="7" id="st_number7">
+                            <label for="st_number7" class="labelL" id="st_number7_lb"></label>
+                            <input type="radio" name="style_number" value="11" id="st_number11">
+                            <label for="st_number11" class="labelL" id="st_number11_lb"></label>
+                            <input type="radio" name="style_number" value="5" id="st_number5">
+                            <label for="st_number5" class="labelL" id="st_number5_lb">White BG</label>
+                        </span>
+                        <span id="style_symbol" style="display:none;">
+                            <input type="radio" name="style_symbol" value="1" id="st_symbol1">
+                            <label for="st_symbol1" class="label" id="st_symbol1_lb">Behind Lines</label>
+                            <input type="radio" name="style_symbol" value="2" id="st_symbol2" checked="checked">
+                            <label for="st_symbol2" class="label" id="st_symbol2_lb">In front of lines</label>
+                            <span class="symbolmode_display">
+                                <span id="panel_buttons0" class="label">Selection:</span>
+                                <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
+                            </span>
+                        </span>
+                        <span id="style_combi" style="display:none;">
+                            <span class="combimode_display">
+                                <span id="panel_buttonc0" class="label">Selection:</span>
+                                <b><span id="combimode_content" class="combimode_content">blpo</span></b>
+                            </span>
+                        </span>
+                        <span id="style_cage" style="display:none;">
+                            <input type="radio" name="style_cage" value="10" id="st_cage10" checked="checked">
+                            <label for="st_cage10" class="label" id="st_cage10_lb">Dotted line</label>
+                            <input type="radio" name="style_cage" value="7" id="st_cage7">
+                            <label for="st_cage7" class="label" id="st_cage7_lb">Grey line</label>
+                            <input type="radio" name="style_cage" value="15" id="st_cage15">
+                            <label for="st_cage15" class="label" id="st_cage15_lb">Grey dots</label>
+                            <input type="radio" name="style_cage" value="16" id="st_cage16">
+                            <label for="st_cage16" class="label" id="st_cage16_lb">Solid line</label>
+                        </span>
+                        <span id="style_sudoku" style="display:none;">
+                            <input type="radio" name="style_sudoku" value="1" id="st_sudoku1" checked="checked">
+                            <label for="st_sudoku1" class="label" id="st_sudoku1_lb">B</label>
+                            <input type="radio" name="style_sudoku" value="2" id="st_sudoku2">
+                            <label for="st_sudoku2" class="label" id="st_sudoku2_lb">G</label>
+                            <input type="radio" name="style_sudoku" value="8" id="st_sudoku8">
+                            <label for="st_sudoku8" class="label" id="st_sudoku8_lb">B</label>
+                            <input type="radio" name="style_sudoku" value="3" id="st_sudoku3">
+                            <label for="st_sudoku3" class="label" id="st_sudoku3_lb">G</label>
+                            <input type="radio" name="style_sudoku" value="9" id="st_sudoku9">
+                            <label for="st_sudoku9" class="label" id="st_sudoku9_lb">B</label>
+                            <input type="radio" name="style_sudoku" value="10" id="st_sudoku10">
+                            <label for="st_sudoku10" class="label" id="st_sudoku10_lb">R</label>
+                        </span>
+                        <span id="style_special" style="display:none;">
+                            <input type="text" name="style_special" id="colorpicker_special" />
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="buttons">
-            <div id="edit_button" class="mode_button">
-                <label class="label_mode" id="edit_txt">Edit:</label>
-                <input type="radio" name="mode_qa" id="pu_q" value=1 checked="checked" />
-                <label for="pu_q" class="label" id="pu_q_label">Problem</label>
-                <input type="radio" name="mode_qa" id="pu_a" value=2 />
-                <label for="pu_a" class="label" id="pu_a_label">Solution</label>
-                <label class="label_mode" id="constraints">Constraints (Beta):</label>
-                <select name="constraints_settings" id="constraints_settings_opt"> </select>
-                <span id="visibility_button0" class="label_mode tooltip">Visibility:</span>
-                <span id="visibility_button" class="label">ON</span>
+        <div id="puzzle-container">
+            <div id="puzzleinfo">
+                <div><label id="puzzletitle" class="info"></label></div>
+                <div><label id="puzzleauthor" class="info"></label></div>
+                <div><input type="button" id="puzzlerules" value="Show rules" style="display:none;" /></div>
+                <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
+                <div><label id="solution_check" class="info" /></label>
+                </div>
             </div>
-            <div id="mode_button" class="mode_button">
-                <label class="label_mode" id="mode_txt">Mode:</label>
-                <input type="radio" name="mode" id="mo_surface" checked="checked" />
-                <label for="mo_surface" class="label" id="mo_surface_lb">Surface</label>
-                <input type="radio" name="mode" id="mo_line" />
-                <label for="mo_line" class="label" id="mo_line_lb">Line</label>
-                <input type="radio" name="mode" id="mo_lineE" />
-                <label for="mo_lineE" class="label" id="mo_lineE_lb">Edge</label>
-                <input type="radio" name="mode" id="mo_wall" />
-                <label for="mo_wall" class="label" id="mo_wall_lb">Wall</label>
-                <input type="radio" name="mode" id="mo_cage" />
-                <label for="mo_cage" class="label" id="mo_cage_lb">Cage</label>
-                <input type="radio" name="mode" id="mo_board" />
-                <label for="mo_board" class="label" id="mo_board_lb">Box</label>
-                <input type="radio" name="mode" id="mo_move" />
-                <label for="mo_move" class="label" id="mo_move_lb">Move</label>
-                <br id="mode_break">
-                <label class="label_mode" id="mode_txt_space">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-                <input type="radio" name="mode" id="mo_number" />
-                <label for="mo_number" class="label" id="mo_number_lb">Number</label>
-                <input type="radio" name="mode" id="mo_sudoku" />
-                <label for="mo_sudoku" class="label" id="mo_sudoku_lb">Sudoku</label>
-                <input type="radio" name="mode" id="mo_symbol" />
-                <label for="mo_symbol" class="label" id="mo_symbol_lb">Shape</label>
-                <input type="radio" name="mode" id="mo_special" />
-                <label for="mo_special" class="label" id="mo_special_lb">Special</label>
-                <input type="radio" name="mode" id="mo_combi" />
-                <label for="mo_combi" class="label" id="mo_combi_lb">Composite</label>
-                <span class="tab" id="tab_selection">
-                    <select id="mode_choices" multiple size="0"></select>
-                </span>
+            <div id="dvique" class="dvique">
+                <canvas id="pause_canvas" style="display:none;"></canvas>
             </div>
-            <hr size=1 noshade>
-            <div id="submode_button" class="submode_button">
-                <span id="div_sub">
-                    <label class="label_mode tooltip" id="sub_txt">Sub:&nbsp&nbsp<span id="sub_text" class="tooltiptext">Choose one sub-mode wherever applicable</span></label>
-                </span>
-                <span id="mode_line" style="display:none;">
-                    <input type="radio" name="mode_line" value="1" id="sub_line1" checked="checked">
-                    <label for="sub_line1" class="label" id="sub_line1_lb">Normal</label>
-                    <input type="radio" name="mode_line" value="2" id="sub_line2">
-                    <label for="sub_line2" class="label" id="sub_line2_lb">Diagonal</label>
-                    <input type="radio" name="mode_line" value="3" id="sub_line3">
-                    <label for="sub_line3" class="label" id="sub_line3_lb">Free</label>
-                    <input type="radio" name="mode_line" value="5" id="sub_line5">
-                    <label for="sub_line5" class="label" id="sub_line5_lb">Middle</label>
-                    <input type="radio" name="mode_line" value="4" id="sub_line4">
-                    <label for="sub_line4" class="label" id="sub_line4_lb">Helper (x)</label>
-                </span>
-                <span id="mode_lineE" style="display:none;">
-                    <input type="radio" name="mode_lineE" value="1" id="sub_lineE1" checked="checked">
-                    <label for="sub_lineE1" class="label" id="sub_lineE1_lb">Normal</label>
-                    <input type="radio" name="mode_lineE" value="2" id="sub_lineE2">
-                    <label for="sub_lineE2" class="label" id="sub_lineE2_lb">Diagonal</label>
-                    <input type="radio" name="mode_lineE" value="3" id="sub_lineE3">
-                    <label for="sub_lineE3" class="label" id="sub_lineE3_lb">Free</label>
-                    <input type="radio" name="mode_lineE" value="4" id="sub_lineE4">
-                    <label for="sub_lineE4" class="label" id="sub_lineE4_lb">Helper (x)</label>
-                    <input type="radio" name="mode_lineE" value="5" id="sub_lineE5">
-                    <label for="sub_lineE5" class="label" id="sub_lineE5_lb">Erase</label>
-                </span>
-                <span id="mode_number" style="display:none;">
-                    <input type="radio" name="mode_number" value="1" id="sub_number1" checked="checked">
-                    <label for="sub_number1" class="labelL" id="sub_number1_lb">Normal</label>
-                    <input type="radio" name="mode_number" value="10" id="sub_number10">
-                    <label for="sub_number10" class="labelL" id="sub_number10_lb">L</label>
-                    <input type="radio" name="mode_number" value="6" id="sub_number6">
-                    <label for="sub_number6" class="labelL" id="sub_number6_lb">M</label>
-                    <input type="radio" name="mode_number" value="5" id="sub_number5">
-                    <label for="sub_number5" class="labelL" id="sub_number5_lb">S</label>
-                    <input type="radio" name="mode_number" value="7" id="sub_number7">
-                    <label for="sub_number7" class="labelL" id="sub_number7_lb">Candidates</label>
-                    <input type="radio" name="mode_number" value="3" id="sub_number3">
-                    <label for="sub_number3" class="labelL" id="sub_number3_lb"></label>
-                    <input type="radio" name="mode_number" value="9" id="sub_number9">
-                    <label for="sub_number9" class="labelL" id="sub_number9_lb"></label>
-                    <input type="radio" name="mode_number" value="4" id="sub_number4">
-                    <label for="sub_number4" class="labelL" id="sub_number4_lb">Tapa</label>
-                    <input type="radio" name="mode_number" value="2" id="sub_number2">
-                    <label for="sub_number2" class="labelL" id="sub_number2_lb">Arrow</label>
-                    <input type="radio" name="mode_number" value="8" id="sub_number8">
-                    <label for="sub_number8" class="labelL" id="sub_number8_lb">Long</label>
-                    <input type="radio" name="mode_number" value="11" id="sub_number11">
-                    <label for="sub_number11" class="labelL" id="sub_number11_lb">Killer</label>
-                </span>
-                <span id="mode_symbol" class="mode_symbol" style="display:none;">
-                    <ul class="nav">
-                        <li><span id="ms1">Shape</span>
-                            <ul id="mode_symbolul1">
-                                <li id="li_circle"><span id="ms1_circle">&#x26AB; &#x26AA; &#x25CF; &#x25CB;</span>
-                                    <ul>
-                                        <li id="li_circle_L"><span id="ms_circle_L">L</span></li>
-                                        <li id="li_circle_M"><span id="ms_circle_M">M</span></li>
-                                        <li id="li_circle_S"><span id="ms_circle_S">S</span></li>
-                                        <li id="li_circle_SS"><span id="ms_circle_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_square"><span id="ms1_square">&#x2B1B; &#x2B1C; &#x25FC; &#x25FB;</span>
-                                    <ul>
-                                        <li id="li_square_LL"><span id="ms_square_LL">XL</span></li>
-                                        <li id="li_square_L"><span id="ms_square_L">L</span></li>
-                                        <li id="li_square_M"><span id="ms_square_M">M</span></li>
-                                        <li id="li_square_S"><span id="ms_square_S">S</span></li>
-                                        <li id="li_square_SS"><span id="ms_square_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_triup"><span id="ms1_triup">&#x25B2; &#x25B3; &#x25B4; &#x25B5;</span>
-                                    <ul>
-                                        <li><span id="ms_triup_L">L</span></li>
-                                        <li><span id="ms_triup_M">M</span></li>
-                                        <li><span id="ms_triup_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_tridown"><span id="ms1_tridown">&#x25BC; &#x25BD; &#x25BE; &#x25BF;</span>
-                                    <ul>
-                                        <li><span id="ms_tridown_L">L</span></li>
-                                        <li><span id="ms_tridown_M">M</span></li>
-                                        <li><span id="ms_tridown_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_triright"><span id="ms1_triright">&#9655; &#11208; &#9657; &#9656;</span>
-                                    <ul>
-                                        <li><span id="ms_triright_L">L</span></li>
-                                        <li><span id="ms_triright_M">M</span></li>
-                                        <li><span id="ms_triright_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_trileft"><span id="ms1_trileft">&#9665; &#11207; &#9667; &#9666;</span>
-                                    <ul>
-                                        <li><span id="ms_trileft_L">L</span></li>
-                                        <li><span id="ms_trileft_M">M</span></li>
-                                        <li><span id="ms_trileft_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_diamond"><span id="ms1_diamond">&#x2B25; &#x2B26; &#x25C6; &#x25C7;</span>
-                                    <ul>
-                                        <li><span id="ms_diamond_L">L</span></li>
-                                        <li><span id="ms_diamond_M">M</span></li>
-                                        <li><span id="ms_diamond_SS">XS</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_ox"><span id="ms1_ox">○△□×</span>
-                                    <ul>
-                                        <li><span id="ms_ox_B">Black</span></li>
-                                        <li><span id="ms_ox_E">Green</span></li>
-                                        <li><span id="ms_ox_G">Gray</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_cross"><span id="ms_cross">Cross</span></li>
-                                <li id="li_line"><span id="ms_line">Lines</span></li>
-                                <li id="li_frameline"><span id="ms_frameline">Cage Lines</span></li>
-                                <li id="li_bars"><span id="ms1_bars">Bars &#x25AE; &#x25AF;</span>
-                                    <ul id="ul_bars">
-                                        <li><span id="ms_bars_B">Black</span></li>
-                                        <li><span id="ms_bars_G">Gray</span></li>
-                                        <li><span id="ms_bars_W">White</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_tri"><span id="ms_tri">&#x25E2; &#x25E3; &#x25E4; &#x25E5;</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="ms2">Number</span>
-                            <ul id="mode_symbolul2">
-                                <li><span id="ms3_math">Math</span>
-                                    <ul>
-                                        <li><span id="ms_math">Black</span></li>
-                                        <li><span id="ms_math_G">Green</span></li>
-                                    </ul>
-                                </li>
-                                <li><span id="ms_inequality">&#xFF1C; &#xFF1E; ^ v </span></li>
-                                <li id=msli_degital><span id="ms1_degital">&brvbar;-&brvbar; &brvbar; '-&brvbar;</span>
-                                    <ul id="ul_degital">
-                                        <li><span id="ms_degital_B">Black</span></li>
-                                        <li><span id="ms_degital_E">Green</span></li>
-                                        <li><span id="ms_degital_G">Gray</span></li>
-                                    </ul>
-                                </li>
-                                <li><span id="ms_degital_f">Digital Frame</span></li>
-                                <li><span id="ms_dice">⚀ ⚂ ⚅</span></li>
-                                <li><span id="ms_pills">Pills</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="ms3">Arrow</span>
-                            <ul id="mode_symbolul3">
-                                <li id="li_arrow_B"><span id="ms3_arrow_B">Fat</span>
-                                    <ul>
-                                        <li><span id="ms_arrow_B_B">Black</span></li>
-                                        <li><span id="ms_arrow_B_G">Grey</span></li>
-                                        <li><span id="ms_arrow_B_W">White</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_arrow_N"><span id="ms3_arrow_N">Thin</span>
-                                    <ul>
-                                        <li><span id="ms_arrow_N_B">Black</span></li>
-                                        <li><span id="ms_arrow_N_G">Grey</span></li>
-                                        <li><span id="ms_arrow_N_W">White</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_arrow_tri"><span id="ms3_arrow_tri">Triangular</span>
-                                    <ul>
-                                        <li><span id="ms_arrow_tri_B">Black</span></li>
-                                        <li><span id="ms_arrow_tri_G">Grey</span></li>
-                                        <li><span id="ms_arrow_tri_W">White</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_arrow_fouredge"><span id="ms3_arrow_fouredge">Four edge</span>
-                                    <ul>
-                                        <li><span id="ms_arrow_fouredge_B">Black</span></li>
-                                        <li><span id="ms_arrow_fouredge_G">Grey</span></li>
-                                        <li><span id="ms_arrow_fouredge_E">Green</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_arrow_GP"><span id="ms3_arrow_GP">GP</span>
-                                    <ul>
-                                        <li><span id="ms_arrow_GP">Normal</span></li>
-                                        <li><span id="ms_arrow_GP_C">With circle</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_arrow_Short"><span id="ms_arrow_Short">Short and fat</span></li>
-                                <li id="li_arrow_S"><span id="ms_arrow_S">Small</span></li>
-                                <li id="li_arrow_cross"><span id="ms_arrow_cross">Cross</span></li>
-                                <li id="li_arrow_eight"><span id="ms_arrow_eight">8-way</span></li>
-                                <li id="li_arrow_fourtip"><span id="ms_arrow_fourtip">Arrow tips</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="ms4">Special 1</span>
-                            <ul id="mode_symbolul4">
-                                <li id="li_battleship"><span id="ms4_battleship">Battleship</span>
-                                    <ul>
-                                        <li><span id="ms_battleship_B">Black</span></li>
-                                        <li><span id="ms_battleship_G">Grey</span></li>
-                                        <li><span id="ms_battleship_W">White</span></li>
-                                        <li><span id="ms_battleship_B+">Curvy Black</span></li>
-                                        <li><span id="ms_battleship_G+">Curvy Grey</span></li>
-                                        <li><span id="ms_battleship_W+">Curvy White</span></li>
-                                    </ul>
-                                </li>
-                                <li id="li_kakuro"><span id="ms_kakuro">Kakuro</span></li>
-                                <li id="li_tents"><span id="ms_tents">&#127794; &#9650; &#8779; &#128031;</span></li>
-                                <li id="li_star"><span id="ms_star">&#10022; &#9734; &#9733;</span></li>
-                                <li id="li_compass"><span id="ms_compass">Compass</span></li>
-                                <li id="li_sudokuetc"><span id="ms_sudokuetc">Sudoku</span></li>
-                                <li id="li_sudokumore"><span id="ms_sudokumore">ArrowSums</span></li>
-                                <li id="li_polyomino"><span id="ms_polyomino">Polyomino</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="ms5">Special 2</span>
-                            <ul id="mode_symbolul5">
-                                <li><span id="ms_angleloop">Angle Loop</span></li>
-                                <li><span id="ms_firefly">Firefly</span></li>
-                                <li><span id="ms_sun_moon">☼ 🌙 💡 💣</span></li>
-                                <li><span id="ms_pencils">Pencils</span></li>
-                                <li><span id="ms_slovak">Slovak Sums</span></li>
-                                <li><span id="ms_arc">Arc</span></li>
-                                <li><span id="ms_darts">Darts</span></li>
-                                <li><span id="ms_spans">Spans</span></li>
-                                <li><span id="ms_neighbors">Neighbors</span></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </span>
-                <span id="mode_special" style="display:none;">
-                    <input type="radio" name="mode_special" value="thermo" id="sub_specialthermo" checked="checked">
-                    <label for="sub_specialthermo" class="label" id="sub_specialthermo_lb">Thermo</label>
-                    <input type="radio" name="mode_special" value="nobulbthermo" id="sub_specialnobulbthermo">
-                    <label for="sub_specialnobulbthermo" class="label" id="sub_specialnobulbthermo_lb">No Bulb Thermo</label>
-                    <input type="radio" name="mode_special" value="arrows" id="sub_specialarrows">
-                    <label for="sub_specialarrows" class="label" id="sub_specialarrows_lb">Sudoku Arrow</label>
-                    <input type="radio" name="mode_special" value="direction" id="sub_specialdirection">
-                    <label for="sub_specialdirection" class="label" id="sub_specialdirection_lb">Arrow</label>
-                    <input type="radio" name="mode_special" value="squareframe" id="sub_specialsquareframe">
-                    <label for="sub_specialsquareframe" class="label" id="sub_specialsquareframe_lb">Rectangle frame</label>
-                    <input type="radio" name="mode_special" value="polygon" id="sub_specialpolygon">
-                    <label for="sub_specialpolygon" class="label" id="sub_specialpolygon_lb">Polygon</label>
-                </span>
-                <span id="mode_cage" style="display:none;">
-                    <input type="radio" name="mode_cage" value="1" id="sub_cage1" checked="checked">
-                    <label for="sub_cage1" class="label" id="sub_cage1_lb">Killer</label>
-                    <input type="radio" name="mode_cage" value="2" id="sub_cage2">
-                    <label for="sub_cage2" class="label" id="sub_cage2_lb">Free</label>
-                </span>
-                <span id="mode_move" style="display:none;">
-                    <input type="radio" name="mode_move" value="1" id="sub_move1" checked="checked">
-                    <label for="sub_move1" class="label" id="sub_move1_lb">All</label>
-                    <input type="radio" name="mode_move" value="2" id="sub_move2">
-                    <label for="sub_move2" class="label" id="sub_move2_lb">Numbers</label>
-                    <input type="radio" name="mode_move" value="3" id="sub_move3">
-                    <label for="sub_move3" class="label" id="sub_move3_lb">Shapes</label>
-                </span>
-                <span id="mode_combi" style="display:none;">
-                    <ul class="nav">
-                        <li><span id="subc1">Paint</span>
-                            <ul>
-                                <li><span id="combisub_blpo">Black / dot</span></li>
-                                <li><span id="combisub_blwh">Yin-Yang</span></li>
-                                <li id="combili_shaka"><span id="combisub_shaka">Shakashaka</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="subc2">Loop</span>
-                            <ul>
-                                <li id="li_linex"><span id="combisub_linex">Line or x</span></li>
-                                <li id="li_lineox"><span id="combisub_lineox">Line or OX</span></li>
-                                <li id="li_edgex"><span id="combisub_edgex">Edge x</span></li>
-                                <li id="li_edgexoi"><span id="combisub_edgexoi">Edge IO</span></li>
-                                <li id="li_yajilin"><span id="combisub_yajilin">Yajilin</span></li>
-                                <li id="li_hashi"><span id="combisub_hashi">Hashi</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="subc3">Area / Field</span>
-                            <ul>
-                                <li><span id="combisub_edgesub">Edge/Aux line</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="subc4">Object</span>
-                            <ul>
-                                <li id="combili_battleship"><span id="combisub_battleship">Battleship</span></li>
-                                <li><span id="combisub_star">Star Battle</span></li>
-                                <li><span id="combisub_tents">Tent</span></li>
-                                <li><span id="combisub_magnets">Magnets</span></li>
-                                <li id="combili_mines"><span id="combisub_mines">Minesweeper</span></li>
-                                <li id="combili_akari"><span id="combisub_akari">Akari</span></li>
-                                <li id="combili_arrowS"><span id="combisub_arrowS">Arrows</span></li>
-                                <li id="combili_doublemines"><span id="combisub_doublemines">DoubleMines</span></li>
-                            </ul>
-                        </li>
-                        <li><span id="subc5">Number logic</span>
-                            <ul>
-                                <li><span id="combisub_numfl">Number flick</span></li>
-                                <li><span id="combisub_alfl">Alphabet flick</span></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </span>
-                <span id="mode_sudoku" style="display:none;">
-                    <input type="radio" name="mode_sudoku" value="1" id="sub_sudoku1" checked="checked">
-                    <label for="sub_sudoku1" class="label" id="sub_sudoku1_lb">Normal</label>
-                    <input type="radio" name="mode_sudoku" value="2" id="sub_sudoku2">
-                    <label for="sub_sudoku2" class="label" id="sub_sudoku2_lb">Corner</label>
-                    <input type="radio" name="mode_sudoku" value="3" id="sub_sudoku3">
-                    <label for="sub_sudoku3" class="label" id="sub_sudoku3_lb">Centre</label>
-                </span>
+            <div id="contestinfo">
+                <div><label id="answer_key" class="info" /></label>
+                </div>
             </div>
-            <div id="stylemode_button" class="stylemode_button">
-                <span>
-                    <label class="label_mode tooltip" id="style_txt">Style:<span id="style_text" class="tooltiptext">Choose one style</span></label>
+            <div id="bottom_button">
+                <span class="tooltip">
+                    <input type="button" id="tb_undo" value="Undo" class="button" />
+                    <span id="undo_text" class="tooltiptext">CTRL + z</span>
                 </span>
-                <span id="style_surface" style="display:'inline-block';">
-                    <!-- Adding superscript was affecting the color selection as it did not had id, so defined new id and followed same structure as parent. Its important to have only two characters at the end after _ because of the way, window_click is setup in main.js for stylemode_check-->
-                    <input type="radio" name="style_surface" value="1" id="st_surface1" checked="checked">
-                    <label for="st_surface1" class="labelL" id="st_surface1_lb">DG<sup id="st_surface1_sp">1</sup></label>
-                    <input type="radio" name="style_surface" value="8" id="st_surface8">
-                    <label for="st_surface8" class="labelL" id="st_surface8_lb">GR<sup id="st_surface8_sp">2</sup></label>
-                    <input type="radio" name="style_surface" value="3" id="st_surface3">
-                    <label for="st_surface3" class="labelL" id="st_surface3_lb">LG<sup id="st_surface3_sp">3</sup></label>
-                    <input type="radio" name="style_surface" value="4" id="st_surface4">
-                    <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
-                    <input type="radio" name="style_surface" value="2" id="st_surface2">
-                    <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
-                    <input type="radio" name="style_surface" value="5" id="st_surface5">
-                    <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
-                    <input type="radio" name="style_surface" value="6" id="st_surface6">
-                    <label for="st_surface6" class="labelL" id="st_surface6_lb">RE<sup id="st_surface6_sp">7</sup></label>
-                    <input type="radio" name="style_surface" value="7" id="st_surface7">
-                    <label for="st_surface7" class="labelL" id="st_surface7_lb">YE<sup id="st_surface7_sp">8</sup></label>
-                    <input type="radio" name="style_surface" value="9" id="st_surface9">
-                    <label for="st_surface9" class="labelL" id="st_surface9_lb">PI<sup id="st_surface9_sp">9</sup></label>
-                    <input type="radio" name="style_surface" value="10" id="st_surface10">
-                    <label for="st_surface10" class="labelL" id="st_surface10_lb">OR<sup id="st_surface10_sp">0</sup></label>
-                    <input type="radio" name="style_surface" value="11" id="st_surface11">
-                    <label for="st_surface11" class="labelL" id="st_surface11_lb">PU<sup id="st_surface11_sp">11</sup></label>
-                    <input type="radio" name="style_surface" value="12" id="st_surface12">
-                    <label for="st_surface12" class="labelL" id="st_surface12_lb">BR<sup id="st_surface12_sp">12</sup></label>
+                <span class="tooltip">
+                    <input type="button" id="tb_redo" value="Redo" class="button" />
+                    <span id="redo_text" class="tooltiptext">CTRL + y</span>
                 </span>
-                <span id="style_line" style="display:none;">
-                    <input type="radio" name="style_line" value="3" id="st_line3" checked="checked">
-                    <label for="st_line3" class="labelL" id="st_line3_lb">G</label>
-                    <input type="radio" name="style_line" value="2" id="st_line2">
-                    <label for="st_line2" class="labelL" id="st_line2_lb">B</label>
-                    <input type="radio" name="style_line" value="5" id="st_line5">
-                    <label for="st_line5" class="labelL" id="st_line5_lb">G</label>
-                    <input type="radio" name="style_line" value="8" id="st_line8">
-                    <label for="st_line8" class="labelL" id="st_line8_lb">R</label>
-                    <input type="radio" name="style_line" value="9" id="st_line9">
-                    <label for="st_line9" class="labelL" id="st_line9_lb">B</label>
-                    <input type="radio" name="style_line" value="80" id="st_line80">
-                    <label for="st_line80" class="labelL" id="st_line80_lb">Thin</label>
-                    <input type="radio" name="style_line" value="12" id="st_line12">
-                    <label for="st_line12" class="labelL" id="st_line12_lb">Dotted</label>
-                    <input type="radio" name="style_line" value="13" id="st_line13">
-                    <label for="st_line13" class="labelL" id="st_line13_lb">Fat dots</label>
-                    <input type="radio" name="style_line" value="40" id="st_line40">
-                    <label for="st_line40" class="labelL" id="st_line40_lb">Short</label>
-                    <input type="radio" name="style_line" value="30" id="st_line30">
-                    <label for="st_line30" class="labelL" id="st_line30_lb">Double</label>
+                <span class="tooltip">
+                    <input type="button" id="tb_reset" value="Erase selected mode" class="button" />
+                    <span id="eraseselect_text" class="tooltiptext">Erase elements that belongs to the selected mode</span>
                 </span>
-                <span id="style_lineE" style="display:none;">
-                    <input type="radio" name="style_lineE" value="3" id="st_lineE3" checked="checked">
-                    <label for="st_lineE3" class="labelL" id="st_lineE3_lb">G</label>
-                    <input type="radio" name="style_lineE" value="2" id="st_lineE2">
-                    <label for="st_lineE2" class="labelL" id="st_lineE2_lb">B</label>
-                    <input type="radio" name="style_lineE" value="5" id="st_lineE5">
-                    <label for="st_lineE5" class="labelL" id="st_lineE5_lb">G</label>
-                    <input type="radio" name="style_lineE" value="8" id="st_lineE8">
-                    <label for="st_lineE8" class="labelL" id="st_lineE8_lb">R</label>
-                    <input type="radio" name="style_lineE" value="9" id="st_lineE9">
-                    <label for="st_lineE9" class="labelL" id="st_lineE9_lb">B</label>
-                    <input type="radio" name="style_lineE" value="21" id="st_lineE21">
-                    <label for="st_lineE21" class="labelL" id="st_lineE21_lb">Thicker</label>
-                    <input type="radio" name="style_lineE" value="80" id="st_lineE80">
-                    <label for="st_lineE80" class="labelL" id="st_lineE80_lb">Thin</label>
-                    <input type="radio" name="style_lineE" value="12" id="st_lineE12">
-                    <label for="st_lineE12" class="labelL" id="st_lineE12_lb">Dotted</label>
-                    <input type="radio" name="style_lineE" value="13" id="st_lineE13">
-                    <label for="st_lineE13" class="labelL" id="st_lineE13_lb">Fat dots</label>
-                    <input type="radio" name="style_lineE" value="30" id="st_lineE30">
-                    <label for="st_lineE30" class="labelL" id="st_lineE30_lb">Double</label>
+                <span class="tooltip">
+                    <input type="button" id="tb_delete" value="Delete all" class="button" />
+                    <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
                 </span>
-                <span id="style_wall" style="display:none;">
-                    <input type="radio" name="style_wall" value="3" id="st_wall3" checked="checked">
-                    <label for="st_wall3" class="labelL" id="st_wall3_lb">G</label>
-                    <input type="radio" name="style_wall" value="2" id="st_wall2">
-                    <label for="st_wall2" class="labelL" id="st_wall2_lb">B</label>
-                    <input type="radio" name="style_wall" value="5" id="st_wall5">
-                    <label for="st_wall5" class="labelL" id="st_wall5_lb">G</label>
-                    <input type="radio" name="style_wall" value="8" id="st_wall8">
-                    <label for="st_wall8" class="labelL" id="st_wall8_lb">R</label>
-                    <input type="radio" name="style_wall" value="9" id="st_wall9">
-                    <label for="st_wall9" class="labelL" id="st_wall9_lb">B</label>
-                    <input type="radio" name="style_wall" value="1" id="st_wall1">
-                    <label for="st_wall1" class="labelL" id="st_wall1_lb">Thin</label>
-                    <input type="radio" name="style_wall" value="12" id="st_wall12">
-                    <label for="st_wall12" class="labelL" id="st_wall12_lb">Dotted</label>
-                    <input type="radio" name="style_wall" value="17" id="st_wall17">
-                    <label for="st_wall17" class="labelL" id="st_wall17_lb">Fat dots</label>
-                    <input type="radio" name="style_wall" value="14" id="st_wall14">
-                    <label for="st_wall14" class="labelL" id="st_wall14_lb">Grey dot</label>
-                </span>
-                <span id="style_number" style="display:none;">
-                    <input type="radio" name="style_number" value="1" id="st_number1" checked="checked">
-                    <label for="st_number1" class="labelL" id="st_number1_lb">B</label>
-                    <input type="radio" name="style_number" value="2" id="st_number2">
-                    <label for="st_number2" class="labelL" id="st_number2_lb">G</label>
-                    <input type="radio" name="style_number" value="8" id="st_number8">
-                    <label for="st_number8" class="labelL" id="st_number8_lb">B</label>
-                    <input type="radio" name="style_number" value="3" id="st_number3">
-                    <label for="st_number3" class="labelL" id="st_number3_lb">G</label>
-                    <input type="radio" name="style_number" value="9" id="st_number9">
-                    <label for="st_number9" class="labelL" id="st_number9_lb">B</label>
-                    <input type="radio" name="style_number" value="10" id="st_number10">
-                    <label for="st_number10" class="labelL" id="st_number10_lb">R</label>
-                    <input type="radio" name="style_number" value="4" id="st_number4">
-                    <label for="st_number4" class="labelL" id="st_number4_lb">W</label>
-                    <input type="radio" name="style_number" value="0" id="st_number0">
-                    <label for="st_number0" class="labelL" id="st_number0_lb"></label>
-                    <input type="radio" name="style_number" value="6" id="st_number6">
-                    <label for="st_number6" class="labelL" id="st_number6_lb"></label>
-                    <input type="radio" name="style_number" value="7" id="st_number7">
-                    <label for="st_number7" class="labelL" id="st_number7_lb"></label>
-                    <input type="radio" name="style_number" value="11" id="st_number11">
-                    <label for="st_number11" class="labelL" id="st_number11_lb"></label>
-                    <input type="radio" name="style_number" value="5" id="st_number5">
-                    <label for="st_number5" class="labelL" id="st_number5_lb">White BG</label>
-                </span>
-                <span id="style_symbol" style="display:none;">
-                    <input type="radio" name="style_symbol" value="1" id="st_symbol1">
-                    <label for="st_symbol1" class="label" id="st_symbol1_lb">Behind Lines</label>
-                    <input type="radio" name="style_symbol" value="2" id="st_symbol2" checked="checked">
-                    <label for="st_symbol2" class="label" id="st_symbol2_lb">In front of lines</label>
-                    <span class="symbolmode_display">
-                        <span id="panel_buttons0" class="label">Selection:</span>
-                        <b><span id="symmode_content" class="symmode_content">circle_L</span></b>
-                    </span>
-                </span>
-                <span id="style_combi" style="display:none;">
-                    <span class="combimode_display">
-                        <span id="panel_buttonc0" class="label">Selection:</span>
-                        <b><span id="combimode_content" class="combimode_content">blpo</span></b>
-                    </span>
-                </span>
-                <span id="style_cage" style="display:none;">
-                    <input type="radio" name="style_cage" value="10" id="st_cage10" checked="checked">
-                    <label for="st_cage10" class="label" id="st_cage10_lb">Dotted line</label>
-                    <input type="radio" name="style_cage" value="7" id="st_cage7">
-                    <label for="st_cage7" class="label" id="st_cage7_lb">Grey line</label>
-                    <input type="radio" name="style_cage" value="15" id="st_cage15">
-                    <label for="st_cage15" class="label" id="st_cage15_lb">Grey dots</label>
-                    <input type="radio" name="style_cage" value="16" id="st_cage16">
-                    <label for="st_cage16" class="label" id="st_cage16_lb">Solid line</label>
-                </span>
-                <span id="style_sudoku" style="display:none;">
-                    <input type="radio" name="style_sudoku" value="1" id="st_sudoku1" checked="checked">
-                    <label for="st_sudoku1" class="label" id="st_sudoku1_lb">B</label>
-                    <input type="radio" name="style_sudoku" value="2" id="st_sudoku2">
-                    <label for="st_sudoku2" class="label" id="st_sudoku2_lb">G</label>
-                    <input type="radio" name="style_sudoku" value="8" id="st_sudoku8">
-                    <label for="st_sudoku8" class="label" id="st_sudoku8_lb">B</label>
-                    <input type="radio" name="style_sudoku" value="3" id="st_sudoku3">
-                    <label for="st_sudoku3" class="label" id="st_sudoku3_lb">G</label>
-                    <input type="radio" name="style_sudoku" value="9" id="st_sudoku9">
-                    <label for="st_sudoku9" class="label" id="st_sudoku9_lb">B</label>
-                    <input type="radio" name="style_sudoku" value="10" id="st_sudoku10">
-                    <label for="st_sudoku10" class="label" id="st_sudoku10_lb">R</label>
-                </span>
-                <span id="style_special" style="display:none;">
-                    <input type="text" name="style_special" id="colorpicker_special" />
-                </span>
+                <br><br>
             </div>
         </div>
     </div>
-    <div id="puzzleinfo">
-        <div><label id="puzzletitle" class="info"></label></div>
-        <div><label id="puzzleauthor" class="info"></label></div>
-        <div><input type="button" id="puzzlerules" value="Show rules" style="display:none;" /></div>
-        <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
-        <div><label id="solution_check" class="info" /></label>
-        </div>
-    </div>
-    <div id="dvique" class="dvique">
-        <canvas id="pause_canvas" style="display:none;"></canvas>
-    </div>
-    <div id="contestinfo">
-        <div><label id="answer_key" class="info" /></label>
-        </div>
-    </div>
-    <div id="bottom_button">
-        <span class="tooltip">
-            <input type="button" id="tb_undo" value="Undo" class="button" />
-            <span id="undo_text" class="tooltiptext">CTRL + z</span>
-        </span>
-        <span class="tooltip">
-            <input type="button" id="tb_redo" value="Redo" class="button" />
-            <span id="redo_text" class="tooltiptext">CTRL + y</span>
-        </span>
-        <span class="tooltip">
-            <input type="button" id="tb_reset" value="Erase selected mode" class="button" />
-            <span id="eraseselect_text" class="tooltiptext">Erase elements that belongs to the selected mode</span>
-        </span>
-        <span class="tooltip">
-            <input type="button" id="tb_delete" value="Delete all" class="button" />
-            <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
-        </span>
-        <br><br>
-        <div id="stop_watch">
-            <h1 id="timer" class="values">00:00:00:00:0</h1>
-            <div>
-                <button id="sw_start" class="button sw">Start</button>
-                <button id="sw_pause" class="button sw">Pause</button>
-                <button id="sw_stop" class="button sw">Stop</button>
-                <button id="sw_reset" class="button sw">Reset</button>
-                <button id="sw_hide" class="button sw">Hide</button>
-            </div>
+    <div id="stop_watch">
+        <h1 id="timer" class="values">00:00:00:00:0</h1>
+        <div>
+            <button id="sw_start" class="button sw">Start</button>
+            <button id="sw_pause" class="button sw">Pause</button>
+            <button id="sw_stop" class="button sw">Stop</button>
+            <button id="sw_reset" class="button sw">Reset</button>
+            <button id="sw_hide" class="button sw">Hide</button>
         </div>
     </div>
     <div id="float-key">
