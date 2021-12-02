@@ -1721,7 +1721,11 @@ function load(urlParam, type = 'url') {
     if (paramArray.q) {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
-
+        if (pu.puzzle_info.iframe) {
+            document.getElementById("puzzletitle").style.display = 'none';
+            document.getElementById("puzzleauthor").style.display = 'none';
+            document.getElementById("penpa_version").remove();
+        } else {
         // Update title
         document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
         const contestinfo = document.getElementById("contestinfo"),
@@ -1741,6 +1745,7 @@ function load(urlParam, type = 'url') {
             submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
         contestinfo.innerHTML = inputContents + submitContents;
         contestinfo.style.display = "block";
+        }
     }
 
     // Check cookies
