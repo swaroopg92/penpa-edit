@@ -48,6 +48,10 @@ function create() {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
+    let responsive_design = getCookie("responsive_design");
+    if (responsive_design !== null && responsive_design == 2) {
+        setResponsiveness(true, true);
+    }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
         // to address old versions where the stored value was ON and OFF
@@ -1600,6 +1604,10 @@ function load(urlParam, type = 'url') {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
+    let responsive_design = getCookie("responsive_design");
+    if (responsive_design !== null && responsive_design == 2) {
+        setResponsiveness(true, true);
+    }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
         // to address old versions where the stored value was ON and OFF
@@ -1948,11 +1956,19 @@ function load(urlParam, type = 'url') {
 
     // Theme
     if (typeof rtext[12] !== 'undefined') {
-        if (JSON.parse(rtext[12]) === 'dark') {
+        let view_setting_string = JSON.parse(rtext[12]);
+        let view_settings = view_setting_string.split("|");
+        
+        if (view_settings[0] === 'dark') {
             document.getElementById("theme_mode_opt").value = 2;
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
+        }
+
+        if (view_settings[1] && view_settings[1] == 'responsive') {
+            document.getElementById("responsive_settings_opt").value = 2;
+            document.getElementById("app-container").classList.add("responsive");
         }
     }
 

@@ -1894,6 +1894,11 @@ onload = function() {
         }
     }
 
+    // Toggle responsiveness
+    document.getElementById("responsive_settings_opt").onchange = function () {
+        setResponsiveness(document.getElementById("responsive_settings_opt").value === '2');
+    }
+
     // Custom Color Setting
     document.getElementById("custom_color_opt").onchange = function() {
         if (document.getElementById("custom_color_opt").value === "1") {
@@ -1921,18 +1926,21 @@ onload = function() {
             deleteCookie("sudoku_normal_size");
             deleteCookie("starbattle_dots");
             deleteCookie("mousemiddle_button");
+            deleteCookie("responsive_mode");
             // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
-            setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
-            setCookie("reload_button", document.getElementById('reload_button').value, 2147483647);
-            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
-            setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
-            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
-            setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
-            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
-            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
-            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, 2147483647);
-            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, 2147483647);
+            let expirationDate = 2147483647;
+            setCookie("color_theme", document.getElementById("theme_mode_opt").value, expirationDate);
+            setCookie("reload_button", document.getElementById('reload_button').value, expirationDate);
+            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), expirationDate);
+            setCookie("gridtype", document.getElementById("gridtype").value, expirationDate);
+            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, expirationDate);
+            setCookie("displaysize", document.getElementById("nb_size3").value, expirationDate);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, expirationDate);
+            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, expirationDate);
+            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, expirationDate);
+            setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expirationDate);
+            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expirationDate);
         }
     }
 
@@ -2051,5 +2059,13 @@ onload = function() {
     function startTimer() {
         pu.hide_pause_layer();
         sw_timer.start({ precision: 'secondTenths' });
+    }
+
+    function setResponsiveness(enabled, updateUI) {
+        let verb = enabled ? 'add' : 'remove';
+        document.getElementById("app-container").classList[verb]("responsive");
+        if (updateUI) {
+            document.getElementById("responsive_settings_opt").value = enabled ? 2 : 1;
+        }
     }
 };
