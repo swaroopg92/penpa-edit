@@ -1302,3 +1302,24 @@ sup {
         display: none;
     }
 }
+
+@media (max-width: 600px) {
+    body {
+        margin: 0 auto;
+    }
+
+    header,
+    #stop_watch {
+        position: relative;
+        display: block;
+        height: auto;
+    }
+
+    #title,
+    #timer,
+    #version-info,
+    #stop_watch div {
+        display: block;
+        text-align: center;
+    }
+}
