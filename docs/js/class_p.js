@@ -11605,7 +11605,7 @@ class Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['customcolor']) {
-            document.getElementById(i).style.display = displaytype;
+            document.getElementById(i).style.display = (displaytype === 'inline-block') ? 'table-row' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms']) {
             document.getElementById("ms_" + i).style.display = displaytype;

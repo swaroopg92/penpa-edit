@@ -50,7 +50,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['custom_color_lb', 'custom_color_opt'],
+        'customcolor': ['custom_color_lb'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['msli_degital',
@@ -107,7 +107,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['custom_color_lb', 'custom_color_opt'],
+        'customcolor': ['custom_color_lb'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['msli_degital',
@@ -164,7 +164,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['custom_color_lb', 'custom_color_opt'],
+        'customcolor': ['custom_color_lb'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['msli_degital',

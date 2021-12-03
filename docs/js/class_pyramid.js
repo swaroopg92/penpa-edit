@@ -79,7 +79,7 @@ class Puzzle_pyramid extends Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
             document.getElementById("ms_" + i).style.display = "inline-block";
