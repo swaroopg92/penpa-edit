@@ -4,6 +4,7 @@
     --popup_width_larger: calc(var(--popup_width) + 30px);
 
     --shadow_low: 0 2px 2px rgba(0, 0, 0, 0.5);
+    --shadow_mid: 0 5px 5px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -736,7 +737,7 @@ body textarea {
     height: 40px;
     text-align: center;
     padding-top: 0px;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0 0;
     cursor: move;
 }
 
@@ -747,7 +748,8 @@ body textarea {
     margin-top: 0px;
     text-align: center;
     padding-top: 0px;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 5px;
+    box-shadow: var(--shadow_mid);
 }
 
 #float-key-menu {
@@ -756,7 +758,7 @@ body textarea {
     height: 20px;
     text-align: center;
     padding-top: 40px;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0 0;
 }
 
 #float-key-header-lb {
@@ -863,37 +865,41 @@ body textarea {
     position: relative;
     min-width: var(--popup_width);
     width: var(--popup_width_larger);
-    max-height: 650px;
-    margin: 15px auto 0;
+    max-height: calc(100% - 80px);
+    margin: 15px auto;
     padding: 40px 10px 10px;
     border-radius: 20px;
     overflow: auto;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-image-content {
     position: relative;
     width: var(--popup_width);
     padding: 40px 10px 10px;
-    height: 230px;
+    max-height: calc(100% - 80px);
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-save-content {
     position: relative;
     width: var(--popup_width);
     padding: 40px 10px 10px;
-    height: 600px;
+    max-height: calc(100% - 80px);
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-save2-content {
     width: 450px;
-    max-height: none;
+    max-height: calc(100% - 80px);
     margin: 15px auto;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-input-content,
@@ -902,10 +908,11 @@ body textarea {
     position: relative;
     width: var(--popup_width);
     padding: 40px 10px 10px;
-    height: 280px;
+    max-height: calc(100% - 80px);
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-image-body,
