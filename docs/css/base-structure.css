@@ -192,7 +192,7 @@ hr.newgridhrline {
     box-shadow: var(--shadow_low);
     border: 0;
     font-size: 0;
-    max-width: 600px;
+    width: 600px;
     margin: 5px auto;
     padding: 10px;
 }
