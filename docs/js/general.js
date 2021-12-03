@@ -50,12 +50,19 @@ function create() {
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
-        document.getElementById('reload_button').textContent = reload_cookie;
+        // to address old versions where the stored value was ON and OFF
+        if (reload_cookie === "ON") {
+            reload_cookie = "1"
+        } else if (reload_cookie === "OFF") {
+            reload_cookie = "2"
+        }
+        document.getElementById('reload_button').value = reload_cookie;
     }
     let tab_cookie = getCookie("tab_settings");
     if (tab_cookie !== null) {
         this.usertab_choices = tab_cookie;
         if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+            document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
         }
     }
@@ -74,6 +81,12 @@ function create() {
     let mousemiddle_button_cookie = getCookie("mousemiddle_button");
     if (mousemiddle_button_cookie !== null) {
         document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
+
+    let timer_bar_cookie = getCookie("timerbar_status");
+    if (timer_bar_cookie !== null) {
+        document.getElementById("timer_bar_opt").value = timer_bar_cookie;
+        showhide_timer();
     }
 
     // Populate Constraints list
@@ -860,8 +873,7 @@ function display_rules() {
 }
 
 function panel_onoff() {
-    if (document.getElementById('panel_button').textContent === "OFF") {
-        document.getElementById('panel_button').textContent = "ON";
+    if (document.getElementById('panel_button').value === "1") {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
             document.getElementById('float-key-body').style.left = window.panel_leftlast;
@@ -879,17 +891,13 @@ function panel_onoff() {
         let mode_loc = penpa_modes["square"]["mode"].indexOf(pu.mode[pu.mode.qa].edit_mode);
         document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
     } else {
-        document.getElementById('panel_button').textContent = "OFF";
         document.getElementById('float-key').style.display = "none";
     }
     pu.redraw();
 }
 
 function edge_onoff() {
-    if (document.getElementById('edge_button').textContent === "OFF") {
-        document.getElementById('edge_button').textContent = "ON";
-    } else {
-        document.getElementById('edge_button').textContent = "OFF";
+    if (document.getElementById('edge_button').value === "2") {
         pu.cursol = pu.centerlist[0];
     }
     pu.type = pu.type_set();
@@ -905,18 +913,9 @@ function solutionvisible_onoff() {
     pu.redraw();
 }
 
-function reloadcheck_onoff() {
-    if (document.getElementById('reload_button').textContent === "ON") {
-        document.getElementById('reload_button').textContent = "OFF";
-    } else {
-        document.getElementById('reload_button').textContent = "ON";
-    }
-}
-
 function advancecontrol_onoff(loadtype = "new") {
-    if (document.getElementById('advance_button').textContent === "ON") {
+    if (document.getElementById('advance_button').value === "2") {
         // Lite Version OFF, Display all the modes
-        document.getElementById('advance_button').textContent = "OFF";
         // Display the mode break line again
         document.getElementById("mode_break").style.display = "inline";
         document.getElementById("mode_txt_space").style.display = "inline";
@@ -924,7 +923,6 @@ function advancecontrol_onoff(loadtype = "new") {
     } else {
         // Lite Version ON, so turn off extra modes
         if (loadtype === "url") {
-            document.getElementById('advance_button').textContent = "ON";
             // Remove the mode break line again
             document.getElementById("mode_break").style.display = "none";
             document.getElementById("mode_txt_space").style.display = "none";
@@ -932,15 +930,15 @@ function advancecontrol_onoff(loadtype = "new") {
         } else {
             let user_choices = getValues('mode_choices');
             if (user_choices.length !== 0) {
-                document.getElementById('advance_button').textContent = "ON";
                 // Remove the mode break line again
                 document.getElementById("mode_break").style.display = "none";
                 document.getElementById("mode_txt_space").style.display = "none";
                 advancecontrol_off(loadtype);
             } else {
+                document.getElementById('advance_button').value = "2";
                 Swal.fire({
                     title: 'Advance/Basic Mode',
-                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Click "PenpaLite" button to turn "ON"</h2>',
+                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Set "PenpaLite" setting to turn "ON"</h2>',
                     icon: 'info'
                 })
             }
@@ -1041,6 +1039,14 @@ function advancecontrol_on() {
         if (pu.undoredo_disable) {
             set_contestmode();
         }
+    }
+}
+
+function showhide_timer() {
+    if (document.getElementById("timer_bar_opt").value === "2") {
+        document.getElementById("stop_watch").style.display = "none";
+    } else if (document.getElementById("timer_bar_opt").value === "1") {
+        document.getElementById("stop_watch").style.display = "";
     }
 }
 
@@ -1531,72 +1537,12 @@ function import_url() {
     }
 }
 
-function load_about() {
-    Swal.fire({
-        title: 'About',
-        html: '<h2 class="info">Welcome to Penpa+ Tool. <br> Its a web application to create and solve Sudokus and Puzzles.<br> Its a Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. <br> You can download your puzzle as images and save the puzzle link in the form of URL to share with others.</h2>',
-        icon: 'info'
-    })
-}
-
-function load_youtube() {
-    window.open('https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos', '_blank');
-}
-
-function load_list() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md', '_blank');
-}
-
-function load_readme() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/README.md', '_blank');
-}
-
-function load_wiki() {
-    window.open('https://github.com/swaroopg92/penpa-edit/wiki/Steps-to-Create-Sudoku-or-Puzzle-in-Penpa', '_blank');
-}
-
-function load_rules() {
-    Swal.fire({
-        title: 'Sudoku/Puzzle Rulesets',
-        html: '<h2 class="info"><a href="https://tinyurl.com/puzzlerules" target="_blank"> Eric Fox - Dictioniary of Rulesets </a> <br> <a href="https://wpcunofficial.miraheze.org/wiki/Category:Puzzle_Types" target="_blank"> Ryotaro Chiba - WPC Puzzles </a> <br> <a href="http://logicmastersindia.com/lmitests/dl.asp?attachmentid=669&v1" target="_blank"> LMI - WSC IB (Sudoku Variants)</a> <br> <a href="http://www.puzzleduel.club/archive/types" target="_blank">Puzzle Duel Club</a> <br> <a href="http://www.logic-puzzles.ropeko.ch/php/db/search.php" target="_blank">Ropeko - Logic Puzzles List</a></h2> <br> <h3>Note :- This is by no means an exhaustive list. Penpa+ is not affiliated with these sources. Please contact respective owners for any further information. If you have any additional interesting sources which I can add here, send me an email to penpaplus@gmail.com</h3>',
-        icon: 'info'
-    })
-}
-
-function load_faqs() {
-    window.open('https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit', '_blank');
-}
-
-function load_discord() {
-    window.open('https://discord.gg/BbN89j5', '_blank');
-}
-
 function load_feedback() {
     Swal.fire({
         title: 'Feedback',
         html: '<h2 class="info"><p>Any suggestions or improvements, send an email to <b> penpaplus@gmail.com </b> <br> or <br> Create an issue on github <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a> <br> or <br> Join discussions in #penpa-plus channel in the Discord Server <a href="https://discord.gg/BbN89j5" target="_blank">here</a>.</p></h2>',
         icon: 'info'
     })
-}
-
-function load_contribute() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CONTRIBUTING.md', '_blank');
-}
-
-function load_todolist() {
-    window.open('https://github.com/swaroopg92/penpa-edit/projects/1', '_blank');
-}
-
-function load_changelogs() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md', '_blank');
-}
-
-function load_credits() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md', '_blank');
-}
-
-function load_license() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
 function load(urlParam, type = 'url') {
@@ -1670,7 +1616,13 @@ function load(urlParam, type = 'url') {
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
-        document.getElementById('reload_button').textContent = reload_cookie;
+        // to address old versions where the stored value was ON and OFF
+        if (reload_cookie === "ON") {
+            reload_cookie = "1"
+        } else if (reload_cookie === "OFF") {
+            reload_cookie = "2"
+        }
+        document.getElementById('reload_button').value = reload_cookie;
     }
     let sudoku_center_cookie = getCookie("sudoku_centre_size");
     if (sudoku_center_cookie !== null) {
@@ -1696,8 +1648,11 @@ function load(urlParam, type = 'url') {
     }
 
     // Border button status
-    if (rtext_para[19] && rtext_para[19] === "ON") {
-        document.getElementById('edge_button').textContent = "ON";
+    if (rtext_para[19]) {
+        // to address old versions where the stored value was ON and OFF
+        if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
+            document.getElementById('edge_button').value = "1";
+        }
     }
 
     // multisolution status
@@ -1759,6 +1714,7 @@ function load(urlParam, type = 'url') {
         // Do this only for latest version 2.25.17 and above
         // if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
         if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
+            document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
         }
         // }
@@ -1829,11 +1785,6 @@ function load(urlParam, type = 'url') {
                     pu.solution = atext;
                 }
 
-                // Solution button
-                // document.getElementById("pu_a_label").style.display = "inline-block";
-                // document.getElementById("pu_a_label").style.marginLeft = "6px";
-                // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
                 set_solvemodetitle();
             }
 
@@ -1951,11 +1902,6 @@ function load(urlParam, type = 'url') {
                 pu.solution = atext;
             }
 
-            // Solution button
-            // document.getElementById("pu_a_label").style.display = "inline-block";
-            // document.getElementById("pu_a_label").style.marginLeft = "6px";
-            // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-            // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             set_solvemodetitle();
         }
         if (typeof rtext[7] !== 'undefined') {
@@ -2466,7 +2412,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
 function set_solvemode(type = "url") {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
-    document.getElementById("title").innerHTML = "Solver mode"
+    document.getElementById("title").innerHTML = "Solver Mode"
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
@@ -2490,7 +2436,6 @@ function set_solvemode(type = "url") {
     // custom color
     document.getElementById('colorpicker_special').style.display = 'none';
     document.getElementById('custom_color_lb').style.display = 'none';
-    document.getElementById('custom_color_opt').style.display = 'none';
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
@@ -2511,7 +2456,7 @@ function set_solvemode(type = "url") {
 
 function set_contestmode() {
     // Disable Share, Undo/Redo buttons, IO sudoku
-    document.getElementById("title").innerHTML = "Contest mode"
+    document.getElementById("title").innerHTML = "Contest Mode"
     document.getElementById("savetext").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
@@ -2526,8 +2471,8 @@ function set_contestmode() {
 }
 
 function set_solvemodetitle() {
-    document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-    document.getElementById("title").classList.add("info");
+    document.getElementById("title").innerHTML = "Solver Mode (Answer Checking Enabled)";
+    document.getElementById("header").classList.add("solving");
 }
 
 function isEmpty(obj) {
@@ -2990,7 +2935,7 @@ function decode_puzzlink(url) {
     }
 
     // Set PenpaLite
-    document.getElementById('advance_button').textContent = "ON";
+    document.getElementById('advance_button').value = "1";
     document.getElementById("mode_break").style.display = "none";
     document.getElementById("mode_txt_space").style.display = "none";
     advancecontrol_off("url");

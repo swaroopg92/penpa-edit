@@ -50,7 +50,7 @@ class Puzzle_square extends Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
             document.getElementById("ms_" + i).style.display = "inline-block";
@@ -224,7 +224,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 2, 3];
@@ -238,7 +238,7 @@ class Puzzle_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 2, 3];
@@ -1607,12 +1607,12 @@ class Puzzle_square extends Puzzle {
                 case "5": //small
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
                     set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * factor * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * factor * this.size, this.size * 0.9);
                     break;
                 case "6": //medium
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
                     set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
+                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.9);
                     break;
                 case "10": //big
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.36);

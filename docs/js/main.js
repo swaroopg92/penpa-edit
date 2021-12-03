@@ -1,3 +1,11 @@
+// Including meta allows CMD to work on Mac
+let isCtrlKeyHeld = e => e.ctrlKey || e.metaKey;
+let isCtrlKeyPressed = key => key === "Control" || key === "Meta";
+let isShiftKeyHeld = e => e.shiftKey;
+let isShiftKeyPressed = key => key === "Shift";
+let isAltKeyHeld = e => e.altKey;
+let isAltKeyPressed = key => key === "Alt";
+
 onload = function() {
 
     // Detect mobile or Ipad beforing booting
@@ -71,7 +79,6 @@ onload = function() {
                 var event = e.changedTouches[0];
                 e.preventDefault(); // When both mouse and touch start, only touch
             }
-            var ctrl_key = e.ctrlKey;
             if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
                 var obj = coord_point(event, 'flex');
             } else {
@@ -84,11 +91,11 @@ onload = function() {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
-                    pu.mouseevent(x, y, num, ctrl_key);
+                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
-                    pu.mouseevent(x, y, num, ctrl_key);
+                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
                 }
             }
         }
@@ -221,9 +228,6 @@ onload = function() {
             var keycode = e.keyCode;
             var code = e.code;
             var keylocation = e.location;
-            var shift_key = e.shiftKey;
-            var ctrl_key = e.ctrlKey;
-            var alt_key = e.altKey;
             var str_num = "1234567890";
             var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
             var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -246,7 +250,7 @@ onload = function() {
 
             // For shift shortcut in Sudoku mode, modify the numpad keys
             // keylocation 3 indicates numlock is ON and number pad is being used
-            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && key !== "Shift" && keylocation === 3 && !ctrl_key && !alt_key) {
+            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && !isShiftKeyPressed(key) && keylocation === 3 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
                 switch (keycode) {
                     case 45:
                         key = "0";
@@ -311,15 +315,15 @@ onload = function() {
             }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
-                pu.key_arrow(key, ctrl_key);
+                pu.key_arrow(key, isCtrlKeyHeld(e));
                 e.returnValue = false;
             }
 
-            if (key === "Shift") {
+            if (isShiftKeyPressed(key)) {
                 shift_counter = shift_counter + 1;
             }
 
-            if (key === "Shift" && shift_counter === 1 && !ctrl_key && !alt_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isShiftKeyPressed(key) && shift_counter === 1 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
                 if (present_submode !== 2) {
                     pu.submode_check("sub_sudoku2");
@@ -327,11 +331,11 @@ onload = function() {
                 e.returnValue = false;
             }
 
-            if (key === "Control") {
+            if (isCtrlKeyPressed(key)) {
                 ctrl_counter = ctrl_counter + 1;
             }
 
-            if (key === "Control" && ctrl_counter === 1 && !shift_key && !alt_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isCtrlKeyPressed(key) && ctrl_counter === 1 && !isShiftKeyHeld(e) && !isAltKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
                 if (present_submode !== 3) {
                     pu.submode_check("sub_sudoku3");
@@ -339,8 +343,8 @@ onload = function() {
                 e.returnValue = false;
             }
 
-            if (!ctrl_key && !alt_key) {
-                if (shift_key && key === " ") {
+            if (!isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
+                if (isShiftKeyHeld(e) && key === " ") {
                     pu.key_number(key);
                     e.returnValue = false;
                 } else if (str_num.indexOf(key) != -1 ||
@@ -349,7 +353,7 @@ onload = function() {
                     str_sym.indexOf(key) != -1 ||
                     (keycode >= 48 && keycode <= 57)) {
                     e.preventDefault();
-                    if (shift_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                    if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(String.fromCharCode(keycode));
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(key);
@@ -394,7 +398,7 @@ onload = function() {
                 } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                     // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                     // Sudoku mode, I have assigned it to Delete
-                    pu.key_space(keycode, shift_key, ctrl_key);
+                    pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
                     e.returnValue = false;
                 } else if (key === "Backspace") {
                     pu.key_backspace();
@@ -402,15 +406,15 @@ onload = function() {
                 }
             }
 
-            if (ctrl_key && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
+            if (isCtrlKeyHeld(e) && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
                 // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                 // Sudoku mode, I have assigned it to Delete
-                pu.key_space(keycode, shift_key, ctrl_key);
+                pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
                 e.returnValue = false;
             }
 
-            if (ctrl_key && !shift_key && !alt_key) {
-                if (key != "Control") {
+            if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
+                if (!isCtrlKeyPressed(key)) {
                     if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         switch (code) {
                             case "Digit0":
@@ -471,7 +475,7 @@ onload = function() {
                             break;
                         case "i": //Ctrl+i
                         case "I":
-                            if ((document.getElementById('panel_button').textContent === "ON") &&
+                            if ((document.getElementById('panel_button').value === "1") &&
                                 (typeof panel_select !== "undefined") &&
                                 (panel_select < panel_pu.cont.length) &&
                                 pu.mode[pu.mode.qa].edit_mode !== "symbol") {
@@ -533,7 +537,7 @@ onload = function() {
                 }
             }
 
-            if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 switch (key) {
                     case "z":
                         // case "Z":
@@ -592,7 +596,7 @@ onload = function() {
                 }
             }
 
-            if (!ctrl_key && pu.mode[pu.mode.qa].edit_mode === "surface") {
+            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
                 switch (key) {
                     case "z":
                     case "Z":
@@ -753,7 +757,7 @@ onload = function() {
                     if (previous_length != user_choices.length) {
                         previous_length = user_choices.length;
                         counter_index = 0; // reset the counter
-                    } else if (shift_key) { // if SHIFT is held down cycle backward
+                    } else if (isShiftKeyHeld(e)) { // if SHIFT is held down cycle backward
                         counter_index += user_choices.length - 1;
                     } else {
                         counter_index++;
@@ -801,7 +805,7 @@ onload = function() {
         } else {
             var key = e.key;
             var keylocation = e.location;
-            if (key === "Shift" && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
                 } else if (present_submode === "2") {
@@ -812,7 +816,7 @@ onload = function() {
                 shift_counter = 0;
                 shift_release_time = Date.now();
                 e.returnValue = false;
-            } else if (key === "Control" && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
                 } else if (present_submode === "2") {
@@ -994,7 +998,7 @@ onload = function() {
             pu.ondown_key = ondown_key;
         }
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
-            e.target.id != "float-canvas" && !e.ctrlKey) {
+            e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
             pu.selection = [];
             pu.redraw();
@@ -1662,25 +1666,8 @@ onload = function() {
                 mdown(e);
                 e.preventDefault();
                 break;
-                //buttons
-            case "panel_button":
-                panel_onoff();
-                e.preventDefault();
-                break;
-            case "edge_button":
-                edge_onoff();
-                e.preventDefault();
-                break;
             case "visibility_button":
                 solutionvisible_onoff();
-                e.preventDefault();
-                break;
-            case "reload_button":
-                reloadcheck_onoff();
-                e.preventDefault();
-                break;
-            case "advance_button":
-                advancecontrol_onoff();
                 e.preventDefault();
                 break;
             case "pu_q_label":
@@ -1822,7 +1809,7 @@ onload = function() {
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
             panel_pu.edit_num = n;
-            if (document.getElementById('panel_button').textContent === "ON" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
+            if (document.getElementById('panel_button').value === "1" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     pu.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -1885,7 +1872,7 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
-        if (document.getElementById('reload_button').textContent === "ON") {
+        if (document.getElementById('reload_button').value === "1") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
             // Chrome requires returnValue to be set
@@ -1934,10 +1921,11 @@ onload = function() {
             deleteCookie("sudoku_normal_size");
             deleteCookie("starbattle_dots");
             deleteCookie("mousemiddle_button");
+            deleteCookie("timerbar_status");
             // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
             setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
-            setCookie("reload_button", document.getElementById('reload_button').textContent, 2147483647);
+            setCookie("reload_button", document.getElementById('reload_button').value, 2147483647);
             setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
             setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
             setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
@@ -1945,6 +1933,7 @@ onload = function() {
             setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
             setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
             setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, 2147483647);
+            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, 2147483647);
             // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, 2147483647);
         }
     }
@@ -2031,10 +2020,30 @@ onload = function() {
 
     document.getElementById("mode_choices").onchange = function() {
         // Dynamically updating the display of modes based on tab setting changes
-        if (document.getElementById('advance_button').textContent === "ON") {
+        if (document.getElementById('advance_button').value === "1") {
             advancecontrol_on(); // First display back everything
             advancecontrol_off("new"); // apply new choices for penpa lite
         }
+    }
+
+    // Panel Setting
+    document.getElementById("panel_button").onchange = function() {
+        panel_onoff();
+    }
+
+    // Border Setting
+    document.getElementById("edge_button").onchange = function() {
+        edge_onoff();
+    }
+
+    // PenpaLite Setting
+    document.getElementById("advance_button").onchange = function() {
+        advancecontrol_onoff();
+    }
+
+    // Timer Bar Setting
+    document.getElementById("timer_bar_opt").onchange = function() {
+        showhide_timer();
     }
 
     // Timer pause and unpause

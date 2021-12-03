@@ -79,7 +79,7 @@ class Puzzle_pyramid extends Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
             document.getElementById("ms_" + i).style.display = "inline-block";
@@ -255,7 +255,7 @@ class Puzzle_pyramid extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 2, 3];
@@ -265,7 +265,7 @@ class Puzzle_pyramid extends Puzzle {
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
                     type = [4];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 2, 3];
