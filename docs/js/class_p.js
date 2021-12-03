@@ -1981,8 +1981,7 @@ class Puzzle {
 
     point_usecheck() {
         for (var i in this.point) {
-            if (this.point[i].use === -1) {
-                ;
+            if (this.point[i].use === -1) {;
             } else if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
                 this.point[i].use = 0;
             } else {
@@ -2047,12 +2046,12 @@ class Puzzle {
             var canvastext = resizedCanvas.toDataURL("image/jpeg");
         } else if (document.getElementById("nb_type3").checked) {
             var svg_canvas = new C2S(this.canvasx, this.canvasy);
-            svg_canvas.text = function (text, x, y, width = 1e4) {
+            svg_canvas.text = function(text, x, y, width = 1e4) {
                 var fontsize = parseFloat(this.font.split("px")[0]);
                 this.strokeText(text, x, y + 0.28 * fontsize, width);
                 this.fillText(text, x, y + 0.28 * fontsize, width);
             };
-            svg_canvas.arrow = function (startX, startY, endX, endY, controlPoints) {
+            svg_canvas.arrow = function(startX, startY, endX, endY, controlPoints) {
                 var dx = endX - startX;
                 var dy = endY - startY;
                 var len = Math.sqrt(dx * dx + dy * dy);
@@ -3393,12 +3392,12 @@ class Puzzle {
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].line) {
                         if ((this["pu_q"].line[i] &&
-                            (this["pu_q"].line[i] === 2 || // Black color
-                                this["pu_q"].line[i] === 5 || // Grey Color
-                                this["pu_q"].line[i] === 80 || // Thin
-                                this["pu_q"].line[i] === 12 || // Dotted
-                                this["pu_q"].line[i] === 13 // Fat dots
-                            ))) {
+                                (this["pu_q"].line[i] === 2 || // Black color
+                                    this["pu_q"].line[i] === 5 || // Grey Color
+                                    this["pu_q"].line[i] === 80 || // Thin
+                                    this["pu_q"].line[i] === 12 || // Dotted
+                                    this["pu_q"].line[i] === 13 // Fat dots
+                                ))) {
                             // Ignore the line
                         } else {
                             if (this[pu].line[i] === 3) {
@@ -3421,12 +3420,12 @@ class Puzzle {
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].freeline) {
                         if ((this["pu_q"].freeline[i] &&
-                            (this["pu_q"].freeline[i] === 2 || // Black color
-                                this["pu_q"].freeline[i] === 5 || // Grey Color
-                                this["pu_q"].freeline[i] === 80 || // Thin
-                                this["pu_q"].freeline[i] === 12 || // Dotted
-                                this["pu_q"].freeline[i] === 13 // Fat dots
-                            ))) {
+                                (this["pu_q"].freeline[i] === 2 || // Black color
+                                    this["pu_q"].freeline[i] === 5 || // Grey Color
+                                    this["pu_q"].freeline[i] === 80 || // Thin
+                                    this["pu_q"].freeline[i] === 12 || // Dotted
+                                    this["pu_q"].freeline[i] === 13 // Fat dots
+                                ))) {
                             // Ignore the line
                         } else {
                             if (this[pu].freeline[i] === 3) {
@@ -3692,12 +3691,12 @@ class Puzzle {
                         case "loopline":
                             for (var i in this[pu].line) {
                                 if ((this["pu_q"].line[i] &&
-                                    (this["pu_q"].line[i] === 2 || // Black color
-                                        this["pu_q"].line[i] === 5 || // Grey Color
-                                        this["pu_q"].line[i] === 80 || // Thin
-                                        this["pu_q"].line[i] === 12 || // Dotted
-                                        this["pu_q"].line[i] === 13 // Fat dots
-                                    ))) {
+                                        (this["pu_q"].line[i] === 2 || // Black color
+                                            this["pu_q"].line[i] === 5 || // Grey Color
+                                            this["pu_q"].line[i] === 80 || // Thin
+                                            this["pu_q"].line[i] === 12 || // Dotted
+                                            this["pu_q"].line[i] === 13 // Fat dots
+                                        ))) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].line[i] === 3) {
@@ -3710,12 +3709,12 @@ class Puzzle {
 
                             for (var i in this[pu].freeline) {
                                 if ((this["pu_q"].freeline[i] &&
-                                    (this["pu_q"].freeline[i] === 2 || // Black color
-                                        this["pu_q"].freeline[i] === 5 || // Grey Color
-                                        this["pu_q"].freeline[i] === 80 || // Thin
-                                        this["pu_q"].freeline[i] === 12 || // Dotted
-                                        this["pu_q"].freeline[i] === 13 // Fat dots
-                                    ))) {
+                                        (this["pu_q"].freeline[i] === 2 || // Black color
+                                            this["pu_q"].freeline[i] === 5 || // Grey Color
+                                            this["pu_q"].freeline[i] === 80 || // Thin
+                                            this["pu_q"].freeline[i] === 12 || // Dotted
+                                            this["pu_q"].freeline[i] === 13 // Fat dots
+                                        ))) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].freeline[i] === 3) {
@@ -3817,7 +3816,7 @@ class Puzzle {
                         case "battleship":
                             for (var i in this[pu].symbol) {
                                 if ((this[pu].symbol[i][1] === "battleship_B" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) ||
+                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) ||
                                     (this[pu].symbol[i][1] === "battleship_B+" &&
                                         this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4)) {
                                     temp_sol.push(i);
@@ -6616,7 +6615,7 @@ class Puzzle {
                             } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
                                 text += '.';
                             } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7" && (this.pu_q.surface[i + j * (this.nx0)] === 1 ||
-                                this.pu_q.surface[i + j * (this.nx0)] === 8 || this.pu_q.surface[i + j * (this.nx0)] === 3)) { //Dark Grey, Grey and Light grey
+                                    this.pu_q.surface[i + j * (this.nx0)] === 8 || this.pu_q.surface[i + j * (this.nx0)] === 3)) { //Dark Grey, Grey and Light grey
                                 switch (parseInt(this.pu_a.number[i + j * (this.nx0)][0])) {
                                     case 1:
                                         text += 'a';
@@ -7487,8 +7486,8 @@ class Puzzle {
 
                             for (var k of this.selection) {
                                 if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
-                                    this.selection.length > 1) ||
+                                        Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
+                                        this.selection.length > 1) ||
                                     this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                     var single_digit = true;
                                 } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
@@ -8608,8 +8607,8 @@ class Puzzle {
         }
     }
 
-    direction_arrow8(x, y) { } //override
-    direction_arrow4(x, y) { } //override
+    direction_arrow8(x, y) {} //override
+    direction_arrow4(x, y) {} //override
 
     //////////////////////////
     // symbol
@@ -10431,11 +10430,11 @@ class Puzzle {
                     offset = 2;
                 }
                 neighbors2 = [row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num - 1, // left middle
-                row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num, // right middle,
-                4 * this.nx0 * this.ny0 + num * 2, // bottom left middle
-                4 * this.nx0 * this.ny0 + num * 2 + 1, // bottom right middle
-                4 * this.nx0 * this.ny0 + num * 2 - this.nx0 * 2 - 1 + offset, // top left middle
-                4 * this.nx0 * this.ny0 + num * 2 + 1 - this.nx0 * 2 - 1 + offset // top right middle
+                    row_num * this.nx0 + 3 * this.nx0 * this.ny0 + col_num, // right middle,
+                    4 * this.nx0 * this.ny0 + num * 2, // bottom left middle
+                    4 * this.nx0 * this.ny0 + num * 2 + 1, // bottom right middle
+                    4 * this.nx0 * this.ny0 + num * 2 - this.nx0 * 2 - 1 + offset, // top left middle
+                    4 * this.nx0 * this.ny0 + num * 2 + 1 - this.nx0 * 2 - 1 + offset // top right middle
                 ]
                 neighbors = neighbors2.concat(this.point[num].surround);
             } else if (this.gridtype === "tetrakis_square") {
@@ -11480,20 +11479,20 @@ class Puzzle {
                         (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
                         (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
                         (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10"),
-                    this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10")
+                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10")
                     ];
                 } else {
                     var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
                         (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
                         (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4"),
-                    this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                    (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")
+                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
+                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")
                     ];
                 }
 
