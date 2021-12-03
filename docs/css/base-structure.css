@@ -56,6 +56,13 @@ header,
     line-height: 3em;
 }
 
+.button.sw {
+    border: 0;
+    border-radius: 1em;
+    text-transform: uppercase;
+    padding: .3em .5em;
+}
+
 header {
     top: 0;
     height: 1.5em;
@@ -66,12 +73,14 @@ header {
     color: var(--fgMain);
 }
 
-#title, #timer {
+#title,
+#timer {
     grid-area: 1 / 2 / 2 / 3;
     text-align: left;
 }
 
-#version-info, #stop_watch div {
+#version-info,
+#stop_watch div {
     grid-area: 1 / 3 / 2 / 4;
     text-align: right;
 }
@@ -101,6 +110,16 @@ hr.newgridhrline {
     text-align: center;
     margin: 0 auto;
     padding-bottom: 10px;
+}
+
+#top_button button,
+#bottom_button input {
+    border: 0;
+    text-transform: uppercase;
+    background: var(--bgMain);
+    color: var(--fgMain);
+    box-shadow: var(--shadow_low);
+    border-radius: 1em;
 }
 
 #bottom_button {
@@ -198,7 +217,7 @@ hr.newgridhrline {
     background-color: var(--bgMedium);
     box-shadow: var(--shadow_low);
     border: 0;
-    font-size: 0;
+    font-size: 1em;
     width: 600px;
     margin: 5px auto;
     padding: 10px;
@@ -226,7 +245,7 @@ hr.newgridhrline {
     font-size: 12px;
 }
 
-.submode_button {
+#submode_button {
     position: relative;
     text-align: left;
     padding-top: 5px;
@@ -234,7 +253,7 @@ hr.newgridhrline {
     height: 35px;
 }
 
-.submode_button label {
+#submode_button label {
     font-size: 12px;
 }
 
@@ -263,9 +282,9 @@ hr.newgridhrline {
     line-height: 28px;
 }
 
-.label {
+/* .label,
+.labelL {
     display: inline-block;
-    margin: 0px;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
@@ -276,6 +295,13 @@ hr.newgridhrline {
     line-height: 28px;
     border-radius: 3px;
 }
+.label {
+    margin: 0px;
+}
+
+.labelL {
+    margin: 3px;
+} */
 
 .label_option {
     display: inline-block;
@@ -285,18 +311,6 @@ hr.newgridhrline {
     padding-right: 5px;
     margin-left: 5px;
     margin-bottom: 5px;
-    font-size: 14px;
-    text-align: center;
-    line-height: 28px;
-    border-radius: 3px;
-}
-
-.labelL {
-    display: inline-block;
-    margin: 3px;
-    height: 25px;
-    padding-left: 5px;
-    padding-right: 5px;
     font-size: 14px;
     text-align: center;
     line-height: 28px;
@@ -567,6 +581,33 @@ input[type="radio"]:checked+label {
     background: var(--greyLight);
     color: var(--black);
     box-shadow: 0 0 0 1px var(--orange);
+}
+
+#submode_button input[type="radio"]+label,
+#mode_button input[type="radio"]+label {
+    border: 0;
+    background-color: var(--bgPage);
+    color: var(--fgMain);
+    border-radius: 1.25em;
+    text-transform: uppercase;
+    font-size: .8em;
+    height: 2.3em;
+    line-height: 2.3em;
+    letter-spacing: .1em;
+    margin: .2em;
+    padding: .2em 1em 0 !important;
+}
+
+#submode_button input[type="radio"]+label:hover,
+#mode_button input[type="radio"]+label:hover {
+    background-color: var(--bgMain);
+}
+
+#submode_button input[type="radio"]:checked+label,
+#mode_button input[type="radio"]:checked+label {
+    background-color: var(--blueContrast) !important;
+    color: var(--fgContrast);
+    box-shadow: none;
 }
 
 body input,
@@ -1202,7 +1243,7 @@ input[type=number] {
     border: 0;
     padding: 3px;
     height: 1.5em;
-    font-size: 1.3em;
+    font-size: 1.1em;
 }
 
 #settings-table select {
@@ -1291,19 +1332,23 @@ sup {
 
 @media (min-width: 850px) {
     #app-container.responsive {
-        display:grid;
+        display: grid;
         grid-template-columns: 1fr 225px 600px 1fr;
     }
+
     #app-container.responsive #tool-container {
         grid-area: 1 / 2 / 2 / 3;
     }
+
     #app-container.responsive #puzzle-container {
         grid-area: 1 / 3 / 2 / 4;
     }
+
     #app-container.responsive #buttons {
         width: auto;
         height: auto;
     }
+
     #app-container.responsive #mode_txt_space,
     #app-container.responsive #mode_break {
         display: none;

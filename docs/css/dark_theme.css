@@ -6,6 +6,7 @@
     --blackLight: #232323;
     --blue: #0000ff;
     --blueDark: #1e50a2;
+    --blueDarkVery: #0f2f63;
     --blueLight: #187bcd;
     --blueLightMedium: #4795d4;
     --blueLightVery: #c0e0ff;
@@ -39,7 +40,12 @@
     --bgPage: var(--blackLight);
     --bgMain: var(--black);
     --bgMedium: var(--greyDarkVery);
+    --bgLite: var(--greyDark);
     --fgMain: var(--white);
+    --fgLite: var(--greyLightVery);
+    --blueAccent: var(--blueDark);
+    --blueContrast: var(--blueLightMedium);
+    --fgContrast: var(--black);
 }
 
 .solving,
@@ -65,6 +71,10 @@
 .button.sw {
     background-color: var(--blueLight);
     color: var(--white);
+}
+
+.button.sw:hover {
+    background-color: var(--blueDarkVery);
 }
 
 .label_mode {
