@@ -264,10 +264,15 @@ hr.newgridhrline {
     padding-right: 5px;
     margin-left: 5px;
     margin-bottom: 5px;
+    margin-top: 1px;
     font-size: 14px;
     text-align: center;
     line-height: 28px;
     border-radius: 3px;
+}
+
+.labelS{
+    margin-top: 1px;
 }
 
 .label_option {
