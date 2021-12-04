@@ -11670,7 +11670,7 @@ class Puzzle {
                         case 'classic':
                             this.conflict_cells = this.conflicts.check_classic(this);
                             break;
-                        case 'consecutive':
+                        case 'nonconsecutive':
                             this.conflict_cells = this.conflicts.check_classic(this);
 
                             // check consecutive only if no classic conflict
