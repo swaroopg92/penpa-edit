@@ -11681,7 +11681,7 @@ class Puzzle {
                     }
                 }
                 this.previous_sol = current_sol;
-                if (this.conflict_cells) {
+                if (this.conflict_cells.length !== 0) {
                     return true;
                 } else {
                     return false;
