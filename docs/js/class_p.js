@@ -8676,8 +8676,8 @@ class Puzzle {
                 let key;
 
                 // Grid Size
-                let row_size = parseInt(document.getElementById("nb_size2").value);
-                let col_size = parseInt(document.getElementById("nb_size1").value);
+                let row_size = parseInt(this.ny0 - 4);
+                let col_size = parseInt(this.nx0 - 4);
 
                 // sort cage
                 let sortedcages = this.cageselection.sort((a, b) => a - b);
