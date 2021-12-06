@@ -3093,10 +3093,25 @@ function decode_puzzlink(url) {
                 this.usertab_choices = ["Surface", "Composite"];
             }
             break;
+        case "tapa":
+        case "tapaloop":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            info_number = type === "tapa"
+                ? puzzlink_pu.decodeTapa()
+                : puzzlink_pu.decodeTapaLoop();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "4", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode(type === "tapa" ? "blpo" : "lineox");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
-                html: 'It currently do not support puzzle type: ' + type,
+                html: 'It currently does not support puzzle type: ' + type,
                 icon: 'error',
                 confirmButtonText: 'ok 🙂',
             })

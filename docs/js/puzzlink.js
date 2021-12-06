@@ -427,6 +427,98 @@ class Puzzlink {
 
         return arrows;
     }
+
+    decodeTapa() {
+        var strings = "?12345";
+        var number_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            if (("0" <= ca && ca <= "9") || ca === ".") {
+                if (ca === ".") {
+                    number_list[c] = "?";
+                } else {
+                    number_list[c] = ca === "9" ? "1111" : ca;
+                }
+                i++;
+                c++;
+            } else if ("a" <= ca && ca <= "f") {
+                var n = parseInt(this.gridurl.substr(i, 2), 36) - 360;
+                if (n < 36) {
+                    number_list[c] = strings[parseInt(n / 6)] + strings[n % 6];
+                } else if (n < 100) {
+                    n -= 36;
+                    number_list[c] = strings[parseInt(n / 16)] + strings[parseInt((n % 16) / 4)] + strings[n % 4];
+                } else if (n < 116) {
+                    // These values are technically impossible to input, but they are included for completeness-sake
+                    n -= 100;
+                    number_list[c] = (n & 4 ? "1" : "?") + (n & 8 ? "1" : "?") + (n & 2 ? "1" : "?") + (n & 1 ? "1" : "?");
+                }
+                i += 2;
+                c++;
+            } else {
+                i++;
+                c += parseInt(ca, 36) - 15;
+            }
+        }
+
+        return number_list;
+    }
+
+    decodeTapaLoop() {
+        // Annoyingly, TapaLoop has a slightly different encoding than Tapa
+        var number_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            if (("0" <= ca && ca <= "8") || ca === ".") {
+                number_list[c] = ca === "." ? "?" : ca;
+                i++;
+                c++;
+            } else if (("a" <= ca && ca <= "f") || ca === "-" || ca === "+") {
+                var n, numbers_per_cell, mod;
+                if (ca === "-") {
+                    numbers_per_cell = 4;
+                    mod = 6;
+                    n = parseInt(this.gridurl.substr(i + 1, 2), 36) - 36;
+                    i += 3
+                } else if (ca === "+") {
+                    numbers_per_cell = 3;
+                    mod = 7;
+                    n = parseInt(this.gridurl.substr(i + 1, 2), 36) - 36;
+                    i += 3
+                } else {
+                    numbers_per_cell = 2;
+                    mod = 8;
+                    n = parseInt(this.gridurl.substr(i, 2), 36) - 360;
+                    i += 2;
+                }
+
+                var s = "";
+                for (var j = 0; j < numbers_per_cell; j++) {
+                    s = (n % mod || "?") + s;
+                    n = parseInt(n / mod);
+                }
+
+                if (numbers_per_cell === 4) {
+                    // puzzlink places numbers clockwise while penpa places top to bottom, left to right
+                    s = s[1] + s[0] + s[2] + s[3];
+                }
+
+                number_list[c] = s;
+                c++;
+            } else {
+                i++;
+                c += parseInt(ca, 36) - 15;
+            }
+        }
+
+        return number_list;
+    }
 }
 
 class DisjointSets {

@@ -32,7 +32,7 @@ describe("puzz.link parser", () => {
         ["Balance Loop 1", "https://puzz.link/p?balance/9/9/dm1ich1o0i1pcpdido1h1i0m0"],
         ["Balance Loop 2", "https://puzz.link/p?balance/5/2/kbg011"],
         ["Balance Loop 3", "https://puzz.link/p?balance/10/10/-24-22-20-1e-1c-1a-18-16-14g-25-23-21-1f-1d-1b-19-17-15zzzzg"],
-        // Castle
+        // Castle Wall
         ["Castle 1", "https://puzz.link/p?castle/12/12/k223d142b141f224f234o212h236i133d123b243o034a122d131q136d145d215d246k"],
         ["Castle 2", "https://puzz.link/p?castle/10/10/k14110.10.10.03200.00.00.b10.b10.00.10.10.00.b10.b10.00.10.10.00.b10.10.10.10.00.00.00.00.b01300.00.00.22420.20.20.b00.20.20.00.22.00.00.20.b00.20.a00.22.00.a20.b00.00.00.00.20.20.20.20.k"],
         ["Castle 3", "https://puzz.link/p?castle/9/5/242g232b00.c00.c00.a00.a00.10.00.c00.c00.b242g232"],
@@ -172,6 +172,17 @@ describe("puzz.link parser", () => {
         ["Sudoku 9x9 1", "https://puzz.link/p?sudoku/9/9/123456789789123456456789123231564897897231564564897231312645978978312645645978312"],
         ["Sudoku 9x9 2", "https://puzz.link/p?sudoku/9/9/15i96l17i7g65i42k1g5368h2i7g2p3h5g48g2g9k3h7i6"],
         ["Sudoku 9x9 3", "https://puzz.link/p?sudoku/9/9/91h8h343m5i1g3k1i3h5i9i8h7i5k7g5i6m787h4h26"],
+        // Tapa
+        ["Tapa 1", "https://puzz.link/p?tapa/12/11/a0a1a2a3a4a5a6a7a8a9abacadaeafagahaiajakalamanaoapaqarasatauavawaxayazb0b1b2b3b4b5b6b7b8b9babcbdbebfbgbhbibjbkblbmbnbobpbqbrbsbtbubvbwbxbybzc0c1c2c3c4c5c6c7c8c9cacbcdcecfcgchcicjckclcmcncocpcqcrcsctcucvcwcxcyczd0d1d2d3d4d5d6d7d80123456789m."],
+        ["Tapa 2", "https://puzz.link/p?tapa/10/10/rbmbmsblblsbmbmrbmbmsafafsagagr"],
+        ["Tapa 3", "https://puzz.link/p?tapa/12/12/taekajmbmkaeha9kaema8kaqznadka7ma9kaahalka9ma9k6t"],
+        ["Tapa 4", "https://puzz.link/p?tapa/7/19/n5ialqbqia9ka7uafibmqbqqchiaaua7k1iafq7iaen"],
+        // Tapa-Like Loop
+        ["Tapa-Like Loop 1", "https://puzz.link/p?tapaloop/7/4/.0128ha0aaasbabrh+10+2u+7l+aii-10-87-fe-ml-ts-9mg"],
+        ["Tapa-Like Loop 2", "https://puzz.link/p?tapaloop/v:/13/13/i2uaih2h2s2w-fej-fekaiqaij2saitagi+46iaii2maiu+46k2r"],
+        ["Tapa-Like Loop 3", "https://puzz.link/p?tapaloop/10/10/2i3i2zh2i3i2z2i3i2zh2i3i2"],
+        ["Tapa-Like Loop 4", "https://puzz.link/p?tapaloop/12/12/zm+2pj+2pvadnarl22p22laenalv+2ojabzm"],
+        ["Tapa-Like Loop 5", "https://puzz.link/p?tapaloop/15/15/habha9gaagaixajziaanb0n2oa9iaii+2pva9haji-9fiakhajzarib0xb0j-feiasziain+2omaiiajl3"],
         // Yajikazu (Yajisan-Kazusan)
         ["Yajikazu 1", "https://puzz.link/p?yajikazu/6/6/912a912b912c912b912a912b912d912c912c912b912a912"],
         ["Yajikazu 2", "https://puzz.link/p?yajikazu/10/10/f32i32b23f32i32b213ab3ab3ab3a11b11b11b33i3313b13b131312b14b14b14l"],
