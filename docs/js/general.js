@@ -1722,6 +1722,7 @@ function load(urlParam, type = 'url') {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
         if (pu.puzzle_info.iframe) {
+            document.getElementById("title").style.display = 'none';
             document.getElementById("puzzletitle").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
             document.getElementById("penpa_version").remove();
