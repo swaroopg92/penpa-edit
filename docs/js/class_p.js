@@ -8669,6 +8669,7 @@ class Puzzle {
             } else if (this.mouse_mode === "up") {
                 this.drawing = false;
                 let cageexist_status = false;
+                let skip_cages = false;
                 let array = "cage";
                 let arraykill = "killercages";
                 let grid_matrix = [];
@@ -8695,6 +8696,19 @@ class Puzzle {
                         }
                     }
                     if (cageexist_status) { // to exit from outermost for loop
+                        break;
+                    }
+                }
+
+                // Find if any cell of the new cage has outside half grid cells then skip
+                for (let i = 0; i < sortedcages.length; i++) {
+                    let col_num = (sortedcages[i] % (this.nx0)) - 2;
+                    let row_num = parseInt(sortedcages[i] / this.nx0) - 2;
+
+                    // If cage selection has outisde half grid cells then skip
+                    if ((row_num < 0) || (row_num >= row_size) || (col_num < 0) || (col_num >= col_size)) {
+                        cageexist_status = true;
+                        skip_cages = true;
                         break;
                     }
                 }
@@ -8902,7 +8916,7 @@ class Puzzle {
                     this.drawing_mode = draw_mode;
                 } else {
                     // length 1 then delete
-                    if (sortedcages.length === 1) {
+                    if (sortedcages.length === 1 && !skip_cages) {
 
                         // check which style cage exist, if same style then delete or else do nothing
                         let top_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][0] + this.nx0 * this.ny0);
