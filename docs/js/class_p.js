@@ -163,7 +163,6 @@ class Puzzle {
         this.multisolution = false;
         this.borderwarning = true;
         this.user_tags = [];
-        this.url = [];
     }
 
     reset() {
