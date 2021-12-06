@@ -1874,6 +1874,20 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
+        // Save puzzle progress
+        if (pu.url.length !== 0) {
+            // get md5 hash for unique id
+            let hash = md5(pu.url);
+            let pu_sub = {
+                'pu_q': pu.pu_q,
+                'pu_a': pu.pu_a,
+                'pu_q_col': pu.pu_q_col,
+                'pu_a_col': pu.pu_a_col
+            };
+
+            setCookie(hash, JSON.stringify(pu_sub), 2147483647);
+        }
+
         if (document.getElementById('reload_button').value === "1") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown

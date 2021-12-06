@@ -1726,11 +1726,11 @@ function load(urlParam, type = 'url') {
             document.getElementById("puzzleauthor").style.display = 'none';
             document.getElementById("penpa_version").remove();
         } else {
-        // Update title
-        document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-        const contestinfo = document.getElementById("contestinfo"),
-            inputContents = pu.puzzle_info.inputs.reduce((a, c, i) => {
-                return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
+            // Update title
+            document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+            const contestinfo = document.getElementById("contestinfo"),
+                inputContents = pu.puzzle_info.inputs.reduce((a, c, i) => {
+                    return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
                           <input type="text" aria-label="A"
                             pattern="${c.Restriction}"
                             data-sum=${c.TSum || 0}
@@ -1741,10 +1741,10 @@ function load(urlParam, type = 'url') {
                             style="display: inline;"
                             value="${c.Answer}"/></span>
                             `;
-            }, ''),
-            submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
-        contestinfo.innerHTML = inputContents + submitContents;
-        contestinfo.style.display = "block";
+                }, ''),
+                submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
+            contestinfo.innerHTML = inputContents + submitContents;
+            contestinfo.style.display = "block";
         }
     }
 
@@ -2102,6 +2102,34 @@ function load(urlParam, type = 'url') {
         var answersetting = JSON.parse(rtext[16]);
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
+        }
+    }
+
+    // Save the Puzzle URL info - used as unique id for cache saving of progress
+    pu.url = paramArray.p;
+
+    if (paramArray.m === "solve" || paramArray.l === "solvedup") {
+        // check for local progres
+        // get md5 hash for unique id
+        const hash = md5(pu.url);
+        let local_copy = JSON.parse(getCookie(hash));
+        if (local_copy !== null) {
+            pu.pu_q = local_copy.pu_q;
+            pu.pu_a = local_copy.pu_a;
+            pu.pu_q_col = local_copy.pu_q_col;
+            pu.pu_a_col = local_copy.pu_a_col;
+
+            // Because class cannot be copied, its set in different way
+            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
+            let undo_redo = ["command_redo", "command_undo"];
+            for (var i of pu_qa) {
+                for (var j of undo_redo) {
+                    var t = pu[i][j].__a;
+                    pu[i][j] = new Stack();
+                    pu[i][j].set(t);
+                }
+            }
+            pu.redraw();
         }
     }
 }
