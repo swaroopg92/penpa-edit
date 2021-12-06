@@ -1979,34 +1979,6 @@ function load(urlParam, type = 'url') {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
         }
     }
-
-    // Save the Puzzle URL info - used as unique id for cache saving of progress
-    pu.url = paramArray.p;
-
-    if (paramArray.m === "solve" || paramArray.l === "solvedup") {
-        // check for local progres
-        // get md5 hash for unique id
-        const hash = md5(pu.url);
-        let local_copy = JSON.parse(getCookie(hash));
-        if (local_copy !== null) {
-            pu.pu_q = local_copy.pu_q;
-            pu.pu_a = local_copy.pu_a;
-            pu.pu_q_col = local_copy.pu_q_col;
-            pu.pu_a_col = local_copy.pu_a_col;
-
-            // Because class cannot be copied, its set in different way
-            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-            let undo_redo = ["command_redo", "command_undo"];
-            for (var i of pu_qa) {
-                for (var j of undo_redo) {
-                    var t = pu[i][j].__a;
-                    pu[i][j] = new Stack();
-                    pu[i][j].set(t);
-                }
-            }
-            pu.redraw();
-        }
-    }
 }
 
 function loadver1(paramArray, rtext) {

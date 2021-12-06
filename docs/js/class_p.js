@@ -166,7 +166,6 @@ class Puzzle {
         this.conflicts = new Conflicts();
         this.previous_sol = [];
         this.conflict_cells = [];
-        this.url = [];
     }
 
     reset() {
