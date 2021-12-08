@@ -984,7 +984,7 @@ function replay_play() {
         } else {
             clearInterval(pu.replay_timer);
         }
-    }, 500 * speed_factor);
+    }, 500 * (1 / speed_factor));
 
     if (pu.replay_timer !== pu.temp_timer) {
         clearInterval(pu.temp_timer);
@@ -2212,14 +2212,19 @@ function load(urlParam, type = 'url') {
         let contents_reset = `<input type="button" id="replay_reset" value="Reset" style="display: inline;" class="replay"/>`;
         let contents_speed = `<select name ="replay_speed" id ="replay_speed" class="replay">` +
             `<option value=0.5>0.5x</option>` +
-            `<option value=0.75>0.75x</option>` +
             `<option value=1 selected="selected">1x</option>` +
-            `<option value=1.25>1.25x</option>` +
-            `<option value=1.5>1.5x</option></select></div>`;
+            `<option value=1.5>0.5x</option>` +
+            `<option value=2>2x</option>` +
+            `<option value=2.5>2.5x</option>` +
+            `<option value=3>3x</option></select></div>`;
 
         // still need to define speed option
         contestinfo.innerHTML = contents_play + contents_pause + contents_reset + contents_speed;
         contestinfo.style.display = "block";
+
+        document.getElementById("replay_speed").onchange = function() {
+            replay_play();
+        }
     }
 }
 
