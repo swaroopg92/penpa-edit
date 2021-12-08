@@ -6688,7 +6688,7 @@ class Puzzle {
         return text;
     }
 
-    undo() {
+    undo(replay = false) {
         var pu_mode = this.mode.qa;
         var undocounter = 1;
         let groupindex;
@@ -6890,13 +6890,15 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
+                    if (!replay) {
+                        this.redraw();
+                    }
                 }
             }
         }
     }
 
-    redo() {
+    redo(replay = false) {
         var pu_mode = this.mode.qa;
         var redocounter = 1;
         let groupindex;
@@ -7090,7 +7092,9 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
+                    if (!replay) {
+                        this.redraw();
+                    }
                 }
             }
         }

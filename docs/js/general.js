@@ -867,68 +867,135 @@ function display_rules() {
 }
 
 function submit_solution() {
-    const inputs = document.querySelectorAll('.lmi-puzzle-input'),
-        answer = [];
-    inputs.forEach(el => answer.push(el.value));
-    const puzzle = {
-            name: pu.puzzle_info.pid,
-            answer: answer
-        },
-        data = {
-            contest: pu.puzzle_info.cid,
-            submitall: false,
-            puzzles: []
-        };
-    data.puzzles.push(puzzle);
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(data)
-    };
-    console.log(data);
-    request = new Request('/live/submit', options);
-    fetch(request)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(response) {
-            const subStatus = response.puzzles[0];
-            if (subStatus.correct) {
-                document.getElementById('submit_sol').style.display = 'none';
-                Swal.fire({
-                    title: '<h3 class="wish">Solution is correct</h3>',
-                    html: '<h2 class="wish">Congratulations 🙂</h2>',
-                    background: 'url(js/images/new_year.jpg)',
-                    icon: 'success',
-                    confirmButtonText: 'Hurray!'
-                });
-            } else {
-                if (subStatus.cPoints !== undefined) {
-                    pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
-                    document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+    if (pu.puzzle_info.gridsubmit) {
+        pu.puzzle_info['genre'] = "tapa"; // Deb needs to pass this info from LMI
+        var solution = "";
+        switch (pu.puzzle_info.genre) {
+            case "tapa":
+                // Answer - Shading
+                if (!isEmpty(pu.pu_a.surface)) {
+                    for (var j = 2; j < pu.ny0 - 2; j++) {
+                        for (var i = 2; i < pu.nx0 - 2; i++) {
+                            if (pu.pu_a.surface[i + j * (pu.nx0)] && (
+                                    pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
+                                    pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
+                                    pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
+                                    pu.pu_a.surface[i + j * (pu.nx0)] === 4)) { // Black
+                                solution += "1";
+                            } else {
+                                solution += "0";
+                            }
+                        }
+                    }
                 }
+                break;
+        }
+        // Deb needs to send this solution to the server and capture response
+        console.log(solution, solution.length == (pu.ny0 - 4) * (pu.nx0 - 4));
+
+        // if solution is correct then send following redo information to store on LMI server
+        // convert undo to redo
+        while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+            pu.undo(true);
+        }
+
+        // compress data so that size is small
+        var u8text = new TextEncoder().encode(JSON.stringify(pu["pu_a"]["command_redo"].__a));
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        var replay = window.btoa(char8);
+        // Deb needs to send this replay data to store in the server
+        console.log(replay, replay.length);
+
+        // restore undo
+        while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+            pu.redo(true);
+        }
+    } else {
+        const inputs = document.querySelectorAll('.lmi-puzzle-input'),
+            answer = [];
+        inputs.forEach(el => answer.push(el.value));
+        const puzzle = {
+                name: pu.puzzle_info.pid,
+                answer: answer
+            },
+            data = {
+                contest: pu.puzzle_info.cid,
+                submitall: false,
+                puzzles: []
+            };
+        data.puzzles.push(puzzle);
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        };
+
+        request = new Request('/live/submit', options);
+        fetch(request)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(response) {
+                const subStatus = response.puzzles[0];
+                if (subStatus.correct) {
+                    document.getElementById('submit_sol').style.display = 'none';
+                    Swal.fire({
+                        title: '<h3 class="wish">Solution is correct</h3>',
+                        html: '<h2 class="wish">Congratulations 🙂</h2>',
+                        background: 'url(js/images/new_year.jpg)',
+                        icon: 'success',
+                        confirmButtonText: 'Hurray!'
+                    });
+                } else {
+                    if (subStatus.cPoints !== undefined) {
+                        pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
+                        document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+                    }
+                    Swal.fire({
+                        title: '<h3 class="warn">Solution is wrong</h3>',
+                        html: '<h2 class="warn">Try again</h2>',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again',
+                        timer: 3000
+                    });
+                }
+            })
+            .catch(function(err) {
                 Swal.fire({
-                    title: '<h3 class="warn">Solution is wrong</h3>',
+                    title: '<h3 class="warn">Something went wrong</h3>',
                     html: '<h2 class="warn">Try again</h2>',
                     icon: 'error',
                     confirmButtonText: 'Try Again',
                     timer: 3000
                 });
-            }
-        })
-        .catch(function(err) {
-            Swal.fire({
-                title: '<h3 class="warn">Something went wrong</h3>',
-                html: '<h2 class="warn">Try again</h2>',
-                icon: 'error',
-                confirmButtonText: 'Try Again',
-                timer: 3000
             });
-        });
+    }
 }
 
+function replay_play() {
+    pu.replay_timer = setInterval(() => {
+        if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+            pu.redo();
+        } else {
+            clearInterval(pu.replay_timer);
+        }
+    }, 500);
+}
+
+function replay_pause() {
+    clearInterval(pu.replay_timer);
+}
+
+function replay_reset() {
+    clearInterval(pu.replay_timer);
+    while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+        pu.undo();
+    }
+}
 
 function panel_onoff() {
     if (document.getElementById('panel_button').value === "1") {
@@ -1721,17 +1788,26 @@ function load(urlParam, type = 'url') {
     if (paramArray.q) {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
+        pu.puzzle_info['iframe'] = true; // Deb needs to pass this info from LMI
+        pu.puzzle_info['gridsubmit'] = true; // Deb needs to pass this info from LMI
         if (pu.puzzle_info.iframe) {
             document.getElementById("title").style.display = 'none';
             document.getElementById("puzzletitle").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
             document.getElementById("penpa_version").remove();
+
+            if (pu.puzzle_info.gridsubmit && !paramArray.r) {
+                let contestinfo = document.getElementById("contestinfo");
+                let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
+                contestinfo.innerHTML = submitContents;
+                contestinfo.style.display = "block";
+            }
         } else {
-        // Update title
-        document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-        const contestinfo = document.getElementById("contestinfo"),
-            inputContents = pu.puzzle_info.inputs.reduce((a, c, i) => {
-                return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
+            // Update title
+            document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+            const contestinfo = document.getElementById("contestinfo"),
+                inputContents = pu.puzzle_info.inputs.reduce((a, c, i) => {
+                    return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
                           <input type="text" aria-label="A"
                             pattern="${c.Restriction}"
                             data-sum=${c.TSum || 0}
@@ -1742,10 +1818,10 @@ function load(urlParam, type = 'url') {
                             style="display: inline;"
                             value="${c.Answer}"/></span>
                             `;
-            }, ''),
-            submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
-        contestinfo.innerHTML = inputContents + submitContents;
-        contestinfo.style.display = "block";
+                }, ''),
+                submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
+            contestinfo.innerHTML = inputContents + submitContents;
+            contestinfo.style.display = "block";
         }
     }
 
@@ -2104,6 +2180,33 @@ function load(urlParam, type = 'url') {
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
         }
+    }
+
+    // Enable Replay Buttons
+    if (paramArray.r) {
+        // Decrypt Replay
+        var ab = atob(paramArray.r);
+        ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+        var inflate = new Zlib.RawInflate(ab);
+        var plain = inflate.decompress();
+        var rstr = new TextDecoder().decode(plain);
+
+        // Because class cannot be copied, its set in different way
+        pu[pu.mode.qa]["command_redo"] = new Stack();
+        pu[pu.mode.qa]["command_redo"].set(JSON.parse(rstr));
+
+        // hide everything except grid
+        document.getElementById("top_button").style.display = "none";
+        document.getElementById("buttons").style.display = "none";
+
+        let contestinfo = document.getElementById("contestinfo");
+        let contents_play = `<div><input type="button" id="replay_play" value="Play" style="display: inline;" class="replay"/>`;
+        let contents_pause = `<input type="button" id="replay_pause" value="Pause" style="display: inline;" class="replay"/>`;
+        let contents_reset = `<input type="button" id="replay_reset" value="Reset" style="display: inline;" class="replay"/></div>`;
+
+        // still need to define speed option
+        contestinfo.innerHTML = contents_play + contents_pause + contents_reset;
+        contestinfo.style.display = "block";
     }
 }
 

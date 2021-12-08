@@ -1695,6 +1695,18 @@ onload = function() {
                 submit_solution();
                 e.preventDefault();
                 break;
+            case "replay_play":
+                replay_play();
+                e.preventDefault();
+                break;
+            case "replay_pause":
+                replay_pause();
+                e.preventDefault();
+                break;
+            case "replay_reset":
+                replay_reset();
+                e.preventDefault();
+                break;
         }
         // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {
