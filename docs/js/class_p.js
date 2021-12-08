@@ -7963,60 +7963,62 @@ class Puzzle {
     }
 
     mouseevent(x, y, num, ctrl_key = false) {
-        num = this.recalculate_num(x, y, num); //for uniform tiling
-        switch (this.mode[this.mode.qa].edit_mode) {
-            case "surface":
-                this.mouse_surface(x, y, num);
-                break;
-            case "line":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-                    this.mouse_linefree(x, y, num);
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
-                    this.mouse_lineX(x, y, num);
-                } else {
-                    this.mouse_line(x, y, num);
-                }
-                break;
-            case "lineE":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-                    this.mouse_lineEfree(x, y, num);
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
-                    this.mouse_lineEX(x, y, num);
-                } else {
-                    this.mouse_lineE(x, y, num);
-                }
-                break;
-            case "wall":
-                this.mouse_wall(x, y, num);
-                break;
-            case "number":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-                    this.mouse_numberS(x, y, num);
-                } else {
-                    this.mouse_number(x, y, num);
-                }
-                break;
-            case "symbol":
-                this.mouse_symbol(x, y, num);
-                break;
-            case "cage":
-                this.mouse_cage(x, y, num);
-                break;
-            case "special":
-                this.mouse_special(x, y, num);
-                break;
-            case "board":
-                this.mouse_board(x, y, num);
-                break;
-            case "move":
-                this.mouse_move(x, y, num);
-                break;
-            case "combi":
-                this.mouse_combi(x, y, num);
-                break;
-            case "sudoku":
-                this.mouse_sudoku(x, y, num, ctrl_key);
-                break;
+        if (!pu.replay) {
+            num = this.recalculate_num(x, y, num); //for uniform tiling
+            switch (this.mode[this.mode.qa].edit_mode) {
+                case "surface":
+                    this.mouse_surface(x, y, num);
+                    break;
+                case "line":
+                    if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+                        this.mouse_linefree(x, y, num);
+                    } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
+                        this.mouse_lineX(x, y, num);
+                    } else {
+                        this.mouse_line(x, y, num);
+                    }
+                    break;
+                case "lineE":
+                    if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+                        this.mouse_lineEfree(x, y, num);
+                    } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
+                        this.mouse_lineEX(x, y, num);
+                    } else {
+                        this.mouse_lineE(x, y, num);
+                    }
+                    break;
+                case "wall":
+                    this.mouse_wall(x, y, num);
+                    break;
+                case "number":
+                    if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
+                        this.mouse_numberS(x, y, num);
+                    } else {
+                        this.mouse_number(x, y, num);
+                    }
+                    break;
+                case "symbol":
+                    this.mouse_symbol(x, y, num);
+                    break;
+                case "cage":
+                    this.mouse_cage(x, y, num);
+                    break;
+                case "special":
+                    this.mouse_special(x, y, num);
+                    break;
+                case "board":
+                    this.mouse_board(x, y, num);
+                    break;
+                case "move":
+                    this.mouse_move(x, y, num);
+                    break;
+                case "combi":
+                    this.mouse_combi(x, y, num);
+                    break;
+                case "sudoku":
+                    this.mouse_sudoku(x, y, num, ctrl_key);
+                    break;
+            }
         }
     }
 

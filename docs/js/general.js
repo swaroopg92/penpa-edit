@@ -977,13 +977,19 @@ function submit_solution() {
 }
 
 function replay_play() {
+    let speed_factor = parseFloat(document.getElementById("replay_speed").value);
     pu.replay_timer = setInterval(() => {
         if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
             pu.redo();
         } else {
             clearInterval(pu.replay_timer);
         }
-    }, 500);
+    }, 500 * speed_factor);
+
+    if (pu.replay_timer !== pu.temp_timer) {
+        clearInterval(pu.temp_timer);
+    }
+    pu.temp_timer = pu.replay_timer;
 }
 
 function replay_pause() {
@@ -2190,6 +2196,7 @@ function load(urlParam, type = 'url') {
         var inflate = new Zlib.RawInflate(ab);
         var plain = inflate.decompress();
         var rstr = new TextDecoder().decode(plain);
+        pu.replay = true; // flag used to block mouse event on the grid
 
         // Because class cannot be copied, its set in different way
         pu[pu.mode.qa]["command_redo"] = new Stack();
@@ -2202,10 +2209,16 @@ function load(urlParam, type = 'url') {
         let contestinfo = document.getElementById("contestinfo");
         let contents_play = `<div><input type="button" id="replay_play" value="Play" style="display: inline;" class="replay"/>`;
         let contents_pause = `<input type="button" id="replay_pause" value="Pause" style="display: inline;" class="replay"/>`;
-        let contents_reset = `<input type="button" id="replay_reset" value="Reset" style="display: inline;" class="replay"/></div>`;
+        let contents_reset = `<input type="button" id="replay_reset" value="Reset" style="display: inline;" class="replay"/>`;
+        let contents_speed = `<select name ="replay_speed" id ="replay_speed" class="replay">` +
+            `<option value=0.5>0.5x</option>` +
+            `<option value=0.75>0.75x</option>` +
+            `<option value=1 selected="selected">1x</option>` +
+            `<option value=1.25>1.25x</option>` +
+            `<option value=1.5>1.5x</option></select></div>`;
 
         // still need to define speed option
-        contestinfo.innerHTML = contents_play + contents_pause + contents_reset;
+        contestinfo.innerHTML = contents_play + contents_pause + contents_reset + contents_speed;
         contestinfo.style.display = "block";
     }
 }
