@@ -2573,38 +2573,46 @@ function decode_puzzlink(url) {
         number_style;
 
     switch (type) {
-        case "ripple":
+        case "cojun":
+        case "meander":
         case "nanro":
-        case "onsen":
+        case "renban":
+        case "ripple":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);
-            if (type === "onsen") {
-                pu.mode_grid("nb_grid2"); // change gridlines to dashes
-                setupProblem(pu, "combi");
-            } else {
-                setupProblem(pu, "sudoku");
-            }
+            setupProblem(pu, "number");
 
             // Decode URL
             info_edge = puzzlink_pu.decodeBorder();
             info_number = puzzlink_pu.decodeNumber16();
 
-            // 1 is normal, 6 has a circle background
-            number_style = type === "onsen" ? 6 : 1;
-
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-            puzzlink_pu.drawNumbers(pu, info_number, number_style, "1");
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
-            if (type === "onsen") {
-                pu.mode_set("combi"); //include redraw
-                pu.subcombimode("linex");
-                this.usertab_choices = ["Surface", "Composite"];
-            } else {
-                pu.mode_set("sudoku"); //include redraw
-                this.usertab_choices = ["Surface", "Sudoku Normal"];
-            }
+            pu.mode_set("number");
+            this.usertab_choices = ["Surface", "Number Normal", "Sudoku Normal"];
+            break;
+        case "onsen":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // change gridlines to dashes
+            setupProblem(pu, "combi");
+
+            // Decode URL
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16();
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
+            // 6 has a circle background
+            puzzlink_pu.drawNumbers(pu, info_number, 6, "1");
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi"); //include redraw
+            pu.subcombimode("linex");
+            this.usertab_choices = ["Surface", "Composite"];
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);

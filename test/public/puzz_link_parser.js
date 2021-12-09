@@ -39,6 +39,9 @@ describe("puzz.link parser", () => {
         ["Castle 4", "https://puzz.link/p?castle/17/17/20.22922722d22822722922822b22b22a22b22a22a22722822f249p243p247p249p246p245p247p247p247p246p244p245p244p248p247p248p"],
         ["Castle 5", "https://puzz.link/p?castle/10/10/c224g243f123e122123p242d233d222d232p11311.e114f233g213c"],
         ["Castle 6", "https://puzz.link/p?castle/6/3/011022033044000a11.12.13.14.10.a2-13e32-23e42-33e529622563a"],
+        // Cojun
+        ["Cojun 1", "https://puzz.link/p?cojun/8/8/qhebtquqmqj0l7s7c8vo1up0zzh4v1j"],
+        ["Cojun 2", "https://puzz.link/p?cojun/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
         // Country Road
         ["Country Road 1", "https://puzz.link/p?country/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g"],
         ["Country Road 2", "https://puzz.link/p?country/20/15/10156ggr62indoe611d38431oonjrhv7hltmb6t90d6hdme4rc8jcp26ge7vo7vvo32vk8tv1v7uefro67hg208e82hg953tva7tu0fg0fv6m1u0ei5g24k54g2l7g557k92h3g3g2g3"],
@@ -96,6 +99,11 @@ describe("puzz.link parser", () => {
         // Maxi Loop
         ["Maxi Loop 1", "https://puzz.link/p?maxi/10/10/37e0001tug030kdb00c2d00299pbgg3hg5j44s"],
         ["Maxi Loop 2", "https://puzz.link/p?maxi/24/16/424k150i894l5b98il295aiaa599aakl5ahakla5aikl9aaah995ai92l4abaiki8942i0kh0g4u020i1sjo9s4of43620jpgj68c4pj75001g1g00kspj462cp1jp08co4u347i3p7g9080f4673759b64879768352663589664786467589b685b"],
+        // Meandering Numbers 
+        ["Meandering Numbers 1", "https://puzz.link/p?meander/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
+        ["Meandering Numbers 2", "https://puzz.link/p?meander/6/6/d01gb04gc6sezv"],
+        ["Meandering Numbers 3", "https://puzz.link/p?meander/10/10/0105187060b050g000funo7ivg02fo827s00zzzzz"],
+        ["Meandering Numbers 4", "https://puzz.link/p?meander/10/10/11bindeqt11bin5easc8c60000vvf8300700i8n2zzk8zt1k1"],
         // Moon or Sun
         ["Moon or Sun 1", "https://puzz.link/p?moonsun/10/10/4488q1m3bmld8iglha003s08seg100e0u201dqpdhqdepddqddhqneqqmqqqqqpdqndhp9"],
         ["Moon or Sun 2", "https://puzz.link/p?moonsun/10/10/54a94i93264d0qil0200vs03vs1stv0fu0vsk6lja01621i415ak6biai3b0c6bg6gi030"],
@@ -129,6 +137,9 @@ describe("puzz.link parser", () => {
         ["Regional Yajilin 2", "https://puzz.link/p?yajilin-regions/8/8/b2om8i4108q00s3vg1s00sg0q"],
         ["Regional Yajilin 3", "https://puzz.link/p?yajilin-regions/16/3/007005005vvv00005000h"],
         ["Regional Yajilin 4", "https://puzz.link/p?yajilin-regions/12/10/189cmfufuj9ipcvsvt6i2gfn1okc076jsv7ihg0sa3nog2231g232g2h213"],
+        // Renban (Renban-Madoguchi)
+        ["Renban 1", "https://puzz.link/p?renban/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
+        ["Renban 2", "https://puzz.link/p?renban/8/8/rlbb326f5bb09aq7mv636310m1gco3sch3wdh4l"],
         // Ripple
         ["Ripple 1", "https://puzz.link/p?ripple/10/10/c9hb4nfmueupv8ke11br7s3pk2r61hbqnsfezzzzz"],
         ["Ripple 2", "https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i"],
