@@ -1209,6 +1209,9 @@ function DeleteCheck() {
 
 function saveimage() {
     document.getElementById("modal-image").style.display = 'block';
+    var input = document.getElementById("saveimagename");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function saveimage_download() {
@@ -1301,16 +1304,28 @@ function saveimage_window() {
 function savetext() {
     document.getElementById("modal-save").style.display = 'block';
     document.getElementById("savetextarea").value = "";
+
+    var input = document.getElementById("saveinfotitle");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
     document.getElementById("iostring").placeholder = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
+
+    var input = document.getElementById("iostring");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function i_url() {
     document.getElementById("modal-load").style.display = 'block';
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button.";
+
+    var input = document.getElementById("urlstring");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function p_settings() {
