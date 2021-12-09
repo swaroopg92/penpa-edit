@@ -2214,7 +2214,7 @@ function load(urlParam, type = 'url') {
         let contents_speed = `<select name ="replay_speed" id ="replay_speed" class="replay">` +
             `<option value=0.5>0.5x</option>` +
             `<option value=1 selected="selected">1x</option>` +
-            `<option value=1.5>0.5x</option>` +
+            `<option value=1.5>1.5x</option>` +
             `<option value=2>2x</option>` +
             `<option value=2.5>2.5x</option>` +
             `<option value=3>3x</option></select></div>`;
