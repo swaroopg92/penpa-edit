@@ -867,9 +867,10 @@ function display_rules() {
 }
 
 function submit_solution() {
-    if (pu.puzzle_info.gridsubmit) {
+		let solutionArray = [];	
+		if (pu.puzzle_info.gridsubmit) {
         pu.puzzle_info['genre'] = "tapa"; // Deb needs to pass this info from LMI
-        var solution = "";
+				let solution = "";
         switch (pu.puzzle_info.genre) {
             case "tapa":
                 // Answer - Shading
@@ -890,8 +891,71 @@ function submit_solution() {
                 }
                 break;
         }
-        // Deb needs to send this solution to the server and capture response
-        console.log(solution, solution.length == (pu.ny0 - 4) * (pu.nx0 - 4));
+				solutionArray.push(solution);
+		} else {
+        document.querySelectorAll('.lmi-puzzle-input').forEach(el => solutionArray.push(el.value));
+		}
+		const puzzle = {
+						name: pu.puzzle_info.pid,
+						answer: solutionArray
+				},
+				data = {
+						contest: pu.puzzle_info.cid,
+						submitall: false,
+						puzzles: []
+				};
+		data.puzzles.push(puzzle);
+		const options = {
+				method: 'POST',
+				headers: {
+						'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify(data)
+		};
+
+		request = new Request('/live/submit', options);
+		fetch(request)
+				.then(function(response) {
+						return response.json();
+				})
+				.then(function(response) {
+						const subStatus = response.puzzles[0];
+						if (subStatus.correct) {
+								document.getElementById('submit_sol').style.display = 'none';
+								submit_solution_steps();
+								Swal.fire({
+										title: '<h3 class="wish">Solution is correct</h3>',
+										html: '<h2 class="wish">Congratulations 🙂</h2>',
+										background: 'url(js/images/new_year.jpg)',
+										icon: 'success',
+										confirmButtonText: 'Hurray!'
+								});
+						} else {
+								if (subStatus.cPoints !== undefined) {
+										pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
+										document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
+								}
+								Swal.fire({
+										title: '<h3 class="warn">Solution is wrong</h3>',
+										html: '<h2 class="warn">Try again</h2>',
+										icon: 'error',
+										confirmButtonText: 'Try Again',
+										timer: 3000
+								});
+						}
+				})
+				.catch(function(err) {
+						Swal.fire({
+								title: '<h3 class="warn">Something went wrong</h3>',
+								html: '<h2 class="warn">Try again</h2>',
+								icon: 'error',
+								confirmButtonText: 'Try Again',
+								timer: 3000
+						});
+				});
+    }
+function submit_solution_steps() {	
+    if (pu.puzzle_info.gridsubmit) {
 
         // if solution is correct then send following redo information to store on LMI server
         // convert undo to redo
@@ -912,67 +976,6 @@ function submit_solution() {
         while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
             pu.redo(true);
         }
-    } else {
-        const inputs = document.querySelectorAll('.lmi-puzzle-input'),
-            answer = [];
-        inputs.forEach(el => answer.push(el.value));
-        const puzzle = {
-                name: pu.puzzle_info.pid,
-                answer: answer
-            },
-            data = {
-                contest: pu.puzzle_info.cid,
-                submitall: false,
-                puzzles: []
-            };
-        data.puzzles.push(puzzle);
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        };
-
-        request = new Request('/live/submit', options);
-        fetch(request)
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(response) {
-                const subStatus = response.puzzles[0];
-                if (subStatus.correct) {
-                    document.getElementById('submit_sol').style.display = 'none';
-                    Swal.fire({
-                        title: '<h3 class="wish">Solution is correct</h3>',
-                        html: '<h2 class="wish">Congratulations 🙂</h2>',
-                        background: 'url(js/images/new_year.jpg)',
-                        icon: 'success',
-                        confirmButtonText: 'Hurray!'
-                    });
-                } else {
-                    if (subStatus.cPoints !== undefined) {
-                        pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
-                        document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-                    }
-                    Swal.fire({
-                        title: '<h3 class="warn">Solution is wrong</h3>',
-                        html: '<h2 class="warn">Try again</h2>',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again',
-                        timer: 3000
-                    });
-                }
-            })
-            .catch(function(err) {
-                Swal.fire({
-                    title: '<h3 class="warn">Something went wrong</h3>',
-                    html: '<h2 class="warn">Try again</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'Try Again',
-                    timer: 3000
-                });
-            });
     }
 }
 
@@ -1794,8 +1797,6 @@ function load(urlParam, type = 'url') {
     if (paramArray.q) {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
-        pu.puzzle_info['iframe'] = true; // Deb needs to pass this info from LMI
-        pu.puzzle_info['gridsubmit'] = true; // Deb needs to pass this info from LMI
         if (pu.puzzle_info.iframe) {
             document.getElementById("title").style.display = 'none';
             document.getElementById("puzzletitle").style.display = 'none';
