@@ -2894,7 +2894,12 @@ class Puzzle {
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
         this.pu_a.command_redo.__a = [];
-        this.pu_a.command_undo.__a = [];
+
+        if (pu.puzzle_info && pu.puzzle_info.gridsubmit) {
+            // Daily puzzle contests, retain undo
+        } else {
+            this.pu_a.command_undo.__a = [];
+        }
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
         this.pu_q.command_redo.__a = qr;
