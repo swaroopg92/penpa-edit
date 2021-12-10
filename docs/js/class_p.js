@@ -5109,6 +5109,19 @@ class Puzzle {
                         }
                     }
                 }
+            } else if (header === "tapa_contest" || header === "tc") {
+                // Answer - Shading
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "1";
+                            } else {
+                                text += "0";
+                            }
+                        }
+                    }
+                }
             } else if (header === "slitherlink") {
                 text += 'Author:\n' +
                     'Genre: Slitherlink\n' +
