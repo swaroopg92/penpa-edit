@@ -845,6 +845,9 @@ function newgrid_r() {
         if (sw_timer.isPaused()) {
             pu.show_pause_layer();
         }
+        if (parent && pu.puzzle_info && pu.puzzle_info.iframe) {
+            parent.resizeiframe();
+		    }
     } else {
         Swal.fire({
             title: 'Swaroop says:',
@@ -913,7 +916,7 @@ function submit_solution() {
 				body: JSON.stringify(data)
 		};
 
-		request = new Request('/live/submit', options);
+		let request = new Request(pu.puzzle_info.gridsubmit ? '/live/submit-daily' : '/live/submit', options);
 		fetch(request)
 				.then(function(response) {
 						return response.json();
@@ -936,8 +939,7 @@ function submit_solution() {
 										document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
 								}
 								Swal.fire({
-										title: '<h3 class="warn">Solution is wrong</h3>',
-										html: '<h2 class="warn">Try again</h2>',
+										title: `<h3 class="warn">${response.message || 'Solution is wrong'}</h3>`,
 										icon: 'error',
 										confirmButtonText: 'Try Again',
 										timer: 3000
@@ -971,6 +973,31 @@ function submit_solution_steps() {
         var replay = window.btoa(char8);
         // Deb needs to send this replay data to store in the server
         console.log(replay, replay.length);
+				
+				const puzzle = {
+						name: pu.puzzle_info.pid,
+						replay: replay
+				},
+				data = {
+						contest: pu.puzzle_info.cid,
+						puzzles: []
+				};
+		data.puzzles.push(puzzle);
+		const options = {
+				method: 'POST',
+				headers: {
+						'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify(data)
+		};
+
+		let request = new Request(pu.puzzle_info.gridsubmit ? '/live/submit-daily' : '/live/submit', options);
+		fetch(request)
+				.then(function(response) {
+						return response.json();
+				})
+				.then(function(response) {
+				});
 
         // restore undo
         while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
@@ -2227,6 +2254,9 @@ function load(urlParam, type = 'url') {
             replay_play();
         }
     }
+		if (parent && pu.puzzle_info && pu.puzzle_info.iframe) {
+			parent.resizeiframe();
+		}
 }
 
 function loadver1(paramArray, rtext) {
