@@ -9902,14 +9902,41 @@ class Puzzle {
                     this.drawing_mode = 50;
                 }
             } else {
-                if (!this[this.mode.qa].lineE[num]) { // Insert cross
-                    this.record(symboltype, num);
-                    this[this.mode.qa].lineE[num] = 98;
-                    this.drawing_mode = 52;
-                } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
-                    this.record(symboltype, num);
-                    delete this[this.mode.qa].lineE[num];
-                    this.drawing_mode = 50;
+                // Ignore if edge already exist
+                // Do this only for square grids for now
+                if (this.gridtype === "square") {
+
+                    let neighbor1 = this.point[num].neighbor[0];
+                    let neighbor2 = this.point[num].neighbor[1];
+                    let edge_num;
+                    let corners = this.point[neighbor2].surround;
+
+                    // If difference is 1 then its left and right else its top and bottom
+                    if (Math.abs(neighbor1 - neighbor2) === 1) {
+                        edge_num = corners[0].toString() + "," + corners[3].toString();
+                    } else {
+                        edge_num = corners[0].toString() + "," + corners[1].toString();
+                    }
+
+                    if (!this[this.mode.qa].lineE[num] && !this[this.mode.qa].lineE[edge_num]) { // Insert cross
+                        this.record(symboltype, num);
+                        this[this.mode.qa].lineE[num] = 98;
+                        this.drawing_mode = 52;
+                    } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record(symboltype, num);
+                        delete this[this.mode.qa].lineE[num];
+                        this.drawing_mode = 50;
+                    }
+                } else {
+                    if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                        this.record(symboltype, num);
+                        this[this.mode.qa].lineE[num] = 98;
+                        this.drawing_mode = 52;
+                    } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record(symboltype, num);
+                        delete this[this.mode.qa].lineE[num];
+                        this.drawing_mode = 50;
+                    }
                 }
             }
         } else {
@@ -9981,15 +10008,43 @@ class Puzzle {
             this.last = num;
             this.redraw();
         } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
-            if (this.drawing_mode == 52) {
-                if (!this[this.mode.qa].lineE[num]) { // Insert cross
-                    this.record("lineE", num);
-                    this[this.mode.qa].lineE[num] = 98;
+            if (this.gridtype === "square") {
+                // Ignore if edge already exist
+                // Do this only for square grids for now
+                let neighbor1 = this.point[num].neighbor[0];
+                let neighbor2 = this.point[num].neighbor[1];
+                let edge_num;
+                let corners = this.point[neighbor2].surround;
+
+                // If difference is 1 then its left and right else its top and bottom
+                if (Math.abs(neighbor1 - neighbor2) === 1) {
+                    edge_num = corners[0].toString() + "," + corners[3].toString();
+                } else {
+                    edge_num = corners[0].toString() + "," + corners[1].toString();
                 }
-            } else if (this.drawing_mode == 50) {
-                if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
-                    this.record("lineE", num);
-                    delete this[this.mode.qa].lineE[num];
+
+                if (this.drawing_mode == 52) {
+                    if (!this[this.mode.qa].lineE[num] && !this[this.mode.qa].lineE[edge_num]) { // Insert cross
+                        this.record("lineE", num);
+                        this[this.mode.qa].lineE[num] = 98;
+                    }
+                } else if (this.drawing_mode == 50) {
+                    if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record("lineE", num);
+                        delete this[this.mode.qa].lineE[num];
+                    }
+                }
+            } else {
+                if (this.drawing_mode == 52) {
+                    if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                        this.record("lineE", num);
+                        this[this.mode.qa].lineE[num] = 98;
+                    }
+                } else if (this.drawing_mode == 50) {
+                    if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record("lineE", num);
+                        delete this[this.mode.qa].lineE[num];
+                    }
                 }
             }
             this.redraw();
