@@ -958,7 +958,7 @@ function submit_solution() {
     }
 function submit_solution_steps() {	
     if (pu.puzzle_info.gridsubmit) {
-
+        parent.clearCountDown();
         // if solution is correct then send following redo information to store on LMI server
         // convert undo to redo
         while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
@@ -2021,6 +2021,9 @@ function load(urlParam, type = 'url') {
         }
 
         if (paramArray.l === "solvedup") { // Basically clone of solve mode
+            if (pu.puzzle_info && pu.puzzle_info.iframe) {
+                pu.puzzle_info.iframe = false;
+            }
             set_solvemode(type);
 
             // Decrypt a
