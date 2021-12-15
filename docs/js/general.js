@@ -870,139 +870,100 @@ function display_rules() {
 }
 
 function submit_solution() {
-		let solutionArray = [];	
-		if (pu.puzzle_info.gridsubmit) {
-        pu.puzzle_info['genre'] = "tapa"; // Deb needs to pass this info from LMI
-				let solution = "";
-        switch (pu.puzzle_info.genre) {
-            case "tapa":
-                // Answer - Shading
-                if (!isEmpty(pu.pu_a.surface)) {
-                    for (var j = 2; j < pu.ny0 - 2; j++) {
-                        for (var i = 2; i < pu.nx0 - 2; i++) {
-                            if (pu.pu_a.surface[i + j * (pu.nx0)] && (
-                                    pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
-                                    pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
-                                    pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
-                                    pu.pu_a.surface[i + j * (pu.nx0)] === 4)) { // Black
-                                solution += "1";
-                            } else {
-                                solution += "0";
-                            }
+    pu.puzzle_info['genre'] = "tapa"; // Deb needs to pass this info from LMI
+    let solution = "";
+    switch (pu.puzzle_info.genre) {
+        case "tapa":
+            // Answer - Shading
+            if (!isEmpty(pu.pu_a.surface)) {
+                for (var j = 2; j < pu.ny0 - 2; j++) {
+                    for (var i = 2; i < pu.nx0 - 2; i++) {
+                        if (pu.pu_a.surface[i + j * (pu.nx0)] && (
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 4)) { // Black
+                            solution += "1";
+                        } else {
+                            solution += "0";
                         }
                     }
                 }
-                break;
-        }
-				solutionArray.push(solution);
-		} else {
-        document.querySelectorAll('.lmi-puzzle-input').forEach(el => solutionArray.push(el.value));
-		}
-		const puzzle = {
-						name: pu.puzzle_info.pid,
-						answer: solutionArray
-				},
-				data = {
-						contest: pu.puzzle_info.cid,
-						submitall: false,
-						puzzles: []
-				};
-		data.puzzles.push(puzzle);
-		const options = {
-				method: 'POST',
-				headers: {
-						'Content-Type': 'application/json;charset=utf-8'
-				},
-				body: JSON.stringify(data)
-		};
-
-		let request = new Request(pu.puzzle_info.gridsubmit ? '/live/submit-daily' : '/live/submit', options);
-		fetch(request)
-				.then(function(response) {
-						return response.json();
-				})
-				.then(function(response) {
-						const subStatus = response.puzzles[0];
-						if (subStatus.correct) {
-								document.getElementById('submit_sol').style.display = 'none';
-								submit_solution_steps();
-								Swal.fire({
-										title: '<h3 class="wish">Solution is correct</h3>',
-										html: '<h2 class="wish">Congratulations 🙂</h2>',
-										background: 'url(js/images/new_year.jpg)',
-										icon: 'success',
-										confirmButtonText: 'Hurray!'
-								});
-						} else {
-								if (subStatus.cPoints !== undefined) {
-										pu.puzzle_info.pts = subStatus.cPoints > 0 ? Math.round(subStatus.cPoints * 10) / 10 : 0;
-										document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-								}
-								Swal.fire({
-										title: `<h3 class="warn">${response.message || 'Solution is wrong'}</h3>`,
-										icon: 'error',
-										confirmButtonText: 'Try Again',
-										timer: 3000
-								});
-						}
-				})
-				.catch(function(err) {
-						Swal.fire({
-								title: '<h3 class="warn">Something went wrong</h3>',
-								html: '<h2 class="warn">Try again</h2>',
-								icon: 'error',
-								confirmButtonText: 'Try Again',
-								timer: 3000
-						});
-				});
+            }
+            break;
     }
-function submit_solution_steps() {	
-    if (pu.puzzle_info.gridsubmit) {
-        parent.clearCountDown();
-        // if solution is correct then send following redo information to store on LMI server
-        // convert undo to redo
-        while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
-            pu.undo(true);
-        }
+    const data = {
+            contest: pu.puzzle_info.cid,
+            puzzle: pu.puzzle_info.pid,
+            answer: solution
+        },
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        request = new Request('/live/submit-daily', options);
+    fetch(request)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(response) {
+            if (response.correct) {
+                document.getElementById('submit_sol').style.display = 'none';
+                if (response.firstTimeCorrect) {
+                    submit_solution_steps();
+                }
+            }
+            Swal.fire({
+                title: `<h3 class="${response.correct ? 'info' : 'warn'}">${response.message || 'Solution is wrong'}</h3>`,
+                icon: response.correct ? 'success' : 'error',
+                confirmButtonText: response.correct ? 'Ok' : 'Try Again',
+                timer: response.correct ? undefined : 3000
+            });
+        })
+        .catch(function(err) {
+            Swal.fire({
+                title: '<h3 class="warn">Something went wrong</h3>',
+                html: '<h2 class="warn">Try again</h2>',
+                icon: 'error',
+                confirmButtonText: 'Try Again',
+                timer: 3000
+            });
+        });
+}
 
-        // compress data so that size is small
-        var u8text = new TextEncoder().encode(JSON.stringify(pu["pu_a"]["command_redo"].__a));
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var replay = window.btoa(char8);
-        // Deb needs to send this replay data to store in the server
-        console.log(replay, replay.length);
-				
-				const puzzle = {
-						name: pu.puzzle_info.pid,
-						replay: replay
-				},
-				data = {
-						contest: pu.puzzle_info.cid,
-						puzzles: []
-				};
-		data.puzzles.push(puzzle);
-		const options = {
-				method: 'POST',
-				headers: {
-						'Content-Type': 'application/json;charset=utf-8'
-				},
-				body: JSON.stringify(data)
-		};
+function submit_solution_steps() {
+    // convert undo to redo
+    while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+        pu.undo(true);
+    }
 
-		let request = new Request(pu.puzzle_info.gridsubmit ? '/live/submit-daily' : '/live/submit', options);
-		fetch(request)
-				.then(function(response) {
-						return response.json();
-				})
-				.then(function(response) {
-				});
+    // compress data so that size is small
+    var u8text = new TextEncoder().encode(JSON.stringify(pu["pu_a"]["command_redo"].__a));
+    var deflate = new Zlib.RawDeflate(u8text);
+    var compressed = deflate.compress();
+    var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+    var replay = window.btoa(char8);
+    const data = {
+            contest: pu.puzzle_info.cid,
+            puzzle: pu.puzzle_info.pid,
+            replay: replay
+        },
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        request = new Request('/live/submit-daily', options);
+    fetch(request);
 
-        // restore undo
-        while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-            pu.redo(true);
-        }
+    // restore undo
+    while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+        pu.redo(true);
     }
 }
 
@@ -1824,37 +1785,21 @@ function load(urlParam, type = 'url') {
     if (paramArray.q) {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
+        if (pu.puzzle_info.title) {
+            document.getElementById("puzzletitle").style.display = 'block';
+            document.getElementById("puzzletitle").innerHTML = pu.puzzle_info.title;
+        } else {
+            document.getElementById("puzzletitle").style.display = 'none';
+        }
         if (pu.puzzle_info.iframe) {
             document.getElementById("title").style.display = 'none';
-            document.getElementById("puzzletitle").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
             document.getElementById("penpa_version").remove();
-
-            if (pu.puzzle_info.gridsubmit && !paramArray.r) {
-                let contestinfo = document.getElementById("contestinfo");
-                let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
-                contestinfo.innerHTML = submitContents;
-                contestinfo.style.display = "block";
-            }
-        } else {
-            // Update title
-            document.getElementById("puzzletitle").innerHTML = pu.puzzle_info['pid'] + ", Points: " + pu.puzzle_info['pts'];
-            const contestinfo = document.getElementById("contestinfo"),
-                inputContents = pu.puzzle_info.inputs.reduce((a, c, i) => {
-                    return a + `<span class="DM" id="answerkey_box${i}_lb" style="display: inline;">${c.KeyHint}
-                          <input type="text" aria-label="A"
-                            pattern="${c.Restriction}"
-                            data-sum=${c.TSum || 0}
-                            class="lmi-puzzle-input"
-                            id="answerkey_box${i}"
-                            placeholder="${c.RestrictionError}"
-                            ${this.disableInputs ? "readonly" : ""}
-                            style="display: inline;"
-                            value="${c.Answer}"/></span>
-                            `;
-                }, ''),
-                submitContents = pu.puzzle_info.als ? `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div><div><span id="submit_sol_response" style="display: inline;"></span></div>` : ``;
-            contestinfo.innerHTML = inputContents + submitContents;
+        }
+        if (pu.puzzle_info.gridsubmit && !paramArray.r) {
+            let contestinfo = document.getElementById("contestinfo");
+            let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
+            contestinfo.innerHTML = submitContents;
             contestinfo.style.display = "block";
         }
     }
@@ -2257,7 +2202,7 @@ function load(urlParam, type = 'url') {
             replay_play();
         }
     }
-		if (parent && pu.puzzle_info && pu.puzzle_info.iframe) {
+		if (parent && parent.resizeiframe) {
 			parent.resizeiframe();
 		}
 }
