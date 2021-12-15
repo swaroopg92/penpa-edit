@@ -3106,15 +3106,44 @@ function decode_puzzlink(url) {
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "combi");
 
-            info_number = type === "tapa"
-                ? puzzlink_pu.decodeTapa()
-                : puzzlink_pu.decodeTapaLoop();
+            info_number = type === "tapa" ?
+                puzzlink_pu.decodeTapa() :
+                puzzlink_pu.decodeTapaLoop();
             puzzlink_pu.drawNumbers(pu, info_number, 1, "4", false);
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode(type === "tapa" ? "blpo" : "lineox");
             this.usertab_choices = ["Surface", "Composite"];
+            break;
+        case "fillomino":
+        case "symmarea":
+        case "view":
+            pu = new Puzzle_square(cols, rows, size);
+            if (type !== "view") {
+                pu.mode_grid("nb_grid2"); // Dashed grid lines
+            }
+            setupProblem(pu, "number");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            this.usertab_choices = ["Surface", "Edge Normal", "Number Normal"];
+            break;
+        case "araf":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed grid lines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 6, "1", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
             break;
         default:
             Swal.fire({
