@@ -6,7 +6,6 @@
     --blackLight: #232323;
     --blue: #0000ff;
     --blueDark: #1e50a2;
-    --blueDarkVery: #0f2f63;
     --blueLight: #187bcd;
     --blueLightMedium: #4795d4;
     --blueLightVery: #c0e0ff;
@@ -39,12 +38,7 @@
     --bgPage: var(--greyLightVery);
     --bgMain: var(--white);
     --bgMedium: var(--greyLightMedium);
-    --bgLite: var(--greyLight);
     --fgMain: var(--black);
-    --fgLite: var(--greyDarkVery);
-    --blueAccent: var(--blueLightVery);
-    --blueContrast: var(--blueDark);
-    --fgContrast: var(--white);
 }
 
 .solving,
