@@ -86,6 +86,9 @@ function set_surface_style(ctx, type) {
         case 99:
             ctx.fillStyle = Color.GREY_LIGHT_VERY;
             break;
+        case 100: // for conflicts
+            ctx.fillStyle = Color.RED_LIGHT;
+            break;
     }
     ctx.strokeStyle = ctx.fillStyle;
 }

@@ -667,6 +667,7 @@ class Puzzle_square extends Puzzle {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
+            this.draw_conflicts();
             this.draw_symbol("pu_q", 1);
             this.draw_symbol("pu_a", 1);
             this.draw_squareframe("pu_q");
@@ -761,6 +762,7 @@ class Puzzle_square extends Puzzle {
             set_surface_style(this.ctx, this[pu].surface[i]);
             if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].surface[i]) {
                 this.ctx.fillStyle = this[pu + "_col"].surface[i];
+                this.ctx.strokeStyle = this.ctx.fillStyle;
             }
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);

@@ -61,6 +61,7 @@
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
+            "./js/conflicts.js",
             "./js/puzzlink.js",
             "./js/modes.js",
             "./js/genre_tags.js",
@@ -216,7 +217,7 @@
                         </span>
                         <span id="mode_symbol" style="display:none;">
                             <ul class="nav">
-                                <li><span id="ms1">Shape</span>
+                                <li><span id="ms1" class="labelS">Shape</span>
                                     <ul id="mode_symbolul1">
                                         <li id="li_circle"><span id="ms1_circle">&#x26AB; &#x26AA; &#x25CF; &#x25CB;</span>
                                             <ul>
@@ -290,7 +291,7 @@
                                         <li id="li_tri"><span id="ms_tri">&#x25E2; &#x25E3; &#x25E4; &#x25E5;</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="ms2">Number</span>
+                                <li><span id="ms2" class="labelS">Number</span>
                                     <ul id="mode_symbolul2">
                                         <li><span id="ms3_math">Math</span>
                                             <ul>
@@ -311,7 +312,7 @@
                                         <li><span id="ms_pills">Pills</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="ms3">Arrow</span>
+                                <li><span id="ms3" class="labelS">Arrow</span>
                                     <ul id="mode_symbolul3">
                                         <li id="li_arrow_B"><span id="ms3_arrow_B">Fat</span>
                                             <ul>
@@ -354,7 +355,7 @@
                                         <li id="li_arrow_fourtip"><span id="ms_arrow_fourtip">Arrow tips</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="ms4">Special 1</span>
+                                <li><span id="ms4" class="labelS">Special 1</span>
                                     <ul id="mode_symbolul4">
                                         <li id="li_battleship"><span id="ms4_battleship">Battleship</span>
                                             <ul>
@@ -375,7 +376,7 @@
                                         <li id="li_polyomino"><span id="ms_polyomino">Polyomino</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="ms5">Special 2</span>
+                                <li><span id="ms5" class="labelS">Special 2</span>
                                     <ul id="mode_symbolul5">
                                         <li><span id="ms_angleloop">Angle Loop</span></li>
                                         <li><span id="ms_firefly">Firefly</span></li>
@@ -420,14 +421,14 @@
                         </span>
                         <span id="mode_combi" style="display:none;">
                             <ul class="nav">
-                                <li><span id="subc1">Paint</span>
+                                <li><span id="subc1" class="labelS">Paint</span>
                                     <ul>
                                         <li><span id="combisub_blpo">Black / dot</span></li>
                                         <li><span id="combisub_blwh">Yin-Yang</span></li>
                                         <li id="combili_shaka"><span id="combisub_shaka">Shakashaka</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="subc2">Loop</span>
+                                <li><span id="subc2" class="labelS">Loop</span>
                                     <ul>
                                         <li id="li_linex"><span id="combisub_linex">Line or x</span></li>
                                         <li id="li_lineox"><span id="combisub_lineox">Line or OX</span></li>
@@ -437,12 +438,12 @@
                                         <li id="li_hashi"><span id="combisub_hashi">Hashi</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="subc3">Area / Field</span>
+                                <li><span id="subc3" class="labelS">Area / Field</span>
                                     <ul>
                                         <li><span id="combisub_edgesub">Edge/Aux line</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="subc4">Object</span>
+                                <li><span id="subc4" class="labelS">Object</span>
                                     <ul>
                                         <li id="combili_battleship"><span id="combisub_battleship">Battleship</span></li>
                                         <li><span id="combisub_star">Star Battle</span></li>
@@ -454,7 +455,7 @@
                                         <li id="combili_doublemines"><span id="combisub_doublemines">DoubleMines</span></li>
                                     </ul>
                                 </li>
-                                <li><span id="subc5">Number logic</span>
+                                <li><span id="subc5" class="labelS">Number logic</span>
                                     <ul>
                                         <li><span id="combisub_numfl">Number flick</span></li>
                                         <li><span id="combisub_alfl">Alphabet flick</span></li>
@@ -837,7 +838,7 @@
             <div class="nb_button">
                 <input type="button" id="closeBtn_nb1" value="New grid" />
                 <input type="button" id="closeBtn_nb2" value="Update display" />
-                <input type="button" id="closeBtn_nb3" value="Cancel" />
+                <input type="button" id="closeBtn_nb3" value="Close" />
             </div>
         </div>
     </div>
@@ -851,7 +852,7 @@
             <br>
             <div class="nb_button">
                 <input type="button" id="closeBtn_size1" value="Apply changes" />
-                <input type="button" id="closeBtn_size2" value="Cancel" />
+                <input type="button" id="closeBtn_size2" value="Close" />
             </div>
             <br>
             <div class="nb_button">
@@ -901,7 +902,7 @@
             <div class="nb_button">
                 <input type="button" id="closeBtn_image1" value="Open in new window" onclick="saveimage_window();" />
                 <input type="button" id="closeBtn_image2" value="Download" />
-                <input type="button" id="closeBtn_image3" value="Cancel" />
+                <input type="button" id="closeBtn_image3" value="Close" />
             </div>
         </div>
     </div>
@@ -984,7 +985,7 @@
                 <input type="button" id="closeBtn_save2" value="Download" />
                 <input type="button" id="closeBtn_save3" value="Open" onclick="savetext_window();" />
                 <input type="button" id="closeBtn_save6" value="URL_short" onclick="shorturl_tab();" />
-                <input type="button" id="closeBtn_save4" value="Cancel" />
+                <input type="button" id="closeBtn_save4" value="Close" />
             </div>
         </div>
     </div>
@@ -1407,6 +1408,17 @@
                             <select name="advancebutton" id="advance_button">
                                 <option value="1">ON</option>
                                 <option value="2" selected="selected">OFF</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Timer Bar:</label>
+                        </td>
+                        <td>
+                            <select name="timerbar" id="timer_bar_opt">
+                                <option value="1" selected="selected">Show</option>
+                                <option value="2">Hide</option>
                             </select>
                         </td>
                     </tr>

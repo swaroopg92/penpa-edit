@@ -1,5 +1,5 @@
 // Including meta allows CMD to work on Mac
-let isCtrlKeyHeld = e => e.ctrlKey||e.metaKey;
+let isCtrlKeyHeld = e => e.ctrlKey || e.metaKey;
 let isCtrlKeyPressed = key => key === "Control" || key === "Meta";
 let isShiftKeyHeld = e => e.shiftKey;
 let isShiftKeyPressed = key => key === "Shift";
@@ -1927,20 +1927,21 @@ onload = function() {
             deleteCookie("starbattle_dots");
             deleteCookie("mousemiddle_button");
             deleteCookie("responsive_mode");
+            deleteCookie("timerbar_status");
             // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
-            let expirationDate = 2147483647;
-            setCookie("color_theme", document.getElementById("theme_mode_opt").value, expirationDate);
-            setCookie("reload_button", document.getElementById('reload_button').value, expirationDate);
-            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), expirationDate);
-            setCookie("gridtype", document.getElementById("gridtype").value, expirationDate);
-            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, expirationDate);
-            setCookie("displaysize", document.getElementById("nb_size3").value, expirationDate);
-            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, expirationDate);
-            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, expirationDate);
-            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, expirationDate);
+            setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
+            setCookie("reload_button", document.getElementById('reload_button').value, 2147483647);
+            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
+            setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
+            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
+            setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
+            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
+            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, 2147483647);
+            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, 2147483647);
             setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expirationDate);
-            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expirationDate);
+            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, 2147483647);
         }
     }
 
@@ -2045,6 +2046,11 @@ onload = function() {
     // PenpaLite Setting
     document.getElementById("advance_button").onchange = function() {
         advancecontrol_onoff();
+    }
+
+    // Timer Bar Setting
+    document.getElementById("timer_bar_opt").onchange = function() {
+        showhide_timer();
     }
 
     // Timer pause and unpause

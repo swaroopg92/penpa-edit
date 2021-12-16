@@ -11,6 +11,7 @@ const penpa_tags = {
             "killer",
             "isodoku",
             "consecutive",
+            "nonconsecutive",
             "sudokurve",
             "tile",
             "battleship",

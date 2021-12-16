@@ -163,6 +163,9 @@ class Puzzle {
         this.multisolution = false;
         this.borderwarning = true;
         this.user_tags = [];
+        this.conflicts = new Conflicts();
+        this.previous_sol = [];
+        this.conflict_cells = [];
     }
 
     reset() {
@@ -5106,6 +5109,19 @@ class Puzzle {
                         }
                     }
                 }
+            } else if (header === "tapa_contest" || header === "tc") {
+                // Answer - Shading
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "1";
+                            } else {
+                                text += "0";
+                            }
+                        }
+                    }
+                }
             } else if (header === "slitherlink") {
                 text += 'Author:\n' +
                     'Genre: Slitherlink\n' +
@@ -8666,6 +8682,7 @@ class Puzzle {
             } else if (this.mouse_mode === "up") {
                 this.drawing = false;
                 let cageexist_status = false;
+                let skip_cages = false;
                 let array = "cage";
                 let arraykill = "killercages";
                 let grid_matrix = [];
@@ -8673,8 +8690,8 @@ class Puzzle {
                 let key;
 
                 // Grid Size
-                let row_size = parseInt(document.getElementById("nb_size2").value);
-                let col_size = parseInt(document.getElementById("nb_size1").value);
+                let row_size = parseInt(this.ny0 - 4);
+                let col_size = parseInt(this.nx0 - 4);
 
                 // sort cage
                 let sortedcages = this.cageselection.sort((a, b) => a - b);
@@ -8692,6 +8709,19 @@ class Puzzle {
                         }
                     }
                     if (cageexist_status) { // to exit from outermost for loop
+                        break;
+                    }
+                }
+
+                // Find if any cell of the new cage has outside half grid cells then skip
+                for (let i = 0; i < sortedcages.length; i++) {
+                    let col_num = (sortedcages[i] % (this.nx0)) - 2;
+                    let row_num = parseInt(sortedcages[i] / this.nx0) - 2;
+
+                    // If cage selection has outisde half grid cells then skip
+                    if ((row_num < 0) || (row_num >= row_size) || (col_num < 0) || (col_num >= col_size)) {
+                        cageexist_status = true;
+                        skip_cages = true;
                         break;
                     }
                 }
@@ -8899,7 +8929,7 @@ class Puzzle {
                     this.drawing_mode = draw_mode;
                 } else {
                     // length 1 then delete
-                    if (sortedcages.length === 1) {
+                    if (sortedcages.length === 1 && !skip_cages) {
 
                         // check which style cage exist, if same style then delete or else do nothing
                         let top_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][0] + this.nx0 * this.ny0);
@@ -9872,14 +9902,41 @@ class Puzzle {
                     this.drawing_mode = 50;
                 }
             } else {
-                if (!this[this.mode.qa].lineE[num]) { // Insert cross
-                    this.record(symboltype, num);
-                    this[this.mode.qa].lineE[num] = 98;
-                    this.drawing_mode = 52;
-                } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
-                    this.record(symboltype, num);
-                    delete this[this.mode.qa].lineE[num];
-                    this.drawing_mode = 50;
+                // Ignore if edge already exist
+                // Do this only for square grids for now
+                if (this.gridtype === "square") {
+
+                    let neighbor1 = this.point[num].neighbor[0];
+                    let neighbor2 = this.point[num].neighbor[1];
+                    let edge_num;
+                    let corners = this.point[neighbor2].surround;
+
+                    // If difference is 1 then its left and right else its top and bottom
+                    if (Math.abs(neighbor1 - neighbor2) === 1) {
+                        edge_num = corners[0].toString() + "," + corners[3].toString();
+                    } else {
+                        edge_num = corners[0].toString() + "," + corners[1].toString();
+                    }
+
+                    if (!this[this.mode.qa].lineE[num] && !this[this.mode.qa].lineE[edge_num]) { // Insert cross
+                        this.record(symboltype, num);
+                        this[this.mode.qa].lineE[num] = 98;
+                        this.drawing_mode = 52;
+                    } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record(symboltype, num);
+                        delete this[this.mode.qa].lineE[num];
+                        this.drawing_mode = 50;
+                    }
+                } else {
+                    if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                        this.record(symboltype, num);
+                        this[this.mode.qa].lineE[num] = 98;
+                        this.drawing_mode = 52;
+                    } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record(symboltype, num);
+                        delete this[this.mode.qa].lineE[num];
+                        this.drawing_mode = 50;
+                    }
                 }
             }
         } else {
@@ -9951,15 +10008,43 @@ class Puzzle {
             this.last = num;
             this.redraw();
         } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
-            if (this.drawing_mode == 52) {
-                if (!this[this.mode.qa].lineE[num]) { // Insert cross
-                    this.record("lineE", num);
-                    this[this.mode.qa].lineE[num] = 98;
+            if (this.gridtype === "square") {
+                // Ignore if edge already exist
+                // Do this only for square grids for now
+                let neighbor1 = this.point[num].neighbor[0];
+                let neighbor2 = this.point[num].neighbor[1];
+                let edge_num;
+                let corners = this.point[neighbor2].surround;
+
+                // If difference is 1 then its left and right else its top and bottom
+                if (Math.abs(neighbor1 - neighbor2) === 1) {
+                    edge_num = corners[0].toString() + "," + corners[3].toString();
+                } else {
+                    edge_num = corners[0].toString() + "," + corners[1].toString();
                 }
-            } else if (this.drawing_mode == 50) {
-                if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
-                    this.record("lineE", num);
-                    delete this[this.mode.qa].lineE[num];
+
+                if (this.drawing_mode == 52) {
+                    if (!this[this.mode.qa].lineE[num] && !this[this.mode.qa].lineE[edge_num]) { // Insert cross
+                        this.record("lineE", num);
+                        this[this.mode.qa].lineE[num] = 98;
+                    }
+                } else if (this.drawing_mode == 50) {
+                    if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record("lineE", num);
+                        delete this[this.mode.qa].lineE[num];
+                    }
+                }
+            } else {
+                if (this.drawing_mode == 52) {
+                    if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                        this.record("lineE", num);
+                        this[this.mode.qa].lineE[num] = 98;
+                    }
+                } else if (this.drawing_mode == 50) {
+                    if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record("lineE", num);
+                        delete this[this.mode.qa].lineE[num];
+                    }
                 }
             }
             this.redraw();
@@ -10975,12 +11060,14 @@ class Puzzle {
     /////////////////////////////////
 
 
-    redraw(svgcall = false) {
+    redraw(svgcall = false, check_sol = true) {
         this.flushcanvas(svgcall);
         panel_pu.draw_panel();
         this.draw();
         this.set_redoundocolor();
-        this.check_solution();
+        if (check_sol) {
+            this.check_solution();
+        }
     }
 
     set_redoundocolor() {
@@ -11157,6 +11244,22 @@ class Puzzle {
         }
     }
 
+    draw_conflicts() {
+        let keys = this.conflict_cells;
+        for (var k = 0; k < keys.length; k++) {
+            var i = keys[k];
+            set_surface_style(this.ctx, 100);
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
+            for (var j = 1; j < this.point[i].surround.length; j++) {
+                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+    }
+
     draw_selection() {
         if (this.mode[this.mode.qa].edit_mode === "sudoku" ||
             (this.mode[this.mode.qa].edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
@@ -11324,28 +11427,32 @@ class Puzzle {
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
-                if (text === this.solution && this.sol_flag === 0) {
-                    setTimeout(() => {
-                        Swal.fire({
-                            title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                            html: '<h2 class="wish">Congratulations 🙂</h2>',
-                            background: 'url(js/images/new_year.jpg)',
-                            icon: 'success',
-                            confirmButtonText: 'Hurray!',
-                            // timer: 5000
-                        })
-                    }, 20)
-                    sw_timer.pause();
-                    // this.mouse_mode = "out";
-                    // this.mouseevent(0, 0, 0);
-                    this.sol_flag = 1;
-                    // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-                } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                    this.sol_flag = 0;
-                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                let conflict = this.check_conflict(text);
+                if (!conflict) {
+                    if (text === this.solution && this.sol_flag === 0) {
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                                html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                background: 'url(js/images/new_year.jpg)',
+                                icon: 'success',
+                                confirmButtonText: 'Hurray!',
+                                // timer: 5000
+                            })
+                        }, 20)
+                        sw_timer.pause();
+                        // this.mouse_mode = "out";
+                        // this.mouseevent(0, 0, 0);
+                        this.sol_flag = 1;
+                        // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
+                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                    } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                        this.sol_flag = 0;
+                        // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    }
                 }
+                this.redraw(false, false);
             }
         } else {
             var text = this.make_solution();
@@ -11633,6 +11740,35 @@ class Puzzle {
         }
         for (var i of penpa_modes["square"]['li']) {
             document.getElementById("li_" + i).style.display = displaytype;
+        }
+    }
+
+    check_conflict(current_sol) {
+        if (this.user_tags) {
+            // Do only if current solution changed
+            if (current_sol !== this.previous_sol) {
+                for (var tag of this.user_tags) {
+                    switch (tag) {
+                        case 'classic':
+                            this.conflict_cells = this.conflicts.check_classic(this);
+                            break;
+                        case 'nonconsecutive':
+                            this.conflict_cells = this.conflicts.check_classic(this);
+
+                            // check consecutive only if no classic conflict
+                            if (this.conflict_cells.length === 0) {
+                                this.conflict_cells = this.conflicts.check_consecutive(this);
+                            }
+                            break;
+                    }
+                }
+                this.previous_sol = current_sol;
+                if (this.conflict_cells.length !== 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
     }
 }

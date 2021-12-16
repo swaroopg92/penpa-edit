@@ -87,6 +87,12 @@ function create() {
         document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
     }
 
+    let timer_bar_cookie = getCookie("timerbar_status");
+    if (timer_bar_cookie !== null) {
+        document.getElementById("timer_bar_opt").value = timer_bar_cookie;
+        showhide_timer();
+    }
+
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
         add_constraints();
@@ -1037,6 +1043,14 @@ function advancecontrol_on() {
         if (pu.undoredo_disable) {
             set_contestmode();
         }
+    }
+}
+
+function showhide_timer() {
+    if (document.getElementById("timer_bar_opt").value === "2") {
+        document.getElementById("stop_watch").style.display = "none";
+    } else if (document.getElementById("timer_bar_opt").value === "1") {
+        document.getElementById("stop_watch").style.display = "";
     }
 }
 
