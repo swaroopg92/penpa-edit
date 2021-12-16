@@ -54,7 +54,7 @@ header {
     left: 0;
     right: 0;
     font-size: .9em;
-    grid-template-columns: 1fr 300px 300px 1fr;
+    grid-template-columns: 1fr 200px 200px 1fr;
     overflow: hidden;
     z-index: 1;
     box-shadow: var(--shadow_low);
