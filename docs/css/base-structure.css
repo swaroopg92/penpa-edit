@@ -1295,19 +1295,36 @@ sup {
 
 @media (min-width: 850px) {
     #app-container.responsive {
-        display:grid;
+        display: grid;
         grid-template-columns: 1fr 225px 600px 1fr;
     }
+
     #app-container.responsive #tool-container {
         grid-area: 1 / 2 / 2 / 3;
     }
+
     #app-container.responsive #puzzle-container {
         grid-area: 1 / 3 / 2 / 4;
     }
+
+    #app-container.responsive.responsive-flip {
+        display: grid;
+        grid-template-columns: 1fr 600px 225px 1fr;
+    }
+
+    #app-container.responsive.responsive-flip #tool-container {
+        grid-area: 1 / 3 / 2 / 4;
+    }
+
+    #app-container.responsive.responsive-flip #puzzle-container {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+
     #app-container.responsive #buttons {
         width: auto;
         height: auto;
     }
+
     #app-container.responsive #mode_txt_space,
     #app-container.responsive #mode_break {
         display: none;

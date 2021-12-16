@@ -49,8 +49,8 @@ function create() {
         pu.set_redoundocolor();
     }
     let responsive_design = getCookie("responsive_design");
-    if (responsive_design !== null && responsive_design == 2) {
-        setResponsiveness(true, true);
+    if (responsive_design !== null) {
+        setResponsiveness(responsive_design, true);
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
@@ -1619,8 +1619,8 @@ function load(urlParam, type = 'url') {
         pu.set_redoundocolor();
     }
     let responsive_design = getCookie("responsive_design");
-    if (responsive_design !== null && responsive_design == 2) {
-        setResponsiveness(true, true);
+    if (responsive_design !== null) {
+        setResponsiveness(responsive_design, true);
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
@@ -1980,9 +1980,15 @@ function load(urlParam, type = 'url') {
             pu.redraw();
         }
 
-        if (view_settings[1] && view_settings[1] == 'responsive') {
-            document.getElementById("responsive_settings_opt").value = 2;
-            document.getElementById("app-container").classList.add("responsive");
+        if (view_settings[1]) {
+            if (view_settings[1] == 'responsive') {
+                document.getElementById("responsive_settings_opt").value = 2;
+                document.getElementById("app-container").classList.add("responsive");
+            } else if (view_settings[1] == 'responsive-flip') {
+                document.getElementById("responsive_settings_opt").value = 3;
+                document.getElementById("app-container").classList.add("responsive");
+                document.getElementById("app-container").classList.add("responsive-flip");
+            }
         }
     }
 

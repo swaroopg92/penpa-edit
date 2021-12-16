@@ -1896,7 +1896,7 @@ onload = function() {
 
     // Toggle responsiveness
     document.getElementById("responsive_settings_opt").onchange = function () {
-        setResponsiveness(document.getElementById("responsive_settings_opt").value === '2');
+        setResponsiveness(document.getElementById("responsive_settings_opt").value);
     }
 
     // Custom Color Setting
@@ -2068,11 +2068,14 @@ onload = function() {
         sw_timer.start({ precision: 'secondTenths' });
     }
 
-    function setResponsiveness(enabled, updateUI) {
-        let verb = enabled ? 'add' : 'remove';
+    function setResponsiveness(mode, updateUI) {
+        let modeInt = parseInt(mode, 10);
+        let verb = modeInt > 1 ? 'add' : 'remove';
+        let flipVerb = modeInt > 2 ? 'add' : 'remove';
         document.getElementById("app-container").classList[verb]("responsive");
+        document.getElementById("app-container").classList[flipVerb]("responsive-flip");
         if (updateUI) {
-            document.getElementById("responsive_settings_opt").value = enabled ? 2 : 1;
+            document.getElementById("responsive_settings_opt").value = mode;
         }
     }
 };
