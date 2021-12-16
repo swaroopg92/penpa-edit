@@ -912,6 +912,7 @@ function submit_solution() {
         .then(function(response) {
             if (response.correct) {
                 document.getElementById('submit_sol').style.display = 'none';
+                sw_timer.stop();
                 if (response.firstTimeCorrect) {
                     submit_solution_steps();
                 }
@@ -1801,6 +1802,15 @@ function load(urlParam, type = 'url') {
             let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
             contestinfo.innerHTML = submitContents;
             contestinfo.style.display = "block";
+            if (pu.puzzle_info.seconds !== undefined) {
+                document.getElementById("timer").style.display = "block";
+                sw_timer.start({
+                    precision: 'secondTenths',
+                    startValues: {
+                        seconds: pu.puzzle_info.seconds
+                    }
+                });
+            }
         }
     }
 
