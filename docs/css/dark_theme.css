@@ -42,8 +42,7 @@
     --fgMain: var(--white);
 }
 
-.solving,
-#stop_watch {
+.solving {
     background: var(--blueDark);
 }
 
