@@ -11527,36 +11527,31 @@ class Puzzle {
         for (var j = r_start; j < (size + r_start); j++) { //  row
             for (var i = c_start; i < (size + c_start); i++) { // column
 
+                let primary = this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)];
+                let secondary = this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)];
+                let checklist = {};
+
                 if (document.getElementById("ignore_pencilmarks").checked) {
-                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10"),
-                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10")
-                    ];
+                    checklist = {
+                        2: 1,
+                        4: 1,
+                        5: 1,
+                        6: 1,
+                        10: 1
+                    };
                 } else {
-                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4"),
-                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")
-                    ];
+                    checklist = {
+                        2: 1,
+                        4: 1
+                    };
                 }
 
-                if (ifcondition[0]) {
-                    if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                if (primary && !checklist[primary[2]]) {
+                    if (primary[2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < 10; k++) {
-                            if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (primary[0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -11567,18 +11562,18 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                        if (isNaN(parseInt(primary[0]))) {
                             outputstring += '0';
                         } else {
-                            outputstring += this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                            outputstring += primary[0];
                         }
                     }
-                } else if (ifcondition[1]) {
-                    if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                } else if (secondary && !checklist[secondary[2]]) {
+                    if (secondary[2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < (size + 1); k++) {
-                            if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (secondary[0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -11589,10 +11584,10 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                        if (isNaN(parseInt(secondary[0]))) {
                             outputstring += '0';
                         } else {
-                            outputstring += this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                            outputstring += secondary[0];
                         }
                     }
                 } else {
