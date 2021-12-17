@@ -1993,11 +1993,12 @@ class Puzzle {
 
     point_usecheck() {
         for (var i in this.point) {
-            if (this.point[i].use === -1) {;
-            } else if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
-                this.point[i].use = 0;
-            } else {
-                this.point[i].use = 1;
+            if (this.point[i].use !== -1) {
+                if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
+                    this.point[i].use = 0;
+                } else {
+                    this.point[i].use = 1;
+                }
             }
         }
     }
