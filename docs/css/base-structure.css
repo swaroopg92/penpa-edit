@@ -639,6 +639,7 @@ body textarea {
     left: 0px;
     width: 0px;
     height: 0px;
+    z-index: 2;
 }
 
 .nav li ul li {
@@ -1328,6 +1329,18 @@ sup {
     #app-container.responsive #mode_txt_space,
     #app-container.responsive #mode_break {
         display: none;
+    }
+
+    #app-container.responsive .nav {
+        height: auto;
+        flex-wrap: wrap;
+    }
+
+    #app-container.responsive .symbolmode_display {
+        display: block;
+    }
+    #app-container.responsive .select2-dropdown {
+        min-width: 10rem !important;
     }
 }
 
