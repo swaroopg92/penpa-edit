@@ -1243,18 +1243,21 @@ function saveimage_download() {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
             var blob = new Blob([text], { type: "image/svg+xml" });
-            var ua = window.navigator.userAgent.toLowerCase();
-            if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-                //safari
-                window.open('data:image/svg+xml;base64,' + window.Base64.encode(text), '_blank');
-            } else if (window.navigator.msSaveBlob) {
+            if (window.navigator.msSaveBlob) {
                 // for IE
                 window.navigator.msSaveBlob(blob, filename);
-            } else {
+            } else if (URL && URL.createObjectURL) {
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.target = "_blank";
                 downloadLink.download = filename;
                 downloadLink.click();
+            } else {
+                Swal.fire({
+                    title: 'Unsupported Browser',
+                    html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                });
             }
         } else {
             if (pu.canvas.msToBlob) { // For IE
@@ -1283,14 +1286,17 @@ function saveimage_window() {
     if (document.getElementById("nb_type3").checked) { //svg
         // store in a Blob
         let blob = new Blob([address], { type: "image/svg+xml" });
-        var ua = window.navigator.userAgent.toLowerCase();
-        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-            //safari
-            window.open('data:image/svg+xml;base64,' + window.Base64.encode(address), '_blank');
-        } else {
+        if (URL && URL.createObjectURL) {
             // create an URI pointing to that blob
             url = URL.createObjectURL(blob);
             window.open(url);
+        } else {
+            Swal.fire({
+                title: 'Unsupported Browser',
+                html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     } else {
         win = window.open();
@@ -1400,7 +1406,6 @@ function savetext_download() {
         filename += ".txt";
     }
     var blob = new Blob([text], { type: "text/plain" });
-    var ua = window.navigator.userAgent.toLowerCase();
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
     for (var i = 0; i < filename.length; i++) {
@@ -1409,17 +1414,21 @@ function savetext_download() {
         }
     }
     if (valid_name) {
-        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-            //safari
-            window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
-        } else if (window.navigator.msSaveBlob) {
+        if (window.navigator.msSaveBlob) {
             // for IE
             window.navigator.msSaveBlob(blob, filename);
-        } else {
+        } else if (URL && URL.createObjectURL) {
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.target = "_blank";
             downloadLink.download = filename;
             downloadLink.click();
+        } else {
+            Swal.fire({
+                title: 'Unsupported Browser',
+                html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     } else {
         Swal.fire({
@@ -1427,7 +1436,7 @@ function savetext_download() {
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
-        })
+        });
     }
 }
 

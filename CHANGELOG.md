@@ -1,4 +1,7 @@
 ## History
+* 2021/12/?????? ver 2.26.12
+	* Revert timer styling.
+	* Fix SVG export in Safari.
 * 2021/12/02 ver 2.26.11
 	* Fix aspect ratio of info icon.
 	* Fix minor CSS linting issues.
