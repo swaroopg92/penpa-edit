@@ -2657,44 +2657,6 @@ class Puzzle {
                     this[this.mode.qa + "_col"][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
                 }
                 break;
-            case "combi":
-                switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
-                    case "tents":
-                        break;
-                    case "linex":
-                        break;
-                    case "edgex":
-                        break;
-                    case "edgexoi":
-                        break;
-                    case "blpo":
-                        break;
-                    case "blwh":
-                        break;
-                    case "battleship":
-                        break;
-                    case "star":
-                        break;
-                    case "magnets":
-                        break;
-                    case "lineox":
-                        break;
-                    case "yajilin":
-                        break;
-                    case "hashi":
-                        break;
-                    case "arrowS":
-                        break;
-                    case "shaka":
-                        break;
-                    case "numfl":
-                        break;
-                    case "alfl":
-                        break;
-                    case "edgesub":
-                        break;
-                }
-                break;
         }
         this.redraw();
     }
