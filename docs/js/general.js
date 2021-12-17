@@ -894,7 +894,7 @@ function submit_solution() {
     }
     const data = {
             contest: pu.puzzle_info.cid,
-            puzzle: pu.puzzle_info.pid,
+            sequence: pu.puzzle_info.pid,
             answer: solution
         },
         options = {
@@ -917,8 +917,11 @@ function submit_solution() {
                     submit_solution_steps();
                 }
             }
+            const redirect = response.redirect ? `Click <a href='${response.redirect}'>here</a> to proceed to main page` : ``;
             Swal.fire({
-                title: `<h3 class="${response.correct ? 'info' : 'warn'}">${response.message || 'Solution is wrong'}</h3>`,
+                html: `<h3 class="${response.correct ? 'info' : 'warn'}">
+                    ${response.message || 'Solution is wrong'}
+                    ${redirect}</h3>`,
                 icon: response.correct ? 'success' : 'error',
                 confirmButtonText: response.correct ? 'Ok' : 'Try Again',
                 timer: response.correct ? undefined : 3000
@@ -949,7 +952,7 @@ function submit_solution_steps() {
     var replay = window.btoa(char8);
     const data = {
             contest: pu.puzzle_info.cid,
-            puzzle: pu.puzzle_info.pid,
+            sequence: pu.puzzle_info.pid,
             replay: replay
         },
         options = {
@@ -1729,7 +1732,14 @@ function load(urlParam, type = 'url') {
         var paramItem = param[i].split('=');
         paramArray[paramItem[0]] = paramItem[1];
     }
+    if (paramArray.p) {
+        load2(paramArray, type);
+    } else {
+        load_from_server(paramArray, type);
+    }
+}
 
+function load2(paramArray, type) {
     // Decrypt P
     var ab = atob(paramArray.p);
     ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
@@ -1792,12 +1802,12 @@ function load(urlParam, type = 'url') {
         } else {
             document.getElementById("puzzletitle").style.display = 'none';
         }
-        if (pu.puzzle_info.iframe) {
+        if (pu.puzzle_info.iframe || pu.puzzle_info.gridsubmit) {
             document.getElementById("title").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
             document.getElementById("penpa_version").remove();
         }
-        if (pu.puzzle_info.gridsubmit && !paramArray.r) {
+        if (pu.puzzle_info.allowSub && pu.puzzle_info.gridsubmit && !paramArray.r) {
             let contestinfo = document.getElementById("contestinfo");
             let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
             contestinfo.innerHTML = submitContents;
@@ -3207,4 +3217,42 @@ function decode_puzzlink(url) {
 
     // Set the Source
     document.getElementById("saveinfosource").value = url;
+}
+
+function load_from_server(paramArray, type)
+{
+    const data = {
+        contest: paramArray.contest,
+        sequence: paramArray.sequence,
+        mode: paramArray.mode,
+        player: paramArray.player,
+        action: 'pqr',
+    },
+    options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(data)
+    },
+    request = new Request('/live/misc-daily', options);
+    fetch(request)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(response) {
+            if (response.success === false) {
+                Swal.fire({
+                    html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
+                    icon: 'error'
+                })
+            }
+            if (response.q) {
+                response.q = window.btoa(JSON.stringify(response.q)); 
+            }
+            load2(response, type);
+        })
+        .catch(function(err) {
+            create();
+        });    
 }
