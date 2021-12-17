@@ -870,7 +870,6 @@ function display_rules() {
 }
 
 function submit_solution() {
-    pu.puzzle_info['genre'] = "tapa"; // Deb needs to pass this info from LMI
     let solution = "";
     switch (pu.puzzle_info.genre) {
         case "tapa":

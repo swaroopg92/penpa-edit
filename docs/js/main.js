@@ -1951,7 +1951,7 @@ onload = function() {
     }
 
     $(document).ready(function() {
-        if (pu && pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
+        if (typeof pu !== 'undefined' && pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
                 'width': "25%"
             });
