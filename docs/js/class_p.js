@@ -166,6 +166,14 @@ class Puzzle {
         this.conflicts = new Conflicts();
         this.previous_sol = [];
         this.conflict_cells = [];
+
+        this.ignored_line_types = {
+            2: 1, // Black color
+            5: 1, // Grey Color
+            80: 1, // Thin
+            12: 1, // Dotted
+            13: 1 // Fat dots
+        };
     }
 
     reset() {
@@ -3357,13 +3365,7 @@ class Puzzle {
             if (document.getElementById("sol_loopline").checked === true || checkall) {
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].line) {
-                        if ((this["pu_q"].line[i] &&
-                                (this["pu_q"].line[i] === 2 || // Black color
-                                    this["pu_q"].line[i] === 5 || // Grey Color
-                                    this["pu_q"].line[i] === 80 || // Thin
-                                    this["pu_q"].line[i] === 12 || // Dotted
-                                    this["pu_q"].line[i] === 13 // Fat dots
-                                ))) {
+                        if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                             // Ignore the line
                         } else {
                             if (this[pu].line[i] === 3) {
@@ -3385,13 +3387,7 @@ class Puzzle {
 
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].freeline) {
-                        if ((this["pu_q"].freeline[i] &&
-                                (this["pu_q"].freeline[i] === 2 || // Black color
-                                    this["pu_q"].freeline[i] === 5 || // Grey Color
-                                    this["pu_q"].freeline[i] === 80 || // Thin
-                                    this["pu_q"].freeline[i] === 12 || // Dotted
-                                    this["pu_q"].freeline[i] === 13 // Fat dots
-                                ))) {
+                        if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
                             // Ignore the line
                         } else {
                             if (this[pu].freeline[i] === 3) {
@@ -3656,13 +3652,7 @@ class Puzzle {
                             break;
                         case "loopline":
                             for (var i in this[pu].line) {
-                                if ((this["pu_q"].line[i] &&
-                                        (this["pu_q"].line[i] === 2 || // Black color
-                                            this["pu_q"].line[i] === 5 || // Grey Color
-                                            this["pu_q"].line[i] === 80 || // Thin
-                                            this["pu_q"].line[i] === 12 || // Dotted
-                                            this["pu_q"].line[i] === 13 // Fat dots
-                                        ))) {
+                                if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].line[i] === 3) {
@@ -3674,13 +3664,7 @@ class Puzzle {
                             }
 
                             for (var i in this[pu].freeline) {
-                                if ((this["pu_q"].freeline[i] &&
-                                        (this["pu_q"].freeline[i] === 2 || // Black color
-                                            this["pu_q"].freeline[i] === 5 || // Grey Color
-                                            this["pu_q"].freeline[i] === 80 || // Thin
-                                            this["pu_q"].freeline[i] === 12 || // Dotted
-                                            this["pu_q"].freeline[i] === 13 // Fat dots
-                                        ))) {
+                                if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].freeline[i] === 3) {
