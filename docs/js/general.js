@@ -3220,13 +3220,7 @@ function decode_puzzlink(url) {
 
 function load_from_server(paramArray, type)
 {
-    const data = {
-        contest: paramArray.contest,
-        sequence: paramArray.sequence,
-        mode: paramArray.mode,
-        player: paramArray.player,
-        action: 'pqr',
-    },
+    const data = Object.keys(paramArray).reduce( function (a, c) { a[c] = paramArray[c]; return a;}, {action:'pqr'}),
     options = {
         method: 'POST',
         headers: {
