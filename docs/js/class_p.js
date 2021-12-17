@@ -369,8 +369,9 @@ class Puzzle {
         // pause-unpause layer
         let pause_canvas = document.getElementById("pause_canvas");
         let pause_ctx = pause_canvas.getContext("2d");
-        pause_canvas.style.width = this.canvasx.toString() + "px";
-        pause_canvas.style.height = this.canvasy.toString() + "px";
+        let factor = 0.95;
+        pause_canvas.style.width = (this.canvasx * factor).toString() + "px";
+        pause_canvas.style.height = (this.canvasy * factor).toString() + "px";
         pause_canvas.width = this.resol * this.canvasx;
         pause_canvas.height = this.resol * this.canvasy;
     }
@@ -382,7 +383,7 @@ class Puzzle {
 
         // set the style and font
         pause_ctx.filleStyle = Color.BLUE;
-        let font_size = 0.09 * pause_canvas.height; // 90 % of display size/ height of canvas
+        let font_size = 0.09 * pause_canvas.height; // 9 % of display size/ height of canvas
         pause_ctx.font = font_size + 'px sans-serif';
         let lineheight = 1.2 * font_size;
         let textstring = "Paused\nClick on \"Start\"\nor \"F4\"";

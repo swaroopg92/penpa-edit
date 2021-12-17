@@ -9,6 +9,12 @@
 	* Initial cleanup efforts toward a responsive design.
 	* Header and Footer to the site.
 	* refactoring cmd, alt, shift, ctrl key code for consistency.
+	* Restored original timer look.
+	* Fixed killer cages bug.
+	* Some display improvements.
+	* Hide timer area option.
+	* Added nonconsecutive tag.
+	* Tapa sol string.
 * 2021/11/24 ver 2.26.10
 	* Reset button now automatically starts time from 0.
 	* Cmd Key is treated equivalent to Ctrl Key for Macbooks.
