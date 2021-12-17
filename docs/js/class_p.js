@@ -2895,7 +2895,7 @@ class Puzzle {
         this.pu_q.command_undo.__a = [];
         this.pu_a.command_redo.__a = [];
 
-        if (pu.puzzle_info && pu.puzzle_info.gridsubmit) {
+        if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily") {
             // Daily puzzle contests, retain undo
         } else {
             this.pu_a.command_undo.__a = [];

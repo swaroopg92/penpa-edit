@@ -845,9 +845,9 @@ function newgrid_r() {
         if (sw_timer.isPaused()) {
             pu.show_pause_layer();
         }
-        if (parent && pu.puzzle_info && pu.puzzle_info.iframe) {
-            parent.resizeiframe();
-		    }
+        if (parent && parent.resizeiframe) {
+			parent.resizeiframe();
+		}
     } else {
         Swal.fire({
             title: 'Swaroop says:',
@@ -1802,12 +1802,12 @@ function load2(paramArray, type) {
         } else {
             document.getElementById("puzzletitle").style.display = 'none';
         }
-        if (pu.puzzle_info.iframe || pu.puzzle_info.gridsubmit) {
+        if (pu.puzzle_info.iframe || pu.puzzle_info.lmimode === "daily") {
             document.getElementById("title").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
             document.getElementById("penpa_version").remove();
         }
-        if (pu.puzzle_info.allowSub && pu.puzzle_info.gridsubmit && !paramArray.r) {
+        if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
             let contestinfo = document.getElementById("contestinfo");
             let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
             contestinfo.innerHTML = submitContents;
@@ -2026,7 +2026,7 @@ function load2(paramArray, type) {
                 set_contestmode();
                 if (document.getElementById("saveinfosource").value) {
                     document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
-                } else if (pu.puzzle_info && !pu.puzzle_info.gridsubmit) {
+                } else if (pu.puzzle_info && pu.puzzle_info.lmimode !== "daily") {
                     document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to Contest Page and enter in the Submissions Box*";
                 }
             }
