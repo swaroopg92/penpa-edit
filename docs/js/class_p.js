@@ -166,6 +166,14 @@ class Puzzle {
         this.conflicts = new Conflicts();
         this.previous_sol = [];
         this.conflict_cells = [];
+
+        this.ignored_line_types = {
+            2: 1, // Black color
+            5: 1, // Grey Color
+            80: 1, // Thin
+            12: 1, // Dotted
+            13: 1 // Fat dots
+        };
     }
 
     reset() {
@@ -1985,11 +1993,12 @@ class Puzzle {
 
     point_usecheck() {
         for (var i in this.point) {
-            if (this.point[i].use === -1) {;
-            } else if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
-                this.point[i].use = 0;
-            } else {
-                this.point[i].use = 1;
+            if (this.point[i].use !== -1) {
+                if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
+                    this.point[i].use = 0;
+                } else {
+                    this.point[i].use = 1;
+                }
             }
         }
     }
@@ -2655,44 +2664,6 @@ class Puzzle {
                 this[this.mode.qa][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
                 if (document.getElementById("custom_color_opt").value === "2") {
                     this[this.mode.qa + "_col"][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
-                }
-                break;
-            case "combi":
-                switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
-                    case "tents":
-                        break;
-                    case "linex":
-                        break;
-                    case "edgex":
-                        break;
-                    case "edgexoi":
-                        break;
-                    case "blpo":
-                        break;
-                    case "blwh":
-                        break;
-                    case "battleship":
-                        break;
-                    case "star":
-                        break;
-                    case "magnets":
-                        break;
-                    case "lineox":
-                        break;
-                    case "yajilin":
-                        break;
-                    case "hashi":
-                        break;
-                    case "arrowS":
-                        break;
-                    case "shaka":
-                        break;
-                    case "numfl":
-                        break;
-                    case "alfl":
-                        break;
-                    case "edgesub":
-                        break;
                 }
                 break;
         }
@@ -3395,13 +3366,7 @@ class Puzzle {
             if (document.getElementById("sol_loopline").checked === true || checkall) {
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].line) {
-                        if ((this["pu_q"].line[i] &&
-                                (this["pu_q"].line[i] === 2 || // Black color
-                                    this["pu_q"].line[i] === 5 || // Grey Color
-                                    this["pu_q"].line[i] === 80 || // Thin
-                                    this["pu_q"].line[i] === 12 || // Dotted
-                                    this["pu_q"].line[i] === 13 // Fat dots
-                                ))) {
+                        if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                             // Ignore the line
                         } else {
                             if (this[pu].line[i] === 3) {
@@ -3423,13 +3388,7 @@ class Puzzle {
 
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].freeline) {
-                        if ((this["pu_q"].freeline[i] &&
-                                (this["pu_q"].freeline[i] === 2 || // Black color
-                                    this["pu_q"].freeline[i] === 5 || // Grey Color
-                                    this["pu_q"].freeline[i] === 80 || // Thin
-                                    this["pu_q"].freeline[i] === 12 || // Dotted
-                                    this["pu_q"].freeline[i] === 13 // Fat dots
-                                ))) {
+                        if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
                             // Ignore the line
                         } else {
                             if (this[pu].freeline[i] === 3) {
@@ -3694,13 +3653,7 @@ class Puzzle {
                             break;
                         case "loopline":
                             for (var i in this[pu].line) {
-                                if ((this["pu_q"].line[i] &&
-                                        (this["pu_q"].line[i] === 2 || // Black color
-                                            this["pu_q"].line[i] === 5 || // Grey Color
-                                            this["pu_q"].line[i] === 80 || // Thin
-                                            this["pu_q"].line[i] === 12 || // Dotted
-                                            this["pu_q"].line[i] === 13 // Fat dots
-                                        ))) {
+                                if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].line[i] === 3) {
@@ -3712,13 +3665,7 @@ class Puzzle {
                             }
 
                             for (var i in this[pu].freeline) {
-                                if ((this["pu_q"].freeline[i] &&
-                                        (this["pu_q"].freeline[i] === 2 || // Black color
-                                            this["pu_q"].freeline[i] === 5 || // Grey Color
-                                            this["pu_q"].freeline[i] === 80 || // Thin
-                                            this["pu_q"].freeline[i] === 12 || // Dotted
-                                            this["pu_q"].freeline[i] === 13 // Fat dots
-                                        ))) {
+                                if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].freeline[i] === 3) {
@@ -11580,36 +11527,31 @@ class Puzzle {
         for (var j = r_start; j < (size + r_start); j++) { //  row
             for (var i = c_start; i < (size + c_start); i++) { // column
 
+                let primary = this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)];
+                let secondary = this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)];
+                let checklist = {};
+
                 if (document.getElementById("ignore_pencilmarks").checked) {
-                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10"),
-                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10")
-                    ];
+                    checklist = {
+                        2: 1,
+                        4: 1,
+                        5: 1,
+                        6: 1,
+                        10: 1
+                    };
                 } else {
-                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4"),
-                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")
-                    ];
+                    checklist = {
+                        2: 1,
+                        4: 1
+                    };
                 }
 
-                if (ifcondition[0]) {
-                    if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                if (primary && !checklist[primary[2]]) {
+                    if (primary[2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < 10; k++) {
-                            if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (primary[0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -11620,18 +11562,18 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                        if (isNaN(parseInt(primary[0]))) {
                             outputstring += '0';
                         } else {
-                            outputstring += this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                            outputstring += primary[0];
                         }
                     }
-                } else if (ifcondition[1]) {
-                    if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                } else if (secondary && !checklist[secondary[2]]) {
+                    if (secondary[2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < (size + 1); k++) {
-                            if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (secondary[0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -11642,10 +11584,10 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                        if (isNaN(parseInt(secondary[0]))) {
                             outputstring += '0';
                         } else {
-                            outputstring += this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                            outputstring += secondary[0];
                         }
                     }
                 } else {
@@ -11716,19 +11658,19 @@ class Puzzle {
             document.getElementById(i).style.display = (displaytype === 'inline-block') ? 'table-row' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = displaytype;
+            document.getElementById("ms_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = displaytype;
+            document.getElementById("ms1_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = displaytype;
+            document.getElementById("ms3_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = displaytype;
+            document.getElementById("combisub_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = displaytype;
