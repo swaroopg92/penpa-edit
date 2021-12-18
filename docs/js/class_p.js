@@ -2097,10 +2097,11 @@ class Puzzle {
             this.redraw(true); // Reflects SVG elements
             this.ctx = old_canvas;
             this.redraw(); // Back to original display
+            this.mode[this.mode.qa].edit_mode = mode; // retain original mode
 
             return svg_canvas.getSerializedSvg(true);
         }
-        this.mode[this.mode.qa].edit_mode = mode;
+        this.mode[this.mode.qa].edit_mode = mode; // retain original mode
 
         if (document.getElementById("nb_margin2").checked) {
             this.canvasx = cx;
