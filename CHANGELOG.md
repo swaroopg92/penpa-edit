@@ -1,7 +1,6 @@
 ## History
-* 2021/12/?????? ver 2.26.13
-	* Fix SVG export in Safari.
 * 2021/12/16 ver 2.26.12
+	* Fix SVG export in Safari.
 	* Restored original timer look.
 	* Fixed killer cages bug.
 	* Some display improvements.
