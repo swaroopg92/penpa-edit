@@ -7,6 +7,7 @@
 	* Hide timer area option.
 	* Added nonconsecutive tag.
 	* Tapa sol string.
+	* code refactoring.
 * 2021/12/02 ver 2.26.11
 	* Fix aspect ratio of info icon.
 	* Fix minor CSS linting issues.
