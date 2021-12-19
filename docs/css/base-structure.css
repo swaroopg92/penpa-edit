@@ -70,7 +70,7 @@ header {
     text-align: left;
 }
 
-#version-info{
+#version-info {
     grid-area: 1 / 3 / 2 / 4;
     text-align: right;
 }
@@ -1339,6 +1339,7 @@ sup {
     #app-container.responsive .symbolmode_display {
         display: block;
     }
+
     #app-container.responsive .select2-dropdown {
         min-width: 10rem !important;
     }
