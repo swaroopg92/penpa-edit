@@ -953,12 +953,8 @@ function submit_solution_steps() {
         pu.undo(true);
     }
 
-    // compress data so that size is small
-    var u8text = new TextEncoder().encode(JSON.stringify(pu["pu_a"]["command_redo"].__a));
-    var deflate = new Zlib.RawDeflate(u8text);
-    var compressed = deflate.compress();
-    var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-    var replay = window.btoa(char8);
+    // encrypt the data
+    var replay = pu.encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
@@ -1722,11 +1718,7 @@ function load(urlParam, type = 'url') {
 
 function load2(paramArray, type) {
     // Decrypt P
-    var ab = atob(paramArray.p);
-    ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-    var inflate = new Zlib.RawInflate(ab);
-    var plain = inflate.decompress();
-    var rtext = new TextDecoder().decode(plain);
+    var rtext = pu.decrypt_data(paramArray.p);
     rtext = rtext.split("\n");
     rtext[0] = rtext[0].split("zO").join("null");
     rtext[1] = rtext[1].split("zO").join("null");
@@ -1977,11 +1969,7 @@ function load2(paramArray, type) {
 
             // Decrypt a
             if (paramArray.a) {
-                var ab = atob(paramArray.a);
-                ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-                var inflate = new Zlib.RawInflate(ab);
-                var plain = inflate.decompress();
-                var atext = new TextDecoder().decode(plain);
+                var atext = pu.decrypt_data(paramArray.a);
 
                 if (pu.multisolution) {
                     pu.solution = JSON.parse(atext);
@@ -2098,11 +2086,7 @@ function load2(paramArray, type) {
 
         // Decrypt a
         if (paramArray.a) {
-            var ab = atob(paramArray.a);
-            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-            var inflate = new Zlib.RawInflate(ab);
-            var plain = inflate.decompress();
-            var atext = new TextDecoder().decode(plain);
+            var atext = pu.decrypt_data(paramArray.a);
             if (pu.multisolution) {
                 pu.solution = JSON.parse(atext);
             } else {
@@ -2199,12 +2183,7 @@ function load2(paramArray, type) {
         let hash = md5(pu.url);
 
         // Decrypt puzzle data
-        let ab = atob(localStorage.getItem(hash));
-        ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-        let inflate = new Zlib.RawInflate(ab);
-        let plain = inflate.decompress();
-        let rstr = new TextDecoder().decode(plain);
-        let local_copy = JSON.parse(rstr);
+        let local_copy = JSON.parse(pu.decrypt_data(localStorage.getItem(hash)));
 
         if (local_copy !== null) {
             pu.pu_q = local_copy.pu_q;
@@ -2250,11 +2229,7 @@ function load2(paramArray, type) {
     // Enable Replay Buttons
     if (paramArray.r) {
         // Decrypt Replay
-        var ab = atob(paramArray.r);
-        ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-        var inflate = new Zlib.RawInflate(ab);
-        var plain = inflate.decompress();
-        var rstr = new TextDecoder().decode(plain);
+        var rstr = pu.decrypt_data(paramArray.r);
         pu.replay = true; // flag used to block mouse event on the grid
 
         // Because class cannot be copied, its set in different way

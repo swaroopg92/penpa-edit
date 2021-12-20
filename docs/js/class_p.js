@@ -2807,11 +2807,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max 7360
 
@@ -2971,11 +2967,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         let solution_clone;
         // if solution exist then copy the solution as well
@@ -2985,11 +2977,8 @@ class Puzzle {
             } else {
                 solution_clone = this.solution;
             }
-            u8text = new TextEncoder().encode(solution_clone);
-            deflate = new Zlib.RawDeflate(u8text);
-            compressed = deflate.compress();
-            char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-            var ba_s = window.btoa(char8);
+            var ba_s = encrypt_data(solution_clone);
+
             // Warning Long URL
             if ((ba.length + ba_s.length) >= 7360) {
                 Swal.fire({
@@ -2999,6 +2988,7 @@ class Puzzle {
                     confirmButtonText: 'ok',
                 })
             }
+
             // if LMI server info exist
             if (pu.puzzle_info) {
                 let qstr = JSON.stringify(pu.puzzle_info);
@@ -3017,6 +3007,7 @@ class Puzzle {
                     confirmButtonText: 'ok',
                 })
             }
+
             // if LMI server info exist
             if (pu.puzzle_info) {
                 let qstr = JSON.stringify(pu.puzzle_info);
@@ -3141,11 +3132,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
@@ -3267,11 +3254,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
@@ -3292,11 +3275,7 @@ class Puzzle {
         var text;
         text = JSON.stringify(this.make_solution());
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
         // Warning Long URL
@@ -11670,6 +11649,22 @@ class Puzzle {
     get_customcolor() {
         let customcolor = $("#colorpicker_special").spectrum("get");
         return "rgba(" + Math.round(customcolor._r) + "," + Math.round(customcolor._g) + "," + Math.round(customcolor._b) + "," + customcolor._a + ")";
+    }
+
+    encrypt_data(data) {
+        var u8text = new TextEncoder().encode(data);
+        var deflate = new Zlib.RawDeflate(u8text);
+        var compressed = deflate.compress();
+        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+        return window.btoa(char8);
+    }
+
+    decrypt_data(data) {
+        var ab = atob(data);
+        ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+        var inflate = new Zlib.RawInflate(ab);
+        var plain = inflate.decompress();
+        return TextDecoder().decode(plain);
     }
 
     set_allmodes(displaytype = "none") {

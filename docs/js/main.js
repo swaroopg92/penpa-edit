@@ -1890,13 +1890,7 @@ onload = function() {
                 'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
             };
 
-            // compress data so that size is small
-            let u8text = new TextEncoder().encode(JSON.stringify(pu_sub));
-            let deflate = new Zlib.RawDeflate(u8text);
-            let compressed = deflate.compress();
-            let char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-
-            localStorage.setItem(hash, window.btoa(char8));
+            localStorage.setItem(hash, pu.encrypt_data(JSON.stringify(pu_sub)));
         }
 
         if (document.getElementById('reload_button').value === "1") {
