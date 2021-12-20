@@ -48,7 +48,7 @@ function create() {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
-    let responsive_design = getCookie("responsive_design");
+    let responsive_design = getCookie("responsive_mode");
     if (responsive_design !== null) {
         setResponsiveness(responsive_design, true);
     }
@@ -1642,7 +1642,7 @@ function load(urlParam, type = 'url') {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
-    let responsive_design = getCookie("responsive_design");
+    let responsive_design = getCookie("responsive_mode");
     if (responsive_design !== null) {
         setResponsiveness(responsive_design, true);
     }
@@ -1996,7 +1996,7 @@ function load(urlParam, type = 'url') {
     if (typeof rtext[12] !== 'undefined') {
         let view_setting_string = JSON.parse(rtext[12]);
         let view_settings = view_setting_string.split("|");
-        
+
         if (view_settings[0] === 'dark') {
             document.getElementById("theme_mode_opt").value = 2;
             document.getElementById("color_theme").href = "./css/dark_theme.css";
@@ -2533,6 +2533,29 @@ function isEmptycontent(pu_qa, array, num, value) {
         }
     }
     return true;
+}
+
+function setResponsiveness(mode, updateUI) {
+    let modeInt = parseInt(mode, 10);
+    let verb = modeInt > 1 ? 'add' : 'remove';
+    let flipVerb = modeInt > 2 ? 'add' : 'remove';
+    document.getElementById("app-container").classList[verb]("responsive");
+    document.getElementById("app-container").classList[flipVerb]("responsive-flip");
+    if (updateUI) {
+        document.getElementById("responsive_settings_opt").value = mode;
+    }
+
+    // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+    // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
+    if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
+        document.getElementById("mode_break").style.display = "inline";
+        document.getElementById("mode_txt_space").style.display = "inline";
+        document.getElementById("visibility_break").style.display = "none";
+    } else if (modeInt > 1 && window.innerWidth >= 850) {
+        document.getElementById("mode_break").style.display = "none";
+        document.getElementById("mode_txt_space").style.display = "none";
+        document.getElementById("visibility_break").style.display = "inline";
+    }
 }
 
 function decode_puzzlink(url) {
