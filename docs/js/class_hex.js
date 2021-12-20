@@ -43,19 +43,19 @@ class Puzzle_hex extends Puzzle {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -77,19 +77,19 @@ class Puzzle_hex extends Puzzle {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -363,6 +363,26 @@ class Puzzle_hex extends Puzzle {
                 if (min0 < min) {
                     if (this.point[i].type === 2 || this.point[i].type === 3 || this.point[i].type === 4) {
                         if (min0 > (0.7 * this.size) ** 2) {
+                            break;
+                        }
+                    }
+                    min = min0;
+                    num = i;
+                }
+            }
+        }
+        return parseInt(num);
+    }
+
+    coord_p_edgex_star(x, y, hitboxfactor) {
+        var min0, min = 10e6;
+        var num = 0;
+        for (var i = 0; i < this.point.length; i++) {
+            if (this.type.indexOf(this.point[i].type) != -1) {
+                min0 = (x - this.point[i].x) ** 2 + (y - this.point[i].y) ** 2;
+                if (min0 < min) {
+                    if (this.point[i].type === 1 || this.point[i].type === 2 || this.point[i].type === 3 || this.point[i].type === 4) {
+                        if (min0 > (hitboxfactor * this.size) ** 2) {
                             break;
                         }
                     }

@@ -5,11 +5,11 @@
     <title>Penpa+</title>
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <meta charset="utf-8" />
-    <meta name="robots" content="noindex,nofollow">
-    <meta name="viewport" content="width=480">
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- STYLES -->
     <script>
-        var ver = "2.26.11"; // Also defined in class_p.js
+        var ver = "2.26.13"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -127,7 +127,8 @@
                         <label for="pu_a" class="label" id="pu_a_label">Solution</label>
                         <label class="label_mode" id="constraints">Constraints (Beta):</label>
                         <select name="constraints_settings" id="constraints_settings_opt"> </select>
-                        <span id="visibility_button0" class="label_mode tooltip">Visibility:</span>
+                        <br id="visibility_break" style="display:none;">
+                        <span id="visibility_button0" class="label_mode">Visibility:</span>
                         <span id="visibility_button" class="label">ON</span>
                     </div>
                     <div id="mode_button" class="mode_button">
@@ -673,7 +674,7 @@
                     <input type="button" id="tb_delete" value="Delete all" class="button" />
                     <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
                 </span>
-                <br><br>
+                <br>
             </div>
         </div>
     </div>
@@ -1267,6 +1268,18 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label>Responsive Mode:</label>
+                        </td>
+                        <td>
+                            <select name="responsive_settings" id="responsive_settings_opt">
+                                <option value="1">Off</option>
+                                <option value="2">On (Tools Left)</option>
+                                <option value="3">On (Tools Right)</option>
+                            </select>
+                        </td>
+                    </tr>
                     <tr id="custom_color_lb">
                         <td>
                             <label>Custom Colors (Beta):</label>
@@ -1402,7 +1415,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Timer Bar:</label>
+                            <label>Timer:</label>
                         </td>
                         <td>
                             <select name="timerbar" id="timer_bar_opt">

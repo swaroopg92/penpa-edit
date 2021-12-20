@@ -467,6 +467,7 @@ Depending on the browser you can update the page without using the cache with "C
 ### Settings
 * This function is to provide Penpa-site general settings like theme, custom color etc.
 	* Display Theme: It currently offers only two options (light and dark).
+	* Responsive Mode: It currently offers two options (buttons to left side and buttons to right side).
 	* Custom Colors: To enable custom colors in certain modes.
 	* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
 		* Dynamic - Upto 5 digits its larger size and then it becomes small.
@@ -485,8 +486,10 @@ Depending on the browser you can update the page without using the cache with "C
 	* Draw on Edges/Corners: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
 	* Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
 	* PenpaLite: Turning on this button will remove all the non-preferred modes from the display thereby simplfiying the display. The preferred modes are determined through tab setting. Select your preferrable modes under "Tab/↵" and then turn "ON" PenpaLite.
+	* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
 		* Theme
+		* Responsive Mode
 		* Tab settings
 		* Reload button status
 		* Gridtype

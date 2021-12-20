@@ -53,13 +53,13 @@ class Puzzle_square extends Puzzle {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms4']) {
             document.getElementById("ms4_" + i).style.display = "inline-block";
@@ -68,7 +68,7 @@ class Puzzle_square extends Puzzle {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";

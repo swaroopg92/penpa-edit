@@ -41,8 +41,7 @@
     --fgMain: var(--black);
 }
 
-.solving,
-#stop_watch {
+.solving {
     background: var(--blueLightVery);
 }
 
@@ -154,12 +153,7 @@
     background-color: var(--white);
 }
 
-#float-key-header {
-    background: var(--grey);
-}
-
 #float-key-body {
-    box-shadow: 4px 4px 4px var(--transparent40);
     background: var(--greyLightMedium);
 }
 
@@ -193,6 +187,7 @@
 }
 
 header,
+#float-key-header,
 .modal-header,
 .modal-subheader {
     background: var(--greyLight);
@@ -210,4 +205,8 @@ header,
 
 .tooltip .tooltiptext::after {
     border-color: var(--greyDarkVery) transparent transparent transparent;
+}
+
+#visibility_button {
+    border: 1px solid var(--blueDark);
 }

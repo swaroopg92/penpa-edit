@@ -1877,6 +1877,11 @@ onload = function() {
         }
     }
 
+    // Toggle responsiveness
+    document.getElementById("responsive_settings_opt").onchange = function() {
+        setResponsiveness(document.getElementById("responsive_settings_opt").value);
+    }
+
     // Custom Color Setting
     document.getElementById("custom_color_opt").onchange = function() {
         if (document.getElementById("custom_color_opt").value === "1") {
@@ -1904,27 +1909,30 @@ onload = function() {
             deleteCookie("sudoku_normal_size");
             deleteCookie("starbattle_dots");
             deleteCookie("mousemiddle_button");
+            deleteCookie("responsive_mode");
             deleteCookie("timerbar_status");
             // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
-            setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
-            setCookie("reload_button", document.getElementById('reload_button').value, 2147483647);
-            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
-            setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
-            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
-            setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
-            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
-            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
-            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, 2147483647);
-            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, 2147483647);
-            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, 2147483647);
+            let expDate = 2147483647;
+            setCookie("color_theme", document.getElementById("theme_mode_opt").value, expDate);
+            setCookie("reload_button", document.getElementById('reload_button').value, expDate);
+            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), expDate);
+            setCookie("gridtype", document.getElementById("gridtype").value, expDate);
+            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, expDate);
+            setCookie("displaysize", document.getElementById("nb_size3").value, expDate);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, expDate);
+            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, expDate);
+            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, expDate);
+            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, expDate);
+            setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expDate);
+            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expDate);
         }
     }
 
     $(document).ready(function() {
         if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
-                'width': "25%"
+                'width': "resolve" // 25% was used before
             });
         }
     });
@@ -1938,9 +1946,16 @@ onload = function() {
     document.getElementById("constraints_settings_opt").onchange = function() {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
         if (current_constraint === "all") {
-            // Display the mode break line
-            document.getElementById("mode_break").style.display = "inline";
-            document.getElementById("mode_txt_space").style.display = "inline";
+            // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+                document.getElementById("mode_break").style.display = "inline";
+                document.getElementById("mode_txt_space").style.display = "inline";
+                document.getElementById("visibility_break").style.display = "none";
+            } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+                document.getElementById("visibility_break").style.display = "inline";
+            }
 
             // set the default submode
             for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
@@ -1960,6 +1975,15 @@ onload = function() {
         } else {
             // Remove all modes, default is none
             pu.set_allmodes();
+
+            // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+                document.getElementById("visibility_break").style.display = "none";
+            } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+                document.getElementById("visibility_break").style.display = "inline";
+            }
 
             // Remove the mode break line
             document.getElementById("mode_break").style.display = "none";
@@ -2041,5 +2065,28 @@ onload = function() {
     function startTimer() {
         pu.hide_pause_layer();
         sw_timer.start({ precision: 'secondTenths' });
+    }
+
+    function setResponsiveness(mode, updateUI) {
+        let modeInt = parseInt(mode, 10);
+        let verb = modeInt > 1 ? 'add' : 'remove';
+        let flipVerb = modeInt > 2 ? 'add' : 'remove';
+        document.getElementById("app-container").classList[verb]("responsive");
+        document.getElementById("app-container").classList[flipVerb]("responsive-flip");
+        if (updateUI) {
+            document.getElementById("responsive_settings_opt").value = mode;
+        }
+
+        // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+        // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
+        if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
+            document.getElementById("mode_break").style.display = "inline";
+            document.getElementById("mode_txt_space").style.display = "inline";
+            document.getElementById("visibility_break").style.display = "none";
+        } else if (modeInt > 1 && window.innerWidth >= 850) {
+            document.getElementById("mode_break").style.display = "none";
+            document.getElementById("mode_txt_space").style.display = "none";
+            document.getElementById("visibility_break").style.display = "inline";
+        }
     }
 };
