@@ -1786,7 +1786,6 @@ function load2(paramArray, type) {
         if (pu.puzzle_info.iframe || pu.puzzle_info.lmimode === "daily") {
             document.getElementById("title").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
-            document.getElementById("penpa_version").remove();
         }
         if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
             let contestinfo = document.getElementById("contestinfo");
@@ -1991,6 +1990,34 @@ function load2(paramArray, type) {
                 }
 
                 set_solvemodetitle();
+            }
+
+            if (rtext[7] !== "undefined") {
+                let starttime = rtext[7].split(":");
+                if (starttime.length === 4) {
+                    sw_timer.stop(); // stop previously running timer and start with stored starting time
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            hours: parseInt(starttime[0]),
+                            minutes: parseInt(starttime[1]),
+                            seconds: parseInt(starttime[2]),
+                            secondTenths: parseInt(starttime[3])
+                        }
+                    });
+                } else if (starttime.length === 5) { // added "days" precision in the recent update
+                    sw_timer.stop(); // stop previously running timer and start with stored starting time
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            days: parseInt(starttime[0]),
+                            hours: parseInt(starttime[1]),
+                            minutes: parseInt(starttime[2]),
+                            seconds: parseInt(starttime[3]),
+                            secondTenths: parseInt(starttime[4])
+                        }
+                    });
+                }
             }
 
             if (typeof rtext[8] !== 'undefined') {
