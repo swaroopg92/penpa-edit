@@ -2226,17 +2226,23 @@ function load2(paramArray, type) {
 
             if (local_copy.timer) {
                 let starttime = local_copy.timer.split(":");
-                sw_timer.stop(); // stop previously running timer and start with stored starting time
-                sw_timer.start({
-                    precision: 'secondTenths',
-                    startValues: {
-                        days: parseInt(starttime[0]),
-                        hours: parseInt(starttime[1]),
-                        minutes: parseInt(starttime[2]),
-                        seconds: parseInt(starttime[3]),
-                        secondTenths: parseInt(starttime[4])
-                    }
-                });
+
+                // Do not update the timer if current_time is greater than local_copy
+                let current_time = sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']);
+
+                if (current_time < local_copy.timer) {
+                    sw_timer.stop(); // stop previously running timer and start with stored starting time
+                    sw_timer.start({
+                        precision: 'secondTenths',
+                        startValues: {
+                            days: parseInt(starttime[0]),
+                            hours: parseInt(starttime[1]),
+                            minutes: parseInt(starttime[2]),
+                            seconds: parseInt(starttime[3]),
+                            secondTenths: parseInt(starttime[4])
+                        }
+                    });
+                }
             }
         }
     }
