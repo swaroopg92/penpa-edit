@@ -1890,7 +1890,7 @@ onload = function() {
                 'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
             };
 
-            localStorage.setItem(hash, pu.encrypt_data(JSON.stringify(pu_sub)));
+            localStorage.setItem(hash, encrypt_data(JSON.stringify(pu_sub)));
         }
 
         if (document.getElementById('reload_button').value === "1") {

@@ -954,7 +954,7 @@ function submit_solution_steps() {
     }
 
     // encrypt the data
-    var replay = pu.encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
+    var replay = encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
@@ -1718,7 +1718,7 @@ function load(urlParam, type = 'url') {
 
 function load2(paramArray, type) {
     // Decrypt P
-    var rtext = pu.decrypt_data(paramArray.p);
+    var rtext = decrypt_data(paramArray.p);
     rtext = rtext.split("\n");
     rtext[0] = rtext[0].split("zO").join("null");
     rtext[1] = rtext[1].split("zO").join("null");
@@ -1969,7 +1969,7 @@ function load2(paramArray, type) {
 
             // Decrypt a
             if (paramArray.a) {
-                var atext = pu.decrypt_data(paramArray.a);
+                var atext = decrypt_data(paramArray.a);
 
                 if (pu.multisolution) {
                     pu.solution = JSON.parse(atext);
@@ -2086,7 +2086,7 @@ function load2(paramArray, type) {
 
         // Decrypt a
         if (paramArray.a) {
-            var atext = pu.decrypt_data(paramArray.a);
+            var atext = decrypt_data(paramArray.a);
             if (pu.multisolution) {
                 pu.solution = JSON.parse(atext);
             } else {
@@ -2183,7 +2183,7 @@ function load2(paramArray, type) {
         let hash = md5(pu.url);
 
         // Decrypt puzzle data
-        let local_copy = JSON.parse(pu.decrypt_data(localStorage.getItem(hash)));
+        let local_copy = JSON.parse(decrypt_data(localStorage.getItem(hash)));
 
         if (local_copy !== null) {
             pu.pu_q = local_copy.pu_q;
@@ -2229,7 +2229,7 @@ function load2(paramArray, type) {
     // Enable Replay Buttons
     if (paramArray.r) {
         // Decrypt Replay
-        var rstr = pu.decrypt_data(paramArray.r);
+        var rstr = decrypt_data(paramArray.r);
         pu.replay = true; // flag used to block mouse event on the grid
 
         // Because class cannot be copied, its set in different way
@@ -3307,4 +3307,21 @@ function load_from_server(paramArray, type) {
         .catch(function(err) {
             create();
         });
+}
+
+function encrypt_data(puzdata) {
+    var u8text = new TextEncoder().encode(puzdata);
+    var deflate = new Zlib.RawDeflate(u8text);
+    var compressed = deflate.compress();
+    var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+    return window.btoa(char8);
+}
+
+function decrypt_data(puzdata) {
+    var ab = atob(puzdata);
+    ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+    var inflate = new Zlib.RawInflate(ab);
+    var plain = inflate.decompress();
+    let decrypted = new TextDecoder().decode(plain);
+    return decrypted;
 }

@@ -11651,22 +11651,6 @@ class Puzzle {
         return "rgba(" + Math.round(customcolor._r) + "," + Math.round(customcolor._g) + "," + Math.round(customcolor._b) + "," + customcolor._a + ")";
     }
 
-    encrypt_data(data) {
-        var u8text = new TextEncoder().encode(data);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        return window.btoa(char8);
-    }
-
-    decrypt_data(data) {
-        var ab = atob(data);
-        ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-        var inflate = new Zlib.RawInflate(ab);
-        var plain = inflate.decompress();
-        return TextDecoder().decode(plain);
-    }
-
     set_allmodes(displaytype = "none") {
         for (var i of penpa_modes["square"]['mode']) {
             document.getElementById("mo_" + i + "_lb").style.display = displaytype;
