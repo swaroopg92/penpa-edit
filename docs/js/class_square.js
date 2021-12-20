@@ -50,16 +50,16 @@ class Puzzle_square extends Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms4']) {
             document.getElementById("ms4_" + i).style.display = "inline-block";
@@ -68,7 +68,7 @@ class Puzzle_square extends Puzzle {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -667,6 +667,7 @@ class Puzzle_square extends Puzzle {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
+            this.draw_conflicts();
             this.draw_symbol("pu_q", 1);
             this.draw_symbol("pu_a", 1);
             this.draw_squareframe("pu_q");
@@ -761,6 +762,7 @@ class Puzzle_square extends Puzzle {
             set_surface_style(this.ctx, this[pu].surface[i]);
             if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].surface[i]) {
                 this.ctx.fillStyle = this[pu + "_col"].surface[i];
+                this.ctx.strokeStyle = this.ctx.fillStyle;
             }
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);

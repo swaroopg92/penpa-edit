@@ -157,12 +157,23 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 10]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 13]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
         this.borderwarning = true;
         this.user_tags = [];
+        this.conflicts = new Conflicts();
+        this.previous_sol = [];
+        this.conflict_cells = [];
+
+        this.ignored_line_types = {
+            2: 1, // Black color
+            5: 1, // Grey Color
+            80: 1, // Thin
+            12: 1, // Dotted
+            13: 1 // Fat dots
+        };
     }
 
     reset() {
@@ -366,8 +377,9 @@ class Puzzle {
         // pause-unpause layer
         let pause_canvas = document.getElementById("pause_canvas");
         let pause_ctx = pause_canvas.getContext("2d");
-        pause_canvas.style.width = this.canvasx.toString() + "px";
-        pause_canvas.style.height = this.canvasy.toString() + "px";
+        let factor = 0.95;
+        pause_canvas.style.width = (this.canvasx * factor).toString() + "px";
+        pause_canvas.style.height = (this.canvasy * factor).toString() + "px";
         pause_canvas.width = this.resol * this.canvasx;
         pause_canvas.height = this.resol * this.canvasy;
     }
@@ -379,7 +391,7 @@ class Puzzle {
 
         // set the style and font
         pause_ctx.filleStyle = Color.BLUE;
-        let font_size = 0.09 * pause_canvas.height; // 90 % of display size/ height of canvas
+        let font_size = 0.09 * pause_canvas.height; // 9 % of display size/ height of canvas
         pause_ctx.font = font_size + 'px sans-serif';
         let lineheight = 1.2 * font_size;
         let textstring = "Paused\nClick on \"Start\"\nor \"F4\"";
@@ -1981,11 +1993,12 @@ class Puzzle {
 
     point_usecheck() {
         for (var i in this.point) {
-            if (this.point[i].use === -1) {;
-            } else if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
-                this.point[i].use = 0;
-            } else {
-                this.point[i].use = 1;
+            if (this.point[i].use !== -1) {
+                if (this.point[i].x < this.margin || this.point[i].x > this.canvasx - this.margin || this.point[i].y < this.margin || this.point[i].y > this.canvasy - this.margin) {
+                    this.point[i].use = 0;
+                } else {
+                    this.point[i].use = 1;
+                }
             }
         }
     }
@@ -2084,10 +2097,11 @@ class Puzzle {
             this.redraw(true); // Reflects SVG elements
             this.ctx = old_canvas;
             this.redraw(); // Back to original display
+            this.mode[this.mode.qa].edit_mode = mode; // retain original mode
 
             return svg_canvas.getSerializedSvg(true);
         }
-        this.mode[this.mode.qa].edit_mode = mode;
+        this.mode[this.mode.qa].edit_mode = mode; // retain original mode
 
         if (document.getElementById("nb_margin2").checked) {
             this.canvasx = cx;
@@ -2651,44 +2665,6 @@ class Puzzle {
                 this[this.mode.qa][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
                 if (document.getElementById("custom_color_opt").value === "2") {
                     this[this.mode.qa + "_col"][this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]] = [];
-                }
-                break;
-            case "combi":
-                switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
-                    case "tents":
-                        break;
-                    case "linex":
-                        break;
-                    case "edgex":
-                        break;
-                    case "edgexoi":
-                        break;
-                    case "blpo":
-                        break;
-                    case "blwh":
-                        break;
-                    case "battleship":
-                        break;
-                    case "star":
-                        break;
-                    case "magnets":
-                        break;
-                    case "lineox":
-                        break;
-                    case "yajilin":
-                        break;
-                    case "hashi":
-                        break;
-                    case "arrowS":
-                        break;
-                    case "shaka":
-                        break;
-                    case "numfl":
-                        break;
-                    case "alfl":
-                        break;
-                    case "edgesub":
-                        break;
                 }
                 break;
         }
@@ -3410,13 +3386,7 @@ class Puzzle {
             if (document.getElementById("sol_loopline").checked === true || checkall) {
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].line) {
-                        if ((this["pu_q"].line[i] &&
-                                (this["pu_q"].line[i] === 2 || // Black color
-                                    this["pu_q"].line[i] === 5 || // Grey Color
-                                    this["pu_q"].line[i] === 80 || // Thin
-                                    this["pu_q"].line[i] === 12 || // Dotted
-                                    this["pu_q"].line[i] === 13 // Fat dots
-                                ))) {
+                        if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                             // Ignore the line
                         } else {
                             if (this[pu].line[i] === 3) {
@@ -3438,13 +3408,7 @@ class Puzzle {
 
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].freeline) {
-                        if ((this["pu_q"].freeline[i] &&
-                                (this["pu_q"].freeline[i] === 2 || // Black color
-                                    this["pu_q"].freeline[i] === 5 || // Grey Color
-                                    this["pu_q"].freeline[i] === 80 || // Thin
-                                    this["pu_q"].freeline[i] === 12 || // Dotted
-                                    this["pu_q"].freeline[i] === 13 // Fat dots
-                                ))) {
+                        if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
                             // Ignore the line
                         } else {
                             if (this[pu].freeline[i] === 3) {
@@ -3709,13 +3673,7 @@ class Puzzle {
                             break;
                         case "loopline":
                             for (var i in this[pu].line) {
-                                if ((this["pu_q"].line[i] &&
-                                        (this["pu_q"].line[i] === 2 || // Black color
-                                            this["pu_q"].line[i] === 5 || // Grey Color
-                                            this["pu_q"].line[i] === 80 || // Thin
-                                            this["pu_q"].line[i] === 12 || // Dotted
-                                            this["pu_q"].line[i] === 13 // Fat dots
-                                        ))) {
+                                if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].line[i] === 3) {
@@ -3727,13 +3685,7 @@ class Puzzle {
                             }
 
                             for (var i in this[pu].freeline) {
-                                if ((this["pu_q"].freeline[i] &&
-                                        (this["pu_q"].freeline[i] === 2 || // Black color
-                                            this["pu_q"].freeline[i] === 5 || // Grey Color
-                                            this["pu_q"].freeline[i] === 80 || // Thin
-                                            this["pu_q"].freeline[i] === 12 || // Dotted
-                                            this["pu_q"].freeline[i] === 13 // Fat dots
-                                        ))) {
+                                if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
                                     // Ignore the line
                                 } else {
                                     if (this[pu].freeline[i] === 3) {
@@ -5122,6 +5074,19 @@ class Puzzle {
                                 }
                             }
                             text += "\n";
+                        }
+                    }
+                }
+            } else if (header === "tapa_contest" || header === "tc") {
+                // Answer - Shading
+                if (!isEmpty(this.pu_a.surface)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                                text += "1";
+                            } else {
+                                text += "0";
+                            }
                         }
                     }
                 }
@@ -8691,6 +8656,7 @@ class Puzzle {
             } else if (this.mouse_mode === "up") {
                 this.drawing = false;
                 let cageexist_status = false;
+                let skip_cages = false;
                 let array = "cage";
                 let arraykill = "killercages";
                 let grid_matrix = [];
@@ -8698,8 +8664,8 @@ class Puzzle {
                 let key;
 
                 // Grid Size
-                let row_size = parseInt(document.getElementById("nb_size2").value);
-                let col_size = parseInt(document.getElementById("nb_size1").value);
+                let row_size = parseInt(this.ny0 - 4);
+                let col_size = parseInt(this.nx0 - 4);
 
                 // sort cage
                 let sortedcages = this.cageselection.sort((a, b) => a - b);
@@ -8717,6 +8683,19 @@ class Puzzle {
                         }
                     }
                     if (cageexist_status) { // to exit from outermost for loop
+                        break;
+                    }
+                }
+
+                // Find if any cell of the new cage has outside half grid cells then skip
+                for (let i = 0; i < sortedcages.length; i++) {
+                    let col_num = (sortedcages[i] % (this.nx0)) - 2;
+                    let row_num = parseInt(sortedcages[i] / this.nx0) - 2;
+
+                    // If cage selection has outisde half grid cells then skip
+                    if ((row_num < 0) || (row_num >= row_size) || (col_num < 0) || (col_num >= col_size)) {
+                        cageexist_status = true;
+                        skip_cages = true;
                         break;
                     }
                 }
@@ -8924,7 +8903,7 @@ class Puzzle {
                     this.drawing_mode = draw_mode;
                 } else {
                     // length 1 then delete
-                    if (sortedcages.length === 1) {
+                    if (sortedcages.length === 1 && !skip_cages) {
 
                         // check which style cage exist, if same style then delete or else do nothing
                         let top_left = 4 * (this[this.mode.qa][arraykill][cageexist_loc][0] + this.nx0 * this.ny0);
@@ -9897,14 +9876,41 @@ class Puzzle {
                     this.drawing_mode = 50;
                 }
             } else {
-                if (!this[this.mode.qa].lineE[num]) { // Insert cross
-                    this.record(symboltype, num);
-                    this[this.mode.qa].lineE[num] = 98;
-                    this.drawing_mode = 52;
-                } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
-                    this.record(symboltype, num);
-                    delete this[this.mode.qa].lineE[num];
-                    this.drawing_mode = 50;
+                // Ignore if edge already exist
+                // Do this only for square grids for now
+                if (this.gridtype === "square") {
+
+                    let neighbor1 = this.point[num].neighbor[0];
+                    let neighbor2 = this.point[num].neighbor[1];
+                    let edge_num;
+                    let corners = this.point[neighbor2].surround;
+
+                    // If difference is 1 then its left and right else its top and bottom
+                    if (Math.abs(neighbor1 - neighbor2) === 1) {
+                        edge_num = corners[0].toString() + "," + corners[3].toString();
+                    } else {
+                        edge_num = corners[0].toString() + "," + corners[1].toString();
+                    }
+
+                    if (!this[this.mode.qa].lineE[num] && !this[this.mode.qa].lineE[edge_num]) { // Insert cross
+                        this.record(symboltype, num);
+                        this[this.mode.qa].lineE[num] = 98;
+                        this.drawing_mode = 52;
+                    } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record(symboltype, num);
+                        delete this[this.mode.qa].lineE[num];
+                        this.drawing_mode = 50;
+                    }
+                } else {
+                    if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                        this.record(symboltype, num);
+                        this[this.mode.qa].lineE[num] = 98;
+                        this.drawing_mode = 52;
+                    } else if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record(symboltype, num);
+                        delete this[this.mode.qa].lineE[num];
+                        this.drawing_mode = 50;
+                    }
                 }
             }
         } else {
@@ -9976,15 +9982,43 @@ class Puzzle {
             this.last = num;
             this.redraw();
         } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
-            if (this.drawing_mode == 52) {
-                if (!this[this.mode.qa].lineE[num]) { // Insert cross
-                    this.record("lineE", num);
-                    this[this.mode.qa].lineE[num] = 98;
+            if (this.gridtype === "square") {
+                // Ignore if edge already exist
+                // Do this only for square grids for now
+                let neighbor1 = this.point[num].neighbor[0];
+                let neighbor2 = this.point[num].neighbor[1];
+                let edge_num;
+                let corners = this.point[neighbor2].surround;
+
+                // If difference is 1 then its left and right else its top and bottom
+                if (Math.abs(neighbor1 - neighbor2) === 1) {
+                    edge_num = corners[0].toString() + "," + corners[3].toString();
+                } else {
+                    edge_num = corners[0].toString() + "," + corners[1].toString();
                 }
-            } else if (this.drawing_mode == 50) {
-                if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
-                    this.record("lineE", num);
-                    delete this[this.mode.qa].lineE[num];
+
+                if (this.drawing_mode == 52) {
+                    if (!this[this.mode.qa].lineE[num] && !this[this.mode.qa].lineE[edge_num]) { // Insert cross
+                        this.record("lineE", num);
+                        this[this.mode.qa].lineE[num] = 98;
+                    }
+                } else if (this.drawing_mode == 50) {
+                    if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record("lineE", num);
+                        delete this[this.mode.qa].lineE[num];
+                    }
+                }
+            } else {
+                if (this.drawing_mode == 52) {
+                    if (!this[this.mode.qa].lineE[num]) { // Insert cross
+                        this.record("lineE", num);
+                        this[this.mode.qa].lineE[num] = 98;
+                    }
+                } else if (this.drawing_mode == 50) {
+                    if (this[this.mode.qa].lineE[num] === 98) { // Remove Cross
+                        this.record("lineE", num);
+                        delete this[this.mode.qa].lineE[num];
+                    }
                 }
             }
             this.redraw();
@@ -11000,12 +11034,14 @@ class Puzzle {
     /////////////////////////////////
 
 
-    redraw(svgcall = false) {
+    redraw(svgcall = false, check_sol = true) {
         this.flushcanvas(svgcall);
         panel_pu.draw_panel();
         this.draw();
         this.set_redoundocolor();
-        this.check_solution();
+        if (check_sol) {
+            this.check_solution();
+        }
     }
 
     set_redoundocolor() {
@@ -11182,6 +11218,22 @@ class Puzzle {
         }
     }
 
+    draw_conflicts() {
+        let keys = this.conflict_cells;
+        for (var k = 0; k < keys.length; k++) {
+            var i = keys[k];
+            set_surface_style(this.ctx, 100);
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
+            for (var j = 1; j < this.point[i].surround.length; j++) {
+                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+    }
+
     draw_selection() {
         if (this.mode[this.mode.qa].edit_mode === "sudoku" ||
             (this.mode[this.mode.qa].edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
@@ -11349,27 +11401,32 @@ class Puzzle {
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
-                if (text === this.solution && this.sol_flag === 0) {
-                    setTimeout(() => {
-                        Swal.fire({
-                            title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                            html: '<h2 class="wish">Congratulations 🙂</h2>',
-                            background: 'url(js/images/new_year.jpg)',
-                            icon: 'success',
-                            confirmButtonText: 'Hurray!',
-                            // timer: 5000
-                        })
-                    }, 20)
-                    // this.mouse_mode = "out";
-                    // this.mouseevent(0, 0, 0);
-                    this.sol_flag = 1;
-                    // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-                } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                    this.sol_flag = 0;
-                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                let conflict = this.check_conflict(text);
+                if (!conflict) {
+                    if (text === this.solution && this.sol_flag === 0) {
+                        setTimeout(() => {
+                            Swal.fire({
+                                title: '<h3 class="wish">Your Solution Is Correct</h3>',
+                                html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                background: 'url(js/images/new_year.jpg)',
+                                icon: 'success',
+                                confirmButtonText: 'Hurray!',
+                                // timer: 5000
+                            })
+                        }, 20)
+                        sw_timer.pause();
+                        // this.mouse_mode = "out";
+                        // this.mouseevent(0, 0, 0);
+                        this.sol_flag = 1;
+                        // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
+                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
+                    } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                        this.sol_flag = 0;
+                        // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    }
                 }
+                this.redraw(false, false);
             }
         } else {
             var text = this.make_solution();
@@ -11495,36 +11552,31 @@ class Puzzle {
         for (var j = r_start; j < (size + r_start); j++) { //  row
             for (var i = c_start; i < (size + c_start); i++) { // column
 
+                let primary = this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)];
+                let secondary = this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)];
+                let checklist = {};
+
                 if (document.getElementById("ignore_pencilmarks").checked) {
-                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10"),
-                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "5") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "6") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "10")
-                    ];
+                    checklist = {
+                        2: 1,
+                        4: 1,
+                        5: 1,
+                        6: 1,
+                        10: 1
+                    };
                 } else {
-                    var ifcondition = [this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4"),
-                        this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)] &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "2") &&
-                        (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] !== "4")
-                    ];
+                    checklist = {
+                        2: 1,
+                        4: 1
+                    };
                 }
 
-                if (ifcondition[0]) {
-                    if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                if (primary && !checklist[primary[2]]) {
+                    if (primary[2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < 10; k++) {
-                            if (this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (primary[0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -11535,18 +11587,18 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                        if (isNaN(parseInt(primary[0]))) {
                             outputstring += '0';
                         } else {
-                            outputstring += this[mode_order[0]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                            outputstring += primary[0];
                         }
                     }
-                } else if (ifcondition[1]) {
-                    if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][2] === "7") {
+                } else if (secondary && !checklist[secondary[2]]) {
+                    if (secondary[2] === "7") {
                         var sum = 0,
                             a;
                         for (var k = 0; k < (size + 1); k++) {
-                            if (this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0][k] === 1) {
+                            if (secondary[0][k] === 1) {
                                 sum += 1;
                                 a = k + 1;
                             }
@@ -11557,10 +11609,10 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0]))) {
+                        if (isNaN(parseInt(secondary[0]))) {
                             outputstring += '0';
                         } else {
-                            outputstring += this[mode_order[1]].number[(i + 2) + ((j + 2) * this.nx0)][0];
+                            outputstring += secondary[0];
                         }
                     }
                 } else {
@@ -11628,22 +11680,22 @@ class Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['customcolor']) {
-            document.getElementById(i).style.display = displaytype;
+            document.getElementById(i).style.display = (displaytype === 'inline-block') ? 'table-row' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = displaytype;
+            document.getElementById("ms_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = displaytype;
+            document.getElementById("ms1_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = displaytype;
+            document.getElementById("ms3_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = displaytype;
+            document.getElementById("combisub_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = displaytype;
@@ -11656,6 +11708,35 @@ class Puzzle {
         }
         for (var i of penpa_modes["square"]['li']) {
             document.getElementById("li_" + i).style.display = displaytype;
+        }
+    }
+
+    check_conflict(current_sol) {
+        if (this.user_tags) {
+            // Do only if current solution changed
+            if (current_sol !== this.previous_sol) {
+                for (var tag of this.user_tags) {
+                    switch (tag) {
+                        case 'classic':
+                            this.conflict_cells = this.conflicts.check_classic(this);
+                            break;
+                        case 'nonconsecutive':
+                            this.conflict_cells = this.conflicts.check_classic(this);
+
+                            // check consecutive only if no classic conflict
+                            if (this.conflict_cells.length === 0) {
+                                this.conflict_cells = this.conflicts.check_consecutive(this);
+                            }
+                            break;
+                    }
+                }
+                this.previous_sol = current_sol;
+                if (this.conflict_cells.length !== 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
     }
 }

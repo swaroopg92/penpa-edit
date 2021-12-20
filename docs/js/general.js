@@ -48,6 +48,10 @@ function create() {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
+    let responsive_design = getCookie("responsive_mode");
+    if (responsive_design !== null) {
+        setResponsiveness(responsive_design, true);
+    }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
         // to address old versions where the stored value was ON and OFF
@@ -81,6 +85,12 @@ function create() {
     let mousemiddle_button_cookie = getCookie("mousemiddle_button");
     if (mousemiddle_button_cookie !== null) {
         document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
+
+    let timer_bar_cookie = getCookie("timerbar_status");
+    if (timer_bar_cookie !== null) {
+        document.getElementById("timer_bar_opt").value = timer_bar_cookie;
+        showhide_timer();
     }
 
     // Populate Constraints list
@@ -846,8 +856,8 @@ function newgrid_r() {
             pu.show_pause_layer();
         }
         if (parent && parent.resizeiframe) {
-			parent.resizeiframe();
-		}
+            parent.resizeiframe();
+        }
     } else {
         Swal.fire({
             title: 'Swaroop says:',
@@ -1167,6 +1177,14 @@ function advancecontrol_on() {
     }
 }
 
+function showhide_timer() {
+    if (document.getElementById("timer_bar_opt").value === "2") {
+        document.getElementById("stop_watch").style.display = "none";
+    } else if (document.getElementById("timer_bar_opt").value === "1") {
+        document.getElementById("stop_watch").style.display = "";
+    }
+}
+
 function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "LINE") {
         if (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === '4') {
@@ -1326,6 +1344,9 @@ function DeleteCheck() {
 
 function saveimage() {
     document.getElementById("modal-image").style.display = 'block';
+    var input = document.getElementById("saveimagename");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function saveimage_download() {
@@ -1360,18 +1381,21 @@ function saveimage_download() {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
             var blob = new Blob([text], { type: "image/svg+xml" });
-            var ua = window.navigator.userAgent.toLowerCase();
-            if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-                //safari
-                window.open('data:image/svg+xml;base64,' + window.Base64.encode(text), '_blank');
-            } else if (window.navigator.msSaveBlob) {
+            if (window.navigator.msSaveBlob) {
                 // for IE
                 window.navigator.msSaveBlob(blob, filename);
-            } else {
+            } else if (URL && URL.createObjectURL) {
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.target = "_blank";
                 downloadLink.download = filename;
                 downloadLink.click();
+            } else {
+                Swal.fire({
+                    title: 'Unsupported Browser',
+                    html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                });
             }
         } else {
             if (pu.canvas.msToBlob) { // For IE
@@ -1400,14 +1424,17 @@ function saveimage_window() {
     if (document.getElementById("nb_type3").checked) { //svg
         // store in a Blob
         let blob = new Blob([address], { type: "image/svg+xml" });
-        var ua = window.navigator.userAgent.toLowerCase();
-        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-            //safari
-            window.open('data:image/svg+xml;base64,' + window.Base64.encode(address), '_blank');
-        } else {
+        if (URL && URL.createObjectURL) {
             // create an URI pointing to that blob
             url = URL.createObjectURL(blob);
             window.open(url);
+        } else {
+            Swal.fire({
+                title: 'Unsupported Browser',
+                html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     } else {
         win = window.open();
@@ -1418,16 +1445,28 @@ function saveimage_window() {
 function savetext() {
     document.getElementById("modal-save").style.display = 'block';
     document.getElementById("savetextarea").value = "";
+
+    var input = document.getElementById("saveinfotitle");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
     document.getElementById("iostring").placeholder = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
+
+    var input = document.getElementById("iostring");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function i_url() {
     document.getElementById("modal-load").style.display = 'block';
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button.";
+
+    var input = document.getElementById("urlstring");
+    input.setSelectionRange(0, input.value.length);
+    input.focus();
 }
 
 function p_settings() {
@@ -1517,7 +1556,6 @@ function savetext_download() {
         filename += ".txt";
     }
     var blob = new Blob([text], { type: "text/plain" });
-    var ua = window.navigator.userAgent.toLowerCase();
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
     for (var i = 0; i < filename.length; i++) {
@@ -1526,17 +1564,21 @@ function savetext_download() {
         }
     }
     if (valid_name) {
-        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-            //safari
-            window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
-        } else if (window.navigator.msSaveBlob) {
+        if (window.navigator.msSaveBlob) {
             // for IE
             window.navigator.msSaveBlob(blob, filename);
-        } else {
+        } else if (URL && URL.createObjectURL) {
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.target = "_blank";
             downloadLink.download = filename;
             downloadLink.click();
+        } else {
+            Swal.fire({
+                title: 'Unsupported Browser',
+                html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     } else {
         Swal.fire({
@@ -1544,7 +1586,7 @@ function savetext_download() {
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
-        })
+        });
     }
 }
 
@@ -1654,72 +1696,12 @@ function import_url() {
     }
 }
 
-function load_about() {
-    Swal.fire({
-        title: 'About',
-        html: '<h2 class="info">Welcome to Penpa+ Tool. <br> Its a web application to create and solve Sudokus and Puzzles.<br> Its a Universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. <br> You can download your puzzle as images and save the puzzle link in the form of URL to share with others.</h2>',
-        icon: 'info'
-    })
-}
-
-function load_youtube() {
-    window.open('https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos', '_blank');
-}
-
-function load_list() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/VIDEO_TUTORIALS.md', '_blank');
-}
-
-function load_readme() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/README.md', '_blank');
-}
-
-function load_wiki() {
-    window.open('https://github.com/swaroopg92/penpa-edit/wiki/Steps-to-Create-Sudoku-or-Puzzle-in-Penpa', '_blank');
-}
-
-function load_rules() {
-    Swal.fire({
-        title: 'Sudoku/Puzzle Rulesets',
-        html: '<h2 class="info"><a href="https://tinyurl.com/puzzlerules" target="_blank"> Eric Fox - Dictioniary of Rulesets </a> <br> <a href="https://wpcunofficial.miraheze.org/wiki/Category:Puzzle_Types" target="_blank"> Ryotaro Chiba - WPC Puzzles </a> <br> <a href="http://logicmastersindia.com/lmitests/dl.asp?attachmentid=669&v1" target="_blank"> LMI - WSC IB (Sudoku Variants)</a> <br> <a href="http://www.puzzleduel.club/archive/types" target="_blank">Puzzle Duel Club</a> <br> <a href="http://www.logic-puzzles.ropeko.ch/php/db/search.php" target="_blank">Ropeko - Logic Puzzles List</a></h2> <br> <h3>Note :- This is by no means an exhaustive list. Penpa+ is not affiliated with these sources. Please contact respective owners for any further information. If you have any additional interesting sources which I can add here, send me an email to penpaplus@gmail.com</h3>',
-        icon: 'info'
-    })
-}
-
-function load_faqs() {
-    window.open('https://docs.google.com/document/d/12Mde0ogcpdtgM2nz6Z_nZYJnMJyUOMC5f3FUxzH9q74/edit', '_blank');
-}
-
-function load_discord() {
-    window.open('https://discord.gg/BbN89j5', '_blank');
-}
-
 function load_feedback() {
     Swal.fire({
         title: 'Feedback',
         html: '<h2 class="info"><p>Any suggestions or improvements, send an email to <b> penpaplus@gmail.com </b> <br> or <br> Create an issue on github <a href="https://github.com/swaroopg92/penpa-edit/issues" target="_blank">here</a> <br> or <br> Join discussions in #penpa-plus channel in the Discord Server <a href="https://discord.gg/BbN89j5" target="_blank">here</a>.</p></h2>',
         icon: 'info'
     })
-}
-
-function load_contribute() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CONTRIBUTING.md', '_blank');
-}
-
-function load_todolist() {
-    window.open('https://github.com/swaroopg92/penpa-edit/projects/1', '_blank');
-}
-
-function load_changelogs() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CHANGELOG.md', '_blank');
-}
-
-function load_credits() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/CREDITS.md', '_blank');
-}
-
-function load_license() {
-    window.open('https://github.com/swaroopg92/penpa-edit/blob/master/LICENSE', '_blank');
 }
 
 function load(urlParam, type = 'url') {
@@ -1829,6 +1811,10 @@ function load2(paramArray, type) {
         document.getElementById("theme_mode_opt").value = 2;
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
+    }
+    let responsive_design = getCookie("responsive_mode");
+    if (responsive_design !== null) {
+        setResponsiveness(responsive_design, true);
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
@@ -2004,11 +1990,6 @@ function load2(paramArray, type) {
                     pu.solution = atext;
                 }
 
-                // Solution button
-                // document.getElementById("pu_a_label").style.display = "inline-block";
-                // document.getElementById("pu_a_label").style.marginLeft = "6px";
-                // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
                 set_solvemodetitle();
             }
 
@@ -2101,11 +2082,6 @@ function load2(paramArray, type) {
                 pu.solution = atext;
             }
 
-            // Solution button
-            // document.getElementById("pu_a_label").style.display = "inline-block";
-            // document.getElementById("pu_a_label").style.marginLeft = "6px";
-            // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-            // document.getElementById("solution_check").innerHTML = "*Automatic answer checking is enabled";
             set_solvemodetitle();
         }
         if (typeof rtext[7] !== 'undefined') {
@@ -2165,12 +2141,27 @@ function load2(paramArray, type) {
 
     // Theme
     if (typeof rtext[12] !== 'undefined') {
-        if (JSON.parse(rtext[12]) === 'dark') {
+        let view_setting_string = JSON.parse(rtext[12]);
+        let view_settings = view_setting_string.split("|");
+
+        if (view_settings[0] === 'dark') {
             document.getElementById("theme_mode_opt").value = 2;
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
         }
+
+        // This is not needed as it will never get called, but leaving it here for now
+        // if (view_settings[1]) {
+        //     if (view_settings[1] == 'responsive') {
+        //         document.getElementById("responsive_settings_opt").value = 2;
+        //         document.getElementById("app-container").classList.add("responsive");
+        //     } else if (view_settings[1] == 'responsive-flip') {
+        //         document.getElementById("responsive_settings_opt").value = 3;
+        //         document.getElementById("app-container").classList.add("responsive");
+        //         document.getElementById("app-container").classList.add("responsive-flip");
+        //     }
+        // }
     }
 
     // answerchecking settings for "OR"
@@ -2221,9 +2212,9 @@ function load2(paramArray, type) {
             replay_play();
         }
     }
-		if (parent && parent.resizeiframe) {
-			parent.resizeiframe();
-		}
+    if (parent && parent.resizeiframe) {
+        parent.resizeiframe();
+    }
 }
 
 function loadver1(paramArray, rtext) {
@@ -2657,7 +2648,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
 function set_solvemode(type = "url") {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
-    document.getElementById("title").innerHTML = "Solver mode"
+    document.getElementById("title").innerHTML = "Solver Mode"
     document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
@@ -2681,7 +2672,6 @@ function set_solvemode(type = "url") {
     // custom color
     document.getElementById('colorpicker_special').style.display = 'none';
     document.getElementById('custom_color_lb').style.display = 'none';
-    document.getElementById('custom_color_opt').style.display = 'none';
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
@@ -2708,7 +2698,6 @@ function set_contestmode() {
     document.getElementById("expansion").style.display = "none";
     document.getElementById("save_undo_lb").style.display = "none";
     document.getElementById("save_undo").style.display = "none";
-    document.getElementById("expansion").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
     document.getElementById("tb_redo").style.display = "none";
@@ -2725,8 +2714,8 @@ function set_contestmode() {
 }
 
 function set_solvemodetitle() {
-    document.getElementById("title").innerHTML = "Solver mode (*Automatic answer checking is enabled)";
-    document.getElementById("title").classList.add("info");
+    document.getElementById("title").innerHTML = "Solver Mode (Answer Checking Enabled)";
+    document.getElementById("header").classList.add("solving");
 }
 
 function isEmpty(obj) {
@@ -2740,6 +2729,29 @@ function isEmptycontent(pu_qa, array, num, value) {
         }
     }
     return true;
+}
+
+function setResponsiveness(mode, updateUI) {
+    let modeInt = parseInt(mode, 10);
+    let verb = modeInt > 1 ? 'add' : 'remove';
+    let flipVerb = modeInt > 2 ? 'add' : 'remove';
+    document.getElementById("app-container").classList[verb]("responsive");
+    document.getElementById("app-container").classList[flipVerb]("responsive-flip");
+    if (updateUI) {
+        document.getElementById("responsive_settings_opt").value = mode;
+    }
+
+    // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+    // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
+    if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
+        document.getElementById("mode_break").style.display = "inline";
+        document.getElementById("mode_txt_space").style.display = "inline";
+        document.getElementById("visibility_break").style.display = "none";
+    } else if (modeInt > 1 && window.innerWidth >= 850) {
+        document.getElementById("mode_break").style.display = "none";
+        document.getElementById("mode_txt_space").style.display = "none";
+        document.getElementById("visibility_break").style.display = "inline";
+    }
 }
 
 function decode_puzzlink(url) {
@@ -3218,17 +3230,16 @@ function decode_puzzlink(url) {
     document.getElementById("saveinfosource").value = url;
 }
 
-function load_from_server(paramArray, type)
-{
-    const data = Object.keys(paramArray).reduce( function (a, c) { a[c] = paramArray[c]; return a;}, {action:'pqr'}),
-    options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+function load_from_server(paramArray, type) {
+    const data = Object.keys(paramArray).reduce(function(a, c) { a[c] = paramArray[c]; return a; }, { action: 'pqr' }),
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
         },
-        body: JSON.stringify(data)
-    },
-    request = new Request('/live/misc-daily', options);
+        request = new Request('/live/misc-daily', options);
     fetch(request)
         .then(function(response) {
             return response.json();
@@ -3241,11 +3252,11 @@ function load_from_server(paramArray, type)
                 })
             }
             if (response.q) {
-                response.q = window.btoa(JSON.stringify(response.q)); 
+                response.q = window.btoa(JSON.stringify(response.q));
             }
             load2(response, type);
         })
         .catch(function(err) {
             create();
-        });    
+        });
 }
