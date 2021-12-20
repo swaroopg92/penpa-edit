@@ -286,24 +286,30 @@ onload = function() {
                 }
             }
 
+            // Do not allow in contest mode
             if (key === "F2") { //function_key
-                pu.mode_qa("pu_q");
-                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                if (!pu.puzzle_info) {
+                    pu.mode_qa("pu_q");
+                    document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                }
                 e.returnValue = false;
             } else if (key === "F3") {
-                pu.mode_qa("pu_a");
-                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
-                e.returnValue = false;
-            }
-
-            if (key === "F4") { //function_key
-                if (sw_timer.isPaused()) {
-                    startTimer();
-                } else {
-                    pauseTimer();
+                if (!pu.puzzle_info) {
+                    pu.mode_qa("pu_a");
+                    document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
                 }
                 e.returnValue = false;
             }
+
+            // Not needed for LMI branch
+            // if (key === "F4") { //function_key
+            //     if (sw_timer.isPaused()) {
+            //         startTimer();
+            //     } else {
+            //         pauseTimer();
+            //     }
+            //     e.returnValue = false;
+            // }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
                 pu.key_arrow(key, isCtrlKeyHeld(e));
@@ -1872,6 +1878,27 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
+        // Save puzzle progress
+        if (pu.url.length !== 0) {
+            // get md5 hash for unique id
+            let hash = md5(pu.url);
+            let pu_sub = {
+                'pu_q': pu.pu_q,
+                'pu_a': pu.pu_a,
+                'pu_q_col': pu.pu_q_col,
+                'pu_a_col': pu.pu_a_col,
+                'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
+            };
+
+            // compress data so that size is small
+            let u8text = new TextEncoder().encode(JSON.stringify(pu_sub));
+            let deflate = new Zlib.RawDeflate(u8text);
+            let compressed = deflate.compress();
+            let char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+
+            localStorage.setItem(hash, window.btoa(char8));
+        }
+
         if (document.getElementById('reload_button').value === "1") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -1943,6 +1970,16 @@ onload = function() {
             setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, expDate);
             setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expDate);
             // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expDate);
+        }
+    }
+
+    document.getElementById("clear_storage_opt").onchange = function() {
+        if (document.getElementById("clear_storage_opt").value === "2") {
+            localStorage.clear();
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
         }
     }
 
