@@ -1895,7 +1895,7 @@ onload = function() {
     }
 
     // Toggle responsiveness
-    document.getElementById("responsive_settings_opt").onchange = function () {
+    document.getElementById("responsive_settings_opt").onchange = function() {
         setResponsiveness(document.getElementById("responsive_settings_opt").value);
     }
 
@@ -1949,7 +1949,7 @@ onload = function() {
     $(document).ready(function() {
         if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
-                'width': "25%"
+                'width': "resolve" // 25% was used before
             });
         }
     });
@@ -1963,9 +1963,16 @@ onload = function() {
     document.getElementById("constraints_settings_opt").onchange = function() {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
         if (current_constraint === "all") {
-            // Display the mode break line
-            document.getElementById("mode_break").style.display = "inline";
-            document.getElementById("mode_txt_space").style.display = "inline";
+            // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+                document.getElementById("mode_break").style.display = "inline";
+                document.getElementById("mode_txt_space").style.display = "inline";
+                document.getElementById("visibility_break").style.display = "none";
+            } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+                document.getElementById("visibility_break").style.display = "inline";
+            }
 
             // set the default submode
             for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
@@ -1985,6 +1992,15 @@ onload = function() {
         } else {
             // Remove all modes, default is none
             pu.set_allmodes();
+
+            // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+                document.getElementById("visibility_break").style.display = "none";
+            } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+                document.getElementById("visibility_break").style.display = "inline";
+            }
 
             // Remove the mode break line
             document.getElementById("mode_break").style.display = "none";
@@ -2076,6 +2092,18 @@ onload = function() {
         document.getElementById("app-container").classList[flipVerb]("responsive-flip");
         if (updateUI) {
             document.getElementById("responsive_settings_opt").value = mode;
+        }
+
+        // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+        // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
+        if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
+            document.getElementById("mode_break").style.display = "inline";
+            document.getElementById("mode_txt_space").style.display = "inline";
+            document.getElementById("visibility_break").style.display = "none";
+        } else if (modeInt > 1 && window.innerWidth >= 850) {
+            document.getElementById("mode_break").style.display = "none";
+            document.getElementById("mode_txt_space").style.display = "none";
+            document.getElementById("visibility_break").style.display = "inline";
         }
     }
 };
