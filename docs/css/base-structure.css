@@ -591,7 +591,6 @@ body textarea {
 
 #visibility_button {
     width: 25px;
-    border: 1px solid var(--greyLight);
     background: none;
     margin-left: 0px;
     border-radius: 1px;
