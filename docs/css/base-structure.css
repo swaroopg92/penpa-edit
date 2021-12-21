@@ -45,7 +45,7 @@ header {
     font-size: .9em;
     grid-template-columns: 1fr 300px 300px 1fr;
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
     box-shadow: var(--shadow_low);
 }
 
