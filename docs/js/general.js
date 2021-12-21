@@ -93,6 +93,11 @@ function create() {
         showhide_timer();
     }
 
+    let local_storage_cookie = getCookie("local_storage");
+    if (local_storage_cookie !== null) {
+        document.getElementById("clear_storage_opt").value = local_storage_cookie;
+    }
+
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
         add_constraints();
@@ -1667,6 +1672,10 @@ function load(urlParam, type = 'url') {
     let mousemiddle_button_cookie = getCookie("mousemiddle_button");
     if (mousemiddle_button_cookie !== null) {
         document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
+    let local_storage_cookie = getCookie("local_storage");
+    if (local_storage_cookie !== null) {
+        document.getElementById("clear_storage_opt").value = local_storage_cookie;
     }
 
     if (rtext_para[18] && rtext_para[18] !== "") {

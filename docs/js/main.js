@@ -1870,12 +1870,20 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
+        if (document.getElementById('reload_button').value === "1") {
+            // Cancel the event
+            e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+            // Chrome requires returnValue to be set
+            e.returnValue = '';
+        }
+
         // Save puzzle progress
         let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
             local_storage_setting !== "2" &&
-            local_storage_setting !== "3") {
+            local_storage_setting !== "3" &&
+            local_storage_setting !== "4") {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
             let pu_sub = {
@@ -1890,13 +1898,6 @@ onload = function() {
             let rstr = encrypt_data(JSON.stringify(pu_sub));
 
             localStorage.setItem(hash, rstr);
-        }
-
-        if (document.getElementById('reload_button').value === "1") {
-            // Cancel the event
-            e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-            // Chrome requires returnValue to be set
-            e.returnValue = '';
         }
     });
 
@@ -1967,12 +1968,19 @@ onload = function() {
     }
 
     document.getElementById("clear_storage_opt").onchange = function() {
-        if (document.getElementById("clear_storage_opt").value === "2") {
+        var store_opt = document.getElementById("clear_storage_opt").value;
+        if (store_opt === "1") {
+            deleteCookie("local_storage");
+        } else if (store_opt === "2") {
             // check for local progres
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
             localStorage.removeItem(hash);
-        } else if (document.getElementById("clear_storage_opt").value === "3") {
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
+        } else if (store_opt === "3") {
             var keys = Object.keys(localStorage),
                 i = keys.length;
             while (i--) {
@@ -1981,11 +1989,14 @@ onload = function() {
                 }
             }
             // localStorage.clear(); for all clear
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
+        } else if (store_opt === "4") {
+            let expDate = 2147483647;
+            setCookie("local_storage", document.getElementById("clear_storage_opt").value, expDate);
         }
-        Swal.fire({
-            html: '<h2 class="info">Local Storage is Cleared</h2>',
-            icon: 'info'
-        })
     }
 
     $(document).ready(function() {
