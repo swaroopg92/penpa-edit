@@ -1871,7 +1871,11 @@ onload = function() {
 
     window.addEventListener('beforeunload', function(e) {
         // Save puzzle progress
-        if (pu.url.length !== 0 && pu.mmode === "solve") {
+        let local_storage_setting = document.getElementById("clear_storage_opt").value;
+        if (pu.url.length !== 0 &&
+            pu.mmode === "solve" &&
+            local_storage_setting !== "2" &&
+            local_storage_setting !== "3") {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
             let pu_sub = {
@@ -1964,6 +1968,11 @@ onload = function() {
 
     document.getElementById("clear_storage_opt").onchange = function() {
         if (document.getElementById("clear_storage_opt").value === "2") {
+            // check for local progres
+            // get md5 hash for unique id
+            let hash = "penpa_" + md5(pu.url);
+            localStorage.removeItem(hash);
+        } else if (document.getElementById("clear_storage_opt").value === "3") {
             var keys = Object.keys(localStorage),
                 i = keys.length;
             while (i--) {
@@ -1972,11 +1981,11 @@ onload = function() {
                 }
             }
             // localStorage.clear(); for all clear
-            Swal.fire({
-                html: '<h2 class="info">Local Storage is Cleared</h2>',
-                icon: 'info'
-            })
         }
+        Swal.fire({
+            html: '<h2 class="info">Local Storage is Cleared</h2>',
+            icon: 'info'
+        })
     }
 
     $(document).ready(function() {
