@@ -2807,11 +2807,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max 7360
 
@@ -2966,11 +2962,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         let solution_clone;
         // if solution exist then copy the solution as well
@@ -2980,11 +2972,7 @@ class Puzzle {
             } else {
                 solution_clone = this.solution;
             }
-            u8text = new TextEncoder().encode(solution_clone);
-            deflate = new Zlib.RawDeflate(u8text);
-            compressed = deflate.compress();
-            char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-            var ba_s = window.btoa(char8);
+            var ba_s = encrypt_data(solution_clone);
             // Warning Long URL
             if ((ba.length + ba_s.length) >= 7360) {
                 Swal.fire({
@@ -3122,11 +3110,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
@@ -3248,11 +3232,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
@@ -3273,11 +3253,7 @@ class Puzzle {
         var text;
         text = JSON.stringify(this.make_solution());
 
-        var u8text = new TextEncoder().encode(text);
-        var deflate = new Zlib.RawDeflate(u8text);
-        var compressed = deflate.compress();
-        var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
-        var ba = window.btoa(char8);
+        var ba = encrypt_data(text);
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
         // Warning Long URL

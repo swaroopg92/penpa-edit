@@ -1584,11 +1584,7 @@ function load(urlParam, type = 'url') {
     }
 
     // Decrypt P
-    var ab = atob(paramArray.p);
-    ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-    var inflate = new Zlib.RawInflate(ab);
-    var plain = inflate.decompress();
-    var rtext = new TextDecoder().decode(plain);
+    var rtext = decrypt_data(paramArray.p);
     rtext = rtext.split("\n");
     rtext[0] = rtext[0].split("zO").join("null");
     rtext[1] = rtext[1].split("zO").join("null");
@@ -1805,11 +1801,7 @@ function load(urlParam, type = 'url') {
 
             // Decrypt a
             if (paramArray.a) {
-                var ab = atob(paramArray.a);
-                ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-                var inflate = new Zlib.RawInflate(ab);
-                var plain = inflate.decompress();
-                var atext = new TextDecoder().decode(plain);
+                var atext = decrypt_data(paramArray.a);
 
                 if (pu.multisolution) {
                     pu.solution = JSON.parse(atext);
@@ -1923,11 +1915,7 @@ function load(urlParam, type = 'url') {
 
         // Decrypt a
         if (paramArray.a) {
-            var ab = atob(paramArray.a);
-            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-            var inflate = new Zlib.RawInflate(ab);
-            var plain = inflate.decompress();
-            var atext = new TextDecoder().decode(plain);
+            var atext = decrypt_data(paramArray.a);
             if (pu.multisolution) {
                 pu.solution = JSON.parse(atext);
             } else {
@@ -3032,4 +3020,21 @@ function decode_puzzlink(url) {
 
     // Set the Source
     document.getElementById("saveinfosource").value = url;
+}
+
+function encrypt_data(puzdata) {
+    var u8text = new TextEncoder().encode(puzdata);
+    var deflate = new Zlib.RawDeflate(u8text);
+    var compressed = deflate.compress();
+    var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+    return window.btoa(char8);
+}
+
+function decrypt_data(puzdata) {
+    var ab = atob(puzdata);
+    ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+    var inflate = new Zlib.RawInflate(ab);
+    var plain = inflate.decompress();
+    let decrypted = new TextDecoder().decode(plain);
+    return decrypted;
 }
