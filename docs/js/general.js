@@ -1776,7 +1776,7 @@ function load2(paramArray, type) {
             document.getElementById("puzzletitle").style.display = 'none';
         }
         if (pu.puzzle_info.iframe || pu.puzzle_info.lmimode === "daily") {
-            document.getElementById("title").style.display = 'none';
+            document.getElementById("header").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
         }
         if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
