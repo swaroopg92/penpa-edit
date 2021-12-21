@@ -1870,6 +1870,24 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
+        // Save puzzle progress
+        if (pu.url.length !== 0 && pu.mmode === "solve") {
+            // get md5 hash for unique id
+            let hash = "penpa_" + md5(pu.url);
+            let pu_sub = {
+                'pu_q': pu.pu_q,
+                'pu_a': pu.pu_a,
+                'pu_q_col': pu.pu_q_col,
+                'pu_a_col': pu.pu_a_col,
+                'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
+            };
+
+            // encrypt data
+            let rstr = encrypt_data(JSON.stringify(pu_sub));
+
+            localStorage.setItem(hash, rstr);
+        }
+
         if (document.getElementById('reload_button').value === "1") {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -1941,6 +1959,23 @@ onload = function() {
             setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, expDate);
             setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expDate);
             // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expDate);
+        }
+    }
+
+    document.getElementById("clear_storage_opt").onchange = function() {
+        if (document.getElementById("clear_storage_opt").value === "2") {
+            var keys = Object.keys(localStorage),
+                i = keys.length;
+            while (i--) {
+                if (keys[i].includes("penpa")) {
+                    localStorage.removeItem(keys[i]);
+                }
+            }
+            // localStorage.clear(); for all clear
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
         }
     }
 

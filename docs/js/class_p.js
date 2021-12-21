@@ -166,7 +166,7 @@ class Puzzle {
         this.conflicts = new Conflicts();
         this.previous_sol = [];
         this.conflict_cells = [];
-
+        this.url = [];
         this.ignored_line_types = {
             2: 1, // Black color
             5: 1, // Grey Color
