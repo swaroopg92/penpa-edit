@@ -198,7 +198,7 @@ hr.newgridhrline {
     box-shadow: var(--shadow_low);
     border: 0;
     font-size: 0;
-    width: 580px;
+    width: 600px;
     margin: 5px auto;
     padding: 10px;
 }
@@ -305,6 +305,10 @@ hr.newgridhrline {
     text-align: center;
     line-height: 28px;
     border-radius: 3px;
+}
+
+#style_special {
+    padding-left: 3px;
 }
 
 .nb_button input[type=button] {
