@@ -932,6 +932,48 @@ function submit_solution() {
                 }
             }
             const redirect = response.redirect ? `Click <a href='${response.redirect}'>here</a> to proceed to main page` : ``;
+            // Rating and feedback code
+            Swal.fire({
+                title: 'Rate this puzzle: 1-5',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: false,
+                confirmButtonText: 'OK',
+                showLoaderOnConfirm: true,
+                preConfirm: (rating) => {
+                    var rating_num = parseFloat(rating);
+                    if (rating_num >= 0 && rating_num <= 5) {
+                        return rating_num;
+                    } else {
+                        Swal.showValidationMessage(
+                            `Invalid input range: Please enter again`
+                        )
+                    }
+                },
+                allowOutsideClick: false
+            }).then((rating_result) => {
+                if (rating_result.isConfirmed) {
+                    // Send the rating to server, Deb need to add code here
+                    // rating is accessed by result.value
+                    Swal.fire({
+                        title: 'Feedback (optional)',
+                        input: 'text',
+                        inputAttributes: {
+                            autocapitalize: 'off'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((feedback_result) => {
+                        if (feedback_result.isConfirmed && feedback_result.value !== "") {
+                            // Deb to add code here to send the feedback to LMI server
+                            console.log(feedback_result.value)
+                        }
+                    })
+                }
+            })
             Swal.fire({
                 html: `<h3 class="${response.correct ? 'info' : 'warn'}">
                     ${response.message || 'Solution is wrong'}
