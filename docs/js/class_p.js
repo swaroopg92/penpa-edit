@@ -5061,7 +5061,12 @@ class Puzzle {
                 if (!isEmpty(this.pu_a.surface)) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
-                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                            // any shades of grey including black
+                            if (this.pu_a.surface[i + j * (this.nx0)] &&
+                                (this.pu_a.surface[i + j * (this.nx0)] === 1 ||
+                                    this.pu_a.surface[i + j * (this.nx0)] === 8 ||
+                                    this.pu_a.surface[i + j * (this.nx0)] === 3 ||
+                                    this.pu_a.surface[i + j * (this.nx0)] === 4)) {
                                 text += "1";
                             } else {
                                 text += "0";
