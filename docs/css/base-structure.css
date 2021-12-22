@@ -1368,3 +1368,57 @@ sup {
         text-align: center;
     }
 }
+
+/* Ratings widget */
+.rate {
+    display: inline-block;
+    border: 0;
+}
+
+/* Order correctly by floating highest to the right */
+.rate>label {
+    float: right;
+}
+
+/* The star of the show */
+.rate>label:before {
+    display: inline-block;
+    font-size: 1.1rem;
+    padding: .3rem .2rem;
+    margin: 0;
+    font-family: FontAwesome;
+    content: "\f005 ";
+    /* full star */
+}
+
+/* Half star trick */
+.rate .half:before {
+    content: "\f089 ";
+    /* half star no outline */
+    position: absolute;
+    padding-right: 0;
+}
+
+/* Click + hover color */
+.rate>input:checked~label,
+/* color current and previous stars on checked */
+.rate>label:hover,
+.rate>label:hover~label {
+    color: #73B100;
+}
+
+/* color previous stars on hover */
+
+/* Hover highlights */
+.rate>input:checked+label:hover,
+/* highlight current and previous stars */
+.rate>input:checked~label:hover~label,
+    {
+    color: #A6E72D;
+}
+
+/* Remove orange box shadow defined for other buttons*/
+.rate input[type="radio"]:checked+label {
+    background-color: var(--transparentWhite) !important;
+    box-shadow: 0 0 0 0px var(--transparentWhite) !important;
+}

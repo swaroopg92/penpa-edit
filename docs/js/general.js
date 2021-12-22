@@ -930,58 +930,70 @@ function submit_solution() {
                 if (response.firstTimeCorrect) {
                     submit_solution_steps();
                 }
-            }
-            const redirect = response.redirect ? `Click <a href='${response.redirect}'>here</a> to proceed to main page` : ``;
-            // Rating and feedback code
-            Swal.fire({
-                title: 'Rate this puzzle: 1-5',
-                input: 'text',
-                inputAttributes: {
-                    autocapitalize: 'off'
-                },
-                showCancelButton: false,
-                confirmButtonText: 'OK',
-                showLoaderOnConfirm: true,
-                preConfirm: (rating) => {
-                    var rating_num = parseFloat(rating);
-                    if (rating_num >= 0 && rating_num <= 5) {
-                        return rating_num;
-                    } else {
-                        Swal.showValidationMessage(
-                            `Invalid input range: Please enter again`
-                        )
-                    }
-                },
-                allowOutsideClick: false
-            }).then((rating_result) => {
-                if (rating_result.isConfirmed) {
-                    // Send the rating to server, Deb need to add code here
-                    // rating is accessed by result.value
-                    Swal.fire({
-                        title: 'Feedback (optional)',
-                        input: 'text',
-                        inputAttributes: {
-                            autocapitalize: 'off'
-                        },
-                        showCancelButton: true,
-                        confirmButtonText: 'OK',
-                        allowOutsideClick: () => !Swal.isLoading()
-                    }).then((feedback_result) => {
-                        if (feedback_result.isConfirmed && feedback_result.value !== "") {
-                            // Deb to add code here to send the feedback to LMI server
-                            console.log(feedback_result.value)
+
+                // Rating and feedback code
+                let wrap = document.createElement('div');
+                wrap.setAttribute('class', 'text-muted');
+                wrap.innerHTML = '<p>Rate the puzzle: </p><div class="rate">' +
+                    '<input type="radio" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                    '<input type="radio" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                    '<input type="radio" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                    '<input type="radio" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                    '<input type="radio" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                    '<input type="radio" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                    '<input type="radio" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                    '<input type="radio" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                    '<input type="radio" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                    '<input type="radio" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                    '</div><br><input id="swal-input2" class="swal2-input" placeholder="Feedback (Optional)">'
+                Swal.fire({
+                    title: 'Solution is correct',
+                    html: wrap,
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (rating) => {
+                        var element = document.getElementsByClassName('rate_lb');
+                        var selected_rating;
+
+                        for (var i = 0; i < element.length; i++) {
+                            let unselected_color = "rgb(84, 84, 84)";
+                            let element_color = getComputedStyle(element[i]).getPropertyValue("color");
+                            if (element_color !== unselected_color) {
+                                selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
+                                break;
+                            }
                         }
-                    })
-                }
-            })
-            Swal.fire({
-                html: `<h3 class="${response.correct ? 'info' : 'warn'}">
-                    ${response.message || 'Solution is wrong'}
-                    ${redirect}</h3>`,
-                icon: response.correct ? 'success' : 'error',
-                confirmButtonText: response.correct ? 'Ok' : 'Try Again',
-                timer: response.correct ? undefined : 3000
-            });
+                        if (selected_rating >= 0.5) {
+                            return selected_rating;
+                        } else {
+                            Swal.showValidationMessage(
+                                `No rating selected`
+                            )
+                        }
+                    },
+                    allowOutsideClick: false
+                }).then((rating_result) => {
+                    if (rating_result.isConfirmed) {
+                        // Send the rating to server, Deb need to add code here
+                        // rating is accessed by rating_result.value
+
+                        const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                        Swal.fire({
+                            html: `<h3 class="info">${redirect}</h3>`,
+                            icon: 'success',
+                            confirmButtonText: 'Ok',
+                        });
+                    }
+                })
+            } else {
+                Swal.fire({
+                    html: `<h3 class='warn'"> Solution is wrong </h3>`,
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                    timer: 3000
+                });
+            }
         })
         .catch(function(err) {
             Swal.fire({
