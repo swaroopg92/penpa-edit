@@ -223,7 +223,16 @@ onload = function() {
     let previousdigit1 = false;
 
     function onKeyDown(e) {
-        if (e.target.tagName === "BODY") {
+        if (e.target.type === "number" ||
+            e.target.type === "text" ||
+            e.target.id === "savetextarea_pp" ||
+            e.target.id === "iostring" ||
+            e.target.id === "inputtext" ||
+            e.target.id === "select2_search" ||
+            e.target.id === "saveinforules" ||
+            e.target.id === "urlstring") {
+            // For input form
+        } else {
             var key = e.key;
             var keycode = e.keyCode;
             var code = e.code;
@@ -806,7 +815,15 @@ onload = function() {
     }
 
     function onKeyUp(e) {
-        if (e.target.tagName === "BODY") {
+        if (e.target.type === "number" ||
+            e.target.type === "text" ||
+            e.target.id === "savetextarea_pp" ||
+            e.target.id === "iostring" ||
+            e.target.id === "inputtext" ||
+            e.target.id === "saveinforules" ||
+            e.target.id === "urlstring") {
+            // For input form
+        } else {
             var key = e.key;
             var keylocation = e.location;
             if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
