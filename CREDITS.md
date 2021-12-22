@@ -7,3 +7,4 @@
 * Help icon made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 * Thanks to <a href="https://github.com/william42"> William42 </a> for SVG Screenshot code.
 * Thanks to <a href="https://github.com/nmay231"> nmay231 </a> for ongoing contributions to puzz.link parser in Penpa+.
+* Thanks to <a href="https://thegriddle.net"> davmillar </a> for ongoing contributions to redesign the GUI and refactoring the code.

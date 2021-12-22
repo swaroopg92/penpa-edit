@@ -48,19 +48,19 @@ class Puzzle_truncated_square extends Puzzle {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -79,22 +79,22 @@ class Puzzle_truncated_square extends Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -295,7 +295,7 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -309,7 +309,7 @@ class Puzzle_truncated_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -426,6 +426,26 @@ class Puzzle_truncated_square extends Puzzle {
                     if (this.point[i].type === 2 || this.point[i].type === 3) {
                         if (min0 > (0.3 * this.size) ** 2) {
                             continue;
+                        }
+                    }
+                    min = min0;
+                    num = i;
+                }
+            }
+        }
+        return parseInt(num);
+    }
+
+    coord_p_edgex_star(x, y, hitboxfactor) {
+        var min0, min = 10e6;
+        var num = 0;
+        for (var i = 0; i < this.point.length; i++) {
+            if (this.type.indexOf(this.point[i].type) != -1) {
+                min0 = (x - this.point[i].x) ** 2 + (y - this.point[i].y) ** 2;
+                if (min0 < min) {
+                    if (this.point[i].type === 1 || this.point[i].type === 2 || this.point[i].type === 3) {
+                        if (min0 > (hitboxfactor * this.size) ** 2) {
+                            break;
                         }
                     }
                     min = min0;
@@ -2623,19 +2643,19 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -2654,22 +2674,22 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -2894,7 +2914,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 3, 4];
@@ -2908,7 +2928,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 3, 4];
@@ -3270,19 +3290,19 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -3301,22 +3321,22 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -3612,7 +3632,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -3626,7 +3646,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -4023,19 +4043,19 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -4054,22 +4074,22 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -4382,7 +4402,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -4396,7 +4416,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -4751,19 +4771,19 @@ class Puzzle_iso extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -4782,22 +4802,22 @@ class Puzzle_iso extends Puzzle_truncated_square {
             document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "inline-block";
+            document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -5087,7 +5107,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (document.getElementById('edge_button').value === "2") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -5101,7 +5121,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (document.getElementById('edge_button').value === "2") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
