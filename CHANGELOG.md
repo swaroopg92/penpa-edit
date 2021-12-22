@@ -1,6 +1,8 @@
 ## History
 * 2021/12/19 ver 2.26.13
 	* Responsive design - left and right options.
+	* Fixed tab order.
+	* Local storage feature to save the state of the puzzle.
 * 2021/12/16 ver 2.26.12
 	* Fixed SVG export in Safari.
 	* Restored original timer look.

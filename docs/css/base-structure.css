@@ -45,7 +45,7 @@ header {
     font-size: .9em;
     grid-template-columns: 1fr 300px 300px 1fr;
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
     box-shadow: var(--shadow_low);
 }
 
@@ -198,7 +198,7 @@ hr.newgridhrline {
     box-shadow: var(--shadow_low);
     border: 0;
     font-size: 0;
-    width: 580px;
+    width: 600px;
     margin: 5px auto;
     padding: 10px;
 }
@@ -305,6 +305,10 @@ hr.newgridhrline {
     text-align: center;
     line-height: 28px;
     border-radius: 3px;
+}
+
+#style_special {
+    padding-left: 3px;
 }
 
 .nb_button input[type=button] {

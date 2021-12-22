@@ -174,28 +174,37 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface", "Wall", "Shape", "Composite",
+    let modes = ["Surface",
         "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
+        "Wall",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
-        "Thermo", "Sudoku Arrow"
+        "Shape",
+        "Thermo", "Sudoku Arrow",
+        "Composite"
     ];
 
-    let modes_text = ["Surface", "Wall", "Shape", "Composite",
+    let modes_text = ["Surface",
         "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
+        "Wall",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
-        "Thermo", "Sudoku Arrow"
+        "Shape",
+        "Thermo", "Sudoku Arrow",
+        "Composite"
     ];
 
-    let modes_mapping = ["surface", "wall", "symbol", "combi",
+    let modes_mapping = ["surface",
         "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4",
+        "wall",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
         "sub_sudoku1", "sub_sudoku2", "sub_sudoku3",
-        "sub_specialthermo", "sub_specialarrows"
+        "symbol",
+        "sub_specialthermo", "sub_specialarrows",
+        "combi"
     ];
     let previous_mode = "surface";
     let previous_submode = 1;
@@ -761,27 +770,33 @@ onload = function() {
                     }
                     counter_index %= user_choices.length
                     let mode_loc = modes.indexOf(user_choices[counter_index]);
-                    if (mode_loc < 4) { // Hard coded, '4', Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
-                        pu.mode_set(modes_mapping[mode_loc])
+
+                    // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
+                    let mode_name = modes_mapping[mode_loc];
+                    if (mode_name.includes("surface") ||
+                        mode_name.includes("wall") ||
+                        mode_name.includes("symbol") ||
+                        mode_name.includes("combi")) {
+                        pu.mode_set(mode_name)
                         e.preventDefault();
                     } else {
-                        if (modes_mapping[mode_loc].includes("number")) {
+                        if (mode_name.includes("number")) {
                             pu.mode_set('number');
                             e.preventDefault();
-                        } else if (modes_mapping[mode_loc].includes("sudoku")) {
+                        } else if (mode_name.includes("sudoku")) {
                             pu.mode_set('sudoku');
                             e.preventDefault();
-                        } else if (modes_mapping[mode_loc].includes("lineE")) {
+                        } else if (mode_name.includes("lineE")) {
                             pu.mode_set('lineE');
                             e.preventDefault();
-                        } else if (modes_mapping[mode_loc].includes("special")) {
+                        } else if (mode_name.includes("special")) {
                             pu.mode_set('special');
                             e.preventDefault();
                         } else {
                             pu.mode_set('line');
                             e.preventDefault();
                         }
-                        pu.submode_check(modes_mapping[mode_loc]);
+                        pu.submode_check(mode_name);
                         e.preventDefault();
                     }
                     e.returnValue = false;
@@ -1899,6 +1914,29 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+
+        // Save puzzle progress
+        let local_storage_setting = document.getElementById("clear_storage_opt").value;
+        if (pu.url.length !== 0 &&
+            pu.mmode === "solve" &&
+            local_storage_setting !== "2" &&
+            local_storage_setting !== "3" &&
+            local_storage_setting !== "4") {
+            // get md5 hash for unique id
+            let hash = "penpa_" + md5(pu.url);
+            let pu_sub = {
+                'pu_q': pu.pu_q,
+                'pu_a': pu.pu_a,
+                'pu_q_col': pu.pu_q_col,
+                'pu_a_col': pu.pu_a_col,
+                'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
+            };
+
+            // encrypt data
+            let rstr = encrypt_data(JSON.stringify(pu_sub));
+
+            localStorage.setItem(hash, rstr);
+        }
     });
 
     // Adding on change events for general settings
@@ -1968,12 +2006,34 @@ onload = function() {
     }
 
     document.getElementById("clear_storage_opt").onchange = function() {
-        if (document.getElementById("clear_storage_opt").value === "2") {
-            localStorage.clear();
+        var store_opt = document.getElementById("clear_storage_opt").value;
+        if (store_opt === "1") {
+            deleteCookie("local_storage");
+        } else if (store_opt === "2") {
+            // check for local progres
+            // get md5 hash for unique id
+            let hash = "penpa_" + md5(pu.url);
+            localStorage.removeItem(hash);
             Swal.fire({
                 html: '<h2 class="info">Local Storage is Cleared</h2>',
                 icon: 'info'
             })
+        } else if (store_opt === "3") {
+            var keys = Object.keys(localStorage),
+                i = keys.length;
+            while (i--) {
+                if (keys[i].includes("penpa")) {
+                    localStorage.removeItem(keys[i]);
+                }
+            }
+            // localStorage.clear(); for all clear
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
+        } else if (store_opt === "4") {
+            let expDate = 2147483647;
+            setCookie("local_storage", document.getElementById("clear_storage_opt").value, expDate);
         }
     }
 

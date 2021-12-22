@@ -93,6 +93,11 @@ function create() {
         showhide_timer();
     }
 
+    let local_storage_cookie = getCookie("local_storage");
+    if (local_storage_cookie !== null) {
+        document.getElementById("clear_storage_opt").value = local_storage_cookie;
+    }
+
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
         add_constraints();
@@ -1833,6 +1838,10 @@ function load2(paramArray, type) {
     if (mousemiddle_button_cookie !== null) {
         document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
     }
+    let local_storage_cookie = getCookie("local_storage");
+    if (local_storage_cookie !== null) {
+        document.getElementById("clear_storage_opt").value = local_storage_cookie;
+    }
 
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
@@ -2180,7 +2189,7 @@ function load2(paramArray, type) {
     if (!paramArray.r && (paramArray.m === "solve" || paramArray.l === "solvedup")) {
         // check for local progres
         // get md5 hash for unique id
-        let hash = md5(pu.url);
+        let hash = "penpa_" + md5(pu.url);
 
         // Decrypt puzzle data
         let local_data = localStorage.getItem(hash);
