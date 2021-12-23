@@ -108,6 +108,10 @@ describe("puzz.link parser", () => {
         ["Kurotto 2", "https://puzz.link/p?kurotto/13/12/g1g1h.h0g1h2g0h4h4g1h3g1h.h2g4i2h.g1h2j.h2g.h.j6h.g.h3i6g2h5h5g4h2g.h.h3g.h5g.h.h8g9i3h.g.h6j5h3g.h.j7h.g.h9h"],
         ["Kurotto 3", "https://puzz.link/p?kurotto/4/4/g4g3.l.3g3g"],
         ["Kurotto 4", "https://puzz.link/p?kurotto/9/17/i123zg5h2g2h66h3g3h.7h.g4h4x567i4.5x5h7g4h56h8g5h.7h.g6h7zg234i"],
+        // LITS
+        ["LITS 1", "https://puzz.link/p?lits/12/8/11084o2iif51gg8040vf3vu577erlpvfnvu"],
+        ["LITS 2", "https://puzz.link/p?lits/8/8/5ajmi9mhai2g514bdn32f340"],
+        ["LITS 3", "https://puzz.link/p?lits/6/6/lldoa4043q6c"],
         // Masyu
         ["Masyu 1", "https://puzz.link/p?masyu/15/10/i0a02000000ik20620i6i0a021c049c209490j0100a0019329"],
         ["Masyu 2", "https://puzz.link/p?mashu/13/9/013009k10a3a39310c9313693i016030j039a20"],
@@ -151,6 +155,10 @@ describe("puzz.link parser", () => {
         ["Nonogram 1", "https://puzz.link/p?nonogram/4/10/123h456h789habcn1g2g3g4g3g2g1g"],
         ["Nonogram 2", "https://puzz.link/p?nonogram/50/45/-14zh627z312218w4142215v22113126u23216x22747x6c225x11f24x22-12214w21-1354x4-1434y2d75y225367w21532541u55534211u241224211t21423431u1254232v3b2314w21a336w1182321v3533311v3133311v414341w3113421v54412x948z1758y23533x36312x47212x5632y7723y8a55ycc1dy-1836z-14215y1623225v311534w12464x11335334u37121218u23117227u12113245u1211121325s34112134u122124av12211aw638z-1dzjb38zh633229y612221ax71126135w7126524x872425y425127y3222555x323e33y413-1133y4697213x647823y61567z336611y31374621w23358621w223545511v32353a5x3553184x3343571x5547721x65342731w94442711w211434274v1311344262u111355732v23431f12w2344e21x1445c14x1232a22x3321222x75311212w13223114w9341113x2113215x12114by12346z1235zg165zh246zh216zh247zh527zh356zh"],
         ["Nonogram 3", "https://puzz.link/p?nonogram/20/14/2l12k112j112j711j91k5121i74k414j48k48k4214i94k73k28k252j81k44k33k4l44n92na12m1912l11611k5421l5126l2812l165m524m4an3ando8o"],
+        // Norinori
+        ["Norinori 1", "https://puzz.link/p?norinori/18/10/365btauumbakihchaf0o3q67cbjcg8kki94dtj2oorju6tnmontv0vgb4ssnvsb9v3g"],
+        ["Norinori 2", "https://puzz.link/p?norinori/10/10/ebdcb96kfaulotutil9qscvm7ivh0aumd8mc"],
+        ["Norinori 3", "https://puzz.link/p?norinori/10/10/09binldaqlaqkl8qg4fg04v803fuk0ovu0vu"],
         // Nuribou
         ["Nuribou 1", "https://puzz.link/p?nuribou/10/10/k2i37zhal8k7h2zhfw3m2g"],
         ["Nuribou 2", "https://puzz.link/p?nuribou/9/9/n2u.i8o9i4o5i.u1n"],

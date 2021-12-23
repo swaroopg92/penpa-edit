@@ -3248,6 +3248,19 @@ function decode_puzzlink(url) {
             pu.subcombimode("blpo");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "lits":
+        case "norinori":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blpo");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
