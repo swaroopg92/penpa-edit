@@ -377,9 +377,9 @@ class Puzzle {
         // pause-unpause layer
         let pause_canvas = document.getElementById("pause_canvas");
         let pause_ctx = pause_canvas.getContext("2d");
-        let factor = 0.95;
-        pause_canvas.style.width = (this.canvasx * factor).toString() + "px";
-        pause_canvas.style.height = (this.canvasy * factor).toString() + "px";
+        let factor = this.resol * 5;
+        pause_canvas.style.width = (this.canvasx - factor).toString() + "px";
+        pause_canvas.style.height = (this.canvasy - factor).toString() + "px";
         pause_canvas.width = this.resol * this.canvasx;
         pause_canvas.height = this.resol * this.canvasy;
     }
