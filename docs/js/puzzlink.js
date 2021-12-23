@@ -519,6 +519,26 @@ class Puzzlink {
 
         return number_list;
     }
+
+    drawCompassNumbers(pu, info_number, sub_mode) {
+        // Compass numbers are given as groups of four numbers
+        // Compass lists them in a different order than Penpa+
+        var number_order = [0, 3, 2, 1];
+        var indexes = Object.keys(info_number).sort((a, b) => a - b);
+
+        for (var compass_index = 0; compass_index < indexes.length; compass_index += 4) {
+            var cell_index = indexes[compass_index] - compass_index * (3 / 4);
+            var row_ind = parseInt(cell_index / this.cols);
+            var col_ind = cell_index % this.cols;
+            var cell = 8 * (pu.ny0 * pu.nx0) + 4 * (pu.nx0 * (2 + row_ind) + 2 + col_ind);
+            for (var j = 0; j < 4; j++) {
+                var number = info_number[indexes[compass_index + j]];
+                pu["pu_q"].numberS[cell + number_order[j]] = [number === "?" ? " " : number, sub_mode];
+            }
+            cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            pu["pu_q"].symbol[cell] = [1, "compass", 1];
+        }
+    }
 }
 
 class DisjointSets {

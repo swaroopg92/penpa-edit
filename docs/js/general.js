@@ -3145,6 +3145,19 @@ function decode_puzzlink(url) {
             pu.subcombimode("edgesub");
             this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
             break;
+        case "compass":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed grid lines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawCompassNumbers(pu, info_number, 1);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',

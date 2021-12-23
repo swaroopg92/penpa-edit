@@ -47,6 +47,12 @@ describe("puzz.link parser", () => {
         // Cojun
         ["Cojun 1", "https://puzz.link/p?cojun/8/8/qhebtquqmqj0l7s7c8vo1up0zzh4v1j"],
         ["Cojun 2", "https://puzz.link/p?cojun/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
+        // Compass
+        ["Compass 1", "https://puzz.link/p?compass/10/6/....0......0.0....0.000013426897acdbe-10-11f-10=100%100+100g....h....i....j....k....zn0000"],
+        ["Compass 2", "https://puzz.link/p?compass/10/10/r4..2j.4.3i3..5l5.2.l2..5m5...r4..3m.4..l2...l.325i3.1.j...4r"],
+        ["Compass 3", "https://puzz.link/p?compass/6/6/m05..h..43t.1.2h11..m"],
+        ["Compass 4", "https://puzz.link/p?compass/7/7/n..24i14..q22..q32..i.33.n"],
+        ["Compass 5", "https://puzz.link/p?compass/8/8/x2.02i1.86i.056i.042h3.40i0.31i.200i.031x"],
         // Country Road
         ["Country Road 1", "https://puzz.link/p?country/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g"],
         ["Country Road 2", "https://puzz.link/p?country/20/15/10156ggr62indoe611d38431oonjrhv7hltmb6t90d6hdme4rc8jcp26ge7vo7vvo32vk8tv1v7uefro67hg208e82hg953tva7tu0fg0fv6m1u0ei5g24k54g2l7g557k92h3g3g2g3"],
