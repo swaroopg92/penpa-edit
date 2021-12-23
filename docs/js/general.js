@@ -2867,6 +2867,7 @@ function decode_puzzlink(url) {
         case "juosan":
         case "maxi":
         case "nagenawa":
+        case "toichika2":
         case "yajilin-regions":
             pu = new Puzzle_square(cols, rows, size);
             if (type === "detour" || type === "maxi" || type === "nagenawa" || type === "juosan") {
@@ -2883,7 +2884,7 @@ function decode_puzzlink(url) {
             if (type === "country") {
                 puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
             } else {
-                // Draw numbers in the corner
+                // Draw small numbers in the corner
                 for (var i in info_number) {
                     // Determine which row and column
                     row_ind = parseInt(i / cols);
@@ -2898,7 +2899,7 @@ function decode_puzzlink(url) {
                 pu.mode_set("combi");
                 pu.subcombimode("linex");
                 this.usertab_choices = ["Surface", "Composite"];
-            } else if (type === "factors") {
+            } else if (type === "factors" || type === "toichika2") {
                 pu.mode_set("number");
                 this.usertab_choices = ["Surface", "Number Normal"];
             } else if (type === "juosan") {
@@ -3215,8 +3216,6 @@ function decode_puzzlink(url) {
                     edge_style = 2;  // Black normal
                 }
                 for (col_ind = 0; col_ind < cols + cols_offset; col_ind++) {
-                    // var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
-                    // var edgey = edgex + pu.nx0;
                     var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
                     var edgey = edgex + 1;
                     var key = edgex.toString() + "," + edgey.toString();
