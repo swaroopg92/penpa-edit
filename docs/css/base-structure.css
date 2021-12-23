@@ -1404,7 +1404,7 @@ sup {
 /* color current and previous stars on checked */
 .rate>label:hover,
 .rate>label:hover~label {
-    color: #73B100;
+    color: #9954bb;
 }
 
 /* color previous stars on hover */
@@ -1414,7 +1414,7 @@ sup {
 /* highlight current and previous stars */
 .rate>input:checked~label:hover~label,
     {
-    color: #A6E72D;
+    color: #CF95DD;
 }
 
 /* Remove orange box shadow defined for other buttons*/

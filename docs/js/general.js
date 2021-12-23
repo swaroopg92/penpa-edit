@@ -945,7 +945,7 @@ function submit_solution() {
                     '<input type="radio" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
                     '<input type="radio" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
                     '<input type="radio" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
-                    '</div><br><input id="swal-input2" class="swal2-input" placeholder="Feedback (Optional)">'
+                    '</div><br><textarea id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"/>'
                 Swal.fire({
                     title: 'Solution is correct',
                     html: wrap,
@@ -975,6 +975,7 @@ function submit_solution() {
                     allowOutsideClick: false
                 }).then((rating_result) => {
                     if (rating_result.isConfirmed) {
+											submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
                         // Send the rating to server, Deb need to add code here
                         // rating is accessed by rating_result.value
 
@@ -1033,6 +1034,25 @@ function submit_solution_steps() {
     while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
         pu.redo(true);
     }
+}
+
+function submit_ratings_feedback(ratings, message) {
+    const data = {
+            contest: pu.puzzle_info.cid,
+						action: 'update-ratings',
+            sequence: pu.puzzle_info.pid,
+            ratings: ratings,
+						message: message
+        },
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        request = new Request('/live/misc-daily', options);
+    fetch(request);
 }
 
 function replay_play() {
