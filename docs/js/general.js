@@ -3192,20 +3192,37 @@ function decode_puzzlink(url) {
                 pu["pu_q"].number[cell] = [info_number[i], 1, "1"];
             }
 
-            // Draw edges
-            puzzlink_pu = new Puzzlink(cols + cols_offset + 1, rows + rows_offset + 1, bstr);
-            info_edge = {};
-            for (i = 0; i < rows_offset; i++) {
-                info_edge[cols_offset + i * (cols + cols_offset) - 1] = 1;  // Left vertical line
-                info_edge[(i + 1) * (cols + cols_offset) - 1] = 1;  // Right vertical line
+            // Draw vertical edges
+            for (i = cols_offset - 1; i < cols + cols_offset + 5; i += 5) {
+                col_ind = Math.min(cols + cols_offset - 1, i);
+                var edge_style = 13;  // Fat dots
+                if (col_ind === cols_offset - 1 || col_ind === cols + cols_offset - 1) {
+                    edge_style = 2;  // Black normal
+                }
+                for (row_ind = 0; row_ind < rows + rows_offset; row_ind++) {
+                    var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                    var edgey = edgex + pu.nx0;
+                    var key = edgex.toString() + "," + edgey.toString();
+                    pu["pu_q"]["lineE"][key] = edge_style;
+                }
             }
-            for (i = 0; i < cols_offset; i++) {
-                // Bottom horizontal line
-                info_edge[(cols + cols_offset) * (rows + rows_offset + 1) + i + (rows_offset - 1) * (cols + cols_offset + 1)] = 1;
-                // Top horizontal line
-                info_edge[2 * (cols + cols_offset) * (rows + rows_offset) + rows + rows_offset + i - 1] = 1;
+
+            // Draw horizontal edges
+            for (var i = rows_offset - 1; i < rows + rows_offset + 5; i += 5) {
+                row_ind = Math.min(rows + rows_offset - 1, i);
+                var edge_style = 13;  // Fat dots
+                if (row_ind === rows_offset - 1 || row_ind === rows + rows_offset - 1) {
+                    edge_style = 2;  // Black normal
+                }
+                for (col_ind = 0; col_ind < cols + cols_offset; col_ind++) {
+                    // var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                    // var edgey = edgex + pu.nx0;
+                    var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
+                    var edgey = edgex + 1;
+                    var key = edgex.toString() + "," + edgey.toString();
+                    pu["pu_q"]["lineE"][key] = edge_style;
+                }
             }
-            puzzlink_pu.drawBorder(pu, info_edge, 2);
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
