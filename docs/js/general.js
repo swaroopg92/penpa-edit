@@ -3158,6 +3158,60 @@ function decode_puzzlink(url) {
             pu.subcombimode("edgesub");
             this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
             break;
+        case "nonogram":
+            var max_cols_offset = Math.ceil(cols / 2);
+            var max_rows_offset = Math.ceil(rows / 2);
+
+            info_number = puzzlink_pu.decodeNumber16();
+            var cols_offset = 0, rows_offset = 0;
+
+            for (var i in info_number) {
+                if (i < max_rows_offset * cols) {
+                    rows_offset = Math.max(rows_offset, parseInt(i % max_rows_offset) + 1);
+                } else {
+                    cols_offset = Math.max(cols_offset, parseInt((i - max_rows_offset * cols) % max_cols_offset) + 1);
+                }
+            }
+
+            document.getElementById("nb_space1").value = rows_offset;
+            document.getElementById("nb_space3").value = cols_offset;
+
+            pu = new Puzzle_square(cols + cols_offset, rows + rows_offset, size);
+            setupProblem(pu, "combi");
+
+            // Draw numbers
+            for (i in info_number) {
+                if (i < max_rows_offset * cols) {  // Top section
+                    row_ind = rows_offset - i % max_rows_offset - 1;
+                    col_ind = cols_offset + parseInt(i / max_rows_offset);
+                } else {  // Left section
+                    row_ind = rows_offset + parseInt((i - max_rows_offset * cols) / max_cols_offset);
+                    col_ind = cols_offset - (i - max_rows_offset * cols) % max_cols_offset - 1;
+                }
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].number[cell] = [info_number[i], 1, "1"];
+            }
+
+            // Draw edges
+            puzzlink_pu = new Puzzlink(cols + cols_offset + 1, rows + rows_offset + 1, bstr);
+            info_edge = {};
+            for (i = 0; i < rows_offset; i++) {
+                info_edge[cols_offset + i * (cols + cols_offset) - 1] = 1;  // Left vertical line
+                info_edge[(i + 1) * (cols + cols_offset) - 1] = 1;  // Right vertical line
+            }
+            for (i = 0; i < cols_offset; i++) {
+                // Bottom horizontal line
+                info_edge[(cols + cols_offset) * (rows + rows_offset + 1) + i + (rows_offset - 1) * (cols + cols_offset + 1)] = 1;
+                // Top horizontal line
+                info_edge[2 * (cols + cols_offset) * (rows + rows_offset) + rows + rows_offset + i - 1] = 1;
+            }
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blpo");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
