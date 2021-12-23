@@ -3229,6 +3229,25 @@ function decode_puzzlink(url) {
             pu.subcombimode("blpo");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "cave":
+        case "mochikoro":
+        case "mochinyoro":
+        case "nuribou":
+            pu = new Puzzle_square(cols, rows, size);
+            if (type === "cave") {
+                pu.mode_grid("nb_grid2"); // Dashed gridlines
+                pu.mode_grid("nb_out2"); // No outside frame
+            }
+            setupProblem(pu, "surface");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface");
+            pu.subcombimode("blpo");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',

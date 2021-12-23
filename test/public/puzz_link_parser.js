@@ -44,6 +44,10 @@ describe("puzz.link parser", () => {
         ["Castle 4", "https://puzz.link/p?castle/17/17/20.22922722d22822722922822b22b22a22b22a22a22722822f249p243p247p249p246p245p247p247p247p246p244p245p244p248p247p248p"],
         ["Castle 5", "https://puzz.link/p?castle/10/10/c224g243f123e122123p242d233d222d232p11311.e114f233g213c"],
         ["Castle 6", "https://puzz.link/p?castle/6/3/011022033044000a11.12.13.14.10.a2-13e32-23e42-33e529622563a"],
+        // Cave
+        ["Cave 1", "https://puzz.link/p?cave/10/10/7i6i7j6j3i5i6w8p6w2i7i5j3j6i3ib"],
+        ["Cave 2", "https://puzz.link/p?cave/19/11/5g5g757g5i5i7775g5g7g7g5i5i7g7d9dgdbdgdi7i9g95g5g5g5g5i5i7g75g5g5g5g755g735g777y5g5g733g753g5h5g5g5g5g5i5i63g5g5g5g-14g-14-10-10g-14-10-10g-14g-10-14g-14g737g5i5i5h5i5g5g733g733g5h5g62"],
+        ["Cave 3", "https://puzz.link/p?cave/7/5/g.g3.g3i3g.3g3r3h3h3"],
         // Cojun
         ["Cojun 1", "https://puzz.link/p?cojun/8/8/qhebtquqmqj0l7s7c8vo1up0zzh4v1j"],
         ["Cojun 2", "https://puzz.link/p?cojun/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
@@ -120,6 +124,14 @@ describe("puzz.link parser", () => {
         ["Meandering Numbers 2", "https://puzz.link/p?meander/6/6/d01gb04gc6sezv"],
         ["Meandering Numbers 3", "https://puzz.link/p?meander/10/10/0105187060b050g000funo7ivg02fo827s00zzzzz"],
         ["Meandering Numbers 4", "https://puzz.link/p?meander/10/10/11bindeqt11bin5easc8c60000vvf8300700i8n2zzk8zt1k1"],
+        // Mochikoro
+        ["Mochikoro 1", "https://puzz.link/p?mochikoro/10/10/..3l4k3j2u6i3m3r2w4i4l2j2g3h"],
+        ["Mochikoro 2", "https://puzz.link/p?mochikoro/10/10/4t4i35zq3y+100k2r3j-10i"],
+        ["Mochikoro 3", "https://puzz.link/p?mochikoro/7/7/3i2q3i2m4i3q1i3"],
+        // Mochinyoro
+        ["Mochinyoro 1", "https://puzz.link/p?mochinyoro/10/10/q-14l6zzzhcleq"],
+        ["Mochinyoro 2", "https://puzz.link/p?mochinyoro/15/3/1-10+100...zx."],
+        ["Mochinyoro 3", "https://puzz.link/p?mochinyoro/12/12/zl3k6zn5k3n4k7zn4k7zl"],
         // Moon or Sun
         ["Moon or Sun 1", "https://puzz.link/p?moonsun/10/10/4488q1m3bmld8iglha003s08seg100e0u201dqpdhqdepddqddhqneqqmqqqqqpdqndhp9"],
         ["Moon or Sun 2", "https://puzz.link/p?moonsun/10/10/54a94i93264d0qil0200vs03vs1stv0fu0vsk6lja01621i415ak6biai3b0c6bg6gi030"],
@@ -139,6 +151,10 @@ describe("puzz.link parser", () => {
         ["Nonogram 1", "https://puzz.link/p?nonogram/4/10/123h456h789habcn1g2g3g4g3g2g1g"],
         ["Nonogram 2", "https://puzz.link/p?nonogram/50/45/-14zh627z312218w4142215v22113126u23216x22747x6c225x11f24x22-12214w21-1354x4-1434y2d75y225367w21532541u55534211u241224211t21423431u1254232v3b2314w21a336w1182321v3533311v3133311v414341w3113421v54412x948z1758y23533x36312x47212x5632y7723y8a55ycc1dy-1836z-14215y1623225v311534w12464x11335334u37121218u23117227u12113245u1211121325s34112134u122124av12211aw638z-1dzjb38zh633229y612221ax71126135w7126524x872425y425127y3222555x323e33y413-1133y4697213x647823y61567z336611y31374621w23358621w223545511v32353a5x3553184x3343571x5547721x65342731w94442711w211434274v1311344262u111355732v23431f12w2344e21x1445c14x1232a22x3321222x75311212w13223114w9341113x2113215x12114by12346z1235zg165zh246zh216zh247zh527zh356zh"],
         ["Nonogram 3", "https://puzz.link/p?nonogram/20/14/2l12k112j112j711j91k5121i74k414j48k48k4214i94k73k28k252j81k44k33k4l44n92na12m1912l11611k5421l5126l2812l165m524m4an3ando8o"],
+        // Nuribou
+        ["Nuribou 1", "https://puzz.link/p?nuribou/10/10/k2i37zhal8k7h2zhfw3m2g"],
+        ["Nuribou 2", "https://puzz.link/p?nuribou/9/9/n2u.i8o9i4o5i.u1n"],
+        ["Nuribou 3", "https://puzz.link/p?nuribou/10/10/s+200h-13i-13zzznbi1h2i"],
         // Nurikabe
         ["Nurikabe 1", "https://puzz.link/p?nurikabe/v:/6/6/4j4p6h4p6j6"],
         ["Nurikabe 2", "https://puzz.link/p?nurikabe/10/10/1k4u1j7i3r6y1w-11m3n2"],
