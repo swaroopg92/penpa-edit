@@ -1745,6 +1745,20 @@ function load(urlParam, type = 'url') {
     if (typeof rtext[17] !== 'undefined') {
         pu.user_tags = JSON.parse(rtext[17]);
     }
+
+    // Detect tag using title information if author did not define tags
+    // This is to add tags for the previously created URLs
+    if (pu.user_tags.length === 0) {
+        let wordsRegex = /([^\x00-\x7F]|\w)+/g;
+        let title = document.getElementById("saveinfotitle").value;
+        let title_words = title.match(wordsRegex);
+
+        // if first word is sudoku, then its classic sudoku
+        if (title_words[0].toLowerCase() === "sudoku") {
+            pu.user_tags[0] = "classic";
+        }
+    }
+
     add_genre_tags(pu.user_tags);
     $('#genre_tags_opt').select2({
         placeholder: 'Search Area',
