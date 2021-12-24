@@ -949,8 +949,9 @@ function submit_solution() {
                 Swal.fire({
                     title: 'Solution is correct',
                     html: wrap,
-                    showCancelButton: false,
-                    confirmButtonText: 'OK',
+                    showCancelButton: true,
+                    confirmButtonText: 'Submit',
+										cancelButtonText: 'Skip',
                     showLoaderOnConfirm: true,
                     preConfirm: (rating) => {
                         var element = document.getElementsByClassName('rate_lb');
@@ -1039,7 +1040,7 @@ function submit_solution_steps() {
 function submit_ratings_feedback(ratings, message) {
     const data = {
             contest: pu.puzzle_info.cid,
-						action: 'update-ratings',
+						action: 'update-ratings-no-refresh',
             sequence: pu.puzzle_info.pid,
             ratings: ratings,
 						message: message
