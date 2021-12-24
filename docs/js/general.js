@@ -1752,10 +1752,18 @@ function load(urlParam, type = 'url') {
         let wordsRegex = /([^\x00-\x7F]|\w)+/g;
         let title = document.getElementById("saveinfotitle").value;
         let title_words = title.match(wordsRegex);
+        let allow_genres = ["arrow", "thermo", "even", "consecutive", "killer", "nonconsecutive"];
 
-        // if first word is sudoku, then its classic sudoku
-        if (title_words[0].toLowerCase() === "sudoku") {
+        // find position of "sudoku"
+        let sudoku_index = title_words.findIndex(element => {
+            return element.toLowerCase() === "sudoku";
+        });
+
+        if (sudoku_index === 0) {
             pu.user_tags[0] = "classic";
+        } else if ((sudoku_index === 1 || sudoku_index === 2) &&
+            (allow_genres.includes(title_words[0].toLowerCase()))) {
+            pu.user_tags[0] = title_words[0].toLowerCase() === "nonconsecutive" ? "nonconsecutive" : "classic";
         }
     }
 
