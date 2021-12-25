@@ -78,6 +78,11 @@ describe("puzz.link parser", () => {
         ["Haisu 1", "https://puzz.link/p?haisu/18/18/511-120000000g014009002800i004g014009002800i004g014009002800g00000000000vvu000000000000000000000000000000000000000000000007vvg00009j2zzg1o5p6zs8zx2j8n7y3z4o4zh7zzh6h5h3zs5q"],
         ["Haisu 2", "https://puzz.link/p?haisu/4/4/44216n8d902m1m"],
         ["Haisu 3", "https://puzz.link/p?haisu/8/8/527704h490018a00e0000s060030o455g77zt6t"],
+        // Hashiwokakero (Bridges)
+        ["Hashiwokakero 1", "https://puzz.link/p?hashikake/5/5/1234g1-10+100=100g.h.i.l."],
+        ["Hashiwokakero 2", "https://puzz.link/p?hashi/9/9/h2g3g.q.g1i3g.o2i1i2o.g2i2g1q.g3g3h"],
+        ["Hashiwokakero 3", "https://puzz.link/p?bridges/17/13/l2h1w2i3h2i3zi1h3p1g2k2g1h3r1k4g4h4h4i3h2u1g2l1g3n1g3y1j.g3g3g3h3r2j.h3g.g2"],
+        ["Hashiwokakero 4", "https://puzz.link/p?hashi/41/19/v3k6k3zzzk2i3g2o3i4zzw3i3g1m3k1i3g2zzs3g3i3k4s2g3g4zzzm3k2m3g2zzk3i5i1g3k2s3i2g3g4zzg4g3g1s4i3u3g5zzi2i2g2k1s3k1zzy1k4k1s1zzi2g1i2g4k4i4k4i6k4k4"],
         // Heyawake
         ["Heyawake 1", "https://puzz.link/p?heyawake/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11"],
         ["Heyawake 2", "https://puzz.link/p?heyawake/10/8/4k94j266sdc488g0206rv300cro0074g321g26"],

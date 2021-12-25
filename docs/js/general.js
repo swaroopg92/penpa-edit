@@ -3260,6 +3260,26 @@ function decode_puzzlink(url) {
             pu.subcombimode("blpo");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "hashikake":
+        case "hashi": // hashikake alias
+        case "bridges": // hashikake alias
+            pu = new Puzzle_square(cols, rows, size);
+
+            // Don't draw any of the grid
+            pu.mode_grid("nb_grid3");
+            pu.mode_grid("nb_lat2");
+            pu.mode_grid("nb_out2");
+
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 6, "1");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("hashi");
+            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
