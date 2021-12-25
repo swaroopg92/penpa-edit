@@ -3280,6 +3280,74 @@ function decode_puzzlink(url) {
             pu.subcombimode("hashi");
             this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
             break;
+        case "pencils":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2");
+            setupProblem(pu, "lineE");
+
+            var url_index = 0, index = 0;
+            while (url_index < bstr.length) {
+                var layer_key = null;
+                var value;
+                var edge = false;
+
+                var char = bstr[url_index];
+                var number = puzzlink_pu.readNumber16(char, url_index);
+
+                if (number[0] !== -1) {
+                    layer_key = "number";
+                    value = [number[0], 1, "1"];
+                    url_index += number[1];
+                } else if (char >= "k" && char <= "z") {
+                    url_index++;
+                    index += parseInt(char, 36) - 19;
+                } else if (char >= "g" && char <= "j") {
+                    layer_key = "symbol";
+                    url_index++;
+                    edgex = edgey = 0;
+                    if (char === "g") { // Pencil points up
+                        value = [2, "pencils", 1];
+                        edgex = pu.nx0;
+                        edgey = pu.nx0 + 1;
+                    } else if (char === "h") { // Pencil points down
+                        value = [4, "pencils", 1];
+                        edgex = 0;
+                        edgey = 1;
+                    } else if (char === "i") { // Pencil points left
+                        value = [1, "pencils", 1];
+                        edgex = 1;
+                        edgey = 1 + pu.nx0;
+                    } else if (char === "j") { // Pencil points right
+                        value = [3, "pencils", 1];
+                        edgex = 0;
+                        edgey = pu.nx0;
+                    }
+                    edge = true;
+                } else {
+                    url_index++;
+                }
+
+                if (layer_key !== null) {
+                    row_ind = parseInt(index / cols);
+                    col_ind = index % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    pu["pu_q"][layer_key][cell] = value;
+                    index++;
+                    if (edge) { // Mark edges of pencils
+                        edgex += pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind;
+                        edgey += pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind;
+                        edge = edgex.toString() + "," + edgey.toString();
+                        pu["pu_q"].lineE[edge] = 2;
+                    }
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.subcombimode("linex");
+            pu.subsymbolmode("pencils");
+            pu.mode_set("lineE");
+            this.usertab_choices = ["Edge Normal", "Shape", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
