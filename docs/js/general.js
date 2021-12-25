@@ -1019,7 +1019,8 @@ function submit_solution_steps() {
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
-            replay: replay
+            replay: replay,
+						clicks: pu[pu.mode.qa]["command_redo"].__a.length
         },
         options = {
             method: 'POST',
