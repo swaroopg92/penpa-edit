@@ -177,6 +177,25 @@ class Puzzlink {
         return number_list;
     }
 
+    drawNumbersExCell(pu, info_number, style, sub_mode, hide_ques) {
+        var cell;
+        for (var i in info_number) {
+            i = parseInt(i);
+            // Top row, bottom row, left column and then right column
+            if (i < this.cols) { // Top Row
+                cell = pu.nx0 * 2 + 2 + i + 1;
+            } else if (i < 2 * this.cols) { // Bottom Row
+                cell = pu.nx0 * (2 + this.rows + 1) + 2 + (i - this.cols) + 1;
+            } else if (i < 2 * this.cols + this.rows) { // Left Column 
+                cell = pu.nx0 * (2 + (i - 2 * this.cols) + 1) + 2;
+            } else {
+                cell = pu.nx0 * (2 + (i - 2 * this.cols - this.rows) + 1) + 2 + this.cols + 1;
+            }
+            var number = hide_ques && info_number[i] === "?" ? " " : info_number[i];
+            pu["pu_q"].number[cell] = [number, style, sub_mode];
+        }
+    }
+
     decodeKakuro() {
         // 0 means no restriction
         // first inner clues, then outer row clue and then outer column clue

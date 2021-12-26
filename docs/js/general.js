@@ -2684,22 +2684,7 @@ function decode_puzzlink(url) {
             setupProblem(pu, "sudoku");
 
             info_number = puzzlink_pu.decodeNumber16ExCell();
-
-            // Add numbers to grid
-            for (var i in info_number) {
-                i = parseInt(i);
-                // Top row, bottom row, left column and then right column
-                if (i < cols) { // Top Row
-                    cell = pu.nx0 * 2 + 2 + i + 1;
-                } else if (i < 2 * cols) { // Bottom Row
-                    cell = pu.nx0 * (2 + rows + 1) + 2 + (i - cols) + 1;
-                } else if (i < 2 * cols + rows) { // Left Column 
-                    cell = pu.nx0 * (2 + (i - 2 * cols) + 1) + 2;
-                } else {
-                    cell = pu.nx0 * (2 + (i - 2 * cols - rows) + 1) + 2 + cols + 1;
-                }
-                pu["pu_q"].number[cell] = [info_number[i], 1, "1"]; // Normal submode is 1
-            }
+            puzzlink_pu.drawNumbersExCell(pu, info_number, 1, "1", false);
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
@@ -3347,6 +3332,35 @@ function decode_puzzlink(url) {
             pu.subsymbolmode("pencils");
             pu.mode_set("lineE");
             this.usertab_choices = ["Edge Normal", "Shape", "Composite"];
+            break;
+        case "easyasabc":
+            // Add whitespace
+            document.getElementById("nb_space1").value = 1;
+            document.getElementById("nb_space2").value = 1;
+            document.getElementById("nb_space3").value = 1;
+            document.getElementById("nb_space4").value = 1;
+
+            bstr = urldata[4];
+            puzzlink_pu = new Puzzlink(cols, rows, bstr);
+            pu = new Puzzle_square(cols + 2, rows + 2, size);
+            setupProblem(pu, "number");
+
+            info_number = puzzlink_pu.decodeNumber16ExCell();
+            // Turn numbers 1-5 to A-E, etc.
+            var string_map = "0ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            for (var i in info_number) {
+                info_number[i] = string_map[info_number[i]] || info_number[i];
+            }
+            puzzlink_pu.drawNumbersExCell(pu, info_number, 1, "1", false);
+
+            // Draw range of allowed letters
+            pu.resize_top(1, "white");
+            number = parseInt(urldata[3]);
+            pu["pu_q"].number[pu.nx0 * 2 + cols + 2] = [`(A-${string_map[number] || number})`, 1, "8"];
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            this.usertab_choices = ["Surface", "Number Normal"];
             break;
         default:
             Swal.fire({
