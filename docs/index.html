@@ -10,7 +10,10 @@
     <meta name="description" content="Web application to create and solve Sudokus and Puzzles.">
     <meta name="keywords" content="grid editor, pencil puzzles, logic puzzle, puzzle solving, sudoku editor, puzzle editor">
     <!-- STYLES -->
+    <!-- Online styles -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://logicmastersindia.com/daily/js/emoji-picker.css" type="text/css" />
+    <!-- Local styles -->
     <script>
         var ver = "2.26.14"; // Also defined in class_p.js
         let style_sources = [
@@ -62,7 +65,6 @@
     <!-- Online libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://unpkg.com/pure-md5@latest/lib/index.js"></script>
-    <link rel="stylesheet" href="https://logicmastersindia.com/daily/js/emoji-picker.css" type="text/css" />
     <script src="https://logicmastersindia.com/daily/js/emoji-picker.js"></script>
     <!--  rest -->
     <script type="text/javascript">
@@ -960,14 +962,14 @@
         <div id="modal-save-content">
             <h3 class="modal-header" id="savetexttitle">Submit to LMI Treasure Chest</h3>
             <div id="modal-save-info">
-                <span class="DM" id="saveinfotitle_lb">Title:<span class="warn">*</span><input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <span class="DM" id="saveinfotitle_lb">*Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
                 <span class="DM" id="saveinfoauthor_lb" style="display:none;">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor" style="display:none;"></span>
                 <span class="DM" id="saveinfotheme_lb">Theme:<input type="text" placeholder="Puzzle Theme (Optional)" value="" id="saveinfotheme"></span>
                 <br>
-                <span class="DM" id="saveinforules_lb">Rules:<span class="warn">*</span><textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <span class="DM" id="saveinforules_lb">*Rules:</span><textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>
-                <span class="DM" id="saveinfoinfo_lb">Info:<textarea class="text_area" rows="1" cols="10" placeholder="Any additional information like example, background story, collaborating authors goes here (Optional)" value="" id="saveinfoinfo"></textarea></span>
+                <span class="DM" id="saveinfoinfo_lb">Info:<textarea class="text_area" rows="1" cols="10" placeholder="Any additional information like example link, background story, collaborating authors goes here (Optional)" value="" id="saveinfoinfo"></textarea></span>
                 <br>
                 <span class="DM" id="saveinfotype_lb">Variant Level:
                     <select id="saveinfotype">
@@ -995,14 +997,14 @@
                 <span><label class="label_nb" id="saveinfo_cols_lb">Columns:</label></span>
                 <input type="number" pattern="\d*" name="saveinfo_cols" id="saveinfo_cols" value="" min="1" max="60" step="1" placeholder="1">
                 <br>
-                <input type="button" id="saveinfogenre" value="Select genre/tags" />
+                <input type="button" id="saveinfogenre" value="*Select genre/tags" />
             </div>
             <div class="nb_button">
                 <input type="button" id="address_edit" value="URL for editing" style="display:none;" />
                 <input type="button" id="address_solve" value="URL for solving" style="display:none;" />
                 <!--For Competitive Solving-->
                 <input type="button" id="address_comp" value="URL for contests" style="display:none;" />
-                <input type="button" id="expansion" value="Select answer checking options" />
+                <input type="button" id="expansion" value="*Select answer checking options" />
             </div>
             <div>
                 <span><label class="label_nb" id="video_usage_lb">Allow for video coverage?</label></span>

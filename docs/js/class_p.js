@@ -2698,7 +2698,24 @@ class Puzzle {
         text += "," + document.getElementById('edge_button').value;
 
         // Multi Solution status, it will be true only when generating solution checking
-        text += "," + false + "\n";
+        text += "," + false;
+
+        // Puzzle Theme
+        let themeinfo = document.getElementById("saveinfotheme").value;
+        text += "," + themeinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Puzzle info
+        let infoinfo = document.getElementById("saveinfoinfo").value;
+        text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Variant Level
+        text += "," + document.getElementById("saveinforules").value;
+
+        // Exclusivity
+        text += "," + document.getElementById("saveinfoexclusivity").value;
+
+        // Video Coverage
+        text += "," + document.getElementById("video_usage").checked + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2850,11 +2867,28 @@ class Puzzle {
         // if solution check exists, then read multisolution variable or else set to false
         if (this.solution) {
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + this.multisolution + "\n";
+            text += "," + this.multisolution;
         } else {
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + false + "\n";
+            text += "," + false;
         }
+
+        // Puzzle Theme
+        let themeinfo = document.getElementById("saveinfotheme").value;
+        text += "," + themeinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Puzzle info
+        let infoinfo = document.getElementById("saveinfoinfo").value;
+        text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Variant Level
+        text += "," + document.getElementById("saveinforules").value;
+
+        // Exclusivity
+        text += "," + document.getElementById("saveinfoexclusivity").value;
+
+        // Video Coverage
+        text += "," + document.getElementById("video_usage").checked + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -3047,11 +3081,28 @@ class Puzzle {
         if (type === "answercheck") {
             this.checkall_status(); // this will update the multisolution status
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + this.multisolution + "\n";
+            text += "," + this.multisolution;
         } else {
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + false + "\n";
+            text += "," + false;
         }
+
+        // Puzzle Theme
+        let themeinfo = document.getElementById("saveinfotheme").value;
+        text += "," + themeinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Puzzle info
+        let infoinfo = document.getElementById("saveinfoinfo").value;
+        text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Variant Level
+        text += "," + document.getElementById("saveinfotype").value;
+
+        // Exclusivity
+        text += "," + document.getElementById("saveinfoexclusivity").value;
+
+        // Video Coverage
+        text += "," + document.getElementById("video_usage").checked + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -3348,7 +3399,7 @@ class Puzzle {
                 }
             }
         }
-        console.log(answercheck_opt)
+
         return answercheck_opt;
     }
 
@@ -11424,16 +11475,66 @@ class Puzzle {
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
-                        setTimeout(() => {
-                            Swal.fire({
-                                title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                                html: '<h2 class="wish">Congratulations 🙂</h2>',
-                                background: 'url(js/images/new_year.jpg)',
-                                icon: 'success',
-                                confirmButtonText: 'Hurray!',
-                                // timer: 5000
-                            })
-                        }, 20)
+
+                        // submit solution steps
+                        submit_solution_steps()
+
+                        // Rating and feedback code
+                        let wrap = document.createElement('div');
+                        wrap.setAttribute('class', 'text-muted');
+                        wrap.innerHTML = '<p>Rate the puzzle: </p><div class="rate">' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                            '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
+                            '<br/><div id="swal-text-area-emoji"/>';
+                        Swal.fire({
+                            title: 'Solution is correct',
+                            html: wrap,
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            cancelButtonText: 'Skip',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (rating) => {
+                                var element = document.getElementsByClassName('rate_lb');
+                                var selected_rating;
+
+                                for (var i = 0; i < element.length; i++) {
+                                    let unselected_color = "rgb(84, 84, 84)";
+                                    let element_color = getComputedStyle(element[i]).getPropertyValue("color");
+                                    if (element_color !== unselected_color) {
+                                        selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
+                                        break;
+                                    }
+                                }
+                                if (selected_rating >= 0.5) {
+                                    return selected_rating;
+                                } else {
+                                    Swal.showValidationMessage(
+                                        `No rating selected`
+                                    )
+                                }
+                            },
+                            allowOutsideClick: false
+                        }).then((rating_result) => {
+                            if (rating_result.isConfirmed) {
+                                submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
+                                const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                                Swal.fire({
+                                    html: `<h3 class="info">${redirect}</h3>`,
+                                    icon: 'success',
+                                    confirmButtonText: 'Ok',
+                                });
+                            }
+                        })
+
                         sw_timer.pause();
                         // this.mouse_mode = "out";
                         // this.mouseevent(0, 0, 0);
@@ -11461,15 +11562,66 @@ class Puzzle {
                             user_sol = author_sol;
                         }
                         if (user_sol === author_sol && this.sol_flag === 0) {
-                            setTimeout(() => {
-                                Swal.fire({
-                                    title: '<h3 class="wish">Your Solution Is Correct</h3>',
-                                    html: '<h2 class="wish">Congratulations 🙂</h2>',
-                                    background: 'url(js/images/new_year.jpg)',
-                                    icon: 'success',
-                                    confirmButtonText: 'Hurray!',
-                                })
-                            }, 20)
+
+                            // submit solution steps
+                            submit_solution_steps()
+
+                            // Rating and feedback code
+                            let wrap = document.createElement('div');
+                            wrap.setAttribute('class', 'text-muted');
+                            wrap.innerHTML = '<p>Rate the puzzle: </p><div class="rate">' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                                '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
+                                '<br/><div id="swal-text-area-emoji"/>';
+                            Swal.fire({
+                                title: 'Solution is correct',
+                                html: wrap,
+                                showCancelButton: true,
+                                confirmButtonText: 'Submit',
+                                cancelButtonText: 'Skip',
+                                showLoaderOnConfirm: true,
+                                preConfirm: (rating) => {
+                                    var element = document.getElementsByClassName('rate_lb');
+                                    var selected_rating;
+
+                                    for (var i = 0; i < element.length; i++) {
+                                        let unselected_color = "rgb(84, 84, 84)";
+                                        let element_color = getComputedStyle(element[i]).getPropertyValue("color");
+                                        if (element_color !== unselected_color) {
+                                            selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
+                                            break;
+                                        }
+                                    }
+                                    if (selected_rating >= 0.5) {
+                                        return selected_rating;
+                                    } else {
+                                        Swal.showValidationMessage(
+                                            `No rating selected`
+                                        )
+                                    }
+                                },
+                                allowOutsideClick: false
+                            }).then((rating_result) => {
+                                if (rating_result.isConfirmed) {
+                                    submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
+                                    const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                                    Swal.fire({
+                                        html: `<h3 class="info">${redirect}</h3>`,
+                                        icon: 'success',
+                                        confirmButtonText: 'Ok',
+                                    });
+                                }
+                            })
+
                             this.sol_flag = 1;
                             // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                             // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;

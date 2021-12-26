@@ -978,9 +978,6 @@ function submit_solution() {
                 }).then((rating_result) => {
                     if (rating_result.isConfirmed) {
                         submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
-                        // Send the rating to server, Deb need to add code here
-                        // rating is accessed by rating_result.value
-
                         const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
                         Swal.fire({
                             html: `<h3 class="info">${redirect}</h3>`,
@@ -2020,6 +2017,31 @@ function load2(paramArray, type) {
     // multisolution status
     if (rtext_para[20] && rtext_para[20] === "true") {
         pu.multisolution = true;
+    }
+
+    // Theme
+    if (rtext_para[21] && rtext_para[21] !== "") {
+        document.getElementById("saveinfotheme").value = rtext_para[21].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+    }
+
+    // Additional Info
+    if (rtext_para[22] && rtext_para[22] !== "") {
+        document.getElementById("saveinfoinfo").value = rtext_para[22].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+    }
+
+    // Variant Level
+    if (rtext_para[23] && rtext_para[23] !== "") {
+        document.getElementById("saveinfotype").value = rtext_para[23];
+    }
+
+    // Exclusivity
+    if (rtext_para[24] && rtext_para[24] !== "") {
+        document.getElementById("saveinfoexclusivity").value = rtext_para[24];
+    }
+
+    // Video Coverage
+    if (rtext_para[25] && rtext_para[25] !== "") {
+        document.getElementById("video_usage").checked = rtext_para[25];
     }
 
     // version save
