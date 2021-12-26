@@ -931,9 +931,13 @@ body textarea {
 }
 
 #saveinfoauthor,
+#saveinfotheme,
 #saveinfotitle,
 #saveinfosource,
-#saveinforules {
+#saveinforules,
+#saveinfoinfo,
+#saveinfotype,
+#saveinfoexclusivity {
     margin: 2px auto;
     width: 90%;
 }
@@ -948,7 +952,9 @@ body textarea {
 }
 
 #save_undo_lb,
-#save_undo {
+#save_undo,
+#video_usage_lb,
+#video_usage {
     margin-left: 10px;
     margin-top: 5px;
 }
@@ -1278,8 +1284,9 @@ sup {
 
 #saveinfogenre {
     text-align: center;
-    margin-left: 20%;
-    height: 20px;
+    margin-left: 30%;
+    margin-top: 5px;
+    padding: 3px;
 }
 
 #modal-save-tag-body {

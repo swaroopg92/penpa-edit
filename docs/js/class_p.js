@@ -3270,11 +3270,17 @@ class Puzzle {
         return url + "?m=solve&p=" + ba;
     }
 
-    maketext_solve_solution() {
+    maketext_solve_solution(validate = false) {
         var text_head = this.maketext_solve("answercheck");
-        var text;
-        text = JSON.stringify(this.make_solution());
+        var text, sol;
+        sol = this.make_solution();
 
+        // validate if some solution exist and its not empty
+        if (validate && Object.keys(sol).every((k) => sol[k].length === 0)) {
+            return false;
+        }
+
+        text = JSON.stringify(sol);
         var ba = encrypt_data(text);
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
@@ -3318,6 +3324,32 @@ class Puzzle {
         }
 
         return checkall;
+    }
+
+    get_answercheck_settings() {
+        let answersetting = document.getElementById("answersetting");
+        let settingstatus_and = answersetting.getElementsByClassName("solcheck");
+        let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
+        var answercheck_opt = [];
+
+        // loop through and check if any "AND" settings are selected
+        for (var i = 0; i < settingstatus_and.length; i++) {
+            if (settingstatus_and[i].checked) {
+                answercheck_opt.push(settingstatus_and[i].id.substring(4)); // ignore initial characters "sol_"
+            }
+        }
+
+        // If answercheck list is 0, it means, no "AND" option was selected
+        if (answercheck_opt.length === 0) {
+            // loop through and check if any "OR" settings are selected
+            for (var i = 0; i < settingstatus_or.length; i++) {
+                if (settingstatus_or[i].checked) {
+                    answercheck_opt.push(settingstatus_and[i].id.substring(7)); // ignore initial characters "sol_or_"
+                }
+            }
+        }
+        console.log(answercheck_opt)
+        return answercheck_opt;
     }
 
     make_solution() {
@@ -11385,6 +11417,10 @@ class Puzzle {
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
+                let user_name = getCookie("fuserName");
+                if (user_name !== null && user_name == "administrator") {
+                    text = this.solution;
+                }
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
@@ -11404,11 +11440,12 @@ class Puzzle {
                         this.sol_flag = 1;
                         // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                         // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-                    } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                        this.sol_flag = 0;
-                        // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                     }
+                    // else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                    //     this.sol_flag = 0;
+                    //     // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                    //     // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    // }
                 }
                 this.redraw(false, false);
             }
@@ -11419,6 +11456,10 @@ class Puzzle {
                 if (author_sol) {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
+                        let user_name = getCookie("fuserName");
+                        if (user_name !== null && user_name == "administrator") {
+                            user_sol = author_sol;
+                        }
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             setTimeout(() => {
                                 Swal.fire({
@@ -11440,13 +11481,13 @@ class Puzzle {
                         }
                     }
                 }
-                if (i === (this.solution.length - 1) && this.sol_flag === 1) {
-                    // If there was any change in the grid and none of the solution matches then reset the flag
-                    // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
-                    this.sol_flag = 0;
-                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
-                }
+                // if (i === (this.solution.length - 1) && this.sol_flag === 1) {
+                //     // If there was any change in the grid and none of the solution matches then reset the flag
+                //     // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
+                //     this.sol_flag = 0;
+                //     // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                //     // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                // }
             }
         }
     }

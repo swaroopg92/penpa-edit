@@ -945,14 +945,14 @@ function submit_solution() {
                     '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
                     '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
                     '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
-                    '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>'+
+                    '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
                     '<br/><div id="swal-text-area-emoji"/>';
                 Swal.fire({
                     title: 'Solution is correct',
                     html: wrap,
                     showCancelButton: true,
                     confirmButtonText: 'Submit',
-										cancelButtonText: 'Skip',
+                    cancelButtonText: 'Skip',
                     showLoaderOnConfirm: true,
                     preConfirm: (rating) => {
                         var element = document.getElementsByClassName('rate_lb');
@@ -977,7 +977,7 @@ function submit_solution() {
                     allowOutsideClick: false
                 }).then((rating_result) => {
                     if (rating_result.isConfirmed) {
-											submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
+                        submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
                         // Send the rating to server, Deb need to add code here
                         // rating is accessed by rating_result.value
 
@@ -1010,12 +1010,13 @@ function submit_solution() {
 }
 
 function createEmojiBar() {
-	const divImojiBar = document.getElementById('swal-text-area-emoji');
-	if (!divImojiBar.innerHTML) {
-		const emojiPicker = new EmojiPicker(document.getElementById('swal-feedback-2'), divImojiBar, "100%", "160px");
-		emojiPicker.show();
-	}
+    const divImojiBar = document.getElementById('swal-text-area-emoji');
+    if (!divImojiBar.innerHTML) {
+        const emojiPicker = new EmojiPicker(document.getElementById('swal-feedback-2'), divImojiBar, "100%", "160px");
+        emojiPicker.show();
+    }
 }
+
 function submit_solution_steps() {
     // convert undo to redo
     while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
@@ -1028,7 +1029,7 @@ function submit_solution_steps() {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
             replay: replay,
-						clicks: pu[pu.mode.qa]["command_redo"].__a.length
+            clicks: pu[pu.mode.qa]["command_redo"].__a.length
         },
         options = {
             method: 'POST',
@@ -1049,10 +1050,10 @@ function submit_solution_steps() {
 function submit_ratings_feedback(ratings, message) {
     const data = {
             contest: pu.puzzle_info.cid,
-						action: 'update-ratings-no-refresh',
+            action: 'update-ratings-no-refresh',
             sequence: pu.puzzle_info.pid,
             ratings: ratings,
-						message: message
+            message: message
         },
         options = {
             method: 'POST',
@@ -1527,6 +1528,10 @@ function saveimage_window() {
 function savetext() {
     document.getElementById("modal-save").style.display = 'block';
     document.getElementById("savetextarea").value = "";
+
+    // populate grid sizes
+    document.getElementById("saveinfo_rows").value = pu.ny;
+    document.getElementById("saveinfo_cols").value = pu.nx;
 }
 
 function io_sudoku() {
@@ -1596,6 +1601,92 @@ function make_gmpfile() {
     var text = pu.maketext_gmpfile();
     document.getElementById("savetextarea").value = text;
     document.getElementById("modal-save2").style.display = 'none';
+}
+
+function submit_portal() {
+    var entries_flag = validate_entries();
+
+    if (typeof entries_flag !== "boolean") {
+
+        // Generate Answer check link and validate solution is entered
+        var solve_link = pu.maketext_solve_solution(true);
+
+        if (solve_link) {
+            // Generate Edit link
+            var edit_link = pu.maketext();
+
+            // Discuss with deb to link shortening of URL?
+            // Display successfull/unsuccessfull popup message if puzzle gets submitted/fails
+
+            // Information for Deb to send to Server
+            // document.getElementById("saveinfotitle").value
+            // document.getElementById("saveinfotheme").value
+            // document.getElementById("saveinforules").value
+            // document.getElementById("saveinfoinfo").value
+            // document.getElementById("saveinforules").value
+            // document.getElementById("saveinfotype").value
+            // document.getElementById("saveinfoexclusivity").value
+            // document.getElementById("saveinfosource").value
+            // pu.gridtype
+            // document.getElementById("saveinfo_rows").value;
+            // document.getElementById("saveinfo_cols").value;
+            // $('#genre_tags_opt').select2("val")
+
+        } else {
+            Swal.fire({
+                title: 'Solution is missing in the "Edit: Solution" mode',
+                icon: 'error',
+                confirmButtonText: 'ok',
+            })
+        }
+    }
+}
+
+function validate_entries() {
+    // Validate title is not empty
+    if (document.getElementById("saveinfotitle").value.length === 0) {
+        Swal.fire({
+            title: 'Title is empty',
+            icon: 'error',
+            confirmButtonText: 'ok',
+        })
+        return false;
+    }
+
+    // Validate Rules are not empty
+    if (document.getElementById("saveinforules").value.length === 0) {
+        Swal.fire({
+            title: 'No rules provided',
+            icon: 'error',
+            confirmButtonText: 'ok',
+        })
+        return false;
+    }
+
+    // Validate at least one genre tag is selected
+    var genre_tag_flag = $('#genre_tags_opt').select2("val");
+
+    if (genre_tag_flag.length === 0) {
+        Swal.fire({
+            title: 'Select at least one genre tag',
+            icon: 'error',
+            confirmButtonText: 'ok',
+        })
+        return false;
+    }
+
+    // Validate at least one answer check option is selected
+    var answer_check_opt = pu.get_answercheck_settings();
+    if (answer_check_opt.length === 0) {
+        Swal.fire({
+            title: 'Select at least one answer checking option',
+            icon: 'error',
+            confirmButtonText: 'ok',
+        })
+        return false;
+    }
+
+    return answer_check_opt;
 }
 
 function savetext_copy() {

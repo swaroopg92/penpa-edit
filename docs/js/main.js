@@ -230,6 +230,7 @@ onload = function() {
             e.target.id === "inputtext" ||
             e.target.id === "select2_search" ||
             e.target.id === "saveinforules" ||
+            e.target.id === "saveinfoinfo" ||
             e.target.id === "urlstring") {
             // For input form
         } else {
@@ -821,6 +822,7 @@ onload = function() {
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "saveinforules" ||
+            e.target.id === "saveinfoinfo" ||
             e.target.id === "urlstring") {
             // For input form
         } else {
@@ -1232,6 +1234,10 @@ onload = function() {
                 return;
             case "iostring":
                 return;
+            case "submit_portal":
+                submit_portal();
+                e.preventDefault();
+                break;
             case "closeBtn_save1":
                 savetext_copy();
                 e.preventDefault();
@@ -2190,5 +2196,19 @@ onload = function() {
     function startTimer() {
         pu.hide_pause_layer();
         sw_timer.start({ precision: 'secondTenths' });
+    }
+
+    // Exclusivity and Repost Setting
+    document.getElementById("saveinfoexclusivity").onchange = function() {
+        let value = document.getElementById("saveinfoexclusivity").value;
+        if (value === "repost") {
+            document.getElementById("saveinfosource_lb").style.display = "";
+            document.getElementById("saveinfosource").style.display = "";
+            document.getElementById("saveinfosource_brk").style.display = "";
+        } else {
+            document.getElementById("saveinfosource_lb").style.display = "none";
+            document.getElementById("saveinfosource").style.display = "none";
+            document.getElementById("saveinfosource_brk").style.display = "none";
+        }
     }
 };
