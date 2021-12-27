@@ -1724,17 +1724,15 @@ function validate_entries() {
         }
     }
 
-    if (pu.mmode !== "solve") {
-        // Validate at least one answer check option is selected
-        var answer_check_opt = pu.get_answercheck_settings();
-        if (answer_check_opt.length === 0) {
-            Swal.fire({
-                title: 'Select at least one answer checking option',
-                icon: 'error',
-                confirmButtonText: 'ok',
-            })
-            return false;
-        }
+    // Validate at least one answer check option is selected
+    var answer_check_opt = pu.get_answercheck_settings();
+    if (answer_check_opt.length === 0) {
+        Swal.fire({
+            title: 'Select at least one answer checking option',
+            icon: 'error',
+            confirmButtonText: 'ok',
+        })
+        return false;
     }
 
     return answer_check_opt;
