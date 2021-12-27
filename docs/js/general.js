@@ -1027,6 +1027,7 @@ function submit_solution_steps() {
             sequence: pu.puzzle_info.pid,
             replay: replay,
             clicks: pu[pu.mode.qa]["command_redo"].__a.length
+            // resetflag: pu.reset_board_flag (deb to capture this and then set clicks equal to cutoff if true)
         },
         options = {
             method: 'POST',

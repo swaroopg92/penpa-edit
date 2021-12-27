@@ -174,6 +174,7 @@ class Puzzle {
             12: 1, // Dotted
             13: 1 // Fat dots
         };
+        this.reset_board_flag = false;
     }
 
     reset() {
@@ -280,6 +281,9 @@ class Puzzle {
         this[this.mode.qa + "_col"].deletelineE = {};
         this[this.mode.qa + "_col"].killercages = [];
         this[this.mode.qa + "_col"].nobulbthermo = [];
+
+        // Set the flag to true
+        this.reset_board_flag = true;
     }
 
     reset_arr() {
