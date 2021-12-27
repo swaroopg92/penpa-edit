@@ -1644,24 +1644,24 @@ function submit_portal() {
             // document.getElementById("video_usage").checked
             // entries_flag (this is answercheckoptions)
             // solve_link (this is for solvers link)
-						const object_to_pass = {
-							solve_link: solve_link,
-							edit_link: edit_link,
-							title: document.getElementById("saveinfotitle").value,
-							theme : document.getElementById("saveinfotheme").value,
-							rules : document.getElementById("saveinforules").value,
-							info : document.getElementById("saveinfoinfo").value,
-							variantlevel : document.getElementById("saveinfotype").value,
-							exclusivity : document.getElementById("saveinfoexclusivity").value,
-							source : document.getElementById("saveinfosource").value,
-							gridtype : pu.gridtype,
-							rows : document.getElementById("saveinfo_rows").value,
-							cols : document.getElementById("saveinfo_cols").value,
-							genres : $('#genre_tags_opt').select2("val"),
-							answercheckoptions: entries_flag,
-							videousage: document.getElementById("video_usage").checked
-						};
-						console.log(object_to_pass);
+            const object_to_pass = {
+                solve_link: solve_link,
+                edit_link: edit_link,
+                title: document.getElementById("saveinfotitle").value,
+                theme: document.getElementById("saveinfotheme").value,
+                rules: document.getElementById("saveinforules").value,
+                info: document.getElementById("saveinfoinfo").value,
+                variantlevel: document.getElementById("saveinfotype").value,
+                exclusivity: document.getElementById("saveinfoexclusivity").value,
+                source: document.getElementById("saveinfosource").value,
+                gridtype: pu.gridtype,
+                rows: document.getElementById("saveinfo_rows").value,
+                cols: document.getElementById("saveinfo_cols").value,
+                genres: $('#genre_tags_opt').select2("val"),
+                answercheckoptions: entries_flag,
+                videousage: document.getElementById("video_usage").checked
+            };
+            console.log(object_to_pass);
 
         } else {
             Swal.fire({
