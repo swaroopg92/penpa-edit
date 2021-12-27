@@ -2709,7 +2709,7 @@ class Puzzle {
         text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Variant Level
-        text += "," + document.getElementById("saveinforules").value;
+        text += "," + document.getElementById("saveinfotype").value;
 
         // Exclusivity
         text += "," + document.getElementById("saveinfoexclusivity").value;
@@ -2882,7 +2882,7 @@ class Puzzle {
         text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Variant Level
-        text += "," + document.getElementById("saveinforules").value;
+        text += "," + document.getElementById("saveinfotype").value;
 
         // Exclusivity
         text += "," + document.getElementById("saveinfoexclusivity").value;
@@ -11468,16 +11468,15 @@ class Puzzle {
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
-                let user_name = getCookie("fuserName");
-                if (user_name !== null && user_name == "administrator") {
-                    text = this.solution;
-                }
+
+                text = this.solution; // Temporary for Deb
+
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
 
                         // submit solution steps
-                        submit_solution_steps()
+                        // submit_solution_steps() -- Temporary by Deb
 
                         // Rating and feedback code
                         let wrap = document.createElement('div');
@@ -11557,14 +11556,13 @@ class Puzzle {
                 if (author_sol) {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
-                        let user_name = getCookie("fuserName");
-                        if (user_name !== null && user_name == "administrator") {
-                            user_sol = author_sol;
-                        }
+
+                        user_sol = author_sol; // Temporary for Deb
+
                         if (user_sol === author_sol && this.sol_flag === 0) {
 
                             // submit solution steps
-                            submit_solution_steps()
+                            // submit_solution_steps() -- Temporary by Deb
 
                             // Rating and feedback code
                             let wrap = document.createElement('div');

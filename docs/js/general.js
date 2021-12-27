@@ -1604,13 +1604,26 @@ function submit_portal() {
     var entries_flag = validate_entries();
 
     if (typeof entries_flag !== "boolean") {
-
-        // Generate Answer check link and validate solution is entered
-        var solve_link = pu.maketext_solve_solution(true);
+        var solve_link;
+        if (pu.mmode === "solve") {
+            if (pu.solution.length === 0) {
+                solve_link = false;
+            } else {
+                var url = location.href.split('?')[0];
+                solve_link = url + "?m=solve&p=" + pu.url + "&a=" + encrypt_data(pu.solution);
+            }
+        } else {
+            // Generate Answer check link and validate solution is entered
+            var solve_link = pu.maketext_solve_solution(true);
+        }
 
         if (solve_link) {
-            // Generate Edit link
-            var edit_link = pu.maketext();
+            // Generate Edit link if in Setter mode
+            if (pu.mmode === "solve") {
+                var edit_link = "";
+            } else {
+                var edit_link = pu.maketext();
+            }
 
             // Discuss with deb to link shortening of URL?
             // Display successfull/unsuccessfull popup message if puzzle gets submitted/fails
@@ -1628,16 +1641,24 @@ function submit_portal() {
             // document.getElementById("saveinfo_rows").value;
             // document.getElementById("saveinfo_cols").value;
             // $('#genre_tags_opt').select2("val")
+            // document.getElementById("video_usage").checked
+            // entries_flag (this is answercheckoptions)
+            // solve_link (this is for solvers link)
 
         } else {
             Swal.fire({
-                title: 'Solution is missing in the "Edit: Solution" mode',
+                title: 'Solution is missing',
                 icon: 'error',
                 confirmButtonText: 'ok',
             })
         }
     }
 }
+
+function isValidURL(string) {
+    var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    return (res !== null)
+};
 
 function validate_entries() {
     // Validate title is not empty
@@ -1672,15 +1693,30 @@ function validate_entries() {
         return false;
     }
 
-    // Validate at least one answer check option is selected
-    var answer_check_opt = pu.get_answercheck_settings();
-    if (answer_check_opt.length === 0) {
-        Swal.fire({
-            title: 'Select at least one answer checking option',
-            icon: 'error',
-            confirmButtonText: 'ok',
-        })
-        return false;
+    // Validate Other Source Url is specified
+    if (document.getElementById("saveinfoexclusivity").value === "repost") {
+        let validateurl = isValidURL(document.getElementById("saveinfosource").value);
+        if (!validateurl) {
+            Swal.fire({
+                title: 'Enter a valid Source URL',
+                icon: 'error',
+                confirmButtonText: 'ok',
+            })
+            return false;
+        }
+    }
+
+    if (pu.mmode !== "solve") {
+        // Validate at least one answer check option is selected
+        var answer_check_opt = pu.get_answercheck_settings();
+        if (answer_check_opt.length === 0) {
+            Swal.fire({
+                title: 'Select at least one answer checking option',
+                icon: 'error',
+                confirmButtonText: 'ok',
+            })
+            return false;
+        }
     }
 
     return answer_check_opt;
@@ -1749,7 +1785,12 @@ function savetext_download() {
 }
 
 function savetext_window() {
-    var text = document.getElementById("savetextarea").value;
+    if (pu.mmode === "solve") {
+        var url = location.href.split('?')[0];
+        var text = url + "?m=solve&p=" + pu.url + "&a=" + encrypt_data(pu.solution);
+    } else {
+        var text = pu.maketext_solve_solution(true);
+    }
     if (text) {
         window.open(text);
     }
@@ -2037,11 +2078,17 @@ function load2(paramArray, type) {
     // Exclusivity
     if (rtext_para[24] && rtext_para[24] !== "") {
         document.getElementById("saveinfoexclusivity").value = rtext_para[24];
+
+        if (document.getElementById("saveinfoexclusivity").value === "repost") {
+            document.getElementById("saveinfosource_lb").style.display = "";
+            document.getElementById("saveinfosource").style.display = "";
+            document.getElementById("saveinfosource_brk").style.display = "";
+        }
     }
 
     // Video Coverage
-    if (rtext_para[25] && rtext_para[25] !== "") {
-        document.getElementById("video_usage").checked = rtext_para[25];
+    if (rtext_para[25] && rtext_para[25] !== "" && rtext_para[25] === "true") {
+        document.getElementById("video_usage").checked = true;
     }
 
     // version save
@@ -2233,7 +2280,8 @@ function load2(paramArray, type) {
                 // Constraints
                 document.getElementById('constraints').style.display = 'none';
                 if (type === "local") {
-                    $('select').toggleSelect2(false);
+                    console.log('enters here');
+                    $('#constraints_settings_opt').toggleSelect2(false);
                 } else {
                     document.getElementById('constraints_settings_opt').style.display = 'none';
                 }
@@ -2924,7 +2972,7 @@ function set_solvemode(type = "url") {
     // Constraints
     document.getElementById('constraints').style.display = 'none';
     if (type === "local") {
-        $('select').toggleSelect2(false);
+        $('#constraints_settings_opt').toggleSelect2(false);
     } else {
         document.getElementById('constraints_settings_opt').style.display = 'none';
     }
@@ -2933,6 +2981,7 @@ function set_solvemode(type = "url") {
 function set_contestmode() {
     // Disable Share, Undo/Redo buttons, IO sudoku
     document.getElementById("title").innerHTML = "Contest mode"
+    document.getElementById("savetext").style.display = "none";
     document.getElementById("address_edit").style.display = "none";
     document.getElementById("address_solve").style.display = "none";
     document.getElementById("expansion").style.display = "none";
