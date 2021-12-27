@@ -2155,11 +2155,31 @@ function load2(paramArray, type) {
     if (typeof rtext[17] !== 'undefined') {
         pu.user_tags = JSON.parse(rtext[17]);
     }
-    add_genre_tags(pu.user_tags);
-    $('#genre_tags_opt').select2({
-        placeholder: 'Search Area',
-        'width': "90%"
-    });
+
+    if (type === "url") {
+        add_genre_tags(pu.user_tags);
+        $('#genre_tags_opt').select2({
+            placeholder: 'Search Area',
+            'width': "90%"
+        });
+    } else {
+        // For local load
+        // Destroy
+        $('#genre_tags_opt').select2('destroy');
+
+        // Set the options
+        $("#genre_tags_opt option").each(function() {
+            if (pu.user_tags.includes($(this)[0].label)) {
+                $(this)[0].setAttribute("selected", true);
+            }
+        });
+
+        // Reinitialize
+        $('#genre_tags_opt').select2({
+            placeholder: 'Search Area',
+            'width': "90%"
+        });
+    }
 
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
@@ -2280,7 +2300,6 @@ function load2(paramArray, type) {
                 // Constraints
                 document.getElementById('constraints').style.display = 'none';
                 if (type === "local") {
-                    console.log('enters here');
                     $('#constraints_settings_opt').toggleSelect2(false);
                 } else {
                     document.getElementById('constraints_settings_opt').style.display = 'none';
