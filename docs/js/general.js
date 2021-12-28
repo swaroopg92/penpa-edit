@@ -1650,7 +1650,7 @@ function submit_portal() {
             },
             body: JSON.stringify(puzzle)
         },
-        request = new Request('/live/misc-pp?action=pp-author-submit-new', options);
+        request = new Request('/live/misc-pp?action=submit-new', options);
     fetch(request)
 				.then(function(response) {
             return response.json();
