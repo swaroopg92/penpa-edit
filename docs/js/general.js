@@ -2683,7 +2683,7 @@ function decode_puzzlink(url) {
             pu = new Puzzle_square(cols + 2, rows + 2, size);
             setupProblem(pu, "sudoku");
 
-            info_number = puzzlink_pu.decodeNumber16ExCell();
+            info_number = puzzlink_pu.decodeNumber16ExCell(false);
             puzzlink_pu.drawNumbersExCell(pu, info_number, 1, "1", false);
 
             // Change to Solution Tab
@@ -3345,7 +3345,7 @@ function decode_puzzlink(url) {
             pu = new Puzzle_square(cols + 2, rows + 2, size);
             setupProblem(pu, "number");
 
-            info_number = puzzlink_pu.decodeNumber16ExCell();
+            info_number = puzzlink_pu.decodeNumber16ExCell(false);
             // Turn numbers 1-5 to A-E, etc.
             var string_map = "0ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             for (var i in info_number) {
@@ -3361,6 +3361,33 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("number");
             this.usertab_choices = ["Surface", "Number Normal"];
+            break;
+        case "tents":
+            // Add whitespace
+            document.getElementById("nb_space1").value = 1;
+            document.getElementById("nb_space2").value = 1;
+            document.getElementById("nb_space3").value = 1;
+            document.getElementById("nb_space4").value = 1;
+
+            pu = new Puzzle_square(cols + 2, rows + 2, size);
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16ExCell(true);
+            puzzlink_pu.drawNumbersExCell(pu, info_number, 1, "1", false);
+
+            info_number = puzzlink_pu.decodeNumber2();
+            for (var i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (3 + row_ind) + 3 + col_ind;
+                pu["pu_q"].symbol[cell] = [1, "tents", 1];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("tents");
+            this.usertab_choices = ["Surface", "Composite"];
             break;
         default:
             Swal.fire({

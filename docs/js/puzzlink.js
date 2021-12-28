@@ -146,10 +146,11 @@ class Puzzlink {
         return bottom <= ca && ca <= up;
     }
 
-    decodeNumber16ExCell() {
+    decodeNumber16ExCell(top_left_only) {
         var number_list = {};
         var ec = 0,
             i = 0;
+        var skipped_bottom = false;
 
         // Top row, bottom row, left column and then right column
         for (i = 0; i < this.gridurl.length; i++) {
@@ -166,8 +167,15 @@ class Puzzlink {
             }
 
             ec++;
+            if (top_left_only && !skipped_bottom && ec >= this.cols) {
+                skipped_bottom = true;
+                ec += this.cols; // Skip bottom row if top_left_only
+            }
+            if (top_left_only && ec >= 2 * this.cols + this.rows) {
+                break; // Finished top and left
+            }
             if (ec >= this.rows * 2 + this.cols * 2) {
-                break;
+                break; // Finished all four sides
             }
         }
 
@@ -307,6 +315,22 @@ class Puzzlink {
                 parseInt(int / 3) % 3,
                 parseInt(int / 1) % 3,
             );
+        }
+
+        return number_list;
+    }
+
+    decodeNumber2() {
+        var number_list = {};
+        var index = 0;
+
+        for (var char of this.gridurl) {
+            if (char >= "i") {
+                index += parseInt(char, 36) - 17;
+            } else {
+                number_list[index] = "1";
+                index += parseInt(char, 36) + 1;
+            }
         }
 
         return number_list;
