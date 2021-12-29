@@ -439,30 +439,66 @@ Depending on the browser you can update the page without using the cache with "C
 * Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
 * Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
 	* Akari
-	* Ayeheya
+	* Aqre
+	* Araf
+	* Ayeheya (Ekawayeh)
 	* Balance Loop
+	* Castle Wall
+	* Cave
+	* Cojun
+	* Compass
 	* Country Road
 	* Detour
+	* Easy as ABC
+	* Factors
+	* Fillomino
+	* Geradeweg
 	* Haisu
+	* Hashiwokakero (Hashi/Bridges)
 	* Heyawake
+	* Juosan
 	* Kakuro
 	* Kurochute
 	* Kurodoko
 	* Kurotto
+	* LITS
 	* Masyu
 	* Maxi Loop
+	* Meandering Numbers
 	* Midloop
-	* Moonsun
+	* Mochikoro
+	* Mochinyoro
+	* Moon or Sun
+	* Nagenawa
 	* Nanro
+	* Nonogram
+	* Norinori
+	* Numberlink
+	* Nuribou
 	* Nurikabe
-	* Nurimisake
+	* Nurimisaki
 	* Onsen
+	* Pencils
+	* Regional Yajilin
+	* Renban (Renban-Madoguchi)
 	* Ripple Effect
 	* Shakashaka
+	* Shimaguni (Islands)
+	* Simple Loop
+	* Skyscrapers
 	* Slitherlink
-	* Skyscraper
+	* Snake
 	* Star Battle
+	* Stostone
 	* Sudoku
+	* Symmetry Area
+	* Tapa
+	* Tapa-Like Loop
+	* Tents
+	* Toichika 2
+	* View
+	* Yajikazu (Yajisan-Kazusan)
+	* Yajilin
 
 ### Settings
 * This function is to provide Penpa-site general settings like theme, custom color etc.
