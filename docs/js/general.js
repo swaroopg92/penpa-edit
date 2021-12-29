@@ -1610,8 +1610,7 @@ function submit_portal() {
             if (pu.solution.length === 0) {
                 solve_link = false;
             } else {
-                var url = location.href.split('?')[0];
-                solve_link = url + "?m=solve&p=" + pu.url + "&a=" + encrypt_data(pu.solution);
+                solve_link = pu.maketext_solve() + "&a=" + encrypt_data(pu.solution);
             }
         } else {
             // Generate Answer check link and validate solution is entered
@@ -1627,59 +1626,59 @@ function submit_portal() {
             }
 
             const puzzle = {
-                solveLink: solve_link,
-                editLink: edit_link,
-                title: document.getElementById("saveinfotitle").value,
-                theme: document.getElementById("saveinfotheme").value,
-                rules: document.getElementById("saveinforules").value,
-                info: document.getElementById("saveinfoinfo").value,
-                variantLevel: document.getElementById("saveinfotype").value,
-                exclusivity: document.getElementById("saveinfoexclusivity").value,
-                originalPost: document.getElementById("saveinfosource").value,
-                gridtype: pu.gridtype,
-                numRows: document.getElementById("saveinfo_rows").value,
-                numCols: document.getElementById("saveinfo_cols").value,
-                genresTags: $('#genre_tags_opt').select2("val"),
-                solvingTags: entries_flag,
-                allowVideo: document.getElementById("video_usage").checked
-            },
-        options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(puzzle)
-        },
-        request = new Request('/live/misc-pp?action=submit-new', options);
-    fetch(request)
-				.then(function(response) {
-            return response.json();
-        })
-        .then(function(response) {
-					if (response.success) {
-            Swal.fire({
-                title: response.message,
-								html : `Here is the <a href='${response.solveLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
-                icon: 'success',
-                confirmButtonText: 'Ok',
-            })
-					} else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: response.message,
-								footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
-                confirmButtonText: 'Retry',
-            })
-					}
-				});
+                    solveLink: solve_link,
+                    editLink: edit_link,
+                    title: document.getElementById("saveinfotitle").value,
+                    theme: document.getElementById("saveinfotheme").value,
+                    rules: document.getElementById("saveinforules").value,
+                    info: document.getElementById("saveinfoinfo").value,
+                    variantLevel: document.getElementById("saveinfotype").value,
+                    exclusivity: document.getElementById("saveinfoexclusivity").value,
+                    originalPost: document.getElementById("saveinfosource").value,
+                    gridtype: pu.gridtype,
+                    numRows: document.getElementById("saveinfo_rows").value,
+                    numCols: document.getElementById("saveinfo_cols").value,
+                    genresTags: $('#genre_tags_opt').select2("val"),
+                    solvingTags: entries_flag,
+                    allowVideo: document.getElementById("video_usage").checked
+                },
+                options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(puzzle)
+                },
+                request = new Request('/live/misc-pp?action=submit-new', options);
+            fetch(request)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: response.message,
+                            html: `Here is the <a href='${response.solveLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
+                            icon: 'success',
+                            confirmButtonText: 'Ok',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                            footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+                            confirmButtonText: 'Retry',
+                        })
+                    }
+                });
 
 
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Solution is missing',
-								footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+                footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
                 confirmButtonText: 'Ok',
             })
         }
@@ -1815,8 +1814,7 @@ function savetext_download() {
 
 function savetext_window() {
     if (pu.mmode === "solve") {
-        var url = location.href.split('?')[0];
-        var text = url + "?m=solve&p=" + pu.url + "&a=" + encrypt_data(pu.solution);
+        var text = pu.maketext_solve() + "&a=" + encrypt_data(pu.solution);
     } else {
         var text = pu.maketext_solve_solution(true);
     }
@@ -3576,7 +3574,7 @@ function load_from_server(paramArray, type) {
             },
             body: JSON.stringify(data)
         },
-				url = data.ppid ? `/live/misc-pp?action=${data.action}` : '/live/misc-daily', 
+        url = data.ppid ? `/live/misc-pp?action=${data.action}` : '/live/misc-daily',
         request = new Request(url, options);
     fetch(request)
         .then(function(response) {
