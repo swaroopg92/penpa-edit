@@ -3385,26 +3385,43 @@ class Puzzle {
         let answersetting = document.getElementById("answersetting");
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
-        var answercheck_opt = [];
+        var answercheck_opt = [],
+            message = "Solution checker looks for ALL of the following:<ul>";
 
         // loop through and check if any "AND" settings are selected
         for (var i = 0; i < settingstatus_and.length; i++) {
             if (settingstatus_and[i].checked) {
-                answercheck_opt.push(settingstatus_and[i].id.substring(4)); // ignore initial characters "sol_"
-            }
-        }
-
-        // If answercheck list is 0, it means, no "AND" option was selected
-        if (answercheck_opt.length === 0) {
-            // loop through and check if any "OR" settings are selected
-            for (var i = 0; i < settingstatus_or.length; i++) {
-                if (settingstatus_or[i].checked) {
-                    answercheck_opt.push(settingstatus_and[i].id.substring(7)); // ignore initial characters "sol_or_"
+                // ignore initial characters "sol_"
+                var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
+                if (opt.length !== 0) {
+                    answercheck_opt.push(opt);
+                    message += "<li>" + answercheck_message[opt] + "</li>";
                 }
             }
         }
+        message += "</ul>";
 
-        return answercheck_opt;
+        // If answercheck list is 0, it means, no "AND" option was selected
+        if (answercheck_opt.length === 0) {
+            message = "Solution checker looks for ONE of the following:<ul>";
+            // loop through and check if any "OR" settings are selected
+            for (var i = 0; i < settingstatus_or.length; i++) {
+                if (settingstatus_or[i].checked) {
+                    // ignore initial characters "sol_or_"
+                    let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
+                    if (opt.length !== 0) {
+                        answercheck_opt.push(opt);
+                        message += "<li>" + answercheck_message[opt] + "</li>";
+                    }
+                }
+            }
+            message += "</ul>";
+        }
+
+        var obj = new Object();
+        obj.answercheck_opt = answercheck_opt;
+        obj.message = message;
+        return obj;
     }
 
     make_solution() {

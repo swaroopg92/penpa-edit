@@ -1626,54 +1626,53 @@ function submit_portal() {
             }
 
             const puzzle = {
-                    solveLink: solve_link,
-                    editLink: edit_link,
-                    title: document.getElementById("saveinfotitle").value,
-                    theme: document.getElementById("saveinfotheme").value,
-                    rules: document.getElementById("saveinforules").value,
-                    info: document.getElementById("saveinfoinfo").value,
-                    variantLevel: document.getElementById("saveinfotype").value,
-                    exclusivity: document.getElementById("saveinfoexclusivity").value,
-                    originalPost: document.getElementById("saveinfosource").value,
-                    gridtype: pu.gridtype,
-                    numRows: document.getElementById("saveinfo_rows").value,
-                    numCols: document.getElementById("saveinfo_cols").value,
-                    genresTags: $('#genre_tags_opt').select2("val"),
-                    solvingTags: entries_flag,
-                    allowVideo: document.getElementById("video_usage").checked
-                },
+                solveLink: solve_link,
+                editLink: edit_link,
+                title: document.getElementById("saveinfotitle").value,
+                theme: document.getElementById("saveinfotheme").value,
+                rules: document.getElementById("saveinforules").value,
+                info: document.getElementById("saveinfoinfo").value,
+                variantLevel: document.getElementById("saveinfotype").value,
+                exclusivity: document.getElementById("saveinfoexclusivity").value,
+                originalPost: document.getElementById("saveinfosource").value,
+                gridtype: pu.gridtype,
+                numRows: document.getElementById("saveinfo_rows").value,
+                numCols: document.getElementById("saveinfo_cols").value,
+                genresTags: $('#genre_tags_opt').select2("val"),
+                solvingTags: entries_flag.answercheck_opt,
+                answermessage: entries_flag.message,
+                allowVideo: document.getElementById("video_usage").checked
+            },
                 options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: JSON.stringify(puzzle)
                     },
-                    body: JSON.stringify(puzzle)
-                },
-                request = new Request('/live/misc-pp?action=submit-new', options);
-            fetch(request)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            title: response.message,
-                            html: `Here is the <a href='${response.solveLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
-                            icon: 'success',
-                            confirmButtonText: 'Ok',
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                            footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
-                            confirmButtonText: 'Retry',
-                        })
-                    }
-                });
-
-
+                    request = new Request('/live/misc-pp?action=submit-new', options);
+                fetch(request)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                html: `Here is the <a href='${response.solveLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
+                                icon: 'success',
+                                confirmButtonText: 'Ok',
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+                                confirmButtonText: 'Retry',
+                            })
+                        }
+                    });
         } else {
             Swal.fire({
                 icon: 'error',
@@ -1738,7 +1737,7 @@ function validate_entries() {
 
     // Validate at least one answer check option is selected
     var answer_check_opt = pu.get_answercheck_settings();
-    if (answer_check_opt.length === 0) {
+    if (answer_check_opt.answercheck_opt.length === 0) {
         Swal.fire({
             title: 'Select at least one answer checking option',
             icon: 'error',
