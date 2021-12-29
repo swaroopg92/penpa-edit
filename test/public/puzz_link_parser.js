@@ -223,6 +223,11 @@ describe("puzz.link parser", () => {
         ["Shimaguni 1", "https://puzz.link/p?shimaguni/15/10/319eqrdmkg4t6bsufv7lo3r7jk9acr3408vvv7rs3hod4kgv21rk7lpzg5g3i"],
         ["Shimaguni 2", "https://puzz.link/p?shimaguni/4/4/7qoo90h2g"],
         ["Shimaguni 3", "https://puzz.link/p?shimaguni/40/10/5bc9s7d2amojovom9dcncvctmqlelultbtbtbtbo7qnqnqn2jlflelf576v6t6uab2d3r2s8l4qml9so3o3orov0575456fg0g8g0gc6o3g0011g000200f70000o0f0h0101207cn4k4k7v3v3r3uzoagaah4zq"],
+        // Simple Loop
+        ["Simple Loop 1", "https://puzz.link/p?simpleloop/12/12/40860g10m0kc0o0m3480q0g0008h2"],
+        ["Simple Loop 2", "https://puzz.link/p?simpleloop/6/6/1g1g06o0"],
+        ["Simple Loop 3", "https://puzz.link/p?simpleloop/10/10/ovof472311ggo8s4u0v0"],
+        ["Simple Loop 4", "https://puzz.link/p?simpleloop/v:/11/11/0408080080k400g014000024g"],
         // Skyscrapers
         ["Skyscrapers 1", "https://puzz.link/p?skyscrapers/2/1/j1g"],
         ["Skyscrapers 2", "https://puzz.link/p?building/5/5/g2l4g2h4h4h2"],

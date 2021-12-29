@@ -343,6 +343,25 @@ class Puzzlink {
         return number_list;
     }
 
+    decodeNumber2Binary() {
+        var number_list = [];
+
+        for (var char of this.gridurl) {
+            var int = parseInt(char, 36);
+            number_list.push(
+                parseInt(int / 16) % 2,
+                parseInt(int / 8) % 2,
+                parseInt(int / 4) % 2,
+                parseInt(int / 2) % 2,
+                parseInt(int / 1) % 2,
+            );
+        }
+        // Remove what was parsed
+        this.gridurl = this.gridurl.substr(number_list.length / 5);
+
+        return number_list;
+    }
+
     moveNumbersToRegionCorners(info_edge, info_number) {
         var cols = this.cols,
             rows = this.rows;
