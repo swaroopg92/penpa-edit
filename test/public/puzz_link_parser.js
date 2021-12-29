@@ -79,6 +79,9 @@ describe("puzz.link parser", () => {
         ["Fillomino 2", "https://puzz.link/p?fillomino/7/3/159u159"],
         ["Fillomino 3", "https://puzz.link/p?fillomino/10/10/q-138g84ga3h46g42g33r46g44ga8h12g15g58r21g28g87h42g14g4-13q"],
         ["Fillomino 4", "https://puzz.link/p?fillomino/7/10/r6l8l5l2lah3i5h9i9i4c4o"],
+        // Geradeweg
+        ["Geradeweg 1", "https://puzz.link/p?geradeweg/17/10/j6m1q4g4o55o54i1s1o2h3p6h3o2s1i35o53o2g3q6m.+100j"],
+        ["Geradeweg 2", "https://puzz.link/p?geradeweg/10/10/g11111111g1111111111l1g11i11g111111111g11111111h1111111111111111g1111g111111111111g11111111g"],
         // Haisu
         ["Haisu 1", "https://puzz.link/p?haisu/18/18/511-120000000g014009002800i004g014009002800i004g014009002800g00000000000vvu000000000000000000000000000000000000000000000007vvg00009j2zzg1o5p6zs8zx2j8n7y3z4o4zh7zzh6h5h3zs5q"],
         ["Haisu 2", "https://puzz.link/p?haisu/4/4/44216n8d902m1m"],
@@ -169,6 +172,12 @@ describe("puzz.link parser", () => {
         ["Norinori 1", "https://puzz.link/p?norinori/18/10/365btauumbakihchaf0o3q67cbjcg8kki94dtj2oorju6tnmontv0vgb4ssnvsb9v3g"],
         ["Norinori 2", "https://puzz.link/p?norinori/10/10/ebdcb96kfaulotutil9qscvm7ivh0aumd8mc"],
         ["Norinori 3", "https://puzz.link/p?norinori/10/10/09binldaqlaqkl8qg4fg04v803fuk0ovu0vu"],
+        // Numberlink
+        ["Numberlink 1", "https://puzz.link/p?numberlink/11/11/-2bap-2ft-15zrazy-2fg-2bn-15o"],
+        ["Numberlink 2", "https://puzz.link/p?numlin/11/11/g1m2h6x6i7h5g7k5p4j8y1g3u8g2n3m4g"],
+        ["Numberlink 3", "https://puzz.link/p?numlin/10/10/1w2h3k4k6g5i7k2n8k5i4g1k8k6h7w3"],
+        ["Numberlink 4", "https://puzz.link/p?numlin/10/10/j48315g977k512g2g48s3g66j6i22j55g9m76g49g93g1g188g4j7g44k3h"],
+        ["Numberlink 5", "https://puzz.link/p?numlin/7/7/l6g1l2l3l4l5l654321"],
         // Nuribou
         ["Nuribou 1", "https://puzz.link/p?nuribou/10/10/k2i37zhal8k7h2zhfw3m2g"],
         ["Nuribou 2", "https://puzz.link/p?nuribou/9/9/n2u.i8o9i4o5i.u1n"],
