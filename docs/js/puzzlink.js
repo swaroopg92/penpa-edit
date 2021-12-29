@@ -305,7 +305,7 @@ class Puzzlink {
         return number_list;
     }
 
-    decodeNumber3() {
+    decodeNumber3(max_iter = -1) {
         var number_list = [];
 
         for (var char of this.gridurl) {
@@ -315,7 +315,14 @@ class Puzzlink {
                 parseInt(int / 3) % 3,
                 parseInt(int / 1) % 3,
             );
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
         }
+        // Remove what was parsed
+        this.gridurl = this.gridurl.substr(number_list.length / 3);
 
         return number_list;
     }

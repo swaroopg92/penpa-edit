@@ -3389,6 +3389,37 @@ function decode_puzzlink(url) {
             pu.subcombimode("tents");
             this.usertab_choices = ["Surface", "Composite"];
             break;
+        case "snake":
+            // Add whitespace
+            document.getElementById("nb_space1").value = 1;
+            document.getElementById("nb_space2").value = 1;
+            document.getElementById("nb_space3").value = 1;
+            document.getElementById("nb_space4").value = 1;
+
+            pu = new Puzzle_square(cols + 2, rows + 2, size);
+            setupProblem(pu, "combi");
+
+            // Add snake ends
+            info_number = puzzlink_pu.decodeNumber3(Math.ceil(cols * rows / 3));
+            for (i in info_number) {
+                if (info_number[i] === 0) {
+                    continue;
+                }
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (3 + row_ind) + 3 + col_ind;
+                pu["pu_q"].symbol[cell] = [info_number[i], "circle_L", 1];
+            }
+
+            // Add outside clues
+            info_number = puzzlink_pu.decodeNumber16ExCell(true);
+            puzzlink_pu.drawNumbersExCell(pu, info_number, 1, "1", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blpo");
+            this.usertab_choices = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',

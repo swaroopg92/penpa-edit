@@ -224,6 +224,11 @@ describe("puzz.link parser", () => {
         ["Slitherlink 2", "https://puzz.link/p?slitherlink/9/9/233333332dk388583d8d38cg73d7c38212173d7c3721317c"],
         ["Slitherlink 3", "https://puzz.link/p?slither/5/5/gch1222ch331bg222"],
         ["Slitherlink 4", "https://puzz.link/p?slither/6/10/h1dgadddg1cgdddcg2cgddbdg1d"],
+        // Snake
+        ["Snake 1", "https://puzz.link/p?snake/2/2/99g11"],
+        ["Snake 2", "https://puzz.link/p?snake/6/6/600000600000g4g333g4g333"],
+        ["Snake 3", "https://puzz.link/p?snake/9/9/0600000000000000000000000603g4g5g6g72g3g4g5g6"],
+        ["Snake 4", "https://puzz.link/p?snake/11/11/00000000000000000000000000000000000000000957664857598o9"],
         // Starbattle
         ["Starbattle 1", "https://puzz.link/p?starbattle/10/10/2/5g252c2qkgbakk98igse7g88cp3730so000u"],
         ["Starbattle 2", "https://puzz.link/p?starbattle/10/10/2/l95las9vb5mmurbelo2m849c5gp068ci9029"],
