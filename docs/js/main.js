@@ -174,28 +174,37 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface", "Wall", "Shape", "Composite",
+    let modes = ["Surface",
         "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
+        "Wall",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
-        "Thermo", "Sudoku Arrow"
+        "Shape",
+        "Thermo", "Sudoku Arrow",
+        "Composite"
     ];
 
-    let modes_text = ["Surface", "Wall", "Shape", "Composite",
+    let modes_text = ["Surface",
         "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
         "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper",
+        "Wall",
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
-        "Thermo", "Sudoku Arrow"
+        "Shape",
+        "Thermo", "Sudoku Arrow",
+        "Composite"
     ];
 
-    let modes_mapping = ["surface", "wall", "symbol", "combi",
+    let modes_mapping = ["surface",
         "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
         "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4",
+        "wall",
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
         "sub_sudoku1", "sub_sudoku2", "sub_sudoku3",
-        "sub_specialthermo", "sub_specialarrows"
+        "symbol",
+        "sub_specialthermo", "sub_specialarrows",
+        "combi"
     ];
     let previous_mode = "surface";
     let previous_submode = 1;
@@ -764,27 +773,33 @@ onload = function() {
                     }
                     counter_index %= user_choices.length
                     let mode_loc = modes.indexOf(user_choices[counter_index]);
-                    if (mode_loc < 4) { // Hard coded, '4', Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
-                        pu.mode_set(modes_mapping[mode_loc])
+
+                    // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
+                    let mode_name = modes_mapping[mode_loc];
+                    if (mode_name.includes("surface") ||
+                        mode_name.includes("wall") ||
+                        mode_name.includes("symbol") ||
+                        mode_name.includes("combi")) {
+                        pu.mode_set(mode_name)
                         e.preventDefault();
                     } else {
-                        if (modes_mapping[mode_loc].includes("number")) {
+                        if (mode_name.includes("number")) {
                             pu.mode_set('number');
                             e.preventDefault();
-                        } else if (modes_mapping[mode_loc].includes("sudoku")) {
+                        } else if (mode_name.includes("sudoku")) {
                             pu.mode_set('sudoku');
                             e.preventDefault();
-                        } else if (modes_mapping[mode_loc].includes("lineE")) {
+                        } else if (mode_name.includes("lineE")) {
                             pu.mode_set('lineE');
                             e.preventDefault();
-                        } else if (modes_mapping[mode_loc].includes("special")) {
+                        } else if (mode_name.includes("special")) {
                             pu.mode_set('special');
                             e.preventDefault();
                         } else {
                             pu.mode_set('line');
                             e.preventDefault();
                         }
-                        pu.submode_check(modes_mapping[mode_loc]);
+                        pu.submode_check(mode_name);
                         e.preventDefault();
                     }
                     e.returnValue = false;
@@ -1878,6 +1893,29 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+
+        // Save puzzle progress
+        let local_storage_setting = document.getElementById("clear_storage_opt").value;
+        if (pu.url.length !== 0 &&
+            pu.mmode === "solve" &&
+            local_storage_setting !== "2" &&
+            local_storage_setting !== "3" &&
+            local_storage_setting !== "4") {
+            // get md5 hash for unique id
+            let hash = "penpa_" + md5(pu.url);
+            let pu_sub = {
+                'pu_q': pu.pu_q,
+                'pu_a': pu.pu_a,
+                'pu_q_col': pu.pu_q_col,
+                'pu_a_col': pu.pu_a_col,
+                'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
+            };
+
+            // encrypt data
+            let rstr = encrypt_data(JSON.stringify(pu_sub));
+
+            localStorage.setItem(hash, rstr);
+        }
     });
 
     // Adding on change events for general settings
@@ -1892,6 +1930,11 @@ onload = function() {
             pu.set_redoundocolor();
             pu.redraw();
         }
+    }
+
+    // Toggle responsiveness
+    document.getElementById("responsive_settings_opt").onchange = function() {
+        setResponsiveness(document.getElementById("responsive_settings_opt").value);
     }
 
     // Custom Color Setting
@@ -1921,27 +1964,62 @@ onload = function() {
             deleteCookie("sudoku_normal_size");
             deleteCookie("starbattle_dots");
             deleteCookie("mousemiddle_button");
+            deleteCookie("responsive_mode");
             deleteCookie("timerbar_status");
             // deleteCookie("different_solution_tab");
         } else if (document.getElementById("save_settings_opt").value === "2") {
-            setCookie("color_theme", document.getElementById("theme_mode_opt").value, 2147483647);
-            setCookie("reload_button", document.getElementById('reload_button').value, 2147483647);
-            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), 2147483647);
-            setCookie("gridtype", document.getElementById("gridtype").value, 2147483647);
-            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, 2147483647);
-            setCookie("displaysize", document.getElementById("nb_size3").value, 2147483647);
-            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, 2147483647);
-            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, 2147483647);
-            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, 2147483647);
-            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, 2147483647);
-            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, 2147483647);
+            let expDate = 2147483647;
+            setCookie("color_theme", document.getElementById("theme_mode_opt").value, expDate);
+            setCookie("reload_button", document.getElementById('reload_button').value, expDate);
+            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), expDate);
+            setCookie("gridtype", document.getElementById("gridtype").value, expDate);
+            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, expDate);
+            setCookie("displaysize", document.getElementById("nb_size3").value, expDate);
+            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, expDate);
+            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, expDate);
+            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, expDate);
+            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, expDate);
+            setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expDate);
+            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expDate);
+        }
+    }
+
+    document.getElementById("clear_storage_opt").onchange = function() {
+        var store_opt = document.getElementById("clear_storage_opt").value;
+        if (store_opt === "1") {
+            deleteCookie("local_storage");
+        } else if (store_opt === "2") {
+            // check for local progres
+            // get md5 hash for unique id
+            let hash = "penpa_" + md5(pu.url);
+            localStorage.removeItem(hash);
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
+        } else if (store_opt === "3") {
+            var keys = Object.keys(localStorage),
+                i = keys.length;
+            while (i--) {
+                if (keys[i].includes("penpa")) {
+                    localStorage.removeItem(keys[i]);
+                }
+            }
+            // localStorage.clear(); for all clear
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            })
+        } else if (store_opt === "4") {
+            let expDate = 2147483647;
+            setCookie("local_storage", document.getElementById("clear_storage_opt").value, expDate);
         }
     }
 
     $(document).ready(function() {
         if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
-                'width': "25%"
+                'width': "resolve" // 25% was used before
             });
         }
     });
@@ -1955,9 +2033,16 @@ onload = function() {
     document.getElementById("constraints_settings_opt").onchange = function() {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
         if (current_constraint === "all") {
-            // Display the mode break line
-            document.getElementById("mode_break").style.display = "inline";
-            document.getElementById("mode_txt_space").style.display = "inline";
+            // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+                document.getElementById("mode_break").style.display = "inline";
+                document.getElementById("mode_txt_space").style.display = "inline";
+                document.getElementById("visibility_break").style.display = "none";
+            } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+                document.getElementById("visibility_break").style.display = "inline";
+            }
 
             // set the default submode
             for (let i = 0; i < penpa_constraints["setting"][current_constraint]["modeset"].length; i++) {
@@ -1977,6 +2062,15 @@ onload = function() {
         } else {
             // Remove all modes, default is none
             pu.set_allmodes();
+
+            // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+                document.getElementById("visibility_break").style.display = "none";
+            } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+                document.getElementById("visibility_break").style.display = "inline";
+            }
 
             // Remove the mode break line
             document.getElementById("mode_break").style.display = "none";

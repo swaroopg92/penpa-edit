@@ -5,11 +5,13 @@
     <title>Penpa+</title>
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <meta charset="utf-8" />
-    <meta name="robots" content="noindex,nofollow">
-    <meta name="viewport" content="width=480">
+    <meta name="robots" content="nofollow" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Web application to create and solve Sudokus and Puzzles.">
+    <meta name="keywords" content="grid editor, pencil puzzle editor, logic puzzle solving, sudoku editor">
     <!-- STYLES -->
     <script>
-        var ver = "2.26.11"; // Also defined in class_p.js
+        var ver = "2.26.13"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -58,6 +60,7 @@
     </script>
     <!-- Online libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://unpkg.com/pure-md5@latest/lib/index.js"></script>
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
@@ -127,7 +130,8 @@
                         <label for="pu_a" class="label" id="pu_a_label">Solution</label>
                         <label class="label_mode" id="constraints">Constraints (Beta):</label>
                         <select name="constraints_settings" id="constraints_settings_opt"> </select>
-                        <span id="visibility_button0" class="label_mode tooltip">Visibility:</span>
+                        <br id="visibility_break" style="display:none;">
+                        <span id="visibility_button0" class="label_mode">Visibility:</span>
                         <span id="visibility_button" class="label">ON</span>
                     </div>
                     <div id="mode_button" class="mode_button">
@@ -673,18 +677,18 @@
                     <input type="button" id="tb_delete" value="Delete all" class="button" />
                     <span id="erase_text" class="tooltiptext">Erase problem or solution grid</span>
                 </span>
-                <br><br>
+                <br>
             </div>
-        </div>
-    </div>
-    <div id="stop_watch">
-        <h1 id="timer" class="values">00:00:00:00:0</h1>
-        <div>
-            <button id="sw_start" class="button sw">Start</button>
-            <button id="sw_pause" class="button sw">Pause</button>
-            <button id="sw_stop" class="button sw">Stop</button>
-            <button id="sw_reset" class="button sw">Reset</button>
-            <button id="sw_hide" class="button sw">Hide</button>
+            <div id="stop_watch">
+                <h1 id="timer" class="values">00:00:00:00:0</h1>
+                <div>
+                    <button id="sw_start" class="button sw">Start</button>
+                    <button id="sw_pause" class="button sw">Pause</button>
+                    <button id="sw_stop" class="button sw">Stop</button>
+                    <button id="sw_reset" class="button sw">Reset</button>
+                    <button id="sw_hide" class="button sw">Hide</button>
+                </div>
+            </div>
         </div>
     </div>
     <div id="float-key">
@@ -1267,6 +1271,18 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label>Responsive Mode:</label>
+                        </td>
+                        <td>
+                            <select name="responsive_settings" id="responsive_settings_opt">
+                                <option value="1">Off</option>
+                                <option value="2">On (Tools Left)</option>
+                                <option value="3">On (Tools Right)</option>
+                            </select>
+                        </td>
+                    </tr>
                     <tr id="custom_color_lb">
                         <td>
                             <label>Custom Colors (Beta):</label>
@@ -1402,7 +1418,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Timer Bar:</label>
+                            <label>Timer:</label>
                         </td>
                         <td>
                             <select name="timerbar" id="timer_bar_opt">
@@ -1420,6 +1436,19 @@
                                 <option value="3" selected="selected"></option>
                                 <option value="1">No</option>
                                 <option value="2">Yes</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Local Storage:</label>
+                        </td>
+                        <td>
+                            <select name="clear_storage" id="clear_storage_opt">
+                                <option value="1" selected="selected">ON</option>
+                                <option value="2">Clear this puzzle</option>
+                                <option value="3">Clear all</option>
+                                <option value="4">OFF</option>
                             </select>
                         </td>
                     </tr>

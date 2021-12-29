@@ -1,4 +1,17 @@
 ## History
+* 2021/12/19 ver 2.26.13
+	* Responsive design - left and right options.
+	* Fixed tab order.
+	* Local storage feature to save the state of the puzzle.
+* 2021/12/16 ver 2.26.12
+	* Fixed SVG export in Safari.
+	* Restored original timer look.
+	* Fixed killer cages bug.
+	* Some display improvements.
+	* Hide timer area option.
+	* Added nonconsecutive tag.
+	* Tapa sol string.
+	* code refactoring.
 * 2021/12/02 ver 2.26.11
 	* Fix aspect ratio of info icon.
 	* Fix minor CSS linting issues.

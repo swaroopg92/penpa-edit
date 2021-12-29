@@ -4,6 +4,7 @@
     --popup_width_larger: calc(var(--popup_width) + 30px);
 
     --shadow_low: 0 2px 2px rgba(0, 0, 0, 0.5);
+    --shadow_mid: 0 5px 5px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -22,7 +23,7 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
-    margin: 1.5em auto 3em;
+    margin: 0.5em auto 0.5em;
     background: var(--bgPage);
     color: var(--fgMain);
 }
@@ -36,8 +37,7 @@ input {
     user-select: auto;
 }
 
-header,
-#stop_watch {
+header {
     display: grid;
     position: fixed;
     left: 0;
@@ -45,14 +45,14 @@ header,
     font-size: .9em;
     grid-template-columns: 1fr 300px 300px 1fr;
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
     box-shadow: var(--shadow_low);
 }
 
 #stop_watch {
-    bottom: 0;
-    height: 3em;
-    line-height: 3em;
+    display: block;
+    font-size: .9em;
+    text-align: center;
 }
 
 header {
@@ -65,20 +65,23 @@ header {
     color: var(--fgMain);
 }
 
-#title, #timer {
+#title {
     grid-area: 1 / 2 / 2 / 3;
     text-align: left;
 }
 
-#version-info, #stop_watch div {
+#version-info {
     grid-area: 1 / 3 / 2 / 4;
     text-align: right;
+}
+
+#app-container {
+    margin-top: 35px;
 }
 
 #tool-holder {
     width: 100%;
     margin: 0 auto;
-    padding-top: 15px;
 }
 
 h3 {
@@ -96,8 +99,11 @@ hr.newgridhrline {
     max-width: 700px;
     text-align: center;
     margin: 0 auto;
-    padding-top: 10px;
     padding-bottom: 10px;
+}
+
+#bottom_button {
+    padding-top: 10px;
 }
 
 .button,
@@ -271,7 +277,7 @@ hr.newgridhrline {
     border-radius: 3px;
 }
 
-.labelS{
+.labelS {
     margin-top: 1px;
 }
 
@@ -299,6 +305,10 @@ hr.newgridhrline {
     text-align: center;
     line-height: 28px;
     border-radius: 3px;
+}
+
+#style_special {
+    padding-left: 3px;
 }
 
 .nb_button input[type=button] {
@@ -585,7 +595,6 @@ body textarea {
 
 #visibility_button {
     width: 25px;
-    border: 1px solid var(--greyLight);
     background: none;
     margin-left: 0px;
     border-radius: 1px;
@@ -633,6 +642,7 @@ body textarea {
     left: 0px;
     width: 0px;
     height: 0px;
+    z-index: 2;
 }
 
 .nav li ul li {
@@ -735,7 +745,7 @@ body textarea {
     height: 40px;
     text-align: center;
     padding-top: 0px;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0 0;
     cursor: move;
 }
 
@@ -746,7 +756,8 @@ body textarea {
     margin-top: 0px;
     text-align: center;
     padding-top: 0px;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 5px;
+    box-shadow: var(--shadow_mid);
 }
 
 #float-key-menu {
@@ -755,7 +766,7 @@ body textarea {
     height: 20px;
     text-align: center;
     padding-top: 40px;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0 0;
 }
 
 #float-key-header-lb {
@@ -862,37 +873,41 @@ body textarea {
     position: relative;
     min-width: var(--popup_width);
     width: var(--popup_width_larger);
-    max-height: 650px;
-    margin: 15px auto 0;
+    max-height: calc(100% - 80px);
+    margin: 15px auto;
     padding: 40px 10px 10px;
     border-radius: 20px;
     overflow: auto;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-image-content {
     position: relative;
     width: var(--popup_width);
     padding: 40px 10px 10px;
-    height: 230px;
+    max-height: calc(100% - 80px);
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-save-content {
     position: relative;
     width: var(--popup_width);
     padding: 40px 10px 10px;
-    height: 600px;
+    max-height: calc(100% - 80px);
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-save2-content {
     width: 450px;
-    max-height: none;
+    max-height: calc(100% - 80px);
     margin: 15px auto;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-input-content,
@@ -901,10 +916,11 @@ body textarea {
     position: relative;
     width: var(--popup_width);
     padding: 40px 10px 10px;
-    height: 280px;
+    max-height: calc(100% - 80px);
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    box-shadow: var(--shadow_mid);
 }
 
 #modal-image-body,
@@ -1281,19 +1297,74 @@ sup {
     margin-left: -7px;
 }
 
-/* @media (min-width: 850px) {
-    #app-container {
-        display:grid;
+@media (min-width: 850px) {
+    #app-container.responsive {
+        display: grid;
         grid-template-columns: 1fr 225px 600px 1fr;
     }
-    #tool-container {
+
+    #app-container.responsive #tool-container {
         grid-area: 1 / 2 / 2 / 3;
     }
-    #puzzle-container {
+
+    #app-container.responsive #puzzle-container {
         grid-area: 1 / 3 / 2 / 4;
     }
-    #buttons {
+
+    #app-container.responsive.responsive-flip {
+        display: grid;
+        grid-template-columns: 1fr 600px 225px 1fr;
+    }
+
+    #app-container.responsive.responsive-flip #tool-container {
+        grid-area: 1 / 3 / 2 / 4;
+    }
+
+    #app-container.responsive.responsive-flip #puzzle-container {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+
+    #app-container.responsive #buttons {
         width: auto;
         height: auto;
     }
-} */
+
+    #app-container.responsive #mode_txt_space,
+    #app-container.responsive #mode_break {
+        display: none;
+    }
+
+    #app-container.responsive .nav {
+        height: auto;
+        flex-wrap: wrap;
+    }
+
+    #app-container.responsive .symbolmode_display {
+        display: block;
+    }
+
+    #app-container.responsive .select2-dropdown {
+        min-width: 10rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        margin: 0 auto;
+    }
+
+    header,
+    #stop_watch {
+        position: relative;
+        display: block;
+        height: auto;
+    }
+
+    #title,
+    #timer,
+    #version-info,
+    #stop_watch div {
+        display: block;
+        text-align: center;
+    }
+}

@@ -48,6 +48,10 @@ function create() {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
+    let responsive_design = getCookie("responsive_mode");
+    if (responsive_design !== null) {
+        setResponsiveness(responsive_design, true);
+    }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
         // to address old versions where the stored value was ON and OFF
@@ -87,6 +91,11 @@ function create() {
     if (timer_bar_cookie !== null) {
         document.getElementById("timer_bar_opt").value = timer_bar_cookie;
         showhide_timer();
+    }
+
+    let local_storage_cookie = getCookie("local_storage");
+    if (local_storage_cookie !== null) {
+        document.getElementById("clear_storage_opt").value = local_storage_cookie;
     }
 
     // Populate Constraints list
@@ -1244,21 +1253,22 @@ function saveimage_download() {
         if (document.getElementById("nb_type3").checked) {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
-            var blob = new Blob([text], {
-                type: "image/svg+xml"
-            });
-            var ua = window.navigator.userAgent.toLowerCase();
-            if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-                //safari
-                window.open('data:image/svg+xml;base64,' + window.Base64.encode(text), '_blank');
-            } else if (window.navigator.msSaveBlob) {
+            var blob = new Blob([text], { type: "image/svg+xml" });
+            if (window.navigator.msSaveBlob) {
                 // for IE
                 window.navigator.msSaveBlob(blob, filename);
-            } else {
+            } else if (URL && URL.createObjectURL) {
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.target = "_blank";
                 downloadLink.download = filename;
                 downloadLink.click();
+            } else {
+                Swal.fire({
+                    title: 'Unsupported Browser',
+                    html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                });
             }
         } else {
             if (pu.canvas.msToBlob) { // For IE
@@ -1286,17 +1296,18 @@ function saveimage_window() {
     var address = pu.resizecanvas();
     if (document.getElementById("nb_type3").checked) { //svg
         // store in a Blob
-        let blob = new Blob([address], {
-            type: "image/svg+xml"
-        });
-        var ua = window.navigator.userAgent.toLowerCase();
-        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-            //safari
-            window.open('data:image/svg+xml;base64,' + window.Base64.encode(address), '_blank');
-        } else {
+        let blob = new Blob([address], { type: "image/svg+xml" });
+        if (URL && URL.createObjectURL) {
             // create an URI pointing to that blob
             url = URL.createObjectURL(blob);
             window.open(url);
+        } else {
+            Swal.fire({
+                title: 'Unsupported Browser',
+                html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     } else {
         win = window.open();
@@ -1405,10 +1416,7 @@ function savetext_download() {
     if (filename.indexOf(".") === -1) {
         filename += ".txt";
     }
-    var blob = new Blob([text], {
-        type: "text/plain"
-    });
-    var ua = window.navigator.userAgent.toLowerCase();
+    var blob = new Blob([text], { type: "text/plain" });
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
     for (var i = 0; i < filename.length; i++) {
@@ -1417,17 +1425,21 @@ function savetext_download() {
         }
     }
     if (valid_name) {
-        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1 && ua.indexOf('edge') === -1) {
-            //safari
-            window.open('data:text/plain;base64,' + window.Base64.encode(text), '_blank');
-        } else if (window.navigator.msSaveBlob) {
+        if (window.navigator.msSaveBlob) {
             // for IE
             window.navigator.msSaveBlob(blob, filename);
-        } else {
+        } else if (URL && URL.createObjectURL) {
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.target = "_blank";
             downloadLink.download = filename;
             downloadLink.click();
+        } else {
+            Swal.fire({
+                title: 'Unsupported Browser',
+                html: 'Your browser does not appear to support the needed functionality for an SVG to be made.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            });
         }
     } else {
         Swal.fire({
@@ -1435,7 +1447,7 @@ function savetext_download() {
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
-        })
+        });
     }
 }
 
@@ -1564,11 +1576,7 @@ function load(urlParam, type = 'url') {
     }
 
     // Decrypt P
-    var ab = atob(paramArray.p);
-    ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-    var inflate = new Zlib.RawInflate(ab);
-    var plain = inflate.decompress();
-    var rtext = new TextDecoder().decode(plain);
+    var rtext = decrypt_data(paramArray.p);
     rtext = rtext.split("\n");
     rtext[0] = rtext[0].split("zO").join("null");
     rtext[1] = rtext[1].split("zO").join("null");
@@ -1630,6 +1638,10 @@ function load(urlParam, type = 'url') {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
+    let responsive_design = getCookie("responsive_mode");
+    if (responsive_design !== null) {
+        setResponsiveness(responsive_design, true);
+    }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
         // to address old versions where the stored value was ON and OFF
@@ -1655,6 +1667,10 @@ function load(urlParam, type = 'url') {
     let mousemiddle_button_cookie = getCookie("mousemiddle_button");
     if (mousemiddle_button_cookie !== null) {
         document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
+    }
+    let local_storage_cookie = getCookie("local_storage");
+    if (local_storage_cookie !== null) {
+        document.getElementById("clear_storage_opt").value = local_storage_cookie;
     }
 
     if (rtext_para[18] && rtext_para[18] !== "") {
@@ -1797,11 +1813,7 @@ function load(urlParam, type = 'url') {
 
             // Decrypt a
             if (paramArray.a) {
-                var ab = atob(paramArray.a);
-                ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-                var inflate = new Zlib.RawInflate(ab);
-                var plain = inflate.decompress();
-                var atext = new TextDecoder().decode(plain);
+                var atext = decrypt_data(paramArray.a);
 
                 if (pu.multisolution) {
                     pu.solution = JSON.parse(atext);
@@ -1923,11 +1935,7 @@ function load(urlParam, type = 'url') {
 
         // Decrypt a
         if (paramArray.a) {
-            var ab = atob(paramArray.a);
-            ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
-            var inflate = new Zlib.RawInflate(ab);
-            var plain = inflate.decompress();
-            var atext = new TextDecoder().decode(plain);
+            var atext = decrypt_data(paramArray.a);
             if (pu.multisolution) {
                 pu.solution = JSON.parse(atext);
             } else {
@@ -1996,12 +2004,27 @@ function load(urlParam, type = 'url') {
 
     // Theme
     if (typeof rtext[12] !== 'undefined') {
-        if (JSON.parse(rtext[12]) === 'dark') {
+        let view_setting_string = JSON.parse(rtext[12]);
+        let view_settings = view_setting_string.split("|");
+
+        if (view_settings[0] === 'dark') {
             document.getElementById("theme_mode_opt").value = 2;
             document.getElementById("color_theme").href = "./css/dark_theme.css";
             pu.set_redoundocolor();
             pu.redraw();
         }
+
+        // This is not needed as it will never get called, but leaving it here for now
+        // if (view_settings[1]) {
+        //     if (view_settings[1] == 'responsive') {
+        //         document.getElementById("responsive_settings_opt").value = 2;
+        //         document.getElementById("app-container").classList.add("responsive");
+        //     } else if (view_settings[1] == 'responsive-flip') {
+        //         document.getElementById("responsive_settings_opt").value = 3;
+        //         document.getElementById("app-container").classList.add("responsive");
+        //         document.getElementById("app-container").classList.add("responsive-flip");
+        //     }
+        // }
     }
 
     // answerchecking settings for "OR"
@@ -2011,6 +2034,53 @@ function load(urlParam, type = 'url') {
         var answersetting = JSON.parse(rtext[16]);
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
+        }
+    }
+
+    // Save the Puzzle URL info - used as unique id for cache saving of progress
+    pu.url = paramArray.p;
+
+    if (paramArray.m === "solve" || paramArray.l === "solvedup") {
+        // check for local progres
+        // get md5 hash for unique id
+        let hash = "penpa_" + md5(pu.url);
+
+        // Decrypt puzzle data
+        let local_data = localStorage.getItem(hash);
+
+        if (local_data !== null) {
+            var local_copy = JSON.parse(decrypt_data(local_data));
+            pu.pu_q = local_copy.pu_q;
+            pu.pu_a = local_copy.pu_a;
+            pu.pu_q_col = local_copy.pu_q_col;
+            pu.pu_a_col = local_copy.pu_a_col;
+
+            // Because class cannot be copied, its set in different way
+            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
+            let undo_redo = ["command_redo", "command_undo"];
+            for (var i of pu_qa) {
+                for (var j of undo_redo) {
+                    var t = pu[i][j].__a;
+                    pu[i][j] = new Stack();
+                    pu[i][j].set(t);
+                }
+            }
+            pu.redraw();
+
+            if (local_copy.timer) {
+                let starttime = local_copy.timer.split(":");
+                sw_timer.stop(); // stop previously running timer and start with stored starting time
+                sw_timer.start({
+                    precision: 'secondTenths',
+                    startValues: {
+                        days: parseInt(starttime[0]),
+                        hours: parseInt(starttime[1]),
+                        minutes: parseInt(starttime[2]),
+                        seconds: parseInt(starttime[3]),
+                        secondTenths: parseInt(starttime[4])
+                    }
+                });
+            }
         }
     }
 }
@@ -2525,6 +2595,29 @@ function isEmptycontent(pu_qa, array, num, value) {
         }
     }
     return true;
+}
+
+function setResponsiveness(mode, updateUI) {
+    let modeInt = parseInt(mode, 10);
+    let verb = modeInt > 1 ? 'add' : 'remove';
+    let flipVerb = modeInt > 2 ? 'add' : 'remove';
+    document.getElementById("app-container").classList[verb]("responsive");
+    document.getElementById("app-container").classList[flipVerb]("responsive-flip");
+    if (updateUI) {
+        document.getElementById("responsive_settings_opt").value = mode;
+    }
+
+    // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
+    // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
+    if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
+        document.getElementById("mode_break").style.display = "inline";
+        document.getElementById("mode_txt_space").style.display = "inline";
+        document.getElementById("visibility_break").style.display = "none";
+    } else if (modeInt > 1 && window.innerWidth >= 850) {
+        document.getElementById("mode_break").style.display = "none";
+        document.getElementById("mode_txt_space").style.display = "none";
+        document.getElementById("visibility_break").style.display = "inline";
+    }
 }
 
 function decode_puzzlink(url) {
@@ -3494,4 +3587,21 @@ function decode_puzzlink(url) {
 
     // Set the Source
     document.getElementById("saveinfosource").value = url;
+}
+
+function encrypt_data(puzdata) {
+    var u8text = new TextEncoder().encode(puzdata);
+    var deflate = new Zlib.RawDeflate(u8text);
+    var compressed = deflate.compress();
+    var char8 = Array.from(compressed, e => String.fromCharCode(e)).join("");
+    return window.btoa(char8);
+}
+
+function decrypt_data(puzdata) {
+    var ab = atob(puzdata);
+    ab = Uint8Array.from(ab.split(""), e => e.charCodeAt(0));
+    var inflate = new Zlib.RawInflate(ab);
+    var plain = inflate.decompress();
+    let decrypted = new TextDecoder().decode(plain);
+    return decrypted;
 }
