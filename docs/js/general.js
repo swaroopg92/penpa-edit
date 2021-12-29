@@ -1640,7 +1640,7 @@ function submit_portal() {
                 numCols: document.getElementById("saveinfo_cols").value,
                 genresTags: $('#genre_tags_opt').select2("val"),
                 solvingTags: entries_flag.answercheck_opt,
-                answermessage: entries_flag.message,
+                onlineSolveMessage: entries_flag.message,
                 allowVideo: document.getElementById("video_usage").checked
             },
                 options = {
