@@ -134,11 +134,11 @@ function deleteCookie(name) {
 
 function add_constraints() {
     let constraints = document.getElementById('constraints_settings_opt');
-    penpa_constraints['options_groups'].forEach(function (element, index) {
+    penpa_constraints['options_groups'].forEach(function(element, index) {
         let optgroup = document.createElement("optgroup");
         optgroup.label = element;
 
-        penpa_constraints['options'][element].forEach(function (subelement, subindex) {
+        penpa_constraints['options'][element].forEach(function(subelement, subindex) {
             let opt = document.createElement("option");
             opt.value = subelement;
             opt.innerHTML = subelement;
@@ -154,11 +154,11 @@ function add_constraints() {
 
 function add_genre_tags(user_tags) {
     let genre_tags = document.getElementById('genre_tags_opt');
-    penpa_tags['options_groups'].forEach(function (element, index) {
+    penpa_tags['options_groups'].forEach(function(element, index) {
         let optgroup = document.createElement("optgroup");
         optgroup.label = element;
 
-        penpa_tags['options'][element].forEach(function (subelement, subindex) {
+        penpa_tags['options'][element].forEach(function(subelement, subindex) {
             let opt = document.createElement("option");
             opt.value = subelement;
             opt.innerHTML = subelement;
@@ -1474,7 +1474,7 @@ function shorturl_tab() {
 function getValues(id) {
     let result = [];
     let collection = document.querySelectorAll("#" + id + " option");
-    collection.forEach(function (x) {
+    collection.forEach(function(x) {
         if (x.selected) {
             result.push(x.value);
         }
@@ -3242,7 +3242,8 @@ function decode_puzzlink(url) {
             var max_rows_offset = Math.ceil(rows / 2);
 
             info_number = puzzlink_pu.decodeNumber16();
-            var cols_offset = 0, rows_offset = 0;
+            var cols_offset = 0,
+                rows_offset = 0;
 
             for (var i in info_number) {
                 if (i < max_rows_offset * cols) {
@@ -3260,10 +3261,10 @@ function decode_puzzlink(url) {
 
             // Draw numbers
             for (i in info_number) {
-                if (i < max_rows_offset * cols) {  // Top section
+                if (i < max_rows_offset * cols) { // Top section
                     row_ind = rows_offset - i % max_rows_offset - 1;
                     col_ind = cols_offset + parseInt(i / max_rows_offset);
-                } else {  // Left section
+                } else { // Left section
                     row_ind = rows_offset + parseInt((i - max_rows_offset * cols) / max_cols_offset);
                     col_ind = cols_offset - (i - max_rows_offset * cols) % max_cols_offset - 1;
                 }
@@ -3274,9 +3275,9 @@ function decode_puzzlink(url) {
             // Draw vertical edges
             for (i = cols_offset - 1; i < cols + cols_offset + 5; i += 5) {
                 col_ind = Math.min(cols + cols_offset - 1, i);
-                var edge_style = 13;  // Fat dots
+                var edge_style = 13; // Fat dots
                 if (col_ind === cols_offset - 1 || col_ind === cols + cols_offset - 1) {
-                    edge_style = 2;  // Black normal
+                    edge_style = 2; // Black normal
                 }
                 for (row_ind = 0; row_ind < rows + rows_offset; row_ind++) {
                     var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
@@ -3289,9 +3290,9 @@ function decode_puzzlink(url) {
             // Draw horizontal edges
             for (var i = rows_offset - 1; i < rows + rows_offset + 5; i += 5) {
                 row_ind = Math.min(rows + rows_offset - 1, i);
-                var edge_style = 13;  // Fat dots
+                var edge_style = 13; // Fat dots
                 if (row_ind === rows_offset - 1 || row_ind === rows + rows_offset - 1) {
-                    edge_style = 2;  // Black normal
+                    edge_style = 2; // Black normal
                 }
                 for (col_ind = 0; col_ind < cols + cols_offset; col_ind++) {
                     var edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
@@ -3363,7 +3364,8 @@ function decode_puzzlink(url) {
             pu.mode_grid("nb_grid2");
             setupProblem(pu, "lineE");
 
-            var url_index = 0, index = 0;
+            var url_index = 0,
+                index = 0;
             while (url_index < bstr.length) {
                 var layer_key = null;
                 var value;
