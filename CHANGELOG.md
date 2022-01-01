@@ -1,4 +1,7 @@
 ## History
+* 2021/12/31 ver 2.26.14
+	* More puzz.link support
+	* Portal support initialization
 * 2021/12/19 ver 2.26.13
 	* Responsive design - left and right options.
 	* Fixed tab order.

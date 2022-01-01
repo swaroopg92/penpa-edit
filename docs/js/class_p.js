@@ -11641,6 +11641,7 @@ class Puzzle {
                                 }
                             })
 
+                            sw_timer.pause();
                             this.sol_flag = 1;
                             // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                             // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
