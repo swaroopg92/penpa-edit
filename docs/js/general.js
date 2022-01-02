@@ -2589,7 +2589,7 @@ function load2(paramArray, type) {
         parent.resizeiframe();
     }
 
-    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily") {
+    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
         // Enable timer for resolves
         document.getElementById("timer").style.display = "";
         document.getElementById("sw_start").style.display = "";
