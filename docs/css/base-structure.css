@@ -1429,3 +1429,10 @@ sup {
     background-color: var(--transparentWhite) !important;
     box-shadow: 0 0 0 0px var(--transparentWhite) !important;
 }
+
+/* Replay */
+.replay {
+    margin: 5px;
+    font-size: 30px;
+    padding: 2px;
+}

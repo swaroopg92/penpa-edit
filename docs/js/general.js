@@ -1093,6 +1093,20 @@ function replay_reset() {
     }
 }
 
+function replay_backward() {
+    clearInterval(pu.replay_timer);
+    if (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+        pu.undo();
+    }
+}
+
+function replay_forward() {
+    clearInterval(pu.replay_timer);
+    if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+        pu.redo();
+    }
+}
+
 function panel_onoff() {
     if (document.getElementById('panel_button').value === "1") {
         document.getElementById('float-key').style.display = "block";
@@ -2548,19 +2562,23 @@ function load2(paramArray, type) {
         document.getElementById("buttons").style.display = "none";
 
         let contestinfo = document.getElementById("contestinfo");
-        let contents_play = `<div><input type="button" id="replay_play" value="Play" style="display: inline;" class="replay"/>`;
-        let contents_pause = `<input type="button" id="replay_pause" value="Pause" style="display: inline;" class="replay"/>`;
-        let contents_reset = `<input type="button" id="replay_reset" value="Reset" style="display: inline;" class="replay"/>`;
+        let contents_play = `<div><button id="replay_play_btn" class="replay"><i id="replay_play" class="fa fa-play replay""></i></button>`;
+        let contents_pause = `<button id="replay_pause_btn" class="replay"><i id="replay_pause" class="fa fa-pause replay""></i></button>`;
+        let contents_reset = `<button id="replay_reset_btn" class="replay"><i id="replay_reset" class="fa fa-refresh replay""></i></button>`;
+        let contents_forward = `<button id="replay_forward_btn" class="replay"><i id="replay_forward" class="fa fa-forward replay""></i></button>`;
+        let contents_backward = `<button id="replay_backward_btn" class="replay"><i id="replay_backward" class="fa fa-backward replay""></i></button>`;
         let contents_speed = `<select name ="replay_speed" id ="replay_speed" class="replay">` +
             `<option value=0.5>0.5x</option>` +
             `<option value=1 selected="selected">1x</option>` +
             `<option value=1.5>1.5x</option>` +
             `<option value=2>2x</option>` +
             `<option value=2.5>2.5x</option>` +
-            `<option value=3>3x</option></select></div>`;
+            `<option value=3>3x</option>` +
+            `<option value=5>5x</option>` +
+            `</select></div>`;
 
         // still need to define speed option
-        contestinfo.innerHTML = contents_play + contents_pause + contents_reset + contents_speed;
+        contestinfo.innerHTML = contents_play + contents_pause + contents_backward + contents_forward + contents_reset + contents_speed;
         contestinfo.style.display = "block";
 
         document.getElementById("replay_speed").onchange = function() {
@@ -2569,6 +2587,16 @@ function load2(paramArray, type) {
     }
     if (parent && parent.resizeiframe) {
         parent.resizeiframe();
+    }
+
+    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily") {
+        // Enable timer for resolves
+        document.getElementById("timer").style.display = "";
+        document.getElementById("sw_start").style.display = "";
+        document.getElementById("sw_pause").style.display = "";
+        document.getElementById("sw_reset").style.display = "";
+        document.getElementById("sw_stop").style.display = "";
+        document.getElementById("sw_hide").style.display = "";
     }
 }
 

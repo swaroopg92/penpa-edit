@@ -1726,15 +1726,28 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "replay_play":
+            case "replay_play_btn":
                 replay_play();
                 e.preventDefault();
                 break;
             case "replay_pause":
+            case "replay_pause_btn":
                 replay_pause();
                 e.preventDefault();
                 break;
             case "replay_reset":
+            case "replay_reset_btn":
                 replay_reset();
+                e.preventDefault();
+                break;
+            case "replay_forward":
+            case "replay_forward_btn":
+                replay_forward();
+                e.preventDefault();
+                break;
+            case "replay_backward":
+            case "replay_backward_btn":
+                replay_backward();
                 e.preventDefault();
                 break;
         }
