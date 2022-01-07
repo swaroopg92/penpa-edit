@@ -115,12 +115,12 @@ class Puzzle {
         this.loop_counter = false;
         this.rules = "";
         this.gridmax = {
-            'square': 60,
+            'square': 65,
             'hex': 20,
             'tri': 20,
             'pyramid': 20,
             'cube': 20,
-            'kakuro': 60,
+            'kakuro': 65,
             'tetrakis': 20,
             'truncated': 20,
             'snub': 20,
