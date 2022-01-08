@@ -1879,12 +1879,21 @@ onload = function() {
         }
         select.appendChild(option);
     }
+
     selectBox = new vanillaSelectBox("#mode_choices", {
         "disableSelectAll": false,
         "maxHeight": 250,
         "search": true,
         "translations": { "all": "All", "items": "items", "selectAll": "Check All", "clearAll": "Clear All" }
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
+
+    let selectContainer = document.getElementById('btn-group-#mode_choices').getElementsByClassName('vsb-menu')[0];
+    let liteModeButton = document.createElement('button');
+    liteModeButton.id = "tab-dropdown-lite-btn";
+    liteModeButton.disabled = true;
+    liteModeButton.innerText = 'Enable Penpa Lite';
+    liteModeButton.addEventListener('click', advancecontrol_toggle);
+    selectContainer.appendChild(liteModeButton);
 
     window.addEventListener('beforeunload', function(e) {
         if (document.getElementById('reload_button').value === "1") {
@@ -2112,11 +2121,28 @@ onload = function() {
         pu.redraw();
     }
 
+    let advanceSettingDropdown = document.getElementById('advance_button');
+
     document.getElementById("mode_choices").onchange = function() {
-        // Dynamically updating the display of modes based on tab setting changes
-        if (document.getElementById('advance_button').value === "1") {
-            advancecontrol_on(); // First display back everything
-            advancecontrol_off("new"); // apply new choices for penpa lite
+        if (can_use_lite()) {
+            advanceSettingDropdown.disabled = false;
+            liteModeButton.disabled = false;
+            
+            // Dynamically updating the display of modes based on tab setting changes
+            if (advanceSettingDropdown.value === "1") {
+                advancecontrol_on(); // First display back everything
+                advancecontrol_off("new"); // apply new choices for penpa lite
+            }
+        } else {
+            // Dynamically updating the display of modes based on tab setting changes
+            if (advanceSettingDropdown.value === "1") {
+                advanceSettingDropdown.value = "2";
+                liteModeButton.innerText = "Enable Penpa Lite";
+                advancecontrol_on();
+            }
+
+            advanceSettingDropdown.disabled = true;
+            liteModeButton.disabled = true;
         }
     }
 
@@ -2131,9 +2157,7 @@ onload = function() {
     }
 
     // PenpaLite Setting
-    document.getElementById("advance_button").onchange = function() {
-        advancecontrol_onoff();
-    }
+    advanceSettingDropdown.onchange = advancecontrol_onoff;
 
     // Timer Bar Setting
     document.getElementById("timer_bar_opt").onchange = function() {
