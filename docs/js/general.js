@@ -25,6 +25,7 @@ function boot_parameters() {
 }
 
 function create() {
+    UserSettings.loadFromCookies();
     let gridtype = getCookie("gridtype");
     if (gridtype == null) {
         gridtype = document.getElementById("gridtype").value;
@@ -47,10 +48,6 @@ function create() {
         document.getElementById("theme_mode_opt").value = 2;
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
-    }
-    let responsive_design = getCookie("responsive_mode");
-    if (responsive_design !== null) {
-        setResponsiveness(responsive_design, true);
     }
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
@@ -81,16 +78,6 @@ function create() {
     let starbattle_dots_cookie = getCookie("starbattle_dots");
     if (starbattle_dots_cookie !== null) {
         document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
-    }
-    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
-    if (mousemiddle_button_cookie !== null) {
-        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
-    }
-
-    let timer_bar_cookie = getCookie("timerbar_status");
-    if (timer_bar_cookie !== null) {
-        document.getElementById("timer_bar_opt").value = timer_bar_cookie;
-        showhide_timer();
     }
 
     let local_storage_cookie = getCookie("local_storage");
@@ -1053,14 +1040,6 @@ function advancecontrol_on() {
     }
 }
 
-function showhide_timer() {
-    if (document.getElementById("timer_bar_opt").value === "2") {
-        document.getElementById("stop_watch").style.display = "none";
-    } else if (document.getElementById("timer_bar_opt").value === "1") {
-        document.getElementById("stop_watch").style.display = "";
-    }
-}
-
 function ResetCheck() {
     if (pu.mode[pu.mode.qa].edit_mode.toUpperCase() === "LINE") {
         if (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === '4') {
@@ -1631,6 +1610,8 @@ function load(urlParam, type = 'url') {
 
     make_class(rtext_para[0], 'url');
 
+    UserSettings.loadFromCookies();
+
     // Check cookies
     let theme_cookie = getCookie("color_theme");
     if (theme_cookie !== null && theme_cookie == 2) {
@@ -1638,10 +1619,7 @@ function load(urlParam, type = 'url') {
         document.getElementById("color_theme").href = "./css/dark_theme.css";
         pu.set_redoundocolor();
     }
-    let responsive_design = getCookie("responsive_mode");
-    if (responsive_design !== null) {
-        setResponsiveness(responsive_design, true);
-    }
+    
     let reload_cookie = getCookie("reload_button");
     if (reload_cookie !== null) {
         // to address old versions where the stored value was ON and OFF
@@ -1663,10 +1641,6 @@ function load(urlParam, type = 'url') {
     let starbattle_dots_cookie = getCookie("starbattle_dots");
     if (starbattle_dots_cookie !== null) {
         document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
-    }
-    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
-    if (mousemiddle_button_cookie !== null) {
-        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
     }
     let local_storage_cookie = getCookie("local_storage");
     if (local_storage_cookie !== null) {
@@ -2595,29 +2569,6 @@ function isEmptycontent(pu_qa, array, num, value) {
         }
     }
     return true;
-}
-
-function setResponsiveness(mode, updateUI) {
-    let modeInt = parseInt(mode, 10);
-    let verb = modeInt > 1 ? 'add' : 'remove';
-    let flipVerb = modeInt > 2 ? 'add' : 'remove';
-    document.getElementById("app-container").classList[verb]("responsive");
-    document.getElementById("app-container").classList[flipVerb]("responsive-flip");
-    if (updateUI) {
-        document.getElementById("responsive_settings_opt").value = mode;
-    }
-
-    // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
-    // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
-    if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
-        document.getElementById("mode_break").style.display = "inline";
-        document.getElementById("mode_txt_space").style.display = "inline";
-        document.getElementById("visibility_break").style.display = "none";
-    } else if (modeInt > 1 && window.innerWidth >= 850) {
-        document.getElementById("mode_break").style.display = "none";
-        document.getElementById("mode_txt_space").style.display = "none";
-        document.getElementById("visibility_break").style.display = "inline";
-    }
 }
 
 function decode_puzzlink(url) {

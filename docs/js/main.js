@@ -1021,7 +1021,7 @@ onload = function() {
         // Middle click for switching problem and solution
         // Applicable only in setter mode
         if (document.getElementById("title").textContent.toLowerCase().includes("setter")) {
-            if (document.getElementById("mousemiddle_settings_opt").value === "2") { // If user setting is yes
+            if (UserSettings.mousemiddle_button === 2) { // If user setting is yes
                 if (ondown_key === "mousedown" && e.button === 1) {
                     if (pu.mode.qa === "pu_a") {
                         pu.mode_qa("pu_q");
@@ -1934,7 +1934,7 @@ onload = function() {
 
     // Toggle responsiveness
     document.getElementById("responsive_settings_opt").onchange = function() {
-        setResponsiveness(document.getElementById("responsive_settings_opt").value);
+        UserSettings.responsive_mode = this.value;
     }
 
     // Custom Color Setting
@@ -1954,34 +1954,12 @@ onload = function() {
 
     // Save Setting
     document.getElementById("save_settings_opt").onchange = function() {
-        if (document.getElementById("save_settings_opt").value === "1") {
-            deleteCookie("color_theme");
-            deleteCookie("reload_button");
-            deleteCookie("tab_settings");
-            deleteCookie("gridtype");
-            deleteCookie("sudoku_centre_size");
-            deleteCookie("displaysize");
-            deleteCookie("sudoku_normal_size");
-            deleteCookie("starbattle_dots");
-            deleteCookie("mousemiddle_button");
-            deleteCookie("responsive_mode");
-            deleteCookie("timerbar_status");
-            // deleteCookie("different_solution_tab");
-        } else if (document.getElementById("save_settings_opt").value === "2") {
-            let expDate = 2147483647;
-            setCookie("color_theme", document.getElementById("theme_mode_opt").value, expDate);
-            setCookie("reload_button", document.getElementById('reload_button').value, expDate);
-            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), expDate);
-            setCookie("gridtype", document.getElementById("gridtype").value, expDate);
-            setCookie("sudoku_centre_size", document.getElementById("sudoku_settings_opt").value, expDate);
-            setCookie("displaysize", document.getElementById("nb_size3").value, expDate);
-            setCookie("sudoku_normal_size", document.getElementById("sudoku_settings_normal_opt").value, expDate);
-            setCookie("starbattle_dots", document.getElementById("starbattle_settings_opt").value, expDate);
-            setCookie("mousemiddle_button", document.getElementById("mousemiddle_settings_opt").value, expDate);
-            setCookie("timerbar_status", document.getElementById("timer_bar_opt").value, expDate);
-            setCookie("responsive_mode", document.getElementById("responsive_settings_opt").value, expDate);
-            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expDate);
-        }
+        UserSettings.save_settings = this.value;
+    }
+    
+    // Save Setting
+    document.getElementById("mousemiddle_settings_opt").onchange = function() {
+        UserSettings.mousemiddle_button = this.value;
     }
 
     document.getElementById("clear_storage_opt").onchange = function() {
@@ -2035,7 +2013,7 @@ onload = function() {
         if (current_constraint === "all") {
             // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
             // and responsive mode is not equal to 1
-            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            let responsive_mode = UserSettings.responsive_mode;
             if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
                 document.getElementById("mode_break").style.display = "inline";
                 document.getElementById("mode_txt_space").style.display = "inline";
@@ -2065,7 +2043,7 @@ onload = function() {
 
             // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
             // and responsive mode is not equal to 1
-            let responsive_mode = parseInt(document.getElementById("responsive_settings_opt").value);
+            let responsive_mode = UserSettings.responsive_mode;
             if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
                 document.getElementById("visibility_break").style.display = "none";
             } else if (responsive_mode > 1 && window.innerWidth >= 850) {
@@ -2137,7 +2115,7 @@ onload = function() {
 
     // Timer Bar Setting
     document.getElementById("timer_bar_opt").onchange = function() {
-        showhide_timer();
+        UserSettings.timerbar_status = this.value;
     }
 
     // Timer pause and unpause
