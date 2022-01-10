@@ -11497,7 +11497,7 @@ class Puzzle {
                     if (text === this.solution && this.sol_flag === 0) {
 
                         // submit solution steps
-                        // submit_solution_steps() -- Temporary by Deb
+                        submit_solution_steps(); // Temporary by Deb
 
                         // Rating and feedback code
                         let wrap = document.createElement('div');
@@ -11583,7 +11583,7 @@ class Puzzle {
                         if (user_sol === author_sol && this.sol_flag === 0) {
 
                             // submit solution steps
-                            // submit_solution_steps() -- Temporary by Deb
+                            submit_solution_steps(); // Temporary by Deb
 
                             // Rating and feedback code
                             let wrap = document.createElement('div');

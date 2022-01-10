@@ -1027,6 +1027,7 @@ function submit_solution_steps() {
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
+						ppid: pu.puzzle_info.ppid,
             replay: replay,
             clicks: pu[pu.mode.qa]["command_redo"].__a.length
             // resetflag: pu.reset_board_flag (deb to capture this and then set clicks equal to cutoff if true)
@@ -1038,7 +1039,8 @@ function submit_solution_steps() {
             },
             body: JSON.stringify(data)
         },
-        request = new Request('/live/submit-daily', options);
+				url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-solution' : '/live/submit-daily',
+        request = new Request(url, options);
     fetch(request);
 
     // restore undo
@@ -1052,6 +1054,7 @@ function submit_ratings_feedback(ratings, message) {
             contest: pu.puzzle_info.cid,
             action: 'update-ratings-no-refresh',
             sequence: pu.puzzle_info.pid,
+						ppid: pu.puzzle_info.ppid,
             ratings: ratings,
             message: message
         },
@@ -1062,7 +1065,8 @@ function submit_ratings_feedback(ratings, message) {
             },
             body: JSON.stringify(data)
         },
-        request = new Request('/live/misc-daily', options);
+				url = pu.puzzle_info.mode === 'expo' ? '/live/misc-pp?action=submit-new' : '/live/misc-daily',
+        request = new Request(url, options);
     fetch(request);
 }
 
