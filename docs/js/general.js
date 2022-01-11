@@ -2460,7 +2460,7 @@ function decode_puzzlink(url) {
     if ((cols > 65) || (rows > 65)) {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'Penpa+ do not support grid size greater than 65 rows or columns',
+            html: 'Penpa+ does not support grid size greater than 65 rows or columns',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
