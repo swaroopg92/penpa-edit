@@ -761,7 +761,7 @@ onload = function() {
             }
 
             if (key === "Tab" || key === "Enter") {
-                let user_choices = getValues('mode_choices');
+                let user_choices = UserSettings.tab_settings;
                 if (user_choices.length !== 0) {
                     if (previous_length != user_choices.length) {
                         previous_length = user_choices.length;
@@ -1655,10 +1655,17 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "closeBtn_nb2":
-                newgrid();
+                // Save grid size setting
+                if (document.getElementById("nb_size3").value != UserSettings.displaysize) {
+                    UserSettings.displaysize = document.getElementById("nb_size3").value;
+                }
+                redraw_grid();
+                document.getElementById('modal').style.display = 'none';
                 e.preventDefault();
                 break;
             case "closeBtn_nb3":
+                // Reset display size setting since user didn't save
+                document.getElementById("nb_size3").value = UserSettings.displaysize;
                 document.getElementById('modal').style.display = 'none';
                 e.preventDefault();
                 break;
@@ -1666,10 +1673,17 @@ onload = function() {
             case "nb_size3_r":
                 return;
             case "closeBtn_size1":
-                newgrid_r();
+                // Save grid size setting
+                if (document.getElementById("nb_size3_r").value != UserSettings.displaysize) {
+                    UserSettings.displaysize = document.getElementById("nb_size3_r").value;
+                }
+                redraw_grid();
+                document.getElementById('modal-newsize').style.display = 'none';
                 e.preventDefault();
                 break;
             case "closeBtn_size2":
+                // Reset display size setting since user didn't save
+                document.getElementById("nb_size3_r").value = UserSettings.displaysize;
                 document.getElementById('modal-newsize').style.display = 'none';
                 e.preventDefault();
                 break;
@@ -1887,7 +1901,7 @@ onload = function() {
     }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
 
     window.addEventListener('beforeunload', function(e) {
-        if (document.getElementById('reload_button').value === "1") {
+        if (UserSettings.reload_button === 1) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
             // Chrome requires returnValue to be set
@@ -1921,15 +1935,7 @@ onload = function() {
     // Adding on change events for general settings
     // Theme Setting
     document.getElementById("theme_mode_opt").onchange = function() {
-        if (document.getElementById("theme_mode_opt").value === "1") {
-            document.getElementById("color_theme").href = "./css/light_theme.css";
-            pu.set_redoundocolor();
-            pu.redraw();
-        } else if (document.getElementById("theme_mode_opt").value === "2") {
-            document.getElementById("color_theme").href = "./css/dark_theme.css";
-            pu.set_redoundocolor();
-            pu.redraw();
-        }
+        UserSettings.color_theme = this.value;
     }
 
     // Toggle responsiveness
@@ -1962,36 +1968,20 @@ onload = function() {
         UserSettings.mousemiddle_button = this.value;
     }
 
+    document.getElementById("starbattle_settings_opt").onchange = function() {
+        UserSettings.starbattle_dots = this.value;
+    }
+
+    document.getElementById("sudoku_settings_normal_opt").onchange = function() {
+        UserSettings.sudoku_normal_size = this.value;
+    }
+
+    document.getElementById("sudoku_settings_opt").onchange = function() {
+        UserSettings.sudoku_centre_size = this.value;
+    }
+
     document.getElementById("clear_storage_opt").onchange = function() {
-        var store_opt = document.getElementById("clear_storage_opt").value;
-        if (store_opt === "1") {
-            deleteCookie("local_storage");
-        } else if (store_opt === "2") {
-            // check for local progres
-            // get md5 hash for unique id
-            let hash = "penpa_" + md5(pu.url);
-            localStorage.removeItem(hash);
-            Swal.fire({
-                html: '<h2 class="info">Local Storage is Cleared</h2>',
-                icon: 'info'
-            })
-        } else if (store_opt === "3") {
-            var keys = Object.keys(localStorage),
-                i = keys.length;
-            while (i--) {
-                if (keys[i].includes("penpa")) {
-                    localStorage.removeItem(keys[i]);
-                }
-            }
-            // localStorage.clear(); for all clear
-            Swal.fire({
-                html: '<h2 class="info">Local Storage is Cleared</h2>',
-                icon: 'info'
-            })
-        } else if (store_opt === "4") {
-            let expDate = 2147483647;
-            setCookie("local_storage", document.getElementById("clear_storage_opt").value, expDate);
-        }
+        UserSettings.local_storage = this.value;
     }
 
     $(document).ready(function() {
@@ -2091,6 +2081,7 @@ onload = function() {
     }
 
     document.getElementById("mode_choices").onchange = function() {
+        UserSettings.tab_settings = getValues('mode_choices');
         // Dynamically updating the display of modes based on tab setting changes
         if (document.getElementById('advance_button').value === "1") {
             advancecontrol_on(); // First display back everything
@@ -2132,3 +2123,32 @@ onload = function() {
         sw_timer.start({ precision: 'secondTenths' });
     }
 };
+
+function clear_storage_one() {
+    // check for local progress
+    // get md5 hash for unique id
+    if (typeof pu.url === 'string') {
+        let hash = "penpa_" + md5(pu.url);
+        localStorage.removeItem(hash);
+        Swal.fire({
+            html: '<h2 class="info">Local Storage is Cleared</h2>',
+            icon: 'info'
+        });
+    }
+}
+
+function clear_storage_all() {
+    var keys = Object.keys(localStorage),
+        i = keys.length;
+
+    while (i--) {
+        if (keys[i].includes("penpa")) {
+            localStorage.removeItem(keys[i]);
+        }
+    }
+    // localStorage.clear(); for all clear
+    Swal.fire({
+        html: '<h2 class="info">Local Storage is Cleared</h2>',
+        icon: 'info'
+    });
+}

@@ -2004,7 +2004,7 @@ class Puzzle {
     }
 
     canvasxy_update() { //space for imagesave
-        this.size = parseInt(document.getElementById("nb_size3").value);
+        this.size = UserSettings.displaysize;
         this.canvasx = (this.width_c) * this.size;
         this.canvasy = (this.height_c) * this.size;
     }
@@ -2732,7 +2732,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
@@ -2882,7 +2882,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // Save timer
@@ -3049,7 +3049,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
@@ -3171,7 +3171,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
@@ -7596,15 +7596,15 @@ class Puzzle {
                                 if (number !== "") {
                                     // S submode is 5, M submode is 6
                                     // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                    if (document.getElementById("sudoku_settings_opt").value === "1") {
+                                    if (UserSettings.sudoku_centre_size === 1) {
                                         if (number.length > 5) {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                         } else {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
                                         }
-                                    } else if (document.getElementById("sudoku_settings_opt").value === "2") { // all large
+                                    } else if (UserSettings.sudoku_centre_size === 2) { // all large
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                    } else if (document.getElementById("sudoku_settings_opt").value === "3") { // all small
+                                    } else if (UserSettings.sudoku_centre_size === 3) { // all small
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                     }
                                 } else {
@@ -9410,9 +9410,9 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
-                        if (document.getElementById("starbattle_settings_opt").value === "3") {
+                        if (UserSettings.starbattle_dots === 3) {
                             num = this.coord_p_edgex_star(x, y, 0);
-                        } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                        } else if (UserSettings.starbattle_dots === 2) {
                             num = this.coord_p_edgex_star(x, y, 0.2);
                         }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
@@ -9474,9 +9474,9 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
-                    if (document.getElementById("starbattle_settings_opt").value === "3") {
+                    if (UserSettings.starbattle_dots === 3) {
                         num = this.coord_p_edgex_star(x, y, 0);
-                    } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                    } else if (UserSettings.starbattle_dots === 2) {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
@@ -11003,26 +11003,26 @@ class Puzzle {
     set_redoundocolor() {
         if (this.mode.qa === "pu_q") {
             if (this.pu_q.command_redo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_redo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.WHITE;
                 }
             }
             if (this.pu_q.command_undo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_undo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.WHITE;
@@ -11030,26 +11030,26 @@ class Puzzle {
             }
         } else {
             if (this.pu_a.command_redo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_redo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_redo').style.color = Color.WHITE;
                 }
             }
             if (this.pu_a.command_undo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
                 }
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
+                if (UserSettings.color_theme === THEME_LIGHT) {
                     document.getElementById('tb_undo').style.color = Color.BLACK;
                 } else {
                     document.getElementById('tb_undo').style.color = Color.WHITE;
