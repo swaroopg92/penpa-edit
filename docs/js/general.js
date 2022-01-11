@@ -1468,7 +1468,7 @@ function shorturl_tab() {
     sel.addRange(range);
     textarea.setSelectionRange(0, 1e5);
     document.execCommand("copy");
-    window.open('https://git.io', '_blank');
+    window.open('https://tinyurl.com/app', '_blank');
 }
 
 function getValues(id) {
