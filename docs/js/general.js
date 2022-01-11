@@ -890,6 +890,7 @@ function submit_solution() {
     let solution = "";
     switch (pu.puzzle_info.genre) {
         case "tapa":
+        case "kurotto":
             // Answer - Shading
             if (!isEmpty(pu.pu_a.surface)) {
                 for (var j = 2; j < pu.ny0 - 2; j++) {
@@ -906,6 +907,21 @@ function submit_solution() {
                     }
                 }
             }
+            break;
+        case "rassisillai":
+            // Answer - Line
+            let sol = [];
+            for (var i in pu.pu_a.line) {
+                if (pu.pu_q.line[i] && pu.ignored_line_types[pu.pu_q.line[i]]) {
+                    // Ignore the line
+                } else {
+                    if (pu.pu_a.line[i] === 3) {
+                        sol.push(i);
+                    }
+                }
+            }
+            sol = sol.sort();
+            solution = JSON.stringify(sol);
             break;
     }
     const data = {
@@ -1027,7 +1043,7 @@ function submit_solution_steps() {
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
-						ppid: pu.puzzle_info.ppid,
+            ppid: pu.puzzle_info.ppid,
             replay: replay,
             clicks: pu[pu.mode.qa]["command_redo"].__a.length
             // resetflag: pu.reset_board_flag (deb to capture this and then set clicks equal to cutoff if true)
@@ -1039,7 +1055,7 @@ function submit_solution_steps() {
             },
             body: JSON.stringify(data)
         },
-				url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-solution' : '/live/submit-daily',
+        url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-solution' : '/live/submit-daily',
         request = new Request(url, options);
     fetch(request);
 
@@ -1054,7 +1070,7 @@ function submit_ratings_feedback(ratings, message) {
             contest: pu.puzzle_info.cid,
             action: 'update-ratings-no-refresh',
             sequence: pu.puzzle_info.pid,
-						ppid: pu.puzzle_info.ppid,
+            ppid: pu.puzzle_info.ppid,
             ratings: ratings,
             message: message
         },
@@ -1065,7 +1081,7 @@ function submit_ratings_feedback(ratings, message) {
             },
             body: JSON.stringify(data)
         },
-				url = pu.puzzle_info.mode === 'expo' ? '/live/misc-pp?action=submit-new' : '/live/misc-daily',
+        url = pu.puzzle_info.mode === 'expo' ? '/live/misc-pp?action=submit-new' : '/live/misc-daily',
         request = new Request(url, options);
     fetch(request);
 }
