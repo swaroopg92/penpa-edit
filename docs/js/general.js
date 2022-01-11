@@ -218,12 +218,12 @@ function create_newboard() {
 function make_class(gridtype, loadtype = 'new') {
     var size = parseInt(document.getElementById("nb_size3").value);
     var gridmax = {
-        'square': 60,
+        'square': 65,
         'hex': 20,
         'tri': 20,
         'pyramid': 20,
         'cube': 20,
-        'kakuro': 60,
+        'kakuro': 65,
         'tetrakis': 20,
         'truncated': 20,
         'snub': 20,
@@ -484,7 +484,7 @@ function make_class(gridtype, loadtype = 'new') {
             var nx = parseInt(document.getElementById("nb_size1").value, 10);
             var ny = parseInt(document.getElementById("nb_size2").value, 10);
 
-            if (nx <= gridmax['square'] && nx > 0 && ny <= 40 && ny > 0) {
+            if (nx <= gridmax['kakuro'] && nx > 0 && ny <= gridmax['kakuro'] && ny > 0) {
                 // Create Kakuro object
                 pu = new Puzzle_kakuro(nx, ny, size);
 
@@ -3160,10 +3160,10 @@ function decode_puzzlink(url) {
     cols = parseInt(urldata[1]);
     rows = parseInt(urldata[2]);
 
-    if ((cols > 60) || (rows > 60)) {
+    if ((cols > 65) || (rows > 65)) {
         Swal.fire({
             title: 'Swaroop says:',
-            html: 'Penpa+ do not support grid size greater than 60 rows or columns',
+            html: 'Penpa+ do not support grid size greater than 65 rows or columns',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
         })
