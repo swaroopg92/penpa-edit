@@ -106,6 +106,19 @@ hr.newgridhrline {
     padding-top: 10px;
 }
 
+.button.sw {
+    cursor: pointer;
+}
+
+#tab-dropdown-lite-btn {
+    border: 0 !important;
+    width: 100%;
+    position: relative;
+    left: -5px;
+    bottom: -5px;
+    cursor: pointer;
+}
+
 .button,
 #top_button button,
 .resize-grid-buttons button {

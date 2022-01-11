@@ -822,8 +822,23 @@ function solutionvisible_onoff() {
     pu.redraw();
 }
 
+function can_use_lite() {
+    let user_choices = getValues('mode_choices');
+    return user_choices.length > 0;
+}
+
+let advanceSettingDropdown = document.getElementById('advance_button');
+
+function advancecontrol_toggle() {
+    let isLite = String(advanceSettingDropdown.value) === "2";
+    advanceSettingDropdown.value = isLite ? "1" : "2";
+    advancecontrol_onoff();
+}
+
 function advancecontrol_onoff(loadtype = "new") {
-    if (document.getElementById('advance_button').value === "2") {
+    loadtype = typeof loadtype === 'string' ? loadtype : "new";
+
+    if (advanceSettingDropdown.value === "2") {
         // Lite Version OFF, Display all the modes
         // Display the mode break line again
         document.getElementById("mode_break").style.display = "inline";
@@ -831,38 +846,27 @@ function advancecontrol_onoff(loadtype = "new") {
         advancecontrol_on();
     } else {
         // Lite Version ON, so turn off extra modes
-        if (loadtype === "url") {
+        if (loadtype === "url" || can_use_lite()) {
             // Remove the mode break line again
             document.getElementById("mode_break").style.display = "none";
             document.getElementById("mode_txt_space").style.display = "none";
             advancecontrol_off(loadtype);
         } else {
-            let user_choices = UserSettings.tab_settings;
-            if (user_choices.length !== 0) {
-                // Remove the mode break line again
-                document.getElementById("mode_break").style.display = "none";
-                document.getElementById("mode_txt_space").style.display = "none";
-                advancecontrol_off(loadtype);
-            } else {
-                document.getElementById('advance_button').value = "2";
-                Swal.fire({
-                    title: 'Advance/Basic Mode',
-                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Set "PenpaLite" setting to turn "ON"</h2>',
-                    icon: 'info'
-                })
-            }
+            advanceSettingDropdown.value = "2";
+            Swal.fire({
+                title: 'Advance/Basic Mode',
+                html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Set "PenpaLite" setting to turn "ON"</h2>',
+                icon: 'info'
+            });
         }
     }
 }
 
 function advancecontrol_off(loadtype) {
     // Check for this only for first time when loading url
-    let user_choices;
-    if (loadtype === "url") {
-        user_choices = this.usertab_choices;
-    } else {
-        user_choices = UserSettings.tab_settings;
-    }
+    let user_choices = (loadtype === "url") ? this.usertab_choices : getValues('mode_choices');
+    document.getElementById('tab-dropdown-lite-btn').innerText = "Disable Penpa Lite";
+    
     if (user_choices.indexOf("Surface") === -1) {
         document.getElementById("mo_surface_lb").style.display = "none";
     }
@@ -933,6 +937,8 @@ function advancecontrol_off(loadtype) {
 }
 
 function advancecontrol_on() {
+    document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
+    
     pu.erase_buttons();
 
     // Set the solve mode

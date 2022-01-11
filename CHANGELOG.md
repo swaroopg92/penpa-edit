@@ -1,4 +1,6 @@
 ## History
+* 2022/????? ver 2.26.15
+	* Made Penpa Lite mode easier to enable from Tab settings.
 * 2021/12/31 ver 2.26.14
 	* More puzz.link support
 * 2021/12/19 ver 2.26.13
