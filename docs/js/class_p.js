@@ -6604,8 +6604,8 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "rassi_sillai" ||
-                header === "rs") {
+            } else if (header === "rassi_sillai_contest" ||
+                header === "rsc") {
                 // Answer - Line Segments
                 let sol = [];
                 for (var i in this.pu_a.line) {
