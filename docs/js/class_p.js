@@ -5034,7 +5034,10 @@ class Puzzle {
                         }
                     }
                 }
-            } else if (header === "tapa_contest" || header === "tc") {
+            } else if (header === "tapa_contest" ||
+                header === "tc" ||
+                header === "kurotto_contest" ||
+                header === "kc") {
                 // Answer - Shading
                 if (!isEmpty(this.pu_a.surface)) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
@@ -6601,7 +6604,22 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "testing") {
+            } else if (header === "rassi_sillai" ||
+                header === "rs") {
+                // Answer - Line Segments
+                let sol = [];
+                for (var i in this.pu_a.line) {
+                    if (this.pu_q.line[i] && this.ignored_line_types[this.pu_q.line[i]]) {
+                        // Ignore the line
+                    } else {
+                        if (this.pu_a.line[i] === 3) {
+                            sol.push(i);
+                        }
+                    }
+                }
+                sol = sol.sort();
+                text = JSON.stringify(sol);
+            } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
                 console.log(this.pu_q_col);
