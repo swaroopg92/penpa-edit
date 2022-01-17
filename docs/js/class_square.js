@@ -319,7 +319,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudoku":
-                if (document.getElementById('edge_button').textContent === "ON") {
+                if (document.getElementById('edge_button').value === "1") {
                     type = [0, 2, 3];
                 } else {
                     type = [0];
