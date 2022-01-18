@@ -915,7 +915,11 @@ function submit_solution() {
                 if (pu.pu_q.line[i] && pu.ignored_line_types[pu.pu_q.line[i]]) {
                     // Ignore the line
                 } else {
-                    if (pu.pu_a.line[i] === 3) {
+                    if (pu.pu_a.line[i] === 3 || // Green
+                        pu.pu_a.line[i] === 2 || // Black
+                        pu.pu_a.line[i] === 5 || // Grey
+                        pu.pu_a.line[i] === 8 || // Red
+                        pu.pu_a.line[i] === 9) { // Blue
                         sol.push(i);
                     }
                 }
