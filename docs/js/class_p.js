@@ -163,7 +163,7 @@ class Puzzle {
         this.multisolution = false;
         this.borderwarning = true;
         this.user_tags = [];
-        this.conflicts = new Conflicts();
+        this.conflicts = new Conflicts(this);
         this.previous_sol = [];
         this.conflict_cells = [];
         this.url = [];
@@ -11700,28 +11700,25 @@ class Puzzle {
     check_conflict(current_sol) {
         if (this.user_tags) {
             // Do only if current solution changed
-            if (current_sol !== this.previous_sol) {
-                for (var tag of this.user_tags) {
-                    switch (tag) {
-                        case 'classic':
-                            this.conflict_cells = this.conflicts.check_classic(this);
-                            break;
-                        case 'nonconsecutive':
-                            this.conflict_cells = this.conflicts.check_classic(this);
-
-                            // check consecutive only if no classic conflict
-                            if (this.conflict_cells.length === 0) {
-                                this.conflict_cells = this.conflicts.check_consecutive(this);
-                            }
-                            break;
-                    }
+            if (current_sol === this.previous_sol) {
+                return;
+            }
+            this.conflicts.reset();
+            const tags = new Set(this.user_tags);
+            if (tags.has('consecutive') || tags.has('nonconsecutive')) {
+                this.conflicts.check_sudoku(this);
+                // check consecutive only if no classic conflict
+                if (this.conflict_cells.length === 0) {
+                    this.conflicts.check_consecutive(this);
                 }
-                this.previous_sol = current_sol;
-                if (this.conflict_cells.length !== 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+            } else if (tags.has('classic')) {
+                this.conflicts.check_sudoku(this);
+            }
+            this.previous_sol = current_sol;
+            if (this.conflict_cells.length !== 0) {
+                return true;
+            } else {
+                return false;
             }
         }
     }
