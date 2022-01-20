@@ -2129,6 +2129,12 @@ onload = function() {
         edge_onoff();
     }
 
+    // Conflict detection
+    document.getElementById("conflict_detection_opt").onchange = function() {
+        UserSettings.conflict_detection = this.value;
+        pu.redraw();
+    }
+
     // Timer Bar Setting
     document.getElementById("timer_bar_opt").onchange = function() {
         UserSettings.timerbar_status = this.value;

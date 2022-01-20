@@ -91,6 +91,18 @@ const UserSettings = {
         return this._mousemiddle_button;
     },
 
+    // Conflict detection
+    _conflict_detection: 1,
+    set conflict_detection(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 1;
+        this._conflict_detection = valueInt;
+
+        document.getElementById("conflict_detection_opt").value = valueInt;
+    },
+    get conflict_detection() {
+        return this._conflict_detection;
+    },
+
     // Star Battle Dot handling
     _starbattle_dots: 1,
     set starbattle_dots(newValue) {
@@ -243,7 +255,8 @@ const UserSettings = {
         'starbattle_dots',
         'sudoku_centre_size',
         'sudoku_normal_size',
-        'timerbar_status'
+        'timerbar_status',
+        'conflict_detection',
     ],
     gridtype_size: [
         'gridtype',
