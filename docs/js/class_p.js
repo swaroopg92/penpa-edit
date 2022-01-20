@@ -4403,7 +4403,7 @@ class Puzzle {
         return matrix_local;
     }
 
-    getregiondata(row_size, col_size, mode = "pu_q") {
+    getregiondata(row_size, col_size, mode = "pu_q", alphabetical = true) {
         // Regions
         var counter = 0;
         var cell_matrix = [];
@@ -4509,14 +4509,21 @@ class Puzzle {
         var size_unique_nums = unique_nums.length;
         var cell_char;
 
-        // Loop through each region to convert to Alphabet
-        // Temporary solution, but later find efficient way
         for (var k = 0; k < size_unique_nums; k++) {
-            cell_char = String.fromCharCode(65 + (k % 26));
+            if (alphabetical) {
+                // Loop through each region to convert to Alphabet
+                // Temporary solution, but later find efficient way
+                // 26 alphabets and then cycle
+                cell_char = String.fromCharCode(65 + (k % 26));
+            } else {
+                // Just return a numeric matrix with all regions being
+                // unique.
+                cell_char = k;
+            }
             for (var i = 0; i < row_size; i++) {
                 for (var j = 0; j < col_size; j++) {
                     if (cell_matrix[i][j] === unique_nums[k]) {
-                        cell_matrix[i][j] = cell_char; // 26 alphabets and then cycle
+                        cell_matrix[i][j] = cell_char;
                     }
                 }
             }
