@@ -11713,6 +11713,8 @@ class Puzzle {
                 }
             } else if (tags.has('classic')) {
                 this.conflicts.check_sudoku(this);
+            } else if (tags.has('starbattle')) {
+                this.conflicts.check_star_battle(this);
             }
             this.previous_sol = current_sol;
             if (this.conflict_cells.length !== 0) {

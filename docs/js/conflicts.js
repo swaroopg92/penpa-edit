@@ -155,6 +155,91 @@ class Conflicts {
         }
     }
 
+    // Check Star Battle puzzle.
+    check_star_battle() {
+        // Assume that there is a single number in the grid with the number
+        // of stars per row/col/region.
+        const number_keys = Object.keys(this.pu.pu_q.number);
+        if (number_keys.length !== 1) return;
+        const star_number = this.pu.pu_q.number[number_keys[0]];
+        if (!Array.isArray(star_number) || star_number.length !== 3) return;
+        // This is the number of stars per row/col/region.
+        const nstars = parseInt(star_number[0]);
+        if (nstars <= 0) return;
+
+        // Get grids
+        const stars = this.get_data('star_grid');
+        const regions = this.get_data('region_grid');
+        const n = stars.length;
+        if (!n || stars[0].length !== n || regions.length !== n
+            || regions[0].length !== n || regions.number_of_regions !== n) {
+            // Unexpected grid data
+            return;
+        }
+
+        // Helper function to check a neighbor. If (x2,y2) is also a star,
+        // mark both as a conflict.
+        const check_neighbor = function(x1, y1, x2, y2) {
+            if (x2 < 0 || x2 >= n || y2 < 0 || y2 >= n) return;
+            if (stars[y2][x2] === 0) return;
+            this.add_conflict(x1, y1);
+            this.add_conflict(x2, y2);
+        }.bind(this);
+
+        // Check neighbors
+        for (let y = 0; y < n; y++) {
+            for (let x = 0; x < n; x++) {
+                if (stars[y][x] === 0) continue;
+                check_neighbor(x, y, x + 1, y); // Right
+                check_neighbor(x, y, x - 1, y + 1); // Lower-left
+                check_neighbor(x, y, x    , y + 1); // Lower
+                check_neighbor(x, y, x + 1, y + 1); // Lower-right
+            }
+        }
+
+        // Check rows and column conflicts.
+        for (let i = 0; i < n; i++) {
+            let row_sum = 0;
+            let col_sum = 0;
+            for (let j = 0; j < n; j++) {
+                row_sum += stars[i][j];
+                col_sum += stars[j][i];
+            }
+            if (row_sum > nstars) {
+                for (let j = 0; j < n; j++) this.add_conflict(j, i);
+            }
+            if (col_sum > nstars) {
+                for (let j = 0; j < n; j++) this.add_conflict(i, j);
+            }
+        }
+
+        // Stop here if we already found conflicts.
+        if (this.has_conflicts()) return;
+
+        // Check region conflicts.
+        const region_sums = [];
+        for (let y = 0; y < n; y++) {
+            for (let x = 0; x < n; x++) {
+                if (!(regions[y][x] in region_sums)) {
+                    region_sums[regions[y][x]] = 0;
+                }
+                region_sums[regions[y][x]] += stars[y][x];
+            }
+        }
+        if (region_sums.every(function(x) { return x <= nstars; })) {
+            // Region sums okay.
+            return;
+        }
+        // Mark region conflicts.
+        for (let y = 0; y < n; y++) {
+            for (let x = 0; x < n; x++) {
+                if (region_sums[regions[y][x]] > nstars) {
+                    this.add_conflict(x, y);
+                }
+            }
+        }
+    }
+
     //========================================================================
     // calculate_* function family:
     // The purpose of these functions is to take the Puzzle instance, read the
@@ -200,6 +285,51 @@ class Conflicts {
             bars.add(neighbor.join(','));
         }
         return bars;
+    }
+
+    // Calculate grid of star positions in the answer.
+    // Where stars are present, the value will be 1, and where stars are absent
+    // the value will be 0.
+    calculate_star_grid() {
+        const nx = parseInt(this.pu.nx) - this.pu.space[2] - this.pu.space[3];
+        const ny = parseInt(this.pu.ny) - this.pu.space[0] - this.pu.space[1];
+        const grid = [];
+        for (let y = 0; y < ny; y++) {
+            let row = [];
+            for (let x = 0; x < nx; x++) {
+                const index = this.xy_to_index(x, y);
+                const symbol = this.pu.pu_a.symbol[index];
+                // Only look for stars.
+                const have_star = Array.isArray(symbol)
+                                  && symbol.length === 3
+                                  && symbol[0] === 2
+                                  && symbol[1] === "star";
+                row.push(0 + have_star);
+            }
+            grid.push(row);
+        }
+        return grid;
+    }
+
+    // Calculate bold regions as a grid.
+    calculate_region_grid() {
+        const regiondata = this.pu.getregiondata(this.pu.ny, this.pu.nx, "pu_q", false);
+        const regions = this.trim_space_from_grid(regiondata);
+
+        // Count and renumber as we go.
+        const renumber = [];
+        let number_of_regions = 0;
+        for (const row of regions) {
+            for (let i = 0; i < row.length; i++) {
+                if (!(row[i] in renumber)) {
+                    renumber[row[i]] = number_of_regions;
+                    number_of_regions++;
+                }
+                row[i] = renumber[row[i]];
+            }
+        }
+        regions.number_of_regions = number_of_regions;
+        return regions;
     }
 
     //========================================================================
@@ -256,5 +386,18 @@ class Conflicts {
         const x = (index % this.pu.nx0) - this.pu.space[2] - 2;
         const y = Math.floor(index / this.pu.nx0) - this.pu.space[0] - 2;
         return [x,y];
+    }
+
+    // When a grid is calculated in terms of nx/ny, it will have extra space
+    // that we want to remove.
+    trim_space_from_grid(grid) {
+        grid.splice(0, this.pu.space[0]); // Remove rows in space above
+        grid.splice(-this.pu.space[1], this.pu.space[1]); // Space below
+        // Count and renumber as we go.
+        for (const row of grid) {
+            row.splice(0, this.pu.space[2]); // Space to the left
+            row.splice(-this.pu.space[3], this.pu.space[3]); // Right
+        }
+        return grid;
     }
 }
