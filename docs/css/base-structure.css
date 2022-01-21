@@ -742,6 +742,25 @@ body textarea {
     padding: 5px;
 }
 
+#close-float-panel {
+    border: 0;
+    color: inherit;
+    background: transparent;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+#close-float-panel:hover {
+    opacity: .6;
+}
+
 #float-key {
     position: absolute;
     display: none;
@@ -774,7 +793,6 @@ body textarea {
 }
 
 #float-key-menu {
-    /*display: none;*/
     width: 100%;
     height: 20px;
     text-align: center;
@@ -800,41 +818,46 @@ body textarea {
     height: 100%;
 }
 
-.panel_menu li:last-child {
-    border-right: 0;
+.panel_menu li + li {
+    border-left: 1px solid;
 }
 
 #float-key-select {
     position: absolute;
     display: none;
     z-index: 1;
-    left: 0px;
-    top: 0px;
+    left: 100%;
+    top: 0;
     width: 50px;
-    height: 20px;
+    margin: 5px;
     text-align: center;
-    padding-top: 20px;
+    border-radius: 7px;
+    box-shadow: var(--shadow_mid);
 }
 
 .panel_menu_select {
+    list-style: none;
     display: block;
-    table-layout: fixed;
     width: 100%;
     height: 100%;
 }
 
 .panel_menu_select li {
+    display: block;
+    text-align: center;
     list-style: none;
-    vertical-align: middle;
-    width: 100%;
-    height: 0px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5em;
 }
 
-.label_menu {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+.panel_menu_select li + li {
+    border-top: 1px solid;
+}
+
+.panel_menu li:hover,
+.panel_menu_select li:hover {
+    opacity: .5;
 }
 
 #float-canvas {

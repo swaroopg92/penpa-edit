@@ -22,13 +22,13 @@ const UserSettings = {
     set responsive_mode(newMode) {
         const modeInt = newMode ? parseInt(newMode, 10) : 1;
         this._responsive_mode = modeInt;
-        
+
         let verb = modeInt > 1 ? 'add' : 'remove';
         let flipVerb = modeInt > 2 ? 'add' : 'remove';
         document.getElementById("app-container").classList[verb]("responsive");
         document.getElementById("app-container").classList[flipVerb]("responsive-flip");
         document.getElementById("responsive_settings_opt").value = newMode;
-        
+
         // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
         // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
         if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
@@ -45,7 +45,7 @@ const UserSettings = {
     get responsive_mode() {
         return this._responsive_mode;
     },
-    
+
     // Save settings as cookie
     _save_settings: false,
     set save_settings(newValue) {

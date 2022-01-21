@@ -24,8 +24,9 @@ class Panel {
     }
 
     select_open() {
-        document.getElementById("float-key-select").style.display = "inline";
+        document.getElementById("float-key-select").style.display = "block";
         document.getElementById("float-key-select").style.left = this.fkh.style.width;
+        console.log(this.fkh.style.width);
     }
 
     select_close() {
