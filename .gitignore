@@ -4,6 +4,7 @@ old_images/
 temp/
 tmp/
 .DS_Store
+notes/
 
 *.log
 

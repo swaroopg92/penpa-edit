@@ -3323,9 +3323,13 @@ class Puzzle {
 
             if (document.getElementById("sol_surface").checked === true || checkall) {
                 for (var i in this[pu].surface) {
-                    // 1 is DG, 8 is GR, 3 is LG, 4 is BL
-                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
-                        sol[0].push(i);
+                    if (this["pu_q"].surface[i]) {
+                        // ignore the shading if already in problem mode
+                    } else {
+                        // 1 is DG, 8 is GR, 3 is LG, 4 is BL
+                        if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
+                            sol[0].push(i);
+                        }
                     }
                 }
             }
@@ -3340,7 +3344,9 @@ class Puzzle {
                 }
             }
 
-            if (document.getElementById("sol_loopline").checked === true || checkall) {
+            if (document.getElementById("sol_loopline").checked === true ||
+                document.getElementById("sol_ignoreloopline").checked === true ||
+                checkall) {
                 if (document.getElementById("sol_ignoreloopline").checked === true) {
                     for (var i in this[pu].line) {
                         if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
@@ -3386,7 +3392,9 @@ class Puzzle {
                 }
             }
 
-            if (document.getElementById("sol_loopedge").checked === true || checkall) {
+            if (document.getElementById("sol_loopedge").checked === true ||
+                document.getElementById("sol_ignoreborder").checked === true ||
+                checkall) {
                 if (document.getElementById("sol_ignoreborder").checked === true) {
                     for (var i in this[pu].lineE) {
                         if ((this.frame[i] && this.frame[i] === 2) ||
@@ -3444,26 +3452,30 @@ class Puzzle {
 
             if (document.getElementById("sol_number").checked === true || checkall) {
                 for (var i in this[pu].number) {
-                    // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                    if (this[pu].number[i][2] === "7") {
-                        // (Green or light blue or dark blue or red)
-                        if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
-                            var sum = 0,
-                                a;
-                            for (var j = 0; j < 10; j++) {
-                                if (this[pu].number[i][0][j] === 1) {
-                                    sum += 1;
-                                    a = j + 1;
+                    if (this["pu_q"].number[i] && this["pu_q"].number[i][1] === 1 && (this["pu_q"].number[i][2] === "1" || this["pu_q"].number[i][2] === "10")) {
+                        // (Black) and (Normal or L) in Problem mode then ignore
+                    } else {
+                        // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                        if (this[pu].number[i][2] === "7") {
+                            // (Green or light blue or dark blue or red)
+                            if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                                var sum = 0,
+                                    a;
+                                for (var j = 0; j < 10; j++) {
+                                    if (this[pu].number[i][0][j] === 1) {
+                                        sum += 1;
+                                        a = j + 1;
+                                    }
+                                }
+                                if (sum === 1) {
+                                    sol[4].push(i + "," + a);
                                 }
                             }
-                            if (sum === 1) {
-                                sol[4].push(i + "," + a);
+                        } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                            // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                sol[4].push(i + "," + this[pu].number[i][0]);
                             }
-                        }
-                    } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                            sol[4].push(i + "," + this[pu].number[i][0]);
                         }
                     }
                 }
@@ -3580,9 +3592,13 @@ class Puzzle {
                     switch (sol_id) {
                         case "surface":
                             for (var i in this[pu].surface) {
-                                // 1 is DG, 8 is GR, 3 is LG, 4 is BL
-                                if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
-                                    temp_sol.push(i);
+                                if (this["pu_q"].surface[i]) {
+                                    // ignore the shading if already in problem mode
+                                } else {
+                                    // 1 is DG, 8 is GR, 3 is LG, 4 is BL
+                                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
+                                        temp_sol.push(i);
+                                    }
                                 }
                             }
                             temp_sol.sort();
@@ -3590,26 +3606,30 @@ class Puzzle {
                             break;
                         case "number":
                             for (var i in this[pu].number) {
-                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                                if (this[pu].number[i][2] === "7") {
-                                    // (Green or light blue or dark blue or red)
-                                    if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
-                                        var sum = 0,
-                                            a;
-                                        for (var j = 0; j < 10; j++) {
-                                            if (this[pu].number[i][0][j] === 1) {
-                                                sum += 1;
-                                                a = j + 1;
+                                if (this["pu_q"].number[i] && this["pu_q"].number[i][1] === 1 && (this["pu_q"].number[i][2] === "1" || this["pu_q"].number[i][2] === "10")) {
+                                    // (Black) and (Normal or L) in Problem mode then ignore
+                                } else {
+                                    // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                    if (this[pu].number[i][2] === "7") {
+                                        // (Green or light blue or dark blue or red)
+                                        if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                                            var sum = 0,
+                                                a;
+                                            for (var j = 0; j < 10; j++) {
+                                                if (this[pu].number[i][0][j] === 1) {
+                                                    sum += 1;
+                                                    a = j + 1;
+                                                }
+                                            }
+                                            if (sum === 1) {
+                                                temp_sol.push(i + "," + a);
                                             }
                                         }
-                                        if (sum === 1) {
-                                            temp_sol.push(i + "," + a);
+                                    } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                            temp_sol.push(i + "," + this[pu].number[i][0]);
                                         }
-                                    }
-                                } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                                        temp_sol.push(i + "," + this[pu].number[i][0]);
                                     }
                                 }
                             }
@@ -5034,7 +5054,10 @@ class Puzzle {
                         }
                     }
                 }
-            } else if (header === "tapa_contest" || header === "tc") {
+            } else if (header === "tapa_contest" ||
+                header === "tc" ||
+                header === "kurotto_contest" ||
+                header === "kc") {
                 // Answer - Shading
                 if (!isEmpty(this.pu_a.surface)) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
@@ -6601,7 +6624,22 @@ class Puzzle {
                     }
                 }
 
-            } else if (header === "testing") {
+            } else if (header === "rassi_sillai_contest" ||
+                header === "rsc") {
+                // Answer - Line Segments
+                let sol = [];
+                for (var i in this.pu_a.line) {
+                    if (this.pu_q.line[i] && this.ignored_line_types[this.pu_q.line[i]]) {
+                        // Ignore the line
+                    } else {
+                        if (this.pu_a.line[i] === 3) {
+                            sol.push(i);
+                        }
+                    }
+                }
+                sol = sol.sort();
+                text = JSON.stringify(sol);
+            } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
                 console.log(this.pu_q_col);
