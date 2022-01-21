@@ -968,7 +968,7 @@ function submit_solution() {
                     '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
                     '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
                     '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
-                    '<br/><div id="swal-text-area-emoji"/>';
+                    '<br/>';
                 Swal.fire({
                     title: 'Solution is correct',
                     html: wrap,
@@ -1029,9 +1029,8 @@ function submit_solution() {
 }
 
 function createEmojiBar() {
-    const divImojiBar = document.getElementById('swal-text-area-emoji');
-    if (!divImojiBar.innerHTML) {
-        const emojiPicker = new EmojiPicker(document.getElementById('swal-feedback-2'), divImojiBar, "100%", "160px");
+    if (document.getElementsByClassName("emoji-picker-button").length === 0) {
+        const emojiPicker = new EmojiPicker('swal-feedback-2', "100%", "160px");
         emojiPicker.show();
     }
 }
