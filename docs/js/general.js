@@ -1104,8 +1104,6 @@ function replay_choice() {
         var undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
         // Live replay only if within time limit and there is timestamp data
-        pu.puzzle_info.seconds = 10;
-
         if ((parseInt(pu.puzzle_info.seconds) <= pu.puzzle_info.replayCutOff) &&
             ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
                 (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
@@ -1116,6 +1114,10 @@ function replay_choice() {
             document.getElementById("replay_forward_btn").style.display = "none";
             document.getElementById("replay_backward_btn").style.display = "none";
             document.getElementById("replay_speed").style.display = "none";
+
+            // Hide play button while its playing
+            document.getElementById("replay_play").style.display = "none";
+            document.getElementById("replay_play_btn").style.display = "none";
 
             // Enable timer for live replay
             document.getElementById("timer").style.display = "";
@@ -1240,6 +1242,9 @@ function replay_play() {
 function replay_pause() {
     if (document.getElementById("replay_choice").value == "2") {
         pu.live_replay = [];
+        // Show play button while its paused
+        document.getElementById("replay_play").style.display = "";
+        document.getElementById("replay_play_btn").style.display = "";
         sw_timer.pause();
     } else {
         clearInterval(pu.replay_timer);
@@ -1249,6 +1254,9 @@ function replay_pause() {
 function replay_reset() {
     if (document.getElementById("replay_choice").value == "2") {
         pu.live_replay = [];
+        // Show play button after reset
+        document.getElementById("replay_play").style.display = "";
+        document.getElementById("replay_play_btn").style.display = "";
     } else {
         clearInterval(pu.replay_timer);
     }
