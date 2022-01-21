@@ -1038,7 +1038,7 @@ function createEmojiBar() {
 
 function submit_solution_steps() {
     // convert undo to redo
-    while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+    while (pu["pu_a"]["command_undo"].__a.length !== 0) {
         pu.undo(true);
     }
 
@@ -1064,7 +1064,7 @@ function submit_solution_steps() {
     fetch(request);
 
     // restore undo
-    while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+    while (pu["pu_a"]["command_redo"].__a.length !== 0) {
         pu.redo(true);
     }
 }
@@ -1090,37 +1090,181 @@ function submit_ratings_feedback(ratings, message) {
     fetch(request);
 }
 
-function replay_play() {
-    let speed_factor = parseFloat(document.getElementById("replay_speed").value);
-    pu.replay_timer = setInterval(() => {
-        if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-            pu.redo();
-        } else {
+function replay_choice() {
+    if (document.getElementById("replay_choice").value == "2") {
+
+        if (typeof pu.replay_timer != "undefined") {
             clearInterval(pu.replay_timer);
         }
-    }, 500 * (1 / speed_factor));
 
-    if (pu.replay_timer !== pu.temp_timer) {
-        clearInterval(pu.temp_timer);
+        // flag to check if its first click in progress
+        pu.first_click = true;
+
+        var redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
+        var undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
+
+        // Live replay only if within time limit and there is timestamp data
+        pu.puzzle_info.seconds = 10;
+
+        if ((parseInt(pu.puzzle_info.seconds) <= pu.puzzle_info.replayCutOff) &&
+            ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
+                (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
+
+            // hide forward, backward and speed buttons
+            document.getElementById("replay_forward").style.display = "none";
+            document.getElementById("replay_backward").style.display = "none";
+            document.getElementById("replay_forward_btn").style.display = "none";
+            document.getElementById("replay_backward_btn").style.display = "none";
+            document.getElementById("replay_speed").style.display = "none";
+
+            // Enable timer for live replay
+            document.getElementById("timer").style.display = "";
+
+            if (sw_timer.isPaused()) {
+                sw_timer.start({
+                    precision: 'secondTenths',
+                });
+            } else {
+                sw_timer.reset();
+                sw_timer.start({
+                    precision: 'secondTenths',
+                });
+            }
+
+            pu.live_replay = function() {
+                // If daily puzzles then enable time for first click, not needed for regular contests
+                if (pu.puzzle_info.lmimode === "daily" && undo_len === 0 && pu.first_click) {
+                    // get time-stamp (ts) of next action
+                    let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5];
+
+                    // initiate wait
+                    setTimeout(pu.live_replay, next_ts);
+
+                    // first click is over
+                    pu.first_click = false;
+                } else {
+                    redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
+                    if (redo_len != 0) {
+                        pu.redo();
+                    }
+
+                    // redo is empty when redo_len reaches 1
+                    if (redo_len > 1) {
+                        undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
+
+                        // get time-stamp (ts) of last action
+                        let prev_ts = pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5];
+
+                        // get time-stamp (ts) of next action
+                        let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 2][5];
+
+                        // time difference
+                        let mseconds = next_ts - prev_ts;
+
+                        // initiate wait
+                        setTimeout(pu.live_replay, mseconds);
+                    } else {
+                        // replay has ended and stop the timer
+                        sw_timer.stop();
+                    }
+                }
+            }
+            setTimeout(pu.live_replay, 0);
+        } else {
+            // Disable timer if no live replay
+            document.getElementById("timer").style.display = "none";
+
+            // hide all buttons
+            document.getElementById("replay_play").style.display = "none";
+            document.getElementById("replay_pause").style.display = "none";
+            document.getElementById("replay_forward").style.display = "none";
+            document.getElementById("replay_backward").style.display = "none";
+            document.getElementById("replay_reset").style.display = "none";
+            document.getElementById("replay_play_btn").style.display = "none";
+            document.getElementById("replay_pause_btn").style.display = "none";
+            document.getElementById("replay_forward_btn").style.display = "none";
+            document.getElementById("replay_backward_btn").style.display = "none";
+            document.getElementById("replay_reset_btn").style.display = "none";
+            document.getElementById("replay_speed").style.display = "none";
+
+            // Display message - Live replay not available for this solve.
+            document.getElementById("replay_message").style.display = "";
+            document.getElementById("replay_message").innerHTML = "Live Replay N/A"
+        }
+    } else if (document.getElementById("replay_choice").value == "1") {
+        // reset live_replay function
+        pu.live_replay = [];
+
+        // Disable timer if no live replay
+        sw_timer.reset();
+        document.getElementById("timer").style.display = "none";
+
+        // show all buttons
+        document.getElementById("replay_play").style.display = "";
+        document.getElementById("replay_pause").style.display = "";
+        document.getElementById("replay_forward").style.display = "";
+        document.getElementById("replay_backward").style.display = "";
+        document.getElementById("replay_reset").style.display = "";
+        document.getElementById("replay_play_btn").style.display = "";
+        document.getElementById("replay_pause_btn").style.display = "";
+        document.getElementById("replay_forward_btn").style.display = "";
+        document.getElementById("replay_backward_btn").style.display = "";
+        document.getElementById("replay_reset_btn").style.display = "";
+        document.getElementById("replay_speed").style.display = "";
+
+        // hide the message
+        document.getElementById("replay_message").style.display = "none";
     }
-    pu.temp_timer = pu.replay_timer;
+}
+
+function replay_play() {
+    if (document.getElementById("replay_choice").value == "2") {
+        replay_choice();
+    } else {
+        let speed_factor = parseFloat(document.getElementById("replay_speed").value);
+        pu.replay_timer = setInterval(() => {
+            if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+                pu.redo();
+            } else {
+                clearInterval(pu.replay_timer);
+            }
+        }, 500 * (1 / speed_factor));
+
+        if (pu.replay_timer !== pu.temp_timer) {
+            clearInterval(pu.temp_timer);
+        }
+        pu.temp_timer = pu.replay_timer;
+    }
 }
 
 function replay_pause() {
-    clearInterval(pu.replay_timer);
+    if (document.getElementById("replay_choice").value == "2") {
+        pu.live_replay = [];
+        sw_timer.pause();
+    } else {
+        clearInterval(pu.replay_timer);
+    }
 }
 
 function replay_reset() {
-    clearInterval(pu.replay_timer);
+    if (document.getElementById("replay_choice").value == "2") {
+        pu.live_replay = [];
+    } else {
+        clearInterval(pu.replay_timer);
+    }
     while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
         pu.undo();
     }
+    pu.first_click = true;
+    sw_timer.reset();
 }
 
 function replay_backward() {
     clearInterval(pu.replay_timer);
     if (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
         pu.undo();
+    } else {
+        pu.first_click = true;
     }
 }
 
@@ -2586,6 +2730,10 @@ function load2(paramArray, type) {
         document.getElementById("buttons").style.display = "none";
 
         let contestinfo = document.getElementById("contestinfo");
+        let contents_choice = `<select name ="replay_choice" id ="replay_choice" class="replay">` +
+            `<option value=1 selected="selected">Solve Path</option>` +
+            `<option value=2>Live Replay</option>` +
+            `</select>`;
         let contents_play = `<div><button id="replay_play_btn" class="replay"><i id="replay_play" class="fa fa-play replay""></i></button>`;
         let contents_pause = `<button id="replay_pause_btn" class="replay"><i id="replay_pause" class="fa fa-pause replay""></i></button>`;
         let contents_reset = `<button id="replay_reset_btn" class="replay"><i id="replay_reset" class="fa fa-refresh replay""></i></button>`;
@@ -2599,14 +2747,20 @@ function load2(paramArray, type) {
             `<option value=2.5>2.5x</option>` +
             `<option value=3>3x</option>` +
             `<option value=5>5x</option>` +
-            `</select></div>`;
+            `<option value=10>10x</option>` +
+            `</select>`;
+        let contents_message = `<label id="replay_message" class="replay" style="display: none;"></label></div>`;
 
         // still need to define speed option
-        contestinfo.innerHTML = contents_play + contents_pause + contents_backward + contents_forward + contents_reset + contents_speed;
+        contestinfo.innerHTML = contents_choice + contents_play + contents_pause + contents_backward + contents_forward + contents_reset + contents_speed + contents_message;
         contestinfo.style.display = "block";
 
         document.getElementById("replay_speed").onchange = function() {
             replay_play();
+        }
+
+        document.getElementById("replay_choice").onchange = function() {
+            replay_choice();
         }
     }
     if (parent && parent.resizeiframe) {

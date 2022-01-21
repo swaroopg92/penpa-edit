@@ -1,4 +1,5 @@
 flowcharts/
+notes/
 videos/
 old_images/
 temp/
@@ -16,4 +17,3 @@ docs/css/images/parch.psd
 .vscode/
 jsconfig.json
 node_modules/
-test/

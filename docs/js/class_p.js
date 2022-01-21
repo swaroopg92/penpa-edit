@@ -6793,7 +6793,12 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    if ((a[0] === "thermo" ||
+                            a[0] === "nobulbthermo" ||
+                            a[0] === "arrows" ||
+                            a[0] === "direction" ||
+                            a[0] === "squareframe" ||
+                            a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
                             if (a_col) {
@@ -6871,7 +6876,7 @@ class Puzzle {
             while (undocounter !== 0) {
                 var a = this.pu_a.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value, a[4]: groupindex (optional)*/
                 var a_col = this.pu_a_col.command_undo.pop();
-                if (a && a[4]) { // if part of group undo
+                if (a && a[4] && a[4] != 0) { // if part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
                     }
@@ -6892,18 +6897,27 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    // counter and timestamp
+                    var a_45 = [],
+                        a_4 = []; // for color array
+                    if (typeof a[4] !== "undefined" && typeof a[5] !== "undefined") {
+                        a_45 = [a[4], a[5]];
+                        a_4 = [a[4]];
+                    } else if (typeof a[4] !== "undefined") {
+                        a_45 = [a[4]];
+                        a_4 = [a[4]];
+                    }
+                    if ((a[0] === "thermo" ||
+                            a[0] === "nobulbthermo" ||
+                            a[0] === "arrows" ||
+                            a[0] === "direction" ||
+                            a[0] === "squareframe" ||
+                            a[0] === "polygon" ||
+                            a[0] === "killercages") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
-                            this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
+                            this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode].concat(a_45));
                             if (a_col) {
-                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"]);
-                            }
-                        }
-                    } else if (a[0] === "killercages" && a[1] === -1) {
-                        if (this[pu_mode][a[0]].length > 0) {
-                            this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode, a[4]]);
-                            if (a_col) {
-                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col", a_col[4]]);
+                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]].pop(), pu_mode + "_col"].concat(a_4));
                             }
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
@@ -6917,39 +6931,26 @@ class Puzzle {
                                 }
                             }
                         }
-                        this.pu_a.command_redo.push([a[0], a[1], a[2], pu_mode]);
+                        this.pu_a.command_redo.push([a[0], a[1], a[2], pu_mode].concat(a_45));
                         if (a_col) {
-                            this.pu_a_col.command_redo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                            this.pu_a_col.command_redo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"].concat(a_4));
                         }
                     } else {
                         if (a[0] === "deletelineE") {
                             pu_mode = "pu_q";
                         }
-                        if (a[4]) {
-                            if (this[pu_mode][a[0]][a[1]]) { //symbol etc
-                                this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode, a[4]]);
-                                if (a_col) {
-                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col", a_col[4]]);
-                                }
-                            } else {
-                                this.pu_a.command_redo.push([a[0], a[1], null, pu_mode, a[4]]);
-                                if (a_col) {
-                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
-                                }
+                        if (this[pu_mode][a[0]][a[1]]) { //symbol etc
+                            this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode].concat(a_45));
+                            if (a_col) {
+                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col"].concat(a_4));
                             }
                         } else {
-                            if (this[pu_mode][a[0]][a[1]]) { //symbol etc
-                                this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]][a[1]], pu_mode]);
-                                if (a_col) {
-                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], this[pu_mode + "_col"][a_col[0]][a_col[1]], pu_mode + "_col"]);
-                                }
-                            } else {
-                                this.pu_a.command_redo.push([a[0], a[1], null, pu_mode]);
-                                if (a_col) {
-                                    this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
-                                }
+                            this.pu_a.command_redo.push([a[0], a[1], null, pu_mode].concat(a_45));
+                            if (a_col) {
+                                this.pu_a_col.command_redo.push([a_col[0], a_col[1], null, pu_mode + "_col"].concat(a_4));
                             }
                         }
+
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
                             if (a_col) {
@@ -7003,7 +7004,12 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
+                    if ((a[0] === "thermo" ||
+                            a[0] === "nobulbthermo" ||
+                            a[0] === "arrows" ||
+                            a[0] === "direction" ||
+                            a[0] === "squareframe" ||
+                            a[0] === "polygon") && a[1] === -1) {
                         this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
@@ -7077,7 +7083,7 @@ class Puzzle {
             while (redocounter !== 0) {
                 var a = this.pu_a.command_redo.pop();
                 var a_col = this.pu_a_col.command_redo.pop();
-                if (a && a[4]) { // if its part of group
+                if (a && a[4] && a[4] != 0) { // if its part of group
                     if (!groupindex) {
                         groupindex = a[4];
                     }
@@ -7098,18 +7104,27 @@ class Puzzle {
                     break;
                 }
                 if (a) {
-                    if ((a[0] === "thermo" || a[0] === "nobulbthermo" || a[0] === "arrows" || a[0] === "direction" || a[0] === "squareframe" || a[0] === "polygon") && a[1] === -1) {
-                        this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
+                    // counter and timestamp
+                    var a_45 = [],
+                        a_4 = []; // for color array
+                    if (typeof a[4] !== "undefined" && typeof a[5] !== "undefined") {
+                        a_45 = [a[4], a[5]];
+                        a_4 = [a[4]];
+                    } else if (typeof a[4] !== "undefined") {
+                        a_45 = [a[4]];
+                        a_4 = [a[4]];
+                    }
+                    if ((a[0] === "thermo" ||
+                            a[0] === "nobulbthermo" ||
+                            a[0] === "arrows" ||
+                            a[0] === "direction" ||
+                            a[0] === "squareframe" ||
+                            a[0] === "polygon" ||
+                            a[0] === "killercages") && a[1] === -1) {
+                        this.pu_a.command_undo.push([a[0], a[1], null, pu_mode].concat(a_45));
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
-                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
-                            this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
-                        }
-                    } else if (a[0] === "killercages" && a[1] === -1) {
-                        this.pu_a.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
-                        this[pu_mode][a[0]].push(a[2]);
-                        if (a_col) {
-                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"].concat(a_4));
                             this[pu_mode + "_col"][a_col[0]].push(a_col[2]);
                         }
                     } else if (a[0] === "move") { //a[0]:move a[1]:point_from a[2]:point_to
@@ -7123,37 +7138,23 @@ class Puzzle {
                                 }
                             }
                         }
-                        this.pu_a.command_undo.push([a[0], a[1], a[2], pu_mode]);
+                        this.pu_a.command_undo.push([a[0], a[1], a[2], pu_mode].concat(a_45));
                         if (a_col) {
-                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"]);
+                            this.pu_a_col.command_undo.push([a_col[0], a_col[1], a_col[2], pu_mode + "_col"].concat(a_4));
                         }
                     } else {
                         if (a[0] === "deletelineE") {
                             pu_mode = "pu_q";
                         }
-                        if (a[4]) {
-                            if (this[pu_mode][a[0]][a[1]]) {
-                                this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode, a[4]]);
-                                if (a_col) {
-                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col", a_col[4]]);
-                                }
-                            } else {
-                                this.pu_a.command_undo.push([a[0], a[1], null, pu_mode, a[4]]);
-                                if (a_col) {
-                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col", a_col[4]]);
-                                }
+                        if (this[pu_mode][a[0]][a[1]]) {
+                            this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode].concat(a_45));
+                            if (a_col) {
+                                this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col"].concat(a_4));
                             }
                         } else {
-                            if (this[pu_mode][a[0]][a[1]]) {
-                                this.pu_a.command_undo.push([a[0], a[1], JSON.stringify(this[pu_mode][a[0]][a[1]]), pu_mode]);
-                                if (a_col) {
-                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], JSON.stringify(this[pu_mode + "_col"][a_col[0]][a_col[1]]), pu_mode + "_col"]);
-                                }
-                            } else {
-                                this.pu_a.command_undo.push([a[0], a[1], null, pu_mode]);
-                                if (a_col) {
-                                    this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"]);
-                                }
+                            this.pu_a.command_undo.push([a[0], a[1], null, pu_mode].concat(a_45));
+                            if (a_col) {
+                                this.pu_a_col.command_undo.push([a_col[0], a_col[1], null, pu_mode + "_col"].concat(a_4));
                             }
                         }
                         if (a[2]) {
@@ -7221,52 +7222,43 @@ class Puzzle {
             this.pu_q.command_redo = new Stack();
             this.pu_q_col.command_redo = new Stack();
         } else {
-            if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
-                this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
-                this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
-            } else if (arr === "killercages" && num === -1) {
-                this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+            // Introducing timestamp for live replay
+            // get time-stamp (ts) of puzzle start
+            let prev_ts = pu.puzzle_info.startTimeUTC;
+
+            // get time-stamp (ts) of next action
+            let next_ts = new Date();
+
+            // time difference
+            let timestamp = new Date(next_ts).getTime() - new Date(prev_ts).getTime(); // in milliseconds
+
+            if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
+                this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
                 this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
             } else if (arr === "move") {
-                this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
-                this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
+                this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa, groupcounter, timestamp]); //num[0]:start_point num[1]:to_point
+                this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col", groupcounter]); //num[0]:start_point num[1]:to_point
             } else if (arr === "deletelineE") {
                 if (this.pu_a[arr][num]) {
-                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q"]); // Array is also recorded in JSON
-                    this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q_col"]); // Array is also recorded in JSON
+                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q", groupcounter, timestamp]); // Array is also recorded in JSON
+                    this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q_col"], groupcounter); // Array is also recorded in JSON
                 } else {
-                    this.pu_a.command_undo.push([arr, num, null, "pu_q"]);
-                    this.pu_a_col.command_undo.push([arr, num, null, "pu_q_col"]);
+                    this.pu_a.command_undo.push([arr, num, null, "pu_q", groupcounter, timestamp]);
+                    this.pu_a_col.command_undo.push([arr, num, null, "pu_q_col", groupcounter]);
                 }
             } else {
                 if (this.pu_a[arr][num]) {
-                    if (groupcounter === 0) {
-                        this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
-                        } else {
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
-                        }
+                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter, timestamp]); // Array is also recorded in JSON
+                    if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
+                        (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
+                            arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
+                        this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     } else {
-                        this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
-                        } else {
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
-                        }
+                        this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     }
                 } else {
-                    if (groupcounter === 0) {
-                        this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
-                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
-                    } else {
-                        this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
-                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
-                    }
+                    this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
+                    this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
                 }
             }
             this.pu_a.command_redo = new Stack();
