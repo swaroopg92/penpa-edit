@@ -1,3 +1,6 @@
+const THEME_LIGHT = 1;
+const THEME_DARK = 2;
+
 function getCookie(name) {
     var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return v ? v[2] : null;
@@ -172,17 +175,20 @@ const UserSettings = {
         return this._tab_settings;
     },
 
-    _color_theme: "square",
+    _color_theme: THEME_LIGHT,
     _theme_urls: {
         1: "./css/light_theme.css",
         2: "./css/dark_theme.css"
     },
     set color_theme(newValue) {
-        newValue = newValue || "square";
-        this._color_theme = newValue;
+        const valueInt = newValue ? parseInt(newValue, 10) : THEME_LIGHT;
+        this._color_theme = valueInt;
 
-        document.getElementById("theme_mode_opt").value = newValue;
-        document.getElementById("color_theme").href = this._theme_urls[newValue];
+        let themeStylesheet = this._theme_urls[valueInt];
+        if (!themeStylesheet) { themeStylesheet = this._theme_urls[THEME_LIGHT]; }
+
+        document.getElementById("theme_mode_opt").value = valueInt;
+        document.getElementById("color_theme").href = themeStylesheet;
         if (window.pu) {
             pu.set_redoundocolor();
             pu.redraw();
@@ -271,6 +277,3 @@ const UserSettings = {
         this._settingsLoaded = true;
     }
 };
-
-const THEME_LIGHT = 1;
-const THEME_DARK = 2;
