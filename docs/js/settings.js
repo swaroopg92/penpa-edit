@@ -137,12 +137,12 @@ const UserSettings = {
         return this._local_storage;
     },
 
-    _reload_button: 1,
+    _reload_button: 2,
     set reload_button(newValue) {
         if (newValue === "ON") { newValue = 1; }
         if (newValue === "OFF") { newValue = 2; }
 
-        const valueInt = newValue ? parseInt(newValue, 10) : 1;
+        const valueInt = newValue ? parseInt(newValue, 10) : 2;
         this._reload_button = valueInt;
 
         document.getElementById("reload_button").value = valueInt;
