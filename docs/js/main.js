@@ -87,7 +87,13 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            if (pu.point[num].use === 1) {
+            let skip_mouseevent = false;
+            pu.puzzle_info = {};
+            pu.puzzle_info["lmimode"] = "daily";
+            if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
+                skip_mouseevent = true;
+            }
+            if (pu.point[num].use === 1 && !skip_mouseevent) {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
@@ -119,9 +125,18 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            pu.mouse_mode = "up";
-            pu.mouse_click = 0;
-            pu.mouseevent(x, y, num);
+            let skip_mouseevent = false;
+            pu.puzzle_info = {};
+            pu.puzzle_info["lmimode"] = "daily";
+            if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
+                skip_mouseevent = true;
+                onOut();
+            }
+            if (!skip_mouseevent) {
+                pu.mouse_mode = "up";
+                pu.mouse_click = 0;
+                pu.mouseevent(x, y, num);
+            }
         }
     }
 
@@ -151,7 +166,14 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            if (pu.point[num].use === 1) {
+            let skip_mouseevent = false;
+            pu.puzzle_info = {};
+            pu.puzzle_info["lmimode"] = "daily";
+            if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
+                skip_mouseevent = true;
+                onOut();
+            }
+            if (pu.point[num].use === 1 && !skip_mouseevent) {
                 pu.mouse_mode = "move";
                 pu.mouseevent(x, y, num);
             }
