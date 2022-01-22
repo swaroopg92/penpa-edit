@@ -174,7 +174,7 @@ class Puzzle {
             12: 1, // Dotted
             13: 1 // Fat dots
         };
-        this.reset_board_flag = false;
+        this.reset_board_clicks = 0;
     }
 
     reset() {
@@ -237,6 +237,9 @@ class Puzzle {
     }
 
     reset_board() {
+        // Set the flag to true
+        this.reset_board_clicks = this.reset_board_clicks + this[this.mode.qa]["command_undo"].__a.length;
+
         this[this.mode.qa] = {};
         this[this.mode.qa].command_redo = new Stack();
         this[this.mode.qa].command_undo = new Stack();
@@ -281,9 +284,6 @@ class Puzzle {
         this[this.mode.qa + "_col"].deletelineE = {};
         this[this.mode.qa + "_col"].killercages = [];
         this[this.mode.qa + "_col"].nobulbthermo = [];
-
-        // Set the flag to true
-        this.reset_board_flag = true;
     }
 
     reset_arr() {
