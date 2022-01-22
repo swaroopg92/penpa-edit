@@ -417,15 +417,15 @@ class Puzzle {
     }
 
     make_frameline() {
-        var gr = 1; //実線
-        var ot = 2; //太線
+        var gr = 1; // Solid line
+        var ot = 2; // Thick line
         if (this.mode.grid[0] === "2") {
-            gr = 11; //点線
+            gr = 11; // Dotted line
         } else if (this.mode.grid[0] === "3") {
-            gr = 0; //線なし
+            gr = 0; // No line
         }
-        if (this.mode.grid[2] === "2") { //枠なし
-            ot = gr; //枠は内部と同じ線
+        if (this.mode.grid[2] === "2") { // No Frame
+            ot = gr; // The line frame is the same line as the inside
         }
         var max, min, key, corner;
         this.frame = {};
@@ -440,6 +440,19 @@ class Puzzle {
                 } else {
                     this.frame[key] = ot;
                 }
+            }
+        }
+        this.cellsoutsideFrame = [];
+        if (this.gridtype === "square" ||
+            this.gridtype === "sudoku" ||
+            this.gridtype === "kakuro") {
+            for (var i = 1; i < this.nx0 - 1; i++) {
+                this.cellsoutsideFrame.push(i + 1 * this.nx0); // first row
+                this.cellsoutsideFrame.push(i + (this.ny0 - 2) * this.nx0); // last row
+            }
+            for (var j = 1; j < this.ny0 - 1; j++) {
+                this.cellsoutsideFrame.push(1 + j * this.nx0); // first column
+                this.cellsoutsideFrame.push(this.nx0 - 2 + j * this.nx0); // last column
             }
         }
     }
