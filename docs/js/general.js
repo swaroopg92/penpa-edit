@@ -2769,6 +2769,7 @@ function load2(paramArray, type) {
             replay_choice();
         }
     }
+
     if (parent && parent.resizeiframe) {
         parent.resizeiframe();
     }
@@ -2781,6 +2782,12 @@ function load2(paramArray, type) {
         document.getElementById("sw_reset").style.display = "";
         document.getElementById("sw_stop").style.display = "";
         document.getElementById("sw_hide").style.display = "";
+
+        // Enable undo redo after solver is done or contest is over.
+        pu.undoredo_disable = false;
+        document.getElementById("tb_undo").style.display = "";
+        document.getElementById("tb_redo").style.display = "";
+        document.getElementById("tb_reset").style.display = "";
     }
 }
 
