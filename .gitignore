@@ -4,6 +4,7 @@ old_images/
 temp/
 tmp/
 .DS_Store
+notes/
 
 *.log
 
@@ -16,3 +17,4 @@ docs/css/images/logo.png
 # Visual Studio Code
 .vscode/
 jsconfig.json
+node_modules/

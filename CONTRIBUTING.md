@@ -33,7 +33,7 @@ enhancements are being done.
 	* If you would like to add more style options then you can do so, but please remember that adding lot of options might just lead to more confusion, so unless its absolutely necessary, I would recommend to avoid such small changes.
 	* I use https://packagecontrol.io/packages/HTML-CSS-JS%20Prettify to keep the code clean and structured. You don't necessarily need to use this package but follow similar clean structure as rest of the code.
 	* Add useful comments to your code wherever necessary for easier understanding.
-* Unfortunately there are no test scripts written, so you might have to manually test that other features are not broken because of your changes. Some sample testing links have been provided in TESTING.md file.
+* Tests are a WIP. For further details, read test/README.md. In the meantime, some sample testing links have been provided in TESTING.md file.
 * Make use of developer tools (e.g. https://developers.google.com/web/tools/chrome-devtools), it allows you to test your changes not only on the desktop version, but also on the mobile version.
 * If you want to see live effect of your changes in the files, you can use the following handy tool - https://www.browsersync.io/
 * Finally send a Pull Request of your branch to integrate to **dev** branch (see below for the details).
