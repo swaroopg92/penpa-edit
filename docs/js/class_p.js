@@ -9815,7 +9815,7 @@ class Puzzle {
             }
             this.last = num;
             this.redraw();
-        } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
+        } else if ((this.point[num].type === 2 || this.point[num].type === 3) && (this.ondown_key === "mousedown")) {
             if (this.drawing_mode == 52) {
                 if (!this[this.mode.qa].line[num]) { // Insert cross
                     this.record("line", num);
@@ -9988,7 +9988,7 @@ class Puzzle {
             }
             this.last = num;
             this.redraw();
-        } else if ((this.point[num].type === 2 || this.point[num].type === 3)) {
+        } else if ((this.point[num].type === 2 || this.point[num].type === 3) && (this.ondown_key === "mousedown")) {
             if (this.gridtype === "square") {
                 // Ignore if edge already exist
                 // Do this only for square grids for now
