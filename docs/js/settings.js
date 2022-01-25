@@ -37,11 +37,11 @@ const UserSettings = {
         if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
             document.getElementById("mode_break").style.display = "inline";
             document.getElementById("mode_txt_space").style.display = "inline";
-            document.getElementById("visibility_break").style.display = "none";
+            // document.getElementById("visibility_break").style.display = "none";
         } else if (modeInt > 1 && window.innerWidth >= 850) {
             document.getElementById("mode_break").style.display = "none";
             document.getElementById("mode_txt_space").style.display = "none";
-            document.getElementById("visibility_break").style.display = "inline";
+            // document.getElementById("visibility_break").style.display = "inline";
         }
 
         // Handle Cookie dynamically (This is to allow Solver Mode also save this setting)

@@ -8,6 +8,8 @@
 	* Improvements to solution checker for number mode, edge mode and shading mode.
 	* Initiated outside border cells array.
 	* Disabled continuous stretch of crosses using composite modes for mobile/ipad.
+	* Put back the draw on edge/corners option to main screen.
+	* Improved Panel display with a Closing button in top right.
 * 2021/12/31 ver 2.26.14
 	* More puzz.link support
 * 2021/12/19 ver 2.26.13

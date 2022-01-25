@@ -822,7 +822,10 @@ function panel_onoff() {
 }
 
 function edge_onoff() {
-    if (document.getElementById('edge_button').value === "2") {
+    if (document.getElementById('edge_button').textContent === "OFF") {
+        document.getElementById('edge_button').textContent = "ON";
+    } else {
+        document.getElementById('edge_button').textContent = "OFF";
         pu.cursol = pu.centerlist[0];
     }
     pu.type = pu.type_set();
@@ -1548,9 +1551,9 @@ function load(urlParam, type = 'url') {
 
     // Border button status
     if (rtext_para[19]) {
-        // to address old versions where the stored value was ON and OFF
+        // to address mixed versions where the stored value was ON and OFF/ "1" and "2"
         if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
-            document.getElementById('edge_button').value = "1";
+            document.getElementById('edge_button').textContent = "ON";
         }
     }
 
