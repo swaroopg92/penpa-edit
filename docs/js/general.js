@@ -25,10 +25,10 @@ function boot_parameters() {
 }
 
 function create() {
-    UserSettings.loadFromCookies();
+    UserSettings.loadFromCookies("gridtype_size");
 
     gridtype = UserSettings.gridtype;
-    
+
     pu = make_class(gridtype);
     pu.reset_frame();
 
@@ -36,6 +36,8 @@ function create() {
     panel_pu = new Panel();
     panel_pu.draw_panel();
     pu.mode_set("surface"); //include redraw
+
+    UserSettings.loadFromCookies("others");
 
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
@@ -811,10 +813,10 @@ function panel_onoff() {
         let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
         let mode_loc = penpa_modes["square"]["mode"].indexOf(pu.mode[pu.mode.qa].edit_mode);
         document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
-        document.getElementById('toggle_panel_visibility').style.opacity = .3;
+        // document.getElementById('toggle_panel_visibility').style.opacity = .3;
     } else {
         document.getElementById('float-key').style.display = "none";
-        document.getElementById('toggle_panel_visibility').style.opacity = 1;
+        // document.getElementById('toggle_panel_visibility').style.opacity = 1;
     }
     pu.redraw();
 }
@@ -838,21 +840,20 @@ function solutionvisible_onoff() {
 
 function can_use_lite() {
     let user_choices = getValues('mode_choices');
-    return user_choices.length > 0;
+    return (user_choices.length > 0 || UserSettings.tab_settings.length > 0);
 }
 
-let advanceSettingDropdown = document.getElementById('advance_button');
-
 function advancecontrol_toggle() {
-    let isLite = String(advanceSettingDropdown.value) === "2";
-    advanceSettingDropdown.value = isLite ? "1" : "2";
-    advancecontrol_onoff();
+    let currentState = document.getElementById('tab-dropdown-lite-btn').innerText;
+    if (currentState === "Disable Penpa Lite") {
+        advancecontrol_onoff("off");
+    } else {
+        advancecontrol_onoff();
+    }
 }
 
 function advancecontrol_onoff(loadtype = "new") {
-    loadtype = typeof loadtype === 'string' ? loadtype : "new";
-
-    if (advanceSettingDropdown.value === "2") {
+    if (!can_use_lite() || loadtype === "off") {
         // Lite Version OFF, Display all the modes
         // Display the mode break line again
         document.getElementById("mode_break").style.display = "inline";
@@ -860,27 +861,21 @@ function advancecontrol_onoff(loadtype = "new") {
         advancecontrol_on();
     } else {
         // Lite Version ON, so turn off extra modes
-        if (loadtype === "url" || can_use_lite()) {
-            // Remove the mode break line again
-            document.getElementById("mode_break").style.display = "none";
-            document.getElementById("mode_txt_space").style.display = "none";
-            advancecontrol_off(loadtype);
-        } else {
-            advanceSettingDropdown.value = "2";
-            Swal.fire({
-                title: 'Advance/Basic Mode',
-                html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Set "PenpaLite" setting to turn "ON"</h2>',
-                icon: 'info'
-            });
-        }
+        // Remove the mode break line again
+        document.getElementById("mode_break").style.display = "none";
+        document.getElementById("mode_txt_space").style.display = "none";
+        advancecontrol_off(loadtype);
     }
 }
 
 function advancecontrol_off(loadtype) {
     // Check for this only for first time when loading url
-    let user_choices = (loadtype === "url") ? this.usertab_choices : getValues('mode_choices');
-    document.getElementById('tab-dropdown-lite-btn').innerText = "Disable Penpa Lite";
-    
+    var user_choices = (loadtype === "url") ? UserSettings.tab_settings : getValues('mode_choices');
+
+    if (document.getElementById('tab-dropdown-lite-btn')) {
+        document.getElementById('tab-dropdown-lite-btn').innerText = "Disable Penpa Lite";
+    }
+
     if (user_choices.indexOf("Surface") === -1) {
         document.getElementById("mo_surface_lb").style.display = "none";
     }
@@ -951,8 +946,9 @@ function advancecontrol_off(loadtype) {
 }
 
 function advancecontrol_on() {
-    document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
-    
+    if (document.getElementById('tab-dropdown-lite-btn')) {
+        document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
+    }
     pu.erase_buttons();
 
     // Set the solve mode
@@ -1453,8 +1449,8 @@ function import_url() {
             urlstring = urlstring.split("/penpa-edit/?")[1];
             load(urlstring, 'local');
             document.getElementById("modal-load").style.display = 'none';
-            if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
-                selectBox.setValue(JSON.parse(this.usertab_choices));
+            if (UserSettings.tab_settings > 0) {
+                selectBox.setValue(UserSettings.tab_settings);
             }
         } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p?") !== -1) {
             decode_puzzlink(urlstring);
@@ -1540,8 +1536,9 @@ function load(urlParam, type = 'url') {
     }
 
     make_class(rtext_para[0], 'url');
+    panel_pu = new Panel();
 
-    UserSettings.loadFromCookies();
+    UserSettings.loadFromCookies("others");
 
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
@@ -1580,8 +1577,6 @@ function load(urlParam, type = 'url') {
     pu.center_n = parseInt(rtext_para[9]);
     pu.center_n0 = parseInt(rtext_para[10]);
 
-    panel_pu = new Panel();
-
     for (var i = 0; i < pu.replace.length; i++) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
@@ -1610,13 +1605,13 @@ function load(urlParam, type = 'url') {
 
     // Tab settings
     if (typeof rtext[6] !== 'undefined') {
-        this.usertab_choices = rtext[6];
+        UserSettings.tab_settings = JSON.parse(rtext[6]);
 
         // Advance Control Setting
         // Do this only for latest version 2.25.17 and above
         // if (pu.version[0] >= 2 && pu.version[1] >= 25 && pu.version[2] >= 17) {
-        if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
-            document.getElementById('advance_button').value = "1";
+        if (UserSettings.tab_settings.length > 0) {
+            // document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
         }
         // }
@@ -2529,7 +2524,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("number");
-            this.usertab_choices = ["Surface", "Number Normal", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
             break;
         case "onsen":
             // Setup board
@@ -2549,7 +2544,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);
@@ -2579,7 +2574,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Sudoku Normal"];
             break;
         case "starbattle":
             // starbattle is different than most
@@ -2607,7 +2602,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode("star");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "building": // skyscrapers alias
         case "skyscrapers":
@@ -2626,7 +2621,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Sudoku Normal"];
             break;
         case "shakashaka":
         case "akari":
@@ -2653,7 +2648,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode(type === 'shakashaka' ? 'shaka' : 'akari');
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "kakuro":
             // Decode URL
@@ -2716,7 +2711,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Sudoku Normal"];
             break;
         case "aqre":
         case "ayeheya":
@@ -2738,7 +2733,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("surface"); //include redraw
-            this.usertab_choices = ["Surface"];
+            UserSettings.tab_settings = ["Surface"];
             break;
         case "kurochute":
         case "kurodoko":
@@ -2764,7 +2759,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo"); // Black square and Point
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "slitherlink":
         case "slither": // slitherlink alias
@@ -2781,7 +2776,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "country":
         case "detour":
@@ -2820,17 +2815,17 @@ function decode_puzzlink(url) {
             if (type === "yajilin-regions") {
                 pu.mode_set("combi");
                 pu.subcombimode("linex");
-                this.usertab_choices = ["Surface", "Composite"];
+                UserSettings.tab_settings = ["Surface", "Composite"];
             } else if (type === "factors" || type === "toichika2") {
                 pu.mode_set("number");
-                this.usertab_choices = ["Surface", "Number Normal"];
+                UserSettings.tab_settings = ["Surface", "Number Normal"];
             } else if (type === "juosan") {
                 pu.mode_set("wall");
-                this.usertab_choices = ["Surface", "Wall"];
+                UserSettings.tab_settings = ["Surface", "Wall"];
             } else {
                 pu.mode_set("combi");
                 pu.subcombimode("lineox");
-                this.usertab_choices = ["Surface", "Composite"];
+                UserSettings.tab_settings = ["Surface", "Composite"];
             }
             break;
         case "moonsun":
@@ -2863,7 +2858,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "haisu":
             pu = new Puzzle_square(cols, rows, size);
@@ -2885,7 +2880,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "balance":
             pu = new Puzzle_square(cols, rows, size);
@@ -2907,7 +2902,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "midloop":
             pu = new Puzzle_square(cols, rows, size);
@@ -2920,7 +2915,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "castle":
         case "yajikazu":
@@ -3017,11 +3012,11 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             if (type === "yajikazu") {
                 pu.mode_set("surface");
-                this.usertab_choices = ["Surface"];
+                UserSettings.tab_settings = ["Surface"];
             } else {
                 pu.mode_set("combi");
                 pu.subcombimode("linex");
-                this.usertab_choices = ["Surface", "Composite"];
+                UserSettings.tab_settings = ["Surface", "Composite"];
             }
             break;
         case "tapa":
@@ -3037,7 +3032,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode(type === "tapa" ? "blpo" : "lineox");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "fillomino":
         case "symmarea":
@@ -3053,7 +3048,7 @@ function decode_puzzlink(url) {
 
             pu.mode_qa("pu_a");
             pu.mode_set("number");
-            this.usertab_choices = ["Surface", "Edge Normal", "Number Normal"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Number Normal"];
             break;
         case "araf":
             pu = new Puzzle_square(cols, rows, size);
@@ -3066,7 +3061,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgesub");
-            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
             break;
         case "compass":
             pu = new Puzzle_square(cols, rows, size);
@@ -3079,7 +3074,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgesub");
-            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
             break;
         case "nonogram":
             var max_cols_offset = Math.ceil(cols / 2);
@@ -3149,7 +3144,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "cave":
         case "mochikoro":
@@ -3168,7 +3163,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("surface");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "lits":
         case "norinori":
@@ -3181,7 +3176,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "hashikake":
         case "hashi": // hashikake alias
@@ -3201,7 +3196,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("hashi");
-            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
             break;
         case "pencils":
             pu = new Puzzle_square(cols, rows, size);
@@ -3270,7 +3265,7 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             pu.subsymbolmode("pencils");
             pu.mode_set("lineE");
-            this.usertab_choices = ["Edge Normal", "Shape", "Composite"];
+            UserSettings.tab_settings = ["Edge Normal", "Shape", "Composite"];
             break;
         case "easyasabc":
             // Add whitespace
@@ -3299,7 +3294,7 @@ function decode_puzzlink(url) {
 
             pu.mode_qa("pu_a");
             pu.mode_set("number");
-            this.usertab_choices = ["Surface", "Number Normal"];
+            UserSettings.tab_settings = ["Surface", "Number Normal"];
             break;
         case "tents":
             // Add whitespace
@@ -3326,7 +3321,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("tents");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "snake":
             // Add whitespace
@@ -3357,7 +3352,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "geradeweg":
         case "numlin": // numberlink alias
@@ -3372,7 +3367,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "simpleloop":
             pu = new Puzzle_square(cols, rows, size);
@@ -3393,7 +3388,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         default:
             Swal.fire({
@@ -3406,7 +3401,7 @@ function decode_puzzlink(url) {
     }
 
     // Set PenpaLite
-    document.getElementById('advance_button').value = "1";
+    // document.getElementById('advance_button').value = "1";
     document.getElementById("mode_break").style.display = "none";
     document.getElementById("mode_txt_space").style.display = "none";
     advancecontrol_off("url");
@@ -3417,7 +3412,7 @@ function decode_puzzlink(url) {
             continue;
         }
 
-        if (this.usertab_choices.includes(child.dataset.value)) {
+        if (UserSettings.tab_settings.includes(child.dataset.value)) {
             if (!child.classList.contains('active')) {
                 child.click();
             }

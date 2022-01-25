@@ -1,6 +1,13 @@
 ## History
-* 2022/????? ver 2.26.15
-	* Made Penpa Lite mode easier to enable from Tab settings.
+* 2022/01/25 ver 2.26.15
+	* Refactor all the user settings into settings class.
+	* Penpa lite button now directly available under tab settings.
+	* Changed git to tinyurl for the url shortener.
+	* Increased grid size limit to 65.
+	* Added new new year message.
+	* Improvements to solution checker for number mode, edge mode and shading mode.
+	* Initiated outside border cells array.
+	* Disabled continuous stretch of crosses using composite modes for mobile/ipad.
 * 2021/12/31 ver 2.26.14
 	* More puzz.link support
 * 2021/12/19 ver 2.26.13

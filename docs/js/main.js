@@ -1884,10 +1884,10 @@ onload = function() {
         var option = document.createElement("option");
         option.value = modes[i];
         option.text = modes_text[i];
-        if (this.usertab_choices) {
+        if (UserSettings.tab_settings) {
 
             // Load the author defined tab settings if any
-            if (this.usertab_choices.indexOf(modes[i]) > -1) {
+            if (UserSettings.tab_settings.indexOf(modes[i]) > -1) {
                 option.setAttribute("selected", true);
             }
         }
@@ -1905,11 +1905,19 @@ onload = function() {
     let liteModeButton = document.createElement('button');
     liteModeButton.id = "tab-dropdown-lite-btn";
     liteModeButton.disabled = true;
-    liteModeButton.innerText = 'Enable Penpa Lite';
+    let tab_initial = getValues('mode_choices');
+    if (tab_initial.length > 0) {
+        liteModeButton.innerText = 'Disable Penpa Lite';
+        liteModeButton.disabled = false;
+    } else {
+        liteModeButton.innerText = 'Enable Penpa Lite';
+        liteModeButton.disabled = true;
+    }
     liteModeButton.addEventListener('click', advancecontrol_toggle);
     selectContainer.appendChild(liteModeButton);
 
     window.addEventListener('beforeunload', function(e) {
+        console.log(UserSettings.reload_button);
         if (UserSettings.reload_button === 1) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -1921,9 +1929,7 @@ onload = function() {
         let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting !== "2" &&
-            local_storage_setting !== "3" &&
-            local_storage_setting !== "4") {
+            local_storage_setting === "1") {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
             let pu_sub = {
@@ -1971,7 +1977,7 @@ onload = function() {
     document.getElementById("save_settings_opt").onchange = function() {
         UserSettings.save_settings = this.value;
     }
-    
+
     // Save Setting
     document.getElementById("mousemiddle_settings_opt").onchange = function() {
         UserSettings.mousemiddle_button = this.value;
@@ -1987,6 +1993,10 @@ onload = function() {
 
     document.getElementById("sudoku_settings_opt").onchange = function() {
         UserSettings.sudoku_centre_size = this.value;
+    }
+
+    document.getElementById("reload_button").onchange = function() {
+        UserSettings.reload_button = this.value;
     }
 
     document.getElementById("clear_storage_opt").onchange = function() {
@@ -2089,29 +2099,22 @@ onload = function() {
         pu.redraw();
     }
 
-    let advanceSettingDropdown = document.getElementById('advance_button');
-
-    document.getElementById("mode_choices").onchange = function () {
+    document.getElementById("mode_choices").onchange = function() {
         UserSettings.tab_settings = getValues('mode_choices');
 
         if (can_use_lite()) {
-            advanceSettingDropdown.disabled = false;
             liteModeButton.disabled = false;
-            
+
             // Dynamically updating the display of modes based on tab setting changes
-            if (advanceSettingDropdown.value === "1") {
+            if (liteModeButton.innerText === "Disable Penpa Lite") {
                 advancecontrol_on(); // First display back everything
                 advancecontrol_off("new"); // apply new choices for penpa lite
             }
         } else {
             // Dynamically updating the display of modes based on tab setting changes
-            if (advanceSettingDropdown.value === "1") {
-                advanceSettingDropdown.value = "2";
-                liteModeButton.innerText = "Enable Penpa Lite";
-                advancecontrol_on();
-            }
+            liteModeButton.innerText = "Enable Penpa Lite";
+            advancecontrol_on();
 
-            advanceSettingDropdown.disabled = true;
             liteModeButton.disabled = true;
         }
     }
@@ -2125,9 +2128,6 @@ onload = function() {
     document.getElementById("edge_button").onchange = function() {
         edge_onoff();
     }
-
-    // PenpaLite Setting
-    advanceSettingDropdown.onchange = advancecontrol_onoff;
 
     // Timer Bar Setting
     document.getElementById("timer_bar_opt").onchange = function() {
