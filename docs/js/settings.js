@@ -168,7 +168,6 @@ const UserSettings = {
     set tab_settings(newValue) {
         newValue = newValue || [];
         this._tab_settings = newValue;
-
         this.attemptSave();
     },
     get tab_settings() {
@@ -201,9 +200,26 @@ const UserSettings = {
 
     _displaysize: 38,
     set displaysize(newValue) {
-        const valueInt = newValue ? parseInt(newValue, 10) : 38;
-        if (valueInt > 90) { valueInt = 90; }
-        if (valueInt < 12) { valueInt = 12; }
+        var valueInt = newValue ? parseInt(newValue, 10) : 38;
+
+        if (valueInt > 90) {
+            valueInt = 90;
+            Swal.fire({
+                title: 'Swaroop says:',
+                html: 'Display Size must be in the range <h2 class="warn">12-90</h2> It is set to max value.',
+                icon: 'info',
+                confirmButtonText: 'ok 🙂',
+            })
+        }
+        if (valueInt < 12) {
+            valueInt = 12;
+            Swal.fire({
+                title: 'Swaroop says:',
+                html: 'Display Size must be in the range <h2 class="warn">12-90</h2> It is set to min value.',
+                icon: 'info',
+                confirmButtonText: 'ok 🙂',
+            })
+        }
 
         this._displaysize = valueInt;
 
@@ -231,20 +247,20 @@ const UserSettings = {
     ],
 
     // Handle saving settings if needed
-    attemptSave: function () {
+    attemptSave: function() {
         if (!this._settingsLoaded) {
             return;
         }
 
         if (this._save_settings) {
             let expDate = 2147483647;
-            this.can_save.forEach(function (setting) {
+            this.can_save.forEach(function(setting) {
                 setCookie(setting, UserSettings[setting], expDate);
             });
             setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), expDate);
             // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, expDate);
         } else {
-            this.can_save.forEach(function (setting) {
+            this.can_save.forEach(function(setting) {
                 deleteCookie(setting);
             });
             deleteCookie('tab_settings');
@@ -253,9 +269,9 @@ const UserSettings = {
     },
 
     _settingsLoaded: false,
-    loadFromCookies: function () {
+    loadFromCookies: function() {
         let foundCookie;
-        this.can_save.forEach(function (setting) {
+        this.can_save.forEach(function(setting) {
             let cookieQuery = getCookie(setting);
             UserSettings[setting] = cookieQuery;
             foundCookie = foundCookie || cookieQuery;
