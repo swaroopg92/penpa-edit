@@ -48,7 +48,7 @@ const UserSettings = {
         if (modeInt === 1) {
             deleteCookie('responsive_mode');
         } else {
-            setCookie('responsive_mode', valueInt, this._expDate);
+            setCookie('responsive_mode', modeInt, this._expDate);
         }
     },
     get responsive_mode() {
