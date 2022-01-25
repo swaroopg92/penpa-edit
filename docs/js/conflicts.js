@@ -9,6 +9,8 @@ class Conflicts {
         this.permit_number_colors = new Set([2, 8, 9, 10]);
         // Fow now only check large numbers for conflicts.
         this.permit_number_size = new Set(["1"]);
+        // Cache for more stable (question) data
+        this.stable_cache = [];
     }
 
     reset() {
@@ -240,6 +242,74 @@ class Conflicts {
         }
     }
 
+    // Check TomTom puzzle
+    check_tomtom() {
+        const data = this.get_data('number_grid');
+        const regions = this.get_data('region_grid');
+        const clues = this.get_data('tomtom_clues');
+        const n = data.length;
+        if (!n || data[0].length !== n ||
+            regions.length !== n || regions[0].length !== n) {
+            // Empty or not square or regions don't match numbers
+            return;
+        }
+
+        // Check latin square first and return early if there are conflicts.
+        this.check_latin_square();
+        if (this.has_conflicts()) return;
+
+        // Check bounds on numbers.
+        for (let y = 0; y < n; y++) {
+            for (let x = 0; x < n; x++) {
+                const entry = data[y][x];
+                if (typeof entry === 'undefined') continue;
+                if (entry < 1 || entry > n) {
+                    this.add_conflict(x, y);
+                }
+            }
+        }
+        if (this.has_conflicts()) return;
+
+        const region_entries = new Array(regions.number_of_regions);
+        for (let i = 0; i < regions.number_of_regions; i++) {
+            region_entries[i] = [];
+        }
+        const region_full = new Array(regions.number_of_regions).fill(true);
+        for (let y = 0; y < n; y++) {
+            for (let x = 0; x < n; x++) {
+                const region = regions[y][x];
+                const entry = data[y][x];
+                if (typeof entry === 'undefined') {
+                    region_full[region] = false;
+                    continue;
+                }
+                region_entries[region].push(entry);
+            }
+        }
+        for (let i = 0; i < regions.number_of_regions; i++) {
+            const clue = clues[i].clue;
+            const op = clues[i].op;
+            if (!region_full[i] || typeof clue === 'undefined') {
+                // Only check regions that are full and have a clue.
+                continue;
+            }
+            const entries = region_entries[i];
+            let conflict = false;
+            if (typeof op !== 'undefined') {
+                conflict = op(entries) !== clue;
+            } else {
+                // Try all the operations.
+                conflict = this.tomtom_plus(entries) !== clue &&
+                           this.tomtom_minus(entries) !== clue &&
+                           this.tomtom_times(entries) !== clue &&
+                           this.tomtom_divide(entries) !== clue;
+            }
+            if (conflict) {
+                this.add_region_conflict(regions, i);
+            }
+        }
+    }
+
     //========================================================================
     // calculate_* function family:
     // The purpose of these functions is to take the Puzzle instance, read the
@@ -332,6 +402,87 @@ class Conflicts {
         return regions;
     }
 
+    // Calculate top-left small numbers from question data as a grid.
+    calculate_top_left_numbers() {
+        // First calculate the index of type 4 points.
+        const check_string = JSON.stringify(this.pu.pu_q.numberS);
+        const lookup = this.stable_lookup('top_left_numbers', check_string);
+        if (lookup) {
+            // Already have this cached.
+            return lookup;
+        }
+        const point_offset = this.find_first_point_with_type(4);
+        const nx = parseInt(this.pu.nx) - this.pu.space[2] - this.pu.space[3];
+        const ny = parseInt(this.pu.ny) - this.pu.space[0] - this.pu.space[1];
+        const nx0 = parseInt(this.pu.nx0);
+        const corner = 0; // Top-left
+        const data = [];
+        for (let y = 0; y < ny; y++) {
+            const true_y = y + this.pu.space[0] + 2;
+            const row = [];
+            for (let x = 0; x < nx; x++) {
+                const true_x = x + this.pu.space[2] + 2;
+                const index = point_offset + (true_y*nx0 + true_x)*4 + corner;
+                const number = this.pu.pu_q.numberS[index];
+                const entry = number && number[0];
+                row.push(entry);
+            }
+            data.push(row);
+        }
+        this.stable_store('top_left_numbers', check_string);
+        return data;
+    }
+
+    // Calculate the TomTom clues. Returns an array indexed by region number
+    // with objects of the form {clue: number, op: operation}
+    calculate_tomtom_clues() {
+        const regions = this.get_data('region_grid');
+        const top_left_numbers = this.get_data('top_left_numbers');
+        // Borrow the check string for the stable cache from top_left_numbers.
+        const check_string = JSON.stringify(regions) +
+                             JSON.stringify(top_left_numbers);
+        const lookup = this.stable_lookup('tomtom_clues', check_string);
+        if (lookup) {
+            // Already have this cached.
+            return lookup;
+        }
+        const nx = parseInt(this.pu.nx) - this.pu.space[2] - this.pu.space[3];
+        const ny = parseInt(this.pu.ny) - this.pu.space[0] - this.pu.space[1];
+        if (regions.length !== ny || regions[0].length !== nx ||
+                regions.number_of_regions < 1) {
+            return [];
+        }
+        const clues = new Array(regions.number_of_regions).fill({
+            clue: undefined,
+            op: undefined
+        });
+        for (let y = 0; y < ny; y++) {
+            for (let x = 0; x < nx; x++) {
+                const number = top_left_numbers[y][x];
+                const region = regions[y][x];
+
+                if (typeof clues[region].clue !== 'undefined') {
+                    // Already have a clue in this region, ignoring.
+                    continue;
+                } if (typeof number !== 'string') {
+                    continue;
+                }
+
+                const match = number.trim().match(/([0-9]+)([+÷/×*x–−-]?)$/);
+                if (!match) continue; // Didn't understand clue.
+
+                const result = parseInt(match[1]);
+                if (isNaN(result)) continue; // Bad number.
+                clues[region] = {
+                    clue: result,
+                    op: this.tomtom_map_operation(match[2])
+                };
+            }
+        }
+        this.stable_store('tomtom_clues', check_string);
+        return clues;
+    }
+
     //========================================================================
     // Helper functions
     //========================================================================
@@ -371,6 +522,17 @@ class Conflicts {
         this.pu.conflict_cells.push(index);
     }
 
+    // Add conflicts for a region using the region grid and index.
+    add_region_conflict(regions, index) {
+        for (let y = 0; y < regions.length; y++) {
+            for (let x = 0; x < regions[y].length; x++) {
+                if (regions[y][x] === index) {
+                    this.add_conflict(x, y);
+                }
+            }
+        }
+    }
+
     // Return whether there are already conflicts found.
     has_conflicts() {
         return this.pu.conflict_cells.length > 0;
@@ -399,5 +561,93 @@ class Conflicts {
             row.splice(-this.pu.space[3], this.pu.space[3]); // Right
         }
         return grid;
+    }
+
+    // Lookup stable data
+    stable_lookup(key, check_string) {
+        if (this.stable_cache[key] &&
+            this.stable_cache[key].check_string === check_string) {
+            return this.stable_cache[key].data;
+        }
+        // Absent or data string doesn't match, needs to be recalculated
+        return undefined;
+    }
+
+    // Store stable data
+    stable_store(key, check_string, data) {
+        this.stable_cache[key] = {
+            check_string,
+            data
+        };
+    }
+
+    // Find the first point in the puzzle's point array with the given type
+    // The type2 check is optional.
+    // Returns -1 if no point with the given type is found.
+    find_first_point_with_type(type, type2 = undefined) {
+        const points = this.pu.point;
+        for (let i = 0; i < points.length; i++) {
+            if (points[i].type === type &&
+                    (typeof type2 === 'undefined' || points[i].type2 === type2)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Map a TomTom operation character to a calculation function.
+    tomtom_map_operation(char) {
+        switch (char) {
+            case '+':
+                return this.tomtom_plus.bind(this);
+            case '×':
+            case 'x':
+            case '*':
+                return this.tomtom_times.bind(this);
+            case '-':
+            case '–':
+            case '−':
+                return this.tomtom_minus.bind(this);
+            case '÷':
+            case '/':
+                return this.tomtom_divide.bind(this);
+            default:
+                return undefined;
+        }
+    }
+
+    // TomTom calculate plus over region.
+    tomtom_plus(entries) {
+        return entries.reduce(function(a, b) {
+            return a + b;
+        });
+    }
+
+    // TomTom calculate minus over region.
+    tomtom_minus(entries) {
+        const max = this.array_max(entries);
+        const sum = this.tomtom_plus(entries);
+        // Double the maximum value since we'll subtract it as part of the sum.
+        return 2 * max - sum;
+    }
+
+    // TomTom calculate times over region.
+    tomtom_times(entries) {
+        return entries.reduce(function(a, b) {
+            return a * b;
+        });
+    }
+
+    // TomTom calculate divide over region.
+    tomtom_divide(entries) {
+        const max = this.array_max(entries);
+        const product = this.tomtom_times(entries);
+        // Square the maximum value since we'll divide it as part of the product.
+        return max * max / product;
+    }
+
+    // Return the maximum element of an array.
+    array_max(arr) {
+        return Math.max(...arr);
     }
 }

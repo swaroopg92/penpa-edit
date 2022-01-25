@@ -11711,15 +11711,17 @@ class Puzzle {
             this.conflicts.reset();
             const tags = new Set(this.user_tags);
             if (tags.has('consecutive') || tags.has('nonconsecutive')) {
-                this.conflicts.check_sudoku(this);
+                this.conflicts.check_sudoku();
                 // check consecutive only if no classic conflict
                 if (this.conflict_cells.length === 0) {
-                    this.conflicts.check_consecutive(this);
+                    this.conflicts.check_consecutive();
                 }
             } else if (tags.has('classic')) {
-                this.conflicts.check_sudoku(this);
+                this.conflicts.check_sudoku();
             } else if (tags.has('starbattle')) {
-                this.conflicts.check_star_battle(this);
+                this.conflicts.check_star_battle();
+            } else if (tags.has('tomtom')) {
+                this.conflicts.check_tomtom();
             }
             this.previous_sol = current_sol;
             if (this.conflict_cells.length !== 0) {
