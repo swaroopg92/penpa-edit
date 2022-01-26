@@ -1695,6 +1695,10 @@ onload = function() {
                 mdown(e);
                 e.preventDefault();
                 break;
+            case "edge_button":
+                edge_onoff();
+                e.preventDefault();
+                break;
             case "visibility_button":
                 solutionvisible_onoff();
                 e.preventDefault();
