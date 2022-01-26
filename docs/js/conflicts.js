@@ -244,6 +244,15 @@ class Conflicts {
 
     // Check TomTom puzzle
     check_tomtom() {
+        // Check if standard range or else return
+        // Assume that there is a single number in the grid with the range
+        const number_keys = Object.keys(this.pu.pu_q.number);
+        if (number_keys.length !== 1) return;
+        const number_data = this.pu.pu_q.number[number_keys[0]];
+        if (number_data.length !== 3) return;
+        const number_range = number_data[0];
+        if (number_range.includes(",")) return;
+
         const data = this.get_data('number_grid');
         const regions = this.get_data('region_grid');
         const clues = this.get_data('tomtom_clues');

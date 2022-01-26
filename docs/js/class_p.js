@@ -11698,7 +11698,8 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection > 1) {
+        let allowedgrids = ["square", "kakuro", "sudoku"]; // Only supports square type of grids
+        if (UserSettings.conflict_detection > 1 || !allowedgrids.includes(this.gridtype)) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             return;
