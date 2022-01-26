@@ -99,7 +99,7 @@ class Conflicts {
                 for (let k = 0; k < 3; k++) {
                     for (let l = 0; l < 3; l++) {
                         // Convert to 0-based index
-                        const el = data[3*i+k][3*j+l] - 1;
+                        const el = data[3 * i + k][3 * j + l] - 1;
                         if (!(el >= 0 && el < n)) continue;
                         if (cell[el]++) {
                             cell_conflict = true;
@@ -112,7 +112,7 @@ class Conflicts {
                 // We could also consider just marking the affected cells?
                 for (let k = 0; k < 3; k++) {
                     for (let l = 0; l < 3; l++) {
-                        this.add_conflict(3*j+l, 3*i+k);
+                        this.add_conflict(3 * j + l, 3 * i + k);
                     }
                 }
             }
@@ -147,11 +147,11 @@ class Conflicts {
                 if (isNaN(num)) continue;
                 if (x + 1 < data[y].length) {
                     // Check right neighbor
-                    check_neighbors(x, y, index, num, x+1, y);
+                    check_neighbors(x, y, index, num, x + 1, y);
                 }
                 if (y + 1 < data.length) {
                     // Check down neighbor
-                    check_neighbors(x, y, index, num, x, y+1);
+                    check_neighbors(x, y, index, num, x, y + 1);
                 }
             }
         }
@@ -173,8 +173,8 @@ class Conflicts {
         const stars = this.get_data('star_grid');
         const regions = this.get_data('region_grid');
         const n = stars.length;
-        if (!n || stars[0].length !== n || regions.length !== n
-            || regions[0].length !== n || regions.number_of_regions !== n) {
+        if (!n || stars[0].length !== n || regions.length !== n ||
+            regions[0].length !== n || regions.number_of_regions !== n) {
             // Unexpected grid data
             return;
         }
@@ -194,7 +194,7 @@ class Conflicts {
                 if (stars[y][x] === 0) continue;
                 check_neighbor(x, y, x + 1, y); // Right
                 check_neighbor(x, y, x - 1, y + 1); // Lower-left
-                check_neighbor(x, y, x    , y + 1); // Lower
+                check_neighbor(x, y, x, y + 1); // Lower
                 check_neighbor(x, y, x + 1, y + 1); // Lower-right
             }
         }
@@ -300,9 +300,9 @@ class Conflicts {
             } else {
                 // Try all the operations.
                 conflict = this.tomtom_plus(entries) !== clue &&
-                           this.tomtom_minus(entries) !== clue &&
-                           this.tomtom_times(entries) !== clue &&
-                           this.tomtom_divide(entries) !== clue;
+                    this.tomtom_minus(entries) !== clue &&
+                    this.tomtom_times(entries) !== clue &&
+                    this.tomtom_divide(entries) !== clue;
             }
             if (conflict) {
                 this.add_region_conflict(regions, i);
@@ -335,13 +335,13 @@ class Conflicts {
 
     // In consecutive sudoku puzzles there are bars between some cells.
     // Returns a set of sorted cell index pairs "index1,index2" for all cells
-    // with a grey bar between them.
+    // with a grey bar or white circle between them.
     calculate_grey_bars() {
         const bars = new Set();
         const symbol_indices = Object.keys(this.pu.pu_q.symbol);
         for (let index of symbol_indices) {
             const symbol = this.pu.pu_q.symbol[index];
-            if (!Array.isArray(symbol) || symbol[1] !== "bars_G") {
+            if (!Array.isArray(symbol) || symbol[1] !== "bars_G" || symbol[1] !== "circle_SS") {
                 // Not a grey bar.
                 continue;
             }
@@ -351,7 +351,7 @@ class Conflicts {
                 // Unexpected neighbor data.
                 continue;
             }
-            const neighbor = point.neighbor.sort(function(a,b){return a-b;});
+            const neighbor = point.neighbor.sort(function(a, b) { return a - b; });
             bars.add(neighbor.join(','));
         }
         return bars;
@@ -370,10 +370,10 @@ class Conflicts {
                 const index = this.xy_to_index(x, y);
                 const symbol = this.pu.pu_a.symbol[index];
                 // Only look for stars.
-                const have_star = Array.isArray(symbol)
-                                  && symbol.length === 3
-                                  && symbol[0] === 2
-                                  && symbol[1] === "star";
+                const have_star = Array.isArray(symbol) &&
+                    symbol.length === 3 &&
+                    symbol[0] === 2 &&
+                    symbol[1] === "star";
                 row.push(0 + have_star);
             }
             grid.push(row);
@@ -422,7 +422,7 @@ class Conflicts {
             const row = [];
             for (let x = 0; x < nx; x++) {
                 const true_x = x + this.pu.space[2] + 2;
-                const index = point_offset + (true_y*nx0 + true_x)*4 + corner;
+                const index = point_offset + (true_y * nx0 + true_x) * 4 + corner;
                 const number = this.pu.pu_q.numberS[index];
                 const entry = number && number[0];
                 row.push(entry);
@@ -440,7 +440,7 @@ class Conflicts {
         const top_left_numbers = this.get_data('top_left_numbers');
         // Borrow the check string for the stable cache from top_left_numbers.
         const check_string = JSON.stringify(regions) +
-                             JSON.stringify(top_left_numbers);
+            JSON.stringify(top_left_numbers);
         const lookup = this.stable_lookup('tomtom_clues', check_string);
         if (lookup) {
             // Already have this cached.
@@ -449,7 +449,7 @@ class Conflicts {
         const nx = parseInt(this.pu.nx) - this.pu.space[2] - this.pu.space[3];
         const ny = parseInt(this.pu.ny) - this.pu.space[0] - this.pu.space[1];
         if (regions.length !== ny || regions[0].length !== nx ||
-                regions.number_of_regions < 1) {
+            regions.number_of_regions < 1) {
             return [];
         }
         const clues = new Array(regions.number_of_regions).fill({
@@ -464,7 +464,8 @@ class Conflicts {
                 if (typeof clues[region].clue !== 'undefined') {
                     // Already have a clue in this region, ignoring.
                     continue;
-                } if (typeof number !== 'string') {
+                }
+                if (typeof number !== 'string') {
                     continue;
                 }
 
@@ -496,18 +497,22 @@ class Conflicts {
         const index = this.xy_to_index(x, y);
         // For the question entry we check that it is black and large
         let entry = this.pu.pu_q.number[index];
-        if (Array.isArray(entry) && entry.length === 3
-            && entry[2] === "1" // Large
-            && entry[1] === 1 // black
-            && Number.isFinite(parseInt(entry[0]))) {
+        if (Array.isArray(entry) && entry.length === 3 &&
+            entry[2] === "1" // Large
+            &&
+            entry[1] === 1 // black
+            &&
+            Number.isFinite(parseInt(entry[0]))) {
             return parseInt(entry[0]);
         }
         // For the answer entry we allow more colors/sizes
         entry = this.pu.pu_a.number[index];
-        if (Array.isArray(entry) && entry.length === 3
-            && this.permit_number_size.has(entry[2]) // Large
-            && this.permit_number_colors.has(entry[1]) // black
-            && Number.isFinite(parseInt(entry[0]))) {
+        if (Array.isArray(entry) && entry.length === 3 &&
+            this.permit_number_size.has(entry[2]) // Large
+            &&
+            this.permit_number_colors.has(entry[1]) // black
+            &&
+            Number.isFinite(parseInt(entry[0]))) {
             return parseInt(entry[0]);
         }
         return undefined;
@@ -547,7 +552,7 @@ class Conflicts {
     index_to_xy(index) {
         const x = (index % this.pu.nx0) - this.pu.space[2] - 2;
         const y = Math.floor(index / this.pu.nx0) - this.pu.space[0] - 2;
-        return [x,y];
+        return [x, y];
     }
 
     // When a grid is calculated in terms of nx/ny, it will have extra space
@@ -588,7 +593,7 @@ class Conflicts {
         const points = this.pu.point;
         for (let i = 0; i < points.length; i++) {
             if (points[i].type === type &&
-                    (typeof type2 === 'undefined' || points[i].type2 === type2)) {
+                (typeof type2 === 'undefined' || points[i].type2 === type2)) {
                 return i;
             }
         }
