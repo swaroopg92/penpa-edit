@@ -157,13 +157,13 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 14]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 15]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
         this.borderwarning = true;
         this.user_tags = [];
-        this.conflicts = new Conflicts();
+        this.conflicts = new Conflicts(this);
         this.previous_sol = [];
         this.conflict_cells = [];
         this.url = [];
@@ -2017,7 +2017,7 @@ class Puzzle {
     }
 
     canvasxy_update() { //space for imagesave
-        this.size = parseInt(document.getElementById("nb_size3").value);
+        this.size = UserSettings.displaysize;
         this.canvasx = (this.width_c) * this.size;
         this.canvasy = (this.height_c) * this.size;
     }
@@ -2708,7 +2708,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').value;
+        text += "," + document.getElementById('edge_button').textContent;
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false + "\n";
@@ -2745,7 +2745,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
@@ -2858,7 +2858,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').value;
+        text += "," + document.getElementById('edge_button').textContent;
 
         // if solution check exists, then read multisolution variable or else set to false
         if (this.solution) {
@@ -2895,7 +2895,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // Save timer
@@ -3032,7 +3032,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').value;
+        text += "," + document.getElementById('edge_button').textContent;
 
         // if solution check exists, then read multisolution variable or else set to false
         if (type === "answercheck") {
@@ -3062,7 +3062,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
@@ -3161,7 +3161,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').value;
+        text += "," + document.getElementById('edge_button').textContent;
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false + "\n";
@@ -3184,7 +3184,7 @@ class Puzzle {
         text += JSON.stringify(list) + "\n";
 
         // Copy the tab selector modes
-        let user_choices = getValues('mode_choices');
+        let user_choices = UserSettings.tab_settings;
         text += JSON.stringify(user_choices) + "\n";
 
         // save answer check settings
@@ -4403,7 +4403,7 @@ class Puzzle {
         return matrix_local;
     }
 
-    getregiondata(row_size, col_size, mode = "pu_q") {
+    getregiondata(row_size, col_size, mode = "pu_q", alphabetical = true) {
         // Regions
         var counter = 0;
         var cell_matrix = [];
@@ -4509,14 +4509,21 @@ class Puzzle {
         var size_unique_nums = unique_nums.length;
         var cell_char;
 
-        // Loop through each region to convert to Alphabet
-        // Temporary solution, but later find efficient way
         for (var k = 0; k < size_unique_nums; k++) {
-            cell_char = String.fromCharCode(65 + (k % 26));
+            if (alphabetical) {
+                // Loop through each region to convert to Alphabet
+                // Temporary solution, but later find efficient way
+                // 26 alphabets and then cycle
+                cell_char = String.fromCharCode(65 + (k % 26));
+            } else {
+                // Just return a numeric matrix with all regions being
+                // unique.
+                cell_char = k;
+            }
             for (var i = 0; i < row_size; i++) {
                 for (var j = 0; j < col_size; j++) {
                     if (cell_matrix[i][j] === unique_nums[k]) {
-                        cell_matrix[i][j] = cell_char; // 26 alphabets and then cycle
+                        cell_matrix[i][j] = cell_char;
                     }
                 }
             }
@@ -7647,15 +7654,15 @@ class Puzzle {
                                 if (number !== "") {
                                     // S submode is 5, M submode is 6
                                     // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                    if (document.getElementById("sudoku_settings_opt").value === "1") {
+                                    if (UserSettings.sudoku_centre_size === 1) {
                                         if (number.length > 5) {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                         } else {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
                                         }
-                                    } else if (document.getElementById("sudoku_settings_opt").value === "2") { // all large
+                                    } else if (UserSettings.sudoku_centre_size === 2) { // all large
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                    } else if (document.getElementById("sudoku_settings_opt").value === "3") { // all small
+                                    } else if (UserSettings.sudoku_centre_size === 3) { // all small
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                     }
                                 } else {
@@ -9461,9 +9468,9 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
-                        if (document.getElementById("starbattle_settings_opt").value === "3") {
+                        if (UserSettings.starbattle_dots === 3) {
                             num = this.coord_p_edgex_star(x, y, 0);
-                        } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                        } else if (UserSettings.starbattle_dots === 2) {
                             num = this.coord_p_edgex_star(x, y, 0.2);
                         }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
@@ -9525,9 +9532,9 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
-                    if (document.getElementById("starbattle_settings_opt").value === "3") {
+                    if (UserSettings.starbattle_dots === 3) {
                         num = this.coord_p_edgex_star(x, y, 0);
-                    } else if (document.getElementById("starbattle_settings_opt").value === "2") {
+                    } else if (UserSettings.starbattle_dots === 2) {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
@@ -11052,59 +11059,30 @@ class Puzzle {
     }
 
     set_redoundocolor() {
-        if (this.mode.qa === "pu_q") {
-            if (this.pu_q.command_redo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
-                } else {
-                    document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
-                }
+        if (this[this.mode.qa].command_redo.__a.length === 0) {
+            if (UserSettings.color_theme === THEME_LIGHT) {
+                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_redo').style.color = Color.BLACK;
-                } else {
-                    document.getElementById('tb_redo').style.color = Color.WHITE;
-                }
-            }
-            if (this.pu_q.command_undo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
-                } else {
-                    document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
-                }
-            } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_undo').style.color = Color.BLACK;
-                } else {
-                    document.getElementById('tb_undo').style.color = Color.WHITE;
-                }
+                document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
             }
         } else {
-            if (this.pu_a.command_redo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
-                } else {
-                    document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
-                }
+            if (UserSettings.color_theme === THEME_LIGHT) {
+                document.getElementById('tb_redo').style.color = Color.BLACK;
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_redo').style.color = Color.BLACK;
-                } else {
-                    document.getElementById('tb_redo').style.color = Color.WHITE;
-                }
+                document.getElementById('tb_redo').style.color = Color.WHITE;
             }
-            if (this.pu_a.command_undo.__a.length === 0) {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
-                } else {
-                    document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
-                }
+        }
+        if (this[this.mode.qa].command_undo.__a.length === 0) {
+            if (UserSettings.color_theme === THEME_LIGHT) {
+                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
             } else {
-                if (document.getElementById("theme_mode_opt").value === "1") {
-                    document.getElementById('tb_undo').style.color = Color.BLACK;
-                } else {
-                    document.getElementById('tb_undo').style.color = Color.WHITE;
-                }
+                document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
+            }
+        } else {
+            if (UserSettings.color_theme === THEME_LIGHT) {
+                document.getElementById('tb_undo').style.color = Color.BLACK;
+            } else {
+                document.getElementById('tb_undo').style.color = Color.WHITE;
             }
         }
     }
@@ -11210,7 +11188,7 @@ class Puzzle {
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             if (this.mode[this.mode.qa].edit_mode === "number" && (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9")) {
                 this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
-            } else if (document.getElementById('edge_button').value === "1") {
+            } else if (document.getElementById('edge_button').textContent === "ON") {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.ctx.beginPath();
@@ -11720,30 +11698,36 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
+        if (UserSettings.conflict_detection > 1) {
+            // User has disabled conflict detection.
+            this.conflict_cells = [];
+            return;
+        }
         if (this.user_tags) {
             // Do only if current solution changed
-            if (current_sol !== this.previous_sol) {
-                for (var tag of this.user_tags) {
-                    switch (tag) {
-                        case 'classic':
-                            this.conflict_cells = this.conflicts.check_classic(this);
-                            break;
-                        case 'nonconsecutive':
-                            this.conflict_cells = this.conflicts.check_classic(this);
-
-                            // check consecutive only if no classic conflict
-                            if (this.conflict_cells.length === 0) {
-                                this.conflict_cells = this.conflicts.check_consecutive(this);
-                            }
-                            break;
-                    }
+            if (current_sol === this.previous_sol) {
+                return;
+            }
+            this.conflicts.reset();
+            const tags = new Set(this.user_tags);
+            if (tags.has('consecutive') || tags.has('nonconsecutive')) {
+                this.conflicts.check_sudoku();
+                // check consecutive only if no classic conflict
+                if (this.conflict_cells.length === 0) {
+                    this.conflicts.check_consecutive();
                 }
-                this.previous_sol = current_sol;
-                if (this.conflict_cells.length !== 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+            } else if (tags.has('classic')) {
+                this.conflicts.check_sudoku();
+            } else if (tags.has('starbattle')) {
+                this.conflicts.check_star_battle();
+            } else if (tags.has('tomtom')) {
+                this.conflicts.check_tomtom();
+            }
+            this.previous_sol = current_sol;
+            if (this.conflict_cells.length !== 0) {
+                return true;
+            } else {
+                return false;
             }
         }
     }

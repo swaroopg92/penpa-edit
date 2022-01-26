@@ -14,10 +14,10 @@ function boot() {
 }
 
 function boot_parameters() {
-    document.getElementById("gridtype").value = "square";
+    UserSettings.gridtype = "square";
     document.getElementById("nb_size1").value = 10;
     document.getElementById("nb_size2").value = 10;
-    document.getElementById("nb_size3").value = 38;
+    UserSettings.displaysize = 38;
     document.getElementById("nb_space1").value = 0;
     document.getElementById("nb_space2").value = 0;
     document.getElementById("nb_space3").value = 0;
@@ -25,14 +25,10 @@ function boot_parameters() {
 }
 
 function create() {
-    let gridtype = getCookie("gridtype");
-    if (gridtype == null) {
-        gridtype = document.getElementById("gridtype").value;
-    }
-    let displaysize_cookie = getCookie("displaysize");
-    if (displaysize_cookie !== null) {
-        document.getElementById("nb_size3").value = displaysize_cookie;
-    }
+    UserSettings.loadFromCookies("gridtype_size");
+
+    gridtype = UserSettings.gridtype;
+
     pu = make_class(gridtype);
     pu.reset_frame();
 
@@ -41,62 +37,7 @@ function create() {
     panel_pu.draw_panel();
     pu.mode_set("surface"); //include redraw
 
-    // Check cookies
-    let theme_cookie = getCookie("color_theme");
-    if (theme_cookie !== null && theme_cookie == 2) {
-        document.getElementById("theme_mode_opt").value = 2;
-        document.getElementById("color_theme").href = "./css/dark_theme.css";
-        pu.set_redoundocolor();
-    }
-    let responsive_design = getCookie("responsive_mode");
-    if (responsive_design !== null) {
-        setResponsiveness(responsive_design, true);
-    }
-    let reload_cookie = getCookie("reload_button");
-    if (reload_cookie !== null) {
-        // to address old versions where the stored value was ON and OFF
-        if (reload_cookie === "ON") {
-            reload_cookie = "1"
-        } else if (reload_cookie === "OFF") {
-            reload_cookie = "2"
-        }
-        document.getElementById('reload_button').value = reload_cookie;
-    }
-    let tab_cookie = getCookie("tab_settings");
-    if (tab_cookie !== null) {
-        this.usertab_choices = tab_cookie;
-        if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
-            document.getElementById('advance_button').value = "1";
-            advancecontrol_onoff("url");
-        }
-    }
-    let sudoku_center_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_center_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
-    }
-    let sudoku_normal_cookie = getCookie("sudoku_normal_size");
-    if (sudoku_normal_cookie !== null) {
-        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
-    }
-    let starbattle_dots_cookie = getCookie("starbattle_dots");
-    if (starbattle_dots_cookie !== null) {
-        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
-    }
-    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
-    if (mousemiddle_button_cookie !== null) {
-        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
-    }
-
-    let timer_bar_cookie = getCookie("timerbar_status");
-    if (timer_bar_cookie !== null) {
-        document.getElementById("timer_bar_opt").value = timer_bar_cookie;
-        showhide_timer();
-    }
-
-    let local_storage_cookie = getCookie("local_storage");
-    if (local_storage_cookie !== null) {
-        document.getElementById("clear_storage_opt").value = local_storage_cookie;
-    }
+    UserSettings.loadFromCookies("others");
 
     // Populate Constraints list
     if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
@@ -115,21 +56,6 @@ function create() {
     });
 
     pu.redraw();
-}
-
-function getCookie(name) {
-    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return v ? v[2] : null;
-}
-
-function setCookie(name, value, days) {
-    var d = new Date;
-    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
-    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
-}
-
-function deleteCookie(name) {
-    setCookie(name, '', -1);
 }
 
 function add_constraints() {
@@ -179,10 +105,10 @@ function add_genre_tags(user_tags) {
 
 function create_newboard() {
 
-    var size = parseInt(document.getElementById("nb_size3").value);
+    var size = UserSettings.displaysize;
     if (12 <= size && size <= 90) {
         var mode = pu.mode;
-        var gridtype = document.getElementById("gridtype").value;
+        var gridtype = UserSettings.gridtype;
         pu = make_class(gridtype);
         pu.mode = mode;
 
@@ -216,7 +142,7 @@ function create_newboard() {
 }
 
 function make_class(gridtype, loadtype = 'new') {
-    var size = parseInt(document.getElementById("nb_size3").value);
+    var size = UserSettings.displaysize;
     var gridmax = {
         'square': 65,
         'hex': 20,
@@ -558,7 +484,8 @@ function make_class(gridtype, loadtype = 'new') {
 }
 
 function changetype() {
-    var gridtype = document.getElementById("gridtype").value;
+    UserSettings.gridtype = document.getElementById("gridtype").value;
+
     var type = ["name_size2", "nb_size2", "name_space2", "name_space3", "name_space4", "nb_space2", "nb_space3", "nb_space4"];
     var type2 = ["name_space1", "nb_space1"];
     var type3 = ["nb_size_lb", "nb_space_lb", "name_size1", "nb_size1"]; // off - for sudoku
@@ -572,7 +499,7 @@ function changetype() {
         "nb_sudoku8_lb", "nb_sudoku8"
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
-    switch (gridtype) {
+    switch (UserSettings.gridtype) {
         case "square":
             for (var i of type) {
                 document.getElementById(i).style.display = "inline";
@@ -821,6 +748,10 @@ function CreateCheck() {
         confirmButtonText: 'Yes, Reset it!'
     }).then((result) => {
         if (result.isConfirmed) {
+            // Save grid size setting
+            if (document.getElementById("nb_size3").value != UserSettings.displaysize) {
+                UserSettings.displaysize = document.getElementById("nb_size3").value;
+            }
             create_newboard();
             pu.redraw();
             if (sw_timer.isPaused()) {
@@ -830,45 +761,14 @@ function CreateCheck() {
     })
 }
 
-function newgrid() {
-    var size = parseInt(document.getElementById("nb_size3").value);
-    if (12 <= size && size <= 90) {
-        pu.reset_frame_newgrid();
-        pu.redraw();
-        panel_pu.draw_panel();
-        document.getElementById('modal').style.display = 'none';
-        if (sw_timer.isPaused()) {
-            pu.show_pause_layer();
-        }
-    } else {
-        Swal.fire({
-            title: 'Error:',
-            html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
-            icon: 'error',
-            confirmButtonText: 'OK',
-        })
-    }
-}
-
-function newgrid_r() {
-    var sizer = parseInt(document.getElementById("nb_size3_r").value, 10);
-    document.getElementById("nb_size3").value = sizer;
-    if (12 <= sizer && sizer <= 90) {
-        pu.reset_frame_newgrid();
-        pu.size = sizer;
-        pu.redraw();
-        panel_pu.draw_panel();
-        document.getElementById('modal-newsize').style.display = 'none';
-        if (sw_timer.isPaused()) {
-            pu.show_pause_layer();
-        }
-    } else {
-        Swal.fire({
-            title: 'Error:',
-            html: 'Display Size must be in the range <h2 class="warn">12-90</h2>',
-            icon: 'error',
-            confirmButtonText: 'OK',
-        })
+function redraw_grid() {
+    var sizer = UserSettings.displaysize;
+    pu.reset_frame_newgrid();
+    pu.size = sizer;
+    pu.redraw();
+    panel_pu.draw_panel();
+    if (sw_timer.isPaused()) {
+        pu.show_pause_layer();
     }
 }
 
@@ -881,6 +781,18 @@ function display_rules() {
         title: 'Rules:',
         html: '<h5 class="info">' + pu.rules + '</h5>'
     })
+}
+
+function panel_off() {
+    document.getElementById('panel_button').value = 2;
+    panel_onoff();
+}
+
+function panel_toggle() {
+    let button = document.getElementById('panel_button');
+    let ogValue = parseInt(button.value, 10) || 2;
+    button.value = 3 - ogValue;
+    panel_onoff();
 }
 
 function panel_onoff() {
@@ -901,14 +813,19 @@ function panel_onoff() {
         let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
         let mode_loc = penpa_modes["square"]["mode"].indexOf(pu.mode[pu.mode.qa].edit_mode);
         document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
+        // document.getElementById('toggle_panel_visibility').style.opacity = .3;
     } else {
         document.getElementById('float-key').style.display = "none";
+        // document.getElementById('toggle_panel_visibility').style.opacity = 1;
     }
     pu.redraw();
 }
 
 function edge_onoff() {
-    if (document.getElementById('edge_button').value === "2") {
+    if (document.getElementById('edge_button').textContent === "OFF") {
+        document.getElementById('edge_button').textContent = "ON";
+    } else {
+        document.getElementById('edge_button').textContent = "OFF";
         pu.cursol = pu.centerlist[0];
     }
     pu.type = pu.type_set();
@@ -924,8 +841,22 @@ function solutionvisible_onoff() {
     pu.redraw();
 }
 
+function can_use_lite() {
+    let user_choices = getValues('mode_choices');
+    return (user_choices.length > 0 || UserSettings.tab_settings.length > 0);
+}
+
+function advancecontrol_toggle() {
+    let currentState = document.getElementById('tab-dropdown-lite-btn').innerText;
+    if (currentState === "Disable Penpa Lite") {
+        advancecontrol_onoff("off");
+    } else {
+        advancecontrol_onoff();
+    }
+}
+
 function advancecontrol_onoff(loadtype = "new") {
-    if (document.getElementById('advance_button').value === "2") {
+    if (!can_use_lite() || loadtype === "off") {
         // Lite Version OFF, Display all the modes
         // Display the mode break line again
         document.getElementById("mode_break").style.display = "inline";
@@ -933,38 +864,21 @@ function advancecontrol_onoff(loadtype = "new") {
         advancecontrol_on();
     } else {
         // Lite Version ON, so turn off extra modes
-        if (loadtype === "url") {
-            // Remove the mode break line again
-            document.getElementById("mode_break").style.display = "none";
-            document.getElementById("mode_txt_space").style.display = "none";
-            advancecontrol_off(loadtype);
-        } else {
-            let user_choices = getValues('mode_choices');
-            if (user_choices.length !== 0) {
-                // Remove the mode break line again
-                document.getElementById("mode_break").style.display = "none";
-                document.getElementById("mode_txt_space").style.display = "none";
-                advancecontrol_off(loadtype);
-            } else {
-                document.getElementById('advance_button').value = "2";
-                Swal.fire({
-                    title: 'Advance/Basic Mode',
-                    html: '<h2 class="info">Currently "Tab/↵" selection is empty. Select your basic required modes under "Tab/↵". <br> Set "PenpaLite" setting to turn "ON"</h2>',
-                    icon: 'info'
-                })
-            }
-        }
+        // Remove the mode break line again
+        document.getElementById("mode_break").style.display = "none";
+        document.getElementById("mode_txt_space").style.display = "none";
+        advancecontrol_off(loadtype);
     }
 }
 
 function advancecontrol_off(loadtype) {
     // Check for this only for first time when loading url
-    let user_choices;
-    if (loadtype === "url") {
-        user_choices = this.usertab_choices;
-    } else {
-        user_choices = getValues('mode_choices');
+    var user_choices = (loadtype === "url") ? UserSettings.tab_settings : getValues('mode_choices');
+
+    if (document.getElementById('tab-dropdown-lite-btn')) {
+        document.getElementById('tab-dropdown-lite-btn').innerText = "Disable Penpa Lite";
     }
+
     if (user_choices.indexOf("Surface") === -1) {
         document.getElementById("mo_surface_lb").style.display = "none";
     }
@@ -1037,6 +951,9 @@ function advancecontrol_off(loadtype) {
 }
 
 function advancecontrol_on() {
+    if (document.getElementById('tab-dropdown-lite-btn')) {
+        document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
+    }
     pu.erase_buttons();
 
     // Set the solve mode
@@ -1052,14 +969,6 @@ function advancecontrol_on() {
         if (pu.undoredo_disable) {
             set_contestmode();
         }
-    }
-}
-
-function showhide_timer() {
-    if (document.getElementById("timer_bar_opt").value === "2") {
-        document.getElementById("stop_watch").style.display = "none";
-    } else if (document.getElementById("timer_bar_opt").value === "1") {
-        document.getElementById("stop_watch").style.display = "";
     }
 }
 
@@ -1494,7 +1403,7 @@ function duplicate() {
 
 function import_sudoku() {
     let flag;
-    if (document.getElementById("gridtype").value === "sudoku" || document.getElementById("gridtype").value === "square") {
+    if (UserSettings.gridtype === "sudoku" || UserSettings.gridtype === "square") {
         let size = 9; // Default is 9x9 sudoku
 
         // if user has defined the sudoku grid size
@@ -1517,7 +1426,7 @@ function import_sudoku() {
 
 function export_sudoku() {
     let flag;
-    if (document.getElementById("gridtype").value === "sudoku" || document.getElementById("gridtype").value === "square") {
+    if (UserSettings.gridtype === "sudoku" || UserSettings.gridtype === "square") {
         let size = 9; // Default is 9x9 sudoku
 
         // if user has defined the sudoku grid size
@@ -1545,8 +1454,8 @@ function import_url() {
             urlstring = urlstring.split("/penpa-edit/?")[1];
             load(urlstring, 'local');
             document.getElementById("modal-load").style.display = 'none';
-            if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
-                selectBox.setValue(JSON.parse(this.usertab_choices));
+            if (UserSettings.tab_settings > 0) {
+                selectBox.setValue(UserSettings.tab_settings);
             }
         } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p?") !== -1) {
             decode_puzzlink(urlstring);
@@ -1589,11 +1498,11 @@ function load(urlParam, type = 'url') {
 
     // load default settings
     var rtext_para = rtext[0].split(',');
-    document.getElementById("gridtype").value = rtext_para[0];
+    UserSettings.gridtype = rtext_para[0];
     changetype();
     document.getElementById("nb_size1").value = rtext_para[1];
     document.getElementById("nb_size2").value = rtext_para[2];
-    document.getElementById("nb_size3").value = rtext_para[3];
+    UserSettings.displaysize = rtext_para[3];
 
     document.getElementById("nb_space1").value = JSON.parse(rtext[1])[0];
     document.getElementById("nb_space2").value = JSON.parse(rtext[1])[1];
@@ -1632,48 +1541,9 @@ function load(urlParam, type = 'url') {
     }
 
     make_class(rtext_para[0], 'url');
+    panel_pu = new Panel();
 
-    // Check cookies
-    let theme_cookie = getCookie("color_theme");
-    if (theme_cookie !== null && theme_cookie == 2) {
-        document.getElementById("theme_mode_opt").value = 2;
-        document.getElementById("color_theme").href = "./css/dark_theme.css";
-        pu.set_redoundocolor();
-    }
-    let responsive_design = getCookie("responsive_mode");
-    if (responsive_design !== null) {
-        setResponsiveness(responsive_design, true);
-    }
-    let reload_cookie = getCookie("reload_button");
-    if (reload_cookie !== null) {
-        // to address old versions where the stored value was ON and OFF
-        if (reload_cookie === "ON") {
-            reload_cookie = "1"
-        } else if (reload_cookie === "OFF") {
-            reload_cookie = "2"
-        }
-        document.getElementById('reload_button').value = reload_cookie;
-    }
-    let sudoku_center_cookie = getCookie("sudoku_centre_size");
-    if (sudoku_center_cookie !== null) {
-        document.getElementById("sudoku_settings_opt").value = sudoku_center_cookie;
-    }
-    let sudoku_normal_cookie = getCookie("sudoku_normal_size");
-    if (sudoku_normal_cookie !== null) {
-        document.getElementById("sudoku_settings_normal_opt").value = sudoku_normal_cookie;
-    }
-    let starbattle_dots_cookie = getCookie("starbattle_dots");
-    if (starbattle_dots_cookie !== null) {
-        document.getElementById("starbattle_settings_opt").value = starbattle_dots_cookie;
-    }
-    let mousemiddle_button_cookie = getCookie("mousemiddle_button");
-    if (mousemiddle_button_cookie !== null) {
-        document.getElementById("mousemiddle_settings_opt").value = mousemiddle_button_cookie;
-    }
-    let local_storage_cookie = getCookie("local_storage");
-    if (local_storage_cookie !== null) {
-        document.getElementById("clear_storage_opt").value = local_storage_cookie;
-    }
+    UserSettings.loadFromCookies("others");
 
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").style.display = "inline";
@@ -1683,9 +1553,9 @@ function load(urlParam, type = 'url') {
 
     // Border button status
     if (rtext_para[19]) {
-        // to address old versions where the stored value was ON and OFF
+        // to address mixed versions where the stored value was ON and OFF/ "1" and "2"
         if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
-            document.getElementById('edge_button').value = "1";
+            document.getElementById('edge_button').textContent = "ON";
         }
     }
 
@@ -1711,8 +1581,6 @@ function load(urlParam, type = 'url') {
     pu.height_c = pu.canvasy / rtext_para[3]; // When updating newgrid, use width_c with canvasxyupdate, so record it.
     pu.center_n = parseInt(rtext_para[9]);
     pu.center_n0 = parseInt(rtext_para[10]);
-
-    panel_pu = new Panel();
 
     for (var i = 0; i < pu.replace.length; i++) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
@@ -1742,11 +1610,11 @@ function load(urlParam, type = 'url') {
 
     // Tab settings
     if (typeof rtext[6] !== 'undefined') {
-        this.usertab_choices = rtext[6];
+        UserSettings.tab_settings = JSON.parse(rtext[6]);
 
         // Advance Control Setting
-        if (this.usertab_choices.length > 2) { // If none selected, usertab_chocies = [] (size 2)
-            document.getElementById('advance_button').value = "1";
+        if (UserSettings.tab_settings.length > 0) {
+            // document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
         }
     }
@@ -1774,7 +1642,21 @@ function load(urlParam, type = 'url') {
                 pu.user_tags[0] = "classic";
             } else if ((sudoku_index === 1 || sudoku_index === 2) &&
                 (allow_genres.includes(title_words[0].toLowerCase()))) {
-                pu.user_tags[0] = title_words[0].toLowerCase() === "nonconsecutive" ? "nonconsecutive" : "classic";
+                switch (title_words[0].toLowerCase()) {
+                    case "consecutive":
+                        pu.user_tags[0] = "consecutive";
+                        break;
+                    case "nonconsecutive":
+                        pu.user_tags[0] = "nonconsecutive";
+                        break;
+                    default:
+                        pu.user_tags[0] = "classic";
+                        break;
+                }
+            } else if (title_words[0].toLowerCase() === "star" && title_words[1].toLowerCase() === "battle") {
+                pu.user_tags[0] = "starbattle";
+            } else if (title_words[0].toLowerCase() === "tomtom") {
+                pu.user_tags[0] = "tomtom";
             }
         }
     }
@@ -2031,10 +1913,7 @@ function load(urlParam, type = 'url') {
         let view_settings = view_setting_string.split("|");
 
         if (view_settings[0] === 'dark') {
-            document.getElementById("theme_mode_opt").value = 2;
-            document.getElementById("color_theme").href = "./css/dark_theme.css";
-            pu.set_redoundocolor();
-            pu.redraw();
+            UserSettings.color_theme = THEME_DARK;
         }
 
         // This is not needed as it will never get called, but leaving it here for now
@@ -2112,11 +1991,11 @@ function loadver1(paramArray, rtext) {
     // Load initial settings
     var rtext_para = rtext[0].split(',');
 
-    document.getElementById("gridtype").value = "square";
+    UserSettings.gridtype = "square";
     changetype();
     document.getElementById("nb_size1").value = parseInt(rtext_para[0]);
     document.getElementById("nb_size2").value = parseInt(rtext_para[1]);
-    document.getElementById("nb_size3").value = parseInt(rtext_para[2]);
+    UserSettings.displaysize = parseInt(rtext_para[2]);
     document.getElementById("nb_space1").value = parseInt(rtext_para[3]);
     document.getElementById("nb_space2").value = parseInt(rtext_para[4]);
     document.getElementById("nb_space3").value = parseInt(rtext_para[5]);
@@ -2545,7 +2424,7 @@ function set_solvemode(type = "url") {
     pu.mmode = "solve";
     pu.mode.qa = "pu_a";
     document.getElementById("title").innerHTML = "Solver Mode"
-    document.getElementById("nb_size3_r").value = document.getElementById("nb_size3").value;
+    document.getElementById("nb_size3_r").value = UserSettings.displaysize;
     document.getElementById("newsize").style.display = "inline";
     document.getElementById("pu_a").checked = true;
     document.getElementById("edit_txt").style.display = "none";
@@ -2620,29 +2499,6 @@ function isEmptycontent(pu_qa, array, num, value) {
     return true;
 }
 
-function setResponsiveness(mode, updateUI) {
-    let modeInt = parseInt(mode, 10);
-    let verb = modeInt > 1 ? 'add' : 'remove';
-    let flipVerb = modeInt > 2 ? 'add' : 'remove';
-    document.getElementById("app-container").classList[verb]("responsive");
-    document.getElementById("app-container").classList[flipVerb]("responsive-flip");
-    if (updateUI) {
-        document.getElementById("responsive_settings_opt").value = mode;
-    }
-
-    // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
-    // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
-    if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
-        document.getElementById("mode_break").style.display = "inline";
-        document.getElementById("mode_txt_space").style.display = "inline";
-        document.getElementById("visibility_break").style.display = "none";
-    } else if (modeInt > 1 && window.innerWidth >= 850) {
-        document.getElementById("mode_break").style.display = "none";
-        document.getElementById("mode_txt_space").style.display = "none";
-        document.getElementById("visibility_break").style.display = "inline";
-    }
-}
-
 function decode_puzzlink(url) {
     var parts, urldata, type, cols, rows, bstr;
 
@@ -2669,7 +2525,7 @@ function decode_puzzlink(url) {
     // create puzzlink object
     bstr = urldata[3];
     puzzlink_pu = new Puzzlink(cols, rows, bstr);
-    size = parseInt(document.getElementById("nb_size3").value);
+    size = UserSettings.displaysize;
 
     // Set border whitespace to 0 for consistency
     document.getElementById("nb_space1").value = 0;
@@ -2708,7 +2564,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("number");
-            this.usertab_choices = ["Surface", "Number Normal", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
             break;
         case "onsen":
             // Setup board
@@ -2728,7 +2584,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "sudoku":
             pu = new Puzzle_sudoku(cols, rows, size);
@@ -2758,7 +2614,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Sudoku Normal"];
             break;
         case "starbattle":
             // starbattle is different than most
@@ -2786,7 +2642,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode("star");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "building": // skyscrapers alias
         case "skyscrapers":
@@ -2805,7 +2661,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Sudoku Normal"];
             break;
         case "shakashaka":
         case "akari":
@@ -2832,7 +2688,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi"); //include redraw
             pu.subcombimode(type === 'shakashaka' ? 'shaka' : 'akari');
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "kakuro":
             // Decode URL
@@ -2895,7 +2751,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("sudoku"); //include redraw
-            this.usertab_choices = ["Surface", "Sudoku Normal"];
+            UserSettings.tab_settings = ["Surface", "Sudoku Normal"];
             break;
         case "aqre":
         case "ayeheya":
@@ -2917,7 +2773,7 @@ function decode_puzzlink(url) {
             // Change to Solution Tab
             pu.mode_qa("pu_a");
             pu.mode_set("surface"); //include redraw
-            this.usertab_choices = ["Surface"];
+            UserSettings.tab_settings = ["Surface"];
             break;
         case "kurochute":
         case "kurodoko":
@@ -2943,7 +2799,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo"); // Black square and Point
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "slitherlink":
         case "slither": // slitherlink alias
@@ -2960,7 +2816,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "country":
         case "detour":
@@ -2999,17 +2855,17 @@ function decode_puzzlink(url) {
             if (type === "yajilin-regions") {
                 pu.mode_set("combi");
                 pu.subcombimode("linex");
-                this.usertab_choices = ["Surface", "Composite"];
+                UserSettings.tab_settings = ["Surface", "Composite"];
             } else if (type === "factors" || type === "toichika2") {
                 pu.mode_set("number");
-                this.usertab_choices = ["Surface", "Number Normal"];
+                UserSettings.tab_settings = ["Surface", "Number Normal"];
             } else if (type === "juosan") {
                 pu.mode_set("wall");
-                this.usertab_choices = ["Surface", "Wall"];
+                UserSettings.tab_settings = ["Surface", "Wall"];
             } else {
                 pu.mode_set("combi");
                 pu.subcombimode("lineox");
-                this.usertab_choices = ["Surface", "Composite"];
+                UserSettings.tab_settings = ["Surface", "Composite"];
             }
             break;
         case "moonsun":
@@ -3042,7 +2898,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "haisu":
             pu = new Puzzle_square(cols, rows, size);
@@ -3064,7 +2920,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "balance":
             pu = new Puzzle_square(cols, rows, size);
@@ -3086,7 +2942,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "midloop":
             pu = new Puzzle_square(cols, rows, size);
@@ -3099,7 +2955,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "castle":
         case "yajikazu":
@@ -3196,11 +3052,11 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             if (type === "yajikazu") {
                 pu.mode_set("surface");
-                this.usertab_choices = ["Surface"];
+                UserSettings.tab_settings = ["Surface"];
             } else {
                 pu.mode_set("combi");
                 pu.subcombimode("linex");
-                this.usertab_choices = ["Surface", "Composite"];
+                UserSettings.tab_settings = ["Surface", "Composite"];
             }
             break;
         case "tapa":
@@ -3216,7 +3072,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode(type === "tapa" ? "blpo" : "lineox");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "fillomino":
         case "symmarea":
@@ -3232,7 +3088,7 @@ function decode_puzzlink(url) {
 
             pu.mode_qa("pu_a");
             pu.mode_set("number");
-            this.usertab_choices = ["Surface", "Edge Normal", "Number Normal"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Number Normal"];
             break;
         case "araf":
             pu = new Puzzle_square(cols, rows, size);
@@ -3245,7 +3101,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgesub");
-            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
             break;
         case "compass":
             pu = new Puzzle_square(cols, rows, size);
@@ -3258,7 +3114,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgesub");
-            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
             break;
         case "nonogram":
             var max_cols_offset = Math.ceil(cols / 2);
@@ -3328,7 +3184,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "cave":
         case "mochikoro":
@@ -3347,7 +3203,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("surface");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "lits":
         case "norinori":
@@ -3360,7 +3216,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "hashikake":
         case "hashi": // hashikake alias
@@ -3380,7 +3236,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("hashi");
-            this.usertab_choices = ["Surface", "Edge Normal", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
             break;
         case "pencils":
             pu = new Puzzle_square(cols, rows, size);
@@ -3449,7 +3305,7 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             pu.subsymbolmode("pencils");
             pu.mode_set("lineE");
-            this.usertab_choices = ["Edge Normal", "Shape", "Composite"];
+            UserSettings.tab_settings = ["Edge Normal", "Shape", "Composite"];
             break;
         case "easyasabc":
             // Add whitespace
@@ -3478,7 +3334,7 @@ function decode_puzzlink(url) {
 
             pu.mode_qa("pu_a");
             pu.mode_set("number");
-            this.usertab_choices = ["Surface", "Number Normal"];
+            UserSettings.tab_settings = ["Surface", "Number Normal"];
             break;
         case "tents":
             // Add whitespace
@@ -3505,7 +3361,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("tents");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "snake":
             // Add whitespace
@@ -3536,7 +3392,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("blpo");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "geradeweg":
         case "numlin": // numberlink alias
@@ -3551,7 +3407,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "simpleloop":
             pu = new Puzzle_square(cols, rows, size);
@@ -3572,7 +3428,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("linex");
-            this.usertab_choices = ["Surface", "Composite"];
+            UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         default:
             Swal.fire({
@@ -3585,7 +3441,7 @@ function decode_puzzlink(url) {
     }
 
     // Set PenpaLite
-    document.getElementById('advance_button').value = "1";
+    // document.getElementById('advance_button').value = "1";
     document.getElementById("mode_break").style.display = "none";
     document.getElementById("mode_txt_space").style.display = "none";
     advancecontrol_off("url");
@@ -3596,7 +3452,7 @@ function decode_puzzlink(url) {
             continue;
         }
 
-        if (this.usertab_choices.includes(child.dataset.value)) {
+        if (UserSettings.tab_settings.includes(child.dataset.value)) {
             if (!child.classList.contains('active')) {
                 child.click();
             }
