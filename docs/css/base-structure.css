@@ -928,6 +928,7 @@ body textarea {
 #modal-save-info {
     padding-left: 10px;
     padding-top: 10px;
+    padding-right: 10px;
 }
 
 #saveinfoauthor,
@@ -939,7 +940,7 @@ body textarea {
 #saveinfotype,
 #saveinfoexclusivity {
     margin: 2px auto;
-    width: 90%;
+    width: 100%;
 }
 
 #sourcewarning {
@@ -953,6 +954,7 @@ body textarea {
 
 #save_undo_lb,
 #save_undo,
+#sudoku_tag,
 #video_usage_lb,
 #video_usage {
     margin-left: 10px;

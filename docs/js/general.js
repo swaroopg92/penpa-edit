@@ -1713,7 +1713,73 @@ function saveimage_window() {
     }
 }
 
+
 function savetext() {
+    $("#saveinfotitle").select2({
+        ajax: {
+            url: '/live/misc-pp?action=penpa-search-genre',
+            dataType: 'json',
+            delay: 1000,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        placeholder: 'Type a Genre',
+        tags: false,
+        minimumInputLength: 3,
+        templateResult: function (puzzle) {
+            if (puzzle.loading) {
+                return puzzle.text;
+            }
+            return $(`
+  <div>
+    <div><strong>${puzzle.text}</strong></div>
+    <div><small>${puzzle.rules || 'Rules for this type is not avaiable. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.'}</small></div>
+  </div>
+            `);
+        },
+    }).on('change', function (e) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                id:e.currentTarget.value
+            })
+        },
+            url = `/live/misc-pp?action=penpa-single-genre-details`,
+            request = new Request(url, options);
+        fetch(request)
+            .then(r => { return r.json(); })
+            .then(function(response) {
+                document.getElementById('saveinforules').value = response.data.rules;
+                if (response.data.variant) {
+                    document.getElementById('puzzletype_'+response.data.variant.toLowerCase()).selected = true;
+                }
+                document.getElementById('sudoku_tag').checked = response.data.isSudoku || false;
+                $("#genre_tags_opt").empty();
+                $('#genre_tags_opt').select2({
+                    data:response.taggings
+                });
+            })
+            .catch(function(err) {
+                console.warn(err);
+            });
+        });
     document.getElementById("modal-save").style.display = 'block';
     document.getElementById("savetextarea").value = "";
 

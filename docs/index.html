@@ -962,7 +962,8 @@
         <div id="modal-save-content">
             <h3 class="modal-header" id="savetexttitle">Submit to LMI Puzzle Expo</h3>
             <div id="modal-save-info">
-                <span class="DM" id="saveinfotitle_lb">*Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <span class="DM" id="saveinfotitle_lb">*Genre:</span>
+								<select id="saveinfotitle" style="width: 100%"></select>
                 <br>
                 <span class="DM" id="saveinfoauthor_lb" style="display:none;">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor" style="display:none;"></span>
                 <span class="DM" id="saveinfotheme_lb">Theme:<input type="text" placeholder="Puzzle Theme (Optional)" value="" id="saveinfotheme"></span>
@@ -971,12 +972,18 @@
                 <br>
                 <span class="DM" id="saveinfoinfo_lb">Info:<textarea class="text_area" rows="1" cols="10" placeholder="Any additional information like example link, background story, collaborating authors goes here (Optional)" value="" id="saveinfoinfo"></textarea></span>
                 <br>
+								<span>
+										<span><label class="label_nb" id="sudoku_tag_lb">Is this a Sudoku?</label></span>
+										<input type="checkbox" name="sudoku_tag" id="sudoku_tag">
+								</span>
+                <br>
                 <span class="DM" id="saveinfotype_lb">Variant Level:
                     <select id="saveinfotype">
-                        <option value="classic" id="puzzletype_1" selected="selected">Classic</option>
-                        <option value="variant" id="puzzletype_2">Variant</option>
-                        <option value="innovative" id="puzzletype_3">Innovative</option>
-                        <option value="original" id="puzzletype_4">Original (Your invention)</option>
+                        <option value="classic" id="puzzletype_classic" selected="selected">Classic</option>
+                        <option value="variant" id="puzzletype_variant">Variant</option>
+                        <option value="hybrid" id="puzzletype_hybrid">Hybrid</option>
+                        <option value="innovative" id="puzzletype_innovative">Innovative</option>
+                        <option value="original" id="puzzletype_original">Original (Your invention)</option>
                     </select>
                 </span>
                 <br>
