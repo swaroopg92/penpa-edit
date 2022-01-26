@@ -295,7 +295,7 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (document.getElementById('edge_button').textContent === "OFF") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -309,7 +309,7 @@ class Puzzle_truncated_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (document.getElementById('edge_button').textContent === "OFF") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -2914,7 +2914,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (document.getElementById('edge_button').textContent === "OFF") {
                     type = [0];
                 } else {
                     type = [0, 1, 3, 4];
@@ -2928,7 +2928,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (document.getElementById('edge_button').textContent === "OFF") {
                         type = [0];
                     } else {
                         type = [0, 1, 3, 4];
@@ -3632,7 +3632,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (document.getElementById('edge_button').textContent === "OFF") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -3646,7 +3646,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (document.getElementById('edge_button').textContent === "OFF") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -4402,7 +4402,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (document.getElementById('edge_button').textContent === "OFF") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -4416,7 +4416,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (document.getElementById('edge_button').textContent === "OFF") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -5107,7 +5107,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (document.getElementById('edge_button').textContent === "OFF") {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -5121,7 +5121,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (document.getElementById('edge_button').textContent === "OFF") {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
