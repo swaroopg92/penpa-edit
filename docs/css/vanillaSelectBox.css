@@ -79,7 +79,7 @@ li.disabled {
 .vsb-main button {
     display: block;
     min-width: 80px;
-    background: white !important;
+    background: white;
     text-align: left;
     height: 29px;
     padding-left: 5px;
@@ -94,6 +94,7 @@ li.disabled {
     border-radius: 3px;
 }
 
+.vsb-main button[disabled],
 .vsb-main button.disabled {
     cursor: not-allowed;
     opacity: 0.65;
@@ -127,7 +128,7 @@ li.disabled {
 
 .vsb-menu :not(.multi) li.active::before {
     content: "";
-    display: inline-block;
+    display: block;
     font-size: inherit;
     float: left;
     margin-left: -16px;
@@ -156,7 +157,7 @@ li.disabled {
 
 .vsb-menu .multi li:not(.grouped-option)::before {
     content: "";
-    display: inline-block;
+    display: block;
     font-size: inherit;
     float: left;
     font-weight: bold;
@@ -171,12 +172,11 @@ li.disabled {
 
 .vsb-menu .multi li.active::after {
     content: "";
-    display: inline-block;
+    display: block;
     font-size: inherit;
     color: #333;
     float: left;
     margin-left: -18px;
-    display: inline-block;
     transform: rotate(45deg);
     margin-top: 2px;
     height: 8px;

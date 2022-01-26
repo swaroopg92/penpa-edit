@@ -106,6 +106,19 @@ hr.newgridhrline {
     padding-top: 10px;
 }
 
+.button.sw {
+    cursor: pointer;
+}
+
+#tab-dropdown-lite-btn {
+    border: 0 !important;
+    width: 100%;
+    position: relative;
+    left: -5px;
+    bottom: -5px;
+    cursor: pointer;
+}
+
 .button,
 #top_button button,
 .resize-grid-buttons button {
@@ -586,21 +599,24 @@ body textarea {
 
 #visibility_button0,
 #panel_buttons0,
-#panel_buttonc0 {
+#panel_buttonc0,
+#edge_button0 {
     width: auto;
     border: none;
     background: none;
     padding-left: 5px;
 }
 
-#visibility_button {
+#visibility_button,
+#edge_button {
     width: 25px;
     background: none;
     margin-left: 0px;
     border-radius: 1px;
 }
 
-#visibility_button:hover {
+#visibility_button:hover,
+#edge_button:hover {
     background: var(--greyLight);
 }
 
@@ -729,6 +745,26 @@ body textarea {
     padding: 5px;
 }
 
+#close-float-panel {
+    border: 0;
+    color: inherit;
+    background: transparent;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+#close-float-panel:hover {
+    opacity: .6;
+}
+
 #float-key {
     position: absolute;
     display: none;
@@ -761,7 +797,6 @@ body textarea {
 }
 
 #float-key-menu {
-    /*display: none;*/
     width: 100%;
     height: 20px;
     text-align: center;
@@ -787,41 +822,46 @@ body textarea {
     height: 100%;
 }
 
-.panel_menu li:last-child {
-    border-right: 0;
+.panel_menu li+li {
+    border-left: 1px solid;
 }
 
 #float-key-select {
     position: absolute;
     display: none;
     z-index: 1;
-    left: 0px;
-    top: 0px;
+    left: 100%;
+    top: 0;
     width: 50px;
-    height: 20px;
+    margin: 5px;
     text-align: center;
-    padding-top: 20px;
+    border-radius: 7px;
+    box-shadow: var(--shadow_mid);
 }
 
 .panel_menu_select {
+    list-style: none;
     display: block;
-    table-layout: fixed;
     width: 100%;
     height: 100%;
 }
 
 .panel_menu_select li {
+    display: block;
+    text-align: center;
     list-style: none;
-    vertical-align: middle;
-    width: 100%;
-    height: 0px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5em;
 }
 
-.label_menu {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+.panel_menu_select li+li {
+    border-top: 1px solid;
+}
+
+.panel_menu li:hover,
+.panel_menu_select li:hover {
+    opacity: .5;
 }
 
 #float-canvas {

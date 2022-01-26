@@ -11,7 +11,7 @@
     <meta name="keywords" content="grid editor, pencil puzzle editor, logic puzzle solving, sudoku editor">
     <!-- STYLES -->
     <script>
-        var ver = "2.26.14"; // Also defined in class_p.js
+        var ver = "2.26.15"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -64,6 +64,7 @@
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
+            "./js/settings.js",
             "./js/conflicts.js",
             "./js/puzzlink.js",
             "./js/modes.js",
@@ -130,9 +131,11 @@
                         <label for="pu_a" class="label" id="pu_a_label">Solution</label>
                         <label class="label_mode" id="constraints">Constraints (Beta):</label>
                         <select name="constraints_settings" id="constraints_settings_opt"> </select>
-                        <br id="visibility_break" style="display:none;">
                         <span id="visibility_button0" class="label_mode">Visibility:</span>
                         <span id="visibility_button" class="label">ON</span>
+                        <br id="visibility_break">
+                        <span id="edge_button0" class="label_mode">Draw on Edges/Corners:</span>
+                        <span id="edge_button" class="label">OFF</span>
                     </div>
                     <div id="mode_button" class="mode_button">
                         <label class="label_mode" id="mode_txt">Mode:</label>
@@ -165,6 +168,7 @@
                         <span class="tab" id="tab_selection">
                             <select id="mode_choices" multiple size="0"></select>
                         </span>
+                        <!-- <button id="toggle_panel_visibility" onclick="panel_toggle();">👁️</button> -->
                     </div>
                     <hr size="1" noshade>
                     <div id="submode_button">
@@ -694,49 +698,30 @@
     <div id="float-key">
         <div class="drag-and-drop" id="float-key-header">
             <h4 id="float-key-header-lb">panel</h4>
+            <button id="close-float-panel" onclick="panel_off();">&times;</button>
         </div>
         <div id="float-key-body">
             <div id="float-key-menu">
                 <ul class="panel_menu">
-                    <li><span id="panel_1"><label for="panel_1" id="panel_1_lbmenu" class="label_menu"> 1</label></span></li>
-                    <li><span id="panel_A"><label for="panel_A" id="panel_A_lbmenu" class="label_menu">A</label></span></li>
-                    <li><span id="panel_a"><label for="panel_a" id="panel_a_lbmenu" class="label_menu">a</label></span></li>
-                    <li><span id="panel_Text"><label for="panel_Text" id="panel_Text_lbmenu" class="label_menu">Text</label></span></li>
-                    <li><span id="panel_select"><label for="panel_select" id="panel_select_lbmenu" class="label_select">▶</label></span></li>
+                    <li id="panel_1_lbmenu"> 1</li>
+                    <li id="panel_A_lbmenu">A</li>
+                    <li id="panel_a_lbmenu">a</li>
+                    <li id="panel_Text_lbmenu">Text</li>
+                    <li id="panel_select_lbmenu">▶</li>
                 </ul>
             </div>
             <div id="float-key-select" style="display:none;">
                 <ul class="panel_menu_select">
-                    <li>
-                        <div id="panel_ja_K"><label for="panel_ja_K" id="panel_ja_K_lbmenu" class="label_menu">ア</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_ja_H"><label for="panel_ja_H" id="panel_ja_H_lbmenu" class="label_menu">あ</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_!"><label for="panel_!" id="panel_!_lbmenu" class="label_menu">!</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_Kan"><label for="panel_Kan" id="panel_Kan_lbmenu" class="label_menu">Kanji</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_Rome"><label for="panel_Rome" id="panel_Rome_lbmenu" class="label_menu">XVI</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_Greek"><label for="panel_Greek" id="panel_Greek_lbmenu" class="label_menu">α</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_europe"><label for="panel_europe" id="panel_europe_lbmenu" class="label_menu">À</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_Cyrillic"><label for="panel_Cyrillic" id="panel_Cyrillic_lbmenu" class="label_menu">Ж</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_Chess"><label for="panel_Chess" id="panel_Chess_lbmenu" class="label_menu">♛</label></div>
-                    </li><br>
-                    <li>
-                        <div id="panel_card"><label for="panel_card" id="panel_card_lbmenu" class="label_menu">♠</label></div>
-                    </li>
+                    <li id="panel_ja_K_lbmenu">ア</li>
+                    <li id="panel_ja_H_lbmenu">あ</li>
+                    <li id="panel_!_lbmenu">!</li>
+                    <li id="panel_Kan_lbmenu">Kanji</li>
+                    <li id="panel_Rome_lbmenu">XVI</li>
+                    <li id="panel_Greek_lbmenu">α</li>
+                    <li id="panel_europe_lbmenu">À</li>
+                    <li id="panel_Cyrillic_lbmenu">Ж</li>
+                    <li id="panel_Chess_lbmenu">♛</li>
+                    <li id="panel_card_lbmenu">♠</li>
                 </ul>
             </div>
             <div id="float-key-board">
@@ -1277,7 +1262,7 @@
                         </td>
                         <td>
                             <select name="responsive_settings" id="responsive_settings_opt">
-                                <option value="1">Off</option>
+                                <option value="1" selected="selected">Off</option>
                                 <option value="2">On (Tools Left)</option>
                                 <option value="3">On (Tools Right)</option>
                             </select>
@@ -1383,7 +1368,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
+<!--                     <tr>
                         <td>
                             <label>Draw on Edges/Corners:</label>
                         </td>
@@ -1393,7 +1378,7 @@
                                 <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>
                             <label>Reload Protection:</label>
@@ -1405,7 +1390,7 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>
                             <label>PenpaLite:</label>
                         </td>
@@ -1415,7 +1400,7 @@
                                 <option value="2" selected="selected">OFF</option>
                             </select>
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>
                             <label>Timer:</label>
@@ -1446,10 +1431,10 @@
                         <td>
                             <select name="clear_storage" id="clear_storage_opt">
                                 <option value="1" selected="selected">ON</option>
-                                <option value="2">Clear this puzzle</option>
-                                <option value="3">Clear all</option>
                                 <option value="4">OFF</option>
-                            </select>
+                            </select><br>
+                            <button onclick="clear_storage_one()">Clear this puzzle</button><br>
+                            <button onclick="clear_storage_all()">Clear all</button>
                         </td>
                     </tr>
                 </table>
