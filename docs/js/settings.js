@@ -30,7 +30,7 @@ const UserSettings = {
         let flipVerb = modeInt > 2 ? 'add' : 'remove';
         document.getElementById("app-container").classList[verb]("responsive");
         document.getElementById("app-container").classList[flipVerb]("responsive-flip");
-        document.getElementById("responsive_settings_opt").value = newMode;
+        document.getElementById("responsive_settings_opt").value = modeInt;
 
         // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
         // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
@@ -89,6 +89,25 @@ const UserSettings = {
     },
     get mousemiddle_button() {
         return this._mousemiddle_button;
+    },
+
+    // Conflict detection
+    _conflict_detection: 1,
+    set conflict_detection(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 1;
+        this._conflict_detection = valueInt;
+
+        document.getElementById("conflict_detection_opt").value = valueInt;
+
+        // Handle Cookie dynamically (This is to allow Solver Mode also save this setting)
+        if (valueInt === 3) {
+            setCookie('conflict_detection', valueInt, this._expDate);
+        } else {
+            deleteCookie('conflict_detection');
+        }
+    },
+    get conflict_detection() {
+        return this._conflict_detection;
     },
 
     // Star Battle Dot handling
@@ -243,7 +262,8 @@ const UserSettings = {
         'starbattle_dots',
         'sudoku_centre_size',
         'sudoku_normal_size',
-        'timerbar_status'
+        'timerbar_status',
+        'conflict_detection'
     ],
     gridtype_size: [
         'gridtype',

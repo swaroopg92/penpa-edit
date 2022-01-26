@@ -10,6 +10,7 @@
 	* Disabled continuous stretch of crosses using composite modes for mobile/ipad.
 	* Put back the draw on edge/corners option to main screen.
 	* Improved Panel display with a Closing button in top right.
+	* Conflict checker for Star Battle, TomTom, Consecutive, NonConsecutive and Some other Sudokus (Classic only)
 * 2021/12/31 ver 2.26.14
 	* More puzz.link support
 * 2021/12/19 ver 2.26.13
