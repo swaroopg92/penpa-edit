@@ -101,7 +101,7 @@ const UserSettings = {
 
         // Handle Cookie dynamically (This is to allow Solver Mode also save this setting)
         if (valueInt === 3) {
-            setCookie('conflict_detection', modeInt, this._expDate);
+            setCookie('conflict_detection', valueInt, this._expDate);
         } else {
             deleteCookie('conflict_detection');
         }
