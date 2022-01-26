@@ -11698,7 +11698,7 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection === 2) {
+        if (UserSettings.conflict_detection > 1) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             return;
