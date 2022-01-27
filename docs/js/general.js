@@ -1715,18 +1715,18 @@ function saveimage_window() {
 
 
 function savetext() {
-    $("#saveinfotitle").select2({
+    $("#saveinfogenremain").select2({
         ajax: {
             url: '/live/misc-pp?action=penpa-search-genre',
             dataType: 'json',
             delay: 1000,
-            data: function (params) {
+            data: function(params) {
                 return {
                     q: params.term, // search term
                     page: params.page
                 };
             },
-            processResults: function (data, params) {
+            processResults: function(data, params) {
                 params.page = params.page || 1;
                 return {
                     results: data.items,
@@ -1739,8 +1739,9 @@ function savetext() {
         },
         placeholder: 'Type a Genre',
         tags: false,
+        width: "100%",
         minimumInputLength: 3,
-        templateResult: function (puzzle) {
+        templateResult: function(puzzle) {
             if (puzzle.loading) {
                 return puzzle.text;
             }
@@ -1751,16 +1752,16 @@ function savetext() {
   </div>
             `);
         },
-    }).on('change', function (e) {
+    }).on('change', function(e) {
         const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    id: e.currentTarget.value
+                })
             },
-            body: JSON.stringify({
-                id:e.currentTarget.value
-            })
-        },
             url = `/live/misc-pp?action=penpa-single-genre-details`,
             request = new Request(url, options);
         fetch(request)
@@ -1768,18 +1769,18 @@ function savetext() {
             .then(function(response) {
                 document.getElementById('saveinforules').value = response.data.rules;
                 if (response.data.variant) {
-                    document.getElementById('puzzletype_'+response.data.variant.toLowerCase()).selected = true;
+                    document.getElementById('puzzletype_' + response.data.variant.toLowerCase()).selected = true;
                 }
                 document.getElementById('sudoku_tag').checked = response.data.isSudoku || false;
                 $("#genre_tags_opt").empty();
                 $('#genre_tags_opt').select2({
-                    data:response.taggings
+                    data: response.taggings
                 });
             })
             .catch(function(err) {
                 console.warn(err);
             });
-        });
+    });
     document.getElementById("modal-save").style.display = 'block';
     document.getElementById("savetextarea").value = "";
 
@@ -2350,9 +2351,13 @@ function load2(paramArray, type) {
         pu.multisolution = true;
     }
 
-    // Theme
-    if (rtext_para[21] && rtext_para[21] !== "") {
-        document.getElementById("saveinfotheme").value = rtext_para[21].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+    // Is it Sudoku or Puzzle
+    if (rtext_para[21]) {
+        if (rtext_para[21] === "true") {
+            document.getElementById("nb_issudoku").checked = true;
+        } else {
+            document.getElementById("nb_ispuzzle").checked = true;
+        }
     }
 
     // Additional Info
@@ -2365,19 +2370,38 @@ function load2(paramArray, type) {
         document.getElementById("saveinfotype").value = rtext_para[23];
     }
 
-    // Exclusivity
-    if (rtext_para[24] && rtext_para[24] !== "") {
-        document.getElementById("saveinfoexclusivity").value = rtext_para[24];
+    // Original Idea
+    if (rtext_para[24]) {
+        if (rtext_para[24] === "true") {
+            document.getElementById("nb_originalyes").checked = true;
+        } else {
+            document.getElementById("nb_originalno").checked = true;
+        }
+    }
 
-        if (document.getElementById("saveinfoexclusivity").value === "repost") {
+    // Exclusivity
+    if (rtext_para[25]) {
+        if (rtext_para[25] === "true") {
+            document.getElementById("nb_exclusive").checked = true;
+        } else {
+            document.getElementById("nb_repost").checked = true;
             document.getElementById("saveinfosource_lb").style.display = "";
             document.getElementById("saveinfosource").style.display = "";
             document.getElementById("saveinfosource_brk").style.display = "";
         }
     }
 
+    // Hide theme setting
+    if (rtext_para[26]) {
+        if (rtext_para[26] === "true") {
+            document.getElementById("nb_hidethemeyes").checked = true;
+        } else {
+            document.getElementById("nb_hidethemeno").checked = true;
+        }
+    }
+
     // Video Coverage
-    if (rtext_para[25] && rtext_para[25] !== "" && rtext_para[25] === "true") {
+    if (rtext_para[27] && rtext_para[27] !== "" && rtext_para[27] === "true") {
         document.getElementById("video_usage").checked = true;
     }
 

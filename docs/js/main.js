@@ -1655,6 +1655,42 @@ onload = function() {
                 document.getElementById("nb_margin2").checked = true;
                 e.preventDefault();
                 break;
+            case "nb_issudoku_lb":
+                document.getElementById("nb_issudoku").checked = true;
+                document.getElementById("saveinfogenremain").removeAttribute("disabled");
+                e.preventDefault();
+                break;
+            case "nb_ispuzzle_lb":
+                document.getElementById("nb_ispuzzle").checked = true;
+                document.getElementById("saveinfogenremain").removeAttribute("disabled");
+                e.preventDefault();
+                break;
+            case "nb_originalyes_lb":
+                document.getElementById("nb_originalyes").checked = true;
+                e.preventDefault();
+                break;
+            case "nb_originalno_lb":
+                document.getElementById("nb_originalno").checked = true;
+                e.preventDefault();
+                break;
+            case "nb_exclusive_lb":
+                document.getElementById("nb_exclusive").checked = true;
+                showhide_source();
+                e.preventDefault();
+                break;
+            case "nb_repost_lb":
+                document.getElementById("nb_repost").checked = true;
+                showhide_source();
+                e.preventDefault();
+                break;
+            case "nb_hidethemeyes_lb":
+                document.getElementById("nb_hidethemeyes").checked = true;
+                e.preventDefault();
+                break;
+            case "nb_hidethemeno_lb":
+                document.getElementById("nb_hidethemeno").checked = true;
+                e.preventDefault();
+                break;
             case "saveimagename":
                 return;
             case "closeBtn_image2":
@@ -2234,9 +2270,8 @@ onload = function() {
     }
 
     // Exclusivity and Repost Setting
-    document.getElementById("saveinfoexclusivity").onchange = function() {
-        let value = document.getElementById("saveinfoexclusivity").value;
-        if (value === "repost") {
+    function showhide_source() {
+        if (document.getElementById("nb_repost").checked) {
             document.getElementById("saveinfosource_lb").style.display = "";
             document.getElementById("saveinfosource").style.display = "";
             document.getElementById("saveinfosource_brk").style.display = "";

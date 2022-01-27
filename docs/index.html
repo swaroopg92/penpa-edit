@@ -12,7 +12,7 @@
     <!-- STYLES -->
     <!-- Online styles -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/lib/emoji-picker.css" type="text/css" />
+    <link rel="stylesheet" href="https://logicmastersindia.com/daily/js/emoji-picker.css" type="text/css" />
     <!-- Local styles -->
     <script>
         var ver = "2.26.14"; // Also defined in class_p.js
@@ -65,7 +65,7 @@
     <!-- Online libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://unpkg.com/pure-md5@latest/lib/index.js"></script>
-    <script src="/lib/emoji-picker.js"></script>
+    <script src="https://logicmastersindia.com/daily/js/emoji-picker.js"></script>
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
@@ -118,7 +118,7 @@
                     <button id="rotation">Transform</button>
                     <button id="newsize" style="display:none;">Resize</button>
                     <button id="saveimage">Screenshot</button>
-                    <button id="savetext">LMI</button>
+                    <button id="savetext">Submit to LMI Expo</button>
                     <a id="download_link"></a>
                     <button id="duplicate" onclick="duplicate();">Clone</button>
                     <button id="input_sudoku">I/O Sudoku</button>
@@ -960,51 +960,61 @@
     </div>
     <div id="modal-save" class="modal">
         <div id="modal-save-content">
-            <h3 class="modal-header" id="savetexttitle">Submit to LMI Puzzle Expo</h3>
+            <h3 class="modal-header" id="savetexttitle">Submit to LMI Expo</h3>
             <div id="modal-save-info">
-                <span class="DM" id="saveinfotitle_lb">*Genre:</span>
-								<select id="saveinfotitle" style="width: 100%"></select>
+                <label class="label_nb" id="isitsudoku_lb">*What is it?</label>
+                <input type="radio" name="nb_isitsudoku" value="1" id="nb_issudoku">
+                <label for="nb_issudoku" class="label" id="nb_issudoku_lb">Sudoku</label>
+                <input type="radio" name="nb_isitsudoku" value="2" id="nb_ispuzzle">
+                <label for="nb_ispuzzle" class="label" id="nb_ispuzzle_lb">Puzzle</label>
+                <br>
+                <span class="DM" id="saveinfogenremain_lb">*Genre:</span>
+                <select id="saveinfogenremain" disabled></select>
                 <br>
                 <span class="DM" id="saveinfoauthor_lb" style="display:none;">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor" style="display:none;"></span>
-                <span class="DM" id="saveinfotheme_lb">Theme:<input type="text" placeholder="Puzzle Theme (Optional)" value="" id="saveinfotheme"></span>
+                <span class="DM" id="saveinfotitle_lb">Title | Theme:<input type="text" placeholder="Puzzle Title or Theme (Optional)" value="" id="saveinfotitle"></span>
+                <br>
+                <label class="label_nb" id="hidetheme_lb">Hide theme until player solves?</label>
+                <input type="radio" name="nb_hidetheme" value="1" id="nb_hidethemeyes">
+                <label for="nb_hidethemeyes" class="label" id="nb_hidethemeyes_lb">Yes</label>
+                <input type="radio" name="nb_hidetheme" value="2" id="nb_hidethemeno" checked="checked">
+                <label for="nb_hidethemeno" class="label" id="nb_hidethemeno_lb">No</label>
                 <br>
                 <span class="DM" id="saveinforules_lb">*Rules:</span><textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>
                 <span class="DM" id="saveinfoinfo_lb">Info:<textarea class="text_area" rows="1" cols="10" placeholder="Any additional information like example link, background story, collaborating authors goes here (Optional)" value="" id="saveinfoinfo"></textarea></span>
                 <br>
-								<span>
-										<span><label class="label_nb" id="sudoku_tag_lb">Is this a Sudoku?</label></span>
-										<input type="checkbox" name="sudoku_tag" id="sudoku_tag">
-								</span>
-                <br>
-                <span class="DM" id="saveinfotype_lb">Variant Level:
+                <span class="DM" id="saveinfotype_lb">Variant Type:
                     <select id="saveinfotype">
-                        <option value="classic" id="puzzletype_classic" selected="selected">Classic</option>
+                        <option value="standard" id="puzzletype_standard" selected="selected">Standard</option>
                         <option value="variant" id="puzzletype_variant">Variant</option>
                         <option value="hybrid" id="puzzletype_hybrid">Hybrid</option>
-                        <option value="innovative" id="puzzletype_innovative">Innovative</option>
-                        <option value="original" id="puzzletype_original">Original (Your invention)</option>
                     </select>
                 </span>
                 <br>
-                <span class="DM" id="saveinfoexclusivity_lb">Exclusivity:
-                    <select id="saveinfoexclusivity">
-                        <option value="exclusive" id="lmi_exclusive" selected="selected">Exclusive</option>
-                        <option value="repost" id="lmi_nonexclusive">Repost</option>
-                    </select>
-                </span>
+                <label class="label_nb" id="isitoriginal_lb">Original (Your Invention)?</label>
+                <input type="radio" name="nb_isitoriginal" value="1" id="nb_originalyes">
+                <label for="nb_originalyes" class="label" id="nb_originalyes_lb">Yes</label>
+                <input type="radio" name="nb_isitoriginal" value="2" id="nb_originalno" checked="checked">
+                <label for="nb_originalno" class="label" id="nb_originalno_lb">No</label>
+                <br>
+                <label class="label_nb" id="isitexclusive_lb">Exclusivity?</label>
+                <input type="radio" name="nb_isitexclusive" value="1" id="nb_exclusive" checked="checked">
+                <label for="nb_exclusive" class="label" id="nb_exclusive_lb">Exclusive</label>
+                <input type="radio" name="nb_isitexclusive" value="2" id="nb_repost">
+                <label for="nb_repost" class="label" id="nb_repost_lb">Repost</label>
                 <br id="saveinfosource_brk" style="display:none;">
-                <span class="DM" id="saveinfosource_lb" style="display:none;">*Other Source Link:<input type="text" placeholder="https://blogpost.com" id="saveinfosource" style="display:none;"></span>
+                <span class="DM" id="saveinfosource_lb" style="display:none;">*Original Source Link:<input type="text" placeholder="https://blogpost.com" id="saveinfosource" style="display:none;"></span>
                 <br>
                 <span id="sourcewarning" style="display:none;">*Type anything here</span>
                 <label class="label_nb" id="saveinfo_gridsize">Puzzle Size:</label>
-                <br>
                 <span><label class="label_nb" id="saveinfo_rows_lb">Rows:</label></span>
                 <input type="number" pattern="\d*" name="saveinfo_rows" id="saveinfo_rows" value="" min="1" max="60" step="1" placeholder="1">
                 <span><label class="label_nb" id="saveinfo_cols_lb">Columns:</label></span>
                 <input type="number" pattern="\d*" name="saveinfo_cols" id="saveinfo_cols" value="" min="1" max="60" step="1" placeholder="1">
-                <br>
-                <input type="button" id="saveinfogenre" value="*Select genre/tags" />
+            </div>
+            <div class="nb_button">
+                <input type="button" id="saveinfogenre" value="*Select Tags" />
             </div>
             <div class="nb_button">
                 <input type="button" id="address_edit" value="URL for editing" style="display:none;" />

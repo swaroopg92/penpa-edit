@@ -2717,9 +2717,8 @@ class Puzzle {
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false;
 
-        // Puzzle Theme
-        let themeinfo = document.getElementById("saveinfotheme").value;
-        text += "," + themeinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        // Is it Sudoku or Puzzle
+        text += "," + document.getElementById("nb_issudoku").checked;
 
         // Puzzle info
         let infoinfo = document.getElementById("saveinfoinfo").value;
@@ -2728,8 +2727,14 @@ class Puzzle {
         // Variant Level
         text += "," + document.getElementById("saveinfotype").value;
 
+        // Original
+        text += "," + document.getElementById("nb_originalyes").checked;
+
         // Exclusivity
-        text += "," + document.getElementById("saveinfoexclusivity").value;
+        text += "," + document.getElementById("nb_exclusive").checked;
+
+        // Hide theme or not
+        text += "," + document.getElementById("nb_hidethemeyes").checked;
 
         // Video Coverage
         text += "," + document.getElementById("video_usage").checked + "\n";
@@ -2890,9 +2895,8 @@ class Puzzle {
             text += "," + false;
         }
 
-        // Puzzle Theme
-        let themeinfo = document.getElementById("saveinfotheme").value;
-        text += "," + themeinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        // Is it Sudoku or Puzzle
+        text += "," + document.getElementById("nb_issudoku").checked;
 
         // Puzzle info
         let infoinfo = document.getElementById("saveinfoinfo").value;
@@ -2901,8 +2905,14 @@ class Puzzle {
         // Variant Level
         text += "," + document.getElementById("saveinfotype").value;
 
+        // Original
+        text += "," + document.getElementById("nb_originalyes").checked;
+
         // Exclusivity
-        text += "," + document.getElementById("saveinfoexclusivity").value;
+        text += "," + document.getElementById("nb_exclusive").checked;
+
+        // Hide theme or not
+        text += "," + document.getElementById("nb_hidethemeyes").checked;
 
         // Video Coverage
         text += "," + document.getElementById("video_usage").checked + "\n";
@@ -3104,9 +3114,8 @@ class Puzzle {
             text += "," + false;
         }
 
-        // Puzzle Theme
-        let themeinfo = document.getElementById("saveinfotheme").value;
-        text += "," + themeinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        // Is it Sudoku or Puzzle
+        text += "," + document.getElementById("nb_issudoku").checked;
 
         // Puzzle info
         let infoinfo = document.getElementById("saveinfoinfo").value;
@@ -3115,8 +3124,14 @@ class Puzzle {
         // Variant Level
         text += "," + document.getElementById("saveinfotype").value;
 
+        // Original
+        text += "," + document.getElementById("nb_originalyes").checked;
+
         // Exclusivity
-        text += "," + document.getElementById("saveinfoexclusivity").value;
+        text += "," + document.getElementById("nb_exclusive").checked;
+
+        // Hide theme or not
+        text += "," + document.getElementById("nb_hidethemeyes").checked;
 
         // Video Coverage
         text += "," + document.getElementById("video_usage").checked + "\n";
@@ -3345,6 +3360,11 @@ class Puzzle {
 
         // validate if some solution exist and its not empty
         if (validate && Object.keys(sol).every((k) => sol[k].length === 0)) {
+            Swal.fire({
+                html: '<h3 class="warn">Please add solution and enable answer check</h3>',
+                icon: 'error',
+                confirmButtonText: 'ok',
+            })
             return false;
         }
 

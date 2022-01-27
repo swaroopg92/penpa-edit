@@ -932,7 +932,6 @@ body textarea {
 }
 
 #saveinfoauthor,
-#saveinfotheme,
 #saveinfotitle,
 #saveinfosource,
 #saveinforules,
@@ -1261,11 +1260,8 @@ sup {
 }
 
 .select2-container--default .select2-selection--single {
-    border: 2px solid #d00 !important;
+    border: 1px solid #000 !important;
     border-radius: 3px !important;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-left: 5px;
     margin-bottom: 5px;
     text-align: center;
 }
@@ -1282,13 +1278,6 @@ sup {
     padding-right: 5px;
     margin: 5px;
     text-align: center;
-}
-
-#saveinfogenre {
-    text-align: center;
-    margin-left: 30%;
-    margin-top: 5px;
-    padding: 3px;
 }
 
 #modal-save-tag-body {
