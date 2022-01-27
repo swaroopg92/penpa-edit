@@ -1119,6 +1119,7 @@ function replay_choice() {
 
             // Enable timer for live replay
             document.getElementById("timer").style.display = "";
+            document.getElementById("stop_watch").style.display = "";
 
             if (sw_timer.isPaused()) {
                 sw_timer.start({
@@ -1173,6 +1174,7 @@ function replay_choice() {
         } else {
             // Disable timer if no live replay
             document.getElementById("timer").style.display = "none";
+            document.getElementById("stop_watch").style.display = "none";
 
             // hide all buttons
             document.getElementById("replay_play").style.display = "none";
@@ -1198,6 +1200,7 @@ function replay_choice() {
         // Disable timer if no live replay
         sw_timer.reset();
         document.getElementById("timer").style.display = "none";
+        document.getElementById("stop_watch").style.display = "none";
 
         // show all buttons
         document.getElementById("replay_play").style.display = "";
@@ -2290,6 +2293,7 @@ function load2(paramArray, type) {
             contestinfo.style.display = "block";
             if (pu.puzzle_info.seconds !== undefined) {
                 document.getElementById("timer").style.display = "block";
+                document.getElementById("stop_watch").style.display = "";
                 sw_timer.start({
                     precision: 'secondTenths',
                     startValues: {
@@ -2877,6 +2881,7 @@ function load2(paramArray, type) {
     if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
         // Enable timer for resolves
         document.getElementById("timer").style.display = "";
+        document.getElementById("stop_watch").style.display = "";
         document.getElementById("sw_start").style.display = "";
         document.getElementById("sw_pause").style.display = "";
         document.getElementById("sw_reset").style.display = "";
