@@ -1,6 +1,6 @@
 :root {
     /*constant widths*/
-    --popup_width: 330px;
+    --popup_width: 350px;
     --popup_width_larger: calc(var(--popup_width) + 30px);
 
     --shadow_low: 0 2px 2px rgba(0, 0, 0, 0.5);
@@ -900,6 +900,7 @@ body textarea {
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    overflow: auto;
     box-shadow: var(--shadow_mid);
 }
 
