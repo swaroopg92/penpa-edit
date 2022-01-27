@@ -936,10 +936,14 @@ body textarea {
 #saveinfosource,
 #saveinforules,
 #saveinfoinfo,
-#saveinfotype,
 #saveinfoexclusivity {
     margin: 2px auto;
     width: 100%;
+}
+
+#saveinfotype{
+    margin: 2px auto;
+    width: 68%;
 }
 
 #sourcewarning {

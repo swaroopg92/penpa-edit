@@ -11553,14 +11553,14 @@ class Puzzle {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
 
-                text = this.solution; // Temporary for Deb
+                // text = this.solution; // Temporary for Deb
 
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
 
                         // submit solution steps
-                        submit_solution_steps(); // Temporary by Deb
+                        // submit_solution_steps(); // Temporary by Deb
 
                         // Rating and feedback code
                         let wrap = document.createElement('div');

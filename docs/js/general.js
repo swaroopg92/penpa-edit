@@ -1947,10 +1947,20 @@ function isValidURL(string) {
 };
 
 function validate_entries() {
+    // Validate "What is it" is selected
+    if (!document.getElementById("nb_issudoku").checked || !document.getElementById("nb_ispuzzle").checked) {
+        Swal.fire({
+            title: 'Select if its a Sudoku or Puzzle',
+            icon: 'error',
+            confirmButtonText: 'ok',
+        })
+        return false;
+    }
+
     // Validate title is not empty
     if (document.getElementById("saveinfotitle").value.length === 0) {
         Swal.fire({
-            title: 'Title is empty',
+            title: 'Title | Theme is empty',
             icon: 'error',
             confirmButtonText: 'ok',
         })
@@ -1980,7 +1990,7 @@ function validate_entries() {
     }
 
     // Validate Other Source Url is specified
-    if (document.getElementById("saveinfoexclusivity").value === "repost") {
+    if (document.getElementById("nb_repost").checked) {
         let validateurl = isValidURL(document.getElementById("saveinfosource").value);
         if (!validateurl) {
             Swal.fire({
