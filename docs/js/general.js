@@ -1738,7 +1738,7 @@ function savetext() {
             cache: true
         },
         placeholder: 'Type a Genre',
-        tags: false,
+        tags: true,
         width: "100%",
         minimumInputLength: 3,
         templateResult: function(puzzle) {
@@ -1748,7 +1748,7 @@ function savetext() {
             return $(`
   <div>
     <div><strong>${puzzle.text}</strong></div>
-    <div><small>${puzzle.rules || 'Rules for this type is not avaiable. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.'}</small></div>
+    <div><small>${puzzle.rules || 'Rules for this type is not available. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.'}</small></div>
   </div>
             `);
         },
