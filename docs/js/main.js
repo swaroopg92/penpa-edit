@@ -88,8 +88,6 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
             let skip_mouseevent = false;
-            pu.puzzle_info = {};
-            pu.puzzle_info["lmimode"] = "daily";
             if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
                 skip_mouseevent = true;
             }
@@ -126,8 +124,6 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
             let skip_mouseevent = false;
-            pu.puzzle_info = {};
-            pu.puzzle_info["lmimode"] = "daily";
             if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
                 skip_mouseevent = true;
                 onOut();
@@ -167,8 +163,6 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
             let skip_mouseevent = false;
-            pu.puzzle_info = {};
-            pu.puzzle_info["lmimode"] = "daily";
             if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
                 skip_mouseevent = true;
                 onOut();
