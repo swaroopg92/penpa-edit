@@ -1726,6 +1726,7 @@ function savetext() {
             data: function(params) {
                 return {
                     q: params.term, // search term
+                    sudoku: document.getElementById('nb_issudoku').checked,
                     page: params.page
                 };
             },
