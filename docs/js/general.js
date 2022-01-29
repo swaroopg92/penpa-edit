@@ -1775,7 +1775,6 @@ function savetext() {
                 if (response.data.variant) {
                     document.getElementById('puzzletype_' + response.data.variant.toLowerCase()).selected = true;
                 }
-                document.getElementById('sudoku_tag').checked = response.data.isSudoku || false;
                 $("#genre_tags_opt").empty();
                 $('#genre_tags_opt').select2({
                     data: response.taggings
