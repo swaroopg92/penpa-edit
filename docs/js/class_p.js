@@ -11391,14 +11391,14 @@ class Puzzle {
                     if (text === this.solution && this.sol_flag === 0) {
                         setTimeout(() => {
                             Swal.fire({
-                                title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                // html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
+                                html: '<h2 class="wish">Congratulations 🙂</h2>',
                                 background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
                                 confirmButtonText: 'Hurray!',
                                 // timer: 5000
                             })
-                        }, 20)
+                        }, 20);
                         sw_timer.pause();
                         // this.mouse_mode = "out";
                         // this.mouseevent(0, 0, 0);
@@ -11423,13 +11423,13 @@ class Puzzle {
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             setTimeout(() => {
                                 Swal.fire({
-                                    title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                    // html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                    // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
+                                    html: '<h2 class="wish">Congratulations 🙂</h2>',
                                     background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
                                     confirmButtonText: 'Hurray!',
                                 })
-                            }, 20)
+                            }, 20);
                             sw_timer.pause();
                             this.sol_flag = 1;
                             // document.getElementById("pu_a_label").innerHTML = "Correct Solution";

@@ -1625,43 +1625,6 @@ function load(urlParam, type = 'url') {
         pu.user_tags = JSON.parse(rtext[17]);
     }
 
-    // Detect tag using title information if author did not define tags
-    // This is to add tags for the previously created URLs
-    if (pu.user_tags.length === 0) {
-        let wordsRegex = /([^\x00-\x7F]|\w)+/g;
-        let title = document.getElementById("saveinfotitle").value;
-        let title_words = title.match(wordsRegex);
-        let allow_genres = ["arrow", "thermo", "even", "consecutive", "killer", "nonconsecutive"];
-
-        // find position of "sudoku"
-        if (title_words) {
-            let sudoku_index = title_words.findIndex(element => {
-                return element.toLowerCase() === "sudoku";
-            });
-
-            if (sudoku_index === 0) {
-                pu.user_tags[0] = "classic";
-            } else if ((sudoku_index === 1 || sudoku_index === 2) &&
-                (allow_genres.includes(title_words[0].toLowerCase()))) {
-                switch (title_words[0].toLowerCase()) {
-                    case "consecutive":
-                        pu.user_tags[0] = "consecutive";
-                        break;
-                    case "nonconsecutive":
-                        pu.user_tags[0] = "nonconsecutive";
-                        break;
-                    default:
-                        pu.user_tags[0] = "classic";
-                        break;
-                }
-            } else if (title_words[0].toLowerCase() === "star" && title_words[1].toLowerCase() === "battle") {
-                pu.user_tags[0] = "starbattle";
-            } else if (title_words[0].toLowerCase() === "tomtom") {
-                pu.user_tags[0] = "tomtom";
-            }
-        }
-    }
-
     add_genre_tags(pu.user_tags);
     $('#genre_tags_opt').select2({
         placeholder: 'Search Area',
@@ -1972,6 +1935,7 @@ function load(urlParam, type = 'url') {
 
             if (local_copy.timer) {
                 let starttime = local_copy.timer.split(":");
+                var puzzle_solved = sw_timer.isPaused() ? true : false;
                 sw_timer.stop(); // stop previously running timer and start with stored starting time
                 sw_timer.start({
                     precision: 'secondTenths',
@@ -1983,6 +1947,9 @@ function load(urlParam, type = 'url') {
                         secondTenths: parseInt(starttime[4])
                     }
                 });
+                if (puzzle_solved) {
+                    sw_timer.pause();
+                }
             }
         }
     }
