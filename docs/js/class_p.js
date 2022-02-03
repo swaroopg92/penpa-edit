@@ -2729,9 +2729,17 @@ class Puzzle {
         return text;
     }
 
-    __export_version_shared() {
+    __export_version_shared(options = {}) {
+        var text = "";
+
+        if (!options.skipTimerPlaceholder) {
+            text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+        }
+
+        text += JSON.stringify(options.comp ? "comp" : "x") + "\n";
+
         // Version
-        var text = JSON.stringify(this.version) + "\n";
+        text += JSON.stringify(this.version) + "\n";
 
         // Save submode/style/combi settings
         text += JSON.stringify(this.mode) + "\n";
@@ -2749,18 +2757,24 @@ class Puzzle {
         return text;
     }
 
-    __export_checker_shared() {
+    __get_answer_settings(type) {
+        type = type || ""; // blank or "_or"
+
         // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck" + type);
         var answersetting = {};
         for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
+            answersetting[settingstatus[i].id] = !!(settingstatus[i].checked);
         }
-        var text = JSON.stringify(answersetting) + "\n";
+        return answersetting;
+    }
+
+    __export_solcheck_shared() {
+        return JSON.stringify(this.__get_answer_settings()) + "\n";
+    }
+
+    __export_checker_shared() {
+        var text = JSON.stringify(this.__get_answer_settings("_or")) + "\n";
 
         // Save genre tags
         text += JSON.stringify($('#genre_tags_opt').select2("val"));
@@ -2816,23 +2830,7 @@ class Puzzle {
         }
 
         text += this.__export_list_tab_shared();
-
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
+        text += this.__export_solcheck_shared();
         text += this.__export_version_shared();
 
         if (document.getElementById("save_undo").checked === false) {
@@ -2905,29 +2903,16 @@ class Puzzle {
             text += sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']) + "\n";
         }
 
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
+        text += this.__export_solcheck_shared();
 
         if (this.mmode !== "solve") {
             text += JSON.stringify("x") + "\n"; // dummy to compensate time saver for non solve cloning
         }
 
-        if (this.comp) {
-            text += JSON.stringify("comp") + "\n";
-        } else {
-            text += JSON.stringify("x") + "\n";
-        }
-
-        text += this.__export_version_shared();
+        text += this.__export_version_shared({
+            skipTimerPlaceholder: true,
+            comp: this.comp
+        });
 
         qr = this.pu_q_col.command_redo.__a;
         qu = this.pu_q_col.command_undo.__a;
@@ -3010,23 +2995,7 @@ class Puzzle {
         this.pu_q.command_undo.__a = qu;
 
         text += this.__export_list_tab_shared();
-
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
+        text += this.__export_solcheck_shared();
         text += this.__export_version_shared();
 
         qr = this.pu_q_col.command_redo.__a;
@@ -3067,24 +3036,10 @@ class Puzzle {
         this.pu_q.command_undo.__a = qu;
 
         text += this.__export_list_tab_shared();
-
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        text += JSON.stringify("comp") + "\n";
-
-        text += this.__export_version_shared();
+        text += this.__export_solcheck_shared();
+        text += this.__export_version_shared({
+            comp: true
+        });
 
         qr = this.pu_q_col.command_redo.__a;
         qu = this.pu_q_col.command_undo.__a;
