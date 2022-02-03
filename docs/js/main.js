@@ -1085,11 +1085,9 @@ onload = function() {
                 break;
             case "tb_undo":
                 pu.undo();
-                e.preventDefault();
                 break;
             case "tb_redo":
                 pu.redo();
-                e.preventDefault();
                 break;
             case "tb_reset":
                 ResetCheck();

@@ -11059,32 +11059,8 @@ class Puzzle {
     }
 
     set_redoundocolor() {
-        if (this[this.mode.qa].command_redo.__a.length === 0) {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
-            } else {
-                document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
-            }
-        } else {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_redo').style.color = Color.BLACK;
-            } else {
-                document.getElementById('tb_redo').style.color = Color.WHITE;
-            }
-        }
-        if (this[this.mode.qa].command_undo.__a.length === 0) {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
-            } else {
-                document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
-            }
-        } else {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_undo').style.color = Color.BLACK;
-            } else {
-                document.getElementById('tb_undo').style.color = Color.WHITE;
-            }
-        }
+        document.getElementById('tb_redo').disabled = (this[this.mode.qa].command_redo.__a.length === 0) ? 'disabled' : '';
+        document.getElementById('tb_undo').disabled = (this[this.mode.qa].command_undo.__a.length === 0) ? 'disabled' : '';
     }
 
     flushcanvas(svgcall) {
