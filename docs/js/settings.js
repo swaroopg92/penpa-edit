@@ -211,7 +211,12 @@ const UserSettings = {
         if (!themeStylesheet) { themeStylesheet = this._theme_urls[THEME_LIGHT]; }
 
         document.getElementById("theme_mode_opt").value = valueInt;
-        document.getElementById("color_theme").href = themeStylesheet;
+        if (style_tag_cache['color_theme']) {
+            style_tag_cache['color_theme'].href = themeStylesheet;
+        } else {
+            console.error('Could not find color theme stylesheet to change.');
+        }
+
         if (window.pu) {
             pu.set_redoundocolor();
             pu.redraw();
