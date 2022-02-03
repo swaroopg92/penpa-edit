@@ -181,7 +181,7 @@ onload = function() {
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
         "Shape",
-        "Thermo", "Sudoku Arrow",
+        "Special", "Thermo", "Sudoku Arrow",
         "Composite"
     ];
 
@@ -192,7 +192,7 @@ onload = function() {
         "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
         "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
         "Shape",
-        "Thermo", "Sudoku Arrow",
+        "Special", "Thermo", "Sudoku Arrow",
         "Composite"
     ];
 
@@ -203,7 +203,7 @@ onload = function() {
         "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
         "sub_sudoku1", "sub_sudoku2", "sub_sudoku3",
         "symbol",
-        "sub_specialthermo", "sub_specialarrows",
+        "special", "sub_specialthermo", "sub_specialarrows",
         "combi"
     ];
     let previous_mode = "surface";
@@ -779,7 +779,8 @@ onload = function() {
                     if (mode_name.includes("surface") ||
                         mode_name.includes("wall") ||
                         mode_name.includes("symbol") ||
-                        mode_name.includes("combi")) {
+                        mode_name.includes("combi") ||
+                        mode_name === "special") {
                         pu.mode_set(mode_name)
                         e.preventDefault();
                     } else {

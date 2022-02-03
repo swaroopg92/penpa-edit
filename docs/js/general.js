@@ -925,7 +925,8 @@ function advancecontrol_off(loadtype) {
     if (user_choices.indexOf("Shape") === -1) {
         document.getElementById("mo_symbol_lb").style.display = "none";
     }
-    if (user_choices.indexOf("Thermo") === -1 &&
+    if (user_choices.indexOf("Special") === -1 &&
+        user_choices.indexOf("Thermo") === -1 &&
         user_choices.indexOf("Sudoku Arrow") === -1) {
         document.getElementById("mo_special_lb").style.display = "none";
     }
