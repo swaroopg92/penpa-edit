@@ -2748,11 +2748,7 @@ class Puzzle {
         text += JSON.stringify("x") + "\n";
 
         // Custom Colors
-        if (document.getElementById("custom_color_opt").value === "2") {
-            text += JSON.stringify("true") + "\n"
-        } else {
-            text += JSON.stringify("false") + "\n"
-        }
+        text += (document.getElementById("custom_color_opt").value === "2") ? "1\n" : "0\n";
 
         return text;
     }
