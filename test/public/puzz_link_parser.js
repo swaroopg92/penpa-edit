@@ -321,8 +321,20 @@ describe("puzz.link parser", () => {
     forEach(testCases, (_, puzzlink_url, filename) => async () => {
         penpa.decode_puzzlink(puzzlink_url);
 
+        const contents = {
+            ...penpa.pu.pu_q
+        };
+        // These are not native objects but class instances
+        delete contents.command_undo;
+        delete contents.command_redo;
+
         const data = {
-            edit_url: penpa.pu.maketext().split("?")[1],
+            contents,
+            genre_tags: penpa.$('#genre_tags_opt').select2("val"),
+            grid_size: [penpa.pu.nx0, penpa.pu.ny0],
+            grid_type: penpa.pu.gridtype,
+            mode: penpa.pu.mode,
+            outside_spacing: penpa.pu.space,
         };
         const body = {
             filename,
