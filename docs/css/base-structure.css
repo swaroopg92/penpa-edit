@@ -1284,6 +1284,11 @@ sup {
     cursor: pointer;
 }
 
+/* todo -- tie to selected theme */
+.select2-container {
+    color: #000 !important;
+}
+
 .select2-dropdown {
     font-size: 14px !important;
 }
