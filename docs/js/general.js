@@ -1237,7 +1237,7 @@ function io_sudoku() {
 
 function i_url() {
     document.getElementById("modal-load").style.display = 'block';
-    document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button.";
+    document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button. You can also load puzz.link puzzles here";
 }
 
 function p_settings() {
