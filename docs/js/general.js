@@ -1456,7 +1456,7 @@ function import_url() {
             if (UserSettings.tab_settings > 0) {
                 selectBox.setValue(UserSettings.tab_settings);
             }
-        } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p?") !== -1) {
+        } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p.html?") !== -1) {
             decode_puzzlink(urlstring);
             document.getElementById("modal-load").style.display = 'none';
         } else {
@@ -2546,7 +2546,7 @@ function decode_puzzlink(url) {
         puzzle.mode_set(mode); //include redraw
     }
 
-    var info_edge, info_number, size, puzzlink_pu,
+    var info_edge, info_number, info_obj, size, puzzlink_pu,
         row_ind, col_ind, cell, value, corner_cursor,
         number_style;
 
@@ -3436,6 +3436,35 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             UserSettings.tab_settings = ["Surface", "Composite"];
             break;
+        case "nurimaze":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            info_obj = puzzlink_pu.decodeNurimaze();
+            puzzlink_pu.drawNumbers(pu, info_obj.number_list, 1, "1");
+
+            // Draw triangles and circles
+            for (i in info_obj.shape_list) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                if (info_obj.shape_list[i] === "o") {
+                    pu["pu_q"].symbol[cell] = [1, "circle_M", 1];
+                } else {
+                    pu["pu_q"].symbol[cell] = [1, "triup_M", 1];
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            pu.mode_set("surface");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
@@ -3453,12 +3482,13 @@ function decode_puzzlink(url) {
     advancecontrol_off("url");
 
     var tabSelect = document.querySelector('ul.multi');
+    var tabOptions = UserSettings.tab_settings;
     for (var child of tabSelect.children) {
         if (!child.dataset.value) {
             continue;
         }
 
-        if (UserSettings.tab_settings.includes(child.dataset.value)) {
+        if (tabOptions.includes(child.dataset.value)) {
             if (!child.classList.contains('active')) {
                 child.click();
             }
