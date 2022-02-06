@@ -7630,7 +7630,7 @@ class Puzzle {
                             }
                             if (!single_digit) {
                                 number = "";
-                                if (this[this.mode.qa].number[k]) {
+                                if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] != "2" && this[this.mode.qa].number[k][2] != "7") {
                                     if (con.length === 0) {
                                         con = this[this.mode.qa].number[k][0];
                                     }
