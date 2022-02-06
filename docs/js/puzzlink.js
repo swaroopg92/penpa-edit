@@ -608,6 +608,35 @@ class Puzzlink {
             pu["pu_q"].symbol[cell] = [1, "compass", 1];
         }
     }
+
+    decodeNurimaze() {
+        var number_list = {};
+        var shape_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            var res = this.readNumber16(ca, i);
+            if (ca === "1") {
+                number_list[c] = "S";
+            } else if (ca === "2") {
+                number_list[c] = "G";
+            } else if (ca === "3") {
+                shape_list[c] = "o";
+            } else if (ca === "4") {
+                shape_list[c] = "t";
+            } else if ((ca >= "5" && ca <= "9") || (ca >= "a" && ca <= "z")) {
+                c += parseInt(ca, 36) - 5;
+            }
+            i++;
+            c++;
+        }
+        var obj = new Object();
+        obj.number_list = number_list;
+        obj.shape_list = shape_list;
+        return obj;
+    }
 }
 
 class DisjointSets {

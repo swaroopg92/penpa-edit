@@ -7633,7 +7633,7 @@ class Puzzle {
                             }
                             if (!single_digit) {
                                 number = "";
-                                if (this[this.mode.qa].number[k]) {
+                                if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] != "2" && this[this.mode.qa].number[k][2] != "7") {
                                     if (con.length === 0) {
                                         con = this[this.mode.qa].number[k][0];
                                     }
@@ -11401,7 +11401,7 @@ class Puzzle {
                                 confirmButtonText: 'Hurray!',
                                 // timer: 5000
                             })
-                        }, 20)
+                        }, 20);
                         sw_timer.pause();
                         // this.mouse_mode = "out";
                         // this.mouseevent(0, 0, 0);
@@ -11432,7 +11432,7 @@ class Puzzle {
                                     icon: 'success',
                                     confirmButtonText: 'Hurray!',
                                 })
-                            }, 20)
+                            }, 20);
                             sw_timer.pause();
                             this.sol_flag = 1;
                             // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
