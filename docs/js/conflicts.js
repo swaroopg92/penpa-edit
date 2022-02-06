@@ -251,7 +251,7 @@ class Conflicts {
         const number_data = this.pu.pu_q.number[number_keys[0]];
         if (number_data.length !== 3) return;
         const number_range = number_data[0];
-        if (number_range.includes(",")) return;
+        if (number_range.includes(",") || number_range.includes("<")) return;
 
         const data = this.get_data('number_grid');
         const regions = this.get_data('region_grid');

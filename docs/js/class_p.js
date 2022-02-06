@@ -4429,15 +4429,18 @@ class Puzzle {
         // Setup Edge Matrices
         var pointA, pointA_x, pointA_y, edge, points;
         for (edge in edge_elements) {
-            points = edge.split(',');
-            pointA = Number(points[0]) - (this.nx0 * this.ny0);
-            pointA_x = (pointA % this.nx0); //column
-            pointA_y = parseInt(pointA / this.nx0); //row
-            if ((Number(points[1]) - Number(points[0])) === 1) {
-                // data for up matrix
-                up_matrix[pointA_y - 1][pointA_x - 1] = 1;
-            } else {
-                right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+            // If black edge or thicker edge
+            if (edge_elements[edge] === 2 || edge_elements[edge] === 21) {
+                points = edge.split(',');
+                pointA = Number(points[0]) - (this.nx0 * this.ny0);
+                pointA_x = (pointA % this.nx0); //column
+                pointA_y = parseInt(pointA / this.nx0); //row
+                if ((Number(points[1]) - Number(points[0])) === 1) {
+                    // data for up matrix
+                    up_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                } else {
+                    right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                }
             }
         }
 
@@ -11711,6 +11714,9 @@ class Puzzle {
             }
             this.conflicts.reset();
             const tags = new Set(this.user_tags);
+            if (tags.has('noconflict')) {
+                return false;
+            }
             if (tags.has('consecutive') || tags.has('nonconsecutive')) {
                 this.conflicts.check_sudoku();
                 // check consecutive only if no classic conflict

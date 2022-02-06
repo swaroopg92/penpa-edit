@@ -60,7 +60,8 @@ const penpa_tags = {
         "Others": [
             "wordpuzzle",
             "puzzlehunt",
-            "wordsearch"
+            "wordsearch",
+            "noconflict"
         ]
     }
 }
