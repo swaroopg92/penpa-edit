@@ -122,6 +122,18 @@ const UserSettings = {
         return this._starbattle_dots;
     },
 
+    // Surface Second Color handling
+    _secondcolor: 2,
+    set secondcolor(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 2;
+        this._secondcolor = valueInt;
+
+        document.getElementById("secondcolor_settings_opt").value = valueInt;
+    },
+    get secondcolor() {
+        return this._secondcolor;
+    },
+
     // Sudoku number size handling
     _sudoku_normal_size: 1,
     set sudoku_normal_size(newValue) {
@@ -260,6 +272,7 @@ const UserSettings = {
         'reload_button',
         'responsive_mode',
         'starbattle_dots',
+        'secondcolor',
         'sudoku_centre_size',
         'sudoku_normal_size',
         'timerbar_status',

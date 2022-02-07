@@ -1992,6 +1992,10 @@ onload = function() {
         UserSettings.starbattle_dots = this.value;
     }
 
+    document.getElementById("secondcolor_settings_opt").onchange = function() {
+        UserSettings.secondcolor = this.value;
+    }
+
     document.getElementById("sudoku_settings_normal_opt").onchange = function() {
         UserSettings.sudoku_normal_size = this.value;
     }
