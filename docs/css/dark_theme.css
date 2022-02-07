@@ -99,7 +99,7 @@
 
 .labelL {
     color: var(--white);
-    border: 1px solid var(--blueDark);
+    border: 1px solid var(--blueskyMedium);
 }
 
 .labelL:hover {
