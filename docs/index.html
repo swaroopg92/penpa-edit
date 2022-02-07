@@ -26,6 +26,7 @@
             "custom_color_css",
             "constraints_settings_css"
         ];
+        const style_tag_cache = [];
         for (let i = 0; i < style_sources.length; i++) {
             let style = document.createElement('link');
             style.rel = "stylesheet";
@@ -34,6 +35,7 @@
             style.href = style_sources[i] + "?v=" + ver;
             style.async = false;
             document.head.appendChild(style);
+            style_tag_cache[style_sources_ids[i]] = style;
         }
     </script>
     <!-- SCRIPTS -->
