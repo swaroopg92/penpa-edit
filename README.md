@@ -190,7 +190,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Line or x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line. Right click and drag for multiple crosses in one go.
 	* Line or OX: Line and 〇× in square (Country road)
 	* Edge x: Edge and auxiliary cross marks (x) on edges. Right click for x. Right click and drag for multiple crosses in one go.
-	* Edge IO: Edge, auxiliary x, and inside/outside painted yellow and green. (Slitherlink, Cave) - Right Click for cross and Left Click for Line
+	* Edge IO: Edge, auxiliary x, and inside/outside painted yellow and green. ("Surface Second Color" preference can be used to change green.) (Slitherlink, Cave) - Right Click for cross and Left Click for Line
 	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot in center, cross (x) on edges
 	* Hashi: Draw the line again to make a double line
 * Area / Field:
@@ -520,7 +520,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Low Range - User needs to click much closer to corners and edges for dots.
 		* Disable - Completely disable the dot feature and only have Star/Cross.
 	* Mouse Middle Button: Shortcut to switch between Problem/Solution mode while in "setter mode". To activate, select YES.
-	* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color.
+	* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color. This also affects Composite Edge IO.
 	* Reload Protection: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
 	* Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
 	* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
