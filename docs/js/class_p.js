@@ -9963,7 +9963,7 @@ class Puzzle {
                 this[this.mode.qa].surface[num] = 7;
             } else if (this[this.mode.qa].surface[num] === 7) {
                 this.record("surface", num);
-                this[this.mode.qa].surface[num] = 2;
+                this[this.mode.qa].surface[num] = 5;
             } else {
                 this.record("surface", num);
                 delete this[this.mode.qa].surface[num];
