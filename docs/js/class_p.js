@@ -8061,7 +8061,7 @@ class Puzzle {
 
     re_surfaceR(num) {
         this.record("surface", num);
-        let rightclick_color = parseInt(document.getElementById("secondcolor_settings_opt").value);
+        let rightclick_color = UserSettings.secondcolor;
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === rightclick_color) {
             delete this[this.mode.qa].surface[num];
             if (document.getElementById("custom_color_opt").value === "2") {
@@ -9963,7 +9963,7 @@ class Puzzle {
                 this[this.mode.qa].surface[num] = 7;
             } else if (this[this.mode.qa].surface[num] === 7) {
                 this.record("surface", num);
-                this[this.mode.qa].surface[num] = parseInt(document.getElementById("secondcolor_settings_opt").value);
+                this[this.mode.qa].surface[num] = UserSettings.secondcolor;
             } else {
                 this.record("surface", num);
                 delete this[this.mode.qa].surface[num];
