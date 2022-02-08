@@ -1,3 +1,5 @@
+const MAX_EXPORT_LENGTH = 7360;
+
 class Point {
     constructor(x, y, type, adjacent, surround, use, neighbor = [], adjacent_dia = [], type2 = 0) {
         this.x = x;
@@ -2686,7 +2688,7 @@ class Puzzle {
 
     ///////SAVE/////////
 
-    maketext() {
+    __export_text_shared() {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
@@ -2709,6 +2711,92 @@ class Puzzle {
 
         // Border button status
         text += "," + document.getElementById('edge_button').textContent;
+
+        return text;
+    }
+
+    __export_list_tab_shared() {
+        var list = [this.centerlist[0]];
+        for (var i = 1; i < this.centerlist.length; i++) {
+            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        }
+        var text = JSON.stringify(list) + "\n";
+
+        // Copy the tab selector modes
+        let user_choices = UserSettings.tab_settings;
+        text += JSON.stringify(user_choices) + "\n";
+
+        return text;
+    }
+
+    __export_version_shared(options = {}) {
+        var text = "";
+
+        if (!options.skipTimerPlaceholder) {
+            text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
+        }
+
+        text += JSON.stringify(options.comp ? "comp" : "x") + "\n";
+
+        // Version
+        text += JSON.stringify(this.version) + "\n";
+
+        // Save submode/style/combi settings
+        text += JSON.stringify(this.mode) + "\n";
+
+        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
+        text += JSON.stringify("x") + "\n";
+
+        // Custom Colors
+        text += (document.getElementById("custom_color_opt").value === "2") ? "1\n" : "0\n";
+
+        return text;
+    }
+
+    __get_answer_settings(type) {
+        type = type || ""; // blank or "_or"
+
+        // save answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck" + type);
+        var answersetting = {};
+        for (var i = 0; i < settingstatus.length; i++) {
+            answersetting[settingstatus[i].id] = !!(settingstatus[i].checked);
+        }
+        return answersetting;
+    }
+
+    __export_solcheck_shared() {
+        return JSON.stringify(this.__get_answer_settings()) + "\n";
+    }
+
+    __export_checker_shared() {
+        var text = JSON.stringify(this.__get_answer_settings("_or")) + "\n";
+
+        // Save genre tags
+        text += JSON.stringify($('#genre_tags_opt').select2("val"));
+
+        return text;
+    }
+
+    __export_finalize_shared(text){
+        var puzzle_data = encrypt_data(text);
+        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max MAX_EXPORT_LENGTH
+
+        // Warning Long URL
+        if (puzzle_data.length >= MAX_EXPORT_LENGTH) {
+            Swal.fire({
+                title: 'Warning:',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                icon: 'warning',
+                confirmButtonText: 'ok',
+            })
+        }
+        
+        return puzzle_data;
+    }
+
+    maketext() {
+        var text = this.__export_text_shared();
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false + "\n";
@@ -2737,48 +2825,9 @@ class Puzzle {
             this.pu_a.command_undo.__a = au;
         }
 
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
-        }
-
-        text += JSON.stringify(list) + "\n";
-
-        // Copy the tab selector modes
-        let user_choices = UserSettings.tab_settings;
-        text += JSON.stringify(user_choices) + "\n";
-
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        // Version
-        text += JSON.stringify(this.version) + "\n";
-
-        // Save submode/style/combi settings
-        text += JSON.stringify(this.mode) + "\n";
-
-        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x") + "\n";
-
-        // Custom Colors
-        if (document.getElementById("custom_color_opt").value === "2") {
-            text += JSON.stringify("true") + "\n"
-        } else {
-            text += JSON.stringify("false") + "\n"
-        }
+        text += this.__export_list_tab_shared();
+        text += this.__export_solcheck_shared();
+        text += this.__export_version_shared();
 
         if (document.getElementById("save_undo").checked === false) {
             qr = this.pu_q_col.command_redo.__a;
@@ -2801,64 +2850,20 @@ class Puzzle {
             this.pu_a_col.command_undo.__a = au;
         }
 
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        // Save genre tags
-        text += JSON.stringify($('#genre_tags_opt').select2("val"));
+        text += this.__export_checker_shared();
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
-        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max 7360
+        var ba = this.__export_finalize_shared(text);
 
-        // Warning Long URL
-        if (ba.length >= 7360) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
         return url + "?m=edit&p=" + ba;
     }
 
     maketext_duplicate() {
-        var text = "";
-        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
-            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
-            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
-
-        // Puzzle title
-        let titleinfo = document.getElementById("saveinfotitle").value;
-        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
-
-        // Puzzle author
-        let authorinfo = document.getElementById("saveinfoauthor").value;
-        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
-
-        // Puzzle Source
-        text += "," + document.getElementById("saveinfosource").value;
-
-        // Puzzle Rules
-        let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        var text = this.__export_text_shared();
 
         // if solution check exists, then read multisolution variable or else set to false
         if (this.solution) {
@@ -2887,59 +2892,23 @@ class Puzzle {
         this.pu_a.command_redo.__a = ar;
         this.pu_a.command_undo.__a = au;
 
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
-        }
-
-        text += JSON.stringify(list) + "\n";
-
-        // Copy the tab selector modes
-        let user_choices = UserSettings.tab_settings;
-        text += JSON.stringify(user_choices) + "\n";
+        text += this.__export_list_tab_shared();
 
         // Save timer
         if (this.mmode === "solve") {
             text += sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']) + "\n";
         }
 
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
+        text += this.__export_solcheck_shared();
 
         if (this.mmode !== "solve") {
             text += JSON.stringify("x") + "\n"; // dummy to compensate time saver for non solve cloning
         }
 
-        if (this.comp) {
-            text += JSON.stringify("comp") + "\n";
-        } else {
-            text += JSON.stringify("x") + "\n";
-        }
-
-        // Version
-        text += JSON.stringify(this.version) + "\n";
-
-        // Save submode/style/combi settings
-        text += JSON.stringify(this.mode) + "\n";
-
-        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x") + "\n";
-
-        // Custom Colors
-        if (document.getElementById("custom_color_opt").value === "2") {
-            text += JSON.stringify("true") + "\n"
-        } else {
-            text += JSON.stringify("false") + "\n"
-        }
+        text += this.__export_version_shared({
+            skipTimerPlaceholder: true,
+            comp: this.comp
+        });
 
         qr = this.pu_q_col.command_redo.__a;
         qu = this.pu_q_col.command_undo.__a;
@@ -2956,20 +2925,7 @@ class Puzzle {
         this.pu_a_col.command_redo.__a = ar;
         this.pu_a_col.command_undo.__a = au;
 
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        // Save genre tags
-        text += JSON.stringify($('#genre_tags_opt').select2("val"));
+        text += this.__export_checker_shared();
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2987,7 +2943,7 @@ class Puzzle {
             }
             var ba_s = encrypt_data(solution_clone);
             // Warning Long URL
-            if ((ba.length + ba_s.length) >= 7360) {
+            if ((ba.length + ba_s.length) >= MAX_EXPORT_LENGTH) {
                 Swal.fire({
                     title: 'Warning:',
                     html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
@@ -2998,7 +2954,7 @@ class Puzzle {
             return url + "?m=edit&p=" + ba + "&a=" + ba_s;
         } else {
             // Warning Long URL
-            if (ba.length >= 7360) {
+            if (ba.length >= MAX_EXPORT_LENGTH) {
                 Swal.fire({
                     title: 'Warning:',
                     html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
@@ -3011,28 +2967,7 @@ class Puzzle {
     }
 
     maketext_solve(type = "none") {
-        var text = "";
-        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
-            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
-            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
-
-        // Puzzle title
-        let titleinfo = document.getElementById("saveinfotitle").value;
-        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
-
-        // Puzzle author
-        let authorinfo = document.getElementById("saveinfoauthor").value;
-        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
-
-        // Puzzle Source
-        text += "," + document.getElementById("saveinfosource").value;
-
-        // Puzzle Rules
-        let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        var text = this.__export_text_shared();
 
         // if solution check exists, then read multisolution variable or else set to false
         if (type === "answercheck") {
@@ -3055,47 +2990,10 @@ class Puzzle {
         this.pu_q.command_redo.__a = qr;
         this.pu_q.command_undo.__a = qu;
 
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
-        }
-        text += JSON.stringify(list) + "\n";
+        text += this.__export_list_tab_shared();
+        text += this.__export_solcheck_shared();
+        text += this.__export_version_shared();
 
-        // Copy the tab selector modes
-        let user_choices = UserSettings.tab_settings;
-        text += JSON.stringify(user_choices) + "\n";
-
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        // Version
-        text += JSON.stringify(this.version) + "\n";
-
-        // Save submode/style/combi settings
-        text += JSON.stringify(this.mode) + "\n";
-
-        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x") + "\n";
-
-        // Custom Colors
-        if (document.getElementById("custom_color_opt").value === "2") {
-            text += JSON.stringify("true") + "\n"
-        } else {
-            text += JSON.stringify("false") + "\n"
-        }
         qr = this.pu_q_col.command_redo.__a;
         qu = this.pu_q_col.command_undo.__a;
         this.pu_q_col.command_redo.__a = [];
@@ -3104,64 +3002,20 @@ class Puzzle {
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
 
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        // Save genre tags
-        text += JSON.stringify($('#genre_tags_opt').select2("val"));
+        text += this.__export_checker_shared();
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
-        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
+        var ba = this.__export_finalize_shared(text);
 
-        // Warning Long URL
-        if (ba.length >= 7360) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
         return url + "?m=solve&p=" + ba;
     }
 
     maketext_compsolve() {
-        var text = "";
-        text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
-            this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
-            this.sudoku[0].toString() + "," + this.sudoku[1].toString() + "," + this.sudoku[2].toString() + "," + this.sudoku[3].toString();
-
-        // Puzzle title
-        let titleinfo = document.getElementById("saveinfotitle").value;
-        text += "," + "Title: " + titleinfo.replace(/,/g, '%2C');
-
-        // Puzzle author
-        let authorinfo = document.getElementById("saveinfoauthor").value;
-        text += "," + "Author: " + authorinfo.replace(/,/g, '%2C');
-
-        // Puzzle Source
-        text += "," + document.getElementById("saveinfosource").value;
-
-        // Puzzle Rules
-        let ruleinfo = document.getElementById("saveinforules").value;
-        text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-
-        // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        var text = this.__export_text_shared();
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + false + "\n";
@@ -3177,47 +3031,12 @@ class Puzzle {
         this.pu_q.command_redo.__a = qr;
         this.pu_q.command_undo.__a = qu;
 
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
-        }
-        text += JSON.stringify(list) + "\n";
+        text += this.__export_list_tab_shared();
+        text += this.__export_solcheck_shared();
+        text += this.__export_version_shared({
+            comp: true
+        });
 
-        // Copy the tab selector modes
-        let user_choices = UserSettings.tab_settings;
-        text += JSON.stringify(user_choices) + "\n";
-
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        text += JSON.stringify("x") + "\n"; // Dummy, to match the size of maketext_duplicate
-
-        text += JSON.stringify("comp") + "\n";
-
-        // Version
-        text += JSON.stringify(this.version) + "\n";
-
-        // Save submode/style/combi settings
-        text += JSON.stringify(this.mode) + "\n";
-
-        // Don't save theme setting in solving as solver might want his own theme, but having this placeholder to match the size with other url modes
-        text += JSON.stringify("x") + "\n";
-
-        // Custom Colors
-        if (document.getElementById("custom_color_opt").value === "2") {
-            text += JSON.stringify("true") + "\n"
-        } else {
-            text += JSON.stringify("false") + "\n"
-        }
         qr = this.pu_q_col.command_redo.__a;
         qu = this.pu_q_col.command_undo.__a;
         this.pu_q_col.command_redo.__a = [];
@@ -3226,38 +3045,15 @@ class Puzzle {
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
 
-        // save answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
-        var answersetting = {};
-        for (var i = 0; i < settingstatus.length; i++) {
-            if (settingstatus[i].checked) {
-                answersetting[settingstatus[i].id] = true;
-            } else {
-                answersetting[settingstatus[i].id] = false;
-            }
-        }
-        text += JSON.stringify(answersetting) + "\n";
-
-        // Save genre tags
-        text += JSON.stringify($('#genre_tags_opt').select2("val"));
+        text += this.__export_checker_shared();
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var ba = encrypt_data(text);
         var url = location.href.split('?')[0];
-        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
-
-        // Warning Long URL
-        if (ba.length >= 7360) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
+        var ba = this.__export_finalize_shared(text);
+        
         return url + "?m=solve&p=" + ba;
     }
 
@@ -3270,7 +3066,7 @@ class Puzzle {
         //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
 
         // Warning Long URL
-        if ((text_head.length + ba.length) >= 7360) {
+        if ((text_head.length + ba.length) >= MAX_EXPORT_LENGTH) {
             Swal.fire({
                 title: 'Warning:',
                 html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
@@ -11062,32 +10858,8 @@ class Puzzle {
     }
 
     set_redoundocolor() {
-        if (this[this.mode.qa].command_redo.__a.length === 0) {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_redo').style.color = Color.GREY_LIGHT;
-            } else {
-                document.getElementById('tb_redo').style.color = Color.GREY_DARK_VERY;
-            }
-        } else {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_redo').style.color = Color.BLACK;
-            } else {
-                document.getElementById('tb_redo').style.color = Color.WHITE;
-            }
-        }
-        if (this[this.mode.qa].command_undo.__a.length === 0) {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_undo').style.color = Color.GREY_LIGHT;
-            } else {
-                document.getElementById('tb_undo').style.color = Color.GREY_DARK_VERY;
-            }
-        } else {
-            if (UserSettings.color_theme === THEME_LIGHT) {
-                document.getElementById('tb_undo').style.color = Color.BLACK;
-            } else {
-                document.getElementById('tb_undo').style.color = Color.WHITE;
-            }
-        }
+        document.getElementById('tb_redo').disabled = (this[this.mode.qa].command_redo.__a.length === 0) ? 'disabled' : '';
+        document.getElementById('tb_undo').disabled = (this[this.mode.qa].command_undo.__a.length === 0) ? 'disabled' : '';
     }
 
     flushcanvas(svgcall) {
