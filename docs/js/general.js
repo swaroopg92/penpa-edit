@@ -2752,6 +2752,7 @@ function load2(paramArray, type) {
 
         // Enable undo redo after solver is done or contest is over.
         pu.undoredo_disable = false;
+        document.getElementById("bottom_button").style.display = "";
         document.getElementById("tb_undo").style.display = "";
         document.getElementById("tb_redo").style.display = "";
         document.getElementById("tb_reset").style.display = "";
@@ -3246,6 +3247,7 @@ function set_contestmode() {
     document.getElementById("save_undo_lb").style.display = "none";
     document.getElementById("save_undo").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
+    document.getElementById("bottom_button").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
     document.getElementById("tb_redo").style.display = "none";
     document.getElementById("tb_reset").style.display = "none";
