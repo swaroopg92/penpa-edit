@@ -224,7 +224,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2, 3];
@@ -238,7 +238,7 @@ class Puzzle_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2, 3];
@@ -319,7 +319,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudoku":
-                if (document.getElementById('edge_button').textContent === "ON") {
+                if (UserSettings.draw_edges) {
                     type = [0, 2, 3];
                 } else {
                     type = [0];

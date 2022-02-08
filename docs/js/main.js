@@ -1695,11 +1695,11 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "edge_button":
-                edge_onoff();
+                UserSettings.draw_edges = !UserSettings.draw_edges;
                 e.preventDefault();
                 break;
             case "visibility_button":
-                solutionvisible_onoff();
+                solutionvisible_onoff(e.target);
                 e.preventDefault();
                 break;
             case "pu_q_label":
@@ -2125,11 +2125,6 @@ onload = function() {
     // Panel Setting
     document.getElementById("panel_button").onchange = function() {
         panel_onoff();
-    }
-
-    // Border Setting
-    document.getElementById("edge_button").onchange = function() {
-        edge_onoff();
     }
 
     // Conflict detection

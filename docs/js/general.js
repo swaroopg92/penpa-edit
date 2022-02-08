@@ -821,22 +821,11 @@ function panel_onoff() {
     pu.redraw();
 }
 
-function edge_onoff() {
-    if (document.getElementById('edge_button').textContent === "OFF") {
-        document.getElementById('edge_button').textContent = "ON";
+function solutionvisible_onoff(button) {
+    if (button.textContent === "ON") {
+        button.textContent = "OFF";
     } else {
-        document.getElementById('edge_button').textContent = "OFF";
-        pu.cursol = pu.centerlist[0];
-    }
-    pu.type = pu.type_set();
-    pu.redraw();
-}
-
-function solutionvisible_onoff() {
-    if (document.getElementById('visibility_button').textContent === "ON") {
-        document.getElementById('visibility_button').textContent = "OFF";
-    } else {
-        document.getElementById('visibility_button').textContent = "ON";
+        button.textContent = "ON";
     }
     pu.redraw();
 }
@@ -1547,7 +1536,7 @@ function load(urlParam, type = 'url') {
     if (rtext_para[19]) {
         // to address mixed versions where the stored value was ON and OFF/ "1" and "2"
         if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
-            document.getElementById('edge_button').textContent = "ON";
+            UserSettings.draw_edges = true;
         }
     }
 

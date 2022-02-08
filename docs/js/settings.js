@@ -259,6 +259,24 @@ const UserSettings = {
         return this._displaysize;
     },
 
+    _draw_edges: false,
+    set draw_edges(newValue) {
+        const button = document.getElementById("edge_button");
+        this._draw_edges = newValue;
+        button.textContent = newValue ? "ON" : "OFF";
+
+        if (window.pu) {
+            if (!newValue) {
+                pu.cursol = pu.centerlist[0];
+            }
+            pu.type = pu.type_set();
+            pu.redraw();
+        }
+    },
+    get draw_edges() {
+        return this._draw_edges;
+    },
+
     can_save: [
         'color_theme',
         'mousemiddle_button',
