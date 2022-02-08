@@ -1114,8 +1114,8 @@ input[type=number] {
 .tooltip .tooltiptext {
     visibility: hidden;
     text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
+    border-radius: .4em;
+    padding: .3em .5em;
     position: absolute;
     z-index: 1;
     bottom: 125%;
@@ -1282,6 +1282,11 @@ sup {
     aspect-ratio: 1;
     border: none;
     cursor: pointer;
+}
+
+/* todo -- tie to selected theme */
+.select2-container {
+    color: #000 !important;
 }
 
 .select2-dropdown {

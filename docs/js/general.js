@@ -1505,22 +1505,15 @@ function load(urlParam, type = 'url') {
     document.getElementById("nb_size2").value = rtext_para[2];
     UserSettings.displaysize = rtext_para[3];
 
-    document.getElementById("nb_space1").value = JSON.parse(rtext[1])[0];
-    document.getElementById("nb_space2").value = JSON.parse(rtext[1])[1];
-    document.getElementById("nb_space3").value = JSON.parse(rtext[1])[2];
-    document.getElementById("nb_space4").value = JSON.parse(rtext[1])[3];
-    if (!rtext_para[11] === 'undefined' && rtext_para[11] == "1") {
-        document.getElementById("nb_sudoku1").checked = true;
-    }
-    if (!rtext_para[12] === 'undefined' && rtext_para[12] == "1") {
-        document.getElementById("nb_sudoku2").checked = true;
-    }
-    if (!rtext_para[13] === 'undefined' && rtext_para[13] == "1") {
-        document.getElementById("nb_sudoku3").checked = true;
-    }
-    if (!rtext_para[14] === 'undefined' && rtext_para[14] == "1") {
-        document.getElementById("nb_sudoku4").checked = true;
-    }
+    var parsedSpaces = JSON.parse(rtext[1]);
+    document.getElementById("nb_space1").value = parsedSpaces[0];
+    document.getElementById("nb_space2").value = parsedSpaces[1];
+    document.getElementById("nb_space3").value = parsedSpaces[2];
+    document.getElementById("nb_space4").value = parsedSpaces[3];
+    if (rtext_para[11] && rtext_para[11] == "1") { document.getElementById("nb_sudoku1").checked = true; }
+    if (rtext_para[12] && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
+    if (rtext_para[13] && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
+    if (rtext_para[14] && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
     if (rtext_para[15]) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
         if (ptitle !== "Title: ") {
@@ -1566,7 +1559,7 @@ function load(urlParam, type = 'url') {
     }
 
     // version save
-    if (typeof rtext[10] !== 'undefined') {
+    if (rtext[10]) {
         pu.version = JSON.parse(rtext[10]);
     } else {
         pu.version = [0, 0, 0]; // To handle all the old links
@@ -1589,18 +1582,18 @@ function load(urlParam, type = 'url') {
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
 
         // submode, style settings
-        if (typeof rtext[11] !== 'undefined') {
+        if (rtext[11]) {
             rtext[11] = rtext[11].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
 
         // custom colors, only checking for 14 as 14 and 15 will appear together or never
-        if (typeof rtext[14] !== 'undefined') {
+        if (rtext[14]) {
             rtext[14] = rtext[14].split(pu.replace[i][1]).join(pu.replace[i][0]);
             rtext[15] = rtext[15].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
 
         // genre tags
-        if (typeof rtext[17] !== 'undefined') {
+        if (rtext[17]) {
             rtext[17] = rtext[17].split(pu.replace[i][1]).join(pu.replace[i][0]);
         }
     }
@@ -1610,7 +1603,7 @@ function load(urlParam, type = 'url') {
     }
 
     // Tab settings
-    if (typeof rtext[6] !== 'undefined') {
+    if (rtext[6]) {
         UserSettings.tab_settings = JSON.parse(rtext[6]);
 
         // Advance Control Setting
@@ -1621,7 +1614,7 @@ function load(urlParam, type = 'url') {
     }
 
     // Populate and set genre tags
-    if (typeof rtext[17] !== 'undefined') {
+    if (rtext[17]) {
         pu.user_tags = JSON.parse(rtext[17]);
     }
 
@@ -1687,12 +1680,13 @@ function load(urlParam, type = 'url') {
         }
 
         // custom color
-        if (typeof rtext[13] !== 'undefined') {
-            if (JSON.parse(rtext[13]) === "true") {
+        if (rtext[13]) {
+            let parsedValue = JSON.parse(rtext[13]);
+            if (parsedValue === "true" || parsedValue === 1) {
                 document.getElementById("custom_color_opt").value = 2;
             }
         }
-        if (typeof rtext[14] !== 'undefined') {
+        if (rtext[14]) {
             pu.pu_q_col = JSON.parse(rtext[14]);
             pu.pu_a_col = JSON.parse(rtext[15]);
             if (!pu.pu_q_col.polygon) {
@@ -1766,7 +1760,7 @@ function load(urlParam, type = 'url') {
                 });
             }
 
-            if (typeof rtext[8] !== 'undefined') {
+            if (rtext[8]) {
                 // set the answer check settings
                 var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
                 var answersetting = JSON.parse(rtext[8]);
@@ -1775,11 +1769,11 @@ function load(urlParam, type = 'url') {
                 }
             }
 
-            if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+            if (rtext[9] && rtext[9].indexOf("comp") !== -1) { // Competitive mode
                 set_contestmode();
             }
         } else {
-            if (typeof rtext[7] !== 'undefined') {
+            if (rtext[7]) {
                 // set the answer check settings
                 var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
                 var answersetting = JSON.parse(rtext[7]);
@@ -1815,13 +1809,14 @@ function load(urlParam, type = 'url') {
         }
 
         // custom color
-        if (typeof rtext[13] !== 'undefined') {
-            if (JSON.parse(rtext[13]) === "true") {
+        if (rtext[13]) {
+            let parsedValue = JSON.parse(rtext[13]);
+            if (parsedValue === "true" || parsedValue === 1) {
                 document.getElementById("custom_color_opt").value = 2;
             }
         }
 
-        if (typeof rtext[14] !== 'undefined') {
+        if (rtext[14]) {
             pu.pu_q_col = JSON.parse(rtext[14]);
             if (!pu.pu_q_col.polygon) {
                 pu.pu_q_col.polygon = [];
@@ -1852,7 +1847,7 @@ function load(urlParam, type = 'url') {
 
             set_solvemodetitle();
         }
-        if (typeof rtext[7] !== 'undefined') {
+        if (rtext[7]) {
             // set the answer check settings
             var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck");
             var answersetting = JSON.parse(rtext[7]);
@@ -1860,7 +1855,7 @@ function load(urlParam, type = 'url') {
                 settingstatus[i].checked = answersetting[settingstatus[i].id];
             }
         }
-        if (typeof rtext[9] !== 'undefined' && rtext[9].indexOf("comp") !== -1) { // Competitive mode
+        if (rtext[9] && rtext[9].indexOf("comp") !== -1) { // Competitive mode
             set_contestmode();
         }
         sw_timer.start({
@@ -1887,7 +1882,7 @@ function load(urlParam, type = 'url') {
     panel_pu.draw_panel();
 
     // submode, style settings
-    if (typeof rtext[11] !== 'undefined') {
+    if (rtext[11]) {
         pu.mode = JSON.parse(rtext[11]);
         if (paramArray.m === "solve") {
             pu.mode.qa = "pu_a";
@@ -1911,7 +1906,7 @@ function load(urlParam, type = 'url') {
     pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
 
     // Theme
-    if (typeof rtext[12] !== 'undefined') {
+    if (rtext[12]) {
         let view_setting_string = JSON.parse(rtext[12]);
         let view_settings = view_setting_string.split("|");
 
@@ -1933,7 +1928,7 @@ function load(urlParam, type = 'url') {
     }
 
     // answerchecking settings for "OR"
-    if (typeof rtext[16] !== 'undefined' && rtext[16] !== "") { // for some reason old links had 16th entry as empty
+    if (rtext[16] && rtext[16] !== "") { // for some reason old links had 16th entry as empty
         // set the answer check settings
         var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
         var answersetting = JSON.parse(rtext[16]);
@@ -2477,6 +2472,7 @@ function set_contestmode() {
     document.getElementById("title").innerHTML = "Contest Mode"
     document.getElementById("savetext").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
+    document.getElementById("bottom_button").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
     document.getElementById("tb_redo").style.display = "none";
     document.getElementById("tb_reset").style.display = "none";
@@ -2605,7 +2601,7 @@ function decode_puzzlink(url) {
                 pu = new Puzzle_square(10, 10, size);
                 setupProblem(pu, "surface");
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'GMPuzzles says:',
                     html: `Sorry, sudoku grids of size: ${cols}x${rows} are not supported`,
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',

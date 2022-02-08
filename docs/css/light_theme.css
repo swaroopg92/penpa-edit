@@ -47,7 +47,11 @@
 
 #tb_undo,
 #tb_redo {
-    color: var(--transparent40);
+    color: var(--black);
+}
+#tb_undo:disabled,
+#tb_redo:disabled {
+    color: var(--greyLight);
 }
 
 #modal-help-body a.button {

@@ -1085,11 +1085,9 @@ onload = function() {
                 break;
             case "tb_undo":
                 pu.undo();
-                e.preventDefault();
                 break;
             case "tb_redo":
                 pu.redo();
-                e.preventDefault();
                 break;
             case "tb_reset":
                 ResetCheck();
@@ -1990,6 +1988,10 @@ onload = function() {
 
     document.getElementById("starbattle_settings_opt").onchange = function() {
         UserSettings.starbattle_dots = this.value;
+    }
+
+    document.getElementById("secondcolor_settings_opt").onchange = function() {
+        UserSettings.secondcolor = this.value;
     }
 
     document.getElementById("sudoku_settings_normal_opt").onchange = function() {

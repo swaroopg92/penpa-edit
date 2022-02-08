@@ -122,6 +122,18 @@ const UserSettings = {
         return this._starbattle_dots;
     },
 
+    // Surface Second Color handling
+    _secondcolor: 2,
+    set secondcolor(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 2;
+        this._secondcolor = valueInt;
+
+        document.getElementById("secondcolor_settings_opt").value = valueInt;
+    },
+    get secondcolor() {
+        return this._secondcolor;
+    },
+
     // Sudoku number size handling
     _sudoku_normal_size: 1,
     set sudoku_normal_size(newValue) {
@@ -211,7 +223,12 @@ const UserSettings = {
         if (!themeStylesheet) { themeStylesheet = this._theme_urls[THEME_LIGHT]; }
 
         document.getElementById("theme_mode_opt").value = valueInt;
-        document.getElementById("color_theme").href = themeStylesheet;
+        if (style_tag_cache['color_theme']) {
+            style_tag_cache['color_theme'].href = themeStylesheet;
+        } else {
+            console.error('Could not find color theme stylesheet to change.');
+        }
+
         if (window.pu) {
             pu.set_redoundocolor();
             pu.redraw();
@@ -228,7 +245,7 @@ const UserSettings = {
         if (valueInt > 90) {
             valueInt = 90;
             Swal.fire({
-                title: 'Swaroop says:',
+                title: 'GMPuzzles says:',
                 html: 'Display Size must be in the range <h2 class="warn">12-90</h2> It is set to max value.',
                 icon: 'info',
                 confirmButtonText: 'ok 🙂',
@@ -237,7 +254,7 @@ const UserSettings = {
         if (valueInt < 12) {
             valueInt = 12;
             Swal.fire({
-                title: 'Swaroop says:',
+                title: 'GMPuzzles says:',
                 html: 'Display Size must be in the range <h2 class="warn">12-90</h2> It is set to min value.',
                 icon: 'info',
                 confirmButtonText: 'ok 🙂',
@@ -260,6 +277,7 @@ const UserSettings = {
         'reload_button',
         'responsive_mode',
         'starbattle_dots',
+        'secondcolor',
         'sudoku_centre_size',
         'sudoku_normal_size',
         'timerbar_status',
