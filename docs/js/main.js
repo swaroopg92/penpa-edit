@@ -1699,7 +1699,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "visibility_button":
-                solutionvisible_onoff(e.target);
+                UserSettings.show_solution = !UserSettings.show_solution;
                 e.preventDefault();
                 break;
             case "pu_q_label":

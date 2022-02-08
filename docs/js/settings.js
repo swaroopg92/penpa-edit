@@ -277,6 +277,20 @@ const UserSettings = {
         return this._draw_edges;
     },
 
+    _show_solution: true,
+    set show_solution(newValue) {
+        const button = document.getElementById("visibility_button");
+        this._show_solution = newValue;
+        button.textContent = newValue ? "ON" : "OFF";
+
+        if (window.pu) {
+            pu.redraw();
+        }
+    },
+    get show_solution() {
+        return this._show_solution;
+    },
+
     can_save: [
         'color_theme',
         'mousemiddle_button',

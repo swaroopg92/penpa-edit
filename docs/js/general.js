@@ -821,15 +821,6 @@ function panel_onoff() {
     pu.redraw();
 }
 
-function solutionvisible_onoff(button) {
-    if (button.textContent === "ON") {
-        button.textContent = "OFF";
-    } else {
-        button.textContent = "ON";
-    }
-    pu.redraw();
-}
-
 function can_use_lite() {
     let user_choices = getValues('mode_choices');
     return (user_choices.length > 0 || UserSettings.tab_settings.length > 0);
