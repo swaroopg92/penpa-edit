@@ -2473,6 +2473,7 @@ function set_contestmode() {
     document.getElementById("title").innerHTML = "Contest Mode"
     document.getElementById("savetext").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
+    document.getElementById("bottom_button").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
     document.getElementById("tb_redo").style.display = "none";
     document.getElementById("tb_reset").style.display = "none";
