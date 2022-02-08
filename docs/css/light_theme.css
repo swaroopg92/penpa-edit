@@ -47,7 +47,11 @@
 
 #tb_undo,
 #tb_redo {
-    color: var(--transparent40);
+    color: var(--black);
+}
+#tb_undo:disabled,
+#tb_redo:disabled {
+    color: var(--greyLight);
 }
 
 #modal-help-body a.button {
@@ -60,8 +64,15 @@
     background: var(--greyLight);
 }
 
+#tab-dropdown-lite-btn,
 .button.sw {
     background-color: var(--blueLight);
+    color: var(--white);
+}
+
+#tab-dropdown-lite-btn:hover,
+.button.sw:hover {
+    background-color: var(--blueDark);
     color: var(--white);
 }
 
@@ -153,29 +164,6 @@
     background-color: var(--white);
 }
 
-#float-key-body {
-    background: var(--greyLightMedium);
-}
-
-#float-key-menu {
-    background: var(--greyLight);
-}
-
-.panel_menu li {
-    border-right: 1px solid var(--white);
-    background-color: var(--greyLight);
-}
-
-.panel_menu_select li {
-    border-left: 1px solid var(--white);
-    border-top: 1px solid var(--white);
-    background-color: var(--greyLight);
-}
-
-.label_menu {
-    background-color: var(--greyLight);
-}
-
 .modal-content,
 #modal-image-content,
 #modal-save-content,
@@ -188,6 +176,9 @@
 
 header,
 #float-key-header,
+#float-key-body,
+#float-key-menu,
+#float-key-select,
 .modal-header,
 .modal-subheader {
     background: var(--greyLight);

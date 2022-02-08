@@ -5,8 +5,11 @@ $('#stop_watch #sw_stop').click(function() {
 });
 
 $('#stop_watch #sw_reset').click(function() {
+    let timer_running = sw_timer.isRunning() ? true : false;
     sw_timer.reset();
-    sw_timer.start();
+    if (timer_running) {
+        sw_timer.start();
+    }
 });
 
 $('#stop_watch #sw_hide').click(function() {
