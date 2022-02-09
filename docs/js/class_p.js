@@ -2778,7 +2778,7 @@ class Puzzle {
         return text;
     }
 
-    __export_finalize_shared(text){
+    __export_finalize_shared(text) {
         var puzzle_data = encrypt_data(text);
         // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max MAX_EXPORT_LENGTH
 
@@ -2791,7 +2791,7 @@ class Puzzle {
                 confirmButtonText: 'ok',
             })
         }
-        
+
         return puzzle_data;
     }
 
@@ -3053,7 +3053,7 @@ class Puzzle {
 
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
-        
+
         return url + "?m=solve&p=" + ba;
     }
 
@@ -7812,7 +7812,11 @@ class Puzzle {
     mouse_surface(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.drawing = true;
-            this.re_surface(num);
+            if (this.ondown_key === "touchstart") {
+                this.re_surface(num);
+            } else {
+                this.re_surface_twobutton(num);
+            }
             this.last = num;
         } else if (this.mouse_mode === "down_right") {
             this.drawing = true;
@@ -7835,14 +7839,34 @@ class Puzzle {
 
     re_surface(num) {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+        var allowed_styles = [1, 8, 3, 4]; // Dark Grey, Grey, Light Grey, Black
         this.record("surface", num);
-        if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 1 && color === 1) {
+        if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color && allowed_styles.includes(color)) {
             this[this.mode.qa].surface[num] = 2;
             if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
             }
             this.drawing_mode = 2;
-        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && color === 1))) {
+        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && allowed_styles.includes(color)))) {
+            delete this[this.mode.qa].surface[num];
+            if (document.getElementById("custom_color_opt").value === "2") {
+                delete this[this.mode.qa + "_col"].surface[num];
+            }
+            this.drawing_mode = 0;
+        } else {
+            this[this.mode.qa].surface[num] = color;
+            if (document.getElementById("custom_color_opt").value === "2") {
+                this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+            }
+            this.drawing_mode = color;
+        }
+        this.redraw();
+    }
+
+    re_surface_twobutton(num) {
+        var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+        this.record("surface", num);
+        if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color)) {
             delete this[this.mode.qa].surface[num];
             if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].surface[num];
