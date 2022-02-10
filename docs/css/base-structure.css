@@ -941,6 +941,7 @@ body textarea {
     margin: 0 auto;
     margin-top: 30px;
     border-radius: 20px;
+    overflow: auto;
     box-shadow: var(--shadow_mid);
 }
 
