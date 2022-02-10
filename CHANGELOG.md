@@ -1,4 +1,14 @@
 ## History
+* 2022/02/09 ver 2.26.16
+	* Timer improvements.
+	* Code refactoring - All settings are now moved to Settings Class.
+	* Special mode added to Tab list.
+	* Added Nurimaze puzzlink support.
+	* Smart check improvements.
+	* Custom second color for edgexoi mode.
+	* Improvements to Surface Mode.
+	* Bug fixes.
+	* Surface Second Color added to Save Settings.
 * 2022/01/25 ver 2.26.15
 	* Refactor all the user settings into settings class.
 	* Penpa lite button now directly available under tab settings.
