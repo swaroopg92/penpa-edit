@@ -2710,7 +2710,8 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + UserSettings.draw_edges ? 'ON' : 'OFF';
+        let border_status = UserSettings.draw_edges ? 'ON' : 'OFF';
+        text += "," + border_status;
 
         return text;
     }
