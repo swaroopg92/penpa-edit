@@ -159,7 +159,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 15]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 16]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -2714,7 +2714,7 @@ class Puzzle {
         text += "," + ruleinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         // Border button status
-        text += "," + document.getElementById('edge_button').textContent;
+        text += "," + UserSettings.draw_edges ? 'ON' : 'OFF';
 
         return text;
     }
@@ -7956,7 +7956,11 @@ class Puzzle {
     mouse_surface(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.drawing = true;
-            this.re_surface(num);
+            if (this.ondown_key === "touchstart") {
+                this.re_surface(num);
+            } else {
+                this.re_surface_twobutton(num);
+            }
             this.last = num;
         } else if (this.mouse_mode === "down_right") {
             this.drawing = true;
@@ -7979,14 +7983,34 @@ class Puzzle {
 
     re_surface(num) {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+        var allowed_styles = [1, 8, 3, 4]; // Dark Grey, Grey, Light Grey, Black
         this.record("surface", num);
-        if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === 1 && color === 1) {
+        if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color && allowed_styles.includes(color)) {
             this[this.mode.qa].surface[num] = 2;
             if (document.getElementById("custom_color_opt").value === "2") {
                 this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
             }
             this.drawing_mode = 2;
-        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && color === 1))) {
+        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && allowed_styles.includes(color)))) {
+            delete this[this.mode.qa].surface[num];
+            if (document.getElementById("custom_color_opt").value === "2") {
+                delete this[this.mode.qa + "_col"].surface[num];
+            }
+            this.drawing_mode = 0;
+        } else {
+            this[this.mode.qa].surface[num] = color;
+            if (document.getElementById("custom_color_opt").value === "2") {
+                this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+            }
+            this.drawing_mode = color;
+        }
+        this.redraw();
+    }
+
+    re_surface_twobutton(num) {
+        var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+        this.record("surface", num);
+        if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color)) {
             delete this[this.mode.qa].surface[num];
             if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].surface[num];
@@ -11107,7 +11131,7 @@ class Puzzle {
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             if (this.mode[this.mode.qa].edit_mode === "number" && (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9")) {
                 this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
-            } else if (document.getElementById('edge_button').textContent === "ON") {
+            } else if (UserSettings.draw_edges) {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.ctx.beginPath();

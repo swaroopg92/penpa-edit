@@ -295,7 +295,7 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -309,7 +309,7 @@ class Puzzle_truncated_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -638,7 +638,7 @@ class Puzzle_truncated_square extends Puzzle {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -2914,7 +2914,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 3, 4];
@@ -2928,7 +2928,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 3, 4];
@@ -3062,7 +3062,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
@@ -3631,7 +3631,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -3645,7 +3645,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -3779,7 +3779,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -4401,7 +4401,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -4415,7 +4415,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -4549,7 +4549,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -5106,7 +5106,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -5120,7 +5120,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -5277,7 +5277,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");

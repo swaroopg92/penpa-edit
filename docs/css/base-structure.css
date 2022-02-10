@@ -609,10 +609,11 @@ body textarea {
 
 #visibility_button,
 #edge_button {
-    width: 25px;
-    background: none;
-    margin-left: 0px;
-    border-radius: 1px;
+    width: 2.079em;
+    font-size: 1em;
+    background: transparent;
+    margin-left: 0;
+    border-radius: .1em;
 }
 
 #visibility_button:hover,
