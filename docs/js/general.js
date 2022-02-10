@@ -1426,8 +1426,8 @@ function export_sudoku() {
     }
 }
 
-function import_url() {
-    let urlstring = document.getElementById("urlstring").value;
+function import_url(urlstring) {
+    urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
         if (urlstring.indexOf("/penpa-edit/?") !== -1) {
             urlstring = urlstring.split("/penpa-edit/?")[1];
@@ -1436,7 +1436,7 @@ function import_url() {
             if (UserSettings.tab_settings > 0) {
                 selectBox.setValue(UserSettings.tab_settings);
             }
-        } else if (urlstring.indexOf("/puzz.link/p?") !== -1 || urlstring.indexOf("/pzv.jp/p.html?") !== -1) {
+        } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p\.html\?/)) {
             decode_puzzlink(urlstring);
             document.getElementById("modal-load").style.display = 'none';
         } else {
@@ -1463,6 +1463,12 @@ function load(urlParam, type = 'url') {
     for (var i = 0; i < param.length; i++) {
         var paramItem = param[i].split('=');
         paramArray[paramItem[0]] = paramItem[1];
+    }
+
+    if (paramArray.p.substring(0,4) === 'http') {
+        create();
+        import_url(paramArray.p);
+        return;
     }
 
     // Decrypt P
@@ -3461,18 +3467,20 @@ function decode_puzzlink(url) {
 
     var tabSelect = document.querySelector('ul.multi');
     var tabOptions = UserSettings.tab_settings;
-    for (var child of tabSelect.children) {
-        if (!child.dataset.value) {
-            continue;
-        }
-
-        if (tabOptions.includes(child.dataset.value)) {
-            if (!child.classList.contains('active')) {
-                child.click();
+    if (tabSelect) {
+        for (var child of tabSelect.children) {
+            if (!child.dataset.value) {
+                continue;
             }
-        } else {
-            if (child.classList.contains('active')) {
-                child.click();
+
+            if (tabOptions.includes(child.dataset.value)) {
+                if (!child.classList.contains('active')) {
+                    child.click();
+                }
+            } else {
+                if (child.classList.contains('active')) {
+                    child.click();
+                }
             }
         }
     }
