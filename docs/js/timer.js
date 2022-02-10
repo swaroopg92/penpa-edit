@@ -5,7 +5,7 @@ $('#stop_watch #sw_stop').click(function() {
 });
 
 $('#stop_watch #sw_reset').click(function() {
-    let timer_running = sw_timer.isRunning() ? true : false;
+    let timer_running = sw_timer.isRunning();
     sw_timer.reset();
     if (timer_running) {
         sw_timer.start();
@@ -24,19 +24,16 @@ $('#stop_watch #sw_hide').click(function() {
     }
 });
 
-sw_timer.addEventListener('secondsUpdated', function(e) {
+function timer_update() {
     $('#stop_watch .values').html(sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']));
-});
+}
 
-sw_timer.addEventListener('started', function(e) {
-    $('#stop_watch .values').html(sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']));
-});
+sw_timer.addEventListener('secondsUpdated', timer_update);
+sw_timer.addEventListener('started', timer_update);
 
 sw_timer.addEventListener('reset', function(e) {
-    $('#stop_watch .values').html(sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']));
+    timer_update();
     sw_timer.stop();
 });
 
-sw_timer.addEventListener('paused', function(e) {
-    $('#stop_watch .values').html(sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths']));
-});
+sw_timer.addEventListener('paused', timer_update);

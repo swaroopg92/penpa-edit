@@ -271,6 +271,38 @@ const UserSettings = {
         return this._displaysize;
     },
 
+    _draw_edges: false,
+    set draw_edges(newValue) {
+        const button = document.getElementById("edge_button");
+        this._draw_edges = newValue;
+        button.textContent = newValue ? "ON" : "OFF";
+
+        if (window.pu) {
+            if (!newValue) {
+                pu.cursol = pu.centerlist[0];
+            }
+            pu.type = pu.type_set();
+            pu.redraw();
+        }
+    },
+    get draw_edges() {
+        return this._draw_edges;
+    },
+
+    _show_solution: true,
+    set show_solution(newValue) {
+        const button = document.getElementById("visibility_button");
+        this._show_solution = newValue;
+        button.textContent = newValue ? "ON" : "OFF";
+
+        if (window.pu) {
+            pu.redraw();
+        }
+    },
+    get show_solution() {
+        return this._show_solution;
+    },
+
     can_save: [
         'color_theme',
         'mousemiddle_button',
