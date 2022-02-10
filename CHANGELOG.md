@@ -1,5 +1,6 @@
 ## History
 * 2022/02/09 ver 2.26.16
+	* Bookmarklet to open puzz.link, pzv, pzprxs, other penpa forks in Penpa+ with a single click.
 	* Timer improvements.
 	* Code refactoring - All settings are now moved to Settings Class.
 	* Special mode added to Tab list.
