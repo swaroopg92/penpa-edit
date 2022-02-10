@@ -224,7 +224,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').textContent === "OFF") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2, 3];
@@ -238,7 +238,7 @@ class Puzzle_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').textContent === "OFF") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2, 3];
@@ -319,7 +319,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudoku":
-                if (document.getElementById('edge_button').textContent === "ON") {
+                if (UserSettings.draw_edges) {
                     type = [0, 2, 3];
                 } else {
                     type = [0];
@@ -663,7 +663,7 @@ class Puzzle_square extends Puzzle {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
