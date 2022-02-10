@@ -1717,23 +1717,38 @@ function show_genretags() {
 
 function savetext_edit() {
     var text = pu.maketext();
-    document.getElementById("savetextarea").value = text;
+    update_textarea(text);
 }
 
 function savetext_solve() {
     var text = pu.maketext_solve();
-    document.getElementById("savetextarea").value = text;
+    update_textarea(text);
 }
 
 function savetext_comp() {
     var text = pu.maketext_compsolve();
-    document.getElementById("savetextarea").value = text;
+    update_textarea(text);
 }
 
 function savetext_withsolution() {
     var text = pu.maketext_solve_solution();
-    document.getElementById("savetextarea").value = text;
+    update_textarea(text);
     document.getElementById("modal-save2").style.display = 'none';
+}
+
+function update_textarea(text) {
+    try {
+        $.get('https://tinyurl.com/api-create.php?url=' + text, function(link, status) {
+            if (status === "success") {
+                document.getElementById("savetextarea").value = link;
+            } else {
+                document.getElementById("savetextarea").value = text;
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        document.getElementById("savetextarea").value = text;
+    }
 }
 
 function make_ppfile() {
