@@ -942,7 +942,8 @@
     </div>
     <div id="modal-save" class="modal">
         <div id="modal-save-content">
-            <h3 class="modal-header" id="savetexttitle">Share URL</h3>
+            <h3 class="modal-header" id="savetexttitle">Share Puzzle</h3>
+            <h5 class="modal-subheader">Puzzle Information</h5>
             <div id="modal-save-info">
                 <span class="DM">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
                 <br>
@@ -950,22 +951,26 @@
                 <br>
                 <span class="DM">Rules:<textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>
-                <input type="button" id="saveinfogenre" value="Select genre/tags (Optional)" />
+                <input type="button" id="saveinfogenre" value="Select Genre/Tags (Optional)" />
                 <br>
-                <span class="DM">Source:<input type="text" placeholder="https://example.com" id="saveinfosource"></span>
-                <br>
-                <span id="sourcewarning">*If you are not the author of the puzzle, please specify the source URL</span>
+                <span class="DM">
+                    Source:
+                    <span id="sourcewarning">* If you are not the author of the puzzle, please specify the source URL</span>
+                    <input type="text" placeholder="https://example.com" id="saveinfosource"></span>
             </div>
+            <h5 class="modal-subheader">Generate URL</h5>
             <div class="nb_button">
-                <input type="button" id="address_edit" value="URL for editing" />
-                <input type="button" id="address_solve" value="URL for solving" />
+                <input type="button" id="address_edit" value="Editing URL" />
+                <input type="button" id="address_solve" value="Solving URL" />
                 <!--For Competitive Solving-->
-                <input type="button" id="address_comp" value="URL for contests" />
-                <input type="button" id="expansion" value="URL with answer check / Extra options" />
+                <input type="button" id="address_comp" value="Contest-Mode URL" /><br/>
+                <input type="button" id="expansion" value="URL with Answer Check / Advanced Options" />
             </div>
-            <div>
-                <span><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>
-                <input type="checkbox" name="save_undo" id="save_undo">
+            <div class="modal-save-inset">
+                <label class="label_nb" for="save_undo">Save Undo/Redo (History)</label>
+                <input type="checkbox" name="save_undo" id="save_undo"><br/>
+                <label class="label_nb" for="auto_shorten_chk">Automatically Shorten w/ TinyURL</label>
+                <input type="checkbox" name="auto_shorten_chk" id="auto_shorten_chk" checked="checked" />
             </div>
             <div id="modal-save-body">
                 <textarea class="text_area" readonly rows="1" cols="50" id="savetextarea"></textarea>
@@ -975,7 +980,7 @@
                 <input type="button" id="closeBtn_save1" value="Copy" />
                 <input type="button" id="closeBtn_save2" value="Download" />
                 <input type="button" id="closeBtn_save3" value="Open" onclick="savetext_window();" />
-                <input type="button" id="closeBtn_save6" value="URL_short" onclick="shorturl_tab();" />
+                <input type="button" id="closeBtn_save6" value="Shorten" onclick="shorturl_tab();" />
                 <input type="button" id="closeBtn_save4" value="Close" />
             </div>
         </div>

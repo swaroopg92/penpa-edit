@@ -935,7 +935,7 @@ body textarea {
 
 #modal-save-content {
     position: relative;
-    width: var(--popup_width);
+    width: var(--popup_width_larger);
     padding: 40px 10px 10px;
     max-height: calc(100% - 80px);
     margin: 0 auto;
@@ -982,6 +982,8 @@ body textarea {
 
 #sourcewarning {
     color: var(--red);
+    font-style: italic;
+    font-size:.9em;
 }
 
 #answerwarning {
@@ -1057,6 +1059,10 @@ body textarea {
     text-align: center;
     margin: 1em 0 0;
     padding: 0;
+}
+
+.modal-header + .modal-subheader {
+    margin-top:0;
 }
 
 .solcheck,
@@ -1327,6 +1333,12 @@ sup {
     text-align: center;
     margin-left: 20%;
     height: 20px;
+    font-size: .8em;
+    padding: 0.1em 0.5em;
+}
+
+.modal-save-inset {
+    margin: 0 2em;
 }
 
 #modal-save-tag-body {

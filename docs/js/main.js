@@ -2144,7 +2144,10 @@ onload = function() {
 
     // Shorten links setting
     document.getElementById("shorten_links_dropdown").onchange = function() {
-        UserSettings.shorten_links = this.value;
+        UserSettings.shorten_links = String(this.value) === "1";
+    }
+    document.getElementById("auto_shorten_chk").onchange = function() {
+        UserSettings.shorten_links = this.checked;
     }
 
     // Timer pause and unpause
