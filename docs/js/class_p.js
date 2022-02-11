@@ -4241,6 +4241,23 @@ class Puzzle {
             }
         }
 
+        // Check Frame
+        for (edge in this.frame) {
+            // If black edge
+            if (this.frame[edge] === 2) {
+                points = edge.split(',');
+                pointA = Number(points[0]) - (this.nx0 * this.ny0);
+                pointA_x = (pointA % this.nx0); //column
+                pointA_y = parseInt(pointA / this.nx0); //row
+                if ((Number(points[1]) - Number(points[0])) === 1) {
+                    // data for up matrix
+                    up_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                } else {
+                    right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                }
+            }
+        }
+
         // Define regions using numbers
         // Loop through each cell
         for (var i = 0; i < row_size; i++) {

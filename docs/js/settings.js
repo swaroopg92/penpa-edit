@@ -303,6 +303,18 @@ const UserSettings = {
         return this._show_solution;
     },
 
+    _shorten_links: false,
+    set shorten_links(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._shorten_links = newValue;
+
+        document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;
+        document.getElementById("auto_shorten_chk").checked = newValue ? 'checked' : null;
+    },
+    get shorten_links() {
+        return this._shorten_links;
+    },
+
     can_save: [
         'color_theme',
         'mousemiddle_button',
@@ -313,7 +325,8 @@ const UserSettings = {
         'sudoku_centre_size',
         'sudoku_normal_size',
         'timerbar_status',
-        'conflict_detection'
+        'conflict_detection',
+        'shorten_links'
     ],
     gridtype_size: [
         'gridtype',
@@ -353,8 +366,10 @@ const UserSettings = {
             let foundCookie;
             this.can_save.forEach(function(setting) {
                 let cookieQuery = getCookie(setting);
-                UserSettings[setting] = cookieQuery;
-                foundCookie = foundCookie || cookieQuery;
+                if (cookieQuery !== null) {
+                    UserSettings[setting] = cookieQuery;
+                    foundCookie = 1;
+                }
             });
 
             const tab_cookie = getCookie("tab_settings");
@@ -364,6 +379,7 @@ const UserSettings = {
                     // document.getElementById('advance_button').value = "1";
                     advancecontrol_onoff("url");
                 }
+                foundCookie = 1;
             }
 
             // If we found any saved setting, turn saving back on.
