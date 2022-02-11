@@ -303,6 +303,17 @@ const UserSettings = {
         return this._show_solution;
     },
 
+    _shorten_links: true,
+    set shorten_links(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 1;
+        this._shorten_links = (valueInt === 1);
+
+        document.getElementById("shorten_links_dropdown").value = valueInt ? 1 : 0;
+    },
+    get shorten_links() {
+        return this._shorten_links;
+    },
+
     can_save: [
         'color_theme',
         'mousemiddle_button',
@@ -313,7 +324,8 @@ const UserSettings = {
         'sudoku_centre_size',
         'sudoku_normal_size',
         'timerbar_status',
-        'conflict_detection'
+        'conflict_detection',
+        'shorten_links'
     ],
     gridtype_size: [
         'gridtype',
