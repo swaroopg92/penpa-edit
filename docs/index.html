@@ -959,18 +959,18 @@
                     <input type="text" placeholder="https://example.com" id="saveinfosource"></span>
             </div>
             <h5 class="modal-subheader">Generate URL</h5>
+            <div class="modal-save-inset">
+                <label class="label_nb" for="save_undo" id="save_undo_lb">Save Undo/Redo (History)</label>
+                <input type="checkbox" name="save_undo" id="save_undo"><br />
+                <label class="label_nb" for="auto_shorten_chk" id="auto_shorten_chk_lb">Automatically Shorten with TinyURL</label>
+                <input type="checkbox" name="auto_shorten_chk" id="auto_shorten_chk" />
+            </div>
             <div class="nb_button">
                 <input type="button" id="address_edit" value="Editing URL" />
                 <input type="button" id="address_solve" value="Solving URL" />
                 <!--For Competitive Solving-->
-                <input type="button" id="address_comp" value="Contest-Mode URL" /><br/>
+                <input type="button" id="address_comp" value="Contest-Mode URL" /><br />
                 <input type="button" id="expansion" value="URL with Answer Check / Advanced Options" />
-            </div>
-            <div class="modal-save-inset">
-                <label class="label_nb" for="save_undo">Save Undo/Redo (History)</label>
-                <input type="checkbox" name="save_undo" id="save_undo"><br/>
-                <label class="label_nb" for="auto_shorten_chk">Automatically Shorten w/ TinyURL</label>
-                <input type="checkbox" name="auto_shorten_chk" id="auto_shorten_chk" checked="checked" />
             </div>
             <div id="modal-save-body">
                 <textarea class="text_area" readonly rows="1" cols="50" id="savetextarea"></textarea>
@@ -1381,8 +1381,8 @@
                         </td>
                         <td>
                             <select id="shorten_links_dropdown">
-                                <option value="1" selected>ON</option>
-                                <option value="0">OFF</option>
+                                <option value="1">ON</option>
+                                <option value="0" selected>OFF</option>
                             </select>
                         </td>
                     </tr>

@@ -977,13 +977,18 @@ body textarea {
 #saveinfosource,
 #saveinforules {
     margin: 2px auto;
-    width: 90%;
+    width: 95%;
+}
+
+#savetextname {
+    margin: 2px auto;
+    width: 75%;
 }
 
 #sourcewarning {
     color: var(--red);
     font-style: italic;
-    font-size:.9em;
+    font-size: .9em;
 }
 
 #answerwarning {
@@ -993,7 +998,6 @@ body textarea {
 
 #save_undo_lb,
 #save_undo {
-    margin-left: 10px;
     margin-top: 5px;
 }
 
@@ -1013,7 +1017,7 @@ body textarea {
 .text_area {
     min-width: 200px;
     min-height: 80px;
-    max-width: 310px;
+    max-width: 95%;
     max-height: 130px;
 }
 
@@ -1061,8 +1065,8 @@ body textarea {
     padding: 0;
 }
 
-.modal-header + .modal-subheader {
-    margin-top:0;
+.modal-header+.modal-subheader {
+    margin-top: 0;
 }
 
 .solcheck,

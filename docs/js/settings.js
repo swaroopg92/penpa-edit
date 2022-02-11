@@ -303,9 +303,9 @@ const UserSettings = {
         return this._show_solution;
     },
 
-    _shorten_links: true,
+    _shorten_links: false,
     set shorten_links(newValue) {
-        if (newValue === undefined) { newValue = true; }
+        if (newValue === undefined) { newValue = false; }
         this._shorten_links = newValue;
 
         document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;

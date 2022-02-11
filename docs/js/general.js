@@ -1269,13 +1269,15 @@ function savetext_withsolution() {
 
 async function request_shortlink(url) {
     try {
-        return $.get('https://tinyurl.com/api-create.php?url=' + url, function (link, status) {
+        return $.get('https://tinyurl.com/api-create.php?url=' + url, function(link, status) {
             if (status === "success") {
                 return link;
             }
+            console.log('Error while creating tinyurl');
             return null;
         });
     } catch (error) {
+        console.log('Error while creating tinyurl');
         return null;
     }
 }
