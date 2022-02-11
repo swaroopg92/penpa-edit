@@ -523,6 +523,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color. This also affects Composite Edge IO.
 	* Reload Protection: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
 	* Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
+	* Shorten Links Automatically: Turning on this button will shorten the Share URL automatically.
 	* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
 	* Conflict Detection: It is upcoming feature. Some of the puzzle genres have smart checking ability. Default is ON. User can turn it OFF for the ongoing puzzle or for all the future puzzles.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
@@ -537,6 +538,7 @@ Depending on the browser you can update the page without using the cache with "C
 		* Mouse Middle Button choice
 		* Local Storage
 		* Conflict Detection
+		* Shorten Links Automatically
 		When the user returns to fresh Penpa page, these settings are recovered.
 	* Local Storage: Default is ON. It stores the local progress of the solution in the solver mode. User can clear the storage of ongoing puzzle using "Clear this puzzle" button or entire storage using "clear all" button.
 
