@@ -1269,19 +1269,29 @@ function savetext_withsolution() {
     document.getElementById("modal-save2").style.display = 'none';
 }
 
-function update_textarea(text) {
+async function request_shortlink(url) {
     try {
-        $.get('https://tinyurl.com/api-create.php?url=' + text, function(link, status) {
+        return $.get('https://tinyurl.com/api-create.php?url=' + url, function(link, status) {
             if (status === "success") {
-                document.getElementById("savetextarea").value = link;
-            } else {
-                document.getElementById("savetextarea").value = text;
+                return link;
             }
+            console.log('Error while creating tinyurl');
+            return null;
         });
     } catch (error) {
-        console.log(error);
-        document.getElementById("savetextarea").value = text;
+        console.log('Error while creating tinyurl');
+        return null;
     }
+}
+
+async function update_textarea(text) {
+    let newText = text;
+    if (UserSettings.shorten_links) {
+        let shortened = await request_shortlink(newText);
+        newText = shortened || newText;
+    }
+
+    document.getElementById("savetextarea").value = newText;
 }
 
 function make_ppfile() {
