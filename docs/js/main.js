@@ -864,16 +864,12 @@ onload = function() {
         var min0, min = 10e6;
         var num = 0;
         let type;
-        //const startTime = performance.now();
+        var improve_modes = ["star", "yajilin", "mines", "doublemines", "akari"];
 
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "doublemines") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
+                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 type = pu.type;
                 pu.type = [0];
@@ -893,11 +889,7 @@ onload = function() {
         // resetting the type for starbattle composite mode
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    ((pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "star") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "mines") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "doublemines") ||
-                        (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) ||
+                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 pu.type = type;
             }

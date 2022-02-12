@@ -14,7 +14,7 @@ const penpa_modes = {
         ],
         //composite modes
         'combisub': ['blpo', 'blwh', 'shaka',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
+            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
             'edgesub',
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS', 'doublemines',
             'numfl', 'alfl'
@@ -71,7 +71,7 @@ const penpa_modes = {
         ],
         //composite modes
         'combisub': ['blpo', 'blwh', 'shaka',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
+            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
             'edgesub',
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS', 'doublemines',
             'numfl', 'alfl'
@@ -128,7 +128,7 @@ const penpa_modes = {
         ],
         //composite modes
         'combisub': ['blpo', 'blwh', 'shaka',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
+            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
             'edgesub',
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS', 'doublemines',
             'numfl', 'alfl'
