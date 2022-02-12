@@ -4387,6 +4387,23 @@ class Puzzle {
             }
         }
 
+        // Check Frame
+        for (edge in this.frame) {
+            // If black edge
+            if (this.frame[edge] === 2) {
+                points = edge.split(',');
+                pointA = Number(points[0]) - (this.nx0 * this.ny0);
+                pointA_x = (pointA % this.nx0); //column
+                pointA_y = parseInt(pointA / this.nx0); //row
+                if ((Number(points[1]) - Number(points[0])) === 1) {
+                    // data for up matrix
+                    up_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                } else {
+                    right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                }
+            }
+        }
+
         // Define regions using numbers
         // Loop through each cell
         for (var i = 0; i < row_size; i++) {
@@ -9426,6 +9443,9 @@ class Puzzle {
                 case "hashi":
                     this.re_combi_hashi(num);
                     break;
+                case "rassisillai":
+                    this.re_combi_rassisillai(num);
+                    break;
                 case "edgesub":
                     this.re_combi_edgesub(num);
                     break;
@@ -9496,6 +9516,9 @@ class Puzzle {
                 case "yajilin":
                     this.re_combi_yajilin_downright(num);
                     break;
+                case "rassisillai":
+                    this.re_combi_rassisillai_downright(num);
+                    break;
                 case "akari":
                     this.re_combi_akari_downright(num);
                     break;
@@ -9543,6 +9566,9 @@ class Puzzle {
                     break;
                 case "hashi":
                     this.re_combi_hashi_move(num);
+                    break;
+                case "rassisillai":
+                    this.re_combi_rassisillai_move(num);
                     break;
                 case "edgesub":
                     this.re_combi_edgesub_move(num);
@@ -9604,6 +9630,13 @@ class Puzzle {
                         this.re_combi_yajilin_up_reduced(num); // moved the dot to right click
                     } else {
                         this.re_combi_yajilin_up(num); // on ipad/mobile behave as usual
+                    }
+                    break;
+                case "rassisillai":
+                    if (this.ondown_key === "mousedown") {
+                        this.re_combi_rassisillai_up_reduced(num); // moved the dot to right click
+                    } else {
+                        this.re_combi_rassisillai_up(num); // on ipad/mobile behave as usual
                     }
                     break;
                 case "tents":
@@ -10124,6 +10157,96 @@ class Puzzle {
             } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
                 this.record('line', num);
                 delete this[this.mode.qa].line[num];
+            }
+        }
+        this.last = num;
+    }
+
+    re_combi_rassisillai(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
+        this.redraw();
+    }
+
+    re_combi_rassisillai_move(num) {
+        if (this.drawing_mode != -1 && this.point[num].type === 0) {
+            if (this.drawing_mode === 5 && num != this.last) {
+                if (!this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                }
+            } else if (this.drawing_mode === 6 && num != this.last) {
+                if (this[this.mode.qa].symbol[num]) {
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                }
+            } else {
+                var line_style = 3;
+                var array;
+                if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
+                    array = "line";
+                    var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                    this.re_line(array, key, line_style);
+                }
+            }
+            this.last = num;
+            this.redraw();
+        }
+    }
+
+    re_combi_rassisillai_up(num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
+            } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
+    re_combi_rassisillai_up_reduced(num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
+            } else if (this[this.mode.qa].symbol[num][0] === 8) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
+    }
+
+    re_combi_rassisillai_downright(num) {
+        if (this.point[num].type === 0) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                this.drawing_mode = 5; // placing dots
+            } else if (this[this.mode.qa].symbol[num][0] === 1) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                this.drawing_mode = 5; // placing dots
+            } else {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.drawing_mode = 6; // removing dots
             }
         }
         this.last = num;
