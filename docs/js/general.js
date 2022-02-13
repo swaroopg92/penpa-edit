@@ -1490,7 +1490,7 @@ function load(urlParam, type = 'url') {
         paramArray[paramItem[0]] = paramItem[1];
     }
 
-    if (paramArray.p.substring(0, 4) === 'http') {
+    if (paramArray.p && paramArray.p.substring(0, 4) === 'http') {
         create();
         import_url(paramArray.p);
         return;
