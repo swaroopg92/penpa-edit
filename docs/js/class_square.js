@@ -311,6 +311,7 @@ class Puzzle_square extends Puzzle {
                     case "shaka":
                     case "numfl":
                     case "alfl":
+                    case "rassisillai":
                         type = [0];
                         break;
                     case "edgesub":
