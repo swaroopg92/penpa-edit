@@ -619,7 +619,7 @@ function changetype() {
             for (var i of type4) {
                 document.getElementById(i).style.display = "inline";
             }
-            document.getElementById("nb_sudoku3_lb").innerHTML = "Sandwich";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "Outside clues (top/left)";
             document.getElementById("nb_sudoku7_lb").innerHTML = "*Default size is 9x9";
             document.getElementById("nb_sudoku1").checked = false;
             document.getElementById("nb_sudoku2").checked = false;
