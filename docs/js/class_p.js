@@ -7103,7 +7103,7 @@ class Puzzle {
             // get time-stamp (ts) of puzzle start
             var prev_ts;
             if (pu.puzzle_info) {
-                prev_ts = pu.puzzle_info.startTimeUTC;
+                prev_ts = pu.puzzle_info.startTimeMS;
             } else {
                 prev_ts = new Date();
             }
