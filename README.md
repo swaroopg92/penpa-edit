@@ -460,6 +460,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Heyawake
 	* Juosan
 	* Kakuro
+	* Kropki
 	* Kurochute
 	* Kurodoko
 	* Kurotto

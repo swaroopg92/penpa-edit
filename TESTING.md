@@ -189,6 +189,16 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Kropki</summary>
+
+* https://puzz.link/p?kropki/1/10/h3e
+* https://puzz.link/p?kropki/10/1/h3e
+* https://puzz.link/p?kropki/13/13/09000100000003312139b30ia4caa4caki2i0gna3002cng3cng40004090000d910000000000000i009000000000099300l030190
+* https://puzz.link/p?kropki/7/7/ddc0330l00729c6ic6e9j0i94d04
+* https://puzz.link/p?kropki/9/4/00000599cccdde000006
+
+</details>
+<details>
 <summary>Kurochute</summary>
 
 * https://puzz.link/p?kurochute/13/13/31i33j13h3g3g47k.h1k71j4h1i2i2m2m531j1g53m1h13k33i3i6g1k34m1j1i5h3n4k41k39h1g32i13

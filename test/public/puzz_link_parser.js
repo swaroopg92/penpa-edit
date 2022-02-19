@@ -107,6 +107,12 @@ describe("puzz.link parser", () => {
         ["Kakuro 3", "https://puzz.link/p?kakuro/2/2/k...-5"],
         ["Kakuro 4", "https://puzz.link/p?kakuro/5/5/kC-e-c-z..-8lff-giO"],
         ["Kakuro 5", "https://puzz.link/p?kakuro/6/6/m-eoI5lD-t.l-co-bm8-e-i97ggc"],
+        // Kropki
+        ["Kropki 1", "https://puzz.link/p?kropki/1/10/h3e"],
+        ["Kropki 2", "https://puzz.link/p?kropki/10/1/h3e"],
+        ["Kropki 3", "https://puzz.link/p?kropki/13/13/09000100000003312139b30ia4caa4caki2i0gna3002cng3cng40004090000d910000000000000i009000000000099300l030190"],
+        ["Kropki 4", "https://puzz.link/p?kropki/7/7/ddc0330l00729c6ic6e9j0i94d04"],
+        ["Kropki 5", "https://puzz.link/p?kropki/9/4/00000599cccdde000006"],
         // Kurochute
         ["Kurochute 1", "https://puzz.link/p?kurochute/13/13/31i33j13h3g3g47k.h1k71j4h1i2i2m2m531j1g53m1h13k33i3i6g1k34m1j1i5h3n4k41k39h1g32i13"],
         ["Kurochute 2", "https://puzz.link/p?kurochute/6/7/h12341p1l2p21234h"],

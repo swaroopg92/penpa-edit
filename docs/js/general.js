@@ -3474,6 +3474,33 @@ function decode_puzzlink(url) {
             pu.mode_set("surface");
             UserSettings.tab_settings = ["Surface", "Composite"];
             break;
+        case "kropki":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "number");
+
+            info_number = puzzlink_pu.decodeNumber3();
+            for (i in info_number) {
+                if (!info_number[i]) {
+                    continue;
+                }
+
+                if (i < (cols - 1) * rows) {
+                    row_ind = parseInt(i / (cols - 1));
+                    col_ind = i % (cols - 1);
+                    cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                } else {
+                    var tmp = i - (cols - 1) * rows;
+                    row_ind = parseInt(tmp / cols);
+                    col_ind = tmp % cols;
+                    cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                }
+                pu["pu_q"].symbol[cell] = [info_number[i], "circle_SS", 2];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
+            break
         default:
             Swal.fire({
                 title: 'Swaroop says:',
