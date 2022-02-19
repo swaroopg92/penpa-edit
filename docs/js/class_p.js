@@ -7101,7 +7101,12 @@ class Puzzle {
         } else {
             // Introducing timestamp for live replay
             // get time-stamp (ts) of puzzle start
-            let prev_ts = pu.puzzle_info.startTimeUTC;
+            var prev_ts;
+            if (pu.puzzle_info) {
+                prev_ts = pu.puzzle_info.startTimeUTC;
+            } else {
+                prev_ts = new Date();
+            }
 
             // get time-stamp (ts) of next action
             let next_ts = new Date();
