@@ -783,7 +783,7 @@ function display_rules() {
     })
 }
 
-function submit_solution() {
+function submit_solution(e) {
     let solution = "";
     switch (pu.puzzle_info.genre) {
         case "tapa":
@@ -822,15 +822,18 @@ function submit_solution() {
                 }
             }
             sol = sol.sort();
-            solution = JSON.stringify(sol);
+            solution = sol.join(':');
             break;
     }
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
             answer: solution
-        },
-        options = {
+        };
+    if (e.altKey && e.ctrlKey) {
+        data.authorSolution = true;
+    }
+    const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -906,12 +909,20 @@ function submit_solution() {
                     }
                 })
             } else {
+                if (response.solutionRecorded) {
+                    Swal.fire({
+                        html: `Solution to puzzle recorded. Please submit again to double check`,
+                        icon: 'success',
+                        confirmButtonText: 'Okay',
+                    });
+                } else {
                 Swal.fire({
-                    html: `<h3 class='warn'"> Solution is wrong </h3>`,
+                    html: `<h3 class='warn'">${response.message||'Solution is wrong'}</h3>`,
                     icon: 'error',
                     confirmButtonText: 'Try Again',
                     timer: 3000
                 });
+                }
             }
         })
         .catch(function(err) {

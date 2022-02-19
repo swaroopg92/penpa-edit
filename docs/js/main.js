@@ -1783,7 +1783,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "submit_sol":
-                submit_solution();
+                submit_solution(e);
                 e.preventDefault();
                 break;
             case "replay_play":
