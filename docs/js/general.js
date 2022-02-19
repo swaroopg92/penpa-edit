@@ -856,7 +856,7 @@ function submit_solution(e) {
                 // Rating and feedback code
                 let wrap = document.createElement('div');
                 wrap.setAttribute('class', 'text-muted');
-                wrap.innerHTML = '<p>Rate the puzzle: </p><div class="rate">' +
+                wrap.innerHTML = '<p>Quality Rating: </p><div class="rate">' +
                     '<input type="radio" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
                     '<input type="radio" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
                     '<input type="radio" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
