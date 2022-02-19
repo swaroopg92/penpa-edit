@@ -857,17 +857,17 @@ function submit_solution(e) {
                 let wrap = document.createElement('div');
                 wrap.setAttribute('class', 'text-muted');
                 wrap.innerHTML = '<p>Quality Rating: </p><div class="rate">' +
-                    '<input type="radio" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
-                    '<input type="radio" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
-                    '<input type="radio" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
-                    '<input type="radio" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
-                    '<input type="radio" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
-                    '<input type="radio" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
-                    '<input type="radio" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
-                    '<input type="radio" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
-                    '<input type="radio" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
-                    '<input type="radio" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
-                    '</div><br><textarea id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                    '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
                     '<br/>';
                 Swal.fire({
                     title: 'Solution is correct',
@@ -938,8 +938,8 @@ function submit_solution(e) {
 
 function createEmojiBar() {
     if (document.getElementsByClassName("emoji-picker-button").length === 0) {
-        const emojiPicker = new EmojiPicker('swal-feedback-2', "100%", "160px");
-        emojiPicker.show();
+        const emojiPicker = new EmojiPicker('swal-feedback-2', "100%", "50px", null);
+        emojiPicker.show(false);
     }
 }
 
