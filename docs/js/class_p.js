@@ -10028,14 +10028,14 @@ class Puzzle {
     re_combi_rassisillai_move(num) {
         if (this.drawing_mode != -1 && this.point[num].type === 0) {
             if (this.drawing_mode === 5 && num != this.last) {
-                if (!this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
-                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                if (!this[this.mode.qa].surface[num]) {
+                    this.record("surface", num);
+                    this[this.mode.qa].surface[num] = 7;
                 }
             } else if (this.drawing_mode === 6 && num != this.last) {
-                if (this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
-                    delete this[this.mode.qa].symbol[num];
+                if (this[this.mode.qa].surface[num]) {
+                    this.record("surface", num);
+                    delete this[this.mode.qa].surface[num];
                 }
             } else {
                 var line_style = 3;
@@ -10053,15 +10053,17 @@ class Puzzle {
 
     re_combi_rassisillai_up(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
-            if (!this[this.mode.qa].symbol[num]) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-            } else if (this[this.mode.qa].symbol[num][0] === 1) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-            } else {
+            } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 1) {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 7;
+            } else {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
             }
         }
         this.drawing_mode = -1;
@@ -10072,10 +10074,12 @@ class Puzzle {
 
     re_combi_rassisillai_up_reduced(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
-            if (!this[this.mode.qa].symbol[num]) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-            } else if (this[this.mode.qa].symbol[num][0] === 8) {
+            } else if (this[this.mode.qa].surface[num] === 7) {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
             } else {
@@ -10091,18 +10095,20 @@ class Puzzle {
 
     re_combi_rassisillai_downright(num) {
         if (this.point[num].type === 0) {
-            if (!this[this.mode.qa].symbol[num]) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.drawing_mode = 5; // placing dots
-            } else if (this[this.mode.qa].symbol[num][0] === 1) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.drawing_mode = 5; // placing dots
-            } else {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 7;
+                this.drawing_mode = 5; // placing shaded yellow
+            } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 1) {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
-                this.drawing_mode = 6; // removing dots
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 7;
+                this.drawing_mode = 5; // placing shaded yellow
+            } else {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
+                this.drawing_mode = 6; // removing shaded yellow
             }
         }
         this.last = num;
