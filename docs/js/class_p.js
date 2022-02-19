@@ -6621,7 +6621,7 @@ class Puzzle {
                     }
                 }
                 sol = sol.sort();
-                text = JSON.stringify(sol);
+                text = sol.join(':');
             } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
