@@ -501,6 +501,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Tapa
 	* Tapa-Like Loop
 	* Tents
+	* Tentaisho (Spiral Galaxies)
 	* Toichika 2
 	* View
 	* Yajikazu (Yajisan-Kazusan)

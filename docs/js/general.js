@@ -2960,6 +2960,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "midloop":
+        case "tentaisho":
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed gridlines
             setupProblem(pu, "combi");
@@ -2969,7 +2970,7 @@ function decode_puzzlink(url) {
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
-            pu.subcombimode("linex");
+            pu.subcombimode(type === "midloop" ? "linex" : "edgesub");
             UserSettings.tab_settings = ["Surface", "Composite"];
             break;
         case "castle":

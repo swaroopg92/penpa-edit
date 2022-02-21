@@ -304,6 +304,11 @@ describe("puzz.link parser", () => {
         ["Tents 4", "https://puzz.link/p?tents/12/11/g111h1h11g1213i21g1ndd2240hzl0978h"],
         ["Tents 5", "https://puzz.link/p?tents/10/10/zj1861a2163d2181182112"],
         ["Tents 6", "https://puzz.link/p?tents/8/8/g1g1g1g11g1g1g1gj2263a353d31"],
+        // Tentaisho (Spiral Galaxies)
+        ["Tentaisho 1", "https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze"],
+        ["Tentaisho 2", "https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em"],
+        ["Tentaisho 3", "https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl"],
+        ["Tentaisho 4", "https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe"],
         // Toichika 2
         ["Toichika-2 1", "https://puzz.link/p?toichika2/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
         ["Toichika-2 2", "https://puzz.link/p?toichika2/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g"],

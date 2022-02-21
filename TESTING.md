@@ -559,6 +559,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Tentaisho (Spiral Galaxies)</summary>
+
+* https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze
+* https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em
+* https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl
+* https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe
+
+</details>
+<details>
 <summary>Toichika 2</summary>
 
 * https://puzz.link/p?toichika2/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48
