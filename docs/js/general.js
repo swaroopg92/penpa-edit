@@ -951,6 +951,9 @@ function submit_solution_steps() {
 
     // encrypt the data
     var replay = encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
+    if (replay == null) {
+        replay = "penpaerror";
+    }
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
@@ -2199,6 +2202,10 @@ function load2(paramArray, type) {
     panel_pu = new Panel();
 
     // Decode Contest ID, Puzzle ID, Puzzle Info
+    var valid_replay = false;
+    if (paramArray.r && !paramArray.r.includes("penpaerror")) {
+        valid_replay = true;
+    }
     if (paramArray.q) {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
@@ -2212,7 +2219,7 @@ function load2(paramArray, type) {
             document.getElementById("header").style.display = 'none';
             document.getElementById("puzzleauthor").style.display = 'none';
         }
-        if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
+        if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !valid_replay) {
             let contestinfo = document.getElementById("contestinfo");
             let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
             contestinfo.innerHTML = submitContents;
@@ -2658,7 +2665,7 @@ function load2(paramArray, type) {
     // Dont do if replay is enabled
     pu.url = paramArray.p;
 
-    if (!paramArray.r && (paramArray.m === "solve" || paramArray.l === "solvedup")) {
+    if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup")) {
         // check for local progres
         // get md5 hash for unique id
         let hash = "penpa_" + md5(pu.url);
@@ -2713,7 +2720,7 @@ function load2(paramArray, type) {
     }
 
     // Enable Replay Buttons
-    if (paramArray.r) {
+    if (valid_replay) {
         // Decrypt Replay
         var rstr = decrypt_data(paramArray.r);
         pu.replay = true; // flag used to block mouse event on the grid
@@ -2765,7 +2772,7 @@ function load2(paramArray, type) {
         parent.resizeiframe();
     }
 
-    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !paramArray.r) {
+    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !valid_replay) {
         // Enable timer for resolves
         document.getElementById("timer").style.display = "";
         document.getElementById("stop_watch").style.display = "";
