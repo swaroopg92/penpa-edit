@@ -3501,6 +3501,38 @@ function decode_puzzlink(url) {
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
             break
+        case "firefly":
+            // Outside padding
+            document.getElementById("nb_space1").value = 1;
+            document.getElementById("nb_space2").value = 1;
+            document.getElementById("nb_space3").value = 1;
+            document.getElementById("nb_space4").value = 1;
+
+            pu = new Puzzle_square(cols + 1, rows + 1, size);
+
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            pu.mode_grid("nb_out2"); // No grid frame
+            setupProblem(pu, "combi");
+
+            // Firefly puzzles use the same encoding as Yajilin
+            var firefly = puzzlink_pu.decodeYajilinArrows();
+            // But puzzlink lists the directions differently than Penpa does
+            var direction_map = [5, 4, 2, 3, 1];
+
+            for (var i in firefly) {
+                row_ind = 2 + parseInt(i / cols);
+                col_ind = 2 + i % cols;
+                cell = pu.nx0 * pu.ny0 + pu.nx0 * row_ind + col_ind;
+
+                pu["pu_q"].symbol[cell] = [direction_map[firefly[i][0]], "firefly", 2];
+                pu["pu_q"].number[cell] = [firefly[i][1], 1, "1"];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.subcombimode("edgex");
+            pu.mode_set("combi");
+            UserSettings.tab_settings = ["Edge Normal", "Composite"];
+            break
         default:
             Swal.fire({
                 title: 'Swaroop says:',

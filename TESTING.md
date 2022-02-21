@@ -133,6 +133,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Firefly (Hotaru Beam)</summary>
+
+* https://puzz.link/p?firefly/10/1/4.h0./
+* https://puzz.link/p?firefly/10/10/k40f20c41j22b24g2.3.b21b10b4.2.g21b12e12d32c10f30k
+* https://puzz.link/p?firefly/7/7/e3.h1.13a0.f0.f0.a151543h1.b3.a
+* https://puzz.link/p?firefly/9/9/c25b45c24k23c2340a44c3.m4.c3.a301.c25k13c33b13c
+
+</details>
+<details>
 <summary>Geradeweg</summary>
 
 * https://puzz.link/p?geradeweg/17/10/j6m1q4g4o55o54i1s1o2h3p6h3o2s1i35o53o2g3q6m.+100j

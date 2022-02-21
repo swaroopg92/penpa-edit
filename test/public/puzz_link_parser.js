@@ -79,6 +79,12 @@ describe("puzz.link parser", () => {
         ["Fillomino 2", "https://puzz.link/p?fillomino/7/3/159u159"],
         ["Fillomino 3", "https://puzz.link/p?fillomino/10/10/q-138g84ga3h46g42g33r46g44ga8h12g15g58r21g28g87h42g14g4-13q"],
         ["Fillomino 4", "https://puzz.link/p?fillomino/7/10/r6l8l5l2lah3i5h9i9i4c4o"],
+        // Firefly (Hotaru Beam)
+        ["Firefly 1", "https://puzz.link/p?firefly/10/10/k40f20c41j22b24g2.3.b21b10b4.2.g21b12e12d32c10f30k"],
+        ["Firefly 2", "https://puzz.link/p?firefly/7/7/e3.h1.13a0.f0.f0.a151543h1.b3.a"],
+        ["Firefly 3", "https://puzz.link/p?firefly/9/9/c25b45c24k23c2340a44c3.m4.c3.a301.c25k13c33b13c"],
+        // Minor bug. This parses correctly but isn't rendered right because it's zero rows thick.
+        ["Firefly 4", "https://puzz.link/p?firefly/10/1/4.h0./"],
         // Geradeweg
         ["Geradeweg 1", "https://puzz.link/p?geradeweg/17/10/j6m1q4g4o55o54i1s1o2h3p6h3o2s1i35o53o2g3q6m.+100j"],
         ["Geradeweg 2", "https://puzz.link/p?geradeweg/10/10/g11111111g1111111111l1g11i11g111111111g11111111h1111111111111111g1111g111111111111g11111111g"],

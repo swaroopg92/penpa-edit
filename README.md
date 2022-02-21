@@ -454,6 +454,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Easy as ABC
 	* Factors
 	* Fillomino
+	* Firefly (Hotaru Beam)
 	* Geradeweg
 	* Haisu
 	* Hashiwokakero (Hashi/Bridges)
