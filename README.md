@@ -491,6 +491,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Shimaguni (Islands)
 	* Simple Loop
 	* Skyscrapers
+	* Slant (Gokigen)
 	* Slitherlink
 	* Snake
 	* Star Battle

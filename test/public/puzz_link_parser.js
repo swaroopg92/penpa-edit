@@ -250,6 +250,10 @@ describe("puzz.link parser", () => {
         ["Skyscrapers 2", "https://puzz.link/p?building/5/5/g2l4g2h4h4h2"],
         ["Skyscrapers 3", "https://puzz.link/p?skyscrapers/6/6/h4j2h2g3g3h4g5g2g2"],
         ["Skyscrapers 4", "https://puzz.link/p?skyscrapers/3/5/1235433212312321"],
+        // Slant (Gokigen)
+        ["Slant 1", "https://puzz.link/p?gokigen/10/10/hc5b0bgcgdg7217bidj8778d7ag676617377dgcg8c6317222d6221clbga"],
+        ["Slant 2", "https://puzz.link/p?gokigen/7/7/kag2d27ag6bh26c91cjbg5cgehci"],
+        ["Slant 3", "https://puzz.link/p?gokigen/7/7/gag7bg4cgch3dh3ch928dk7ag4bh.ic"],
         // Slitherlink
         ["Slitherlink 1", "https://puzz.link/p?slither/12/10/6b2b76cbbc6ah7656d76dd1dcg6bh56b516b8dcc6bgbbg62d0a3c"],
         ["Slitherlink 2", "https://puzz.link/p?slitherlink/9/9/233333332dk388583d8d38cg73d7c38212173d7c3721317c"],
