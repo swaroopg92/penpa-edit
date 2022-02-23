@@ -3133,7 +3133,8 @@ class Puzzle {
 
             if (document.getElementById("sol_surface").checked === true || checkall) {
                 for (var i in this[pu].surface) {
-                    if (this["pu_q"].surface[i]) {
+                    let pu_q = "pu_q";
+                    if (this[pu_q].surface[i] && (this[pu_q].surface[i] === 1 || this[pu_q].surface[i] === 8 || this[pu_q].surface[i] === 3 || this[pu_q].surface[i] === 4)) {
                         // ignore the shading if already in problem mode
                     } else {
                         // 1 is DG, 8 is GR, 3 is LG, 4 is BL
