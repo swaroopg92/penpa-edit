@@ -7114,6 +7114,18 @@ class Puzzle {
             // time difference
             let timestamp = new Date(next_ts).getTime() - new Date(prev_ts).getTime(); // in milliseconds
 
+            if (pu.puzzle_info && pu.puzzle_info.replayCutOff) {
+                let cutoff = (pu.puzzle_info.replayCutOff + 300) * 1000; // 5 min buffer
+                if (timestamp > cutoff) {
+                    timestamp = null;
+                }
+            } else {
+                let cutoff = 25 * 60 * 1000; // 25 min
+                if (timestamp > cutoff) {
+                    timestamp = null;
+                }
+            }
+
             if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
                 this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
