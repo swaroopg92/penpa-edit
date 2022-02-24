@@ -79,28 +79,6 @@ function add_constraints() {
 }
 
 function add_genre_tags(user_tags) {
-    let genre_tags = document.getElementById('genre_tags_opt');
-    penpa_tags['options_groups'].forEach(function(element, index) {
-        let optgroup = document.createElement("optgroup");
-        optgroup.label = element;
-
-        penpa_tags['options'][element].forEach(function(subelement, subindex) {
-            let opt = document.createElement("option");
-            opt.value = subelement;
-            opt.innerHTML = subelement;
-
-            if (user_tags.includes(subelement)) {
-                opt.setAttribute("selected", true);
-            }
-            optgroup.appendChild(opt);
-        });
-        genre_tags.appendChild(optgroup);
-    });
-
-    // // to access each option
-    // $("#genre_tags_opt option").each(function() {
-    //     console.log($(this));
-    // });
 }
 
 function create_newboard() {
@@ -1841,7 +1819,7 @@ function submit_portal(e, isPreview) {
                     gridtype: pu.gridtype,
                     numRows: document.getElementById("saveinfo_rows").value,
                     numCols: document.getElementById("saveinfo_cols").value,
-                    genresTags: $('#genre_tags_opt').select2("val"),
+                    genresTags: $('#genre_tags_opt').select2("data").map((c) => c.id),
                     solvingTags: entries_flag.answercheck_opt,
                     onlineSolveMessage: entries_flag.message,
                     allowVideo: document.getElementById("video_usage").checked
@@ -1865,16 +1843,18 @@ function submit_portal(e, isPreview) {
                             pu.puzzle_info.ppid = response.previewId;
                             Swal.fire({
                                 title: response.message,
-                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
+                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to share this link with puzzlers around the world.`,
                                 icon: 'success',
                                 confirmButtonText: 'Ok',
                             })
                         } else {
                             Swal.fire({
                                 title: response.message,
-                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
+                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to share this link with puzzlers around the world.`,
                                 icon: 'success',
                                 confirmButtonText: 'Ok',
+                            }).then(function() {
+                                window.location = response.expoLink;
                             })
                         }
                     } else {
@@ -1936,7 +1916,7 @@ function validate_entries() {
     }
 
     // Validate at least one genre tag is selected
-    if ($('#genre_tags_opt').select2("val").length === 0) {
+    if ($('#genre_tags_opt').select2("data").length === 0) {
         expoError({html: 'Select at least one tag. It is best to select all related tags.'});
         return false;
     }
