@@ -79,28 +79,6 @@ function add_constraints() {
 }
 
 function add_genre_tags(user_tags) {
-    let genre_tags = document.getElementById('genre_tags_opt');
-    penpa_tags['options_groups'].forEach(function(element, index) {
-        let optgroup = document.createElement("optgroup");
-        optgroup.label = element;
-
-        penpa_tags['options'][element].forEach(function(subelement, subindex) {
-            let opt = document.createElement("option");
-            opt.value = subelement;
-            opt.innerHTML = subelement;
-
-            if (user_tags.includes(subelement)) {
-                opt.setAttribute("selected", true);
-            }
-            optgroup.appendChild(opt);
-        });
-        genre_tags.appendChild(optgroup);
-    });
-
-    // // to access each option
-    // $("#genre_tags_opt option").each(function() {
-    //     console.log($(this));
-    // });
 }
 
 function create_newboard() {
@@ -950,16 +928,22 @@ function submit_solution_steps() {
     }
 
     // encrypt the data
-    var replay = encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
-    if (replay == null) {
+    var replay, clicks;
+    try {
+        replay = encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
+        clicks = pu[pu.mode.qa]["command_redo"].__a.length + pu.reset_board_clicks;
+    } catch(err) {
         replay = "penpaerror";
+    }
+    if (replay == null || replay == "") {
+        replay = "penpaerror-replayisblank";
     }
     const data = {
             contest: pu.puzzle_info.cid,
             sequence: pu.puzzle_info.pid,
             ppid: pu.puzzle_info.ppid,
             replay: replay,
-            clicks: pu[pu.mode.qa]["command_redo"].__a.length + pu.reset_board_clicks
+            clicks: clicks
         },
         options = {
             method: 'POST',
@@ -968,7 +952,7 @@ function submit_solution_steps() {
             },
             body: JSON.stringify(data)
         },
-        url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-solution' : '/live/submit-daily',
+        url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-solution' : '/live/submit-daily?replay',
         request = new Request(url, options);
     fetch(request);
 
@@ -1619,6 +1603,7 @@ function saveimage_window() {
 
 
 function savetext() {
+    const newGenreRule = 'Rules for this type is not available. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.';
     $("#saveinfogenremain").select2({
         ajax: {
             url: '/live/misc-pp?action=penpa-search-genre',
@@ -1653,18 +1638,20 @@ function savetext() {
             return $(`
   <div>
     <div><strong>${puzzle.text}</strong></div>
-    <div><small>${puzzle.rules || 'Rules for this type is not available. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.'}</small></div>
+    <div><small>${puzzle.rules || newGenreRule}</small></div>
   </div>
             `);
         },
     }).on('change', function(e) {
-        const options = {
+        const genredata = $(e.currentTarget).select2('data')[0],
+            options = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify({
-                    id: e.currentTarget.value
+                    id: genredata.id,
+                    dbId: genredata.dbId
                 })
             },
             url = `/live/misc-pp?action=penpa-single-genre-details`,
@@ -1672,9 +1659,11 @@ function savetext() {
         fetch(request)
             .then(r => { return r.json(); })
             .then(function(response) {
-                document.getElementById('saveinforules').value = response.data.rules;
+                document.getElementById('saveinforules').value = response.data.newGenre ? newGenreRule : response.data.rules;
                 if (response.data.variant) {
                     document.getElementById('puzzletype_' + response.data.variant.toLowerCase()).selected = true;
+                } else {
+                    document.getElementById('puzzletype_standard').selected = true;
                 }
                 $("#genre_tags_opt").empty();
                 $('#genre_tags_opt').select2({
@@ -1787,7 +1776,11 @@ function make_gmpfile() {
     document.getElementById("modal-save2").style.display = 'none';
 }
 
-function submit_portal() {
+function preview_portal(e) {
+    submit_portal(e, true);
+}
+
+function submit_portal(e, isPreview) {
     var entries_flag = validate_entries();
 
     if (typeof entries_flag !== "boolean") {
@@ -1812,19 +1805,21 @@ function submit_portal() {
             }
 
             const puzzle = {
+                    ppid: pu.puzzle_info && pu.puzzle_info.ppid,
                     solveLink: solve_link,
+                    isPreview: isPreview,
+                    isSudoku: document.getElementById("nb_issudoku").checked,
                     editLink: edit_link,
                     title: document.getElementById("saveinfotitle").value,
-                    theme: document.getElementById("saveinfotheme").value,
                     rules: document.getElementById("saveinforules").value,
                     info: document.getElementById("saveinfoinfo").value,
                     variantLevel: document.getElementById("saveinfotype").value,
-                    exclusivity: document.getElementById("saveinfoexclusivity").value,
+                    exclusivity: document.getElementById('nb_exclusive').checked,
                     originalPost: document.getElementById("saveinfosource").value,
                     gridtype: pu.gridtype,
                     numRows: document.getElementById("saveinfo_rows").value,
                     numCols: document.getElementById("saveinfo_cols").value,
-                    genresTags: $('#genre_tags_opt').select2("val"),
+                    genresTags: $('#genre_tags_opt').select2("data").map((c) => c.id),
                     solvingTags: entries_flag.answercheck_opt,
                     onlineSolveMessage: entries_flag.message,
                     allowVideo: document.getElementById("video_usage").checked
@@ -1843,12 +1838,25 @@ function submit_portal() {
                 })
                 .then(function(response) {
                     if (response.success) {
-                        Swal.fire({
-                            title: response.message,
-                            html: `Here is the <a href='${response.solveLink}'>link</a> to your puzzle. Feel free to publish this link to puzzlers around the world.`,
-                            icon: 'success',
-                            confirmButtonText: 'Ok',
-                        })
+                        if (response.previewId) {
+                            pu.puzzle_info = pu.puzzle_info || {};
+                            pu.puzzle_info.ppid = response.previewId;
+                            Swal.fire({
+                                title: response.message,
+                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to share this link with puzzlers around the world.`,
+                                icon: 'success',
+                                confirmButtonText: 'Ok',
+                            })
+                        } else {
+                            Swal.fire({
+                                title: response.message,
+                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to share this link with puzzlers around the world.`,
+                                icon: 'success',
+                                confirmButtonText: 'Ok',
+                            }).then(function() {
+                                window.location = response.expoLink;
+                            })
+                        }
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -1875,46 +1883,41 @@ function isValidURL(string) {
     return (res !== null)
 };
 
+function expoError(error) {
+    Swal.fire({
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+        ...error
+    })
+}
+
 function validate_entries() {
     // Validate "What is it" is selected
-    if (!document.getElementById("nb_issudoku").checked || !document.getElementById("nb_ispuzzle").checked) {
-        Swal.fire({
-            title: 'Select if its a Sudoku or Puzzle',
-            icon: 'error',
-            confirmButtonText: 'ok',
-        })
+    if (!document.getElementById("nb_issudoku").checked && !document.getElementById("nb_ispuzzle").checked) {
+        expoError({html: 'Select if its a Sudoku or Puzzle'});
+        return false;
+    }
+    if (!$('#saveinfogenremain').select2("val")) {
+        expoError({html: 'Select a puzzle genre. Make sure to fill in the rules in case of a new Genre.'});
         return false;
     }
 
     // Validate title is not empty
-    if (document.getElementById("saveinfotitle").value.length === 0) {
-        Swal.fire({
-            title: 'Title | Theme is empty',
-            icon: 'error',
-            confirmButtonText: 'ok',
-        })
+    if (false && document.getElementById("saveinfotitle").value.length === 0) {
+        expoError({html: 'Title | Theme is empty'});
         return false;
     }
 
     // Validate Rules are not empty
     if (document.getElementById("saveinforules").value.length === 0) {
-        Swal.fire({
-            title: 'No rules provided',
-            icon: 'error',
-            confirmButtonText: 'ok',
-        })
+        expoError({html: 'Rules not provided'});
         return false;
     }
 
     // Validate at least one genre tag is selected
-    var genre_tag_flag = $('#genre_tags_opt').select2("val");
-
-    if (genre_tag_flag.length === 0) {
-        Swal.fire({
-            title: 'Select at least one genre tag',
-            icon: 'error',
-            confirmButtonText: 'ok',
-        })
+    if ($('#genre_tags_opt').select2("data").length === 0) {
+        expoError({html: 'Select at least one tag. It is best to select all related tags.'});
         return false;
     }
 
@@ -1922,11 +1925,7 @@ function validate_entries() {
     if (document.getElementById("nb_repost").checked) {
         let validateurl = isValidURL(document.getElementById("saveinfosource").value);
         if (!validateurl) {
-            Swal.fire({
-                title: 'Enter a valid Source URL',
-                icon: 'error',
-                confirmButtonText: 'ok',
-            })
+            expoError({html: 'Enter a valid Source URL'});
             return false;
         }
     }
@@ -1934,11 +1933,7 @@ function validate_entries() {
     // Validate at least one answer check option is selected
     var answer_check_opt = pu.get_answercheck_settings();
     if (answer_check_opt.answercheck_opt.length === 0) {
-        Swal.fire({
-            title: 'Select at least one answer checking option',
-            icon: 'error',
-            confirmButtonText: 'ok',
-        })
+        expoError({html: 'Select at least one answer checking option'});
         return false;
     }
 

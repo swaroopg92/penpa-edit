@@ -1242,8 +1242,12 @@ onload = function() {
             case "iostring":
                 return;
             case "submit_portal":
-                submit_portal();
                 e.preventDefault();
+                submit_portal(e);
+                break;
+            case "preview_portal":
+                e.preventDefault();
+                preview_portal(e);
                 break;
             case "closeBtn_save1":
                 savetext_copy();
