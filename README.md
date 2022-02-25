@@ -486,6 +486,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Pencils
 	* Regional Yajilin
 	* Renban (Renban-Madoguchi)
+	* Ring-ring
 	* Ripple Effect
 	* Shakashaka
 	* Shimaguni (Islands)

@@ -3562,6 +3562,37 @@ function decode_puzzlink(url) {
             pu.submode_check("sub_lineE2");
             UserSettings.tab_settings = ["Edge Diagonal"];
             break
+        case "ringring":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            // RingRing encoding is very close to puzzlink_pu.decodeNumber2() but slightly different
+            i = -1;
+            for (char of bstr) {
+                if (("0" <= char && char <= "9") ||
+                    ("a" <= char && char <= "z")) {
+                    i += parseInt(char, 36) + 1;
+                } else if (char === ".") {
+                    i += 36;
+                    continue;
+                }
+
+                if (i >= cols * rows) {
+                    break;
+                }
+
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (row_ind + 2) + (col_ind + 2);
+                pu["pu_q"].surface[cell] = 4;
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            UserSettings.tab_settings = ["Edge Normal", "Composite"];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',

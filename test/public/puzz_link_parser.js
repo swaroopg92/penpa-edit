@@ -225,6 +225,11 @@ describe("puzz.link parser", () => {
         // Renban (Renban-Madoguchi)
         ["Renban 1", "https://puzz.link/p?renban/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
         ["Renban 2", "https://puzz.link/p?renban/8/8/rlbb326f5bb09aq7mv636310m1gco3sch3wdh4l"],
+        // Ring-ring
+        ["Ring-ring 1", "https://puzz.link/p?ringring/15/10/2540a304.26e5646a14351"],
+        ["Ring-ring 2", "https://puzz.link/p?ringring/7/7/2ia"],
+        ["Ring-ring 3", "https://puzz.link/p?ringring/14/10/k5a.87u"],
+        ["Ring-ring 4", "https://puzz.link/p?ringring/10/10/3be82fh4e0"],
         // Ripple
         ["Ripple 1", "https://puzz.link/p?ripple/10/10/c9hb4nfmueupv8ke11br7s3pk2r61hbqnsfezzzzz"],
         ["Ripple 2", "https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i"],

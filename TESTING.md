@@ -413,6 +413,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Ring-ring</summary>
+
+* https://puzz.link/p?ringring/15/10/2540a304.26e5646a14351
+* https://puzz.link/p?ringring/7/7/2ia
+* https://puzz.link/p?ringring/14/10/k5a.87u
+* https://puzz.link/p?ringring/10/10/3be82fh4e0
+
+</details>
+<details>
 <summary>Ripple Effect</summary>
 
 * https://puzz.link/p?ripple/10/10/c9hb4nfmueupv8ke11br7s3pk2r61hbqnsfezzzzz
