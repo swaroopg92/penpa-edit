@@ -78,8 +78,7 @@ function add_constraints() {
     });
 }
 
-function add_genre_tags(user_tags) {
-}
+function add_genre_tags(user_tags) {}
 
 function create_newboard() {
 
@@ -932,7 +931,7 @@ function submit_solution_steps() {
     try {
         replay = encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
         clicks = pu[pu.mode.qa]["command_redo"].__a.length + pu.reset_board_clicks;
-    } catch(err) {
+    } catch (err) {
         replay = "penpaerror";
     }
     if (replay == null || replay == "") {
@@ -1895,29 +1894,29 @@ function expoError(error) {
 function validate_entries() {
     // Validate "What is it" is selected
     if (!document.getElementById("nb_issudoku").checked && !document.getElementById("nb_ispuzzle").checked) {
-        expoError({html: 'Select if its a Sudoku or Puzzle'});
+        expoError({ html: 'Select if its a Sudoku or Puzzle' });
         return false;
     }
     if (!$('#saveinfogenremain').select2("val")) {
-        expoError({html: 'Select a puzzle genre. Make sure to fill in the rules in case of a new Genre.'});
+        expoError({ html: 'Select a puzzle genre. Make sure to fill in the rules in case of a new Genre.' });
         return false;
     }
 
     // Validate title is not empty
     if (false && document.getElementById("saveinfotitle").value.length === 0) {
-        expoError({html: 'Title | Theme is empty'});
+        expoError({ html: 'Title | Theme is empty' });
         return false;
     }
 
     // Validate Rules are not empty
     if (document.getElementById("saveinforules").value.length === 0) {
-        expoError({html: 'Rules not provided'});
+        expoError({ html: 'Rules not provided' });
         return false;
     }
 
     // Validate at least one genre tag is selected
     if ($('#genre_tags_opt').select2("data").length === 0) {
-        expoError({html: 'Select at least one tag. It is best to select all related tags.'});
+        expoError({ html: 'Select at least one tag. It is best to select all related tags.' });
         return false;
     }
 
@@ -1925,7 +1924,7 @@ function validate_entries() {
     if (document.getElementById("nb_repost").checked) {
         let validateurl = isValidURL(document.getElementById("saveinfosource").value);
         if (!validateurl) {
-            expoError({html: 'Enter a valid Source URL'});
+            expoError({ html: 'Enter a valid Source URL' });
             return false;
         }
     }
@@ -1933,7 +1932,7 @@ function validate_entries() {
     // Validate at least one answer check option is selected
     var answer_check_opt = pu.get_answercheck_settings();
     if (answer_check_opt.answercheck_opt.length === 0) {
-        expoError({html: 'Select at least one answer checking option'});
+        expoError({ html: 'Select at least one answer checking option' });
         return false;
     }
 
@@ -2305,6 +2304,11 @@ function load2(paramArray, type) {
     // Video Coverage
     if (rtext_para[27] && rtext_para[27] !== "" && rtext_para[27] === "true") {
         document.getElementById("video_usage").checked = true;
+    }
+
+    // Main genre
+    if (rtext_para[28]) {
+        console.log(JSON.parse(rtext_para[28]));
     }
 
     // version save
