@@ -2800,14 +2800,9 @@ class Puzzle {
         return puzzle_data;
     }
 
-    maketext() {
-        var text = this.__export_text_shared();
-
-        // Multi Solution status, it will be true only when generating solution checking
-        text += "," + false;
-
+    __export_lmiexpo_info() {
         // Is it Sudoku or Puzzle
-        text += "," + document.getElementById("nb_issudoku").checked;
+        var text = "," + document.getElementById("nb_issudoku").checked;
 
         // Puzzle info
         let infoinfo = document.getElementById("saveinfoinfo").value;
@@ -2826,7 +2821,21 @@ class Puzzle {
         text += "," + document.getElementById("nb_hidethemeyes").checked;
 
         // Video Coverage
-        text += "," + document.getElementById("video_usage").checked + "\n";
+        text += "," + document.getElementById("video_usage").checked;
+
+        // Save genre
+        text += "," + JSON.stringify($('#saveinfogenremain').select2("val"));
+
+        return text;
+    }
+
+    maketext() {
+        var text = this.__export_text_shared();
+
+        // Multi Solution status, it will be true only when generating solution checking
+        text += "," + false;
+
+        text += this.__export_lmiexpo_info() + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2901,27 +2910,7 @@ class Puzzle {
             text += "," + false;
         }
 
-        // Is it Sudoku or Puzzle
-        text += "," + document.getElementById("nb_issudoku").checked;
-
-        // Puzzle info
-        let infoinfo = document.getElementById("saveinfoinfo").value;
-        text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-
-        // Variant Level
-        text += "," + document.getElementById("saveinfotype").value;
-
-        // Original
-        text += "," + document.getElementById("nb_originalyes").checked;
-
-        // Exclusivity
-        text += "," + document.getElementById("nb_exclusive").checked;
-
-        // Hide theme or not
-        text += "," + document.getElementById("nb_hidethemeyes").checked;
-
-        // Video Coverage
-        text += "," + document.getElementById("video_usage").checked + "\n";
+        text += this.__export_lmiexpo_info() + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -3050,27 +3039,7 @@ class Puzzle {
             text += "," + false;
         }
 
-        // Is it Sudoku or Puzzle
-        text += "," + document.getElementById("nb_issudoku").checked;
-
-        // Puzzle info
-        let infoinfo = document.getElementById("saveinfoinfo").value;
-        text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-
-        // Variant Level
-        text += "," + document.getElementById("saveinfotype").value;
-
-        // Original
-        text += "," + document.getElementById("nb_originalyes").checked;
-
-        // Exclusivity
-        text += "," + document.getElementById("nb_exclusive").checked;
-
-        // Hide theme or not
-        text += "," + document.getElementById("nb_hidethemeyes").checked;
-
-        // Video Coverage
-        text += "," + document.getElementById("video_usage").checked + "\n";
+        text += this.__export_lmiexpo_info() + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
