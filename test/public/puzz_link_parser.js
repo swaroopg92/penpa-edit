@@ -188,6 +188,11 @@ describe("puzz.link parser", () => {
         ["Nurikabe 3", "https://puzz.link/p?nurikabe/10/10/zh3j5t3g3hat3g3h9zr"],
         ["Nurikabe 4", "https://puzz.link/p?nurikabe/18/10/w3g8k1i4n1k5j1i1k9r1l2n3j3n9t1l2h2i1j5h2j7l4n6y"],
         ["Nurikabe 5", "https://puzz.link/p?nurikabe/7/7/1s5zm.i3g2"],
+        // Nurimaze
+        ["Nurimaze 1", "https://puzz.link/p?nurimaze/10/10/nnvfvfvuntvvvv7vrmedmfrunvbvnnvfnmdr81b49384e46483j4g3r28"],
+        ["Nurimaze 2", "https://puzz.link/p?nurimaze/12/12/mmvnfrbrbrnrntndn9rbrbrlll8dtkmurvprptpmtjuvrftvottuvg4i1n383r4f4j2w3q"],
+        ["Nurimaze 3", "https://puzz.link/p?nurimaze/13/13/007vvuuvvtj6vvvvrvvmcrvvvrvvu000etpvv7vstrjnefbptf7estrjtubvprn0w1o3m3zzd2w"],
+        ["Nurimaze 4", "https://puzz.link/p?nurimaze/7/7/bvvvfvvuobk9vitsno1535354i494i4545352"],
         // Nurimisaki
         ["Nurimisaki 1", "https://puzz.link/p?nurimisaki/12/12/h3l4k.l.m.j2n.k3o.h.j.m3r3m2j.i.i3j.i2i2t2k"],
         ["Nurimisaki 2", "https://puzz.link/p?nurimisaki/44/44/i3g.g.g.g.g.h.o.g.g.g.g.g.g.g.j.zg.x.zn.v.j.g.j2h.k.g.k.g.k.g.i3i.k.g.k.g.k.g.k.g.n.m.m.m.m.m.h.i.m.m.m.m.n3m.g.k.g.k.g.k.g.k.h.j.g.k.g.k.g.k.g.k3g.k3l.m.m.m.m.i.j.m.m.m.m.m.j.g.k.g.k.g.k.g.k.g.i.i3k.g.k.g.s.g.j.i.m.m.o.k.p3i.m.m.k2o.n.m.g.k.g.s.g.k.h.j.g.s.g.k.g.k.g.r.k.o.m.m.i3.i.o2k.m.m.o.h.g.s.g3k.g.k.g.i.i.k.g.k.g.k.g.k.g.v.m.m.m.m.h..h.m.m.m.m.v.g.k.g.k.g.k.g.k.i.i.g.k3g.k.g.s.g.h.o.m.m.k2o.i.3i.m.m.o.k.r.g.k.g.k.g.s.g.j.h.k.g.s.g.k.g.m.n.o2k.m.m.i3p.k.o.m.m.i.j.g.s.g.k.g.k3i.i.g.k.g.k.g.k.g.k.g.j.m.m.m.m.m.j.i.m.m.m.m.l3k.g3k.g.k.g.k.g.k.g.j.h.k.g.k.g.k.g.k.g.m3n.m.m.m.m.i.h.m.m.m.m.m.n.g.k.g.k.g.k.g.k.i3i.g.k.g.k.g.k.h2j.g.j.zi.zg.x.zg.j.g.g.g.g.g.g3g.o.h.g.g.g.g.g3i"],
@@ -321,8 +326,20 @@ describe("puzz.link parser", () => {
     forEach(testCases, (_, puzzlink_url, filename) => async () => {
         penpa.decode_puzzlink(puzzlink_url);
 
+        const contents = {
+            ...penpa.pu.pu_q
+        };
+        // These are not native objects but class instances
+        delete contents.command_undo;
+        delete contents.command_redo;
+
         const data = {
-            edit_url: penpa.pu.maketext().split("?")[1],
+            contents,
+            genre_tags: penpa.$('#genre_tags_opt').select2("val"),
+            grid_size: [penpa.pu.nx0, penpa.pu.ny0],
+            grid_type: penpa.pu.gridtype,
+            mode: penpa.pu.mode,
+            outside_spacing: penpa.pu.space,
         };
         const body = {
             filename,
@@ -332,6 +349,6 @@ describe("puzz.link parser", () => {
         const snapshot = await fetchJson(`/snapshot`, "POST", body);
 
         const expected = snapshot.data ? JSON.parse(snapshot.data) : "SNAPSHOT NOT FOUND";
-        assert.deepEqual(expected, data);
+        assert.deepEqual(expected, data, `Snapshots differ: expected=${JSON.stringify(expected)}, actual=${JSON.stringify(data)}`);
     });
 });
