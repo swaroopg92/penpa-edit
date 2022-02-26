@@ -344,6 +344,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Nurimaze</summary>
+
+* https://puzz.link/p?nurimaze/10/10/nnvfvfvuntvvvv7vrmedmfrunvbvnnvfnmdr81b49384e46483j4g3r28
+* https://puzz.link/p?nurimaze/12/12/mmvnfrbrbrnrntndn9rbrbrlll8dtkmurvprptpmtjuvrftvottuvg4i1n383r4f4j2w3q
+* https://puzz.link/p?nurimaze/13/13/007vvuuvvtj6vvvvrvvmcrvvvrvvu000etpvv7vstrjnefbptf7estrjtubvprn0w1o3m3zzd2w
+* https://puzz.link/p?nurimaze/7/7/bvvvfvvuobk9vitsno1535354i494i4545352
+
+</details>
+<details>
 <summary>Nurimisaki</summary>
 
 * https://puzz.link/p?nurimisaki/12/12/h3l4k.l.m.j2n.k3o.h.j.m3r3m2j.i.i3j.i2i2t2k
