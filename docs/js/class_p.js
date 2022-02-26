@@ -2824,10 +2824,12 @@ class Puzzle {
         text += "," + document.getElementById("video_usage").checked;
 
         // Save genre
-        if ($('#saveinfogenremain').disabled) {
+        if (document.getElementById("saveinfogenremain").disabled) {
             text += "," + false;
         } else {
-            text += "," + JSON.stringify($('#saveinfogenremain').select2("val"));
+            let genre = $('#saveinfogenremain').select2("data")[0].text,
+                genreText = genre.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+            text += "," + genreText;
         }
 
         return text;

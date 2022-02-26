@@ -52,7 +52,8 @@ function create() {
     add_genre_tags(pu.user_tags);
     $('#genre_tags_opt').select2({
         placeholder: 'Search Area',
-        'width': "90%"
+        'width': "90%",
+        tags: true
     });
 
     pu.redraw();
@@ -1666,7 +1667,8 @@ function savetext() {
                 }
                 $("#genre_tags_opt").empty();
                 $('#genre_tags_opt').select2({
-                    data: response.taggings
+                    data: response.taggings,
+                    tags: true
                 });
             })
             .catch(function(err) {
@@ -1809,7 +1811,8 @@ function submit_portal(e, isPreview) {
                     isPreview: isPreview,
                     isSudoku: document.getElementById("nb_issudoku").checked,
                     editLink: edit_link,
-                    title: document.getElementById("saveinfotitle").value,
+                    titletheme: document.getElementById("saveinfotitle").value,
+                    genre: $('#saveinfogenremain').select2("data")[0].text,
                     rules: document.getElementById("saveinforules").value,
                     info: document.getElementById("saveinfoinfo").value,
                     variantLevel: document.getElementById("saveinfotype").value,
@@ -2203,6 +2206,9 @@ function load2(paramArray, type) {
     if (paramArray.q) {
         let qstr = atob(paramArray.q);
         pu.puzzle_info = JSON.parse(qstr);
+        if (!pu.puzzle_info.expoEdit) {
+            document.getElementById("savetext").style.display = 'none';
+        }
         if (pu.puzzle_info.title) {
             document.getElementById("puzzletitle").style.display = 'block';
             document.getElementById("puzzletitle").innerHTML = pu.puzzle_info.title;
@@ -2308,7 +2314,12 @@ function load2(paramArray, type) {
 
     // Main genre
     if (rtext_para[28]) {
-        console.log(JSON.parse(rtext_para[28]));
+        document.getElementById("saveinfogenremain").disabled = false;
+        savetext();
+        let genre = rtext_para[28].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '='),
+            newOption = new Option(genre, genre, false, false);
+        $('#saveinfogenremain').append(newOption);
+        document.getElementById('modal-save').style.display = 'none';
     }
 
     // version save
@@ -2378,8 +2389,15 @@ function load2(paramArray, type) {
         add_genre_tags(pu.user_tags);
         $('#genre_tags_opt').select2({
             placeholder: 'Search Area',
-            'width': "90%"
+            'width': "90%",
+            tags: true
         });
+        if (pu.puzzle_info && pu.puzzle_info.taggings) {
+            $("#genre_tags_opt").empty().select2({
+                data: pu.puzzle_info.taggings,
+                tags: true
+            });
+        }
     } else {
         // For local load
         // Destroy
@@ -2395,7 +2413,8 @@ function load2(paramArray, type) {
         // Reinitialize
         $('#genre_tags_opt').select2({
             placeholder: 'Search Area',
-            'width': "90%"
+            'width': "90%",
+            tags: true
         });
     }
 
