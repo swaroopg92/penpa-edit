@@ -2824,7 +2824,11 @@ class Puzzle {
         text += "," + document.getElementById("video_usage").checked;
 
         // Save genre
-        text += "," + JSON.stringify($('#saveinfogenremain').select2("val"));
+        if ($('#saveinfogenremain').disabled) {
+            text += "," + false;
+        } else {
+            text += "," + JSON.stringify($('#saveinfogenremain').select2("val"));
+        }
 
         return text;
     }
