@@ -107,6 +107,14 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Double Back</summary>
+
+* https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70
+* https://puzz.link/p?doubleback/8/8/b2stfautich00cq80j2gk0u0
+* https://puzz.link/p?doubleback/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000
+
+</details>
+<details>
 <summary>Easy as ABC</summary>
 
 * https://puzz.link/p?easyasabc/5/5/3/123j654h987.0-ff-33

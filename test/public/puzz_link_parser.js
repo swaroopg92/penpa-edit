@@ -65,6 +65,10 @@ describe("puzz.link parser", () => {
         ["Detour 1", "https://puzz.link/p?detour/10/10/182g307gfcug03464c07vovn00rgvnvnvg80g4g35dh2g21g6g1g"],
         ["Detour 2", "https://puzz.link/p?detour/8/8/10820g41g4000s000007v01g5gcg2"],
         ["Detour 3", "https://puzz.link/p?detour/8/8/a2gh4928h49000vs00o0vg00g1g435h5"],
+        // Double Back
+        ["Double Back 1", "https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70"],
+        ["Double Back 2", "https://puzz.link/p?doubleback/8/8/b2stfautich00cq80j2gk0u0"],
+        ["Double Back 3", "https://puzz.link/p?doubleback/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
         // Easy as ABC
         ["Easy as ABC 1", "https://puzz.link/p?easyasabc/5/5/3/123j654h987.0-ff-33"],
         ["Easy as ABC 2", "https://puzz.link/p?easyasabc/15/13/3/.0123456789abcdef-10-11-12-13-14-15-16-17-18-19-1a-1b-1c-1d-1e-1f-20-21-22-23-24-25-26-27-28-29-2a-2b-2c-2d-2e-2f-30-31-32-33-34i."],
