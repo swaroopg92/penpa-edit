@@ -1854,9 +1854,9 @@ function submit_portal(e, isPreview) {
                             pu.puzzle_info.ppid = response.previewId;
                             Swal.fire({
                                 title: response.message,
-                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to share this link with puzzlers around the world.`,
+                                html: `Here is the <a target='_blank' href='${response.expoLink}'>link</a> to preview your puzzle. Please note that puzzle will be public only after you submit.`,
                                 icon: 'success',
-                                confirmButtonText: 'Ok',
+                                confirmButtonText: 'I Understand',
                             })
                         } else {
                             Swal.fire({
