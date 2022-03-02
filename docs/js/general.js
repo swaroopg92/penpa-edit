@@ -1033,8 +1033,17 @@ function replay_choice() {
                     // get time-stamp (ts) of next action
                     let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5];
 
-                    // initiate wait
-                    setTimeout(pu.live_replay, next_ts);
+                    // initiate wait only if less than 5 seconds
+                    if (next_ts <= 5000) {
+                        setTimeout(pu.live_replay, next_ts);
+                    } else {
+                        // Fast forward the timer
+                        sw_timer.reset();
+                        sw_timer.start({ startValues: { seconds: next_ts / 1000 } });
+
+                        // No waiting
+                        setTimeout(pu.live_replay, 0);
+                    }
 
                     // first click is over
                     pu.first_click = false;
