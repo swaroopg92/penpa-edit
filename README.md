@@ -271,7 +271,14 @@ Depending on the browser you can update the page without using the cache with "C
 
 * Rules - Enter rules here
 
-* Genre/Tags - Select specific tags that suit your puzzle. These tags will be used for special answer checking features. (special answer checking features are still under construction)
+* Genre/Tags - Select specific tags that suit your puzzle. These tags will be used for smart answer checking features. The smart checking supports following tags (Under development):
+1. Classic Sudoku (9x9)
+2. Consecutive Sudoku
+3. Nonconsecutive Sudoku
+4. Consecutive Pairs Sudoku
+5. Star Battle
+6. TomTom
+7. Arrow/Thermo/Even/Odd/Killer (Only Classic Check, 9x9)
 
 * Source - If you are not the author of the puzzle, specify the source URL
 

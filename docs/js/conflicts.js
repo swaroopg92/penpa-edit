@@ -157,6 +157,43 @@ class Conflicts {
         }
     }
 
+    // Check that consecutive values where bars/grey dots are between cells.
+    check_consecutivepairs() {
+        const data = this.get_data('number_grid');
+        const bars = this.get_data('grey_bars');
+
+        // Helper subfunction. Checks the cell values and adds conflicts.
+        const check_neighbors = function(x1, y1, index1, num1, x2, y2) {
+            const index2 = this.xy_to_index(x2, y2);
+            const num2 = data[y2][x2];
+            if (isNaN(num2)) return;
+            // Either zero or two of these should be true, otherwise we have a
+            // conflict.
+            const consecutive = Math.abs(num1 - num2) === 1;
+            const has_bar = bars.has(index1 + ',' + index2);
+            if (has_bar && !consecutive) {
+                this.add_conflict(x1, y1);
+                this.add_conflict(x2, y2);
+            }
+        }.bind(this);
+
+        for (let y = 0; y < data.length; y++) {
+            for (let x = 0; x < data[y].length; x++) {
+                const index = this.xy_to_index(x, y);
+                const num = data[y][x];
+                if (isNaN(num)) continue;
+                if (x + 1 < data[y].length) {
+                    // Check right neighbor
+                    check_neighbors(x, y, index, num, x + 1, y);
+                }
+                if (y + 1 < data.length) {
+                    // Check down neighbor
+                    check_neighbors(x, y, index, num, x, y + 1);
+                }
+            }
+        }
+    }
+
     // Check Star Battle puzzle.
     check_star_battle() {
         // Assume that there is a single number in the grid with the number
@@ -350,7 +387,7 @@ class Conflicts {
         const symbol_indices = Object.keys(this.pu.pu_q.symbol);
         for (let index of symbol_indices) {
             const symbol = this.pu.pu_q.symbol[index];
-            if (!Array.isArray(symbol) || symbol[1] !== "bars_G" || symbol[1] !== "circle_SS") {
+            if (!Array.isArray(symbol) && (symbol[1] !== "bars_G" || symbol[1] !== "circle_SS")) {
                 // Not a grey bar.
                 continue;
             }
