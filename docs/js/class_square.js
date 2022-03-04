@@ -442,6 +442,12 @@ class Puzzle_square extends Puzzle {
                         if (this.point[a].use === 1) { this.cursolS = a; }
                         break;
                 }
+                // Remember cursol
+                this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                this.selection = [];
+                if (!this.selection.includes(this.cursol)) {
+                    this.selection.push(this.cursol);
+                }
             } else if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                 switch (c) {
                     case 0:
@@ -460,6 +466,12 @@ class Puzzle_square extends Puzzle {
                         a = this.cursolS % 4 === 3 ? this.cursolS + 4 * (this.nx0) : this.cursolS - this.cursolS % 4 + 3;
                         if (this.point[a].use === 1) { this.cursolS = a; }
                         break;
+                }
+                // Remember cursol
+                this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                this.selection = [];
+                if (!this.selection.includes(this.cursol)) {
+                    this.selection.push(this.cursol);
                 }
             } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
                 if (this.selection.length >= 1) {
@@ -570,6 +582,10 @@ class Puzzle_square extends Puzzle {
                             }
                             break;
                     }
+                    // Remember cursolS
+                    if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                        this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                    }
                 }
             } else {
                 switch (c) {
@@ -589,6 +605,10 @@ class Puzzle_square extends Puzzle {
                         a = this.cursol + this.nx0;
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
+                }
+                // Remember cursolS
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
                 }
             }
         }
