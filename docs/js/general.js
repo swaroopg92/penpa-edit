@@ -1650,7 +1650,9 @@ function load(urlParam, type = 'url') {
                 (allow_genres.includes(title_words[0].toLowerCase()))) {
                 switch (title_words[0].toLowerCase()) {
                     case "consecutive":
-                        if (title_words[1].toLowerCase() != "pairs") {
+                        if (title_words[1].toLowerCase() == "pairs") {
+                            pu.user_tags[0] = "consecutivepairs";
+                        } else {
                             pu.user_tags[0] = "consecutive";
                         }
                         break;

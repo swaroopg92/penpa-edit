@@ -11674,7 +11674,13 @@ class Puzzle {
             if (tags.has('noconflict')) {
                 return false;
             }
-            if (tags.has('consecutive') || tags.has('nonconsecutive')) {
+            if (tags.has('consecutivepairs')) {
+                this.conflicts.check_sudoku();
+                // check consecutive only if no classic conflict
+                if (this.conflict_cells.length === 0) {
+                    this.conflicts.check_consecutivepairs();
+                }
+            } else if (tags.has('consecutive') || tags.has('nonconsecutive')) {
                 this.conflicts.check_sudoku();
                 // check consecutive only if no classic conflict
                 if (this.conflict_cells.length === 0) {
