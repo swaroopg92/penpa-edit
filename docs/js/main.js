@@ -1080,7 +1080,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "savetext":
-                savetext();
+                savetextPrecheck();
                 e.preventDefault();
                 break;
             case "input_sudoku":

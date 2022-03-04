@@ -1610,7 +1610,42 @@ function saveimage_window() {
     }
 }
 
-
+function savetextPrecheck() {
+    const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        },
+        url = `/live/misc-pp?action=penpa-search-genre&q=abcdefgh&sudoku=false`,
+        request = new Request(url, options);
+    fetch(request)
+        .then(r => { return r.json(); })
+        .then(function(response) {
+            if (response.success) {
+                savetext();
+            } else {
+                Swal.fire({
+                    html: response.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    allowOutsideClick: false,
+                    footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+                    }).then(function() {
+                            window.location = response.redirect;
+                    })
+            }
+        })
+        .catch(function(err) {
+            Swal.fire({
+                    html: err.toString(),
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    allowOutsideClick: false,
+                    footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+                    });
+        });
+}
 function savetext() {
     const newGenreRule = 'Rules for this type is not available. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.';
     $("#saveinfogenremain").select2({
@@ -1857,13 +1892,15 @@ function submit_portal(e, isPreview) {
                                 html: `Here is the <a target='_blank' href='${response.expoLink}'>link</a> to preview your puzzle. Please note that puzzle will be public only after you submit.`,
                                 icon: 'success',
                                 confirmButtonText: 'I Understand',
+                                footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
                             })
                         } else {
                             Swal.fire({
                                 title: response.message,
-                                html: `Here is the <a href='${response.expoLink}'>link</a> to your puzzle. Feel free to share this link with puzzlers around the world.`,
+                                html: `Here is the <a href='${response.expoLink}'>link</a> to your submitted puzzle.`, // Feel free to share this link with puzzlers around the world.`,
                                 icon: 'success',
                                 confirmButtonText: 'Ok',
+                                footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
                             }).then(function() {
                                 window.location = response.expoLink;
                             })
@@ -2328,7 +2365,10 @@ function load2(paramArray, type) {
         let genre = rtext_para[28].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '='),
             newOption = new Option(genre, genre, false, false);
         $('#saveinfogenremain').append(newOption);
-        document.getElementById('modal-save').style.display = 'none';
+        if (pu && pu.puzzle_info && pu.puzzle_info.expoEdit) {
+        } else {
+            document.getElementById('modal-save').style.display = 'none';
+        }
     }
 
     // version save
