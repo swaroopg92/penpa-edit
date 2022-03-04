@@ -7794,8 +7794,9 @@ class Puzzle {
                 this.mouse_wall(x, y, num);
                 break;
             case "number":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-                    this.mouse_numberS(x, y, num);
+                let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
+                if (submode === "3" || submode === "9") {
+                    this.mouse_numberS(x, y, num, submode);
                 } else {
                     this.mouse_number(x, y, num);
                 }
@@ -8355,9 +8356,23 @@ class Puzzle {
             this.lastx = x;
             this.lasty = y;
             this.cursol = num;
+
+            // Remember cursolS
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "down_right") {
             this.cursol = num;
+
+            // Remember cursolS
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "move") {
             if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2" && this.drawing) {
@@ -8372,9 +8387,18 @@ class Puzzle {
         }
     }
 
-    mouse_numberS(x, y, num) {
+    mouse_numberS(x, y, num, submode) {
         if (this.mouse_mode === "down_left") {
             this.cursolS = num;
+
+            // Remember cursol
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (submode === "3") {
+                    this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                } else if (submode === "9") {
+                    this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "down_right") {
             this.cursolS = num;
@@ -8399,6 +8423,13 @@ class Puzzle {
                 this.selection.splice(num_index, 1);
             }
             this.cursol = num;
+
+            // Remember cursolS
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "move") {
             // if the first selected position is edge then do not consider move
