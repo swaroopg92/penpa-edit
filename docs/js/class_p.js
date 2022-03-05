@@ -2853,6 +2853,10 @@ class Puzzle {
 
         text += this.__export_checker_shared();
 
+        // Custom Answer Message
+        let custom_message = document.getElementById("custom_message").value;
+        text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
@@ -2927,6 +2931,14 @@ class Puzzle {
         this.pu_a_col.command_undo.__a = au;
 
         text += this.__export_checker_shared();
+
+        // Custom Answer Message
+        if (this.solution) {
+            let custom_message = document.getElementById("custom_message").value;
+            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        } else {
+            text += "\n" + false;
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3005,6 +3017,14 @@ class Puzzle {
 
         text += this.__export_checker_shared();
 
+        // Custom Answer Message
+        if (type === "answercheck") {
+            let custom_message = document.getElementById("custom_message").value;
+            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        } else {
+            text += "\n" + false;
+        }
+
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
@@ -3047,6 +3067,9 @@ class Puzzle {
         this.pu_q_col.command_undo.__a = qu;
 
         text += this.__export_checker_shared();
+
+        // Custom Answer Message
+        text += "\n" + false;
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -11350,10 +11373,14 @@ class Puzzle {
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
+                        let message = document.getElementById("custom_message").value;
+                        if (message == "") {
+                            message = "Congratulations 🙂";
+                        }
                         setTimeout(() => {
                             Swal.fire({
                                 // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                html: '<h2 class="wish">' + message + '</h2>',
                                 background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
                                 confirmButtonText: 'Hurray!',
@@ -11382,10 +11409,14 @@ class Puzzle {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
+                            let message = document.getElementById("custom_message").value;
+                            if (message == "") {
+                                message = "Congratulations 🙂";
+                            }
                             setTimeout(() => {
                                 Swal.fire({
                                     // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                    html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                    html: '<h2 class="wish">' + message + '</h2>',
                                     background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
                                     confirmButtonText: 'Hurray!',

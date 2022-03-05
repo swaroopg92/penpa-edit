@@ -1910,6 +1910,14 @@ function load(urlParam, type = 'url') {
         }
     }
 
+    // custom answer check message
+    if (rtext[18] && rtext[18] !== "") {
+        let custom_message = rtext[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
+        if (custom_message != "false") {
+            document.getElementById("custom_message").value = custom_message;
+        }
+    }
+
     // Save the Puzzle URL info - used as unique id for cache saving of progress
     pu.url = paramArray.p;
 
@@ -2430,6 +2438,13 @@ function set_solvemode(type = "url") {
     // Middle Button settings not applicable in Solve mode
     document.getElementById('mousemiddle_settings_lb').style.display = 'none';
     document.getElementById('mousemiddle_settings_opt').style.display = 'none';
+
+    // Hide Custom Answer Message
+    document.getElementById('save6texttitle').style.display = 'none';
+    document.getElementById('custom_message').style.display = 'none';
+
+    // Hide Answer check Generate Button
+    document.getElementById('closeBtn_save5').style.display = 'none';
 
     // Constraints
     document.getElementById('constraints').style.display = 'none';

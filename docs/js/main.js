@@ -226,6 +226,7 @@ onload = function() {
         if (e.target.type === "number" ||
             e.target.type === "text" ||
             e.target.id === "savetextarea_pp" ||
+            e.target.id === "custom_message" ||
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "select2_search" ||
@@ -813,6 +814,7 @@ onload = function() {
         if (e.target.type === "number" ||
             e.target.type === "text" ||
             e.target.id === "savetextarea_pp" ||
+            e.target.id === "custom_message" ||
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "saveinforules" ||
