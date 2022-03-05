@@ -88,7 +88,9 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
             let skip_mouseevent = false;
-            if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmimode === "daily" &&
+                (pu.cellsoutsideFrame.includes(num) || pu.ignorecells.includes(num))) {
                 skip_mouseevent = true;
             }
             if (pu.point[num].use === 1 && !skip_mouseevent) {
@@ -124,7 +126,9 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
             let skip_mouseevent = false;
-            if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmimode === "daily" &&
+                (pu.cellsoutsideFrame.includes(num) || pu.ignorecells.includes(num))) {
                 skip_mouseevent = true;
                 onOut();
             }
@@ -163,7 +167,9 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
             let skip_mouseevent = false;
-            if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.cellsoutsideFrame.includes(num)) {
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmimode === "daily" &&
+                (pu.cellsoutsideFrame.includes(num) || pu.ignorecells.includes(num))) {
                 skip_mouseevent = true;
                 onOut();
             }

@@ -1631,21 +1631,22 @@ function savetextPrecheck() {
                     confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
-                    }).then(function() {
-                            window.location = response.redirect;
-                    })
+                }).then(function() {
+                    window.location = response.redirect;
+                })
             }
         })
         .catch(function(err) {
             Swal.fire({
-                    html: err.toString(),
-                    icon: 'error',
-                    confirmButtonText: 'Ok',
-                    allowOutsideClick: false,
-                    footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
-                    });
+                html: err.toString(),
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                allowOutsideClick: false,
+                footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+            });
         });
 }
+
 function savetext() {
     const newGenreRule = 'Rules for this type is not available. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.';
     $("#saveinfogenremain").select2({
@@ -2365,8 +2366,7 @@ function load2(paramArray, type) {
         let genre = rtext_para[28].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '='),
             newOption = new Option(genre, genre, false, false);
         $('#saveinfogenremain').append(newOption);
-        if (pu && pu.puzzle_info && pu.puzzle_info.expoEdit) {
-        } else {
+        if (pu && pu.puzzle_info && pu.puzzle_info.expoEdit) {} else {
             document.getElementById('modal-save').style.display = 'none';
         }
     }
@@ -2855,6 +2855,16 @@ function load2(paramArray, type) {
         document.getElementById("tb_undo").style.display = "";
         document.getElementById("tb_redo").style.display = "";
         document.getElementById("tb_reset").style.display = "";
+    }
+
+    // remove access for given shaded cells
+    pu.ignorecells = [];
+    if (pu.puzzle_info && pu.puzzle_info.genre === "rassisillai") {
+        if (!isEmpty(pu.pu_q.surface)) {
+            for (key in pu.pu_q.surface) {
+                pu.ignorecells.push(parseInt(key));
+            }
+        }
     }
 }
 
