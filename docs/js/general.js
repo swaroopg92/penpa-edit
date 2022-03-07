@@ -4410,10 +4410,14 @@ function load_from_server(paramArray, type) {
         })
         .then(function(response) {
             if (response.success === false) {
+                if (response.showLoad) {
+                    i_url();
+                } else {
                 Swal.fire({
                     html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
                     icon: 'error'
-                })
+                });
+                }
             }
             if (response.q) {
                 response.q = window.btoa(JSON.stringify(response.q));
