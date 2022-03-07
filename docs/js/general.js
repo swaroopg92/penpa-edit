@@ -1869,7 +1869,8 @@ function submit_portal(e, isPreview) {
                     genresTags: $('#genre_tags_opt').select2("data").map((c) => c.id),
                     solvingTags: entries_flag.answercheck_opt,
                     onlineSolveMessage: entries_flag.message,
-                    allowVideo: document.getElementById("video_usage").checked
+                    allowVideo: document.getElementById("video_usage").checked,
+                    svgdata: pu.puzzlepreview()
                 },
                 options = {
                     method: 'POST',
