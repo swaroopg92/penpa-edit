@@ -4,6 +4,7 @@ function boot() {
     canvas.id = "canvas";
     obj.appendChild(canvas);
     boot_parameters();
+    init_genre_tags();
 
     var urlParam = location.search.substring(1);
     if (urlParam) {
@@ -67,11 +68,7 @@ function create() {
     }
 
     // Populate genre list
-    add_genre_tags(pu.user_tags);
-    $('#genre_tags_opt').select2({
-        placeholder: 'Search Area',
-        'width': "90%"
-    });
+    set_genre_tags(pu.user_tags);
 
     pu.redraw();
 }
@@ -96,8 +93,11 @@ function add_constraints() {
     });
 }
 
-function add_genre_tags(user_tags) {
+function init_genre_tags() {
     let genre_tags = document.getElementById('genre_tags_opt');
+    for (let child of genre_tags.childNodes) {
+        genre_tags.removeChild(child);
+    }
     penpa_tags['options_groups'].forEach(function(element, index) {
         let optgroup = document.createElement("optgroup");
         optgroup.label = element;
@@ -106,19 +106,25 @@ function add_genre_tags(user_tags) {
             let opt = document.createElement("option");
             opt.value = subelement;
             opt.innerHTML = subelement;
-
-            if (user_tags.includes(subelement)) {
-                opt.setAttribute("selected", true);
-            }
             optgroup.appendChild(opt);
         });
         genre_tags.appendChild(optgroup);
+    });
+
+    $('#genre_tags_opt').select2({
+        placeholder: 'Search Area',
+        'width': "90%"
     });
 
     // // to access each option
     // $("#genre_tags_opt option").each(function() {
     //     console.log($(this));
     // });
+}
+
+function set_genre_tags(user_tags) {
+    $('#genre_tags_opt').val(user_tags);
+    $('#genre_tags_opt').trigger("change"); // Update selection
 }
 
 function create_newboard() {
@@ -1925,11 +1931,7 @@ function load(urlParam, type = 'url', origurl = null) {
         }
     }
 
-    add_genre_tags(pu.user_tags);
-    $('#genre_tags_opt').select2({
-        placeholder: 'Search Area',
-        'width': "90%"
-    });
+    set_genre_tags(pu.user_tags);
 
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
@@ -3227,13 +3229,13 @@ function decode_puzzlink(url) {
                     pu.user_tags = ['aqre'];
                     break;
                 case "ayeheya":
-                    pu.user_tags = ['ayeheya'];
+                    pu.user_tags = ['ayeheya (ekawayeh)'];
                     break;
                 case "heyawake":
                     pu.user_tags = ['heyawake'];
                     break;
                 case "shimaguni":
-                    pu.user_tags = ['shimaguni'];
+                    pu.user_tags = ['shimaguni (islands)'];
                     break;
                 case "stostone":
                     pu.user_tags = ['stostone'];
@@ -3598,7 +3600,7 @@ function decode_puzzlink(url) {
             // Set tags
             switch (type) {
                 case "castle":
-                    pu.user_tags = ['castle wall'];
+                    pu.user_tags = ['castlewall'];
                     break;
                 case "yajikazu":
                     pu.user_tags = ['yajikazu (yajisan-kazusan)'];
@@ -4064,7 +4066,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             // Set tags
-            pu.user_tags = ['simpleloop'];
+            pu.user_tags = ['simple loop'];
             break;
         case "nurimaze":
             pu = new Puzzle_square(cols, rows, size);
@@ -4282,17 +4284,8 @@ function decode_puzzlink(url) {
 
     // Set the Source
     document.getElementById("saveinfosource").value = url;
-
-    // Set the tags
-    // Destroy the current one
-    $('#genre_tags_opt').select2('destroy');
-    // create a fresh one
-    add_genre_tags(pu.user_tags);
-    $('#genre_tags_opt').select2({
-        placeholder: 'Search Area',
-        'width': "90%"
-    });
-
+    // // Set the tags
+    set_genre_tags(pu.user_tags);
 }
 
 function encrypt_data(puzdata) {
