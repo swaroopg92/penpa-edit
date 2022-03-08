@@ -3493,7 +3493,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             // Set tags
-            pu.user_tags = ['midloop'];
+            pu.user_tags = [type === "midloop" ? "midloop" : "tentaisho (spiral galaxies)"];
             break;
         case "castle":
         case "yajikazu":
@@ -4126,6 +4126,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
+            pu.user_tags = ['kropki']; // Genre Tags
             break
         case "firefly":
             // Outside padding
@@ -4158,6 +4159,7 @@ function decode_puzzlink(url) {
             pu.subcombimode("edgex");
             pu.mode_set("combi");
             UserSettings.tab_settings = ["Edge Normal", "Composite"];
+            pu.user_tags = ['firefly (hotaru beam)']; // Genre Tags
             break
         case "gokigen":
             // Outside padding
@@ -4186,6 +4188,7 @@ function decode_puzzlink(url) {
             pu.mode_set("lineE");
             pu.submode_check("sub_lineE2");
             UserSettings.tab_settings = ["Edge Diagonal"];
+            pu.user_tags = ['slant (gokigen)']; // Genre Tags
             break
         case "ringring":
             pu = new Puzzle_square(cols, rows, size);
@@ -4217,6 +4220,7 @@ function decode_puzzlink(url) {
             pu.mode_set("combi");
             pu.subcombimode("linex");
             UserSettings.tab_settings = ["Edge Normal", "Composite"];
+            pu.user_tags = ['ring-ring']; // Genre Tags
             break;
         case "doubleback":
             pu = new Puzzle_square(cols, rows, size);
@@ -4242,6 +4246,7 @@ function decode_puzzlink(url) {
             pu.mode_set("combi");
             pu.subcombimode("linex");
             UserSettings.tab_settings = ["Edge Normal", "Composite"];
+            pu.user_tags = ['double back']; // Genre Tags
             break;
         default:
             Swal.fire({
