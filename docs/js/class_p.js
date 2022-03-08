@@ -117,12 +117,12 @@ class Puzzle {
         this.loop_counter = false;
         this.rules = "";
         this.gridmax = {
-            'square': 65,
+            'square': 100,
             'hex': 20,
             'tri': 20,
             'pyramid': 20,
             'cube': 20,
-            'kakuro': 65,
+            'kakuro': 100,
             'tetrakis': 20,
             'truncated': 20,
             'snub': 20,
@@ -159,7 +159,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 16]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 17]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -2853,6 +2853,10 @@ class Puzzle {
 
         text += this.__export_checker_shared();
 
+        // Custom Answer Message
+        let custom_message = document.getElementById("custom_message").value;
+        text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
@@ -2927,6 +2931,14 @@ class Puzzle {
         this.pu_a_col.command_undo.__a = au;
 
         text += this.__export_checker_shared();
+
+        // Custom Answer Message
+        if (this.solution) {
+            let custom_message = document.getElementById("custom_message").value;
+            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        } else {
+            text += "\n" + false;
+        }
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3005,6 +3017,14 @@ class Puzzle {
 
         text += this.__export_checker_shared();
 
+        // Custom Answer Message
+        if (type === "answercheck") {
+            let custom_message = document.getElementById("custom_message").value;
+            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+        } else {
+            text += "\n" + false;
+        }
+
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
@@ -3047,6 +3067,9 @@ class Puzzle {
         this.pu_q_col.command_undo.__a = qu;
 
         text += this.__export_checker_shared();
+
+        // Custom Answer Message
+        text += "\n" + false;
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -3133,7 +3156,8 @@ class Puzzle {
 
             if (document.getElementById("sol_surface").checked === true || checkall) {
                 for (var i in this[pu].surface) {
-                    if (this["pu_q"].surface[i]) {
+                    let pu_q = "pu_q";
+                    if (this[pu_q].surface[i] && (this[pu_q].surface[i] === 1 || this[pu_q].surface[i] === 8 || this[pu_q].surface[i] === 3 || this[pu_q].surface[i] === 4)) {
                         // ignore the shading if already in problem mode
                     } else {
                         // 1 is DG, 8 is GR, 3 is LG, 4 is BL
@@ -7793,8 +7817,9 @@ class Puzzle {
                 this.mouse_wall(x, y, num);
                 break;
             case "number":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-                    this.mouse_numberS(x, y, num);
+                let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
+                if (submode === "3" || submode === "9") {
+                    this.mouse_numberS(x, y, num, submode);
                 } else {
                     this.mouse_number(x, y, num);
                 }
@@ -8354,9 +8379,23 @@ class Puzzle {
             this.lastx = x;
             this.lasty = y;
             this.cursol = num;
+
+            // Remember cursolS
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "down_right") {
             this.cursol = num;
+
+            // Remember cursolS
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "move") {
             if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2" && this.drawing) {
@@ -8371,9 +8410,18 @@ class Puzzle {
         }
     }
 
-    mouse_numberS(x, y, num) {
+    mouse_numberS(x, y, num, submode) {
         if (this.mouse_mode === "down_left") {
             this.cursolS = num;
+
+            // Remember cursol
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (submode === "3") {
+                    this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                } else if (submode === "9") {
+                    this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "down_right") {
             this.cursolS = num;
@@ -8398,6 +8446,13 @@ class Puzzle {
                 this.selection.splice(num_index, 1);
             }
             this.cursol = num;
+
+            // Remember cursolS
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (!this.cellsoutsideFrame.includes(this.cursol)) {
+                    this.cursolS = 4 * (this.cursol + this.nx0 * this.ny0);
+                }
+            }
             this.redraw();
         } else if (this.mouse_mode === "move") {
             // if the first selected position is edge then do not consider move
@@ -10028,14 +10083,14 @@ class Puzzle {
     re_combi_rassisillai_move(num) {
         if (this.drawing_mode != -1 && this.point[num].type === 0) {
             if (this.drawing_mode === 5 && num != this.last) {
-                if (!this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
-                    this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
+                if (!this[this.mode.qa].surface[num]) {
+                    this.record("surface", num);
+                    this[this.mode.qa].surface[num] = 7;
                 }
             } else if (this.drawing_mode === 6 && num != this.last) {
-                if (this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
-                    delete this[this.mode.qa].symbol[num];
+                if (this[this.mode.qa].surface[num]) {
+                    this.record("surface", num);
+                    delete this[this.mode.qa].surface[num];
                 }
             } else {
                 var line_style = 3;
@@ -10053,15 +10108,17 @@ class Puzzle {
 
     re_combi_rassisillai_up(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
-            if (!this[this.mode.qa].symbol[num]) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-            } else if (this[this.mode.qa].symbol[num][0] === 1) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-            } else {
+            } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 1) {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 7;
+            } else {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
             }
         }
         this.drawing_mode = -1;
@@ -10072,10 +10129,12 @@ class Puzzle {
 
     re_combi_rassisillai_up_reduced(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
-            if (!this[this.mode.qa].symbol[num]) {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-            } else if (this[this.mode.qa].symbol[num][0] === 8) {
+            } else if (this[this.mode.qa].surface[num] === 7) {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
             } else {
@@ -10091,18 +10150,20 @@ class Puzzle {
 
     re_combi_rassisillai_downright(num) {
         if (this.point[num].type === 0) {
-            if (!this[this.mode.qa].symbol[num]) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.drawing_mode = 5; // placing dots
-            } else if (this[this.mode.qa].symbol[num][0] === 1) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.drawing_mode = 5; // placing dots
-            } else {
+            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 7;
+                this.drawing_mode = 5; // placing shaded yellow
+            } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 1) {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
-                this.drawing_mode = 6; // removing dots
+                this.record("surface", num);
+                this[this.mode.qa].surface[num] = 7;
+                this.drawing_mode = 5; // placing shaded yellow
+            } else {
+                this.record("surface", num);
+                delete this[this.mode.qa].surface[num];
+                this.drawing_mode = 6; // removing shaded yellow
             }
         }
         this.last = num;
@@ -11312,10 +11373,14 @@ class Puzzle {
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
+                        let message = document.getElementById("custom_message").value;
+                        if (message == "") {
+                            message = "Congratulations 🙂";
+                        }
                         setTimeout(() => {
                             Swal.fire({
                                 // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                html: '<h2 class="wish">' + message + '</h2>',
                                 background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
                                 confirmButtonText: 'Hurray!',
@@ -11344,10 +11409,14 @@ class Puzzle {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
+                            let message = document.getElementById("custom_message").value;
+                            if (message == "") {
+                                message = "Congratulations 🙂";
+                            }
                             setTimeout(() => {
                                 Swal.fire({
                                     // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                    html: '<h2 class="wish">Congratulations 🙂</h2>',
+                                    html: '<h2 class="wish">' + message + '</h2>',
                                     background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
                                     confirmButtonText: 'Hurray!',
@@ -11636,7 +11705,13 @@ class Puzzle {
             if (tags.has('noconflict')) {
                 return false;
             }
-            if (tags.has('consecutive') || tags.has('nonconsecutive')) {
+            if (tags.has('consecutivepairs')) {
+                this.conflicts.check_sudoku();
+                // check consecutive only if no classic conflict
+                if (this.conflict_cells.length === 0) {
+                    this.conflicts.check_consecutivepairs();
+                }
+            } else if (tags.has('consecutive') || tags.has('nonconsecutive')) {
                 this.conflicts.check_sudoku();
                 // check consecutive only if no classic conflict
                 if (this.conflict_cells.length === 0) {

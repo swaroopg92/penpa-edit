@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <!-- HTML Meta Tags -->
     <title>Penpa+</title>
-    <link rel="shortcut icon" href="./css/images/logo.png" />
+    <meta name="description" content="Web application to create and solve Sudokus and Puzzles.">
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://swaroopg92.github.io/penpa-edit/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Penpa+">
+    <meta property="og:description" content="Web application to create and solve Sudokus and Puzzles.">
+    <meta property="og:image" content="https://github.com/swaroopg92/penpa-edit/blob/master/docs/css/images/logo.png">
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="swaroopg92.github.io">
+    <meta property="twitter:url" content="https://swaroopg92.github.io/penpa-edit/">
+    <meta name="twitter:title" content="Penpa+">
+    <meta name="twitter:description" content="Web application to create and solve Sudokus and Puzzles.">
+    <meta name="twitter:image" content="https://github.com/swaroopg92/penpa-edit/blob/master/docs/css/images/logo.png">
+    <!-- HTML other tags -->
     <meta charset="utf-8" />
     <meta name="robots" content="nofollow" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Web application to create and solve Sudokus and Puzzles.">
     <meta name="keywords" content="grid editor, pencil puzzle editor, logic puzzle solving, sudoku editor">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./css/images/logo.png" />
+    <link rel="apple-touch-icon" href="./css/images/logo.png" />
     <!-- STYLES -->
     <script>
-        var ver = "2.26.16"; // Also defined in class_p.js
+        var ver = "2.26.17"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -759,17 +776,17 @@
             <h4><label class="label_nb" id="nb_size_lb">Size:</label></h4>
             <span>
                 <span><label class="label_nb" id="name_size2">Rows:</label></span>
-                <input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="65" step="1">
+                <input type="number" pattern="\d*" name="nb_size2" id="nb_size2" value="10" min="1" max="100" step="1">
                 <span><label class="label_nb" id="name_size1">Columns:</label></span>
-                <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="65" step="1">
+                <input type="number" pattern="\d*" name="nb_size1" id="nb_size1" value="10" min="1" max="100" step="1">
                 <span><label class="label_nb" id="nb_sudoku1_lb">Diagonal &#x27CD;</label></span>
                 <input type="checkbox" name="nb_sudoku1" id="nb_sudoku1">
                 <span><label class="label_nb" id="nb_sudoku4_lb">Diagonal &#x27CB;</label></span>
                 <input type="checkbox" name="nb_sudoku4" id="nb_sudoku4">
                 <br>
-                <span><label class="label_nb" id="nb_sudoku2_lb">Skyscraper/Little Killer</label></span>
+                <span><label class="label_nb" id="nb_sudoku2_lb">Outside clues</label></span>
                 <input type="checkbox" name="nb_sudoku2" id="nb_sudoku2">
-                <span><label class="label_nb" id="nb_sudoku3_lb">Sandwich</label></span>
+                <span><label class="label_nb" id="nb_sudoku3_lb">Outside clues (top/left)</label></span>
                 <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
                 <br>
                 <span><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
@@ -1198,6 +1215,8 @@
                             </td>
                         </tr>
                     </table>
+                    <h5 id="save6texttitle">Custom Message</h5>
+                    <textarea class="text_area" rows="1" cols="50" placeholder="Custom Congratulation Message on answer check pop up" id="custom_message"></textarea>
                     <br>
                     <input type="button" id="closeBtn_save5" value="Generate URL with answer check" />
                 </div>
