@@ -281,6 +281,61 @@ class Puzzlink {
         return -1;
     }
 
+    decodeNumber36(max_iter = -1) {
+        var number_list = [];
+        let index;
+
+        for (index = 0; index < this.gridurl.length; index++) {
+            const char = this.gridurl[index];
+            if (char === "-") {
+                number_list.push(parseInt(this.gridurl.substr(index + 1, 2), 36));
+                index += 2;
+            } else if (char === "%") {
+                number_list.push("?");
+            } else if (char === ".") {
+                number_list.push(" ");
+            } else {
+                number_list.push(parseInt(char, 36));
+            }
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
+        }
+
+        // Remove what was parsed so the next function call reads what is left
+        this.gridurl = this.gridurl.substr(index);
+
+        return number_list;
+    }
+
+    decodeNumber10(max_iter = -1) {
+        var number_list = {};
+        let index = 0;
+
+        for (var char of this.gridurl) {
+            if (char === '.') {
+                number_list[index] = '?';
+            } else if (char >= "0" && char <= "9") {
+                number_list[index] = parseInt(char);
+            } else if (char >= "a" && char <= "z") {
+                index += parseInt(char, 36) - 10;
+            }
+            index++;
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
+        }
+
+        // Remove what was parsed so the next function call reads what is left
+        this.gridurl = this.gridurl.substr(index);
+
+        return number_list;
+    }
+
     decodeNumber4() {
         var number_list = {},
             i = 0;
