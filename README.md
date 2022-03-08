@@ -447,6 +447,7 @@ Depending on the browser you can update the page without using the cache with "C
 * If the puzzle is too big and contains a lot of elements, it generates a big URL and the size is limited by the internet. In order to address this issue, one can use this Load button option to copy the big URL and click "Load URL" button.
 * Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
 * Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
+	* Aho
 	* Akari
 	* Aqre
 	* Araf
@@ -461,12 +462,15 @@ Depending on the browser you can update the page without using the cache with "C
 	* Double Back
 	* Easy as ABC
 	* Factors
+	* Fillmat
 	* Fillomino
 	* Firefly (Hotaru Beam)
 	* Geradeweg
 	* Haisu
+	* Hanare-gumi
 	* Hashiwokakero (Hashi/Bridges)
 	* Heyawake
+	* Hitori
 	* Juosan
 	* Kakuro
 	* Kropki
@@ -474,6 +478,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Kurodoko
 	* Kurotto
 	* LITS
+	* Look-Air
 	* Masyu
 	* Maxi Loop
 	* Meandering Numbers
@@ -491,12 +496,15 @@ Depending on the browser you can update the page without using the cache with "C
 	* Nurimaze
 	* Nurimisaki
 	* Onsen
+	* Paintarea
 	* Pencils
+	* Putteria
 	* Regional Yajilin
 	* Renban (Renban-Madoguchi)
 	* Ring-ring
 	* Ripple Effect
 	* Shakashaka
+	* Shikaku
 	* Shimaguni (Islands)
 	* Simple Loop
 	* Skyscrapers
@@ -506,15 +514,19 @@ Depending on the browser you can update the page without using the cache with "C
 	* Star Battle
 	* Stostone
 	* Sudoku
+	* Sukoro
+	* Sukoro-room
 	* Symmetry Area
 	* Tapa
 	* Tapa-Like Loop
-	* Tents
 	* Tentaisho (Spiral Galaxies)
+	* Tents
 	* Toichika 2
+	* Uso-tatami
 	* View
 	* Yajikazu (Yajisan-Kazusan)
 	* Yajilin
+	* Yin-Yang
 
 ### Settings
 * This function is to provide Penpa-site general settings like theme, custom color etc.

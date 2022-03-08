@@ -2576,12 +2576,14 @@ function decode_puzzlink(url) {
 
     var info_edge, info_number, info_obj, size, puzzlink_pu,
         row_ind, col_ind, cell, value, corner_cursor,
-        number_style;
+        number_style, map_genre_tag;
 
     switch (type) {
         case "cojun":
+        case "hanare":
         case "meander":
         case "nanro":
+        case "putteria":
         case "renban":
         case "ripple":
             // Setup board
@@ -2600,24 +2602,15 @@ function decode_puzzlink(url) {
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
 
+            // Convert the abreviated type name to the long form
+            map_genre_tag = {
+                hanare: "hanare-gumi",
+                meander: "meandering numbers",
+                renban: "renban (renban-madoguchi)",
+                ripple: "ripple effect",
+            };
             // Set tags
-            switch (type) {
-                case "cojun":
-                    pu.user_tags = ['cojun'];
-                    break;
-                case "meander":
-                    pu.user_tags = ['meandering numbers'];
-                    break;
-                case "nanro":
-                    pu.user_tags = ['nanro'];
-                    break;
-                case "renban":
-                    pu.user_tags = ['renban (renban-madoguchi)'];
-                    break;
-                case "ripple":
-                    pu.user_tags = ['ripple effect'];
-                    break;
-            }
+            pu.user_tags = [map_genre_tag[type] || type];
             break;
         case "onsen":
             // Setup board
@@ -3295,6 +3288,8 @@ function decode_puzzlink(url) {
             }
             break;
         case "araf":
+            // Add all of the decodeNumber16() puzzles (but make sure the controls are the same and that question marks are handled the same way)
+            // Then add all of the decodeNumber10()
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed grid lines
             setupProblem(pu, "combi");
@@ -3877,6 +3872,117 @@ function decode_puzzlink(url) {
             pu.subcombimode("linex");
             UserSettings.tab_settings = ["Edge Normal", "Composite"];
             pu.user_tags = ['double back']; // Genre Tags
+            break;
+        case "yinyang":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber3();
+            // Draw the circles
+            for (i in info_number) {
+                if (info_number[i] === 0) {
+                    continue;
+                }
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].symbol[cell] = [info_number[i], "circle_M", 1];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blwh");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ['yin-yang']; // Genre Tags
+            break;
+        case "hitori":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            info_number = puzzlink_pu.decodeNumber36(cols * rows);
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface");
+            UserSettings.tab_settings = ["Surface"];
+            pu.user_tags = ['hitori']; // Genre Tags
+            break;
+        case "aho":
+        case "shikaku":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed lines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 7, "1", true);
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            pu.user_tags = [type]; // Genre tags
+            break;
+        case "fillmat":
+        case "lookair":
+        case "usotatami":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed lines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber10();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+
+            if (type === "lookair") {
+                pu.mode_set("surface");
+                UserSettings.tab_settings = ["Surface"];
+            } else {
+                pu.mode_set("combi");
+                pu.subcombimode("edgesub");
+                UserSettings.tab_settings = ["Surface", "Composite"];
+            }
+
+            pu.user_tags = [type]; // Genre tags
+            break;
+        case "paintarea":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber10();
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface");
+            UserSettings.tab_settings = ["Surface"];
+            pu.user_tags = ["paintarea"]; // Genre tags
+            break;
+        case "sukoro":
+        case "sukororoom":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "number");
+
+            if (type === "sukororoom") {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2);
+            }
+
+            info_number = puzzlink_pu.decodeNumber10();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
+            pu.user_tags = [type]; // Genre tags
             break;
         default:
             Swal.fire({
