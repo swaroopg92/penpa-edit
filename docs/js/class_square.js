@@ -1844,6 +1844,15 @@ class Puzzle_square extends Puzzle {
                 }
                 this.draw_polygon(ctx, x, y + 0.4 * 0.25 * this.size, 0.4, 3, 90);
                 break;
+            case "triup_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y + 0.25 * 0.25 * this.size, 0.25, 3, 90);
+                break;
             case "triup_SS":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
@@ -1870,6 +1879,15 @@ class Puzzle_square extends Puzzle {
                     set_circle_style(ctx, num);
                 }
                 this.draw_polygon(ctx, x, y - 0.4 * 0.25 * this.size, 0.4, 3, -90);
+                break;
+            case "tridown_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y - 0.25 * 0.25 * this.size, 0.25, 3, -90);
                 break;
             case "tridown_SS":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
@@ -1898,6 +1916,15 @@ class Puzzle_square extends Puzzle {
                 }
                 this.draw_polygon(ctx, x - 0.4 * 0.25 * this.size, y, 0.4, 3, 180);
                 break;
+            case "triright_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x - 0.25 * 0.25 * this.size, y, 0.25, 3, 180);
+                break;
             case "triright_SS":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
@@ -1925,6 +1952,15 @@ class Puzzle_square extends Puzzle {
                 }
                 this.draw_polygon(ctx, x + 0.4 * 0.25 * this.size, y, 0.4, 3, 0);
                 break;
+            case "trileft_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x + 0.25 * 0.25 * this.size, y, 0.25, 3, 0);
+                break;
             case "trileft_SS":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
@@ -1951,6 +1987,15 @@ class Puzzle_square extends Puzzle {
                     set_circle_style(ctx, num);
                 }
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
+                break;
+            case "diamond_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.22, 4, 0);
                 break;
             case "diamond_SS":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
