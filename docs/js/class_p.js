@@ -2111,8 +2111,15 @@ class Puzzle {
             this.ctx = svg_canvas;
             this.redraw(true); // Reflects SVG elements
             this.ctx = old_canvas;
-            this.redraw(); // Back to original display
+
             this.mode[this.mode.qa].edit_mode = mode; // retain original mode
+            if (document.getElementById("nb_margin2").checked) {
+                this.canvasx = cx;
+                this.canvasy = cy;
+                this.point_move(xl, yu, 0);
+                this.canvas_size_setting();
+            }
+            this.redraw(); // Back to original display
 
             return svg_canvas.getSerializedSvg(true);
         }
@@ -2470,18 +2477,23 @@ class Puzzle {
                 case "ms_square_SS":
                 case "ms_triup_L":
                 case "ms_triup_M":
+                case "ms_triup_S":
                 case "ms_triup_SS":
                 case "ms_tridown_L":
                 case "ms_tridown_M":
+                case "ms_tridown_S":
                 case "ms_tridown_SS":
                 case "ms_triright_L":
                 case "ms_triright_M":
+                case "ms_triright_S":
                 case "ms_triright_SS":
                 case "ms_trileft_L":
                 case "ms_trileft_M":
+                case "ms_trileft_S":
                 case "ms_trileft_SS":
                 case "ms_diamond_L":
                 case "ms_diamond_M":
+                case "ms_diamond_S":
                 case "ms_diamond_SS":
                 case "ms_star":
                 case "ms_firefly":
