@@ -19,8 +19,8 @@ describe("puzz.link parser", () => {
         ["Aho 3", "https://puzz.link/p?aho/v:/11/11/k.m6i5g4i6h.j3j.i.j1l9h2o.h.l.j.i.j5j1h2i6g.i4m.k"],
         // Akari
         ["Akari 1", "https://puzz.link/p?akari/10/10/..g.h.i.j.k.l.t0143bzzp"],
-        ["Akari 2", "https://puzz.link/p?akari/10/10/jbh.rchcpah.n.jbpchcp.jah"],
-        ["Akari 3", "https://puzz.link/p?akari/20/20/h.k.h.kbz.ha.gb6.hab.hbl.h.zk.h.lbbiab.hb.h.zh.gbg6b.g.i6.zz.g.i6b.g.i.g.zh.hb.h.hbbib.l.hbzi.h.n.ha.ha.gb.gb.hbzbi.h.kb"],
+        ["Akari 2", "https://puzz.link/p?bijutsukan/10/10/jbh.rchcpah.n.jbpchcp.jah"],
+        ["Akari 3", "https://puzz.link/p?lightup/20/20/h.k.h.kbz.ha.gb6.hab.hbl.h.zk.h.lbbiab.hb.h.zh.gbg6b.g.i6.zz.g.i6b.g.i.g.zh.hb.h.hbbib.l.hbzi.h.n.ha.ha.gb.gb.hbzbi.h.kb"],
         ["Akari 4", "https://puzz.link/p?akari/40/40/i..i8.g.gco1...i1.h.g.hd.i.g...t1.j6.g.hcgch.bo1..jah.g.g.gbh.h.q1.n.j.g.gbi.g.qco.j.g.l.bobqbh..lcobxbi.rbsbmbpbzi.r.mcgckci.sck.j.rdpblbhbkbg.r.n1.j.q.rcl..i6.m7.h.ocl7.i.gbm.h.oakb.i6.qcm.m.i.h.h.p..obj.jb.h.n..g.n.lbi.gbg.p.o.k.kbbg6clbbich1bj6.j.g.n.h.k.h0..l.h.j...n.i.j......bi6bi.gblbgbh1.......i.g.l.g.n.i.i.h....g.c1cmbm66.h.h.g..gb.l1.b.o5.g.hbgcbbj....1.mcg.g.g7.j2.o1....gbgbk..g..g.u...g.g.ibk.g71.bs.h.g.i.jbbi.g.pbh1b.hbg..h.h65.hcmbkbj1cbk.z.j1..p.g.x1.h1..cn1.hbt..6...l1.......bdkbj6.g..g.n.......b.r.h.g.g..n.........h1bl2bg.6.g.n1..........g...i...k.jcm........ib..bl6.g.m"],
         // Aqre
         ["Aqre 1", "https://puzz.link/p?aqre/10/10/vvvs000fvvu0007vvv00vv00vv00vv00vv002020210221g0120200211g2121212120"],
@@ -50,8 +50,8 @@ describe("puzz.link parser", () => {
         ["Castle 6", "https://puzz.link/p?castle/6/3/011022033044000a11.12.13.14.10.a2-13e32-23e42-33e529622563a"],
         // Cave
         ["Cave 1", "https://puzz.link/p?cave/10/10/7i6i7j6j3i5i6w8p6w2i7i5j3j6i3ib"],
-        ["Cave 2", "https://puzz.link/p?cave/19/11/5g5g757g5i5i7775g5g7g7g5i5i7g7d9dgdbdgdi7i9g95g5g5g5g5i5i7g75g5g5g5g755g735g777y5g5g733g753g5h5g5g5g5g5i5i63g5g5g5g-14g-14-10-10g-14-10-10g-14g-10-14g-14g737g5i5i5h5i5g5g733g733g5h5g62"],
-        ["Cave 3", "https://puzz.link/p?cave/7/5/g.g3.g3i3g.3g3r3h3h3"],
+        ["Cave 2", "https://puzz.link/p?bag/19/11/5g5g757g5i5i7775g5g7g7g5i5i7g7d9dgdbdgdi7i9g95g5g5g5g5i5i7g75g5g5g5g755g735g777y5g5g733g753g5h5g5g5g5g5i5i63g5g5g5g-14g-14-10-10g-14-10-10g-14g-10-14g-14g737g5i5i5h5i5g5g733g733g5h5g62"],
+        ["Cave 3", "https://puzz.link/p?corral/7/5/g.g3.g3i3g.3g3r3h3h3"],
         // Cojun
         ["Cojun 1", "https://puzz.link/p?cojun/8/8/qhebtquqmqj0l7s7c8vo1up0zzh4v1j"],
         ["Cojun 2", "https://puzz.link/p?cojun/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
@@ -87,7 +87,7 @@ describe("puzz.link parser", () => {
         ["Fillmat 2", "https://puzz.link/p?fillmat/5/5/e.a..b.a.a.d..a.a"],
         // Fillomino
         ["Fillomino 1", "https://puzz.link/p?fillomino/5/5/-10-10-10-10-10-108.8-10-10.1.-10-108.8-10-10-10g-10-10"],
-        ["Fillomino 2", "https://puzz.link/p?fillomino/7/3/159u159"],
+        ["Fillomino 2", "https://puzz.link/p?fillomino01/7/3/159u159"],
         ["Fillomino 3", "https://puzz.link/p?fillomino/10/10/q-138g84ga3h46g42g33r46g44ga8h12g15g58r21g28g87h42g14g4-13q"],
         ["Fillomino 4", "https://puzz.link/p?fillomino/7/10/r6l8l5l2lah3i5h9i9i4c4o"],
         // Firefly (Hotaru Beam)
@@ -113,7 +113,7 @@ describe("puzz.link parser", () => {
         ["Hashiwokakero 4", "https://puzz.link/p?hashi/41/19/v3k6k3zzzk2i3g2o3i4zzw3i3g1m3k1i3g2zzs3g3i3k4s2g3g4zzzm3k2m3g2zzk3i5i1g3k2s3i2g3g4zzg4g3g1s4i3u3g5zzi2i2g2k1s3k1zzy1k4k1s1zzi2g1i2g4k4i4k4i6k4k4"],
         // Heyawake
         ["Heyawake 1", "https://puzz.link/p?heyawake/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11"],
-        ["Heyawake 2", "https://puzz.link/p?heyawake/10/8/4k94j266sdc488g0206rv300cro0074g321g26"],
+        ["Heyawake 2", "https://puzz.link/p?heyawacky/10/8/4k94j266sdc488g0206rv300cro0074g321g26"],
         ["Heyawake 3", "https://puzz.link/p?heyawake/12/12/5k2q1d0mgb85k2q0d06g381k0q00000u0001vg0007ou0ofg3tg00065g63242362i"],
         ["Heyawake 4", "https://puzz.link/p?heyawake/17/17/ju1vv0vvnm0bv07vg3gfvv7vvhvvuvvvevvnfv07vg3vo003001g00oe1v00fsvs17vo1vpvfufo001g03g0006001g1vs01v00fvvvvvsvvv0s2zj2k2m"],
         // Hitori
@@ -162,7 +162,7 @@ describe("puzz.link parser", () => {
         // Masyu
         ["Masyu 1", "https://puzz.link/p?masyu/15/10/i0a02000000ik20620i6i0a021c049c209490j0100a0019329"],
         ["Masyu 2", "https://puzz.link/p?mashu/13/9/013009k10a3a39310c9313693i016030j039a20"],
-        ["Masyu 3", "https://puzz.link/p?mashu/v:/10/10/000000060i23601000000001i200f90000"],
+        ["Masyu 3", "https://puzz.link/p?pearl/v:/10/10/000000060i23601000000001i200f90000"],
         // Mid-loop
         ["Mid-loop 1", "https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz"],
         ["Mid-loop 2", "https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg"],
@@ -247,7 +247,7 @@ describe("puzz.link parser", () => {
         ["Putteria 2", "https://puzz.link/p?putteria/8/8/adcaagl55ac0dntnvpnvjrng0123456789abcdef1g1z1z1h1"],
         // Regional Yajilin (Yajilin Regions)
         ["Regional Yajilin 1", "https://puzz.link/p?yajilin-regions/11/6/0457vvfnvnpkvun421100422g2123g1g1"],
-        ["Regional Yajilin 2", "https://puzz.link/p?yajilin-regions/8/8/b2om8i4108q00s3vg1s00sg0q"],
+        ["Regional Yajilin 2", "https://puzz.link/p?yajirin-regions/8/8/b2om8i4108q00s3vg1s00sg0q"],
         ["Regional Yajilin 3", "https://puzz.link/p?yajilin-regions/16/3/007005005vvv00005000h"],
         ["Regional Yajilin 4", "https://puzz.link/p?yajilin-regions/12/10/189cmfufuj9ipcvsvt6i2gfn1okc076jsv7ihg0sa3nog2231g232g2h213"],
         // Renban (Renban-Madoguchi)
@@ -260,7 +260,7 @@ describe("puzz.link parser", () => {
         ["Ring-ring 4", "https://puzz.link/p?ringring/10/10/3be82fh4e0"],
         // Ripple
         ["Ripple 1", "https://puzz.link/p?ripple/10/10/c9hb4nfmueupv8ke11br7s3pk2r61hbqnsfezzzzz"],
-        ["Ripple 2", "https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i"],
+        ["Ripple 2", "https://puzz.link/p?hakyukoka/5/5/d6lqqf3ei1g3s2g1i"],
         ["Ripple 3", "https://puzz.link/p?ripple/6/6/4444440fo3u0m3h1i6l3g52g4g2i5h4"],
         ["Ripple 4", "http://pzv.jp/p?ripple/10/10/35srcenac8p9p4obgjqo5u0rnkfnnnfqvov4zzzzz"],
         // Shakashaka
@@ -285,7 +285,7 @@ describe("puzz.link parser", () => {
         // Skyscrapers
         ["Skyscrapers 1", "https://puzz.link/p?skyscrapers/2/1/j1g"],
         ["Skyscrapers 2", "https://puzz.link/p?building/5/5/g2l4g2h4h4h2"],
-        ["Skyscrapers 3", "https://puzz.link/p?skyscrapers/6/6/h4j2h2g3g3h4g5g2g2"],
+        ["Skyscrapers 3", "https://puzz.link/p?skyscraper/6/6/h4j2h2g3g3h4g5g2g2"],
         ["Skyscrapers 4", "https://puzz.link/p?skyscrapers/3/5/1235433212312321"],
         // Slant (Gokigen)
         ["Slant 1", "https://puzz.link/p?gokigen/10/10/hc5b0bgcgdg7217bidj8778d7ag676617377dgcg8c6317222d6221clbga"],
@@ -370,8 +370,8 @@ describe("puzz.link parser", () => {
         ["Yajikazu 5", "https://puzz.link/p?yajikazu/6/3/1122334400a1.2.3.4.0.a-13e3-23e4-33e5962563"],
         // Yajilin
         ["Yajilin 1", "https://puzz.link/p?yajilin/b/10/10/n2222c11b42r11f21b11f21r12b41c3112n"],
-        ["Yajilin 2", "https://puzz.link/p?yajilin/b/9/9/a21220.c212242h41h0.d0.f0.k0.f11d41h42h"],
-        ["Yajilin 3", "https://puzz.link/p?yajilin/9/9/a21220.0.0.0.212242h42h0.d0.c0.b0.e0.e0.b0.c0.d41h41h"],
+        ["Yajilin 2", "https://puzz.link/p?yajirin/b/9/9/a21220.c212242h41h0.d0.f0.k0.f11d41h42h"],
+        ["Yajilin 3", "https://puzz.link/p?yajirin/9/9/a21220.0.0.0.212242h42h0.d0.c0.b0.e0.e0.b0.c0.d41h41h"],
         ["Yajilin 4", "https://puzz.link/p?yajilin/11/11/zq33k1241111111221111zi34m12c11d"],
         ["Yajilin 5", "https://puzz.link/p?yajilin/10/10/40u23k10h20l10h20k13l40i"],
         ["Yajilin 6", "https://puzz.link/p?yajilin/b/11/11/m31e23e23c23g10a22i32j12j32j40j31j31p"],

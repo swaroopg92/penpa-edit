@@ -2580,6 +2580,7 @@ function decode_puzzlink(url) {
 
     switch (type) {
         case "cojun":
+        case "hakyukoka": // ripple alias
         case "hanare":
         case "meander":
         case "nanro":
@@ -2604,6 +2605,7 @@ function decode_puzzlink(url) {
 
             // Convert the abreviated type name to the long form
             map_genre_tag = {
+                hakyukoka: "ripple effect",
                 hanare: "hanare-gumi",
                 meander: "meandering numbers",
                 renban: "renban (renban-madoguchi)",
@@ -2700,6 +2702,7 @@ function decode_puzzlink(url) {
             pu.user_tags = ['starbattle'];
             break;
         case "building": // skyscrapers alias
+        case "skyscraper": // skyscrapers alias
         case "skyscrapers":
             // Add white space for skyscraper clues
             document.getElementById("nb_space1").value = 1;
@@ -2721,8 +2724,10 @@ function decode_puzzlink(url) {
             // Set tags
             pu.user_tags = ['skyscrapers'];
             break;
-        case "shakashaka":
         case "akari":
+        case "bijutsukan": // akari alias
+        case "lightup": // akari alias
+        case "shakashaka":
             // Decode URL
             info_number = puzzlink_pu.decodeNumber4();
 
@@ -2749,14 +2754,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             // Set tags
-            switch (type) {
-                case "shakashaka":
-                    pu.user_tags = ['shakashaka'];
-                    break;
-                case "akari":
-                    pu.user_tags = ['akari'];
-                    break;
-            }
+            pu.user_tags = [type === 'shakashaka' ? 'shakashaka' : 'akari'];
             break;
         case "kakuro":
             // Decode URL
@@ -2826,6 +2824,7 @@ function decode_puzzlink(url) {
             break;
         case "aqre":
         case "ayeheya":
+        case "heyawacky": // heyawake alias
         case "heyawake":
         case "shimaguni":
         case "stostone":
@@ -2854,6 +2853,7 @@ function decode_puzzlink(url) {
                 case "ayeheya":
                     pu.user_tags = ['ayeheya (ekawayeh)'];
                     break;
+                case "heyawacky":
                 case "heyawake":
                     pu.user_tags = ['heyawake'];
                     break;
@@ -2938,6 +2938,10 @@ function decode_puzzlink(url) {
         case "nagenawa":
         case "toichika2":
         case "yajilin-regions":
+        case "yajirin-regions": // yajilin-regions alias
+            if (type === "yajirin-regions") {
+                type = "yajilin-regions";
+            }
             pu = new Puzzle_square(cols, rows, size);
             if (type === "detour" || type === "maxi" || type === "nagenawa" || type === "juosan") {
                 pu.mode_grid("nb_grid2"); // Dashed gridlines
@@ -2980,37 +2984,19 @@ function decode_puzzlink(url) {
                 UserSettings.tab_settings = ["Surface", "Composite"];
             }
 
-            // Set tags
-            switch (type) {
-                case "country":
-                    pu.user_tags = ['country road'];
-                    break;
-                case "detour":
-                    pu.user_tags = ['detour'];
-                    break;
-                case "factors":
-                    pu.user_tags = ['factors'];
-                    break;
-                case "juosan":
-                    pu.user_tags = ['juosan'];
-                    break;
-                case "maxi":
-                    pu.user_tags = ['maxi loop'];
-                    break;
-                case "nagenawa":
-                    pu.user_tags = ['nagenawa'];
-                    break;
-                case "toichika2":
-                    pu.user_tags = ['toichika2'];
-                    break;
-                case "yajilin-regions":
-                    pu.user_tags = ['regional yajilin'];
-                    break;
+            // Convert the abreviated type name to the long form
+            map_genre_tag = {
+                country: "country road",
+                maxi: "maxi loop",
+                "yajilin-regions": "regional yajilin",
             }
+            // Set tags
+            pu.user_tags = [map_genre_tag[type] || type];
             break;
         case "moonsun":
         case "mashu": // masyu alias
         case "masyu":
+        case "pearl": // masyu alias
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed gridlines
             setupProblem(pu, "combi");
@@ -3041,15 +3027,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             // Set tags
-            switch (type) {
-                case "moonsun":
-                    pu.user_tags = ['moon or sun'];
-                    break;
-                case "mashu":
-                case "masyu":
-                    pu.user_tags = ['masyu'];
-                    break;
-            }
+            pu.user_tags = [type === "moonsun" ? "moon or sun" : "masyu"];
             break;
         case "haisu":
             pu = new Puzzle_square(cols, rows, size);
@@ -3121,6 +3099,10 @@ function decode_puzzlink(url) {
         case "castle":
         case "yajikazu":
         case "yajilin":
+        case "yajirin": // yajilin alias
+            if (type === "yajirin") {
+                type = "yajilin";
+            }
             // Yajikazu and some Yajilin puzzles don't shade cells
             var skip_shading = type !== "castle";
 
@@ -3259,6 +3241,7 @@ function decode_puzzlink(url) {
             }
             break;
         case "fillomino":
+        case "fillomino01": // fillomino alias
         case "symmarea":
         case "view":
             pu = new Puzzle_square(cols, rows, size);
@@ -3277,6 +3260,7 @@ function decode_puzzlink(url) {
             // Set tags
             switch (type) {
                 case "fillomino":
+                case "fillomino01":
                     pu.user_tags = ['fillomino'];
                     break;
                 case "symmarea":
@@ -3288,8 +3272,6 @@ function decode_puzzlink(url) {
             }
             break;
         case "araf":
-            // Add all of the decodeNumber16() puzzles (but make sure the controls are the same and that question marks are handled the same way)
-            // Then add all of the decodeNumber10()
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed grid lines
             setupProblem(pu, "combi");
@@ -3394,10 +3376,16 @@ function decode_puzzlink(url) {
             // Set tags
             pu.user_tags = ['nonogram'];
             break;
+        case "bag": // cave alias
         case "cave":
+        case "corral": // cave alias
+        case "correl": // cave alias
         case "mochikoro":
         case "mochinyoro":
         case "nuribou":
+            if (type === "bag" || type === "corral" || type === "correl") {
+                type = "cave";
+            }
             pu = new Puzzle_square(cols, rows, size);
             if (type === "cave") {
                 pu.mode_grid("nb_grid2"); // Dashed gridlines
@@ -3414,20 +3402,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             // Set tags
-            switch (type) {
-                case "cave":
-                    pu.user_tags = ['cave'];
-                    break;
-                case "mochikoro":
-                    pu.user_tags = ['mochikoro'];
-                    break;
-                case "mochinyoro":
-                    pu.user_tags = ['mochinyoro'];
-                    break;
-                case "nuribou":
-                    pu.user_tags = ['nuribou'];
-                    break;
-            }
+            pu.user_tags = [type];
             break;
         case "lits":
         case "norinori":
