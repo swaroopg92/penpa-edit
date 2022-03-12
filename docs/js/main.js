@@ -1962,7 +1962,7 @@ onload = function() {
             pu.redraw();
         } else if (document.getElementById("custom_color_opt").value === "2") {
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
+            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" || pu.gridtype === "hex")) &&
                 (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
                 document.getElementById('style_special').style.display = 'inline';
             }

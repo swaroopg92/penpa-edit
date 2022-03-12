@@ -197,7 +197,7 @@ const penpa_modes = {
         'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
             'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
             'battleship_B', 'battleship_G', 'battleship_W',
-            'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
+            'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'polyomino',
             'angleloop', 'firefly', 'sun_moon'
         ],
         'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'ox', 'degital'],
