@@ -1870,7 +1870,7 @@ function submit_portal(e, isPreview) {
                     solvingTags: entries_flag.answercheck_opt,
                     onlineSolveMessage: entries_flag.message,
                     allowVideo: document.getElementById("video_usage").checked,
-                    svgdata: pu.puzzlepreview()
+                    imgdata: pu.puzzlepreview()
                 },
                 options = {
                     method: 'POST',

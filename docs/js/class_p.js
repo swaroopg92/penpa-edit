@@ -2139,7 +2139,7 @@ class Puzzle {
         var currentdisplay = UserSettings.displaysize;
 
         // Update display size
-        UserSettings.displaysize = 12;
+        UserSettings.displaysize = 20;
         this.redraw();
 
         // Switch to Problem Mode
