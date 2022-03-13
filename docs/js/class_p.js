@@ -2136,6 +2136,11 @@ class Puzzle {
         // Save Current Mode and Solution Visibility Setting
         var currentMode = this.mode.qa;
         var currentVisibility = UserSettings.show_solution;
+        var currentdisplay = UserSettings.displaysize;
+
+        // Update display size
+        UserSettings.displaysize = 12;
+        this.redraw();
 
         // Switch to Problem Mode
         this.mode_qa("pu_q");
@@ -2151,61 +2156,42 @@ class Puzzle {
         var cy = this.canvasy;
 
         this.mode[this.mode.qa].edit_mode = "surface"; // For deleting selection frame
+        var obj = this.gridspace_calculate();
+        var yu = obj.yu,
+            yd = obj.yd,
+            xl = obj.xl,
+            xr = obj.xr;
+        this.canvasx = xr - xl;
+        this.canvasy = yd - yu;
+        this.point_move(-xl, -yu, 0);
+        this.canvas_size_setting();
         this.redraw();
 
-        var qual = 1;
+        var qual = 1.5;
         var width = this.canvas.width / qual;
         resizedCanvas.width = width.toString();
         resizedCanvas.height = (width * this.canvas.height / this.canvas.width).toString();
 
         resizedContext.drawImage(this.canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
 
-        var svg_canvas = new C2S(this.canvasx, this.canvasy);
-        svg_canvas.text = function(text, x, y, width = 1e4) {
-            var fontsize = parseFloat(this.font.split("px")[0]);
-            this.strokeText(text, x, y + 0.28 * fontsize, width);
-            this.fillText(text, x, y + 0.28 * fontsize, width);
-        };
-        svg_canvas.arrow = function(startX, startY, endX, endY, controlPoints) {
-            var dx = endX - startX;
-            var dy = endY - startY;
-            var len = Math.sqrt(dx * dx + dy * dy);
-            var sin = dy / len;
-            var cos = dx / len;
-            var a = [];
-            a.push(0, 0);
-            for (var i = 0; i < controlPoints.length; i += 2) {
-                var x = controlPoints[i];
-                var y = controlPoints[i + 1];
-                a.push(x < 0 ? len + x : x, y);
-            }
-            a.push(len, 0);
-            for (var i = controlPoints.length; i > 0; i -= 2) {
-                var x = controlPoints[i - 2];
-                var y = controlPoints[i - 1];
-                a.push(x < 0 ? len + x : x, -y);
-            }
-            a.push(0, 0);
-            for (var i = 0; i < a.length; i += 2) {
-                var x = a[i] * cos - a[i + 1] * sin + startX;
-                var y = a[i] * sin + a[i + 1] * cos + startY;
-                if (i === 0) this.moveTo(x, y);
-                else this.lineTo(x, y);
-            }
-        };
-
-        var old_canvas = this.ctx;
-        this.ctx = svg_canvas;
-        this.redraw(true); // Reflects SVG elements
-        this.ctx = old_canvas;
+        var canvastext = resizedCanvas.toDataURL("image/png");
 
         // Switch back to original mode and visibility setting
         this.mode_qa(currentMode);
         UserSettings.show_solution = currentVisibility;
+
+        this.canvasx = cx;
+        this.canvasy = cy;
+        this.point_move(xl, yu, 0);
+        this.canvas_size_setting();
+
+        // Update display size
+        UserSettings.displaysize = currentdisplay;
+
         this.redraw(); // Back to original display
         this.mode[this.mode.qa].edit_mode = mode; // retain original mode
 
-        return svg_canvas.getSerializedSvg(true);
+        return canvastext;
     }
 
     gridspace_calculate() {
