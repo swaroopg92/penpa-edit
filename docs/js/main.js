@@ -939,6 +939,9 @@ onload = function() {
         count_redo = 0;
         new_timer = setInterval(() => {
             count_undo++;
+            if (pu[pu.mode.qa].command_undo.__a.length === 0) {
+                clearInterval(new_timer);
+            }
             if (count_undo > 10) {
                 pu.undo();
             }
@@ -969,6 +972,9 @@ onload = function() {
         count_undo = 0;
         new_timer = setInterval(() => {
             count_redo++;
+            if (pu[pu.mode.qa].command_redo.__a.length === 0) {
+                clearInterval(new_timer);
+            }
             if (count_redo > 10) {
                 pu.redo();
             }
@@ -1914,7 +1920,6 @@ onload = function() {
     selectContainer.appendChild(liteModeButton);
 
     window.addEventListener('beforeunload', function(e) {
-        console.log(UserSettings.reload_button);
         if (UserSettings.reload_button === 1) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown

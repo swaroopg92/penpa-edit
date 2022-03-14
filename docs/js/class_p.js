@@ -11386,7 +11386,7 @@ class Puzzle {
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
-                        if (message == "") {
+                        if (message == "" || message.includes("http-equiv=")) {
                             message = "Congratulations 🙂";
                         }
                         setTimeout(() => {
@@ -11422,7 +11422,7 @@ class Puzzle {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             let message = document.getElementById("custom_message").value;
-                            if (message == "") {
+                            if (message == "" || message.includes("http-equiv=")) {
                                 message = "Congratulations 🙂";
                             }
                             setTimeout(() => {
