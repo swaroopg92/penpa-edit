@@ -3300,7 +3300,11 @@ class Puzzle_square extends Puzzle {
                 this.draw_slash(ctx, x, y, 0.5 * Math.sqrt(2));
                 break;
             case 2:
-                ctx.fillStyle = Color.BLACK;
+                if (ccolor !== "none") {
+                    ctx.fillStyle = ccolor;
+                } else {
+                    ctx.fillStyle = Color.BLACK;
+                }
                 ctx.strokeStyle = Color.TRANSPARENTWHITE;
                 ctx.lineWidth = 1;
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, th);
@@ -3753,7 +3757,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
                 break;
             case 5:
-                set_circle_style(ctx, 1);
+                set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x, y, r1);
                 break;
         }
