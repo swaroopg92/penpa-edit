@@ -1204,6 +1204,10 @@ onload = function() {
                 expansion();
                 e.preventDefault();
                 break;
+            case "expansion_replay":
+                expansion_replay();
+                e.preventDefault();
+                break;
             case "address_comp":
                 savetext_comp();
                 e.preventDefault();
@@ -1238,6 +1242,10 @@ onload = function() {
                 break;
             case "closeBtn_save5":
                 savetext_withsolution();
+                e.preventDefault();
+                break;
+            case "closeBtn_replay":
+                savetext_withreplay();
                 e.preventDefault();
                 break;
             case "solution_open":

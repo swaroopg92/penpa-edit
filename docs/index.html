@@ -27,6 +27,9 @@
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <link rel="apple-touch-icon" href="./css/images/logo.png" />
     <!-- STYLES -->
+    <!-- Online styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Local styles -->
     <script>
         var ver = "2.26.17"; // Also defined in class_p.js
         let style_sources = [
@@ -992,7 +995,8 @@
                 <input type="button" id="address_edit" value="Editing URL" />
                 <input type="button" id="address_solve" value="Solving URL" />
                 <!--For Competitive Solving-->
-                <input type="button" id="address_comp" value="Contest-Mode URL" /><br />
+                <input type="button" id="address_comp" value="Contest-Mode URL" />
+                <input type="button" id="expansion_replay" value="Replay URL" style="display:none;" /> <br />
                 <input type="button" id="expansion" value="URL with Answer Check / Advanced Options" />
             </div>
             <div id="modal-save-body">
@@ -1233,6 +1237,15 @@
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-replay" class="modal">
+        <div id="modal-replay-content" class="modal-content">
+            <h3 class="modal-header">Extended Output</h3>
+            <div id="modal-replay-solution" class="nb_button">
+                <input type="text" placeholder="Solver Name" value="" id="saveinfosolver" />
+                <input type="button" id="closeBtn_replay" value="Generate URL with Replay" />
             </div>
         </div>
     </div>

@@ -3113,6 +3113,33 @@ class Puzzle {
         return text_head + "&a=" + ba;
     }
 
+    maketext_replay() {
+        var text_head = pu.maketext_solve();
+
+        // convert undo to redo
+        while (pu["pu_a"]["command_undo"].__a.length !== 0) {
+            pu.undo(true);
+        }
+
+        // encrypt the data
+        var replay;
+        try {
+            replay = encrypt_data(JSON.stringify(pu["pu_a"]["command_redo"].__a));
+        } catch (err) {
+            replay = "penpaerror";
+        }
+        if (replay == null || replay == "") {
+            replay = "penpaerror-replayisblank";
+        }
+
+        // restore undo
+        while (pu["pu_a"]["command_redo"].__a.length !== 0) {
+            pu.redo(true);
+        }
+
+        return text_head + "&r=" + replay;
+    }
+
     checkall_status() {
         // See if user selected any particular setting
         let answersetting = document.getElementById("answersetting");
