@@ -8236,6 +8236,11 @@ class Puzzle {
                         delete this[this.mode.qa + "_col"][array][num];
                     }
                 }
+                if (group_counter > 0) {
+                    this.record_replay(array, num, group_counter);
+                } else {
+                    this.record_replay(array, num);
+                }
                 if (group_counter === 0) { //group_counter > 0 belongs to automatic killer cage
                     this.drawing_mode = 0;
                 }
@@ -8252,6 +8257,7 @@ class Puzzle {
                         delete this[this.mode.qa + "_col"][array][num];
                     }
                 }
+                this.record_replay(array, num);
             }
         } else {
             if (this.drawing_mode === 100) { // single line, edge
@@ -8271,6 +8277,11 @@ class Puzzle {
                         this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
+                if (group_counter > 0) {
+                    this.record_replay(array, num, group_counter);
+                } else {
+                    this.record_replay(array, num);
+                }
                 if (group_counter === 0) { //group_counter > 0 belongs to automatic killer cage
                     this.drawing_mode = line_style;
                 }
@@ -8287,6 +8298,7 @@ class Puzzle {
                         this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
                     }
                 }
+                this.record_replay(array, num);
             }
         }
     }
