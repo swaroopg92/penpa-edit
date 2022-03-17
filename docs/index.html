@@ -27,8 +27,11 @@
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <link rel="apple-touch-icon" href="./css/images/logo.png" />
     <!-- STYLES -->
+    <!-- Online styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Local styles -->
     <script>
-        var ver = "2.26.17"; // Also defined in class_p.js
+        var ver = "2.26.18"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -108,16 +111,21 @@
             document.head.appendChild(script);
         }
     </script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Global site tag (gtag.js) - Google Analytics (support for this tag will end in June 2023)-->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180924087-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+        function gtag() {dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'UA-180924087-1');
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics (New GA4 Tag)-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WQYM10ZE7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-2WQYM10ZE7');
     </script>
 </head>
 
@@ -992,7 +1000,8 @@
                 <input type="button" id="address_edit" value="Editing URL" />
                 <input type="button" id="address_solve" value="Solving URL" />
                 <!--For Competitive Solving-->
-                <input type="button" id="address_comp" value="Contest-Mode URL" /><br />
+                <input type="button" id="address_comp" value="Contest-Mode URL" />
+                <input type="button" id="expansion_replay" value="Replay URL" style="display:none;" /> <br />
                 <input type="button" id="expansion" value="URL with Answer Check / Advanced Options" />
             </div>
             <div id="modal-save-body">
@@ -1233,6 +1242,17 @@
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-replay" class="modal">
+        <div id="modal-replay-content" class="modal-content">
+            <h3 class="modal-header">Share Replay</h3>
+            <div id="modal-replay-solution" class="nb_button">
+                <p><label id="replay_beta_warning">*Beta Version</label></p>
+                <input type="text" placeholder="Solver Name" value="" id="saveinfosolver" />
+                <br>
+                <input type="button" id="closeBtn_replay" value="Generate URL with Replay" />
             </div>
         </div>
     </div>
@@ -1488,8 +1508,8 @@
                                 <option value="1" selected="selected">ON</option>
                                 <option value="4">OFF</option>
                             </select><br>
-                            <button onclick="clear_storage_one()">Clear this puzzle</button><br>
-                            <button onclick="clear_storage_all()">Clear all</button>
+                            <button id="clear_storage_one" onclick="clear_storage_one()">Clear this puzzle</button><br>
+                            <button id="clear_storage_all" onclick="clear_storage_all()">Clear all</button>
                         </td>
                     </tr>
                 </table>

@@ -1,5 +1,6 @@
 ## History
-* 2022/**/**
+* 2022/03/17 ver 2.26.18
+	* Feature to share replay.
 	* Fixed an auto redirect bug for custom messages.
 	* Fixed an undo bug.
 	* Custom Color Support Added for Hex Grids.
