@@ -1942,6 +1942,8 @@ function load(urlParam, type = 'url') {
                     var t = pu[i][j].__a;
                     pu[i][j] = new Stack();
                     pu[i][j].set(t);
+                } else {
+                    pu[i][j] = new Stack();
                 }
             }
         }
@@ -2072,6 +2074,8 @@ function load(urlParam, type = 'url') {
                     var t = pu[i][j].__a;
                     pu[i][j] = new Stack();
                     pu[i][j].set(t);
+                } else {
+                    pu[i][j] = new Stack();
                 }
             }
         }
@@ -2212,6 +2216,8 @@ function load(urlParam, type = 'url') {
                         var t = pu[i][j].__a;
                         pu[i][j] = new Stack();
                         pu[i][j].set(t);
+                    } else {
+                        pu[i][j] = new Stack();
                     }
                 }
             }
