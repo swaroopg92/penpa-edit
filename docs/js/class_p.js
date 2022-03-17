@@ -24,7 +24,7 @@ class Stack {
     }
 
     push(o) {
-        if (this.__a.length > 1000) {
+        if (this.__a.length > 5000) {
             this.__a.shift();
         }
         this.__a.push(o);
@@ -6574,7 +6574,7 @@ class Puzzle {
         return text;
     }
 
-    undo() {
+    undo(replay = false) {
         var pu_mode = this.mode.qa;
         var undocounter = 1;
         let groupindex;
@@ -6674,7 +6674,9 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
+                    if (!replay) {
+                        this.redraw();
+                    }
                 }
             }
         } else {
@@ -6776,13 +6778,15 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
+                    if (!replay) {
+                        this.redraw();
+                    }
                 }
             }
         }
     }
 
-    redo() {
+    redo(replay = false) {
         var pu_mode = this.mode.qa;
         var redocounter = 1;
         let groupindex;
@@ -6878,7 +6882,9 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
+                    if (!replay) {
+                        this.redraw();
+                    }
                 }
             }
         } else {
@@ -6976,7 +6982,9 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
+                    if (!replay) {
+                        this.redraw();
+                    }
                 }
             }
         }
@@ -7027,52 +7035,41 @@ class Puzzle {
             this.pu_q.command_redo = new Stack();
             this.pu_q_col.command_redo = new Stack();
         } else {
-            if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe") && num === -1) {
-                this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
-                this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
-            } else if (arr === "killercages" && num === -1) {
-                this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
+            // Introducing timestamp for live replay (in milli seconds)
+            let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['seconds'])) * 1000;
+
+            let cutoff = 25 * 60 * 1000; // 25 min
+            if (timestamp > cutoff) {
+                timestamp = null;
+            }
+
+            if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
+                this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
                 this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
             } else if (arr === "move") {
-                this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa]); //num[0]:start_point num[1]:to_point
-                this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col"]); //num[0]:start_point num[1]:to_point
+                this.pu_a.command_undo.push([arr, num[0], num[1], this.mode.qa, groupcounter, timestamp]); //num[0]:start_point num[1]:to_point
+                this.pu_a_col.command_undo.push([arr, num[0], num[1], this.mode.qa + "_col", groupcounter]); //num[0]:start_point num[1]:to_point
             } else if (arr === "deletelineE") {
                 if (this.pu_a[arr][num]) {
-                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q"]); // Array is also recorded in JSON
-                    this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q_col"]); // Array is also recorded in JSON
+                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q", groupcounter, timestamp]); // Array is also recorded in JSON
+                    this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), "pu_q_col"], groupcounter); // Array is also recorded in JSON
                 } else {
-                    this.pu_a.command_undo.push([arr, num, null, "pu_q"]);
-                    this.pu_a_col.command_undo.push([arr, num, null, "pu_q_col"]);
+                    this.pu_a.command_undo.push([arr, num, null, "pu_q", groupcounter, timestamp]);
+                    this.pu_a_col.command_undo.push([arr, num, null, "pu_q_col", groupcounter]);
                 }
             } else {
                 if (this.pu_a[arr][num]) {
-                    if (groupcounter === 0) {
-                        this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
-                        } else {
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
-                        }
+                    this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter, timestamp]); // Array is also recorded in JSON
+                    if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") &&
+                        (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
+                            arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
+                        this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     } else {
-                        this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
-                        } else {
-                            this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
-                        }
+                        this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     }
                 } else {
-                    if (groupcounter === 0) {
-                        this.pu_a.command_undo.push([arr, num, null, this.mode.qa]);
-                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col"]);
-                    } else {
-                        this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter]);
-                        this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
-                    }
+                    this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
+                    this.pu_a_col.command_undo.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
                 }
             }
             this.pu_a.command_redo = new Stack();
