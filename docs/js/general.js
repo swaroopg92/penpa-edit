@@ -1963,6 +1963,7 @@ function load(urlParam, type = 'url') {
             if (rtext[7] !== "undefined") {
                 let starttime = rtext[7].split(":");
                 if (starttime.length === 4) {
+                    sw_timer.stop(); // stop previously running timer and start with stored starting time
                     sw_timer.start({
                         precision: 'secondTenths',
                         startValues: {
@@ -1973,6 +1974,7 @@ function load(urlParam, type = 'url') {
                         }
                     });
                 } else if (starttime.length === 5) { // added "days" precision in the recent update
+                    sw_timer.stop(); // stop previously running timer and start with stored starting time
                     sw_timer.start({
                         precision: 'secondTenths',
                         startValues: {
@@ -2279,6 +2281,9 @@ function load(urlParam, type = 'url') {
         }
 
         // Disable timer buttons
+        sw_timer.reset();
+        document.getElementById("timer").style.display = "none";
+        document.getElementById("stop_watch").style.display = "none";
         document.getElementById("sw_start").style.display = "none";
         document.getElementById("sw_pause").style.display = "none";
         document.getElementById("sw_reset").style.display = "none";
@@ -2291,6 +2296,31 @@ function load(urlParam, type = 'url') {
         document.getElementById("tb_undo").style.display = "none";
         document.getElementById("tb_redo").style.display = "none";
         document.getElementById("tb_reset").style.display = "none";
+
+        // Hide title, author, rules
+        document.getElementById("puzzletitle").style.display = 'none';
+        document.getElementById("puzzleauthor").style.display = 'none';
+        document.getElementById("puzzlerules").style.display = 'none';
+
+        // Show Solver Name and his time
+        if (paramArray.q) {
+            var qstr = JSON.parse(decrypt_data(paramArray.q));
+            let disptext = '';
+            if (document.getElementById("saveinfotitle").value) {
+                disptext += 'Title: ' + document.getElementById("saveinfotitle").value + ' | ';
+            }
+            if (document.getElementById("saveinfoauthor").value) {
+                disptext += 'Author: ' + document.getElementById("saveinfoauthor").value + ' | ';
+            }
+            if (qstr.sname) {
+                disptext += 'Solver: ' + qstr.sname + ' | ';
+            }
+            if (qstr.stime) {
+                disptext += 'Time: ' + qstr.stime + " (d:h:m:s:ts)";
+            }
+            document.getElementById("puzzletitle").innerHTML = disptext;
+            document.getElementById("puzzletitle").style.display = '';
+        }
     }
 }
 

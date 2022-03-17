@@ -3137,7 +3137,23 @@ class Puzzle {
             pu.redo(true);
         }
 
-        return text_head + "&r=" + replay;
+        // puzzle info
+        var puzzle_info = encrypt_data(JSON.stringify({
+            'sname': document.getElementById('saveinfosolver').value,
+            'stime': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
+        }));
+
+        // Warning Long URL
+        if ((text_head.length + puzzle_info.length + replay.length) >= MAX_EXPORT_LENGTH) {
+            Swal.fire({
+                title: 'Warning:',
+                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
+                icon: 'warning',
+                confirmButtonText: 'ok',
+            })
+        }
+
+        return text_head + "&q=" + puzzle_info + "&r=" + replay;
     }
 
     checkall_status() {

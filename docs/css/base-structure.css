@@ -946,9 +946,15 @@ body textarea {
     box-shadow: var(--shadow_mid);
 }
 
-#modal-save2-content,
-#modal-replay-content {
+#modal-save2-content {
     width: 450px;
+    max-height: calc(100% - 80px);
+    margin: 15px auto;
+    box-shadow: var(--shadow_mid);
+}
+
+#modal-replay-content {
+    width: 300px;
     max-height: calc(100% - 80px);
     margin: 15px auto;
     box-shadow: var(--shadow_mid);
@@ -1440,4 +1446,8 @@ sup {
     margin: 5px;
     font-size: 30px;
     padding: 2px;
+}
+
+#replay_beta_warning {
+    color: var(--red);
 }
