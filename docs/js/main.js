@@ -1204,6 +1204,10 @@ onload = function() {
                 expansion();
                 e.preventDefault();
                 break;
+            case "expansion_replay":
+                expansion_replay();
+                e.preventDefault();
+                break;
             case "address_comp":
                 savetext_comp();
                 e.preventDefault();
@@ -1238,6 +1242,10 @@ onload = function() {
                 break;
             case "closeBtn_save5":
                 savetext_withsolution();
+                e.preventDefault();
+                break;
+            case "closeBtn_replay":
+                savetext_withreplay();
                 e.preventDefault();
                 break;
             case "solution_open":
@@ -1723,6 +1731,31 @@ onload = function() {
                 break;
             case "puzzlerules":
                 display_rules();
+                e.preventDefault();
+                break;
+            case "replay_play":
+            case "replay_play_btn":
+                replay_play();
+                e.preventDefault();
+                break;
+            case "replay_pause":
+            case "replay_pause_btn":
+                replay_pause();
+                e.preventDefault();
+                break;
+            case "replay_reset":
+            case "replay_reset_btn":
+                replay_reset();
+                e.preventDefault();
+                break;
+            case "replay_forward":
+            case "replay_forward_btn":
+                replay_forward();
+                e.preventDefault();
+                break;
+            case "replay_backward":
+            case "replay_backward_btn":
+                replay_backward();
                 e.preventDefault();
                 break;
         }
