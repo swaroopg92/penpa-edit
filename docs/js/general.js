@@ -797,7 +797,7 @@ function replay_choice() {
         var undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
         // Live replay only if within time limit and there is timestamp data
-        if ((pu.puzzle_info.totalMS <= pu.replaycutoff) && ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
+        if ((pu.puzzleinfo.totalMS <= pu.replaycutoff) && ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
                 (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
 
             // hide forward, backward and speed buttons
