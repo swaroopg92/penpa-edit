@@ -2902,7 +2902,11 @@ class Puzzle {
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
         this.pu_a.command_redo.__a = [];
-        this.pu_a.command_undo.__a = [];
+        if (this.mmode === "solve") {
+            // Retain undo in solve mode
+        } else {
+            this.pu_a.command_undo.__a = [];
+        }
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
         this.pu_q.command_redo.__a = qr;
