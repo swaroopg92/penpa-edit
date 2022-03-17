@@ -851,16 +851,17 @@ function replay_choice() {
                     if (redo_len != 0) {
                         pu.redo(replay = true);
                     }
+                    redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
 
                     // redo is empty when redo_len reaches 1
-                    if (redo_len > 1) {
+                    if (redo_len > 0) {
                         undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
                         // get time-stamp (ts) of last action
                         let prev_ts = pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5];
 
                         // get time-stamp (ts) of next action
-                        let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 2][5];
+                        let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5];
 
                         // time difference
                         let mseconds = next_ts - prev_ts;
