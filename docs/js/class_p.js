@@ -176,6 +176,7 @@ class Puzzle {
             12: 1, // Dotted
             13: 1 // Fat dots
         };
+        this.replaycutoff = 25 * 60 * 1000; // 25 minutes
     }
 
     reset() {
@@ -7038,8 +7039,7 @@ class Puzzle {
             // Introducing timestamp for live replay (in milli seconds)
             let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['seconds'])) * 1000;
 
-            let cutoff = 25 * 60 * 1000; // 25 min
-            if (timestamp > cutoff) {
+            if (timestamp > this.replaycutoff) {
                 timestamp = null;
             }
 

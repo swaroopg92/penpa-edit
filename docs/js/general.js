@@ -797,7 +797,7 @@ function replay_choice() {
         var undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
         // Live replay only if within time limit and there is timestamp data
-        if (((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
+        if ((pu.puzzle_info.totalMS <= pu.replaycutoff) && ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
                 (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
 
             // hide forward, backward and speed buttons
@@ -2305,6 +2305,7 @@ function load(urlParam, type = 'url') {
         // Show Solver Name and his time
         if (paramArray.q) {
             var qstr = JSON.parse(decrypt_data(paramArray.q));
+            pu.puzzleinfo = qstr;
             let disptext = '';
             if (document.getElementById("saveinfotitle").value) {
                 disptext += 'Title: ' + document.getElementById("saveinfotitle").value + ' | ';
@@ -2320,6 +2321,11 @@ function load(urlParam, type = 'url') {
             }
             document.getElementById("puzzletitle").innerHTML = disptext;
             document.getElementById("puzzletitle").style.display = '';
+
+            // Calculate Total MS for later use
+            let solvetime = qstr.stime.split(':');
+            // Days, Hours, Min, Seconds, 10th Seconds
+            pu.puzzleinfo.totalMS = ((+solvetime[0]) * 24 * 60 * 60 + (+solvetime[1]) * 60 * 60 + (+solvetime[2]) * 60 + (+solvetime[3]) + (+solvetime[4]) * 0.1) * 1000;
         }
     }
 }
