@@ -849,7 +849,7 @@ function replay_choice() {
                 } else {
                     redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
                     if (redo_len != 0) {
-                        pu.redo();
+                        pu.redo(replay = true);
                     }
 
                     // redo is empty when redo_len reaches 1
@@ -930,7 +930,7 @@ function replay_play() {
         let speed_factor = parseFloat(document.getElementById("replay_speed").value);
         pu.replay_timer = setInterval(() => {
             if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-                pu.redo();
+                pu.redo(replay = true);
             } else {
                 clearInterval(pu.replay_timer);
             }
@@ -965,7 +965,7 @@ function replay_reset() {
         clearInterval(pu.replay_timer);
     }
     while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
-        pu.undo();
+        pu.undo(replay = true);
     }
     pu.first_click = true;
     sw_timer.reset();
@@ -974,7 +974,7 @@ function replay_reset() {
 function replay_backward() {
     clearInterval(pu.replay_timer);
     if (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
-        pu.undo();
+        pu.undo(replay = true);
     } else {
         pu.first_click = true;
     }
@@ -983,7 +983,7 @@ function replay_backward() {
 function replay_forward() {
     clearInterval(pu.replay_timer);
     if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-        pu.redo();
+        pu.redo(replay = true);
     }
 }
 
@@ -1935,12 +1935,14 @@ function load(urlParam, type = 'url') {
 
         // Because class cannot be copied, its set in different way
         let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-        let undo_redo = ["command_redo", "command_undo"];
+        let undo_redo = ["command_redo", "command_undo", "command_replay"];
         for (var i of pu_qa) {
             for (var j of undo_redo) {
-                var t = pu[i][j].__a;
-                pu[i][j] = new Stack();
-                pu[i][j].set(t);
+                if (typeof pu[i][j] != "undefined") {
+                    var t = pu[i][j].__a;
+                    pu[i][j] = new Stack();
+                    pu[i][j].set(t);
+                }
             }
         }
 
@@ -2063,12 +2065,14 @@ function load(urlParam, type = 'url') {
 
         // Because class cannot be copied, its set in different way
         let pu_qa = ["pu_q", "pu_q_col"];
-        let undo_redo = ["command_redo", "command_undo"];
+        let undo_redo = ["command_redo", "command_undo", "command_replay"];
         for (var i of pu_qa) {
             for (var j of undo_redo) {
-                var t = pu[i][j].__a;
-                pu[i][j] = new Stack();
-                pu[i][j].set(t);
+                if (typeof pu[i][j] != "undefined") {
+                    var t = pu[i][j].__a;
+                    pu[i][j] = new Stack();
+                    pu[i][j].set(t);
+                }
             }
         }
 
@@ -2201,12 +2205,14 @@ function load(urlParam, type = 'url') {
 
             // Because class cannot be copied, its set in different way
             let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-            let undo_redo = ["command_redo", "command_undo"];
+            let undo_redo = ["command_redo", "command_undo", "command_replay"];
             for (var i of pu_qa) {
                 for (var j of undo_redo) {
-                    var t = pu[i][j].__a;
-                    pu[i][j] = new Stack();
-                    pu[i][j].set(t);
+                    if (typeof pu[i][j] != "undefined") {
+                        var t = pu[i][j].__a;
+                        pu[i][j] = new Stack();
+                        pu[i][j].set(t);
+                    }
                 }
             }
             pu.redraw();
