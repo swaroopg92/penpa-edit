@@ -145,6 +145,7 @@ class Puzzle {
             ["\"board\"", "zB"],
             ["\"command_redo\"", "zR"],
             ["\"command_undo\"", "zU"],
+            ["\"command_replay\"", "z8"],
             ["\"numberS\"", "z1"],
             ["\"freeline\"", "zF"],
             ["\"freelineE\"", "z2"],
