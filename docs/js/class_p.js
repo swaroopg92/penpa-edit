@@ -7068,7 +7068,7 @@ class Puzzle {
             this.pu_q.command_redo = new Stack();
             this.pu_q_col.command_redo = new Stack();
         } else {
-            timestamp = null;
+            let timestamp = null;
 
             if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
