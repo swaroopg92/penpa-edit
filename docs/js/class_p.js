@@ -6789,7 +6789,7 @@ class Puzzle {
 
                     if (!replay) {
                         // Introducing timestamp for live replay (in milli seconds)
-                        let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['seconds'])) * 1000;
+                        let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['secondTenths'])) * 100;
                         if (timestamp > this.replaycutoff) {
                             timestamp = null;
                         }
@@ -7004,7 +7004,7 @@ class Puzzle {
 
                     if (!replay) {
                         // Introducing timestamp for live replay (in milli seconds)
-                        let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['seconds'])) * 1000;
+                        let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['secondTenths'])) * 100;
                         if (timestamp > this.replaycutoff) {
                             timestamp = null;
                         }
@@ -7068,11 +7068,7 @@ class Puzzle {
             this.pu_q.command_redo = new Stack();
             this.pu_q_col.command_redo = new Stack();
         } else {
-            // Introducing timestamp for live replay (in milli seconds)
-            let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['seconds'])) * 1000;
-            if (timestamp > this.replaycutoff) {
-                timestamp = null;
-            }
+            timestamp = null;
 
             if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
                 this.pu_a.command_undo.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
@@ -7111,7 +7107,7 @@ class Puzzle {
     record_replay(arr, num, groupcounter = 0) {
         if (this.mode.qa === "pu_a") {
             // Introducing timestamp for live replay (in milli seconds)
-            let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['seconds'])) * 1000;
+            let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['secondTenths'])) * 100;
             if (timestamp > this.replaycutoff) {
                 timestamp = null;
             }
