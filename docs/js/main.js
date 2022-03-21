@@ -1968,16 +1968,9 @@ onload = function() {
             !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
-            let pu_sub = {
-                'pu_q': pu.pu_q,
-                'pu_a': pu.pu_a,
-                'pu_q_col': pu.pu_q_col,
-                'pu_a_col': pu.pu_a_col,
-                'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
-            };
 
-            // encrypt data
-            let rstr = encrypt_data(JSON.stringify(pu_sub));
+            // generate duplicate link
+            let rstr = pu.maketext_duplicate() + "&l=solvedup";
 
             localStorage.setItem(hash, rstr);
         }

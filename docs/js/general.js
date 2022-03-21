@@ -7,7 +7,25 @@ function boot() {
 
     var urlParam = location.search.substring(1);
     if (urlParam) {
-        load(urlParam);
+
+        let param = urlParam.split('&');
+        let paramArray = [];
+
+        // Decompose address into elements
+        for (var i = 0; i < param.length; i++) {
+            let paramItem = param[i].split('=');
+            paramArray[paramItem[0]] = paramItem[1];
+        }
+
+        let hash = "penpa_" + md5(paramArray.p);
+
+        // Decrypt puzzle data
+        let local_data = localStorage.getItem(hash);
+        if (local_data && local_data.includes('&p=')) {
+            load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
+        } else {
+            load(urlParam);
+        }
     } else {
         create();
     }
@@ -1695,7 +1713,7 @@ function load_feedback() {
     })
 }
 
-function load(urlParam, type = 'url') {
+function load(urlParam, type = 'url', origurl = null) {
     var param = urlParam.split('&');
     var paramArray = [];
 
@@ -2117,18 +2135,6 @@ function load(urlParam, type = 'url') {
         if (view_settings[0] === 'dark') {
             UserSettings.color_theme = THEME_DARK;
         }
-
-        // This is not needed as it will never get called, but leaving it here for now
-        // if (view_settings[1]) {
-        //     if (view_settings[1] == 'responsive') {
-        //         document.getElementById("responsive_settings_opt").value = 2;
-        //         document.getElementById("app-container").classList.add("responsive");
-        //     } else if (view_settings[1] == 'responsive-flip') {
-        //         document.getElementById("responsive_settings_opt").value = 3;
-        //         document.getElementById("app-container").classList.add("responsive");
-        //         document.getElementById("app-container").classList.add("responsive-flip");
-        //     }
-        // }
     }
 
     // answerchecking settings for "OR"
@@ -2150,9 +2156,13 @@ function load(urlParam, type = 'url') {
     }
 
     // Save the Puzzle URL info - used as unique id for cache saving of progress
-    pu.url = paramArray.p;
+    if (origurl) {
+        pu.url = origurl;
+    } else {
+        pu.url = paramArray.p;
+    }
 
-    if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup")) {
+    if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup") && (type != "localstorage")) {
         // check for local progres
         // get md5 hash for unique id
         let hash = "penpa_" + md5(pu.url);
