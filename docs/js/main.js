@@ -1964,7 +1964,8 @@ onload = function() {
         let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting === "1") {
+            local_storage_setting === "1" &&
+            !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
             let pu_sub = {
