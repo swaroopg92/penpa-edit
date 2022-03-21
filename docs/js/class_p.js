@@ -6695,8 +6695,6 @@ class Puzzle {
             while (undocounter !== 0) {
                 var a = this.pu_a.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value, a[4]: groupindex (optional)*/
                 var a_col = this.pu_a_col.command_undo.pop();
-                var a_replay = [...a];
-                var a_col_replay = [...a_col];
                 if (a && a[4] && a[4] != 0) { // if part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
@@ -6718,6 +6716,10 @@ class Puzzle {
                     break;
                 }
                 if (a) {
+                    var a_replay = [...a];
+                    if (a_col) {
+                        var a_col_replay = [...a_col];
+                    }
                     // counter and timestamp
                     var a_45 = [],
                         a_4 = []; // for color array
