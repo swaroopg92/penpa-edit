@@ -2274,6 +2274,9 @@ function load(urlParam, type = 'url') {
         document.getElementById("puzzleauthor").style.display = 'none';
         document.getElementById("puzzlerules").style.display = 'none';
 
+        // Update title
+        document.getElementById("title").innerHTML = "Replay Mode"
+
         // Show Solver Name and his time
         if (paramArray.q) {
             var qstr = JSON.parse(decrypt_data(paramArray.q));

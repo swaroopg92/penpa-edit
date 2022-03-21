@@ -6801,8 +6801,10 @@ class Puzzle {
                         }
 
                         // Save the record
+                        a_replay[5] = timestamp;
                         this.pu_a.command_replay.push(a_replay);
                         if (a_col) {
+                            a_col_replay[5] = timestamp;
                             this.pu_a_col.command_replay.push(a_col_replay);
                         }
                     }
@@ -7016,8 +7018,10 @@ class Puzzle {
                         }
 
                         // Save the record
+                        a[5] = timestamp;
                         this.pu_a.command_replay.push(a);
                         if (a_col) {
+                            a_col[5] = timestamp;
                             this.pu_a_col.command_replay.push(a_col);
                         }
                     }
