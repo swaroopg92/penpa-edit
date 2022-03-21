@@ -6695,6 +6695,8 @@ class Puzzle {
             while (undocounter !== 0) {
                 var a = this.pu_a.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value, a[4]: groupindex (optional)*/
                 var a_col = this.pu_a_col.command_undo.pop();
+                var a_replay = [...a];
+                var a_col_replay = [...a_col];
                 if (a && a[4] && a[4] != 0) { // if part of group undo
                     if (!groupindex) {
                         groupindex = a[4];
@@ -6772,9 +6774,11 @@ class Puzzle {
 
                         if (a[2]) {
                             this[pu_mode][a[0]][a[1]] = JSON.parse(a[2]); //JSON.parse with decode
+                            a_replay[2] = JSON.parse(a[2]);
                             if (a_col) {
                                 if (a_col[2]) {
                                     this[pu_mode + "_col"][a_col[0]][a_col[1]] = JSON.parse(a_col[2]); //JSON.parse with decode
+                                    a_col_replay[2] = JSON.parse(a_col[2]);
                                 } else {
                                     this[pu_mode + "_col"][a_col[0]][a_col[1]] = null;
                                 }
@@ -6795,9 +6799,9 @@ class Puzzle {
                         }
 
                         // Save the record
-                        this.pu_a.command_replay.push(a);
+                        this.pu_a.command_replay.push(a_replay);
                         if (a_col) {
-                            this.pu_a_col.command_replay.push(a_col);
+                            this.pu_a_col.command_replay.push(a_col_replay);
                         }
                     }
 
