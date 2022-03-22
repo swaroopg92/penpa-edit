@@ -469,6 +469,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Haisu
 	* Hanare-gumi
 	* Hashiwokakero (Hashi/Bridges)
+	* Hebi-Ichigo
 	* Heyawake
 	* Hitori
 	* Juosan
@@ -503,6 +504,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Renban (Renban-Madoguchi)
 	* Ring-ring
 	* Ripple Effect
+	* Scrin
 	* Shakashaka
 	* Shikaku
 	* Shimaguni (Islands)
@@ -519,9 +521,11 @@ Depending on the browser you can update the page without using the cache with "C
 	* Symmetry Area
 	* Tapa
 	* Tapa-Like Loop
+	* Tasquare
 	* Tentaisho (Spiral Galaxies)
 	* Tents
 	* Toichika 2
+	* Uso-one
 	* Uso-tatami
 	* View
 	* Yajikazu (Yajisan-Kazusan)
