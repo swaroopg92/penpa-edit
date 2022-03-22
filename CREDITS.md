@@ -10,3 +10,4 @@
 * Thanks to <a href="https://github.com/nmay231"> nmay231 </a> for ongoing contributions to puzz.link parser in Penpa+.
 * Thanks to <a href="https://thegriddle.net"> davmillar </a> for ongoing contributions to redesign the GUI and refactoring the code.
 * Thanks to <a href="https://github.com/kieranclancy"> Kieran Clancy </a> for ongoing contributions to smart checking in Penpa+.
+* Thanks to <a href="https://github.com/BenceJoful"> BenceJoful </a> for assisting in updating custom color code for Hex Grid in Penpa+.

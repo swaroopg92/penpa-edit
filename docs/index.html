@@ -14,8 +14,11 @@
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <link rel="apple-touch-icon" href="./css/images/logo.png" />
     <!-- STYLES -->
+    <!-- Online styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Local styles -->
     <script>
-        var ver = "2.26.17"; // Also defined in class_p.js
+        var ver = "2.26.18"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -253,6 +256,7 @@
                                             <ul>
                                                 <li><span id="ms_triup_L">L</span></li>
                                                 <li><span id="ms_triup_M">M</span></li>
+                                                <li><span id="ms_triup_S">S</span></li>
                                                 <li><span id="ms_triup_SS">XS</span></li>
                                             </ul>
                                         </li>
@@ -260,6 +264,7 @@
                                             <ul>
                                                 <li><span id="ms_tridown_L">L</span></li>
                                                 <li><span id="ms_tridown_M">M</span></li>
+                                                <li><span id="ms_tridown_S">S</span></li>
                                                 <li><span id="ms_tridown_SS">XS</span></li>
                                             </ul>
                                         </li>
@@ -267,6 +272,7 @@
                                             <ul>
                                                 <li><span id="ms_triright_L">L</span></li>
                                                 <li><span id="ms_triright_M">M</span></li>
+                                                <li><span id="ms_triright_S">S</span></li>
                                                 <li><span id="ms_triright_SS">XS</span></li>
                                             </ul>
                                         </li>
@@ -274,6 +280,7 @@
                                             <ul>
                                                 <li><span id="ms_trileft_L">L</span></li>
                                                 <li><span id="ms_trileft_M">M</span></li>
+                                                <li><span id="ms_trileft_S">S</span></li>
                                                 <li><span id="ms_trileft_SS">XS</span></li>
                                             </ul>
                                         </li>
@@ -281,6 +288,7 @@
                                             <ul>
                                                 <li><span id="ms_diamond_L">L</span></li>
                                                 <li><span id="ms_diamond_M">M</span></li>
+                                                <li><span id="ms_diamond_S">S</span></li>
                                                 <li><span id="ms_diamond_SS">XS</span></li>
                                             </ul>
                                         </li>
@@ -744,19 +752,19 @@
         <div id="modal-new-content" class="modal-content">
             <h3 class="modal-header">New Grid</h3>
             <span id="modal-grid">
-                <h4><label class="label_nb" id="nb_type_lb">Board type:</label></h4>
+                <h4><label class="label_nb" id="nb_gridtype_lb">Board type:</label></h4>
                 <select id="gridtype" onchange="changetype()">
-                    <option value="square" id="nb_type1_lb" selected="selected">Square</option>
-                    <option value="hex" id="nb_type2_lb">Hexagon</option>
-                    <option value="tri" id="nb_type3_lb">Triangle</option>
-                    <option value="pyramid" id="nb_type4_lb">Pyramid</option>
-                    <option value="iso" id="nb_type5_lb">Cube</option>
-                    <option value="sudoku" id="nb_type6_lb">Sudoku</option>
-                    <option value="kakuro" id="nb_type7_lb">Kakuro</option>
-                    <option value="tetrakis_square" id="nb_type8_lb"> Tetrakis square </option>
-                    <option value="truncated_square" id="nb_type9_lb"> Truncated square </option>
-                    <option value="snub_square" id="nb_type10_lb"> Snub square </option>
-                    <option value="cairo_pentagonal" id="nb_type11_lb"> Cairo pentagonal </option>
+                    <option value="square" id="nb_gridtype1_lb" selected="selected">Square</option>
+                    <option value="hex" id="nb_gridtype2_lb">Hexagon</option>
+                    <option value="tri" id="nb_gridtype3_lb">Triangle</option>
+                    <option value="pyramid" id="nb_gridtype4_lb">Pyramid</option>
+                    <option value="iso" id="nb_gridtype5_lb">Cube</option>
+                    <option value="sudoku" id="nb_gridtype6_lb">Sudoku</option>
+                    <option value="kakuro" id="nb_gridtype7_lb">Kakuro</option>
+                    <option value="tetrakis_square" id="nb_gridtype8_lb"> Tetrakis square </option>
+                    <option value="truncated_square" id="nb_gridtype9_lb"> Truncated square </option>
+                    <option value="snub_square" id="nb_gridtype10_lb"> Snub square </option>
+                    <option value="cairo_pentagonal" id="nb_gridtype11_lb"> Cairo pentagonal </option>
                 </select>
             </span><br>
             <h4><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -973,7 +981,8 @@
                 <input type="button" id="address_edit" value="Editing URL" />
                 <input type="button" id="address_solve" value="Solving URL" />
                 <!--For Competitive Solving-->
-                <input type="button" id="address_comp" value="Contest-Mode URL" /><br />
+                <input type="button" id="address_comp" value="Contest-Mode URL" />
+                <input type="button" id="expansion_replay" value="Replay URL" style="display:none;" /> <br />
                 <input type="button" id="expansion" value="URL with Answer Check / Advanced Options" />
             </div>
             <div id="modal-save-body">
@@ -1201,6 +1210,8 @@
                             </td>
                         </tr>
                     </table>
+                    <h5 id="save6texttitle">Custom Message</h5>
+                    <textarea class="text_area" rows="1" cols="50" placeholder="Custom Congratulation Message on answer check pop up" id="custom_message"></textarea>
                     <br>
                     <input type="button" id="closeBtn_save5" value="Generate URL with answer check" />
                 </div>
@@ -1212,6 +1223,17 @@
                     <input type="button" id="pp_file" value="pp_file output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-replay" class="modal">
+        <div id="modal-replay-content" class="modal-content">
+            <h3 class="modal-header">Share Replay</h3>
+            <div id="modal-replay-solution" class="nb_button">
+                <p><label id="replay_beta_warning">*Beta Version</label></p>
+                <input type="text" placeholder="Solver Name" value="" id="saveinfosolver" />
+                <br>
+                <input type="button" id="closeBtn_replay" value="Generate URL with Replay" />
             </div>
         </div>
     </div>
@@ -1467,8 +1489,8 @@
                                 <option value="1" selected="selected">ON</option>
                                 <option value="4">OFF</option>
                             </select><br>
-                            <button onclick="clear_storage_one()">Clear this puzzle</button><br>
-                            <button onclick="clear_storage_all()">Clear all</button>
+                            <button id="clear_storage_one" onclick="clear_storage_one()">Clear this puzzle</button><br>
+                            <button id="clear_storage_all" onclick="clear_storage_all()">Clear all</button>
                         </td>
                     </tr>
                 </table>

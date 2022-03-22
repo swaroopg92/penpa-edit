@@ -226,6 +226,7 @@ onload = function() {
         if (e.target.type === "number" ||
             e.target.type === "text" ||
             e.target.id === "savetextarea_pp" ||
+            e.target.id === "custom_message" ||
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "select2_search" ||
@@ -813,6 +814,7 @@ onload = function() {
         if (e.target.type === "number" ||
             e.target.type === "text" ||
             e.target.id === "savetextarea_pp" ||
+            e.target.id === "custom_message" ||
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "saveinforules" ||
@@ -937,6 +939,9 @@ onload = function() {
         count_redo = 0;
         new_timer = setInterval(() => {
             count_undo++;
+            if (pu[pu.mode.qa].command_undo.__a.length === 0) {
+                clearInterval(new_timer);
+            }
             if (count_undo > 10) {
                 pu.undo();
             }
@@ -967,6 +972,9 @@ onload = function() {
         count_undo = 0;
         new_timer = setInterval(() => {
             count_redo++;
+            if (pu[pu.mode.qa].command_redo.__a.length === 0) {
+                clearInterval(new_timer);
+            }
             if (count_redo > 10) {
                 pu.redo();
             }
@@ -1196,6 +1204,10 @@ onload = function() {
                 expansion();
                 e.preventDefault();
                 break;
+            case "expansion_replay":
+                expansion_replay();
+                e.preventDefault();
+                break;
             case "address_comp":
                 savetext_comp();
                 e.preventDefault();
@@ -1230,6 +1242,10 @@ onload = function() {
                 break;
             case "closeBtn_save5":
                 savetext_withsolution();
+                e.preventDefault();
+                break;
+            case "closeBtn_replay":
+                savetext_withreplay();
                 e.preventDefault();
                 break;
             case "solution_open":
@@ -1717,6 +1733,31 @@ onload = function() {
                 display_rules();
                 e.preventDefault();
                 break;
+            case "replay_play":
+            case "replay_play_btn":
+                replay_play();
+                e.preventDefault();
+                break;
+            case "replay_pause":
+            case "replay_pause_btn":
+                replay_pause();
+                e.preventDefault();
+                break;
+            case "replay_reset":
+            case "replay_reset_btn":
+                replay_reset();
+                e.preventDefault();
+                break;
+            case "replay_forward":
+            case "replay_forward_btn":
+                replay_forward();
+                e.preventDefault();
+                break;
+            case "replay_backward":
+            case "replay_backward_btn":
+                replay_backward();
+                e.preventDefault();
+                break;
         }
         // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {
@@ -1912,7 +1953,6 @@ onload = function() {
     selectContainer.appendChild(liteModeButton);
 
     window.addEventListener('beforeunload', function(e) {
-        console.log(UserSettings.reload_button);
         if (UserSettings.reload_button === 1) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -1924,19 +1964,13 @@ onload = function() {
         let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting === "1") {
+            local_storage_setting === "1" &&
+            !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
-            let pu_sub = {
-                'pu_q': pu.pu_q,
-                'pu_a': pu.pu_a,
-                'pu_q_col': pu.pu_q_col,
-                'pu_a_col': pu.pu_a_col,
-                'timer': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
-            };
 
-            // encrypt data
-            let rstr = encrypt_data(JSON.stringify(pu_sub));
+            // generate duplicate link
+            let rstr = pu.maketext_duplicate() + "&l=solvedup";
 
             localStorage.setItem(hash, rstr);
         }
@@ -1960,7 +1994,7 @@ onload = function() {
             pu.redraw();
         } else if (document.getElementById("custom_color_opt").value === "2") {
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) &&
+            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" || pu.gridtype === "hex")) &&
                 (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
                 document.getElementById('style_special').style.display = 'inline';
             }

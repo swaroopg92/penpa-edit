@@ -898,7 +898,8 @@ body textarea {
 }
 
 #modal-save2,
-#modal-save-tag {
+#modal-save-tag,
+#modal-replay {
     display: none;
     position: fixed;
     z-index: 3;
@@ -947,6 +948,13 @@ body textarea {
 
 #modal-save2-content {
     width: 450px;
+    max-height: calc(100% - 80px);
+    margin: 15px auto;
+    box-shadow: var(--shadow_mid);
+}
+
+#modal-replay-content {
+    width: 300px;
     max-height: calc(100% - 80px);
     margin: 15px auto;
     box-shadow: var(--shadow_mid);
@@ -1037,7 +1045,8 @@ body textarea {
     width: 40px;
 }
 
-#modal-save2-solution {
+#modal-save2-solution,
+#modal-replay-solution {
     padding-left: 5px;
     padding-right: 5px;
     padding-top: 10px;
@@ -1430,4 +1439,15 @@ sup {
         display: block;
         text-align: center;
     }
+}
+
+/* Replay */
+.replay {
+    margin: 5px;
+    font-size: 30px;
+    padding: 2px;
+}
+
+#replay_beta_warning {
+    color: var(--red);
 }

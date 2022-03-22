@@ -1,4 +1,23 @@
 ## History
+* 2022/03/17 ver 2.26.18
+	* Feature to share replay.
+	* Fixed an auto redirect bug for custom messages.
+	* Fixed an undo bug.
+	* Custom Color Support Added for Hex Grids.
+	* Added Small Sized Shapes to Triangle and Diamonds.
+* 2022/03/08 ver 2.26.17
+	* Screenshot bug fixed for svg.
+	* Improvements to smart checking for TomTom grid.
+	* Added consecutive pair answer checking.
+	* Rassi Sillai Composite Mode Added.
+	* Updated tests to snapshot specific properties rather than url.
+	* Increased max grid size to 100.
+	* Improvements to answer checking.
+	* Added more attributes to html tag.
+	* Added tags to puzz-link imported puzzles.
+	* Improvements to Cursor and CursoL transition.
+	* Fixed bug for consecutive smart checking.
+	* Custom answer check message.
 * 2022/02/09 ver 2.26.16
 	* Directly generate tinyurl (Optional).
 	* Bookmarklet to open puzz.link, pzv, pzprxs, other penpa forks in Penpa+ with a single click.
