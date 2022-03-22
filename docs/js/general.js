@@ -3467,14 +3467,18 @@ function decode_puzzlink(url) {
             pu.user_tags = [type === "midloop" ? "midloop" : "tentaisho (spiral galaxies)"];
             break;
         case "castle":
+        case "hebi":
+        case "snakes": // hebi alias
         case "yajikazu":
         case "yajilin":
         case "yajirin": // yajilin alias
             if (type === "yajirin") {
                 type = "yajilin";
+            } else if (type === "snakes") {
+                type = "hebi";
             }
             // Yajikazu and some Yajilin puzzles don't shade cells
-            var skip_shading = type !== "castle";
+            var skip_shading = type !== "castle" && type !== "hebi";
 
             // Yajilin changes the url format to indicate shading or not
             if (urldata[1] === "b") {
@@ -3521,7 +3525,7 @@ function decode_puzzlink(url) {
                 }
 
                 // Add arrow and number
-                var shading = arrows[i][2];
+                var shading = type === "hebi" ? 2 : arrows[i][2];
                 pu["pu_q"].number[cell] = [number, shading === 2 ? 7 : 1, "2"];
 
                 // Background shading
@@ -3539,7 +3543,6 @@ function decode_puzzlink(url) {
                 ];
 
                 // Borders
-                var edgex, edgey;
                 for (var e of cell_edges) {
                     edgex = e[0];
                     edgey = e[0] + e[1];
@@ -3566,24 +3569,23 @@ function decode_puzzlink(url) {
             if (type === "yajikazu") {
                 pu.mode_set("surface");
                 UserSettings.tab_settings = ["Surface"];
+            } else if (type === "hebi") {
+                pu.mode_set("number");
+                UserSettings.tab_settings = ["Surface", "Number Normal"];
             } else {
                 pu.mode_set("combi");
                 pu.subcombimode("linex");
                 UserSettings.tab_settings = ["Surface", "Composite"];
             }
 
-            // Set tags
-            switch (type) {
-                case "castle":
-                    pu.user_tags = ['castlewall'];
-                    break;
-                case "yajikazu":
-                    pu.user_tags = ['yajikazu (yajisan-kazusan)'];
-                    break;
-                case "yajilin":
-                    pu.user_tags = ['yajilin'];
-                    break;
+            // Convert the abreviated type name to the long form
+            map_genre_tag = {
+                castle: "castlewall",
+                yajikazu: "yajikazu (yajisan-kazusan)",
+                hebi: "hebi-ichigo",
             }
+            // Set tags
+            pu.user_tags = [map_genre_tag[type] || type];
             break;
         case "tapa":
         case "tapaloop":
@@ -4329,6 +4331,63 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Number Normal", "Sudoku Normal"];
             pu.user_tags = [type]; // Genre tags
             break;
+        case "usoone":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber4();
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface");
+            pu.subcombimode("lineox"); // Allow user to circle/cross out liars
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ["usoone"];
+            break;
+        case "scrin":
+            pu = new Puzzle_square(cols, rows, size);
+            // Draw grid dots only
+            pu.mode_grid("nb_grid3");
+            pu.mode_grid("nb_lat1");
+            pu.mode_grid("nb_out2");
+
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 6, "1", true);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgex");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ["scrin"];
+            break;
+        case "tasquare":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", true);
+
+            for (var i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].symbol[cell] = [1, "square_L", 1]; // Large square
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blpo");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            // Set tags
+            pu.user_tags = ['tasquare'];
+            break;
         default:
             Swal.fire({
                 title: 'Swaroop says:',
@@ -4370,7 +4429,7 @@ function decode_puzzlink(url) {
 
     // Set the Source
     document.getElementById("saveinfosource").value = url;
-    // // Set the tags
+    // Set the tags
     set_genre_tags(pu.user_tags);
 }
 

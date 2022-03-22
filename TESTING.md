@@ -196,6 +196,13 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Hebi-Ichigo</summary>
+
+* https://puzz.link/p?hebi/10/10/k0.04a32c14l350.a40a23a11b44p40b0.a0.a40a0.25l0.c23a214.k
+* https://puzz.link/p?hebi/5/5/g13c31g35c12a
+
+</details>
+<details>
 <summary>Heyawake</summary>
 
 * https://puzz.link/p?heyawake/10/10/0k18ih52a4k9800000003g00000000vv00008g57b
@@ -494,6 +501,13 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Scrin</summary>
+
+* https://puzz.link/p?scrin/10/10/g.p7u5p.j.zi3m3m3u
+* https://puzz.link/p?scrin/9/9/j3l2i4h1m5zh6zi3k2g
+
+</details>
+<details>
 <summary>Shakashaka</summary>
 
 * https://puzz.link/p?shakashaka/10/10/g.zkbibvcicrbq.r
@@ -639,6 +653,13 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Tasquare</summary>
+
+* https://puzz.link/p?tasquare/10/10/.i.h.h.i.h.h1i2i4h2i5i1z1i6iah2ibi9h.h.i.h.h.i./
+* https://puzz.link/p?tasquare/10/10/.n.i+fffm-ffj+100m-10i2g.k2l2k2k2k2k2k.l.j2i./
+
+</details>
+<details>
 <summary>Tents</summary>
 
 * https://puzz.link/p?tents/20/20/py0o001123456789abcdefghi0j0k0l0m0n0o0p0q0r0s0t0u0v0w0x0y0z00jkl0
@@ -664,6 +685,13 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 * https://puzz.link/p?toichika2/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48
 * https://puzz.link/p?toichika2/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g
 * https://puzz.link/p?toichika2/20/15/10156ggr62indoe611d38431oonjrhv7hltmb6t90d6hdme4rc8jcp26ge7vo7vvo32vk8tv1v7uefro67hg208e82hg953tva7tu0fg0fv6m1u0ei5g24k54g2l7g557k92h3g3g2g3
+
+</details>
+<details>
+<summary>Uso-one</summary>
+
+* https://puzz.link/p?usoone/10/10/14i94i94i284g90408v0000000vv0000vv0067c56dh77cdgbgbgcg25dicjbg2768dh7bichdgc7bab
+* https://puzz.link/p?usoone/10/10/284g90i14488gh122400000007vo003o0000r.93bckahddcdgdocidb2clbh8cichc
 
 </details>
 <details>
