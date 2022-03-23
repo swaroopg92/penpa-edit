@@ -802,6 +802,26 @@ function submit_solution(e) {
             sol = sol.sort();
             solution = sol.join(':');
             break;
+        case "voxas":
+            // Answer - Line
+            let sol = [];
+            for (var i in pu.pu_a.lineE) {
+                if ((pu.frame[i] && pu.frame[i] === 2) ||
+                    (pu.pu_q.lineE[i] && pu.pu_q.lineE[i] === 2)) {
+                    // Ignore the Edge
+                } else {
+                    if (pu.pu_a.lineE[i] === 3 || // Green
+                        pu.pu_a.lineE[i] === 2 || // Black
+                        pu.pu_a.lineE[i] === 5 || // Grey
+                        pu.pu_a.lineE[i] === 8 || // Red
+                        pu.pu_a.lineE[i] === 9) { // Blue
+                        sol.push(i);
+                    }
+                }
+            }
+            sol = sol.sort();
+            solution = sol.join(':');
+            break;
     }
     const data = {
         contest: pu.puzzle_info.cid,
@@ -905,7 +925,7 @@ function submit_solution(e) {
         })
         .catch(function(err) {
             Swal.fire({
-                title: '<h3 class="warn">Something went wrong</h3>',
+                title: '<h3 class="warn">Something went wrong while connecting to the LMI Server</h3>',
                 html: '<h2 class="warn">Try again</h2>',
                 icon: 'error',
                 confirmButtonText: 'Try Again',
@@ -4413,10 +4433,10 @@ function load_from_server(paramArray, type) {
                 if (response.showLoad) {
                     i_url();
                 } else {
-                Swal.fire({
-                    html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
-                    icon: 'error'
-                });
+                    Swal.fire({
+                        html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
+                        icon: 'error'
+                    });
                 }
             }
             if (response.q) {

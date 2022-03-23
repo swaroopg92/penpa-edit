@@ -6660,6 +6660,22 @@ class Puzzle {
                 }
                 sol = sol.sort();
                 text = sol.join(':');
+            } else if (header === "voxas_contest" ||
+                header === "vc") {
+                // Answer - Line Segments
+                let sol = [];
+                for (var i in this.pu_a.lineE) {
+                    if ((this.frame[i] && this.frame[i] === 2) ||
+                        (this.pu_q.lineE[i] && this.pu_q.lineE[i] === 2)) {
+                        // Ignore the Edge
+                    } else {
+                        if (this.pu_a.lineE[i] === 3) {
+                            sol.push(i);
+                        }
+                    }
+                }
+                sol = sol.sort();
+                text = sol.join(':');
             } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
