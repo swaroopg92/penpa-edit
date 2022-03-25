@@ -177,7 +177,7 @@ class Puzzle {
             12: 1, // Dotted
             13: 1 // Fat dots
         };
-        this.replaycutoff = 25 * 60 * 1000; // 25 minutes
+        this.replaycutoff = 60 * 60 * 1000; // 60 minutes
     }
 
     reset() {
