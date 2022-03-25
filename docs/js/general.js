@@ -823,7 +823,6 @@ function replay_choice() {
             document.getElementById("replay_backward").style.display = "none";
             document.getElementById("replay_forward_btn").style.display = "none";
             document.getElementById("replay_backward_btn").style.display = "none";
-            document.getElementById("replay_speed").style.display = "none";
 
             // Hide play button while its playing
             document.getElementById("replay_play").style.display = "none";
@@ -871,12 +870,18 @@ function replay_choice() {
                     }
                     redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
 
+                    let speed_factor = parseFloat(document.getElementById("replay_speed").value);
+
                     // redo is empty when redo_len reaches 1
                     if (redo_len > 0) {
                         undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
                         // get time-stamp (ts) of last action
                         let prev_ts = pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5];
+
+                        // Fast forward the timer
+                        sw_timer.reset();
+                        sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
 
                         // get time-stamp (ts) of next action
                         let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5];
@@ -885,8 +890,17 @@ function replay_choice() {
                         let mseconds = next_ts - prev_ts;
 
                         // initiate wait
-                        setTimeout(pu.live_replay, mseconds);
+                        setTimeout(pu.live_replay, mseconds * (1 / speed_factor));
                     } else {
+                        undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
+
+                        // get time-stamp (ts) of last action
+                        let prev_ts = pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5];
+
+                        // Fast forward the timer
+                        sw_timer.reset();
+                        sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+
                         // replay has ended and stop the timer
                         sw_timer.stop();
                     }
@@ -987,6 +1001,7 @@ function replay_reset() {
         pu.undo(replay = true);
     }
     pu.first_click = true;
+    sw_timer.start({ startValues: { seconds: 0 } });
     sw_timer.reset();
 }
 
