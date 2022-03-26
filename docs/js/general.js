@@ -4432,6 +4432,7 @@ function load_from_server(paramArray, type) {
         .then(function(response) {
             if (response.success === false) {
                 if (response.showLoad) {
+                    create();
                     i_url();
                 } else {
                     Swal.fire({
