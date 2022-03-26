@@ -763,6 +763,7 @@ function display_rules() {
 
 function submit_solution(e) {
     let solution = "";
+    let sol = [];
     switch (pu.puzzle_info.genre) {
         case "tapa":
         case "kurotto":
@@ -785,7 +786,7 @@ function submit_solution(e) {
             break;
         case "rassisillai":
             // Answer - Line
-            let sol = [];
+            sol = [];
             for (var i in pu.pu_a.line) {
                 if (pu.pu_q.line[i] && pu.ignored_line_types[pu.pu_q.line[i]]) {
                     // Ignore the line
@@ -804,7 +805,7 @@ function submit_solution(e) {
             break;
         case "voxas":
             // Answer - Line
-            let sol = [];
+            sol = [];
             for (var i in pu.pu_a.lineE) {
                 if ((pu.frame[i] && pu.frame[i] === 2) ||
                     (pu.pu_q.lineE[i] && pu.pu_q.lineE[i] === 2)) {
