@@ -1372,7 +1372,7 @@ sup {
 @media (min-width: 850px) {
     #app-container.responsive {
         display: grid;
-        grid-template-columns: 1fr 225px 600px 1fr;
+        grid-template-columns: 1fr 26fr 40fr 1fr;
     }
 
     #app-container.responsive #tool-container {
@@ -1385,7 +1385,7 @@ sup {
 
     #app-container.responsive.responsive-flip {
         display: grid;
-        grid-template-columns: 1fr 600px 225px 1fr;
+        grid-template-columns: 1fr 40fr 26fr 1fr;
     }
 
     #app-container.responsive.responsive-flip #tool-container {
