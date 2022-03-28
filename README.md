@@ -472,6 +472,9 @@ Depending on the browser you can update the page without using the cache with "C
 	* Hebi-Ichigo
 	* Heyawake
 	* Hitori
+	* Ichimaga
+	* Ichimagam (Magnetic Ichimaga)
+	* Ichimagamx (Crossing Ichimaga)
 	* Juosan
 	* Kakuro
 	* Kropki
@@ -484,6 +487,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Maxi Loop
 	* Meandering Numbers
 	* Midloop
+	* Minesweeper
 	* Mochikoro
 	* Mochinyoro
 	* Moon or Sun
@@ -524,6 +528,7 @@ Depending on the browser you can update the page without using the cache with "C
 	* Tasquare
 	* Tentaisho (Spiral Galaxies)
 	* Tents
+	* Territory (Nawabari)
 	* Toichika 2
 	* Uso-one
 	* Uso-tatami
