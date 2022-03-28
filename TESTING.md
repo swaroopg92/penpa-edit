@@ -224,6 +224,25 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Ichimaga</summary>
+
+* https://puzz.link/p?ichimaga/14/10/cdlcicdehcg2ddkbhddgdhbjbhcbcj8bg6bbjdhbgcgbbi6cgcbc
+* https://puzz.link/p?ichimaga/7/7/o6dgdgbhch.ibg7.o
+
+</details>
+<details>
+<summary>Ichimagam (Magnetic Ichimaga)</summary>
+
+* https://puzz.link/p?ichimagam/7/7/o6dgdgbhch.ibg7.o
+
+</details>
+<details>
+<summary>Ichimagamx (Crossing Ichimaga)</summary>
+
+* https://puzz.link/p?ichimagax/7/7/o6dgdgbhch.ibg7.o
+
+</details>
+<details>
 <summary>Juosan</summary>
 
 * https://puzz.link/p?juosan/8/8/c3000000000003g00000000042g
@@ -304,14 +323,6 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
-<summary>Midloop</summary>
-
-* https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz
-* https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg
-* https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi
-
-</details>
-<details>
 <summary>Maxi Loop</summary>
 
 * https://puzz.link/p?maxi/10/10/37e0001tug030kdb00c2d00299pbgg3hg5j44s
@@ -325,6 +336,21 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 * https://puzz.link/p?meander/6/6/d01gb04gc6sezv
 * https://puzz.link/p?meander/10/10/0105187060b050g000funo7ivg02fo827s00zzzzz
 * https://puzz.link/p?meander/10/10/11bindeqt11bin5easc8c60000vvf8300700i8n2zzk8zt1k1
+
+</details>
+<details>
+<summary>Midloop</summary>
+
+* https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz
+* https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg
+* https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi
+
+</details>
+<details>
+<summary>Minesweeper</summary>
+
+* https://puzz.link/p?mines/4/6/2h1k14h23k1h2
+* https://puzz.link/p?mines/10/10/2g4i2g2k33j4h3h3g1i3j3h23h43h3h3h34h32h3j3i2g3h3h3j33k2g2i3g1
 
 </details>
 <details>
@@ -660,6 +686,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Tentaisho (Spiral Galaxies)</summary>
+
+* https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze
+* https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em
+* https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl
+* https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe
+
+</details>
+<details>
 <summary>Tents</summary>
 
 * https://puzz.link/p?tents/20/20/py0o001123456789abcdefghi0j0k0l0m0n0o0p0q0r0s0t0u0v0w0x0y0z00jkl0
@@ -671,12 +706,10 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
-<summary>Tentaisho (Spiral Galaxies)</summary>
+<summary>Territory (Nawabari)</summary>
 
-* https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze
-* https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em
-* https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl
-* https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe
+* https://puzz.link/p?nawabari/9/9/b3c2k1b3a2b2b2c3m2c3b2b1a3b2k4c2b
+* https://puzz.link/p?nawabari/10/10/c.h3c2f1d2b3c4a4a3c1l3c3a2a3c2b2d2f3c2h.c
 
 </details>
 <details>

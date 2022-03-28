@@ -124,6 +124,13 @@ describe("puzz.link parser", () => {
         ["Hitori 2", "https://puzz.link/p?hitori/8/8/.%.632..1.6..1.12.23..%3.%7..7..5.6.35%..7.7..7.2.%6.2.%.1..1.1./"],
         ["Hitori 3", "https://puzz.link/p?hitori/8/8/8416325715684121262378436475273858613542475783762346528431821615"],
         ["Hitori 4", "https://puzz.link/p?hitori/9/6/number15burgerkingfootlettucethelastthingyouwantinyourburger"],
+        // Ichimaga
+        ["Ichimaga 1", "https://puzz.link/p?ichimaga/14/10/cdlcicdehcg2ddkbhddgdhbjbhcbcj8bg6bbjdhbgcgbbi6cgcbc"],
+        ["Ichimaga 2", "https://puzz.link/p?ichimaga/7/7/o6dgdgbhch.ibg7.o"],
+        // Ichimagam (Magnetic Ichimaga)
+        ["Ichimagam (Magnetic Ichimaga) 1", "https://puzz.link/p?ichimagam/7/7/o6dgdgbhch.ibg7.o"],
+        // Ichimagamx (Crossing Ichimaga)
+        ["Ichimagamx (Crossing Ichimaga) 1", "https://puzz.link/p?ichimagax/7/7/o6dgdgbhch.ibg7.o"],
         // Juosan
         ["Juosan 1", "https://puzz.link/p?juosan/8/8/c3000000000003g00000000042g"],
         ["Juosan 2", "https://puzz.link/p?juosan/11/12/04fu7ukjl4btl6idrvifnvrtrvs0vd9vrshu97v9kiv4p4410ag1421521322524622g5g184551g134231g"],
@@ -166,10 +173,6 @@ describe("puzz.link parser", () => {
         ["Masyu 1", "https://puzz.link/p?masyu/15/10/i0a02000000ik20620i6i0a021c049c209490j0100a0019329"],
         ["Masyu 2", "https://puzz.link/p?mashu/13/9/013009k10a3a39310c9313693i016030j039a20"],
         ["Masyu 3", "https://puzz.link/p?pearl/v:/10/10/000000060i23601000000001i200f90000"],
-        // Mid-loop
-        ["Mid-loop 1", "https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz"],
-        ["Mid-loop 2", "https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg"],
-        ["Mid-loop 3", "https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi"],
         // Maxi Loop
         ["Maxi Loop 1", "https://puzz.link/p?maxi/10/10/37e0001tug030kdb00c2d00299pbgg3hg5j44s"],
         ["Maxi Loop 2", "https://puzz.link/p?maxi/24/16/424k150i894l5b98il295aiaa599aakl5ahakla5aikl9aaah995ai92l4abaiki8942i0kh0g4u020i1sjo9s4of43620jpgj68c4pj75001g1g00kspj462cp1jp08co4u347i3p7g9080f4673759b64879768352663589664786467589b685b"],
@@ -178,6 +181,13 @@ describe("puzz.link parser", () => {
         ["Meandering Numbers 2", "https://puzz.link/p?meander/6/6/d01gb04gc6sezv"],
         ["Meandering Numbers 3", "https://puzz.link/p?meander/10/10/0105187060b050g000funo7ivg02fo827s00zzzzz"],
         ["Meandering Numbers 4", "https://puzz.link/p?meander/10/10/11bindeqt11bin5easc8c60000vvf8300700i8n2zzk8zt1k1"],
+        // Mid-loop
+        ["Mid-loop 1", "https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz"],
+        ["Mid-loop 2", "https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg"],
+        ["Mid-loop 3", "https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi"],
+        // Minesweeper
+        ["Minesweeper 1", "https://puzz.link/p?mines/4/6/2h1k14h23k1h2"],
+        ["Minesweeper 2", "https://puzz.link/p?mines/10/10/2g4i2g2k33j4h3h3g1i3j3h23h43h3h3h34h32h3j3i2g3h3h3j33k2g2i3g1"],
         // Mochikoro
         ["Mochikoro 1", "https://puzz.link/p?mochikoro/10/10/..3l4k3j2u6i3m3r2w4i4l2j2g3h"],
         ["Mochikoro 2", "https://puzz.link/p?mochikoro/10/10/4t4i35zq3y+100k2r3j-10i"],
@@ -349,6 +359,11 @@ describe("puzz.link parser", () => {
         // Tasquare
         ["Tasquare 1", "https://puzz.link/p?tasquare/10/10/.i.h.h.i.h.h1i2i4h2i5i1z1i6iah2ibi9h.h.i.h.h.i./"],
         ["Tasquare 2", "https://puzz.link/p?tasquare/10/10/.n.i+fffm-ffj+100m-10i2g.k2l2k2k2k2k2k.l.j2i./"],
+        // Tentaisho (Spiral Galaxies)
+        ["Tentaisho 1", "https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze"],
+        ["Tentaisho 2", "https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em"],
+        ["Tentaisho 3", "https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl"],
+        ["Tentaisho 4", "https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe"],
         // Tents
         ["Tents 1", "https://puzz.link/p?tents/20/20/py0o001123456789abcdefghi0j0k0l0m0n0o0p0q0r0s0t0u0v0w0x0y0z00jkl0"],
         ["Tents 2", "https://puzz.link/p?tents/9/9/2i2i1i221i31a0c42124b1a112"],
@@ -356,11 +371,9 @@ describe("puzz.link parser", () => {
         ["Tents 4", "https://puzz.link/p?tents/12/11/g111h1h11g1213i21g1ndd2240hzl0978h"],
         ["Tents 5", "https://puzz.link/p?tents/10/10/zj1861a2163d2181182112"],
         ["Tents 6", "https://puzz.link/p?tents/8/8/g1g1g1g11g1g1g1gj2263a353d31"],
-        // Tentaisho (Spiral Galaxies)
-        ["Tentaisho 1", "https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze"],
-        ["Tentaisho 2", "https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em"],
-        ["Tentaisho 3", "https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl"],
-        ["Tentaisho 4", "https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe"],
+        // Territory (Nawabari)
+        ["Territory (Nawabari) 1", "https://puzz.link/p?nawabari/9/9/b3c2k1b3a2b2b2c3m2c3b2b1a3b2k4c2b"],
+        ["Territory (Nawabari) 2", "https://puzz.link/p?nawabari/10/10/c.h3c2f1d2b3c4a4a3c1l3c3a2a3c2b2d2f3c2h.c"],
         // Toichika 2
         ["Toichika-2 1", "https://puzz.link/p?toichika2/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
         ["Toichika-2 2", "https://puzz.link/p?toichika2/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g"],
