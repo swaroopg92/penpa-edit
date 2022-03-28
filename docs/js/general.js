@@ -3464,7 +3464,7 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             // Set tags
-            pu.user_tags = [type === "midloop" ? "midloop" : "tentaisho (spiral galaxies)"];
+            pu.user_tags = [type === "midloop" ? "midloop" : "spiralgalaxies"];
             break;
         case "castle":
         case "hebi":
