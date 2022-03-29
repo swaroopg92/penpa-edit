@@ -7557,7 +7557,7 @@ class Puzzle {
                                                 for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
                                                     this.record("numberS", side_cursor + j - 4, this.undoredo_counter);
                                                     this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                                    this.record_play("numberS", side_cursor + j - 4, this.undoredo_counter);
+                                                    this.record_replay("numberS", side_cursor + j - 4, this.undoredo_counter);
                                                 }
                                             }
                                         }
