@@ -2282,6 +2282,9 @@ function load(urlParam, type = 'url', origurl = null) {
         // set the mode to surface, so that no cursor is shown
         pu.mode_set("surface"); //include redraw
 
+        // Turn Panel Off if its ON
+        panel_off();
+
         // hide everything except grid
         document.getElementById("top_button").style.display = "none";
         document.getElementById("buttons").style.display = "none";
