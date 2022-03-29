@@ -24,7 +24,8 @@ class Puzzle_hex extends Puzzle {
             "degital_f": 7,
             "arrow_eight": 6,
             "dice": 9,
-            "polyomino": 9
+            "polyomino": 9,
+            "polyhex": 7
         };
         this.reset();
         this.erase_buttons();
@@ -1598,6 +1599,15 @@ class Puzzle_hex extends Puzzle {
             case "polyomino":
                 this.draw_polyomino(ctx, num, x, y);
                 break;
+            case "polyhex":
+                this.draw_polyhex(ctx, num, x, y);
+                // if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                //     this[qamode + "_col"].symbol[i]) {
+                //     this.draw_polyhex(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
+                // } else {
+                //     this.draw_polyhex(ctx, num, x, y);
+                // }
+                break;
                 //case "pencils":
                 //  this.draw_pencils(ctx,num,x,y);
                 //  break;
@@ -2887,7 +2897,30 @@ class Puzzle_hex extends Puzzle {
             }
         }
     }
-
+    draw_polyhex(ctx, num, x, y, ccolor = "none") {
+        ctx.setLineDash([]);
+        if (ccolor !== "none") {
+            ctx.fillStyle = ccolor;
+        } else {
+            ctx.fillStyle = Color.GREY_LIGHT;
+        }
+        ctx.strokeStyle = Color.BLACK;
+        ctx.lineWidth = 1.2;
+        ctx.lineCap = "butt";
+        var r = 0.2;
+        var degrees = [-120,-60,180,null,0,120,60];
+        var r2 = r * 1.23;
+        for (var i = 0; i < 7; i++) {
+            if (num[i] === 1) {
+                if (i==3){
+                    this.draw_polygon(ctx, x, y, r * 0.5 * Math.sqrt(2), 6, 30);
+                }else{
+                    this.draw_polygon(ctx, x + pu.size * r2 * Math.cos(degrees[i] * Math.PI / 180), y + pu.size * r2 * Math.sin(degrees[i] * Math.PI / 180), r * 0.5 * Math.sqrt(2), 6, 30);
+                }
+            }
+        }
+    }
+    
     rotate_theta(th) {
         th = (th + this.theta);
         if (this.reflect[0] === -1) { th = (180 - th + 360) % 360; }

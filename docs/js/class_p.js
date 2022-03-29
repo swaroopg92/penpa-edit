@@ -2510,6 +2510,7 @@ class Puzzle {
                     break;
                 case "ms_sudokuetc":
                 case "ms_polyomino":
+                case "ms_polyhex":
                 case "ms_neighbors":
                     $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
                     break;
