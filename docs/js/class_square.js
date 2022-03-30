@@ -2550,7 +2550,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_polyhex(ctx, num, x, y);
                 }
                 break;
-                        case "pencils":
+            case "pencils":
                 if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_pencils(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
