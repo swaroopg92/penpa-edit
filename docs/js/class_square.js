@@ -2008,6 +2008,96 @@ class Puzzle_square extends Puzzle {
                 }
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
                 break;
+            case "hexpoint_LL":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.48, 6, 30);
+                break;
+            case "hexpoint_L":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.4, 6, 30);
+                break;
+            case "hexpoint_M":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.3, 6, 30);
+                break;
+            case "hexpoint_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.2, 6, 30);
+                break;
+            case "hexpoint_SS":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.13, 6, 30);
+                break;
+            case "hexflat_LL":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.48, 6, 0);
+                break;
+            case "hexflat_L":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.4, 6, 0);
+                break;
+            case "hexflat_M":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.3, 6, 0);
+                break;
+            case "hexflat_S":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.2, 6, 0);
+                break;
+            case "hexflat_SS":
+                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    this[qamode + "_col"].symbol[i]) {
+                    set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
+                } else {
+                    set_circle_style(ctx, num);
+                }
+                this.draw_polygon(ctx, x, y, 0.13, 6, 0);
+                break;
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";

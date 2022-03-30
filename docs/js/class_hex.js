@@ -1502,6 +1502,46 @@ class Puzzle_hex extends Puzzle {
                 set_circle_style(ctx, num, ccolor);
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
                 break;
+            case "hexpoint_LL":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.58, 6, 30);
+                break;
+            case "hexpoint_L":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.43, 6, 30);
+                break;
+                case "hexpoint_M":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.35, 6, 30);
+                break;
+            case "hexpoint_S":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.22, 6, 30);
+                break;
+            case "hexpoint_SS":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 30);
+                break;
+            case "hexflat_LL":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.58, 6, 0);
+                break;
+            case "hexflat_L":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.43, 6, 0);
+                break;
+                case "hexflat_M":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.35, 6, 0);
+                break;
+            case "hexflat_S":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.22, 6, 0);
+                break;
+            case "hexflat_SS":
+                set_circle_style(ctx, num, ccolor);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 0);
+                break;
             case "ox_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
@@ -1699,13 +1739,7 @@ class Puzzle_hex extends Puzzle {
                 this.draw_polyomino(ctx, num, x, y, ccolor);
                 break;
             case "polyhex":
-                this.draw_polyhex(ctx, num, x, y);
-                // if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
-                //     this[qamode + "_col"].symbol[i]) {
-                //     this.draw_polyhex(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
-                // } else {
-                //     this.draw_polyhex(ctx, num, x, y);
-                // }
+                this.draw_polyhex(ctx, num, x, y, ccolor);
                 break;
                 //case "pencils":
                 //  this.draw_pencils(ctx,num,x,y);

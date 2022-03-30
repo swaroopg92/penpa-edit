@@ -2505,6 +2505,16 @@ class Puzzle {
                 case "ms_diamond_M":
                 case "ms_diamond_S":
                 case "ms_diamond_SS":
+                case "ms_hexpoint_LL":
+                case "ms_hexpoint_L":
+                case "ms_hexpoint_M":
+                case "ms_hexpoint_S":
+                case "ms_hexpoint_SS":
+                case "ms_hexflat_LL":
+                case "ms_hexflat_L":
+                case "ms_hexflat_M":
+                case "ms_hexflat_S":
+                case "ms_hexflat_SS":
                 case "ms_star":
                 case "ms_firefly":
                 case "ms_sun_moon":
