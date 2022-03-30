@@ -1,12 +1,14 @@
 # About
 Use following links to do testing of Penpa+. This by no means an exhaustive testing but only sample links to ensure new features have not broken old code.
 
+<!-- https://swaroopg92.github.io/penpa-edit -->
 <details>
 <summary>Penpa+</summary>
 
 * https://git.io/JReKb
 
 </details>
+<!-- ============ https://puzz.link/p or http://pzv.jp/p.html ============ -->
 <details>
 <summary>Aho</summary>
 
@@ -120,6 +122,15 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 * https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70
 * https://puzz.link/p?doubleback/8/8/b2stfautich00cq80j2gk0u0
 * https://puzz.link/p?doubleback/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000
+
+</details>
+<details>
+<summary>Double Choco</summary>
+
+* https://puzz.link/p?dbchoco/10/10/0vehehf137soguhehev0q1l2j3h1j2l2j4h4l2h1j1l3j2h2j4l4q
+* https://puzz.link/p?dbchoco/10/10/jo6cc6pjjpjppjc66c3ph3g8zzg2g4h1g5zzg3g2h
+* https://puzz.link/p?dbchoco/16/16/oilc98m4no6803vv1s0u3pvbjrnni0r33k31pj7sj7gb7qd63s60g1j8g6j123j3k12k1zzk17m3w2j1g2k3j54p13i4zj6n1s13i9135j6z4u3v
+* https://puzz.link/p?dbchoco/6/6/blalf03gzg5n3k
 
 </details>
 <details>
@@ -686,6 +697,14 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 
 </details>
 <details>
+<summary>Tatebo-Yokobo</summary>
+
+* https://puzz.link/p?tateyoko/10/10/p2i3xn2np1i21pi32n1nrn1i2pn2n1nri2pi3xn3i22n1ri2qi42i2x2i2p2np2i4xi22nqn2n2n3nqi4xn2npn1n2p
+* http://pzv.jp/p.html?tateyoko/10/10/2i22ppi23i2xi43nq2i2r2i3xi22n1no1i4pi5p1nxpi2q3i32x2i4rn1i4x2i3pn2nq2i33nqn3i3ppn1i2
+* https://puzz.link/p?tateyoko/5/5/-10i22ppi23i2xi43nq2i2r2-ff
+
+</details>
+<details>
 <summary>Tentaisho (Spiral Galaxies)</summary>
 
 * https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze
@@ -769,5 +788,55 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 * https://puzz.link/p?yinyang/v:/14/8/59000k00074i00027a8ala6j620g793b606n39
 * https://puzz.link/p?yinyang/12/5/02903a2o490i392o0290
 * https://puzz.link/p?yinyang/14/10/000003fji00i3i669j099i31109960kl0320g010a000000
+
+</details>
+<!-- ============ https://pzprxs.vercel.app/p ============ -->
+<details>
+<summary>Canal View</summary>
+
+* https://pzprxs.vercel.app/p?canal/6/6/.j.p6h4p6j6
+* https://pzprxs.vercel.app/p?canal/v:/10/10/1k4u1j7i3r6y1w-11m3n2
+
+</details>
+<details>
+<summary>Chained Block</summary>
+
+* https://pzprxs.vercel.app/p?chainedb/9/9/15i96l17i7g65i42k1g5368h2i7g2p3h5g48g2g9k3h7i6
+* https://pzprxs.vercel.app/p?chainedb/12/12/h3l4k.l.m.j2n.k3o.h.j.m3r3m2j.i.i3j.i2i2t2k
+
+</details>
+<details>
+<summary>Choco Banana</summary>
+
+* https://pzprxs.vercel.app/p?cbanana/v:/6/6/.j.p6h4p6j6
+* https://pzprxs.vercel.app/p?cbanana/10/10/1k4u1j7i3r6y1w-11m3n2
+
+</details>
+<details>
+<summary>Dotchi-Loop</summary>
+
+* https://pzprxs.vercel.app/p?dotchi/7/7/2b2a2imi0i38h49mi873300390i0a262970
+* https://pzprxs.vercel.app/p?dotchi/10/10/54a94i93264d0qil0200vs03vs1stv0fu0vsk6lja01621i415ak6biai3b0c6bg6gi030
+
+</details>
+<details>
+<summary>One Room One Door</summary>
+
+* https://pzprxs.vercel.app/p?oneroom/10/8/4k94j266sdc488g0206rv300cro00.4g321g26
+* https://pzprxs.vercel.app/p?oneroom/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11
+
+</details>
+<details>
+<summary>Rassi Silai</summary>
+
+* https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4
+* https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000
+
+</details>
+<details>
+<summary>Tonttiraja</summary>
+
+* https://pzprxs.vercel.app/p?tontti/v:/6/6/.j.p6h4p6j6
+* https://pzprxs.vercel.app/p?tontti/10/10/1k4u1j7i3r6y1w-11m3n2
 
 </details>

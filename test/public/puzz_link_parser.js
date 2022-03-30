@@ -13,6 +13,7 @@ describe("puzz.link parser", () => {
     })
 
     const urls = [
+        // ============ https://puzz.link/p or http://pzv.jp/p.html ============
         // Aho
         ["Aho 1", "https://puzz.link/p?aho/10/10/.k9h4n4t9h4i6i4p8ici2h3t6n6h3k5"],
         ["Aho 2", "https://puzz.link/p?aho/11/7/-14lch-15zw11v-16p"],
@@ -73,6 +74,11 @@ describe("puzz.link parser", () => {
         ["Double Back 1", "https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70"],
         ["Double Back 2", "https://puzz.link/p?doubleback/8/8/b2stfautich00cq80j2gk0u0"],
         ["Double Back 3", "https://puzz.link/p?doubleback/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
+        // Double Choco
+        ["Double Choco 1", "https://puzz.link/p?dbchoco/10/10/0vehehf137soguhehev0q1l2j3h1j2l2j4h4l2h1j1l3j2h2j4l4q"],
+        ["Double Choco 2", "https://puzz.link/p?dbchoco/10/10/jo6cc6pjjpjppjc66c3ph3g8zzg2g4h1g5zzg3g2h"],
+        ["Double Choco 3", "https://puzz.link/p?dbchoco/16/16/oilc98m4no6803vv1s0u3pvbjrnni0r33k31pj7sj7gb7qd63s60g1j8g6j123j3k12k1zzk17m3w2j1g2k3j54p13i4zj6n1s13i9135j6z4u3v"],
+        ["Double Choco 4", "https://puzz.link/p?dbchoco/6/6/blalf03gzg5n3k"],
         // Easy as ABC
         ["Easy as ABC 1", "https://puzz.link/p?easyasabc/5/5/3/123j654h987.0-ff-33"],
         ["Easy as ABC 2", "https://puzz.link/p?easyasabc/15/13/3/.0123456789abcdef-10-11-12-13-14-15-16-17-18-19-1a-1b-1c-1d-1e-1f-20-21-22-23-24-25-26-27-28-29-2a-2b-2c-2d-2e-2f-30-31-32-33-34i."],
@@ -359,6 +365,10 @@ describe("puzz.link parser", () => {
         // Tasquare
         ["Tasquare 1", "https://puzz.link/p?tasquare/10/10/.i.h.h.i.h.h1i2i4h2i5i1z1i6iah2ibi9h.h.i.h.h.i./"],
         ["Tasquare 2", "https://puzz.link/p?tasquare/10/10/.n.i+fffm-ffj+100m-10i2g.k2l2k2k2k2k2k.l.j2i./"],
+        // Tatebo-Yokobo
+        ["Tatebo-Yokobo 1", "https://puzz.link/p?tateyoko/10/10/p2i3xn2np1i21pi32n1nrn1i2pn2n1nri2pi3xn3i22n1ri2qi42i2x2i2p2np2i4xi22nqn2n2n3nqi4xn2npn1n2p"],
+        ["Tatebo-Yokobo 2", "http://pzv.jp/p.html?tateyoko/10/10/2i22ppi23i2xi43nq2i2r2i3xi22n1no1i4pi5p1nxpi2q3i32x2i4rn1i4x2i3pn2nq2i33nqn3i3ppn1i2"],
+        ["Tatebo-Yokobo 3", "https://puzz.link/p?tateyoko/5/5/-10i22ppi23i2xi43nq2i2r2-ff"],
         // Tentaisho (Spiral Galaxies)
         ["Tentaisho 1", "https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze"],
         ["Tentaisho 2", "https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em"],
@@ -406,6 +416,29 @@ describe("puzz.link parser", () => {
         ["Yin-Yang 2", "https://puzz.link/p?yinyang/v:/14/8/59000k00074i00027a8ala6j620g793b606n39"],
         ["Yin-Yang 3", "https://puzz.link/p?yinyang/12/5/02903a2o490i392o0290"],
         ["Yin-Yang 4", "https://puzz.link/p?yinyang/14/10/000003fji00i3i669j099i31109960kl0320g010a000000"],
+
+        // ============ https://pzprxs.vercel.app/p ============
+        // Canal View
+        ["Canal View 1", "https://pzprxs.vercel.app/p?canal/6/6/.j.p6h4p6j6"],
+        ["Canal View 2", "https://pzprxs.vercel.app/p?canal/v:/10/10/1k4u1j7i3r6y1w-11m3n2"],
+        // Chained Block
+        ["Chained Block 1", "https://pzprxs.vercel.app/p?chainedb/9/9/15i96l17i7g65i42k1g5368h2i7g2p3h5g48g2g9k3h7i6"],
+        ["Chained Block 2", "https://pzprxs.vercel.app/p?chainedb/12/12/h3l4k.l.m.j2n.k3o.h.j.m3r3m2j.i.i3j.i2i2t2k"],
+        // Choco Banana
+        ["Choco Banana 1", "https://pzprxs.vercel.app/p?cbanana/v:/6/6/.j.p6h4p6j6"],
+        ["Choco Banana 2", "https://pzprxs.vercel.app/p?cbanana/10/10/1k4u1j7i3r6y1w-11m3n2"],
+        // Dotchi-Loop
+        ["Dotchi-Loop 1", "https://pzprxs.vercel.app/p?dotchi/7/7/2b2a2imi0i38h49mi873300390i0a262970"],
+        ["Dotchi-Loop 2", "https://pzprxs.vercel.app/p?dotchi/10/10/54a94i93264d0qil0200vs03vs1stv0fu0vsk6lja01621i415ak6biai3b0c6bg6gi030"],
+        // One Room One Door
+        ["One Room One Door 1", "https://pzprxs.vercel.app/p?oneroom/10/8/4k94j266sdc488g0206rv300cro00.4g321g26"],
+        ["One Room One Door 2", "https://pzprxs.vercel.app/p?oneroom/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11"],
+        // Rassi Silai
+        ["Rassi Silai 1", "https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4"],
+        ["Rassi Silai 2", "https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
+        // Tonttiraja
+        ["Tonttiraja 1", "https://pzprxs.vercel.app/p?tontti/v:/6/6/.j.p6h4p6j6"],
+        ["Tonttiraja 2", "https://pzprxs.vercel.app/p?tontti/10/10/1k4u1j7i3r6y1w-11m3n2"],
     ];
     const testCases = [];
 

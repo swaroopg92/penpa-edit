@@ -58,6 +58,7 @@ const penpa_tags = {
             "roundtrip"
         ],
         "puzzlink": [
+            // ============ https://puzz.link/p or http://pzv.jp/p.html ============
             "aho",
             "akari",
             "aqre",
@@ -67,6 +68,7 @@ const penpa_tags = {
             "country road",
             "detour",
             "double back",
+            "double choco",
             "easy as abc",
             "factors",
             "fillmat",
@@ -118,6 +120,7 @@ const penpa_tags = {
             "sukororoom",
             "symmetry area",
             "tasquare",
+            "tatebo-yokobo",
             "tents",
             "territory (nawabari)",
             "toichika2",
@@ -126,6 +129,14 @@ const penpa_tags = {
             "view",
             "yajikazu (yajisan-kazusan)",
             "yin-yang",
+            // ============ https://pzprxs.vercel.app/p ============
+            "canal view",
+            "chained block",
+            "choco banana",
+            "dotchi-loop",
+            "one room one door",
+            "rassi silai",
+            "tonttiraja",
         ],
         "Others": [
             "wordpuzzle",
