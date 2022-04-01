@@ -4414,8 +4414,8 @@ function decode_puzzlink(url) {
     document.getElementById("saveinfosource").value = url;
 }
 
-function load_from_server(paramArray, type) {
-    const data = Object.keys(paramArray).reduce(function(a, c) { a[c] = paramArray[c]; return a; }, { action: 'pqr' }),
+function load_from_server(paramArray, type, action) {
+    const data = Object.keys(paramArray).reduce(function(a, c) { a[c] = paramArray[c]; return a; }, { action: action || 'pqr' }),
         options = {
             method: 'POST',
             headers: {
@@ -4430,6 +4430,17 @@ function load_from_server(paramArray, type) {
             return response.json();
         })
         .then(function(response) {
+            if (response.showStartButton) {
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Start Puzzle',
+                        text: `Timer will start once you click on "Start Puzzle".`,
+                        footer: `<i>Close this page, if you are not ready yet.</i>`,
+                    }).then((result) => {
+                      load_from_server(paramArray, type, 'start-puzzle');
+                    });
+            }
+            else {
             if (response.success === false) {
                 if (response.showLoad) {
                     create();
@@ -4445,6 +4456,7 @@ function load_from_server(paramArray, type) {
                 response.q = window.btoa(JSON.stringify(response.q));
             }
             load2(response, type);
+            }
         })
         .catch(function(err) {
             create();
