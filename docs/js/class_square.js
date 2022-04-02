@@ -4371,13 +4371,13 @@ class Puzzle_square extends Puzzle {
         ctx.lineWidth = 1.2;
         ctx.lineCap = "butt";
         var r = 0.2;
-        var degrees = [-120,-60,180,null,0,120,60];
+        var degrees = [-120, -60, 180, null, 0, 120, 60];
         var r2 = r * 1.23;
         for (var i = 0; i < 7; i++) {
             if (num[i] === 1) {
-                if (i==3){
+                if (i == 3) {
                     this.draw_polygon(ctx, x, y, r * 0.5 * Math.sqrt(2), 6, 30);
-                }else{
+                } else {
                     this.draw_polygon(ctx, x + pu.size * r2 * Math.cos(degrees[i] * Math.PI / 180), y + pu.size * r2 * Math.sin(degrees[i] * Math.PI / 180), r * 0.5 * Math.sqrt(2), 6, 30);
                 }
             }
