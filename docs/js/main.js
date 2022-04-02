@@ -1758,6 +1758,52 @@ onload = function() {
                 replay_backward();
                 e.preventDefault();
                 break;
+            case "replay_download":
+            case "replay_download_btn":
+                if (!document.getElementById("replay_download_btn").disabled){
+
+                    document.getElementById("replay_download_btn").disabled = true;
+                    document.getElementById("replay_message").style.display = "";
+                    document.getElementById("replay_message").innerHTML = "Preparing your download"
+        
+                    setTimeout(function(){
+                        let  gif = new GIF({
+                            workers: 8,
+                            quality: 40,
+                            workerScript: './js/libs/gif.worker.js'
+                        });
+                        let c = $('#canvas')[0];
+                        let frame_ms = 500 / parseFloat(document.getElementById("replay_speed").value);
+                        let original_position = pu[pu.mode.qa]["command_undo"].__a.length
+
+                        //go to start
+                        while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+                            pu.undo(replay = true);
+                        }
+                        //advance and capture one frame at a time
+                        while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+                            gif.addFrame(c, {delay: frame_ms, copy: true});
+                            pu.redo(replay = true);
+                        }
+                        //capture final frame with longer delay
+                        gif.addFrame(c, {delay: 2000, copy: true});
+                        
+                        gif.on('finished', function(blob) {
+                            saveblob_download(blob,"my_solve.gif");
+                            document.getElementById("replay_download_btn").disabled = false;
+                            document.getElementById("replay_message").style.display = "none";
+                            document.getElementById("replay_message").innerHTML = ""
+                        });
+                        gif.render();
+                        
+                        //return to where we were before.
+                        while (pu[pu.mode.qa]["command_undo"].__a.length !== original_position) {
+                            pu.undo(replay = true);
+                        }
+                    },5);
+                }
+                e.preventDefault();
+                break;        
         }
         // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {

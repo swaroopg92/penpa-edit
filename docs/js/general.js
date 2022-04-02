@@ -823,6 +823,7 @@ function replay_choice() {
             document.getElementById("replay_backward").style.display = "none";
             document.getElementById("replay_forward_btn").style.display = "none";
             document.getElementById("replay_backward_btn").style.display = "none";
+            document.getElementById("replay_download_btn").style.display = "none";
 
             // Hide play button while its playing
             document.getElementById("replay_play").style.display = "none";
@@ -924,6 +925,7 @@ function replay_choice() {
             document.getElementById("replay_backward_btn").style.display = "none";
             document.getElementById("replay_reset_btn").style.display = "none";
             document.getElementById("replay_speed").style.display = "none";
+            document.getElementById("replay_download_btn").style.display = "none";
 
             // Display message - Live replay not available for this solve.
             document.getElementById("replay_message").style.display = "";
@@ -950,6 +952,7 @@ function replay_choice() {
         document.getElementById("replay_backward_btn").style.display = "";
         document.getElementById("replay_reset_btn").style.display = "";
         document.getElementById("replay_speed").style.display = "";
+        document.getElementById("replay_download_btn").style.display = "";
 
         // hide the message
         document.getElementById("replay_message").style.display = "none";
@@ -1571,15 +1574,18 @@ function savetext_copy() {
 
 function savetext_download() {
     var text = document.getElementById("savetextarea").value;
+    var blob = new Blob([text], { type: "text/plain" });
+    saveblob_download(blob, "my_puzzle.txt");
+}
+function saveblob_download(blob, defaultFilename){
     var downloadLink = document.getElementById('download_link');
     var filename = document.getElementById("savetextname").value;
     if (!filename) {
-        filename = "my_puzzle.txt";
+        filename = defaultFilename;
     }
     if (filename.indexOf(".") === -1) {
         filename += ".txt";
     }
-    var blob = new Blob([text], { type: "text/plain" });
     var str_sym = "\\/:*?\"<>|";
     var valid_name = 1;
     for (var i = 0; i < filename.length; i++) {
@@ -1587,6 +1593,7 @@ function savetext_download() {
             valid_name = 0;
         }
     }
+
     if (valid_name) {
         if (window.navigator.msSaveBlob) {
             // for IE
@@ -2295,6 +2302,7 @@ function load(urlParam, type = 'url', origurl = null) {
             `<option value=1 selected="selected">Solve Path</option>` +
             `<option value=2>Live Replay</option>` +
             `</select>`;
+        let contents_download = `<button id="replay_download_btn" class="replay"><i id="replay_download" class="fa fa-download replay""></i></button>`;
         let contents_play = `<div><button id="replay_play_btn" class="replay"><i id="replay_play" class="fa fa-play replay""></i></button>`;
         let contents_pause = `<button id="replay_pause_btn" class="replay"><i id="replay_pause" class="fa fa-pause replay""></i></button>`;
         let contents_reset = `<button id="replay_reset_btn" class="replay"><i id="replay_reset" class="fa fa-refresh replay""></i></button>`;
@@ -2313,7 +2321,7 @@ function load(urlParam, type = 'url', origurl = null) {
         let contents_message = `<label id="replay_message" class="replay" style="display: none;"></label></div>`;
 
         // still need to define speed option
-        contestinfo.innerHTML = contents_choice + contents_play + contents_pause + contents_backward + contents_forward + contents_reset + contents_speed + contents_message;
+        contestinfo.innerHTML = contents_choice + contents_download + contents_play + contents_pause + contents_backward + contents_forward + contents_reset + contents_speed + contents_message;
         contestinfo.style.display = "block";
 
         document.getElementById("replay_speed").onchange = function() {
