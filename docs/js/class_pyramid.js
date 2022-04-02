@@ -1234,9 +1234,53 @@ class Puzzle_pyramid extends Puzzle {
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
                 break;
+            case "diamond_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.22, 4, 0);
+                break;
             case "diamond_SS":
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
+                break;
+            case "hexpoint_LL":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.48, 6, 30);
+                break;
+            case "hexpoint_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.4, 6, 30);
+                break;
+            case "hexpoint_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.3, 6, 30);
+                break;
+            case "hexpoint_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.2, 6, 30);
+                break;
+            case "hexpoint_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 30);
+                break;
+            case "hexflat_LL":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.48, 6, 0);
+                break;
+            case "hexflat_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.4, 6, 0);
+                break;
+            case "hexflat_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.3, 6, 0);
+                break;
+            case "hexflat_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.2, 6, 0);
+                break;
+            case "hexflat_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 0);
                 break;
             case "ox_B":
                 ctx.setLineDash([]);
