@@ -716,7 +716,7 @@ class Puzzle_hex extends Puzzle {
                     this.ctx.fillStyle = this[pu + "_col"].thermo[i];
                 } else {
                     this.ctx.fillStyle = Color.GREY_LIGHT;
-                }                
+                }
                 this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
@@ -1122,7 +1122,7 @@ class Puzzle_hex extends Puzzle {
             if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].cage[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].cage[i];
             }
-            
+
             this.ctx.beginPath();
             this.ctx.moveTo(x1, y1);
             if (x3 != -1) { this.ctx.lineTo(x3, y3); }
@@ -1510,7 +1510,7 @@ class Puzzle_hex extends Puzzle {
                 set_circle_style(ctx, num, ccolor);
                 this.draw_polygon(ctx, x, y, 0.43, 6, 30);
                 break;
-                case "hexpoint_M":
+            case "hexpoint_M":
                 set_circle_style(ctx, num, ccolor);
                 this.draw_polygon(ctx, x, y, 0.35, 6, 30);
                 break;
@@ -1530,7 +1530,7 @@ class Puzzle_hex extends Puzzle {
                 set_circle_style(ctx, num, ccolor);
                 this.draw_polygon(ctx, x, y, 0.43, 6, 0);
                 break;
-                case "hexflat_M":
+            case "hexflat_M":
                 set_circle_style(ctx, num, ccolor);
                 this.draw_polygon(ctx, x, y, 0.35, 6, 0);
                 break;
@@ -3129,19 +3129,19 @@ class Puzzle_hex extends Puzzle {
         ctx.lineWidth = 1.2;
         ctx.lineCap = "butt";
         var r = 0.2;
-        var degrees = [-120,-60,180,null,0,120,60];
+        var degrees = [-120, -60, 180, null, 0, 120, 60];
         var r2 = r * 1.23;
         for (var i = 0; i < 7; i++) {
             if (num[i] === 1) {
-                if (i==3){
+                if (i == 3) {
                     this.draw_polygon(ctx, x, y, r * 0.5 * Math.sqrt(2), 6, 30);
-                }else{
+                } else {
                     this.draw_polygon(ctx, x + pu.size * r2 * Math.cos(degrees[i] * Math.PI / 180), y + pu.size * r2 * Math.sin(degrees[i] * Math.PI / 180), r * 0.5 * Math.sqrt(2), 6, 30);
                 }
             }
         }
     }
-    
+
     rotate_theta(th) {
         th = (th + this.theta);
         if (this.reflect[0] === -1) { th = (180 - th + 360) % 360; }
