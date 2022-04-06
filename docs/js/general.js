@@ -1703,8 +1703,27 @@ function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
         if (urlstring.indexOf("/penpa-edit/?") !== -1) {
-            urlstring = urlstring.split("/penpa-edit/?")[1];
-            load(urlstring, 'local');
+
+            let param = urlstring.split('&');
+            let paramArray = [];
+
+            // Decompose address into elements
+            for (var i = 0; i < param.length; i++) {
+                let paramItem = param[i].split('=');
+                paramArray[paramItem[0]] = paramItem[1];
+            }
+
+            let hash = "penpa_" + md5(paramArray.p);
+
+            // Decrypt puzzle data
+            let local_data = localStorage.getItem(hash);
+            if (local_data && local_data.includes('&p=')) {
+                load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
+            } else {
+                urlstring = urlstring.split("/penpa-edit/?")[1];
+                load(urlstring, 'local');
+            }
+
             document.getElementById("modal-load").style.display = 'none';
             if (UserSettings.tab_settings > 0) {
                 selectBox.setValue(UserSettings.tab_settings);
@@ -2055,7 +2074,6 @@ function load(urlParam, type = 'url', origurl = null) {
                     settingstatus[i].checked = answersetting[settingstatus[i].id];
                 }
             }
-
             // Populate Constraints list
             if (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro") {
                 add_constraints();
@@ -2224,9 +2242,10 @@ function load(urlParam, type = 'url', origurl = null) {
         let hash = "penpa_" + md5(pu.url);
 
         // Decrypt puzzle data
-        let local_copy = localStorage.getItem(hash);
+        let local_data = localStorage.getItem(hash);
 
-        if (local_copy !== null) {
+        if (local_data !== null) {
+            var local_copy = JSON.parse(decrypt_data(local_data));
             pu.pu_q = local_copy.pu_q;
             pu.pu_a = local_copy.pu_a;
             pu.pu_q_col = local_copy.pu_q_col;
@@ -2854,7 +2873,8 @@ function set_solvemode(type = "url") {
 
     // Constraints
     document.getElementById('constraints').style.display = 'none';
-    if (type === "local") {
+
+    if (type.includes('local')) {
         $('select').toggleSelect2(false);
     } else {
         document.getElementById('constraints_settings_opt').style.display = 'none';
