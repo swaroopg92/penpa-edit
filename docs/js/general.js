@@ -1894,8 +1894,29 @@ function load(urlParam, type = 'url', origurl = null) {
         if (UserSettings.tab_settings.length > 0) {
             // document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
+
+            if (type.includes('local')) {
+                var tabSelect = document.querySelector('ul.multi');
+                var tabOptions = UserSettings.tab_settings;
+                if (tabSelect) {
+                    for (var child of tabSelect.children) {
+                        if (!child.dataset.value) {
+                            continue;
+                        }
+
+                        if (tabOptions.includes(child.dataset.value)) {
+                            if (!child.classList.contains('active')) {
+                                child.click();
+                            }
+                        } else {
+                            if (child.classList.contains('active')) {
+                                child.click();
+                            }
+                        }
+                    }
+                }
+            }
         }
-        // }
     }
 
     // Populate and set genre tags
