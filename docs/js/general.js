@@ -2224,10 +2224,9 @@ function load(urlParam, type = 'url', origurl = null) {
         let hash = "penpa_" + md5(pu.url);
 
         // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
+        let local_copy = localStorage.getItem(hash);
 
-        if (local_data !== null) {
-            var local_copy = JSON.parse(decrypt_data(local_data));
+        if (local_copy !== null) {
             pu.pu_q = local_copy.pu_q;
             pu.pu_a = local_copy.pu_a;
             pu.pu_q_col = local_copy.pu_q_col;
