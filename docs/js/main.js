@@ -1298,7 +1298,7 @@ onload = function() {
                             pu.resize_left(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_top(1); // original
+                            pu.resize_top(1); // maininal
                             break;
                         case 3:
                             pu.resize_right(1); // rotated by 270
@@ -1335,7 +1335,7 @@ onload = function() {
                             pu.resize_right(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(1); // original
+                            pu.resize_bottom(1); // maininal
                             break;
                         case 3:
                             pu.resize_left(1); // rotated by 270
@@ -1350,7 +1350,7 @@ onload = function() {
                             pu.resize_right(1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(1, 'white'); // original
+                            pu.resize_bottom(1, 'white'); // maininal
                             break;
                         case 3:
                             pu.resize_left(1, 'white'); // rotated by 270
@@ -1372,7 +1372,7 @@ onload = function() {
                             pu.resize_bottom(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_left(1); // original
+                            pu.resize_left(1); // maininal
                             break;
                         case 3:
                             pu.resize_top(1); // rotated by 270
@@ -1409,7 +1409,7 @@ onload = function() {
                             pu.resize_top(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(1); // original
+                            pu.resize_right(1); // maininal
                             break;
                         case 3:
                             pu.resize_bottom(1); // rotated by 270
@@ -1424,7 +1424,7 @@ onload = function() {
                             pu.resize_top(1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(1, 'white'); // original
+                            pu.resize_right(1, 'white'); // maininal
                             break;
                         case 3:
                             pu.resize_bottom(1, 'white'); // rotated by 270
@@ -1446,7 +1446,7 @@ onload = function() {
                             pu.resize_left(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_top(-1); // original
+                            pu.resize_top(-1); // maininal
                             break;
                         case 3:
                             pu.resize_right(-1); // rotated by 270
@@ -1483,7 +1483,7 @@ onload = function() {
                             pu.resize_right(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(-1); // original
+                            pu.resize_bottom(-1); // maininal
                             break;
                         case 3:
                             pu.resize_left(-1); // rotated by 270
@@ -1498,7 +1498,7 @@ onload = function() {
                             pu.resize_right(-1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(-1, 'white'); // original
+                            pu.resize_bottom(-1, 'white'); // maininal
                             break;
                         case 3:
                             pu.resize_left(-1, 'white'); // rotated by 270
@@ -1520,7 +1520,7 @@ onload = function() {
                             pu.resize_bottom(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_left(-1); // original
+                            pu.resize_left(-1); // maininal
                             break;
                         case 3:
                             pu.resize_top(-1); // rotated by 270
@@ -1557,7 +1557,7 @@ onload = function() {
                             pu.resize_top(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(-1); // original
+                            pu.resize_right(-1); // maininal
                             break;
                         case 3:
                             pu.resize_bottom(-1); // rotated by 270
@@ -1572,7 +1572,7 @@ onload = function() {
                             pu.resize_top(-1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(-1, 'white'); // original
+                            pu.resize_right(-1, 'white'); // maininal
                             break;
                         case 3:
                             pu.resize_bottom(-1, 'white'); // rotated by 270
@@ -1760,6 +1760,7 @@ onload = function() {
                 break;
             case "replay_download":
             case "replay_download_btn":
+                //generate a GIF of the solve path, with title and solve time information above it.
                 if (!document.getElementById("replay_download_btn").disabled){
 
                     document.getElementById("replay_download_btn").disabled = true;
@@ -1767,26 +1768,77 @@ onload = function() {
                     document.getElementById("replay_message").innerHTML = "Preparing your download"
         
                     setTimeout(function(){
+                        function splitTextLines(ctx, text, maxWidth) {
+                            var words = text.split(" ");
+                            var lines = [];
+                            var currentLine = words[0];
+                        
+                            for (var i = 1; i < words.length; i++) {
+                                var word = words[i];
+                                var width = ctx.measureText(currentLine + " " + word).width;
+                                if (width < maxWidth) {
+                                    currentLine += " " + word;
+                                } else {
+                                    lines.push(currentLine);
+                                    currentLine = word;
+                                }
+                            }
+                            lines.push(currentLine);
+                            return lines;
+                        }
+
+                        //put the title text on the top
+                        let main_c = $('#canvas')[0];
+                        let main_ctx = main_c.getContext("2d");
+                        
+                        let gif_c = document.createElement('canvas');
+                        let gif_ctx = gif_c.getContext("2d");
+
+                        let fontSize = 42;
+                        let fontLineSize = fontSize * 1.2;
+                        gif_ctx.font = fontSize + "px sans-serif";
+                        let puzzleTitleLines = splitTextLines(gif_ctx,$('#puzzletitle').text(),main_c.width-20);
+                        let gif_vertical_offset = puzzleTitleLines.length * fontLineSize
+                        gif_c.width = main_c.width;
+                        gif_c.height = main_c.height + gif_vertical_offset;
+                        gif_ctx.font = fontSize + "px sans-serif";
+
+                        //clear the gif canvas
+                        gif_ctx.fillStyle = "#fff";
+                        gif_ctx.fillRect(0, 0, gif_c.width, gif_c.height);
+
+                        //draw the title text.
+                        gif_ctx.fillStyle = "#0000ff";
+                        let textY = fontSize;
+                        for(let textLine of puzzleTitleLines){
+                            gif_ctx.fillText(textLine, 10, textY);
+                            textY += fontLineSize;
+                        }
+
+                        //prepare to create gif frames
                         let  gif = new GIF({
                             workers: 8,
                             quality: 40,
                             workerScript: './js/libs/gif.worker.js'
                         });
-                        let c = $('#canvas')[0];
                         let frame_ms = 500 / parseFloat(document.getElementById("replay_speed").value);
-                        let original_position = pu[pu.mode.qa]["command_undo"].__a.length
-
-                        //go to start
+                        let original_position = pu[pu.mode.qa]["command_undo"].__a.length;
+                        
+                        //go to first frame of solve
                         while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
                             pu.undo(replay = true);
                         }
+
                         //advance and capture one frame at a time
                         while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-                            gif.addFrame(c, {delay: frame_ms, copy: true});
+                            gif_ctx.putImageData(main_ctx.getImageData(0,0,main_c.width,main_c.height),0,gif_vertical_offset);
+                            gif.addFrame(gif_c, {delay: frame_ms, copy: true});
+                            
                             pu.redo(replay = true);
                         }
                         //capture final frame with longer delay
-                        gif.addFrame(c, {delay: 2000, copy: true});
+                        gif_ctx.putImageData(main_ctx.getImageData(0,0,main_c.width,main_c.height),0,gif_vertical_offset);
+                        gif.addFrame(gif_c, {delay: 2000, copy: true});
                         
                         gif.on('finished', function(blob) {
                             saveblob_download(blob,"my_solve.gif");
@@ -1796,7 +1848,7 @@ onload = function() {
                         });
                         gif.render();
                         
-                        //return to where we were before.
+                        //return playback position to where it was before.
                         while (pu[pu.mode.qa]["command_undo"].__a.length !== original_position) {
                             pu.undo(replay = true);
                         }
