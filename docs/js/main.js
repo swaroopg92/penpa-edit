@@ -1298,7 +1298,7 @@ onload = function() {
                             pu.resize_left(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_top(1); // maininal
+                            pu.resize_top(1); // original
                             break;
                         case 3:
                             pu.resize_right(1); // rotated by 270
@@ -1335,7 +1335,7 @@ onload = function() {
                             pu.resize_right(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(1); // maininal
+                            pu.resize_bottom(1); // original
                             break;
                         case 3:
                             pu.resize_left(1); // rotated by 270
@@ -1350,7 +1350,7 @@ onload = function() {
                             pu.resize_right(1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(1, 'white'); // maininal
+                            pu.resize_bottom(1, 'white'); // original
                             break;
                         case 3:
                             pu.resize_left(1, 'white'); // rotated by 270
@@ -1372,7 +1372,7 @@ onload = function() {
                             pu.resize_bottom(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_left(1); // maininal
+                            pu.resize_left(1); // original
                             break;
                         case 3:
                             pu.resize_top(1); // rotated by 270
@@ -1409,7 +1409,7 @@ onload = function() {
                             pu.resize_top(1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(1); // maininal
+                            pu.resize_right(1); // original
                             break;
                         case 3:
                             pu.resize_bottom(1); // rotated by 270
@@ -1424,7 +1424,7 @@ onload = function() {
                             pu.resize_top(1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(1, 'white'); // maininal
+                            pu.resize_right(1, 'white'); // original
                             break;
                         case 3:
                             pu.resize_bottom(1, 'white'); // rotated by 270
@@ -1446,7 +1446,7 @@ onload = function() {
                             pu.resize_left(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_top(-1); // maininal
+                            pu.resize_top(-1); // original
                             break;
                         case 3:
                             pu.resize_right(-1); // rotated by 270
@@ -1483,7 +1483,7 @@ onload = function() {
                             pu.resize_right(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(-1); // maininal
+                            pu.resize_bottom(-1); // original
                             break;
                         case 3:
                             pu.resize_left(-1); // rotated by 270
@@ -1498,7 +1498,7 @@ onload = function() {
                             pu.resize_right(-1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(-1, 'white'); // maininal
+                            pu.resize_bottom(-1, 'white'); // original
                             break;
                         case 3:
                             pu.resize_left(-1, 'white'); // rotated by 270
@@ -1520,7 +1520,7 @@ onload = function() {
                             pu.resize_bottom(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_left(-1); // maininal
+                            pu.resize_left(-1); // original
                             break;
                         case 3:
                             pu.resize_top(-1); // rotated by 270
@@ -1557,7 +1557,7 @@ onload = function() {
                             pu.resize_top(-1); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(-1); // maininal
+                            pu.resize_right(-1); // original
                             break;
                         case 3:
                             pu.resize_bottom(-1); // rotated by 270
@@ -1572,7 +1572,7 @@ onload = function() {
                             pu.resize_top(-1, 'white'); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(-1, 'white'); // maininal
+                            pu.resize_right(-1, 'white'); // original
                             break;
                         case 3:
                             pu.resize_bottom(-1, 'white'); // rotated by 270
