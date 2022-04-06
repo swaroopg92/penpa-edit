@@ -1765,7 +1765,7 @@ onload = function() {
 
                     document.getElementById("replay_download_btn").disabled = true;
                     document.getElementById("replay_message").style.display = "";
-                    document.getElementById("replay_message").innerHTML = "Preparing your download"
+                    document.getElementById("replay_message").innerHTML = "Preparing your download";
         
                     setTimeout(function(){
                         function splitTextLines(ctx, text, maxWidth) {
@@ -1794,14 +1794,14 @@ onload = function() {
                         let gif_c = document.createElement('canvas');
                         let gif_ctx = gif_c.getContext("2d");
 
-                        let fontSize = 42;
+                        let fontSize = 16;
                         let fontLineSize = fontSize * 1.2;
-                        gif_ctx.font = fontSize + "px sans-serif";
-                        let puzzleTitleLines = splitTextLines(gif_ctx,$('#puzzletitle').text(),main_c.width-20);
+                        gif_ctx.font = "bold " + fontSize + "px sans-serif";
+                        let puzzleTitleLines = splitTextLines(gif_ctx,$('#puzzletitle').text(),main_c.offsetWidth);
                         let gif_vertical_offset = puzzleTitleLines.length * fontLineSize
-                        gif_c.width = main_c.width;
-                        gif_c.height = main_c.height + gif_vertical_offset;
-                        gif_ctx.font = fontSize + "px sans-serif";
+                        gif_c.width = main_c.offsetWidth;
+                        gif_c.height = main_c.offsetHeight + gif_vertical_offset;
+                        gif_ctx.font = "bold " + fontSize + "px sans-serif";
 
                         //clear the gif canvas
                         gif_ctx.fillStyle = "#fff";
@@ -1811,7 +1811,7 @@ onload = function() {
                         gif_ctx.fillStyle = "#0000ff";
                         let textY = fontSize;
                         for(let textLine of puzzleTitleLines){
-                            gif_ctx.fillText(textLine, 10, textY);
+                            gif_ctx.fillText(textLine, (gif_c.width - gif_ctx.measureText(textLine).width)/2, textY);
                             textY += fontLineSize;
                         }
 
@@ -1819,7 +1819,9 @@ onload = function() {
                         let  gif = new GIF({
                             workers: 8,
                             quality: 40,
-                            workerScript: './js/libs/gif.worker.js'
+                            workerScript: './js/libs/gif.worker.js',
+                            width: gif_c.width,
+                            height: gif_c.height
                         });
                         let frame_ms = 500 / parseFloat(document.getElementById("replay_speed").value);
                         let original_position = pu[pu.mode.qa]["command_undo"].__a.length;
@@ -1831,14 +1833,14 @@ onload = function() {
 
                         //advance and capture one frame at a time
                         while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-                            gif_ctx.putImageData(main_ctx.getImageData(0,0,main_c.width,main_c.height),0,gif_vertical_offset);
-                            gif.addFrame(gif_c, {delay: frame_ms, copy: true});
+                            gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height-gif_vertical_offset);
+                            gif.addFrame(gif_ctx, {delay: frame_ms, copy: true});
                             
                             pu.redo(replay = true);
                         }
                         //capture final frame with longer delay
-                        gif_ctx.putImageData(main_ctx.getImageData(0,0,main_c.width,main_c.height),0,gif_vertical_offset);
-                        gif.addFrame(gif_c, {delay: 2000, copy: true});
+                        gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height-gif_vertical_offset);
+                        gif.addFrame(gif_ctx, {delay: 2000, copy: true});
                         
                         gif.on('finished', function(blob) {
                             saveblob_download(blob,"my_solve.gif");
