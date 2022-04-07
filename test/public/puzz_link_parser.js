@@ -462,6 +462,7 @@ describe("puzz.link parser", () => {
         // These are not native objects but class instances
         delete contents.command_undo;
         delete contents.command_redo;
+        delete contents.command_replay;
 
         const data = {
             contents,
