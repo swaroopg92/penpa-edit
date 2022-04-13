@@ -1,4 +1,11 @@
 ## History
+* 2022/04/13 ver 2.26.19
+	* minor improvement to responsive mode for utilizing full space.
+	* improvements to local storage.
+	* improvements to replay feature.
+	* Hexagon shapes to various modes.
+	* improved pause layer to be dark in dark mode.
+	* added top limit for panel movement.
 * 2022/03/17 ver 2.26.18
 	* Feature to share replay.
 	* Fixed an auto redirect bug for custom messages.
