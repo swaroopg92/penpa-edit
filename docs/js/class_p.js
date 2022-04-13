@@ -385,7 +385,7 @@ class Puzzle {
         // pause-unpause layer
         let pause_canvas = document.getElementById("pause_canvas");
         let pause_ctx = pause_canvas.getContext("2d");
-        let factor = this.resol * 5;
+        let factor = this.resol * 4;
         pause_canvas.style.width = (this.canvasx - factor).toString() + "px";
         pause_canvas.style.height = (this.canvasy - factor).toString() + "px";
         pause_canvas.width = this.resol * this.canvasx;
@@ -398,7 +398,11 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        pause_ctx.filleStyle = Color.BLUE;
+        if (UserSettings.color_theme == 1) {
+            pause_ctx.fillStyle = Color.BLUE;
+        } else {
+            pause_ctx.fillStyle = Color.WHITE;
+        }
         let font_size = 0.09 * pause_canvas.height; // 9 % of display size/ height of canvas
         pause_ctx.font = font_size + 'px sans-serif';
         let lineheight = 1.2 * font_size;
