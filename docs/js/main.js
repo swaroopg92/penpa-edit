@@ -1826,12 +1826,24 @@ onload = function() {
         }
         e.preventDefault();
 
+        // restrict the panel movement to not go beyond with top header
+        let el_header = document.getElementById("header");
+        let el_floatheader = document.getElementById("float-key-header");
+
         drag.style.top = event.pageY - y_window + "px";
         drag.style.left = event.pageX - x_window + "px";
-        body.style.top = event.pageY - y_window + "px";
-        body.style.left = event.pageX - x_window + "px";
-        window.panel_toplast = body.style.top;
-        window.panel_leftlast = body.style.left;
+
+        if (el_floatheader.getBoundingClientRect().top > el_header.getBoundingClientRect().bottom) {
+            body.style.top = event.pageY - y_window + "px";
+            body.style.left = event.pageX - x_window + "px";
+
+            window.panel_toplast = body.style.top;
+            window.panel_leftlast = body.style.left;
+        } else {
+            drag.style.top = body.style.top;
+            drag.style.left = body.style.left;
+        }
+
         drag.addEventListener("touchend", mup, { passive: false });
         drag.addEventListener("mouseup", mup, { passive: false });
         document.body.addEventListener("touchleave", mup, { passive: false });
