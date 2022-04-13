@@ -771,7 +771,7 @@ function submit_solution(e) {
             if (!isEmpty(pu.pu_a.surface)) {
                 for (var j = 2; j < pu.ny0 - 2; j++) {
                     for (var i = 2; i < pu.nx0 - 2; i++) {
-                        if (pu.pu_a.surface[i + j * (pu.nx0)] && (
+                        if (!pu.pu_q.number[i + j * (pu.nx0)] && pu.pu_a.surface[i + j * (pu.nx0)] && (
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
@@ -4431,31 +4431,30 @@ function load_from_server(paramArray, type, action) {
         })
         .then(function(response) {
             if (response.showStartButton) {
-                    Swal.fire({
-                        allowOutsideClick: false,
-                        confirmButtonText: 'Start Puzzle',
-                        text: `Timer will start once you click on "Start Puzzle".`,
-                        footer: `<i>Close this page, if you are not ready yet.</i>`,
-                    }).then((result) => {
-                      load_from_server(paramArray, type, 'start-puzzle');
-                    });
-            }
-            else {
-            if (response.success === false) {
-                if (response.showLoad) {
-                    create();
-                    i_url();
-                } else {
-                    Swal.fire({
-                        html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
-                        icon: 'error'
-                    });
+                Swal.fire({
+                    allowOutsideClick: false,
+                    confirmButtonText: 'Start Puzzle',
+                    text: `Timer will start once you click on "Start Puzzle".`,
+                    footer: `<i>Close this page, if you are not ready yet.</i>`,
+                }).then((result) => {
+                    load_from_server(paramArray, type, 'start-puzzle');
+                });
+            } else {
+                if (response.success === false) {
+                    if (response.showLoad) {
+                        create();
+                        i_url();
+                    } else {
+                        Swal.fire({
+                            html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
+                            icon: 'error'
+                        });
+                    }
                 }
-            }
-            if (response.q) {
-                response.q = window.btoa(JSON.stringify(response.q));
-            }
-            load2(response, type);
+                if (response.q) {
+                    response.q = window.btoa(JSON.stringify(response.q));
+                }
+                load2(response, type);
             }
         })
         .catch(function(err) {
