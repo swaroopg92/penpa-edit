@@ -252,6 +252,7 @@ onload = function() {
             e.target.id === "inputtext" ||
             e.target.id === "select2_search" ||
             e.target.id === "saveinforules" ||
+            e.target.id === "saveinfoex" ||
             e.target.id === "saveinfoinfo" ||
             e.target.id === "urlstring") {
             // For input form
@@ -845,6 +846,7 @@ onload = function() {
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "saveinforules" ||
+            e.target.id === "saveinfoex" ||
             e.target.id === "saveinfoinfo" ||
             e.target.id === "urlstring") {
             // For input form
@@ -1250,6 +1252,10 @@ onload = function() {
             case "submit_portal":
                 e.preventDefault();
                 submit_portal(e);
+                break;
+            case "submit_portal_ex":
+                e.preventDefault();
+                submit_portal_ex(e);
                 break;
             case "preview_portal":
                 e.preventDefault();

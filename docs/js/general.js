@@ -1847,6 +1847,10 @@ function preview_portal(e) {
     submit_portal(e, true);
 }
 
+function submit_portal(e){
+    // Do something here
+}
+
 function submit_portal(e, isPreview) {
     var entries_flag = validate_entries();
 
