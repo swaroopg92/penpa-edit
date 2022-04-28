@@ -1731,6 +1731,7 @@ function savetext() {
                 } else {
                     document.getElementById('puzzletype_standard').selected = true;
                 }
+                document.getElementById('saveinfoex').value = response.data.exampleLink || '';
                 $("#genre_tags_opt").empty();
                 $('#genre_tags_opt').select2({
                     data: response.taggings,
@@ -1846,12 +1847,11 @@ function make_gmpfile() {
 function preview_portal(e) {
     submit_portal(e, true);
 }
-
-function submit_portal(e){
-    // Do something here
+function submit_portal_ex(e) {
+    submit_portal(e, false, true);
 }
 
-function submit_portal(e, isPreview) {
+function submit_portal(e, isPreview, isExample) {
     var entries_flag = validate_entries();
 
     if (typeof entries_flag !== "boolean") {
@@ -1879,6 +1879,8 @@ function submit_portal(e, isPreview) {
                     ppid: pu.puzzle_info && pu.puzzle_info.ppid,
                     solveLink: solve_link,
                     isPreview: isPreview,
+                    isExample: isExample,
+                    exampleLink: document.getElementById("saveinfoex").value,
                     isSudoku: document.getElementById("nb_issudoku").checked,
                     editLink: edit_link,
                     titletheme: document.getElementById("saveinfotitle").value,
