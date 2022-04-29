@@ -2895,6 +2895,9 @@ class Puzzle {
             text += "," + genreText;
         }
 
+        // Example link
+        text += "," + document.getElementById("saveinfoex").value;
+
         return text;
     }
 

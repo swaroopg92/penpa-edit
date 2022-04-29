@@ -1847,6 +1847,7 @@ function make_gmpfile() {
 function preview_portal(e) {
     submit_portal(e, true);
 }
+
 function submit_portal_ex(e) {
     submit_portal(e, false, true);
 }
@@ -2397,6 +2398,11 @@ function load2(paramArray, type) {
         if (pu && pu.puzzle_info && pu.puzzle_info.expoEdit) {} else {
             document.getElementById('modal-save').style.display = 'none';
         }
+    }
+
+    // Example link
+    if (rtext_para[29] && rtext_para[29] !== "") {
+        document.getElementById("saveinfoex").value = rtext_para[29];
     }
 
     // version save
