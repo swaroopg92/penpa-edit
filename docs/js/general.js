@@ -828,6 +828,9 @@ function replay_choice() {
             // Hide play button while its playing
             document.getElementById("replay_play").style.display = "none";
             document.getElementById("replay_play_btn").style.display = "none";
+            // Show pause button
+            document.getElementById("replay_pause").style.display = "";
+            document.getElementById("replay_pause_btn").style.display = "";
 
             // Enable timer for live replay
             document.getElementById("timer").style.display = "";
@@ -880,9 +883,11 @@ function replay_choice() {
                         // get time-stamp (ts) of last action
                         let prev_ts = pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5];
 
-                        // Fast forward the timer
-                        sw_timer.reset();
-                        sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                        if (sw_timer.isRunning()) {
+                            // Fast forward the timer
+                            sw_timer.reset();
+                            sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                        }
 
                         // get time-stamp (ts) of next action
                         let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5];
@@ -898,12 +903,21 @@ function replay_choice() {
                         // get time-stamp (ts) of last action
                         let prev_ts = pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5];
 
-                        // Fast forward the timer
-                        sw_timer.reset();
-                        sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                        if (sw_timer.isRunning()) {
+                            // Fast forward the timer
+                            sw_timer.reset();
+                            sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                        }
 
                         // replay has ended and stop the timer
                         sw_timer.stop();
+
+                        // Show play button
+                        document.getElementById("replay_play").style.display = "";
+                        document.getElementById("replay_play_btn").style.display = "";
+                        // Hide pause button
+                        document.getElementById("replay_pause").style.display = "none";
+                        document.getElementById("replay_pause_btn").style.display = "none";
                     }
                 }
             }
@@ -963,12 +977,24 @@ function replay_play() {
     if (document.getElementById("replay_choice").value == "2") {
         replay_choice();
     } else {
+        // hide play button
+        document.getElementById("replay_play").style.display = "none";
+        document.getElementById("replay_play_btn").style.display = "none";
+        // show pause button
+        document.getElementById("replay_pause").style.display = "";
+        document.getElementById("replay_pause_btn").style.display = "";
         let speed_factor = parseFloat(document.getElementById("replay_speed").value);
         pu.replay_timer = setInterval(() => {
             if (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
                 pu.redo(replay = true);
             } else {
                 clearInterval(pu.replay_timer);
+                // Show play button
+                document.getElementById("replay_play").style.display = "";
+                document.getElementById("replay_play_btn").style.display = "";
+                // Hide pause button
+                document.getElementById("replay_pause").style.display = "none";
+                document.getElementById("replay_pause_btn").style.display = "none";
             }
         }, 500 * (1 / speed_factor));
 
@@ -982,13 +1008,16 @@ function replay_play() {
 function replay_pause() {
     if (document.getElementById("replay_choice").value == "2") {
         pu.live_replay = [];
-        // Show play button while its paused
-        document.getElementById("replay_play").style.display = "";
-        document.getElementById("replay_play_btn").style.display = "";
         sw_timer.pause();
     } else {
         clearInterval(pu.replay_timer);
     }
+    // Show play button while its paused
+    document.getElementById("replay_play").style.display = "";
+    document.getElementById("replay_play_btn").style.display = "";
+    // Hide pause button
+    document.getElementById("replay_pause").style.display = "none";
+    document.getElementById("replay_pause_btn").style.display = "none";
 }
 
 function replay_reset() {
@@ -2332,6 +2361,10 @@ function load(urlParam, type = 'url', origurl = null) {
         document.getElementById("replay_choice").onchange = function() {
             replay_choice();
         }
+
+        // Hide pause button
+        document.getElementById("replay_pause").style.display = "none";
+        document.getElementById("replay_pause_btn").style.display = "none";
 
         // Disable timer buttons
         sw_timer.reset();
