@@ -13,10 +13,15 @@ describe("puzz.link parser", () => {
     })
 
     const urls = [
+        // ============ https://puzz.link/p or http://pzv.jp/p.html ============
+        // Aho
+        ["Aho 1", "https://puzz.link/p?aho/10/10/.k9h4n4t9h4i6i4p8ici2h3t6n6h3k5"],
+        ["Aho 2", "https://puzz.link/p?aho/11/7/-14lch-15zw11v-16p"],
+        ["Aho 3", "https://puzz.link/p?aho/v:/11/11/k.m6i5g4i6h.j3j.i.j1l9h2o.h.l.j.i.j5j1h2i6g.i4m.k"],
         // Akari
         ["Akari 1", "https://puzz.link/p?akari/10/10/..g.h.i.j.k.l.t0143bzzp"],
-        ["Akari 2", "https://puzz.link/p?akari/10/10/jbh.rchcpah.n.jbpchcp.jah"],
-        ["Akari 3", "https://puzz.link/p?akari/20/20/h.k.h.kbz.ha.gb6.hab.hbl.h.zk.h.lbbiab.hb.h.zh.gbg6b.g.i6.zz.g.i6b.g.i.g.zh.hb.h.hbbib.l.hbzi.h.n.ha.ha.gb.gb.hbzbi.h.kb"],
+        ["Akari 2", "https://puzz.link/p?bijutsukan/10/10/jbh.rchcpah.n.jbpchcp.jah"],
+        ["Akari 3", "https://puzz.link/p?lightup/20/20/h.k.h.kbz.ha.gb6.hab.hbl.h.zk.h.lbbiab.hb.h.zh.gbg6b.g.i6.zz.g.i6b.g.i.g.zh.hb.h.hbbib.l.hbzi.h.n.ha.ha.gb.gb.hbzbi.h.kb"],
         ["Akari 4", "https://puzz.link/p?akari/40/40/i..i8.g.gco1...i1.h.g.hd.i.g...t1.j6.g.hcgch.bo1..jah.g.g.gbh.h.q1.n.j.g.gbi.g.qco.j.g.l.bobqbh..lcobxbi.rbsbmbpbzi.r.mcgckci.sck.j.rdpblbhbkbg.r.n1.j.q.rcl..i6.m7.h.ocl7.i.gbm.h.oakb.i6.qcm.m.i.h.h.p..obj.jb.h.n..g.n.lbi.gbg.p.o.k.kbbg6clbbich1bj6.j.g.n.h.k.h0..l.h.j...n.i.j......bi6bi.gblbgbh1.......i.g.l.g.n.i.i.h....g.c1cmbm66.h.h.g..gb.l1.b.o5.g.hbgcbbj....1.mcg.g.g7.j2.o1....gbgbk..g..g.u...g.g.ibk.g71.bs.h.g.i.jbbi.g.pbh1b.hbg..h.h65.hcmbkbj1cbk.z.j1..p.g.x1.h1..cn1.hbt..6...l1.......bdkbj6.g..g.n.......b.r.h.g.g..n.........h1bl2bg.6.g.n1..........g...i...k.jcm........ib..bl6.g.m"],
         // Aqre
         ["Aqre 1", "https://puzz.link/p?aqre/10/10/vvvs000fvvu0007vvv00vv00vv00vv00vv002020210221g0120200211g2121212120"],
@@ -46,8 +51,8 @@ describe("puzz.link parser", () => {
         ["Castle 6", "https://puzz.link/p?castle/6/3/011022033044000a11.12.13.14.10.a2-13e32-23e42-33e529622563a"],
         // Cave
         ["Cave 1", "https://puzz.link/p?cave/10/10/7i6i7j6j3i5i6w8p6w2i7i5j3j6i3ib"],
-        ["Cave 2", "https://puzz.link/p?cave/19/11/5g5g757g5i5i7775g5g7g7g5i5i7g7d9dgdbdgdi7i9g95g5g5g5g5i5i7g75g5g5g5g755g735g777y5g5g733g753g5h5g5g5g5g5i5i63g5g5g5g-14g-14-10-10g-14-10-10g-14g-10-14g-14g737g5i5i5h5i5g5g733g733g5h5g62"],
-        ["Cave 3", "https://puzz.link/p?cave/7/5/g.g3.g3i3g.3g3r3h3h3"],
+        ["Cave 2", "https://puzz.link/p?bag/19/11/5g5g757g5i5i7775g5g7g7g5i5i7g7d9dgdbdgdi7i9g95g5g5g5g5i5i7g75g5g5g5g755g735g777y5g5g733g753g5h5g5g5g5g5i5i63g5g5g5g-14g-14-10-10g-14-10-10g-14g-10-14g-14g737g5i5i5h5i5g5g733g733g5h5g62"],
+        ["Cave 3", "https://puzz.link/p?corral/7/5/g.g3.g3i3g.3g3r3h3h3"],
         // Cojun
         ["Cojun 1", "https://puzz.link/p?cojun/8/8/qhebtquqmqj0l7s7c8vo1up0zzh4v1j"],
         ["Cojun 2", "https://puzz.link/p?cojun/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
@@ -65,6 +70,15 @@ describe("puzz.link parser", () => {
         ["Detour 1", "https://puzz.link/p?detour/10/10/182g307gfcug03464c07vovn00rgvnvnvg80g4g35dh2g21g6g1g"],
         ["Detour 2", "https://puzz.link/p?detour/8/8/10820g41g4000s000007v01g5gcg2"],
         ["Detour 3", "https://puzz.link/p?detour/8/8/a2gh4928h49000vs00o0vg00g1g435h5"],
+        // Double Back
+        ["Double Back 1", "https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70"],
+        ["Double Back 2", "https://puzz.link/p?doubleback/8/8/b2stfautich00cq80j2gk0u0"],
+        ["Double Back 3", "https://puzz.link/p?doubleback/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
+        // Double Choco
+        ["Double Choco 1", "https://puzz.link/p?dbchoco/10/10/0vehehf137soguhehev0q1l2j3h1j2l2j4h4l2h1j1l3j2h2j4l4q"],
+        ["Double Choco 2", "https://puzz.link/p?dbchoco/10/10/jo6cc6pjjpjppjc66c3ph3g8zzg2g4h1g5zzg3g2h"],
+        ["Double Choco 3", "https://puzz.link/p?dbchoco/16/16/oilc98m4no6803vv1s0u3pvbjrnni0r33k31pj7sj7gb7qd63s60g1j8g6j123j3k12k1zzk17m3w2j1g2k3j54p13i4zj6n1s13i9135j6z4u3v"],
+        ["Double Choco 4", "https://puzz.link/p?dbchoco/6/6/blalf03gzg5n3k"],
         // Easy as ABC
         ["Easy as ABC 1", "https://puzz.link/p?easyasabc/5/5/3/123j654h987.0-ff-33"],
         ["Easy as ABC 2", "https://puzz.link/p?easyasabc/15/13/3/.0123456789abcdef-10-11-12-13-14-15-16-17-18-19-1a-1b-1c-1d-1e-1f-20-21-22-23-24-25-26-27-28-29-2a-2b-2c-2d-2e-2f-30-31-32-33-34i."],
@@ -74,11 +88,20 @@ describe("puzz.link parser", () => {
         ["Factors 1", "https://puzz.link/p?factors/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
         ["Factors 2", "https://puzz.link/p?factors/9/9/nbuurdjudmrrun8cv6pvvdtnvsr7pg39-2d-2a-308-20-38f8-1e-1267-1c7-1e-48-18-18-2d983a-303e-30fc9-23-36287-48-15-30-14"],
         ["Factors 3", "https://puzz.link/p?factors/9/9/bvftapbukqlvnugu0fvvmbujfvvg3o-202-18-1b-28-2338-3f-368-12e-282-48*6950-12696-1c-1bf-30-2a-10-2d98-23-28c-122-207-36"],
+        // Fillmat
+        ["Fillmat 1", "https://puzz.link/p?fillmat/9/10/2u3g2a2d4e2d3a3g2s2b2b2e"],
+        ["Fillmat 2", "https://puzz.link/p?fillmat/5/5/e.a..b.a.a.d..a.a"],
         // Fillomino
         ["Fillomino 1", "https://puzz.link/p?fillomino/5/5/-10-10-10-10-10-108.8-10-10.1.-10-108.8-10-10-10g-10-10"],
-        ["Fillomino 2", "https://puzz.link/p?fillomino/7/3/159u159"],
+        ["Fillomino 2", "https://puzz.link/p?fillomino01/7/3/159u159"],
         ["Fillomino 3", "https://puzz.link/p?fillomino/10/10/q-138g84ga3h46g42g33r46g44ga8h12g15g58r21g28g87h42g14g4-13q"],
         ["Fillomino 4", "https://puzz.link/p?fillomino/7/10/r6l8l5l2lah3i5h9i9i4c4o"],
+        // Firefly (Hotaru Beam)
+        ["Firefly 1", "https://puzz.link/p?firefly/10/10/k40f20c41j22b24g2.3.b21b10b4.2.g21b12e12d32c10f30k"],
+        ["Firefly 2", "https://puzz.link/p?firefly/7/7/e3.h1.13a0.f0.f0.a151543h1.b3.a"],
+        ["Firefly 3", "https://puzz.link/p?firefly/9/9/c25b45c24k23c2340a44c3.m4.c3.a301.c25k13c33b13c"],
+        // Minor bug. This parses correctly but isn't rendered right because it's zero rows thick.
+        ["Firefly 4", "https://puzz.link/p?firefly/10/1/4.h0./"],
         // Geradeweg
         ["Geradeweg 1", "https://puzz.link/p?geradeweg/17/10/j6m1q4g4o55o54i1s1o2h3p6h3o2s1i35o53o2g3q6m.+100j"],
         ["Geradeweg 2", "https://puzz.link/p?geradeweg/10/10/g11111111g1111111111l1g11i11g111111111g11111111h1111111111111111g1111g111111111111g11111111g"],
@@ -86,16 +109,34 @@ describe("puzz.link parser", () => {
         ["Haisu 1", "https://puzz.link/p?haisu/18/18/511-120000000g014009002800i004g014009002800i004g014009002800g00000000000vvu000000000000000000000000000000000000000000000007vvg00009j2zzg1o5p6zs8zx2j8n7y3z4o4zh7zzh6h5h3zs5q"],
         ["Haisu 2", "https://puzz.link/p?haisu/4/4/44216n8d902m1m"],
         ["Haisu 3", "https://puzz.link/p?haisu/8/8/527704h490018a00e0000s060030o455g77zt6t"],
+        // Hanare-gumi
+        ["Hanare-gumi 1", "https://puzz.link/p?hanare/6/6/35vbm8uaihjfzv"],
+        ["Hanare-gumi 2", "https://puzz.link/p?hanare/8/8/bdbiufrpnii0u6s5t4195qcgh2zs6i3p5i5n"],
         // Hashiwokakero (Bridges)
         ["Hashiwokakero 1", "https://puzz.link/p?hashikake/5/5/1234g1-10+100=100g.h.i.l."],
         ["Hashiwokakero 2", "https://puzz.link/p?hashi/9/9/h2g3g.q.g1i3g.o2i1i2o.g2i2g1q.g3g3h"],
         ["Hashiwokakero 3", "https://puzz.link/p?bridges/17/13/l2h1w2i3h2i3zi1h3p1g2k2g1h3r1k4g4h4h4i3h2u1g2l1g3n1g3y1j.g3g3g3h3r2j.h3g.g2"],
         ["Hashiwokakero 4", "https://puzz.link/p?hashi/41/19/v3k6k3zzzk2i3g2o3i4zzw3i3g1m3k1i3g2zzs3g3i3k4s2g3g4zzzm3k2m3g2zzk3i5i1g3k2s3i2g3g4zzg4g3g1s4i3u3g5zzi2i2g2k1s3k1zzy1k4k1s1zzi2g1i2g4k4i4k4i6k4k4"],
+        // Hebi-Ichigo
+        ["Hebi-Ichigo 1", "https://puzz.link/p?hebi/10/10/k0.04a32c14l350.a40a23a11b44p40b0.a0.a40a0.25l0.c23a214.k"],
+        ["Hebi-Ichigo 2", "https://puzz.link/p?snakes/5/5/g13c31g35c12a"],
         // Heyawake
         ["Heyawake 1", "https://puzz.link/p?heyawake/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11"],
-        ["Heyawake 2", "https://puzz.link/p?heyawake/10/8/4k94j266sdc488g0206rv300cro0074g321g26"],
+        ["Heyawake 2", "https://puzz.link/p?heyawacky/10/8/4k94j266sdc488g0206rv300cro0074g321g26"],
         ["Heyawake 3", "https://puzz.link/p?heyawake/12/12/5k2q1d0mgb85k2q0d06g381k0q00000u0001vg0007ou0ofg3tg00065g63242362i"],
         ["Heyawake 4", "https://puzz.link/p?heyawake/17/17/ju1vv0vvnm0bv07vg3gfvv7vvhvvuvvvevvnfv07vg3vo003001g00oe1v00fsvs17vo1vpvfufo001g03g0006001g1vs01v00fvvvvvsvvv0s2zj2k2m"],
+        // Hitori
+        ["Hitori 1", "https://puzz.link/p?hitori/5/5/1-6i5-1v-2h1n-196-lx-3f45-iu91n-co-269cy5-1v-2h"],
+        ["Hitori 2", "https://puzz.link/p?hitori/8/8/.%.632..1.6..1.12.23..%3.%7..7..5.6.35%..7.7..7.2.%6.2.%.1..1.1./"],
+        ["Hitori 3", "https://puzz.link/p?hitori/8/8/8416325715684121262378436475273858613542475783762346528431821615"],
+        ["Hitori 4", "https://puzz.link/p?hitori/9/6/number15burgerkingfootlettucethelastthingyouwantinyourburger"],
+        // Ichimaga
+        ["Ichimaga 1", "https://puzz.link/p?ichimaga/14/10/cdlcicdehcg2ddkbhddgdhbjbhcbcj8bg6bbjdhbgcgbbi6cgcbc"],
+        ["Ichimaga 2", "https://puzz.link/p?ichimaga/7/7/o6dgdgbhch.ibg7.o"],
+        // Ichimagam (Magnetic Ichimaga)
+        ["Ichimagam (Magnetic Ichimaga) 1", "https://puzz.link/p?ichimagam/7/7/o6dgdgbhch.ibg7.o"],
+        // Ichimagamx (Crossing Ichimaga)
+        ["Ichimagamx (Crossing Ichimaga) 1", "https://puzz.link/p?ichimagax/7/7/o6dgdgbhch.ibg7.o"],
         // Juosan
         ["Juosan 1", "https://puzz.link/p?juosan/8/8/c3000000000003g00000000042g"],
         ["Juosan 2", "https://puzz.link/p?juosan/11/12/04fu7ukjl4btl6idrvifnvrtrvs0vd9vrshu97v9kiv4p4410ag1421521322524622g5g184551g134231g"],
@@ -107,6 +148,12 @@ describe("puzz.link parser", () => {
         ["Kakuro 3", "https://puzz.link/p?kakuro/2/2/k...-5"],
         ["Kakuro 4", "https://puzz.link/p?kakuro/5/5/kC-e-c-z..-8lff-giO"],
         ["Kakuro 5", "https://puzz.link/p?kakuro/6/6/m-eoI5lD-t.l-co-bm8-e-i97ggc"],
+        // Kropki
+        ["Kropki 1", "https://puzz.link/p?kropki/1/10/h3e"],
+        ["Kropki 2", "https://puzz.link/p?kropki/10/1/h3e"],
+        ["Kropki 3", "https://puzz.link/p?kropki/13/13/09000100000003312139b30ia4caa4caki2i0gna3002cng3cng40004090000d910000000000000i009000000000099300l030190"],
+        ["Kropki 4", "https://puzz.link/p?kropki/7/7/ddc0330l00729c6ic6e9j0i94d04"],
+        ["Kropki 5", "https://puzz.link/p?kropki/9/4/00000599cccdde000006"],
         // Kurochute
         ["Kurochute 1", "https://puzz.link/p?kurochute/13/13/31i33j13h3g3g47k.h1k71j4h1i2i2m2m531j1g53m1h13k33i3i6g1k34m1j1i5h3n4k41k39h1g32i13"],
         ["Kurochute 2", "https://puzz.link/p?kurochute/6/7/h12341p1l2p21234h"],
@@ -116,6 +163,9 @@ describe("puzz.link parser", () => {
         ["Kurodoko 2", "https://puzz.link/p?kurodoko/12/12/9l9l5l4l2l7l5l3l4l3h5p7h3l7l4l8l8l2l7l5l7l7"],
         ["Kurodoko 3", "https://puzz.link/p?kurodoko/4/4/g4g3.l.3g3g"],
         ["Kurodoko 4", "https://puzz.link/p?kurodoko/9/9/man5h365i4zo4i684h4n8m"],
+        // Look-Air
+        ["Look-Air 1", "https://puzz.link/p?lookair/10/10/3a1k3c1a1f1b0b5d1g2f2g3d5b1b3f1a0c3k1a3"],
+        ["Look-Air 2", "https://puzz.link/p?lookair/12/3/m5b0b.b0m"],
         // Kurotto
         ["Kurotto 1", "https://puzz.link/p?kurotto/10/10/sah2j.8.h.4.h6l6g4.l.8i9h9j.7.h.7.h5l5t6h3i"],
         ["Kurotto 2", "https://puzz.link/p?kurotto/13/12/g1g1h.h0g1h2g0h4h4g1h3g1h.h2g4i2h.g1h2j.h2g.h.j6h.g.h3i6g2h5h5g4h2g.h.h3g.h5g.h.h8g9i3h.g.h6j5h3g.h.j7h.g.h9h"],
@@ -128,11 +178,7 @@ describe("puzz.link parser", () => {
         // Masyu
         ["Masyu 1", "https://puzz.link/p?masyu/15/10/i0a02000000ik20620i6i0a021c049c209490j0100a0019329"],
         ["Masyu 2", "https://puzz.link/p?mashu/13/9/013009k10a3a39310c9313693i016030j039a20"],
-        ["Masyu 3", "https://puzz.link/p?mashu/v:/10/10/000000060i23601000000001i200f90000"],
-        // Mid-loop
-        ["Mid-loop 1", "https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz"],
-        ["Mid-loop 2", "https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg"],
-        ["Mid-loop 3", "https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi"],
+        ["Masyu 3", "https://puzz.link/p?pearl/v:/10/10/000000060i23601000000001i200f90000"],
         // Maxi Loop
         ["Maxi Loop 1", "https://puzz.link/p?maxi/10/10/37e0001tug030kdb00c2d00299pbgg3hg5j44s"],
         ["Maxi Loop 2", "https://puzz.link/p?maxi/24/16/424k150i894l5b98il295aiaa599aakl5ahakla5aikl9aaah995ai92l4abaiki8942i0kh0g4u020i1sjo9s4of43620jpgj68c4pj75001g1g00kspj462cp1jp08co4u347i3p7g9080f4673759b64879768352663589664786467589b685b"],
@@ -141,6 +187,13 @@ describe("puzz.link parser", () => {
         ["Meandering Numbers 2", "https://puzz.link/p?meander/6/6/d01gb04gc6sezv"],
         ["Meandering Numbers 3", "https://puzz.link/p?meander/10/10/0105187060b050g000funo7ivg02fo827s00zzzzz"],
         ["Meandering Numbers 4", "https://puzz.link/p?meander/10/10/11bindeqt11bin5easc8c60000vvf8300700i8n2zzk8zt1k1"],
+        // Mid-loop
+        ["Mid-loop 1", "https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz"],
+        ["Mid-loop 2", "https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg"],
+        ["Mid-loop 3", "https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi"],
+        // Minesweeper
+        ["Minesweeper 1", "https://puzz.link/p?mines/4/6/2h1k14h23k1h2"],
+        ["Minesweeper 2", "https://puzz.link/p?mines/10/10/2g4i2g2k33j4h3h3g1i3j3h23h43h3h3h34h32h3j3i2g3h3h3j33k2g2i3g1"],
         // Mochikoro
         ["Mochikoro 1", "https://puzz.link/p?mochikoro/10/10/..3l4k3j2u6i3m3r2w4i4l2j2g3h"],
         ["Mochikoro 2", "https://puzz.link/p?mochikoro/10/10/4t4i35zq3y+100k2r3j-10i"],
@@ -200,30 +253,48 @@ describe("puzz.link parser", () => {
         // Onsen-meguri (Onsen)
         ["Onsen-meguri 1", "https://puzz.link/p?onsen/10/18/85264cappjb7n4c4pjr32fd5qeoqm8s908u000o18ee0gm97g1s826s66c778ite822zh7j6zzzzzzj3j8zh"],
         ["Onsen-meguri 2", "https://puzz.link/p?onsen/9/9/275aepgrdtati48vsf5vmkto5d11rgzs3h4zzj"],
+        // Paintarea
+        ["Paintarea 1", "https://puzz.link/p?paintarea/10/10/vfmnvettvfttvvnqufvvvvsevqvvfmvfbt1rm2q2m2.h1.m2q1m"],
+        ["Paintarea 2", "https://puzz.link/p?paintarea/10/7/2327evvvrv2sgfu6cal1a0c8vzzr"],
         // Pencils
         ["Pencils 1", "https://puzz.link/p?pencils/6/6/1234k5.ghij-10zq-ff"],
         ["Pencils 2", "https://puzz.link/p?pencils/8/8/1o1k1k1l1o111m1n1m11m1k1m1o1l1m1l1l"],
         ["Pencils 3", "https://puzz.link/p?pencils/6/6/2kilgphk1w4kin5"],
         ["Pencils 4", "https://puzz.link/p?pencils/11/11/oi2kglgsgnhin2kgngkgl32uhkjkiyhogphlg2gv4l2jho3j"],
+        // Putteria
+        ["Putteria 1", "https://puzz.link/p?putteria/10/10/4b5pf5aprd948qbr8hjiejbftaadvscftra6zzzzz"],
+        ["Putteria 2", "https://puzz.link/p?putteria/8/8/adcaagl55ac0dntnvpnvjrng0123456789abcdef1g1z1z1h1"],
         // Regional Yajilin (Yajilin Regions)
         ["Regional Yajilin 1", "https://puzz.link/p?yajilin-regions/11/6/0457vvfnvnpkvun421100422g2123g1g1"],
-        ["Regional Yajilin 2", "https://puzz.link/p?yajilin-regions/8/8/b2om8i4108q00s3vg1s00sg0q"],
+        ["Regional Yajilin 2", "https://puzz.link/p?yajirin-regions/8/8/b2om8i4108q00s3vg1s00sg0q"],
         ["Regional Yajilin 3", "https://puzz.link/p?yajilin-regions/16/3/007005005vvv00005000h"],
         ["Regional Yajilin 4", "https://puzz.link/p?yajilin-regions/12/10/189cmfufuj9ipcvsvt6i2gfn1okc076jsv7ihg0sa3nog2231g232g2h213"],
         // Renban (Renban-Madoguchi)
         ["Renban 1", "https://puzz.link/p?renban/10/10/5k88hh20i142e2c5880g3o03vs0001fs02030g123g4g5"],
         ["Renban 2", "https://puzz.link/p?renban/8/8/rlbb326f5bb09aq7mv636310m1gco3sch3wdh4l"],
+        // Ring-ring
+        ["Ring-ring 1", "https://puzz.link/p?ringring/15/10/2540a304.26e5646a14351"],
+        ["Ring-ring 2", "https://puzz.link/p?ringring/7/7/2ia"],
+        ["Ring-ring 3", "https://puzz.link/p?ringring/14/10/k5a.87u"],
+        ["Ring-ring 4", "https://puzz.link/p?ringring/10/10/3be82fh4e0"],
         // Ripple
         ["Ripple 1", "https://puzz.link/p?ripple/10/10/c9hb4nfmueupv8ke11br7s3pk2r61hbqnsfezzzzz"],
-        ["Ripple 2", "https://puzz.link/p?ripple/5/5/d6lqqf3ei1g3s2g1i"],
+        ["Ripple 2", "https://puzz.link/p?hakyukoka/5/5/d6lqqf3ei1g3s2g1i"],
         ["Ripple 3", "https://puzz.link/p?ripple/6/6/4444440fo3u0m3h1i6l3g52g4g2i5h4"],
         ["Ripple 4", "http://pzv.jp/p?ripple/10/10/35srcenac8p9p4obgjqo5u0rnkfnnnfqvov4zzzzz"],
+        // Scrin
+        ["Scrin 1", "https://puzz.link/p?scrin/10/10/g.p7u5p.j.zi3m3m3u"],
+        ["Scrin 2", "https://puzz.link/p?scrin/9/9/j3l2i4h1m5zh6zi3k2g"],
         // Shakashaka
         ["Shakashaka 1", "https://puzz.link/p?shakashaka/10/10/g4.g5bcgdhei.l....w01436555000azp"],
         ["Shakashaka 2", "https://puzz.link/p?shakashaka/10/10/rch.m.k.lcgbv.ldgcqcjchb"],
         ["Shakashaka 3", "https://puzz.link/p?shakashaka/12/12/.hcc6.rbrchbdh.mczck.jbehdrbp.gbcc"],
         ["Shakashaka 4", "https://puzz.link/p?shakashaka/17/17/bmbibw.g.ibh.l.n1.ch.g.ibh.z.kbm.pck.g.o.g.mcncmei.y.kboal00aj.ibzi.kbm"],
         ["Shakashaka 5", "https://puzz.link/p?shakashaka/25/9/lcici.k.zl.111.h..ccg72....jbgbg.g.i.i.l.ibg.h.gbh.j.g.ibg.h.gbhbi.k.1.jbg.1.1.zlbi.kci.l"],
+        // Shikaku
+        ["Shikaku 1", "https://puzz.link/p?shikaku/10/10/x3gag.s9m.p.m8s-10g.gax"],
+        ["Shikaku 2", "https://puzz.link/p?shikaku/24/14/-1ezh-1ep9h-18zzfp-10zt-2at8zzvct9zt-1epezz-2ah-15pazh-18"],
+        ["Shikaku 3", "https://puzz.link/p?shikaku/8/8/2222y.j55j66j.y3333"],
         // Shimaguni (Islands)
         ["Shimaguni 1", "https://puzz.link/p?shimaguni/15/10/319eqrdmkg4t6bsufv7lo3r7jk9acr3408vvv7rs3hod4kgv21rk7lpzg5g3i"],
         ["Shimaguni 2", "https://puzz.link/p?shimaguni/4/4/7qoo90h2g"],
@@ -236,8 +307,12 @@ describe("puzz.link parser", () => {
         // Skyscrapers
         ["Skyscrapers 1", "https://puzz.link/p?skyscrapers/2/1/j1g"],
         ["Skyscrapers 2", "https://puzz.link/p?building/5/5/g2l4g2h4h4h2"],
-        ["Skyscrapers 3", "https://puzz.link/p?skyscrapers/6/6/h4j2h2g3g3h4g5g2g2"],
+        ["Skyscrapers 3", "https://puzz.link/p?skyscraper/6/6/h4j2h2g3g3h4g5g2g2"],
         ["Skyscrapers 4", "https://puzz.link/p?skyscrapers/3/5/1235433212312321"],
+        // Slant (Gokigen)
+        ["Slant 1", "https://puzz.link/p?gokigen/10/10/hc5b0bgcgdg7217bidj8778d7ag676617377dgcg8c6317222d6221clbga"],
+        ["Slant 2", "https://puzz.link/p?gokigen/7/7/kag2d27ag6bh26c91cjbg5cgehci"],
+        ["Slant 3", "https://puzz.link/p?gokigen/7/7/gag7bg4cgch3dh3ch928dk7ag4bh.ic"],
         // Slitherlink
         ["Slitherlink 1", "https://puzz.link/p?slither/12/10/6b2b76cbbc6ah7656d76dd1dcg6bh56b516b8dcc6bgbbg62d0a3c"],
         ["Slitherlink 2", "https://puzz.link/p?slitherlink/9/9/233333332dk388583d8d38cg73d7c38212173d7c3721317c"],
@@ -266,6 +341,12 @@ describe("puzz.link parser", () => {
         ["Sudoku 9x9 1", "https://puzz.link/p?sudoku/9/9/123456789789123456456789123231564897897231564564897231312645978978312645645978312"],
         ["Sudoku 9x9 2", "https://puzz.link/p?sudoku/9/9/15i96l17i7g65i42k1g5368h2i7g2p3h5g48g2g9k3h7i6"],
         ["Sudoku 9x9 3", "https://puzz.link/p?sudoku/9/9/91h8h343m5i1g3k1i3h5i9i8h7i5k7g5i6m787h4h26"],
+        // Sukoro
+        ["Sukoro 1", "https://puzz.link/p?sukoro/5/4/1c2b3d4..e"],
+        ["Sukoro 2", "https://puzz.link/p?sukoro/8/8/b1a2a21a1a2a2b1a2a2a1b2a2a2a12a1a2a2b1a1a2a21a1a2a2b1a2a1a1"],
+        // Sukoro-room
+        ["Sukoro-room 1", "https://puzz.link/p?sukororoom/10/10/blvvffvvu5cvvftulub6uv2ue7ljuvdjn4cnq1..zzl1q"],
+        ["Sukoro-room 2", "https://puzz.link/p?sukororoom/v:/10/10/mtuvvjtvdfvuebdumn6vvfpb8ujuufntuvtmk2zzx3k"],
         // Symmetry Area
         ["Symmetry Area 1", "https://puzz.link/p?symmarea/17/7/9i9i3i3i77i5i5i5i3qfsfsfq3i9i9i1i31i3i3i3i9"],
         ["Symmetry Area 2", "https://puzz.link/p?symmarea/10/10/g1g13g1g1q2n27k1h1p3n21h1l2z1g1h2g1g"],
@@ -281,6 +362,18 @@ describe("puzz.link parser", () => {
         ["Tapa-Like Loop 3", "https://puzz.link/p?tapaloop/10/10/2i3i2zh2i3i2z2i3i2zh2i3i2"],
         ["Tapa-Like Loop 4", "https://puzz.link/p?tapaloop/12/12/zm+2pj+2pvadnarl22p22laenalv+2ojabzm"],
         ["Tapa-Like Loop 5", "https://puzz.link/p?tapaloop/15/15/habha9gaagaixajziaanb0n2oa9iaii+2pva9haji-9fiakhajzarib0xb0j-feiasziain+2omaiiajl3"],
+        // Tasquare
+        ["Tasquare 1", "https://puzz.link/p?tasquare/10/10/.i.h.h.i.h.h1i2i4h2i5i1z1i6iah2ibi9h.h.i.h.h.i./"],
+        ["Tasquare 2", "https://puzz.link/p?tasquare/10/10/.n.i+fffm-ffj+100m-10i2g.k2l2k2k2k2k2k.l.j2i./"],
+        // Tatebo-Yokobo
+        ["Tatebo-Yokobo 1", "https://puzz.link/p?tateyoko/10/10/p2i3xn2np1i21pi32n1nrn1i2pn2n1nri2pi3xn3i22n1ri2qi42i2x2i2p2np2i4xi22nqn2n2n3nqi4xn2npn1n2p"],
+        ["Tatebo-Yokobo 2", "http://pzv.jp/p.html?tateyoko/10/10/2i22ppi23i2xi43nq2i2r2i3xi22n1no1i4pi5p1nxpi2q3i32x2i4rn1i4x2i3pn2nq2i33nqn3i3ppn1i2"],
+        ["Tatebo-Yokobo 3", "https://puzz.link/p?tateyoko/5/5/-10i22ppi23i2xi43nq2i2r2-ff"],
+        // Tentaisho (Spiral Galaxies)
+        ["Tentaisho 1", "https://puzz.link/p?tentaisho/10/10/znezzjezzmezweu4ezlezzrezjeze"],
+        ["Tentaisho 2", "https://puzz.link/p?tentaisho/16/10/neme8cenezkezlcerezzqewezzlae2ezmegeyevez8eo44eq6ezzeneek84em"],
+        ["Tentaisho 3", "https://puzz.link/p?tentaisho/5/5/o3ey72fs2fl"],
+        ["Tentaisho 4", "https://puzz.link/p?tentaisho/9/9/elaegezs62fkf7eqegekfgezifkbc3ejezsc2ehe"],
         // Tents
         ["Tents 1", "https://puzz.link/p?tents/20/20/py0o001123456789abcdefghi0j0k0l0m0n0o0p0q0r0s0t0u0v0w0x0y0z00jkl0"],
         ["Tents 2", "https://puzz.link/p?tents/9/9/2i2i1i221i31a0c42124b1a112"],
@@ -288,10 +381,19 @@ describe("puzz.link parser", () => {
         ["Tents 4", "https://puzz.link/p?tents/12/11/g111h1h11g1213i21g1ndd2240hzl0978h"],
         ["Tents 5", "https://puzz.link/p?tents/10/10/zj1861a2163d2181182112"],
         ["Tents 6", "https://puzz.link/p?tents/8/8/g1g1g1g11g1g1g1gj2263a353d31"],
+        // Territory (Nawabari)
+        ["Territory (Nawabari) 1", "https://puzz.link/p?nawabari/9/9/b3c2k1b3a2b2b2c3m2c3b2b1a3b2k4c2b"],
+        ["Territory (Nawabari) 2", "https://puzz.link/p?nawabari/10/10/c.h3c2f1d2b3c4a4a3c1l3c3a2a3c2b2d2f3c2h.c"],
         // Toichika 2
         ["Toichika-2 1", "https://puzz.link/p?toichika2/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
         ["Toichika-2 2", "https://puzz.link/p?toichika2/12/12/4s6ndj8iorsml2p8llbdekqu9504hq8lvi2bt54jun8vv95nsi88c05g4g3i2i1i25o4g"],
         ["Toichika-2 3", "https://puzz.link/p?toichika2/20/15/10156ggr62indoe611d38431oonjrhv7hltmb6t90d6hdme4rc8jcp26ge7vo7vvo32vk8tv1v7uefro67hg208e82hg953tva7tu0fg0fv6m1u0ei5g24k54g2l7g557k92h3g3g2g3"],
+        // Uso-one
+        ["Uso-one 1", "https://puzz.link/p?usoone/10/10/14i94i94i284g90408v0000000vv0000vv0067c56dh77cdgbgbgcg25dicjbg2768dh7bichdgc7bab"],
+        ["Uso-one 2", "https://puzz.link/p?usoone/10/10/284g90i14488gh122400000007vo003o0000r.93bckahddcdgdocidb2clbh8cichc"],
+        // Uso-tatami
+        ["Uso-tatami 1", "https://puzz.link/p?usotatami/10/10/6e7b3a8j2e4c...b21e4c2b4b414d12c3d2d..j8a2b7e6"],
+        ["Uso-tatami 2", "https://puzz.link/p?usotatami/6/4/c2c1h3c4c"],
         // View
         ["View 1", "https://puzz.link/p?view/8/8/k0g1g0i2h031h1g2k2j4k2g1h012h2i2g1g1k"],
         ["View 2", "https://puzz.link/p?view/10/10/2g0g0r1i4g1j5g4i2j3k4g2j2q0i2g1v4l3j2"],
@@ -303,12 +405,40 @@ describe("puzz.link parser", () => {
         ["Yajikazu 5", "https://puzz.link/p?yajikazu/6/3/1122334400a1.2.3.4.0.a-13e3-23e4-33e5962563"],
         // Yajilin
         ["Yajilin 1", "https://puzz.link/p?yajilin/b/10/10/n2222c11b42r11f21b11f21r12b41c3112n"],
-        ["Yajilin 2", "https://puzz.link/p?yajilin/b/9/9/a21220.c212242h41h0.d0.f0.k0.f11d41h42h"],
-        ["Yajilin 3", "https://puzz.link/p?yajilin/9/9/a21220.0.0.0.212242h42h0.d0.c0.b0.e0.e0.b0.c0.d41h41h"],
+        ["Yajilin 2", "https://puzz.link/p?yajirin/b/9/9/a21220.c212242h41h0.d0.f0.k0.f11d41h42h"],
+        ["Yajilin 3", "https://puzz.link/p?yajirin/9/9/a21220.0.0.0.212242h42h0.d0.c0.b0.e0.e0.b0.c0.d41h41h"],
         ["Yajilin 4", "https://puzz.link/p?yajilin/11/11/zq33k1241111111221111zi34m12c11d"],
         ["Yajilin 5", "https://puzz.link/p?yajilin/10/10/40u23k10h20l10h20k13l40i"],
         ["Yajilin 6", "https://puzz.link/p?yajilin/b/11/11/m31e23e23c23g10a22i32j12j32j40j31j31p"],
         ["Yajilin 7", "https://puzz.link/p?yajilin/6/3/1122334400a1.2.3.4.0.a-13e3-23e4-33e5962563"],
+        // Yin-Yang
+        ["Yin-Yang 1", "https://puzz.link/p?yinyang/v:/6/6/l2a70001f0kb"],
+        ["Yin-Yang 2", "https://puzz.link/p?yinyang/v:/14/8/59000k00074i00027a8ala6j620g793b606n39"],
+        ["Yin-Yang 3", "https://puzz.link/p?yinyang/12/5/02903a2o490i392o0290"],
+        ["Yin-Yang 4", "https://puzz.link/p?yinyang/14/10/000003fji00i3i669j099i31109960kl0320g010a000000"],
+
+        // ============ https://pzprxs.vercel.app/p ============
+        // Canal View
+        ["Canal View 1", "https://pzprxs.vercel.app/p?canal/6/6/.j.p6h4p6j6"],
+        ["Canal View 2", "https://pzprxs.vercel.app/p?canal/v:/10/10/1k4u1j7i3r6y1w-11m3n2"],
+        // Chained Block
+        ["Chained Block 1", "https://pzprxs.vercel.app/p?chainedb/9/9/15i96l17i7g65i42k1g5368h2i7g2p3h5g48g2g9k3h7i6"],
+        ["Chained Block 2", "https://pzprxs.vercel.app/p?chainedb/12/12/h3l4k.l.m.j2n.k3o.h.j.m3r3m2j.i.i3j.i2i2t2k"],
+        // Choco Banana
+        ["Choco Banana 1", "https://pzprxs.vercel.app/p?cbanana/v:/6/6/.j.p6h4p6j6"],
+        ["Choco Banana 2", "https://pzprxs.vercel.app/p?cbanana/10/10/1k4u1j7i3r6y1w-11m3n2"],
+        // Dotchi-Loop
+        ["Dotchi-Loop 1", "https://pzprxs.vercel.app/p?dotchi/7/7/2b2a2imi0i38h49mi873300390i0a262970"],
+        ["Dotchi-Loop 2", "https://pzprxs.vercel.app/p?dotchi/10/10/54a94i93264d0qil0200vs03vs1stv0fu0vsk6lja01621i415ak6biai3b0c6bg6gi030"],
+        // One Room One Door
+        ["One Room One Door 1", "https://pzprxs.vercel.app/p?oneroom/10/8/4k94j266sdc488g0206rv300cro00.4g321g26"],
+        ["One Room One Door 2", "https://pzprxs.vercel.app/p?oneroom/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11"],
+        // Rassi Silai
+        ["Rassi Silai 1", "https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4"],
+        ["Rassi Silai 2", "https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
+        // Tonttiraja
+        ["Tonttiraja 1", "https://pzprxs.vercel.app/p?tontti/v:/6/6/.j.p6h4p6j6"],
+        ["Tonttiraja 2", "https://pzprxs.vercel.app/p?tontti/10/10/1k4u1j7i3r6y1w-11m3n2"],
     ];
     const testCases = [];
 
@@ -332,6 +462,7 @@ describe("puzz.link parser", () => {
         // These are not native objects but class instances
         delete contents.command_undo;
         delete contents.command_redo;
+        delete contents.command_replay;
 
         const data = {
             contents,
