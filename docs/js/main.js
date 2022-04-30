@@ -1761,18 +1761,18 @@ onload = function() {
             case "replay_download":
             case "replay_download_btn":
                 //generate a GIF of the solve path, with title and solve time information above it.
-                if (!document.getElementById("replay_download_btn").disabled){
+                if (!document.getElementById("replay_download_btn").disabled) {
 
                     document.getElementById("replay_download_btn").disabled = true;
                     document.getElementById("replay_message").style.display = "";
                     document.getElementById("replay_message").innerHTML = "Preparing your download";
-        
-                    setTimeout(function(){
+
+                    setTimeout(function() {
                         function splitTextLines(ctx, text, maxWidth) {
                             var words = text.split(" ");
                             var lines = [];
                             var currentLine = words[0];
-                        
+
                             for (var i = 1; i < words.length; i++) {
                                 var word = words[i];
                                 var width = ctx.measureText(currentLine + " " + word).width;
@@ -1790,14 +1790,14 @@ onload = function() {
                         //put the title text on the top
                         let main_c = $('#canvas')[0];
                         let main_ctx = main_c.getContext("2d");
-                        
+
                         let gif_c = document.createElement('canvas');
                         let gif_ctx = gif_c.getContext("2d");
 
                         let fontSize = 16;
                         let fontLineSize = fontSize * 1.2;
                         gif_ctx.font = "bold " + fontSize + "px sans-serif";
-                        let puzzleTitleLines = splitTextLines(gif_ctx,$('#puzzletitle').text(),main_c.offsetWidth);
+                        let puzzleTitleLines = splitTextLines(gif_ctx, $('#puzzletitle').text(), main_c.offsetWidth);
                         let gif_vertical_offset = puzzleTitleLines.length * fontLineSize
                         gif_c.width = main_c.offsetWidth;
                         gif_c.height = main_c.offsetHeight + gif_vertical_offset;
@@ -1810,13 +1810,13 @@ onload = function() {
                         //draw the title text.
                         gif_ctx.fillStyle = "#0000ff";
                         let textY = fontSize;
-                        for(let textLine of puzzleTitleLines){
-                            gif_ctx.fillText(textLine, (gif_c.width - gif_ctx.measureText(textLine).width)/2, textY);
+                        for (let textLine of puzzleTitleLines) {
+                            gif_ctx.fillText(textLine, (gif_c.width - gif_ctx.measureText(textLine).width) / 2, textY);
                             textY += fontLineSize;
                         }
 
                         //prepare to create gif frames
-                        let  gif = new GIF({
+                        let gif = new GIF({
                             workers: 8,
                             quality: 40,
                             workerScript: './js/libs/gif.worker.js',
@@ -1825,7 +1825,7 @@ onload = function() {
                         });
                         let frame_ms = 500 / parseFloat(document.getElementById("replay_speed").value);
                         let original_position = pu[pu.mode.qa]["command_undo"].__a.length;
-                        
+
                         //go to first frame of solve
                         while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
                             pu.undo(replay = true);
@@ -1833,31 +1833,31 @@ onload = function() {
 
                         //advance and capture one frame at a time
                         while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
-                            gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height-gif_vertical_offset);
-                            gif.addFrame(gif_ctx, {delay: frame_ms, copy: true});
-                            
+                            gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
+                            gif.addFrame(gif_ctx, { delay: frame_ms, copy: true });
+
                             pu.redo(replay = true);
                         }
                         //capture final frame with longer delay
-                        gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height-gif_vertical_offset);
-                        gif.addFrame(gif_ctx, {delay: 2000, copy: true});
-                        
+                        gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
+                        gif.addFrame(gif_ctx, { delay: 2000, copy: true });
+
                         gif.on('finished', function(blob) {
-                            saveblob_download(blob,"my_solve.gif");
+                            saveblob_download(blob, "my_solve.gif");
                             document.getElementById("replay_download_btn").disabled = false;
                             document.getElementById("replay_message").style.display = "none";
                             document.getElementById("replay_message").innerHTML = ""
                         });
                         gif.render();
-                        
+
                         //return playback position to where it was before.
                         while (pu[pu.mode.qa]["command_undo"].__a.length !== original_position) {
                             pu.undo(replay = true);
                         }
-                    },5);
+                    }, 5);
                 }
                 e.preventDefault();
-                break;        
+                break;
         }
         // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {

@@ -700,7 +700,8 @@ class Puzzlink {
 
     decodeTateyoko() {
         let info_number = {};
-        let cell_index = 0, index;
+        let cell_index = 0,
+            index;
         for (index = 0; index < this.gridurl.length; index++) {
             let char = this.gridurl[index];
             // value = [number, is background shaded?]

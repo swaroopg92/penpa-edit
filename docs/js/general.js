@@ -2938,12 +2938,14 @@ function set_solvemode(type = "url") {
 
     // Constraints
     document.getElementById('constraints').style.display = 'none';
-
     if (type.includes('local')) {
-        $('select').toggleSelect2(false);
-    } else {
-        document.getElementById('constraints_settings_opt').style.display = 'none';
+        try {
+            $('select').toggleSelect2(false);
+        } catch (err) {
+            // pass
+        }
     }
+    document.getElementById('constraints_settings_opt').style.display = 'none';
 
     // No need of Solving URL in Solver Mode, instead show replay url
     document.getElementById('address_solve').style.display = 'none';
@@ -4589,7 +4591,7 @@ function decode_puzzlink(url) {
 
             pu.user_tags = ["tatebo-yokobo"]; // Set tags
             break;
-        // ============ https://pzprxs.vercel.app/p ============
+            // ============ https://pzprxs.vercel.app/p ============
         case "canal":
         case "cbanana":
         case "tontti":
