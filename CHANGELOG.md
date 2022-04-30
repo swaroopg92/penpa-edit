@@ -1,5 +1,7 @@
 ## History
-* 2022/04/13 ver 2.26.19
+* 2022/04/30 ver 2.26.19
+	* Added more puzz link support - kropki, firefly, slant, spiral galaxies, ringring, doubleback, yinyang, hitori, putteria, hanare, aho, shikaku, fillmat, lookair, paintarea, sukoro, sukkororoom, usotatami, usoone, scrin, hebiichigo, tasquare, minesweeper, ichimaga, magneticichimaga, crossingichimaga, territory, doublechoco, tateboyokobo, canalview, chocobanana, tonttiraja, dotchiloop, chainedblock, oneroomonedoor, rassisilai
+	* Added gif download feature to replay
 	* minor improvement to responsive mode for utilizing full space.
 	* improvements to local storage.
 	* improvements to replay feature.
