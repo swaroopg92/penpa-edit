@@ -1577,7 +1577,8 @@ function savetext_download() {
     var blob = new Blob([text], { type: "text/plain" });
     saveblob_download(blob, "my_puzzle.txt");
 }
-function saveblob_download(blob, defaultFilename){
+
+function saveblob_download(blob, defaultFilename) {
     var downloadLink = document.getElementById('download_link');
     var filename = document.getElementById("savetextname").value;
     if (!filename) {
