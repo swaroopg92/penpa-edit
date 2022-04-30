@@ -13,6 +13,8 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * Import and Export Sudoku (I/O Sudoku) in Penpa - https://youtu.be/f-Lw0QuXa2c
 * Enhancing the Solver Experience in Penpa - https://youtu.be/azNx2lQmANg
 * What does PenpaLite do? What is this Constraints for? - https://youtu.be/2OczdnF5LmY
+* How to generate GMPuzzles Submission TextFile? - https://youtu.be/0i8hVUO85iM
+* How to import Puzz.link/Pzv/Other Penpa forks to Penpa+? - https://youtu.be/z7jhvfKhhmU
 
 ## Puzzles
 * How to Create a Thermo Sudoku? - https://youtu.be/ynZOz057mKA
@@ -22,6 +24,7 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * How to Create a XV, GreaterThan, Consecutive, Kropki, Quadruple Sudoku? - https://youtu.be/vl1hEuX7H5M
 * How to Create 3D Sudoku/Isodoku? - https://youtu.be/PZ8imdAa_g0
 * How to Create a Little Killer Sudoku? - https://youtu.be/L_5DGjV2Z-w
+* How to Create a Kakuro Puzzle? - https://youtu.be/0iVCFYePt9Y
 
 ## Bonus
 * How to post a puzzle on Logic Masters Germany website - https://www.youtube.com/watch?v=9vhpo2B9qrM&t=1124s

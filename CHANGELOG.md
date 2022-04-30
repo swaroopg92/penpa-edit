@@ -1,4 +1,13 @@
 ## History
+* 2022/04/30 ver 2.26.19
+	* Added more puzz link support - kropki, firefly, slant, spiral galaxies, ringring, doubleback, yinyang, hitori, putteria, hanare, aho, shikaku, fillmat, lookair, paintarea, sukoro, sukkororoom, usotatami, usoone, scrin, hebiichigo, tasquare, minesweeper, ichimaga, magneticichimaga, crossingichimaga, territory, doublechoco, tateboyokobo, canalview, chocobanana, tonttiraja, dotchiloop, chainedblock, oneroomonedoor, rassisilai
+	* Added gif download feature to replay
+	* minor improvement to responsive mode for utilizing full space.
+	* improvements to local storage.
+	* improvements to replay feature.
+	* Hexagon shapes to various modes.
+	* improved pause layer to be dark in dark mode.
+	* added top limit for panel movement.
 * 2022/03/17 ver 2.26.18
 	* Feature to share replay.
 	* Fixed an auto redirect bug for custom messages.

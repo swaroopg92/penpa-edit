@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 18]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 19]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -385,7 +385,7 @@ class Puzzle {
         // pause-unpause layer
         let pause_canvas = document.getElementById("pause_canvas");
         let pause_ctx = pause_canvas.getContext("2d");
-        let factor = this.resol * 5;
+        let factor = this.resol * 4;
         pause_canvas.style.width = (this.canvasx - factor).toString() + "px";
         pause_canvas.style.height = (this.canvasy - factor).toString() + "px";
         pause_canvas.width = this.resol * this.canvasx;
@@ -398,7 +398,11 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        pause_ctx.filleStyle = Color.BLUE;
+        if (UserSettings.color_theme == 1) {
+            pause_ctx.fillStyle = Color.BLUE;
+        } else {
+            pause_ctx.fillStyle = Color.WHITE;
+        }
         let font_size = 0.09 * pause_canvas.height; // 9 % of display size/ height of canvas
         pause_ctx.font = font_size + 'px sans-serif';
         let lineheight = 1.2 * font_size;
@@ -4999,7 +5003,8 @@ class Puzzle {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             // any shades of grey including black
-                            if (this.pu_a.surface[i + j * (this.nx0)] &&
+                            if (!this.pu_q.number[i + j * (this.nx0)] &&
+                                this.pu_a.surface[i + j * (this.nx0)] &&
                                 (this.pu_a.surface[i + j * (this.nx0)] === 1 ||
                                     this.pu_a.surface[i + j * (this.nx0)] === 8 ||
                                     this.pu_a.surface[i + j * (this.nx0)] === 3 ||
