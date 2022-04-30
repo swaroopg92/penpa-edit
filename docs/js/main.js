@@ -2314,6 +2314,9 @@ function clear_storage_one() {
             icon: 'info'
         });
     }
+
+    // turn off localstorage
+    UserSettings.local_storage = 3; // not using 4 because this is temporary state
 }
 
 function clear_storage_all() {
@@ -2326,6 +2329,10 @@ function clear_storage_all() {
         }
     }
     // localStorage.clear(); for all clear
+
+    // turn off localstorage
+    UserSettings.local_storage = 3; // not using 4 because this is temporary state
+
     Swal.fire({
         html: '<h2 class="info">Local Storage is Cleared</h2>',
         icon: 'info'
