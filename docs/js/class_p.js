@@ -3353,6 +3353,37 @@ class Puzzle {
                         }
                     }
                 }
+
+                let surface_2_edge_types = ['pentominous', 'araf'];
+                let found = this.user_tags.some(r => surface_2_edge_types.includes(r));
+                if (found && this.gridtype === 'square') {
+                    let present_cell, right_cell, down_cell;
+                    for (var j = 2; j < this.nx0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            present_cell = i + j * (this.nx0);
+                            right_cell = present_cell + 1;
+                            down_cell = Math.max(...this.point[present_cell].adjacent);
+                            if (i != this.nx0 - 3) {
+                                if (this[pu].surface[present_cell] &&
+                                    this[pu].surface[right_cell] &&
+                                    (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
+                                    sol[2].push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                }
+                            }
+                            if (j != this.nx0 - 3) {
+                                if (this[pu].surface[present_cell] &&
+                                    this[pu].surface[down_cell] &&
+                                    (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
+                                    sol[2].push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                }
+                            }
+                        }
+                    }
+                }
+                console.log(sol[2]);
+                let unique_sol2 = [...new Set(sol[2])];
+                console.log(unique_sol2);
+                sol[2] = unique_sol2;
             }
 
             if (document.getElementById("sol_wall").checked === true || checkall) {
@@ -3613,8 +3644,37 @@ class Puzzle {
                                     }
                                 }
                             }
+                            let surface_2_edge_types = ['pentominous', 'araf'];
+                            let found = this.user_tags.some(r => surface_2_edge_types.includes(r));
+                            if (found && this.gridtype === 'square') {
+
+                                let present_cell, right_cell, down_cell;
+                                for (var j = 2; j < this.nx0 - 2; j++) {
+                                    for (var i = 2; i < this.nx0 - 2; i++) {
+                                        present_cell = i + j * (this.nx0);
+                                        right_cell = present_cell + 1;
+                                        down_cell = Math.max(...this.point[present_cell].adjacent);
+                                        if (i != this.nx0 - 3) {
+                                            if (this[pu].surface[present_cell] &&
+                                                this[pu].surface[right_cell] &&
+                                                (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
+                                                temp_sol.push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                            }
+                                        }
+                                        if (j != this.nx0 - 3) {
+                                            if (this[pu].surface[present_cell] &&
+                                                this[pu].surface[down_cell] &&
+                                                (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
+                                                temp_sol.push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             temp_sol.sort();
-                            sol[sol_count] = temp_sol;
+                            let unique_temp_sol = [...new Set(temp_sol)];
+                            console.log(unique_temp_sol);
+                            sol[sol_count] = unique_temp_sol;
                             break;
                         case "wall":
                             for (var i in this[pu].wall) {
