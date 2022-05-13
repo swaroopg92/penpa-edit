@@ -804,7 +804,7 @@ function submit_solution(e) {
             solution = sol.join(':');
             break;
         case "voxas":
-            // Answer - Line
+            // Answer - Edge
             sol = [];
             for (var i in pu.pu_a.lineE) {
                 if ((pu.frame[i] && pu.frame[i] === 2) ||
@@ -822,6 +822,43 @@ function submit_solution(e) {
             }
             sol = sol.sort();
             solution = sol.join(':');
+            break;
+        case "kakuro":
+            // Answer - number
+            let ind;
+            for (var j = 3; j < pu.ny0 - 2; j++) {
+                for (var i = 3; i < pu.nx0 - 2; i++) {
+                    ind = i + j * (pu.nx0);
+                    if (pu.pu_q.symbol[ind]) {
+                        // if its a clue cell then ignore
+                    } else if (pu.pu_q.number[ind] && pu.pu_q.number[ind][1] === 1 && (pu.pu_q.number[ind][2] === "1" || pu.pu_q.number[ind][2] === "10")) {
+                        // (Black) and (Normal or L) in Problem mode then ignore
+                    } else {
+                        // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                        if (pu.pu_a.number[ind][2] === "7") {
+                            var sum = 0,
+                                a;
+                            for (var k = 0; k < 10; k++) {
+                                if (pu.pu_a.number[ind][0][k] === 1) {
+                                    sum += 1;
+                                    a = k + 1;
+                                }
+                            }
+                            if (sum === 1) {
+                                solution += a.toString();
+                            }
+                        } else if (!isNaN(pu.pu_a.number[ind][0]) || !pu.pu_a.number[ind][0].match(/[^A-Za-z]+/)) {
+                            // ((any color) and (Normal, M, S, L))
+                            if (pu.pu_a.number[ind][1] && (pu.pu_a.number[ind][2] === "1" ||
+                                    pu.pu_a.number[ind][2] === "5" ||
+                                    pu.pu_a.number[ind][2] === "6" ||
+                                    pu.pu_a.number[ind][2] === "10")) {
+                                solution += pu.pu_a.number[ind][0].toString();
+                            }
+                        }
+                    }
+                }
+            }
             break;
     }
     const data = {
