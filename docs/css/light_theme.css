@@ -85,6 +85,11 @@
     border: 1px solid var(--blueDark);
 }
 
+.labelSu {
+    color: var(--black);
+    border: 1px solid var(--blueDark);
+}
+
 .label_option {
     color: var(--black);
     border: 1px solid var(--blueDark);
