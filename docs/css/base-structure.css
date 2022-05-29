@@ -1263,6 +1263,13 @@ input[type=number] {
     color: var(--blue);
 }
 
+.shortcuts table,
+th,
+td {
+    color: var(--blue);
+    border: 1px solid var(--fgMain);
+}
+
 #answersetting {
     border-collapse: collapse;
     border: 3px solid var(--fgMain);
