@@ -178,6 +178,7 @@ class Puzzle {
             13: 1 // Fat dots
         };
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
+        this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino'];
     }
 
     reset() {
@@ -3369,23 +3370,48 @@ class Puzzle {
                     }
                 }
 
-                let surface_2_edge_types = ['pentominous', 'araf'];
-                let found = this.user_tags.some(r => surface_2_edge_types.includes(r));
+                let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
                 if (found && this.gridtype === 'square') {
+                    // find out the grid position using the frame data
+                    // Note this section of code will work only if thick border frame exists
+                    if (typeof this.row_start == "undefined") {
+                        // Find top left corner and bottom right corner
+                        let topleft = 9999,
+                            bottomright = 0,
+                            numbers;
+                        for (var i in this.frame) {
+                            numbers = i.split(",");
+                            if (topleft >= parseInt(numbers[0])) {
+                                topleft = parseInt(numbers[0]);
+                            }
+                            if (bottomright <= parseInt(numbers[1])) {
+                                bottomright = parseInt(numbers[1]);
+                            }
+                        }
+                        // finding row and column indices
+                        let pointA, pointB;
+                        pointA = topleft - (this.nx0 * this.ny0);
+                        this.col_start = (pointA % this.nx0) - 1; //column
+                        this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                        pointB = bottomright - (this.nx0 * this.ny0);
+                        this.col_end = (pointB % this.nx0) - 1; //column
+                        this.row_end = parseInt(pointB / this.nx0) - 1; //row
+                    }
+
                     let present_cell, right_cell, down_cell;
-                    for (var j = 2; j < this.nx0 - 2; j++) {
-                        for (var i = 2; i < this.nx0 - 2; i++) {
+                    for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                        for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
                             present_cell = i + j * (this.nx0);
                             right_cell = present_cell + 1;
                             down_cell = Math.max(...this.point[present_cell].adjacent);
-                            if (i != this.nx0 - 3) {
+                            if (i != this.col_end + 1) {
                                 if (this[pu].surface[present_cell] &&
                                     this[pu].surface[right_cell] &&
                                     (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
                                     sol[2].push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
                                 }
                             }
-                            if (j != this.nx0 - 3) {
+                            if (j != this.row_end + 1) {
                                 if (this[pu].surface[present_cell] &&
                                     this[pu].surface[down_cell] &&
                                     (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
@@ -3395,9 +3421,7 @@ class Puzzle {
                         }
                     }
                 }
-                console.log(sol[2]);
                 let unique_sol2 = [...new Set(sol[2])];
-                console.log(unique_sol2);
                 sol[2] = unique_sol2;
             }
 
@@ -3659,24 +3683,49 @@ class Puzzle {
                                     }
                                 }
                             }
-                            let surface_2_edge_types = ['pentominous', 'araf'];
-                            let found = this.user_tags.some(r => surface_2_edge_types.includes(r));
+
+                            let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
                             if (found && this.gridtype === 'square') {
+                                // find out the grid position using the frame data
+                                // Note this section of code will work only if thick border frame exists
+                                if (typeof this.row_start == "undefined") {
+                                    // Find top left corner and bottom right corner
+                                    let topleft = 9999,
+                                        bottomright = 0,
+                                        numbers;
+                                    for (var i in this.frame) {
+                                        numbers = i.split(",");
+                                        if (topleft >= parseInt(numbers[0])) {
+                                            topleft = parseInt(numbers[0]);
+                                        }
+                                        if (bottomright <= parseInt(numbers[1])) {
+                                            bottomright = parseInt(numbers[1]);
+                                        }
+                                    }
+                                    // finding row and column indices
+                                    let pointA, pointB;
+                                    pointA = topleft - (this.nx0 * this.ny0);
+                                    this.col_start = (pointA % this.nx0) - 1; //column
+                                    this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                                    pointB = bottomright - (this.nx0 * this.ny0);
+                                    this.col_end = (pointB % this.nx0) - 1; //column
+                                    this.row_end = parseInt(pointB / this.nx0) - 1; //row
+                                }
 
                                 let present_cell, right_cell, down_cell;
-                                for (var j = 2; j < this.nx0 - 2; j++) {
-                                    for (var i = 2; i < this.nx0 - 2; i++) {
+                                for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                                    for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
                                         present_cell = i + j * (this.nx0);
                                         right_cell = present_cell + 1;
                                         down_cell = Math.max(...this.point[present_cell].adjacent);
-                                        if (i != this.nx0 - 3) {
+                                        if (i != this.col_end + 1) {
                                             if (this[pu].surface[present_cell] &&
                                                 this[pu].surface[right_cell] &&
                                                 (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
                                                 temp_sol.push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
                                             }
                                         }
-                                        if (j != this.nx0 - 3) {
+                                        if (j != this.row_end + 1) {
                                             if (this[pu].surface[present_cell] &&
                                                 this[pu].surface[down_cell] &&
                                                 (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
@@ -3688,7 +3737,6 @@ class Puzzle {
                             }
                             temp_sol.sort();
                             let unique_temp_sol = [...new Set(temp_sol)];
-                            console.log(unique_temp_sol);
                             sol[sol_count] = unique_temp_sol;
                             break;
                         case "wall":
