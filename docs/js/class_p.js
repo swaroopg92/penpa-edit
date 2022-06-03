@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 19]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 20]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -178,6 +178,7 @@ class Puzzle {
             13: 1 // Fat dots
         };
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
+        this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino'];
     }
 
     reset() {
@@ -3368,6 +3369,60 @@ class Puzzle {
                         }
                     }
                 }
+
+                let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
+                if (found && this.gridtype === 'square') {
+                    // find out the grid position using the frame data
+                    // Note this section of code will work only if thick border frame exists
+                    if (typeof this.row_start == "undefined") {
+                        // Find top left corner and bottom right corner
+                        let topleft = 9999,
+                            bottomright = 0,
+                            numbers;
+                        for (var i in this.frame) {
+                            numbers = i.split(",");
+                            if (topleft >= parseInt(numbers[0])) {
+                                topleft = parseInt(numbers[0]);
+                            }
+                            if (bottomright <= parseInt(numbers[1])) {
+                                bottomright = parseInt(numbers[1]);
+                            }
+                        }
+                        // finding row and column indices
+                        let pointA, pointB;
+                        pointA = topleft - (this.nx0 * this.ny0);
+                        this.col_start = (pointA % this.nx0) - 1; //column
+                        this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                        pointB = bottomright - (this.nx0 * this.ny0);
+                        this.col_end = (pointB % this.nx0) - 1; //column
+                        this.row_end = parseInt(pointB / this.nx0) - 1; //row
+                    }
+
+                    let present_cell, right_cell, down_cell;
+                    for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                        for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
+                            present_cell = i + j * (this.nx0);
+                            right_cell = present_cell + 1;
+                            down_cell = Math.max(...this.point[present_cell].adjacent);
+                            if (i != this.col_end + 1) {
+                                if (this[pu].surface[present_cell] &&
+                                    this[pu].surface[right_cell] &&
+                                    (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
+                                    sol[2].push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                }
+                            }
+                            if (j != this.row_end + 1) {
+                                if (this[pu].surface[present_cell] &&
+                                    this[pu].surface[down_cell] &&
+                                    (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
+                                    sol[2].push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                }
+                            }
+                        }
+                    }
+                }
+                let unique_sol2 = [...new Set(sol[2])];
+                sol[2] = unique_sol2;
             }
 
             if (document.getElementById("sol_wall").checked === true || checkall) {
@@ -3628,8 +3683,61 @@ class Puzzle {
                                     }
                                 }
                             }
+
+                            let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
+                            if (found && this.gridtype === 'square') {
+                                // find out the grid position using the frame data
+                                // Note this section of code will work only if thick border frame exists
+                                if (typeof this.row_start == "undefined") {
+                                    // Find top left corner and bottom right corner
+                                    let topleft = 9999,
+                                        bottomright = 0,
+                                        numbers;
+                                    for (var i in this.frame) {
+                                        numbers = i.split(",");
+                                        if (topleft >= parseInt(numbers[0])) {
+                                            topleft = parseInt(numbers[0]);
+                                        }
+                                        if (bottomright <= parseInt(numbers[1])) {
+                                            bottomright = parseInt(numbers[1]);
+                                        }
+                                    }
+                                    // finding row and column indices
+                                    let pointA, pointB;
+                                    pointA = topleft - (this.nx0 * this.ny0);
+                                    this.col_start = (pointA % this.nx0) - 1; //column
+                                    this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                                    pointB = bottomright - (this.nx0 * this.ny0);
+                                    this.col_end = (pointB % this.nx0) - 1; //column
+                                    this.row_end = parseInt(pointB / this.nx0) - 1; //row
+                                }
+
+                                let present_cell, right_cell, down_cell;
+                                for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                                    for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
+                                        present_cell = i + j * (this.nx0);
+                                        right_cell = present_cell + 1;
+                                        down_cell = Math.max(...this.point[present_cell].adjacent);
+                                        if (i != this.col_end + 1) {
+                                            if (this[pu].surface[present_cell] &&
+                                                this[pu].surface[right_cell] &&
+                                                (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
+                                                temp_sol.push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                            }
+                                        }
+                                        if (j != this.row_end + 1) {
+                                            if (this[pu].surface[present_cell] &&
+                                                this[pu].surface[down_cell] &&
+                                                (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
+                                                temp_sol.push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             temp_sol.sort();
-                            sol[sol_count] = temp_sol;
+                            let unique_temp_sol = [...new Set(temp_sol)];
+                            sol[sol_count] = unique_temp_sol;
                             break;
                         case "wall":
                             for (var i in this[pu].wall) {
