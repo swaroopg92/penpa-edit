@@ -2853,6 +2853,10 @@ class Puzzle {
             this.pu_a.command_undo.__a = [];
         }
 
+        // No need to save replay information in edit link
+        this.pu_a.command_replay.__a = [];
+        this.pu_a_col.command_replay.__a;
+
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
 
@@ -2927,6 +2931,7 @@ class Puzzle {
         var qu = this.pu_q.command_undo.__a;
         var ar = this.pu_a.command_redo.__a;
         var au = this.pu_a.command_undo.__a;
+        var are = this.pu_a.command_replay.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
         this.pu_a.command_redo.__a = [];
@@ -2934,6 +2939,7 @@ class Puzzle {
             // Retain undo in solve mode
         } else {
             this.pu_a.command_undo.__a = [];
+            this.pu_a.command_replay.__a = [];
         }
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
@@ -2941,6 +2947,7 @@ class Puzzle {
         this.pu_q.command_undo.__a = qu;
         this.pu_a.command_redo.__a = ar;
         this.pu_a.command_undo.__a = au;
+        this.pu_a.command_replay.__a = are;
 
         text += this.__export_list_tab_shared();
 
@@ -2964,16 +2971,24 @@ class Puzzle {
         qu = this.pu_q_col.command_undo.__a;
         ar = this.pu_a_col.command_redo.__a;
         au = this.pu_a_col.command_undo.__a;
+        are = this.pu_a_col.command_replay.__a;
         this.pu_q_col.command_redo.__a = [];
         this.pu_q_col.command_undo.__a = [];
         this.pu_a_col.command_redo.__a = [];
-        this.pu_a_col.command_undo.__a = [];
+
+        if (this.mmode === "solve") {
+            // Retain undo in solve mode
+        } else {
+            this.pu_a_col.command_undo.__a = [];
+            this.pu_a_col.command_replay.__a = [];
+        }
         text += JSON.stringify(this.pu_q_col) + "\n";
         text += JSON.stringify(this.pu_a_col) + "\n";
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
         this.pu_a_col.command_redo.__a = ar;
         this.pu_a_col.command_undo.__a = au;
+        this.pu_a_col.command_replay.__a = are;
 
         text += this.__export_checker_shared();
 

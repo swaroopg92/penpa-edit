@@ -294,6 +294,18 @@ hr.newgridhrline {
     margin-top: 1px;
 }
 
+.labelSu {
+    display: inline-block;
+    margin: 3px;
+    height: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 28px;
+    border-radius: 3px;
+}
+
 .label_option {
     display: inline-block;
     margin: 0px;
@@ -1248,6 +1260,13 @@ input[type=number] {
     color: var(--blue);
 }
 
+.shortcuts table,
+.shortcuts th,
+.shortcuts td {
+    color: var(--blue);
+    border: 1px solid var(--fgMain);
+}
+
 #answersetting {
     border-collapse: collapse;
     border: 3px solid var(--fgMain);
@@ -1438,6 +1457,20 @@ sup {
     #stop_watch div {
         display: block;
         text-align: center;
+    }
+
+    .labelSu {
+        display: inline-block;
+        height: 50px;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        font-size: 28px;
+        text-align: center;
+        line-height: 50px;
+        border-radius: 3px;
     }
 }
 
