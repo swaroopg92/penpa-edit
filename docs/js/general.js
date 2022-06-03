@@ -2011,6 +2011,14 @@ function load(urlParam, type = 'url', origurl = null) {
                 pu.user_tags[0] = "starbattle";
             } else if (title_words[0].toLowerCase() === "tomtom") {
                 pu.user_tags[0] = "tomtom";
+            } else if (title_words[0].toLowerCase() === "fillomino") {
+                pu.user_tags[0] = "fillomino";
+            } else if (title_words[0].toLowerCase() === "pentominous") {
+                pu.user_tags[0] = "pentominous";
+            } else if (title_words[0].toLowerCase() === "spiral" && title_words[1].toLowerCase() === "galaxies") {
+                pu.user_tags[0] = "spiralgalaxies";
+            } else if (title_words[0].toLowerCase() === "araf") {
+                pu.user_tags[0] = "araf";
             }
         }
     }
