@@ -86,6 +86,11 @@
     border: 1px solid var(--blueskyMedium);
 }
 
+.labelSu {
+    color: var(--white);
+    border: 1px solid var(--blueskyMedium);
+}
+
 .label_option {
     color: var(--white);
     border: 2px solid var(--blueDark);
@@ -156,7 +161,7 @@
 }
 
 #pause_canvas {
-    background: var(--white);
+    background: var(--blackLight);
     border: 0px none black;
 }
 

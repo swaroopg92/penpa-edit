@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 18]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 20]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -178,6 +178,7 @@ class Puzzle {
             13: 1 // Fat dots
         };
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
+        this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino'];
     }
 
     reset() {
@@ -385,7 +386,7 @@ class Puzzle {
         // pause-unpause layer
         let pause_canvas = document.getElementById("pause_canvas");
         let pause_ctx = pause_canvas.getContext("2d");
-        let factor = this.resol * 5;
+        let factor = this.resol * 4;
         pause_canvas.style.width = (this.canvasx - factor).toString() + "px";
         pause_canvas.style.height = (this.canvasy - factor).toString() + "px";
         pause_canvas.width = this.resol * this.canvasx;
@@ -398,7 +399,11 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        pause_ctx.filleStyle = Color.BLUE;
+        if (UserSettings.color_theme == 1) {
+            pause_ctx.fillStyle = Color.BLUE;
+        } else {
+            pause_ctx.fillStyle = Color.WHITE;
+        }
         let font_size = 0.09 * pause_canvas.height; // 9 % of display size/ height of canvas
         pause_ctx.font = font_size + 'px sans-serif';
         let lineheight = 1.2 * font_size;
@@ -2505,6 +2510,16 @@ class Puzzle {
                 case "ms_diamond_M":
                 case "ms_diamond_S":
                 case "ms_diamond_SS":
+                case "ms_hexpoint_LL":
+                case "ms_hexpoint_L":
+                case "ms_hexpoint_M":
+                case "ms_hexpoint_S":
+                case "ms_hexpoint_SS":
+                case "ms_hexflat_LL":
+                case "ms_hexflat_L":
+                case "ms_hexflat_M":
+                case "ms_hexflat_S":
+                case "ms_hexflat_SS":
                 case "ms_star":
                 case "ms_firefly":
                 case "ms_sun_moon":
@@ -2520,6 +2535,7 @@ class Puzzle {
                     break;
                 case "ms_sudokuetc":
                 case "ms_polyomino":
+                case "ms_polyhex":
                 case "ms_neighbors":
                     $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
                     break;
@@ -2838,6 +2854,10 @@ class Puzzle {
             this.pu_a.command_undo.__a = [];
         }
 
+        // No need to save replay information in edit link
+        this.pu_a.command_replay.__a = [];
+        this.pu_a_col.command_replay.__a;
+
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
 
@@ -2912,6 +2932,7 @@ class Puzzle {
         var qu = this.pu_q.command_undo.__a;
         var ar = this.pu_a.command_redo.__a;
         var au = this.pu_a.command_undo.__a;
+        var are = this.pu_a.command_replay.__a;
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
         this.pu_a.command_redo.__a = [];
@@ -2919,6 +2940,7 @@ class Puzzle {
             // Retain undo in solve mode
         } else {
             this.pu_a.command_undo.__a = [];
+            this.pu_a.command_replay.__a = [];
         }
         text += JSON.stringify(this.pu_q) + "\n";
         text += JSON.stringify(this.pu_a) + "\n";
@@ -2926,6 +2948,7 @@ class Puzzle {
         this.pu_q.command_undo.__a = qu;
         this.pu_a.command_redo.__a = ar;
         this.pu_a.command_undo.__a = au;
+        this.pu_a.command_replay.__a = are;
 
         text += this.__export_list_tab_shared();
 
@@ -2949,16 +2972,24 @@ class Puzzle {
         qu = this.pu_q_col.command_undo.__a;
         ar = this.pu_a_col.command_redo.__a;
         au = this.pu_a_col.command_undo.__a;
+        are = this.pu_a_col.command_replay.__a;
         this.pu_q_col.command_redo.__a = [];
         this.pu_q_col.command_undo.__a = [];
         this.pu_a_col.command_redo.__a = [];
-        this.pu_a_col.command_undo.__a = [];
+
+        if (this.mmode === "solve") {
+            // Retain undo in solve mode
+        } else {
+            this.pu_a_col.command_undo.__a = [];
+            this.pu_a_col.command_replay.__a = [];
+        }
         text += JSON.stringify(this.pu_q_col) + "\n";
         text += JSON.stringify(this.pu_a_col) + "\n";
         this.pu_q_col.command_redo.__a = qr;
         this.pu_q_col.command_undo.__a = qu;
         this.pu_a_col.command_redo.__a = ar;
         this.pu_a_col.command_undo.__a = au;
+        this.pu_a_col.command_replay.__a = are;
 
         text += this.__export_checker_shared();
 
@@ -3338,6 +3369,60 @@ class Puzzle {
                         }
                     }
                 }
+
+                let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
+                if (found && this.gridtype === 'square') {
+                    // find out the grid position using the frame data
+                    // Note this section of code will work only if thick border frame exists
+                    if (typeof this.row_start == "undefined") {
+                        // Find top left corner and bottom right corner
+                        let topleft = 9999,
+                            bottomright = 0,
+                            numbers;
+                        for (var i in this.frame) {
+                            numbers = i.split(",");
+                            if (topleft >= parseInt(numbers[0])) {
+                                topleft = parseInt(numbers[0]);
+                            }
+                            if (bottomright <= parseInt(numbers[1])) {
+                                bottomright = parseInt(numbers[1]);
+                            }
+                        }
+                        // finding row and column indices
+                        let pointA, pointB;
+                        pointA = topleft - (this.nx0 * this.ny0);
+                        this.col_start = (pointA % this.nx0) - 1; //column
+                        this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                        pointB = bottomright - (this.nx0 * this.ny0);
+                        this.col_end = (pointB % this.nx0) - 1; //column
+                        this.row_end = parseInt(pointB / this.nx0) - 1; //row
+                    }
+
+                    let present_cell, right_cell, down_cell;
+                    for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                        for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
+                            present_cell = i + j * (this.nx0);
+                            right_cell = present_cell + 1;
+                            down_cell = Math.max(...this.point[present_cell].adjacent);
+                            if (i != this.col_end + 1) {
+                                if (this[pu].surface[present_cell] &&
+                                    this[pu].surface[right_cell] &&
+                                    (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
+                                    sol[2].push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                }
+                            }
+                            if (j != this.row_end + 1) {
+                                if (this[pu].surface[present_cell] &&
+                                    this[pu].surface[down_cell] &&
+                                    (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
+                                    sol[2].push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                }
+                            }
+                        }
+                    }
+                }
+                let unique_sol2 = [...new Set(sol[2])];
+                sol[2] = unique_sol2;
             }
 
             if (document.getElementById("sol_wall").checked === true || checkall) {
@@ -3598,8 +3683,61 @@ class Puzzle {
                                     }
                                 }
                             }
+
+                            let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
+                            if (found && this.gridtype === 'square') {
+                                // find out the grid position using the frame data
+                                // Note this section of code will work only if thick border frame exists
+                                if (typeof this.row_start == "undefined") {
+                                    // Find top left corner and bottom right corner
+                                    let topleft = 9999,
+                                        bottomright = 0,
+                                        numbers;
+                                    for (var i in this.frame) {
+                                        numbers = i.split(",");
+                                        if (topleft >= parseInt(numbers[0])) {
+                                            topleft = parseInt(numbers[0]);
+                                        }
+                                        if (bottomright <= parseInt(numbers[1])) {
+                                            bottomright = parseInt(numbers[1]);
+                                        }
+                                    }
+                                    // finding row and column indices
+                                    let pointA, pointB;
+                                    pointA = topleft - (this.nx0 * this.ny0);
+                                    this.col_start = (pointA % this.nx0) - 1; //column
+                                    this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                                    pointB = bottomright - (this.nx0 * this.ny0);
+                                    this.col_end = (pointB % this.nx0) - 1; //column
+                                    this.row_end = parseInt(pointB / this.nx0) - 1; //row
+                                }
+
+                                let present_cell, right_cell, down_cell;
+                                for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                                    for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
+                                        present_cell = i + j * (this.nx0);
+                                        right_cell = present_cell + 1;
+                                        down_cell = Math.max(...this.point[present_cell].adjacent);
+                                        if (i != this.col_end + 1) {
+                                            if (this[pu].surface[present_cell] &&
+                                                this[pu].surface[right_cell] &&
+                                                (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
+                                                temp_sol.push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                            }
+                                        }
+                                        if (j != this.row_end + 1) {
+                                            if (this[pu].surface[present_cell] &&
+                                                this[pu].surface[down_cell] &&
+                                                (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
+                                                temp_sol.push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             temp_sol.sort();
-                            sol[sol_count] = temp_sol;
+                            let unique_temp_sol = [...new Set(temp_sol)];
+                            sol[sol_count] = unique_temp_sol;
                             break;
                         case "wall":
                             for (var i in this[pu].wall) {
@@ -4988,7 +5126,8 @@ class Puzzle {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             // any shades of grey including black
-                            if (this.pu_a.surface[i + j * (this.nx0)] &&
+                            if (!this.pu_q.number[i + j * (this.nx0)] &&
+                                this.pu_a.surface[i + j * (this.nx0)] &&
                                 (this.pu_a.surface[i + j * (this.nx0)] === 1 ||
                                     this.pu_a.surface[i + j * (this.nx0)] === 8 ||
                                     this.pu_a.surface[i + j * (this.nx0)] === 3 ||
@@ -8047,7 +8186,9 @@ class Puzzle {
             this.re_surfacemove(num);
             this.last = num;
         } else if (this.mouse_mode === "up") {
-            this.cursol = this.last;
+            if (this.last > 0) {
+                this.cursol = this.last;
+            }
             this.drawing = false;
             this.drawing_mode = -1;
             this.last = -1;

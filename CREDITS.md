@@ -7,7 +7,7 @@
 * NewYear Image by <a href="https://pixabay.com/users/pattyjansen-154933/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=586225">Patty Jansen</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=586225">Pixabay</a>
 * Help icon made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 * Thanks to <a href="https://github.com/william42"> William42 </a> for SVG Screenshot code.
-* Thanks to <a href="https://github.com/nmay231"> nmay231 </a> for ongoing contributions to puzz.link parser in Penpa+.
-* Thanks to <a href="https://thegriddle.net"> davmillar </a> for ongoing contributions to redesign the GUI and refactoring the code.
-* Thanks to <a href="https://github.com/kieranclancy"> Kieran Clancy </a> for ongoing contributions to smart checking in Penpa+.
-* Thanks to <a href="https://github.com/BenceJoful"> BenceJoful </a> for assisting in updating custom color code for Hex Grid in Penpa+.
+* Thanks to <a href="https://github.com/nmay231"> nmay231 </a> for contributions to puzz.link parser in Penpa+.
+* Thanks to <a href="https://thegriddle.net"> davmillar </a> for contributions to redesign the GUI and refactoring the code.
+* Thanks to <a href="https://github.com/kieranclancy"> Kieran Clancy </a> for contributions to smart checking in Penpa+.
+* Thanks to <a href="https://github.com/BenceJoful"> BenceJoful </a> for contributions to hexgrid and replay improvements in Penpa+.
