@@ -4,6 +4,7 @@
 	* Improvement to size of Sudoku Mode buttons for Mobile Devices.
 	* Shortcuts to help button.
 	* Display and Design improvements.
+	* Arrow key movements to Hex Sudoku Mode.
 	* Bug fixes.
 * 2022/04/30 ver 2.26.19
 	* Added more puzz link support - kropki, firefly, slant, spiral galaxies, ringring, doubleback, yinyang, hitori, putteria, hanare, aho, shikaku, fillmat, lookair, paintarea, sukoro, sukkororoom, usotatami, usoone, scrin, hebiichigo, tasquare, minesweeper, ichimaga, magneticichimaga, crossingichimaga, territory, doublechoco, tateboyokobo, canalview, chocobanana, tonttiraja, dotchiloop, chainedblock, oneroomonedoor, rassisilai
