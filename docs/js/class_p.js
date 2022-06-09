@@ -3408,14 +3408,24 @@ class Puzzle {
                                 if (this[pu].surface[present_cell] &&
                                     this[pu].surface[right_cell] &&
                                     (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
-                                    sol[2].push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                    let imp_edge = this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2];
+                                    if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
+                                        // ignore given edges
+                                    } else {
+                                        sol[2].push(imp_edge + ',1');
+                                    }
                                 }
                             }
                             if (j != this.row_end + 1) {
                                 if (this[pu].surface[present_cell] &&
                                     this[pu].surface[down_cell] &&
                                     (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
-                                    sol[2].push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                    let imp_edge = this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2];
+                                    if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
+                                        // ignore given edges
+                                    } else {
+                                        sol[2].push(imp_edge + ',1');
+                                    }
                                 }
                             }
                         }
@@ -3722,14 +3732,24 @@ class Puzzle {
                                             if (this[pu].surface[present_cell] &&
                                                 this[pu].surface[right_cell] &&
                                                 (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
-                                                temp_sol.push(this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2] + ',1');
+                                                let imp_edge = this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2];
+                                                if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
+                                                    // ignore given edges
+                                                } else {
+                                                    temp_sol.push(imp_edge + ',1');
+                                                }
                                             }
                                         }
                                         if (j != this.row_end + 1) {
                                             if (this[pu].surface[present_cell] &&
                                                 this[pu].surface[down_cell] &&
                                                 (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
-                                                temp_sol.push(this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2] + ',1');
+                                                let imp_edge = this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2];
+                                                if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
+                                                    // ignore given edges
+                                                } else {
+                                                    temp_sol.push(imp_edge + ',1');
+                                                }
                                             }
                                         }
                                     }
