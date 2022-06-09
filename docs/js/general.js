@@ -1549,6 +1549,7 @@ function savetext_withsolution() {
 
 function savetext_withreplay() {
     var text = pu.maketext_replay();
+    pu.isReplay = true;
     update_textarea(text);
     document.getElementById("modal-replay").style.display = 'none';
 }
@@ -1572,8 +1573,9 @@ async function update_textarea(text) {
     let newText = text;
     if (UserSettings.shorten_links) {
         let shortened = await request_shortlink(newText);
-        if (shortened) {
+        if (shortened && pu.isReplay) {
             shortened = shortened + "#Replay";
+            pu.isReplay = false;
         }
         newText = shortened || newText;
     }

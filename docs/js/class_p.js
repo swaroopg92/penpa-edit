@@ -179,6 +179,7 @@ class Puzzle {
         };
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino'];
+        this.isReplay = false;
     }
 
     reset() {
