@@ -18,10 +18,19 @@ function boot() {
             paramArray[paramItem[0]] = paramItem[1];
         }
 
-        let hash = "penpa_" + md5(paramArray.p);
+        try {
+            let hash = "penpa_" + md5(paramArray.p);
+            let local_data = localStorage.getItem(hash);
+        } catch (error) {
+            console.log('md5 package is being blocked, most probably by Adblock', error);
+            Swal.fire({
+                html: '<h2 class="info">Most likely, md5 package is being blocked by Adblock, local storage feature is not effective. Solution: Disable Adblock on Penpa+ Site</h2>',
+                icon: 'info'
+            });
+            let local_data = false;
+        }
 
         // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
         if (local_data && local_data.includes('&p=')) {
             load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
         } else {
@@ -1761,10 +1770,19 @@ function import_url(urlstring) {
                 paramArray[paramItem[0]] = paramItem[1];
             }
 
-            let hash = "penpa_" + md5(paramArray.p);
+            try {
+                let hash = "penpa_" + md5(paramArray.p);
+                let local_data = localStorage.getItem(hash);
+            } catch (error) {
+                console.log('md5 package is being blocked, most probably by Adblock', error);
+                Swal.fire({
+                    html: '<h2 class="info">Most likely, md5 package is being blocked by Adblock, local storage feature is not effective. Solution: Disable Adblock on Penpa+ Site</h2>',
+                    icon: 'info'
+                });
+                let local_data = false;
+            }
 
             // Decrypt puzzle data
-            let local_data = localStorage.getItem(hash);
             if (local_data && local_data.includes('&p=')) {
                 load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
             } else {
@@ -2270,11 +2288,20 @@ function load(urlParam, type = 'url', origurl = null) {
     if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup") && (type != "localstorage")) {
         // check for local progres
         // get md5 hash for unique id
-        let hash = "penpa_" + md5(pu.url);
+
+        try {
+            let hash = "penpa_" + md5(pu.url);
+            let local_data = localStorage.getItem(hash);
+        } catch (error) {
+            console.log('md5 package is being blocked, most probably by Adblock', error);
+            Swal.fire({
+                html: '<h2 class="info">Most likely, md5 package is being blocked by Adblock, local storage feature is not effective. Solution: Disable Adblock on Penpa+ Site</h2>',
+                icon: 'info'
+            });
+            let local_data = null;
+        }
 
         // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
-
         if (local_data !== null) {
             var local_copy = JSON.parse(decrypt_data(local_data));
             pu.pu_q = local_copy.pu_q;

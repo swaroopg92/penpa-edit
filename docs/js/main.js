@@ -2079,12 +2079,23 @@ onload = function() {
             local_storage_setting === "1" &&
             !pu.replay) {
             // get md5 hash for unique id
-            let hash = "penpa_" + md5(pu.url);
+            try {
+                let hash = "penpa_" + md5(pu.url);
+            } catch (error) {
+                console.log('md5 package is being blocked, most probably by Adblock', error);
+                Swal.fire({
+                    html: '<h2 class="info">Most likely, md5 package is being blocked by Adblock, local storage feature is not effective. Solution: Disable Adblock on Penpa+ Site</h2>',
+                    icon: 'info'
+                });
+                let hash = null;
+            }
 
             // generate duplicate link
             let rstr = pu.maketext_duplicate() + "&l=solvedup";
 
-            localStorage.setItem(hash, rstr);
+            if (hash !== null) {
+                localStorage.setItem(hash, rstr);
+            }
         }
     });
 
@@ -2307,12 +2318,20 @@ function clear_storage_one() {
     // check for local progress
     // get md5 hash for unique id
     if (typeof pu.url === 'string') {
-        let hash = "penpa_" + md5(pu.url);
-        localStorage.removeItem(hash);
-        Swal.fire({
-            html: '<h2 class="info">Local Storage is Cleared</h2>',
-            icon: 'info'
-        });
+        try {
+            let hash = "penpa_" + md5(pu.url);
+            localStorage.removeItem(hash);
+            Swal.fire({
+                html: '<h2 class="info">Local Storage is Cleared</h2>',
+                icon: 'info'
+            });
+        } catch (error) {
+            console.log('md5 package is being blocked, most probably by Adblock', error);
+            Swal.fire({
+                html: '<h2 class="info">Most likely, md5 package is being blocked by Adblock, local storage feature is not effective. Solution: Disable Adblock on Penpa+ Site</h2>',
+                icon: 'info'
+            });
+        }
     }
 
     // turn off localstorage
