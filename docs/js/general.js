@@ -1572,6 +1572,9 @@ async function update_textarea(text) {
     let newText = text;
     if (UserSettings.shorten_links) {
         let shortened = await request_shortlink(newText);
+        if (shortened) {
+            shortened = shortened + "#Replay";
+        }
         newText = shortened || newText;
     }
 
