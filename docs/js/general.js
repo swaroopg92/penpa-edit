@@ -767,6 +767,8 @@ function submit_solution(e) {
     switch (pu.puzzle_info.genre) {
         case "tapa":
         case "kurotto":
+        case "nurimisaki":
+        case "heyawake":
             // Answer - Shading
             if (!isEmpty(pu.pu_a.surface)) {
                 for (var j = 2; j < pu.ny0 - 2; j++) {
