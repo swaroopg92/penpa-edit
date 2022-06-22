@@ -785,6 +785,7 @@ function submit_solution(e) {
             }
             break;
         case "rassisillai":
+        case "yajilin":
             // Answer - Line
             sol = [];
             for (var i in pu.pu_a.line) {
