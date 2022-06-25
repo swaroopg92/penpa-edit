@@ -41,8 +41,8 @@ enhancements are being done.
 ## Pull Request Process
 
 1. Ensure your changes are working and other functionality are same as before
-2. Ensure your branch contains up-to-date changes of the **Master** branch.
-3. Update ChangeLog.md
+2. Ensure your branch contains up-to-date changes of the **dev** branch.
+3. Update ChangeLog.md, adding to the `Unreleased` section at the top. If that does not exist, add it.
 4. Submit Pull Request through GitHub and tag me as a reviewer.
 5. Reviewer makes comments and submitter fixes them iteratively as needed.
 6. Final acceptance will be based on Author's discretion.
