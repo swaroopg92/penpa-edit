@@ -1,4 +1,6 @@
 ## History
+* Unreleased
+	* Added 'Number Tapa' tab mode
 * 2022/06/02 ver 2.26.20
 	* Implicit edges for region division puzzles solved using Shading.
 	* Improvement to size of Sudoku Mode buttons for Mobile Devices.
