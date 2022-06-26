@@ -764,6 +764,7 @@ function display_rules() {
 function submit_solution(e) {
     let solution = "";
     let sol = [];
+    let skipsol;
     switch (pu.puzzle_info.genre) {
         case "tapa":
         case "kurotto":
@@ -773,7 +774,12 @@ function submit_solution(e) {
             if (!isEmpty(pu.pu_a.surface)) {
                 for (var j = 2; j < pu.ny0 - 2; j++) {
                     for (var i = 2; i < pu.nx0 - 2; i++) {
-                        if (!pu.pu_q.number[i + j * (pu.nx0)] && pu.pu_a.surface[i + j * (pu.nx0)] && (
+                        if (pu.pu_q.number[i + j * (pu.nx0)] && pu.pu_q.number[i + j * (pu.nx0)][0] != '') {
+                            skipsol = true;
+                        } else {
+                            skipsol = false;
+                        }
+                        if (!skipsol && pu.pu_a.surface[i + j * (pu.nx0)] && (
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
