@@ -844,7 +844,7 @@ function submit_solution(e) {
                         // (Black) and (Normal or L) in Problem mode then ignore
                     } else {
                         // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                        if (pu.pu_a.number[ind][2] === "7") {
+                        if (pu.pu_a.number[ind] && pu.pu_a.number[ind][2] === "7") {
                             var sum = 0,
                                 a;
                             for (var k = 0; k < 10; k++) {
@@ -856,7 +856,7 @@ function submit_solution(e) {
                             if (sum === 1) {
                                 solution += a.toString();
                             }
-                        } else if (!isNaN(pu.pu_a.number[ind][0]) || !pu.pu_a.number[ind][0].match(/[^A-Za-z]+/)) {
+                        } else if (pu.pu_a.number[ind] && (!isNaN(pu.pu_a.number[ind][0]) || !pu.pu_a.number[ind][0].match(/[^A-Za-z]+/))) {
                             // ((any color) and (Normal, M, S, L))
                             if (pu.pu_a.number[ind][1] && (pu.pu_a.number[ind][2] === "1" ||
                                     pu.pu_a.number[ind][2] === "5" ||
