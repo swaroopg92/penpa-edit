@@ -246,3 +246,8 @@ a:active {
 #visibility_button {
     border: 1px solid var(--blueskyMedium);
 }
+
+.submit {
+    color: var(--white);
+    border: 1px solid var(--blueskyMedium);
+}

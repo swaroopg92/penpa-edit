@@ -836,6 +836,16 @@ onload = function() {
                     e.returnValue = false;
                 }
             }
+
+            if (isAltKeyHeld(e) && !isShiftKeyHeld(e) && !isCtrlKeyHeld(e)) {
+                switch (key) {
+                    case "s":
+                    case "S":
+                        submit_solution(e);
+                        e.preventDefault();
+                        break;
+                }
+            }
         }
     }
 

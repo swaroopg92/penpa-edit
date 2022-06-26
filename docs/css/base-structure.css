@@ -1485,3 +1485,17 @@ sup {
     font-size: 30px;
     padding: 2px;
 }
+
+.submit {
+    display: inline-block;
+    height: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 28px;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 3px;
+}

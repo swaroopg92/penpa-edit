@@ -2355,7 +2355,7 @@ function load2(paramArray, type) {
         }
         if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !valid_replay) {
             let contestinfo = document.getElementById("contestinfo");
-            let submitContents = `<div><input type="button" id="submit_sol" value="Submit Solution" style="display: inline;"/></div>`;
+            let submitContents = `<div><input type="button" id="submit_sol" class="submit" value="Submit Solution" style="display: inline;"/></div>`;
             contestinfo.innerHTML = submitContents;
             contestinfo.style.display = "block";
             if (pu.puzzle_info.seconds !== undefined) {

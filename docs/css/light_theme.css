@@ -201,3 +201,8 @@ header,
 #visibility_button {
     border: 1px solid var(--blueDark);
 }
+
+.submit {
+    color: var(--black);
+    border: 1px solid var(--blueDark);
+}
