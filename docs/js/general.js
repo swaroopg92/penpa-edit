@@ -6,6 +6,9 @@ function boot() {
     boot_parameters();
 
     var urlParam = location.search.substring(1);
+	if (!urlParam && location.hash) {
+		urlParam = location.hash.substring(1);
+	}
     if (urlParam) {
         load(urlParam);
     } else {
