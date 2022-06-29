@@ -3349,7 +3349,7 @@ class Puzzle {
                 }
 
                 if (document.getElementById("sol_ignoreborder").checked === true) {
-                    for (var i in this[pu].lineE) {
+                    for (var i in this[pu].freelineE) {
                         if ((this.frame[i] && this.frame[i] === 2) ||
                             (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
                             // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
