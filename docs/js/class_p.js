@@ -2967,7 +2967,7 @@ class Puzzle {
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=edit&p=" + ba;
+        return url + "#m=edit&p=" + ba;
     }
 
     maketext_duplicate() {
@@ -3072,9 +3072,9 @@ class Puzzle {
             if (pu.puzzle_info) {
                 let qstr = JSON.stringify(pu.puzzle_info);
                 let ba_q = btoa(qstr);
-                return url + "?m=edit&p=" + ba + "&a=" + ba_s + "&q=" + ba_q;
+                return url + "#m=edit&p=" + ba + "&a=" + ba_s + "&q=" + ba_q;
             } else {
-                return url + "?m=edit&p=" + ba + "&a=" + ba_s;
+                return url + "#m=edit&p=" + ba + "&a=" + ba_s;
             }
         } else {
             // Warning Long URL
@@ -3091,9 +3091,9 @@ class Puzzle {
             if (pu.puzzle_info) {
                 let qstr = JSON.stringify(pu.puzzle_info);
                 let ba_q = btoa(qstr);
-                return url + "?m=edit&p=" + ba + "&q=" + ba_q;
+                return url + "#m=edit&p=" + ba + "&q=" + ba_q;
             } else {
-                return url + "?m=edit&p=" + ba;
+                return url + "#m=edit&p=" + ba;
             }
         }
     }
@@ -3145,7 +3145,7 @@ class Puzzle {
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=solve&p=" + ba;
+        return url + "#m=solve&p=" + ba;
     }
 
     maketext_compsolve() {
@@ -3188,7 +3188,7 @@ class Puzzle {
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=solve&p=" + ba;
+        return url + "#m=solve&p=" + ba;
     }
 
     maketext_solve_solution(validate = false) {
