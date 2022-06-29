@@ -7,6 +7,9 @@ function boot() {
     init_genre_tags();
 
     var urlParam = location.search.substring(1);
+    if (!urlParam && location.hash) {
+        urlParam = location.hash.substring(1);
+    }
     if (urlParam) {
 
         let param = urlParam.split('&');

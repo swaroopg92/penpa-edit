@@ -2911,7 +2911,7 @@ class Puzzle {
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=edit&p=" + ba;
+        return url + "#m=edit&p=" + ba;
     }
 
     maketext_duplicate() {
@@ -3037,7 +3037,7 @@ class Puzzle {
                     confirmButtonText: 'ok',
                 })
             }
-            return url + "?m=edit&p=" + ba;
+            return url + "#m=edit&p=" + ba;
         }
     }
 
@@ -3094,7 +3094,7 @@ class Puzzle {
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=solve&p=" + ba;
+        return url + "#m=solve&p=" + ba;
     }
 
     maketext_compsolve() {
@@ -3140,7 +3140,7 @@ class Puzzle {
         var url = location.href.split('?')[0];
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=solve&p=" + ba;
+        return url + "#m=solve&p=" + ba;
     }
 
     maketext_solve_solution() {
