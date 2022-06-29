@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 20]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 21]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -3325,6 +3325,13 @@ class Puzzle {
             if (document.getElementById("sol_loopedge").checked === true ||
                 document.getElementById("sol_ignoreborder").checked === true ||
                 checkall) {
+
+                // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
+                if ((this.version[0] > 2) || (this.version[0] == 2 && this.version[1] > 26) || (this.version[0] == 2 && this.version[1] == 26 && this.version[2] > 20)) {
+                    if (!document.getElementById("sol_ignoreborder").checked) {
+                        document.getElementById("sol_ignoreborder").checked = true;
+                    }
+                }
                 if (document.getElementById("sol_ignoreborder").checked === true) {
                     for (var i in this[pu].lineE) {
                         if ((this.frame[i] && this.frame[i] === 2) ||

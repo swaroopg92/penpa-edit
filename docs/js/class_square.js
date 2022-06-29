@@ -4127,7 +4127,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4160,7 +4160,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4193,7 +4193,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4226,7 +4226,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if (this.version[0] <= 2 && this.version[1] <= 25 && this.version[2] < 9) {
+                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
