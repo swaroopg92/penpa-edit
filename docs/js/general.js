@@ -1565,6 +1565,8 @@ function savetext_withreplay() {
 }
 
 async function request_shortlink(url) {
+    // The # content cannot be sent to server, So if anyone wants to use automatic shorten, use ?
+    url = url.replace("#", "?");
     try {
         return $.get('https://tinyurl.com/api-create.php?url=' + url, function(link, status) {
             if (status === "success") {
