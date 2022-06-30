@@ -28,7 +28,7 @@ function boot() {
         if (local_data && local_data.includes('&p=')) {
             // This is to account for old links and new links together
             var url;
-            if (location.hash) {
+            if (local_data.includes("#")) {
                 url = local_data.split('#')[1];
             } else {
                 url = local_data.split('?')[1];
@@ -1778,7 +1778,14 @@ function import_url(urlstring) {
             // Decrypt puzzle data
             let local_data = localStorage.getItem(hash);
             if (local_data && local_data.includes('&p=')) {
-                load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
+                // This is to account for old links and new links together
+                var url;
+                if (local_data.includes("#")) {
+                    url = local_data.split('#')[1];
+                } else {
+                    url = local_data.split('?')[1];
+                }
+                load(url, type = 'localstorage', origurl = paramArray.p);
             } else {
                 urlstring = urlstring.split("/penpa-edit/?")[1];
                 load(urlstring, 'local');
