@@ -2848,18 +2848,6 @@ class Puzzle {
 
     __export_finalize_shared(text) {
         var puzzle_data = encrypt_data(text);
-        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max MAX_EXPORT_LENGTH
-
-        // Warning Long URL
-        if (puzzle_data.length >= MAX_EXPORT_LENGTH) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
-
         return puzzle_data;
     }
 
@@ -2964,7 +2952,13 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=edit&p=" + ba;
@@ -3047,7 +3041,13 @@ class Puzzle {
         }
 
         var ba = encrypt_data(text);
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
         let solution_clone;
         // if solution exist then copy the solution as well
         if (this.solution) {
@@ -3058,16 +3058,6 @@ class Puzzle {
             }
             var ba_s = encrypt_data(solution_clone);
 
-            // Warning Long URL
-            if ((ba.length + ba_s.length) >= MAX_EXPORT_LENGTH) {
-                Swal.fire({
-                    title: 'Warning:',
-                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                    icon: 'warning',
-                    confirmButtonText: 'ok',
-                })
-            }
-
             // if LMI server info exist
             if (pu.puzzle_info) {
                 let qstr = JSON.stringify(pu.puzzle_info);
@@ -3077,16 +3067,6 @@ class Puzzle {
                 return url + "#m=edit&p=" + ba + "&a=" + ba_s;
             }
         } else {
-            // Warning Long URL
-            if (ba.length >= MAX_EXPORT_LENGTH) {
-                Swal.fire({
-                    title: 'Warning:',
-                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                    icon: 'warning',
-                    confirmButtonText: 'ok',
-                })
-            }
-
             // if LMI server info exist
             if (pu.puzzle_info) {
                 let qstr = JSON.stringify(pu.puzzle_info);
@@ -3142,7 +3122,13 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=solve&p=" + ba;
@@ -3185,7 +3171,13 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=solve&p=" + ba;
@@ -3208,17 +3200,6 @@ class Puzzle {
 
         text = JSON.stringify(sol);
         var ba = encrypt_data(text);
-        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
-
-        // Warning Long URL
-        if ((text_head.length + ba.length) >= MAX_EXPORT_LENGTH) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
         return text_head + "&a=" + ba;
     }
 
