@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 20]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [2, 26, 21]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -2820,18 +2820,6 @@ class Puzzle {
 
     __export_finalize_shared(text) {
         var puzzle_data = encrypt_data(text);
-        // console.log("save",text.length,"=>",compressed.length,"=>",ba.length); //Github ba.length max MAX_EXPORT_LENGTH
-
-        // Warning Long URL
-        if (puzzle_data.length >= MAX_EXPORT_LENGTH) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
-
         return puzzle_data;
     }
 
@@ -2908,10 +2896,17 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
+
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=edit&p=" + ba;
+        return url + "#m=edit&p=" + ba;
     }
 
     maketext_duplicate() {
@@ -3007,7 +3002,15 @@ class Puzzle {
         }
 
         var ba = encrypt_data(text);
-        var url = location.href.split('?')[0];
+
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
+
         let solution_clone;
         // if solution exist then copy the solution as well
         if (this.solution) {
@@ -3017,27 +3020,9 @@ class Puzzle {
                 solution_clone = this.solution;
             }
             var ba_s = encrypt_data(solution_clone);
-            // Warning Long URL
-            if ((ba.length + ba_s.length) >= MAX_EXPORT_LENGTH) {
-                Swal.fire({
-                    title: 'Warning:',
-                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
-                    icon: 'warning',
-                    confirmButtonText: 'ok',
-                })
-            }
-            return url + "?m=edit&p=" + ba + "&a=" + ba_s;
+            return url + "#m=edit&p=" + ba + "&a=" + ba_s;
         } else {
-            // Warning Long URL
-            if (ba.length >= MAX_EXPORT_LENGTH) {
-                Swal.fire({
-                    title: 'Warning:',
-                    html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
-                    icon: 'warning',
-                    confirmButtonText: 'ok',
-                })
-            }
-            return url + "?m=edit&p=" + ba;
+            return url + "#m=edit&p=" + ba;
         }
     }
 
@@ -3091,10 +3076,16 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=solve&p=" + ba;
+        return url + "#m=solve&p=" + ba;
     }
 
     maketext_compsolve() {
@@ -3137,10 +3128,16 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        var url = location.href.split('?')[0];
+        // This is to account for old links and new links together
+        var url;
+        if (location.hash) {
+            url = location.href.split('#')[0];
+        } else {
+            url = location.href.split('?')[0];
+        }
         var ba = this.__export_finalize_shared(text);
 
-        return url + "?m=solve&p=" + ba;
+        return url + "#m=solve&p=" + ba;
     }
 
     maketext_solve_solution() {
@@ -3149,17 +3146,6 @@ class Puzzle {
         text = JSON.stringify(this.make_solution());
 
         var ba = encrypt_data(text);
-        //console.log("save",text.length,"=>",compressed.length,"=>",ba.length);
-
-        // Warning Long URL
-        if ((text_head.length + ba.length) >= MAX_EXPORT_LENGTH) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open https://www.gmpuzzles.com/penpa-edit/ <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
         return text_head + "&a=" + ba;
     }
 
@@ -3183,16 +3169,6 @@ class Puzzle {
             'sname': document.getElementById('saveinfosolver').value,
             'stime': sw_timer.getTimeValues().toString(['days', 'hours', 'minutes', 'seconds', 'secondTenths'])
         }));
-
-        // Warning Long URL
-        if ((text_head.length + puzzle_info.length + replay.length) >= MAX_EXPORT_LENGTH) {
-            Swal.fire({
-                title: 'Warning:',
-                html: '<h3 class="warn">URL too long and will not open directly in the browser. Follow the following steps: <br>1) Copy the generated URL <br> 2) Open Penpa+ site (https://swaroopg92.github.io/penpa-edit/) <br> 3) Use "Load" button to load the URL</h3>',
-                icon: 'warning',
-                confirmButtonText: 'ok',
-            })
-        }
 
         return text_head + "&q=" + puzzle_info + "&r=" + replay;
     }
@@ -3325,6 +3301,13 @@ class Puzzle {
             if (document.getElementById("sol_loopedge").checked === true ||
                 document.getElementById("sol_ignoreborder").checked === true ||
                 checkall) {
+
+                // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
+                if ((this.version[0] > 2) || (this.version[0] == 2 && this.version[1] > 26) || (this.version[0] == 2 && this.version[1] == 26 && this.version[2] > 20)) {
+                    if (!document.getElementById("sol_ignoreborder").checked && !checkall) {
+                        document.getElementById("sol_ignoreborder").checked = true;
+                    }
+                }
                 if (document.getElementById("sol_ignoreborder").checked === true) {
                     for (var i in this[pu].lineE) {
                         if ((this.frame[i] && this.frame[i] === 2) ||
@@ -3349,7 +3332,7 @@ class Puzzle {
                 }
 
                 if (document.getElementById("sol_ignoreborder").checked === true) {
-                    for (var i in this[pu].lineE) {
+                    for (var i in this[pu].freelineE) {
                         if ((this.frame[i] && this.frame[i] === 2) ||
                             (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
                             // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)

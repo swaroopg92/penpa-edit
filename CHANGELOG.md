@@ -1,4 +1,9 @@
 ## History
+* unlreased ver 2.26.21
+	* Handle long url directly using hash
+	* Fixed some bugs
+	* Replay # to replay urls for link identification
+	* Automatically ignore given edges for answer check if edge answer check is selected (even if user forgets to select ignore edge option)
 * 2022/06/02 ver 2.26.20
 	* Implicit edges for region division puzzles solved using Shading.
 	* Improvement to size of Sudoku Mode buttons for Mobile Devices.

@@ -7,6 +7,9 @@ function boot() {
     init_genre_tags();
 
     var urlParam = location.search.substring(1);
+    if (!urlParam && location.hash) {
+        urlParam = location.hash.substring(1);
+    }
     if (urlParam) {
 
         let param = urlParam.split('&');
@@ -23,7 +26,14 @@ function boot() {
         // Decrypt puzzle data
         let local_data = localStorage.getItem(hash);
         if (local_data && local_data.includes('&p=')) {
-            load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
+            // This is to account for old links and new links together
+            var url;
+            if (local_data.includes("#")) {
+                url = local_data.split('#')[1];
+            } else {
+                url = local_data.split('?')[1];
+            }
+            load(url, type = 'localstorage', origurl = paramArray.p);
         } else {
             load(urlParam);
         }
@@ -1557,6 +1567,8 @@ function savetext_withreplay() {
 }
 
 async function request_shortlink(url) {
+    // The # content cannot be sent to server, So if anyone wants to use automatic shorten, use ?
+    url = url.replace("#", "?");
     try {
         return $.get('https://tinyurl.com/api-create.php?url=' + url, function(link, status) {
             if (status === "success") {
@@ -1768,7 +1780,14 @@ function import_url(urlstring) {
             // Decrypt puzzle data
             let local_data = localStorage.getItem(hash);
             if (local_data && local_data.includes('&p=')) {
-                load(local_data.split('?')[1], type = 'localstorage', origurl = paramArray.p);
+                // This is to account for old links and new links together
+                var url;
+                if (local_data.includes("#")) {
+                    url = local_data.split('#')[1];
+                } else {
+                    url = local_data.split('?')[1];
+                }
+                load(url, type = 'localstorage', origurl = paramArray.p);
             } else {
                 urlstring = urlstring.split("/penpa-edit/?")[1];
                 load(urlstring, 'local');
@@ -2319,6 +2338,7 @@ function load(urlParam, type = 'url', origurl = null) {
     if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup") && (type != "localstorage")) {
         // check for local progres
         // get md5 hash for unique id
+
         let hash = "penpa_" + md5(pu.url);
 
         // Decrypt puzzle data
