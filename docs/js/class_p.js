@@ -3304,7 +3304,7 @@ class Puzzle {
 
                 // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
                 if ((this.version[0] > 2) || (this.version[0] == 2 && this.version[1] > 26) || (this.version[0] == 2 && this.version[1] == 26 && this.version[2] > 20)) {
-                    if (!document.getElementById("sol_ignoreborder").checked) {
+                    if (!document.getElementById("sol_ignoreborder").checked && !checkall) {
                         document.getElementById("sol_ignoreborder").checked = true;
                     }
                 }
