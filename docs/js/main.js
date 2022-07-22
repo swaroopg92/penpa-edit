@@ -1760,12 +1760,7 @@ onload = function() {
                 break;
             case "replay_download":
             case "replay_download_btn":
-                // generate a GIF of the solve path, with title and solve time information above it.
-                // Load the gif libraries
-                $.getScript("./js/libs/gif.js", function(data, textStatus, jqxhr) {
-                    console.log("gif library successfully loaded");
-                });
-
+                //generate a GIF of the solve path, with title and solve time information above it.
                 if (!document.getElementById("replay_download_btn").disabled) {
 
                     document.getElementById("replay_download_btn").disabled = true;

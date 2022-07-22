@@ -1,6 +1,4 @@
 ## History
-* 2022/**/**
-	* Load gif.js only for replay url
 * 2022/07/01 ver 2.26.21
 	* Handle long url directly using hash.
 	* Fixed some bugs.
