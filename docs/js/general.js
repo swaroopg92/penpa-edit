@@ -2526,6 +2526,27 @@ function load2(paramArray, type) {
         if (UserSettings.tab_settings.length > 0) {
             // document.getElementById('advance_button').value = "1";
             advancecontrol_onoff("url");
+
+            // Select the tab options in the dropdown
+            var tabSelect = document.querySelector('ul.multi');
+            var tabOptions = UserSettings.tab_settings;
+            if (tabSelect) {
+                for (var child of tabSelect.children) {
+                    if (!child.dataset.value) {
+                        continue;
+                    }
+
+                    if (tabOptions.includes(child.dataset.value)) {
+                        if (!child.classList.contains('active')) {
+                            child.click();
+                        }
+                    } else {
+                        if (child.classList.contains('active')) {
+                            child.click();
+                        }
+                    }
+                }
+            }
         }
         // }
     }
