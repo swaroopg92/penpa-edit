@@ -1434,7 +1434,6 @@ sup {
 /* Order correctly by floating highest to the right */
 .rate>label {
     float: right;
-	color: #ddd;
 }
 
 /* The star of the show */
