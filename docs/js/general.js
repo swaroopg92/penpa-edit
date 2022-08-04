@@ -772,7 +772,6 @@ function submit_solution(e) {
         case "tapa":
         case "kurotto":
         case "nurimisaki":
-        case "heyawake":
             // Answer - Shading
             if (!isEmpty(pu.pu_a.surface)) {
                 for (var j = 2; j < pu.ny0 - 2; j++) {
@@ -783,6 +782,24 @@ function submit_solution(e) {
                             skipsol = false;
                         }
                         if (!skipsol && pu.pu_a.surface[i + j * (pu.nx0)] && (
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 4)) { // Black
+                            solution += "1";
+                        } else {
+                            solution += "0";
+                        }
+                    }
+                }
+            }
+            break;
+        case "heyawake":
+            // Answer - Shading
+            if (!isEmpty(pu.pu_a.surface)) {
+                for (var j = 2; j < pu.ny0 - 2; j++) {
+                    for (var i = 2; i < pu.nx0 - 2; i++) {
+                        if (pu.pu_a.surface[i + j * (pu.nx0)] && (
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
                                 pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
