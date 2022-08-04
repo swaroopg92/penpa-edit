@@ -26,6 +26,7 @@ const Color = {
     ORANGE_TRANSPARENT: "rgba(255, 103, 0, 0.6)",
     PINK_LIGHT: "#ffb3ff",
     PURPLE_LIGHT: "#cc99ff",
+    RATING_BACKGROUND: "#dddddd",
     RED: "#ff0000",
     RED_LIGHT: "#ffa3a3",
     RED_TRANSPARENT: "rgba(255, 0, 0, 0.7)",

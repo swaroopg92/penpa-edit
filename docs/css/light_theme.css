@@ -24,6 +24,7 @@
     --orangeLight: #ffcc80;
     --pinkLight: #ffb3ff;
     --purpleLight: #cc99ff;
+    --rating_background: #dddddd;
     --red: #ff0000;
     --redDark: #dd0000;
     --redLight: #ffa3a3;
@@ -49,6 +50,7 @@
 #tb_redo {
     color: var(--black);
 }
+
 #tb_undo:disabled,
 #tb_redo:disabled {
     color: var(--greyLight);

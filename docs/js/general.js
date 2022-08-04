@@ -929,7 +929,7 @@ function submit_solution(e) {
                         var selected_rating;
 
                         for (var i = 0; i < element.length; i++) {
-                            let unselected_color = "rgb(221, 221, 221)";
+                            let unselected_color = Color.RATING_BACKGROUND;
                             let element_color = getComputedStyle(element[i]).getPropertyValue("color");
                             if (element_color !== unselected_color) {
                                 selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
