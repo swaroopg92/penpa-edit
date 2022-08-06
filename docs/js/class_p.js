@@ -7307,7 +7307,7 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
-        var str_all = "1234567890qwertyuiopasdfghjklbnmQWERTYUIOPASDFGHJKLBNM";
+        var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }

@@ -243,6 +243,12 @@ onload = function() {
             var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤";
 
+            // check for caps lock
+            var capslock = false;
+            if (str_alph_up.indexOf(key) != -1) {
+                capslock = true;
+            }
+
             if ((Date.now() - shift_release_time) < shift_time_limit) {
                 shift_counter = 1;
                 pu.submode_check("sub_sudoku2");
@@ -548,116 +554,120 @@ onload = function() {
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                switch (code) {
-                    case "KeyZ":
-                        // case "Z":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku1").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku1");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyX":
-                        // case "X":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku2").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku2");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyC":
-                        // case "C":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku3").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku3");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyV":
-                        // case "V":
-                        present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    default:
-                        e.returnValue = false;
-                        break;
+                if (!capslock) {
+                    switch (code) {
+                        case "KeyZ":
+                            // case "Z":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku1").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku1");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyX":
+                            // case "X":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku2").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku2");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyC":
+                            // case "C":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku3").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku3");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyV":
+                            // case "V":
+                            present_mode = document.getElementById("mo_surface").checked;
+                            if (!present_mode) {
+                                pu.mode_set("surface");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        default:
+                            e.returnValue = false;
+                            break;
+                    }
                 }
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-                switch (code) {
-                    case "KeyZ":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku1").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku1");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyX":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku2").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku2");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyC":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku3").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku3");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyV":
-                        present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    default:
-                        e.returnValue = false;
-                        break;
+                if (!capslock) {
+                    switch (code) {
+                        case "KeyZ":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku1").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku1");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyX":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku2").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku2");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyC":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku3").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku3");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyV":
+                            present_mode = document.getElementById("mo_surface").checked;
+                            if (!present_mode) {
+                                pu.mode_set("surface");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        default:
+                            e.returnValue = false;
+                            break;
+                    }
                 }
             }
 
