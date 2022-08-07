@@ -3016,6 +3016,7 @@ function set_contestmode() {
 function set_solvemodetitle() {
     document.getElementById("title").innerHTML = "Solver Mode (Answer Checking Enabled)";
     document.getElementById("header").classList.add("solving");
+    document.getElementById("page_help").style.backgroundColor = Color.GREY_LIGHT;
 }
 
 function isEmpty(obj) {
