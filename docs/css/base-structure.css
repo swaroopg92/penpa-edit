@@ -1310,18 +1310,16 @@ sup {
 #page_help {
     position: relative;
     top: -1px;
-    background: url(images/help_icon.png);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-position: center;
+    background-color: var(--blueLightVery);
     vertical-align: middle;
-    width: 1.2em;
-    height: 1.2em;
-    margin: 0;
-    padding: 0;
-    aspect-ratio: 1;
+    font-weight: bold;
+    font-size: 0.7em;
+    margin: 0px;
+    padding: 2px;
     border: none;
+    border-radius: 50%;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 /* todo -- tie to selected theme */

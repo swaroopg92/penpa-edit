@@ -18,7 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "2.26.21"; // Also defined in class_p.js
+        var ver = "3.0.1"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -114,7 +114,7 @@
 <body>
     <header id="header">
         <span id="title">Setter Mode</span>
-        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2022 <button id="page_help"></button></span>
+        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2022 <button id="page_help">Help</button></span>
     </header>
     <div id="app-container">
         <div id="tool-container">
@@ -1311,11 +1311,11 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Responsive Mode:</label>
+                            <label>Display Layout:</label>
                         </td>
                         <td>
                             <select name="responsive_settings" id="responsive_settings_opt">
-                                <option value="1" selected="selected">Off</option>
+                                <option value="1" selected="selected">Default</option>
                                 <option value="2">On (Tools Left)</option>
                                 <option value="3">On (Tools Right)</option>
                             </select>

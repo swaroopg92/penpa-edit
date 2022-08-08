@@ -467,7 +467,7 @@ class Puzzle_hex extends Puzzle {
         // Find the row of cursol
         let count = 1;
         let cursorpos = this.cursol;
-        while ((cursorpos - 3 * this.nx) > first_canvascell) {
+        while ((cursorpos - 3 * this.nx) >= first_canvascell) {
             count = count + 1;
             cursorpos = cursorpos - 3 * this.nx - 1;
         }
@@ -483,7 +483,7 @@ class Puzzle_hex extends Puzzle {
                             if (this.point[a].use === 1) { this.cursol = a; }
                             break;
                         case 1: // bottom right to top left for theta = 0
-                            if ((this.nx % 2) === 0) {
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                                 if ((count % 2) === 0) {
                                     a = this.cursol - (this.nx * 3 + 1);
                                 } else {
@@ -503,7 +503,7 @@ class Puzzle_hex extends Puzzle {
                             if (this.point[a].use === 1) { this.cursol = a; }
                             break;
                         case 3: // top left to bottom right for theta = 0
-                            if ((this.nx % 2) === 0) {
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                                 if ((count % 2) === 1) {
                                     a = this.cursol + (this.nx * 3 + 1);
                                 } else {
@@ -519,7 +519,7 @@ class Puzzle_hex extends Puzzle {
                             if (this.point[a].use === 1) { this.cursol = a; }
                             break;
                         case 4: // top right to bottom left for theta = 0
-                            if ((this.nx % 2) === 0) {
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                                 if ((count % 2) === 1) {
                                     a = this.cursol + (this.nx * 3);
                                 } else {
@@ -535,7 +535,7 @@ class Puzzle_hex extends Puzzle {
                             if (this.point[a].use === 1) { this.cursol = a; }
                             break;
                         case 5: // bottom left to top right for theta = 0
-                            if ((this.nx % 2) === 0) {
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                                 if ((count % 2) === 0) {
                                     a = this.cursol - (this.nx * 3);
                                 } else {
@@ -567,7 +567,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 1: // bottom right to top left for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 0) {
                                 a = this.cursol - (this.nx * 3 + 1);
                             } else {
@@ -587,7 +587,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 3: // top left to bottom right for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 1) {
                                 a = this.cursol + (this.nx * 3 + 1);
                             } else {
@@ -603,7 +603,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 4: // top right to bottom left for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 1) {
                                 a = this.cursol + (this.nx * 3);
                             } else {
@@ -619,7 +619,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 5: // bottom left to top right for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 0) {
                                 a = this.cursol - (this.nx * 3);
                             } else {

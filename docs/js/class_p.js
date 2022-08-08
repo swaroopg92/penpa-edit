@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [2, 26, 21]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 1]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -7307,7 +7307,7 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
-        var str_all = "1234567890qwertyuiopasdfghjklbnmQWERTYUIOPASDFGHJKLBNMZXCV";
+        var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
@@ -7574,13 +7574,41 @@ class Puzzle {
                                         }
                                     }
 
-                                    for (var j = 0; j < 4; j++) {
-                                        if (this[this.mode.qa].number[edge_cursor[j]]) {
-                                            this.record("number", edge_cursor[j], this.undoredo_counter);
-                                            delete this[this.mode.qa].number[edge_cursor[j]];
-                                            this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                    if (this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro") {
+                                        // not reliable, every access, the order is changing and hence sorting
+                                        var adjacent_cursor = this.get_neighbors(k, 'adjacent').sort();
+
+                                        // Edge cursor order = [top edge, bottom edge, left edge, right edge]
+                                        // adjacent_cursor order = [top cell, left cell, right cell, bottom cell]
+                                        // Match the edge_cursor and adjacent_cursor order
+                                        adjacent_cursor.splice(1, 0, adjacent_cursor.pop());
+
+                                        if (adjacent_cursor.length == 4) {
+                                            for (var j = 0; j < 4; j++) {
+                                                let filled = false;
+                                                if (this.point[adjacent_cursor[j]].use == 1 &&
+                                                    this[this.mode.qa].number[adjacent_cursor[j]]) {
+                                                    filled = true;
+                                                } else if (this.point[adjacent_cursor[j]].use != 1) {
+                                                    filled = true;
+                                                }
+                                                if (filled && this[this.mode.qa].number[edge_cursor[j]]) {
+                                                    this.record("number", edge_cursor[j], this.undoredo_counter);
+                                                    delete this[this.mode.qa].number[edge_cursor[j]];
+                                                    this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        for (var j = 0; j < 4; j++) {
+                                            if (this[this.mode.qa].number[edge_cursor[j]]) {
+                                                this.record("number", edge_cursor[j], this.undoredo_counter);
+                                                delete this[this.mode.qa].number[edge_cursor[j]];
+                                                this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                            }
                                         }
                                     }
+
                                 }
 
                                 this.record("number", k, this.undoredo_counter);
@@ -10952,6 +10980,8 @@ class Puzzle {
         //Improved and simplified version
         if (options === 'edges') {
             neighbors = this.point[num].neighbor;
+        } else if (options === 'adjacent') {
+            neighbors = this.point[num].adjacent;
         } else {
             if (this.gridtype === "cairo_pentagonal") {
                 // neighbors = this.point[num].neighbor; // Currently eliminating some other cell markings so ignore for now

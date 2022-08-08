@@ -8,6 +8,10 @@ If the message "Invalid address" is displayed on a supported browser, try cleari
 
 Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
 
+## Referencing and citing content
+You can now site this in your research and publications using:
+[![DOI](https://zenodo.org/badge/270875169.svg)](https://zenodo.org/badge/latestdoi/270875169)
+
 ## Sample Preview of the possibilities of this tool
 ![Sample of Objects](./images/sample1.png "Sample of Options")
 
@@ -625,7 +629,7 @@ Wall Logic :x: ;
 ### Settings
 * This function is to provide Penpa-site general settings like theme, custom color etc.
 	* Display Theme: It currently offers only two options (light and dark).
-	* Responsive Mode: It currently offers two options (buttons to left side and buttons to right side).
+	* Display Layout: It currently offers two options (buttons to left side and buttons to right side).
 	* Custom Colors: To enable custom colors in certain modes.
 	* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
 		* Dynamic - Upto 5 digits its larger size and then it becomes small.
@@ -646,8 +650,8 @@ Wall Logic :x: ;
 	* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
 	* Conflict Detection: It is upcoming feature. Some of the puzzle genres have smart checking ability. Default is ON. User can turn it OFF for the ongoing puzzle or for all the future puzzles.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
-		* Theme
-		* Responsive Mode
+		* Display Theme
+		* Display Layout
 		* Tab settings
 		* Reload button status
 		* Gridtype
