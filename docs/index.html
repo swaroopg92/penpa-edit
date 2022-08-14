@@ -31,7 +31,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.0.1"; // Also defined in class_p.js
+        var ver = "3.0.2"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -548,7 +548,7 @@
                             <input type="radio" name="style_surface" value="4" id="st_surface4">
                             <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
                             <input type="radio" name="style_surface" value="2" id="st_surface2">
-                            <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
+                            <label for="st_surface2" class="labelL" id="st_surface2_lb">GN<sup id="st_surface2_sp">5</sup></label>
                             <input type="radio" name="style_surface" value="5" id="st_surface5">
                             <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
                             <input type="radio" name="style_surface" value="6" id="st_surface6">
@@ -1575,7 +1575,8 @@
     </div>
     <script type="text/javascript">
         script_sources = ["./js/libs/easytimer.min.js",
-            "./js/timer.js"
+            "./js/timer.js",
+            "./js/conversion.js"
         ];
         for (let i = 0; i < script_sources.length; i++) {
             let script = document.createElement("script");

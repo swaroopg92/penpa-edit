@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 1]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 2]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -3201,6 +3201,49 @@ class Puzzle {
         }
 
         return checkall;
+    }
+
+    get_answercheck_settings() {
+        let answersetting = document.getElementById("answersetting");
+        let settingstatus_and = answersetting.getElementsByClassName("solcheck");
+        let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
+        var answercheck_opt = [],
+            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+
+        // loop through and check if any "AND" settings are selected
+        for (var i = 0; i < settingstatus_and.length; i++) {
+            if (settingstatus_and[i].checked) {
+                // ignore initial characters "sol_"
+                var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
+                if (opt.length !== 0) {
+                    answercheck_opt.push(opt);
+                    message += "<li>" + answercheck_message[opt] + "</li>";
+                }
+            }
+        }
+        message += "</ul>";
+
+        // If answercheck list is 0, it means, no "AND" option was selected
+        if (answercheck_opt.length === 0) {
+            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            // loop through and check if any "OR" settings are selected
+            for (var i = 0; i < settingstatus_or.length; i++) {
+                if (settingstatus_or[i].checked) {
+                    // ignore initial characters "sol_or_"
+                    let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
+                    if (opt.length !== 0) {
+                        answercheck_opt.push(opt);
+                        message += "<li>" + answercheck_message[opt] + "</li>";
+                    }
+                }
+            }
+            message += "</ul>";
+        }
+
+        var obj = new Object();
+        obj.answercheck_opt = answercheck_opt;
+        obj.message = message;
+        return obj;
     }
 
     make_solution() {
