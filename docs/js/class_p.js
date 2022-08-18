@@ -12027,6 +12027,10 @@ class Puzzle {
         }
     }
 
+    only_alphanumeric(str) {
+        return /^[A-Za-z0-9]*$/.test(str);
+    }
+
     load_clues() {
         let iostring = document.getElementById("iostring").value;
         let pcolor = 1; //black
@@ -12042,12 +12046,10 @@ class Puzzle {
             let digits = iostring.split("");
             let size = Math.sqrt(iostring.length);
 
-            // check all are digits
-            for (var i = 0; i < digits.length; i++) {
-                if (isNaN(parseInt(digits[i], 10))) {
-                    document.getElementById("iostring").value = "Error: it contains non-numeric characters";
-                    return "failed";
-                }
+            // check all are digits or alphabets
+            if (!pu.only_alphanumeric(iostring)) {
+                document.getElementById("iostring").value = "Error: it contains non-alpha-numeric characters";
+                return "failed";
             }
 
             // Data check passed, proceed
@@ -12075,7 +12077,7 @@ class Puzzle {
                 for (var j = r_start; j < (size + r_start); j++) { //  row
                     for (var i = c_start; i < (size + c_start); i++) { // column
                         if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
-                            if (isNaN(parseInt(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]))) {
+                            if (!(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)])) {
                                 this.record("number", (i + 2) + ((j + 2) * this.nx0));
                                 this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], scolor, "1"];
                             }
@@ -12147,7 +12149,7 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(primary[0]))) {
+                        if (!pu.only_alphanumeric(primary[0])) {
                             outputstring += '0';
                         } else {
                             outputstring += primary[0];
@@ -12169,7 +12171,7 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(secondary[0]))) {
+                        if (!pu.only_alphanumeric(secondary[0])) {
                             outputstring += '0';
                         } else {
                             outputstring += secondary[0];
