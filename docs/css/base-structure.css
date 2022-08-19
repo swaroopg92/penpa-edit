@@ -1325,10 +1325,10 @@ sup {
     vertical-align: middle;
     font-weight: bold;
     font-size: 0.7em;
-    margin: 0px;
-    padding: 2px;
+    margin: 0;
+    padding: 2px 5px;
     border: none;
-    border-radius: 50%;
+    border-radius: .5em;
     cursor: pointer;
     text-decoration: underline;
 }
