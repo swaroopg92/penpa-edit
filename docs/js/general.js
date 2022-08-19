@@ -4854,6 +4854,21 @@ function hide_element_by_id(s) {
 }
 
 function penpa_layouts(option) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const puzzleData = urlParams.get('p');
+
+    if (!puzzleData) {
+        Swal.fire({
+            title: 'No puzzle data found in URL.',
+            html: '<h4 class="warn">You can\'t use streaming layout unless a puzzle is loaded.</h4>',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        UserSettings.responsive_mode = 1;
+        return;
+    }
+
     Swal.fire({
         title: 'Are you sure to apply the Streaming Layout?',
         html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
@@ -4890,9 +4905,7 @@ function penpa_layouts(option) {
                     buttons.style.minHeight = '200px';
 
                     // Extract rules and format them
-                    const queryString = window.location.search;
-                    const urlParams = new URLSearchParams(queryString);
-                    let puzzleDescription = decrypt_data(urlParams.get('p').replace(/ /g, '+')).split("\n")[0].split(',');
+                    let puzzleDescription = decrypt_data(puzzleData.replace(/ /g, '+')).split("\n")[0].split(',');
 
                     if (puzzleDescription[18]) {
                         let rules = puzzleDescription[18].replace(/%2C/g, ',').replace(/%2D/g, '</span><br><span style="user-select:text">').replace(/%2E/g, '&').replace(/%2F/g, '=');
