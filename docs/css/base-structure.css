@@ -238,6 +238,17 @@ hr.newgridhrline {
     font-size: 12px;
 }
 
+#stylemode_button,
+#submode_button {
+    line-height: 35px;
+}
+
+#stylemode_button *,
+#submode_button *{
+    line-height: 25px;
+    vertical-align: middle;
+}
+
 .submode_button {
     position: relative;
     text-align: left;
