@@ -32,18 +32,6 @@ const UserSettings = {
             document.getElementById("app-container").classList[verb]("responsive");
             document.getElementById("app-container").classList[flipVerb]("responsive-flip");
             document.getElementById("responsive_settings_opt").value = modeInt;
-
-            // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
-            // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
-            if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
-                document.getElementById("mode_break").style.display = "inline";
-                document.getElementById("mode_txt_space").style.display = "inline";
-                // document.getElementById("visibility_break").style.display = "none";
-            } else if (modeInt > 1 && window.innerWidth >= 850) {
-                document.getElementById("mode_break").style.display = "none";
-                document.getElementById("mode_txt_space").style.display = "none";
-                // document.getElementById("visibility_break").style.display = "inline";
-            }
         } else {
             document.getElementById("responsive_settings_opt").value = modeInt;
             if (window.pu) {
