@@ -4854,69 +4854,81 @@ function hide_element_by_id(s) {
 }
 
 function penpa_layouts(option) {
-    switch (option) {
-        case 1:
-            // Use flex display in the app-container element for easy positioning
-            let appContainer = document.getElementById('app-container');
-            appContainer.style.display = 'flex';
-            // Use left depending on your cropping settings in OBS
-            appContainer.style.justifyContent = 'left';
-            // Use flex-start or flex-end to move the element on top or bottom of the screen,
-            // making room for a camera possibly
-            appContainer.style.alignItems = 'flex-start';
-            // Remove if you want the toolbox, grid and rules in this order,
-            // Remember to tweak margins if you do
-            appContainer.style.flexDirection = 'row-reverse';
-            appContainer.style.marginRight = '285px';
-            appContainer.style.marginLeft = '30px';
+    Swal.fire({
+        title: 'Are you sure to apply the Streaming Layout?',
+        html: '<h4 class="warn">You won\'t be able to revert this!</h4>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: Color.BLUE_SKY,
+        cancelButtonColor: Color.RED,
+        confirmButtonText: 'Yes, Apply Streaming Layout!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            switch (option) {
+                case 1:
+                    // Use flex display in the app-container element for easy positioning
+                    let appContainer = document.getElementById('app-container');
+                    appContainer.style.display = 'flex';
+                    // Use left depending on your cropping settings in OBS
+                    appContainer.style.justifyContent = 'left';
+                    // Use flex-start or flex-end to move the element on top or bottom of the screen,
+                    // making room for a camera possibly
+                    appContainer.style.alignItems = 'flex-start';
+                    // Remove if you want the toolbox, grid and rules in this order,
+                    // Remember to tweak margins if you do
+                    appContainer.style.flexDirection = 'row-reverse';
+                    appContainer.style.marginRight = '285px';
+                    appContainer.style.marginLeft = '30px';
 
-            // Add margins around the tool-container so it's not touching the grid
-            let toolContainer = document.getElementById('tool-container');
-            toolContainer.style.marginLeft = '20px';
-            toolContainer.style.marginRight = '20px';
-            toolContainer.style.marginTop = '6px';
-            let buttons = document.getElementById('buttons');
-            buttons.style.width = '100%';
-            buttons.style.minHeight = '200px';
+                    // Add margins around the tool-container so it's not touching the grid
+                    let toolContainer = document.getElementById('tool-container');
+                    toolContainer.style.marginLeft = '20px';
+                    toolContainer.style.marginRight = '20px';
+                    toolContainer.style.marginTop = '6px';
+                    let buttons = document.getElementById('buttons');
+                    buttons.style.width = '100%';
+                    buttons.style.minHeight = '200px';
 
-            // Extract rules and format them
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            let puzzleDescription = decrypt_data(urlParams.get('p').replace(/ /g, '+')).split("\n")[0].split(',');
+                    // Extract rules and format them
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    let puzzleDescription = decrypt_data(urlParams.get('p').replace(/ /g, '+')).split("\n")[0].split(',');
 
-            if (puzzleDescription[18]) {
-                let rules = puzzleDescription[18].replace(/%2C/g, ',').replace(/%2D/g, '</span><br><span style="user-select:text">').replace(/%2E/g, '&').replace(/%2F/g, '=');
+                    if (puzzleDescription[18]) {
+                        let rules = puzzleDescription[18].replace(/%2C/g, ',').replace(/%2D/g, '</span><br><span style="user-select:text">').replace(/%2E/g, '&').replace(/%2F/g, '=');
 
-                // Add rules to the page, making them selectable
-                let div = document.createElement('div');
-                let p = document.createElement('p');
-                div.appendChild(p);
-                div.style.userSelect = 'text';
-                div.style.marginTop = '20px';
-                p.innerHTML = "<span style=\"user-select:text\">" + rules + "</span>";
-                toolContainer.firstElementChild.appendChild(div);
-                hide_element_by_id('puzzlerules');
+                        // Add rules to the page, making them selectable
+                        let div = document.createElement('div');
+                        let p = document.createElement('p');
+                        div.appendChild(p);
+                        div.style.userSelect = 'text';
+                        div.style.marginTop = '20px';
+                        p.innerHTML = "<span style=\"user-select:text\">" + rules + "</span>";
+                        toolContainer.firstElementChild.appendChild(div);
+                        hide_element_by_id('puzzlerules');
+                    }
+
+                    // Make the title bigger, hide the show rules button
+                    if (puzzleDescription[16]) {
+                        let title = puzzleDescription[15].replace(/Title: /, '');
+                        let author = puzzleDescription[16].replace(/Author: /, '');
+
+                        let puzzleInfo = document.getElementById('puzzleinfo');
+                        puzzleInfo.style.width = 'auto';
+                        let newTitle = document.createElement('h1');
+                        newTitle.textContent = title;
+                        if (author.length > 0)
+                            newTitle.textContent += " - " + author;
+
+                        puzzleInfo.prepend(newTitle);
+
+                        hide_element_by_id('puzzletitle');
+                        hide_element_by_id('puzzleauthor');
+                    }
+                    break;
             }
-
-            // Make the title bigger, hide the show rules button
-            if (puzzleDescription[16]) {
-                let title = puzzleDescription[15].replace(/Title: /, '');
-                let author = puzzleDescription[16].replace(/Author: /, '');
-
-                let puzzleInfo = document.getElementById('puzzleinfo');
-                puzzleInfo.style.width = 'auto';
-                let newTitle = document.createElement('h1');
-                newTitle.textContent = title;
-                if (author.length > 0)
-                    newTitle.textContent += " - " + author;
-
-                puzzleInfo.prepend(newTitle);
-
-                hide_element_by_id('puzzletitle');
-                hide_element_by_id('puzzleauthor');
-            }
-
-            console.log("Custom Penpa styles applied.");
-            break;
-    }
+        } else {
+            UserSettings.responsive_mode = 1;
+        }
+    })
 }

@@ -1478,7 +1478,3 @@ sup {
     font-size: 30px;
     padding: 2px;
 }
-
-#replay_beta_warning {
-    color: var(--red);
-}
