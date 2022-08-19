@@ -1,4 +1,13 @@
 ## History
+* 2022/08/14 ver 3.0.2
+	* Added answer check options to be displayed on clicking title.
+	* Surface mode, changed GR for green to GN to avoid clash with GREY.
+* 2022/08/07 ver 3.0.1
+	* Fixed cpu usage issue with gif library.
+	* Added Citation reference to readme.
+	* Improvement to sudoku mode to accept QWERTZ keybaord layout for shortcuts.
+	* Improvement to cleaning of edge marks in sudoku mode, only when both cells are filled.
+	* Improvement to help display button.
 * 2022/07/01 ver 2.26.21
 	* Handle long url directly using hash.
 	* Fixed some bugs.

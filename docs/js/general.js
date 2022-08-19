@@ -1762,7 +1762,7 @@ function export_sudoku() {
 function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/?") !== -1) {
+        if (urlstring.indexOf("/penpa-edit/") !== -1) {
 
             let param = urlstring.split('&');
             let paramArray = [];
@@ -1787,7 +1787,11 @@ function import_url(urlstring) {
                 }
                 load(url, type = 'localstorage', origurl = paramArray.p);
             } else {
-                urlstring = urlstring.split("/penpa-edit/?")[1];
+                if (urlstring.includes("#")) {
+                    urlstring = urlstring.split("/penpa-edit/#")[1];
+                } else {
+                    urlstring = urlstring.split("/penpa-edit/?")[1];
+                }
                 load(urlstring, 'local');
             }
 
@@ -3010,8 +3014,32 @@ function set_contestmode() {
 }
 
 function set_solvemodetitle() {
-    document.getElementById("title").innerHTML = "Solver Mode (Answer Checking Enabled)";
+    var title = document.getElementById("title");
+    title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+    title.addEventListener("click", display_answercheck);
+    title.style.textDecoration = "underline";
     document.getElementById("header").classList.add("solving");
+    document.getElementById("page_help").style.backgroundColor = Color.GREY_LIGHT;
+}
+
+function display_answercheck() {
+    // Validate at least one answer check option is selected
+    var answer_check_opt = pu.get_answercheck_settings();
+    if (answer_check_opt.answercheck_opt.length === 0) {
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'No specific option selected by Author. Answer check looks for all the elements with appropriate accepted colors. Check <a href="https://github.com/swaroopg92/penpa-edit/blob/master/images/multisolution.PNG" target="_blank">this</a> for reference.',
+            icon: 'info',
+            confirmButtonText: 'ok 🙂',
+        })
+    } else {
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: answer_check_opt.message,
+            icon: 'info',
+            confirmButtonText: 'ok 🙂',
+        })
+    }
 }
 
 function isEmpty(obj) {
