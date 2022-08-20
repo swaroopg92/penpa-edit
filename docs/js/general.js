@@ -2485,7 +2485,7 @@ function load(urlParam, type = 'url', origurl = null) {
             pu.puzzleinfo = qstr;
             let disptext = '';
             if (document.getElementById("saveinfotitle").value) {
-                disptext += 'Title: ' + document.getElementById("saveinfotitle").value + ' | ';
+                disptext += document.getElementById("saveinfotitle").value + ' | ';
             }
             if (document.getElementById("saveinfoauthor").value) {
                 disptext += 'Author: ' + document.getElementById("saveinfoauthor").value + ' | ';
