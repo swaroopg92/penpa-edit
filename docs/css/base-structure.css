@@ -1397,6 +1397,71 @@ sup {
     margin-left: -7px;
 }
 
+#ruletext {
+    display: none;
+}
+
+#puzzlerules {
+    display: none;
+}
+
+#puzzlerules.rules-present {
+    display: inline-block;
+}
+
+#puzzletitle,
+#puzzleauthor {
+    display: block;
+}
+
+#puzzletitle::before {
+    content: "Title: ";
+}
+
+#puzzleauthor::before {
+    content: "Author: ";
+}
+
+#app-container.streaming-mode {
+    display:flex;
+    justify-content:left;
+    align-items:flex-start;
+    flex-direction:row-reverse;
+    margin: 35px 285px 0 30px !important;
+}
+#app-container.streaming-mode #puzzletitle::before,
+#app-container.streaming-mode #puzzleauthor::before{
+    display: none;
+}
+#app-container.streaming-mode #puzzletitle::after {
+    content: " - ";
+}
+#app-container.streaming-mode #puzzletitle,
+#app-container.streaming-mode #puzzleauthor{
+    display: inline;
+    font-size: 2em;
+}
+#app-container.streaming-mode #puzzlerules {
+    display: none;
+}
+#app-container.streaming-mode #puzzleinfo {
+    width: auto;
+}
+#app-container.streaming-mode #tool-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 6px;
+}
+#app-container.streaming-mode #buttons {
+    width: 100%;
+    min-height: 200px;
+}
+#app-container.streaming-mode #ruletext {
+    display: block;
+    user-select: text;
+    margin-top: 20px;
+}
+
 @media (min-width: 850px) {
     #app-container.responsive {
         display: grid;
