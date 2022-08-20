@@ -244,33 +244,9 @@ hr.newgridhrline {
 }
 
 #stylemode_button *,
-#submode_button *{
+#submode_button * {
     line-height: 25px;
     vertical-align: middle;
-}
-
-.submode_button {
-    position: relative;
-    text-align: left;
-    padding-top: 5px;
-    font-size: 12px;
-    height: 35px;
-}
-
-.submode_button label {
-    font-size: 12px;
-}
-
-.stylemode_button {
-    position: relative;
-    text-align: left;
-    padding-bottom: -5px;
-    font-size: 12px;
-    height: 35px;
-}
-
-.stylemode_button label {
-    font-size: 14px;
 }
 
 .label_mode {
@@ -1428,39 +1404,47 @@ sup {
 }
 
 #app-container.streaming-mode {
-    display:flex;
-    justify-content:left;
-    align-items:flex-start;
-    flex-direction:row-reverse;
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    flex-direction: row-reverse;
     margin: 35px 285px 0 30px !important;
 }
+
 #app-container.streaming-mode #puzzletitle::before,
-#app-container.streaming-mode #puzzleauthor::before{
+#app-container.streaming-mode #puzzleauthor::before {
     display: none;
 }
+
 #app-container.streaming-mode #puzzletitle::after {
     content: " - ";
 }
+
 #app-container.streaming-mode #puzzletitle,
-#app-container.streaming-mode #puzzleauthor{
+#app-container.streaming-mode #puzzleauthor {
     display: inline;
     font-size: 2em;
 }
+
 #app-container.streaming-mode #puzzlerules {
     display: none;
 }
+
 #app-container.streaming-mode #puzzleinfo {
     width: auto;
 }
+
 #app-container.streaming-mode #tool-container {
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 6px;
 }
+
 #app-container.streaming-mode #buttons {
     width: 100%;
     min-height: 200px;
 }
+
 #app-container.streaming-mode #ruletext {
     display: block;
     user-select: text;
@@ -1519,11 +1503,13 @@ sup {
 }
 
 @media (max-width: 850px) {
+
     #app-container.responsive #mode_txt_space,
     #app-container.responsive #mode_break {
         display: inline;
     }
 }
+
 @media (max-width: 600px) {
     body {
         margin: 0 auto;
