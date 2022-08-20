@@ -26,8 +26,8 @@ const UserSettings = {
         const modeInt = newMode ? parseInt(newMode, 10) : 1;
         this._responsive_mode = modeInt;
 
-        let verb = (modeInt === 1 || modeInt === 2) ? 'add' : 'remove';
-        let flipVerb = (modeInt === 2) ? 'add' : 'remove';
+        let verb = (modeInt === 2 || modeInt === 3) ? 'add' : 'remove';
+        let flipVerb = (modeInt === 3) ? 'add' : 'remove';
         let streamVerb = (modeInt === 4) ? 'add' : 'remove';
         document.getElementById("app-container").classList[verb]("responsive");
         document.getElementById("app-container").classList[flipVerb]("responsive-flip");
