@@ -1414,6 +1414,11 @@ sup {
     display: block;
 }
 
+#puzzletitle:empty,
+#puzzleauthor:empty {
+    display: none !important;
+}
+
 #puzzletitle::before {
     content: "Title: ";
 }
