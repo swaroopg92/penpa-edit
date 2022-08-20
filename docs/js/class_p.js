@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 1]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -3201,6 +3201,49 @@ class Puzzle {
         }
 
         return checkall;
+    }
+
+    get_answercheck_settings() {
+        let answersetting = document.getElementById("answersetting");
+        let settingstatus_and = answersetting.getElementsByClassName("solcheck");
+        let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
+        var answercheck_opt = [],
+            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+
+        // loop through and check if any "AND" settings are selected
+        for (var i = 0; i < settingstatus_and.length; i++) {
+            if (settingstatus_and[i].checked) {
+                // ignore initial characters "sol_"
+                var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
+                if (opt.length !== 0) {
+                    answercheck_opt.push(opt);
+                    message += "<li>" + answercheck_message[opt] + "</li>";
+                }
+            }
+        }
+        message += "</ul>";
+
+        // If answercheck list is 0, it means, no "AND" option was selected
+        if (answercheck_opt.length === 0) {
+            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            // loop through and check if any "OR" settings are selected
+            for (var i = 0; i < settingstatus_or.length; i++) {
+                if (settingstatus_or[i].checked) {
+                    // ignore initial characters "sol_or_"
+                    let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
+                    if (opt.length !== 0) {
+                        answercheck_opt.push(opt);
+                        message += "<li>" + answercheck_message[opt] + "</li>";
+                    }
+                }
+            }
+            message += "</ul>";
+        }
+
+        var obj = new Object();
+        obj.answercheck_opt = answercheck_opt;
+        obj.message = message;
+        return obj;
     }
 
     make_solution() {
@@ -11984,6 +12027,10 @@ class Puzzle {
         }
     }
 
+    only_alphanumeric(str) {
+        return /^[A-Za-z0-9]*$/.test(str);
+    }
+
     load_clues() {
         let iostring = document.getElementById("iostring").value;
         let pcolor = 1; //black
@@ -11999,12 +12046,10 @@ class Puzzle {
             let digits = iostring.split("");
             let size = Math.sqrt(iostring.length);
 
-            // check all are digits
-            for (var i = 0; i < digits.length; i++) {
-                if (isNaN(parseInt(digits[i], 10))) {
-                    document.getElementById("iostring").value = "Error: it contains non-numeric characters";
-                    return "failed";
-                }
+            // check all are digits or alphabets
+            if (!pu.only_alphanumeric(iostring)) {
+                document.getElementById("iostring").value = "Error: it contains non-alpha-numeric characters";
+                return "failed";
             }
 
             // Data check passed, proceed
@@ -12032,7 +12077,7 @@ class Puzzle {
                 for (var j = r_start; j < (size + r_start); j++) { //  row
                     for (var i = c_start; i < (size + c_start); i++) { // column
                         if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
-                            if (isNaN(parseInt(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)]))) {
+                            if (!(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)])) {
                                 this.record("number", (i + 2) + ((j + 2) * this.nx0));
                                 this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], scolor, "1"];
                             }
@@ -12104,7 +12149,7 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(primary[0]))) {
+                        if (!pu.only_alphanumeric(primary[0])) {
                             outputstring += '0';
                         } else {
                             outputstring += primary[0];
@@ -12126,7 +12171,7 @@ class Puzzle {
                             outputstring += '0';
                         }
                     } else {
-                        if (isNaN(parseInt(secondary[0]))) {
+                        if (!pu.only_alphanumeric(secondary[0])) {
                             outputstring += '0';
                         } else {
                             outputstring += secondary[0];

@@ -1789,9 +1789,9 @@ function import_url(urlstring) {
                 }
                 load(url, type = 'localstorage', origurl = paramArray.p);
             } else {
-                if (urlstring.includes("#")){
+                if (urlstring.includes("#")) {
                     urlstring = urlstring.split("/penpa-edit/#")[1];
-                } else{
+                } else {
                     urlstring = urlstring.split("/penpa-edit/?")[1];
                 }
                 load(urlstring, 'local');
@@ -1872,16 +1872,18 @@ function load(urlParam, type = 'url', origurl = null) {
     if (rtext_para[14] && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
     if (rtext_para[15]) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
+        ptitle = ptitle.replace(/^Title\:\s/, '');
         if (ptitle !== "Title: ") {
             document.getElementById("puzzletitle").innerHTML = ptitle;
-            document.getElementById("saveinfotitle").value = ptitle.slice(7); // text after "Title: "
+            document.getElementById("saveinfotitle").value = ptitle;
         }
     }
     if (rtext_para[16]) {
         let pauthor = rtext_para[16].replace(/%2C/g, ',')
-        if (pauthor != "Author: ") {
+        pauthor = pauthor.replace(/^Author\:\s/, '');
+        if (pauthor != "") {
             document.getElementById("puzzleauthor").innerHTML = pauthor;
-            document.getElementById("saveinfoauthor").value = pauthor.slice(8); // text after "Author: "
+            document.getElementById("saveinfoauthor").value = pauthor;
         }
     }
     if (rtext_para[17] && rtext_para[17] !== "") {
@@ -1902,9 +1904,10 @@ function load(urlParam, type = 'url', origurl = null) {
     UserSettings.loadFromCookies("others");
 
     if (rtext_para[18] && rtext_para[18] !== "") {
-        document.getElementById("puzzlerules").style.display = "inline";
+        document.getElementById("puzzlerules").classList.add("rules-present");
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
-        document.getElementById("saveinforules").value = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+        document.getElementById("ruletext").innerHTML = pu.rules;
+        document.getElementById("saveinforules").value = pu.rules.replace(/<br>/g, '\n');
     }
 
     // Border button status
@@ -2471,7 +2474,7 @@ function load(urlParam, type = 'url', origurl = null) {
         // Hide title, author, rules
         document.getElementById("puzzletitle").style.display = 'none';
         document.getElementById("puzzleauthor").style.display = 'none';
-        document.getElementById("puzzlerules").style.display = 'none';
+        document.getElementById("puzzlerules").classList.remove("rules-present");
 
         // Update title
         document.getElementById("title").innerHTML = "Replay Mode"
@@ -3014,9 +3017,32 @@ function set_contestmode() {
 }
 
 function set_solvemodetitle() {
-    document.getElementById("title").innerHTML = "Solver Mode (Answer Checking Enabled)";
+    var title = document.getElementById("title");
+    title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+    title.addEventListener("click", display_answercheck);
+    title.style.textDecoration = "underline";
     document.getElementById("header").classList.add("solving");
     document.getElementById("page_help").style.backgroundColor = Color.GREY_LIGHT;
+}
+
+function display_answercheck() {
+    // Validate at least one answer check option is selected
+    var answer_check_opt = pu.get_answercheck_settings();
+    if (answer_check_opt.answercheck_opt.length === 0) {
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: 'No specific option selected by Author. Answer check looks for all the elements with appropriate accepted colors. Check <a href="https://github.com/swaroopg92/penpa-edit/blob/master/images/multisolution.PNG" target="_blank">this</a> for reference.',
+            icon: 'info',
+            confirmButtonText: 'ok 🙂',
+        })
+    } else {
+        Swal.fire({
+            title: 'Swaroop says:',
+            html: answer_check_opt.message,
+            icon: 'info',
+            confirmButtonText: 'ok 🙂',
+        })
+    }
 }
 
 function isEmpty(obj) {
@@ -4823,4 +4849,9 @@ function decrypt_data(puzdata) {
     var plain = inflate.decompress();
     let decrypted = new TextDecoder().decode(plain);
     return decrypted;
+}
+
+function hide_element_by_id(s) {
+    let element = document.getElementById(s);
+    element.parentElement.style.contentVisibility = 'hidden';
 }

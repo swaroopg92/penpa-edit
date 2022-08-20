@@ -15,6 +15,7 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * What does PenpaLite do? What is this Constraints for? - https://youtu.be/2OczdnF5LmY
 * How to generate GMPuzzles Submission TextFile? - https://youtu.be/0i8hVUO85iM
 * How to import Puzz.link/Pzv/Other Penpa forks to Penpa+? - https://youtu.be/z7jhvfKhhmU
+* How to share your solve in Penpa+? - https://youtube.com/shorts/NgwQi17sX7A?feature=share
 
 ## Puzzles
 * How to Create a Thermo Sudoku? - https://youtu.be/ynZOz057mKA
@@ -25,6 +26,7 @@ Youtube Channel - https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ
 * How to Create 3D Sudoku/Isodoku? - https://youtu.be/PZ8imdAa_g0
 * How to Create a Little Killer Sudoku? - https://youtu.be/L_5DGjV2Z-w
 * How to Create a Kakuro Puzzle? - https://youtu.be/0iVCFYePt9Y
+* How to Create a Tight Fit Sudoku? - https://youtu.be/7zG2T1OPzMw
 
 ## Bonus
 * How to post a puzzle on Logic Masters Germany website - https://www.youtube.com/watch?v=9vhpo2B9qrM&t=1124s

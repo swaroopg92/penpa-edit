@@ -18,7 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.0.1"; // Also defined in class_p.js
+        var ver = "3.0.3"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -529,7 +529,7 @@
                             <input type="radio" name="style_surface" value="4" id="st_surface4">
                             <label for="st_surface4" class="labelL" id="st_surface4_lb">BL<sup id="st_surface4_sp">4</sup></label>
                             <input type="radio" name="style_surface" value="2" id="st_surface2">
-                            <label for="st_surface2" class="labelL" id="st_surface2_lb">GR<sup id="st_surface2_sp">5</sup></label>
+                            <label for="st_surface2" class="labelL" id="st_surface2_lb">GN<sup id="st_surface2_sp">5</sup></label>
                             <input type="radio" name="style_surface" value="5" id="st_surface5">
                             <label for="st_surface5" class="labelL" id="st_surface5_lb">BL<sup id="st_surface5_sp">6</sup></label>
                             <input type="radio" name="style_surface" value="6" id="st_surface6">
@@ -681,15 +681,15 @@
                     </div>
                 </div>
             </div>
+            <div id="ruletext"></div>
         </div>
         <div id="puzzle-container">
             <div id="puzzleinfo">
-                <div><label id="puzzletitle" class="info"></label></div>
-                <div><label id="puzzleauthor" class="info"></label></div>
-                <div><input type="button" id="puzzlerules" value="Show rules" style="display:none;" /></div>
+                <label id="puzzletitle" class="info"></label>
+                <label id="puzzleauthor" class="info"></label>
+                <div><input type="button" id="puzzlerules" value="Show Rules" /></div>
                 <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
-                <div><label id="solution_check" class="info" /></label>
-                </div>
+                <div><label id="solution_check" class="info" /></label></div>
             </div>
             <div id="dvique" class="dvique">
                 <canvas id="pause_canvas" style="display:none;"></canvas>
@@ -1250,7 +1250,6 @@
         <div id="modal-replay-content" class="modal-content">
             <h3 class="modal-header">Share Replay</h3>
             <div id="modal-replay-solution" class="nb_button">
-                <p><label id="replay_beta_warning">*Beta Version</label></p>
                 <input type="text" placeholder="Solver Name" value="" id="saveinfosolver" />
                 <br>
                 <input type="button" id="closeBtn_replay" value="Generate URL with Replay" />
@@ -1318,6 +1317,7 @@
                                 <option value="1" selected="selected">Default</option>
                                 <option value="2">On (Tools Left)</option>
                                 <option value="3">On (Tools Right)</option>
+                                <option value="4">Streaming 1 (beta)</option>
                             </select>
                         </td>
                     </tr>
@@ -1557,7 +1557,8 @@
     </div>
     <script type="text/javascript">
         script_sources = ["./js/libs/easytimer.min.js",
-            "./js/timer.js"
+            "./js/timer.js",
+            "./js/conversion.js"
         ];
         for (let i = 0; i < script_sources.length; i++) {
             let script = document.createElement("script");
