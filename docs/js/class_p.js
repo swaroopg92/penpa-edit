@@ -178,7 +178,7 @@ class Puzzle {
             13: 1 // Fat dots
         };
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
-        this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino'];
+        this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
     }
 
