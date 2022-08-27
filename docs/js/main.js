@@ -245,7 +245,8 @@ onload = function() {
 
             // check for caps lock
             var capslock = false;
-            if (str_alph_up.indexOf(key) != -1) {
+            if ((str_alph_up.indexOf(key) != -1 && !isShiftKeyHeld(e)) ||
+                (str_alph_low.indexOf(key) != -1 && isShiftKeyHeld(e))) {
                 capslock = true;
             }
 
@@ -370,6 +371,9 @@ onload = function() {
                     (keycode >= 48 && keycode <= 57)) {
                     e.preventDefault();
                     if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                        if (!capslock) {
+                            keycode = keycode + 32;
+                        }
                         pu.key_number(String.fromCharCode(keycode));
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(key);
