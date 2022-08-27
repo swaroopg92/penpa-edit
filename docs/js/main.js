@@ -371,7 +371,7 @@ onload = function() {
                     (keycode >= 48 && keycode <= 57)) {
                     e.preventDefault();
                     if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                        if (!capslock) {
+                        if (!capslock && keycode >= 65 && keycode <= 90) {
                             keycode = keycode + 32;
                         }
                         pu.key_number(String.fromCharCode(keycode));
