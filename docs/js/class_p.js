@@ -3493,8 +3493,16 @@ class Puzzle {
                             }
                         } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
                             // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                                sol[4].push(i + "," + this[pu].number[i][0]);
+                            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
+                                    let alphabet = this[pu].number[i][0];
+                                    if (alphabet.match(/[a-zA-Z]/g)) {
+                                        sol[4].push(i + "," + alphabet.toLowerCase());
+                                    }
+                                } else {
+                                    sol[4].push(i + "," + this[pu].number[i][0]);
+                                }
                             }
                         }
                     }
@@ -3647,8 +3655,16 @@ class Puzzle {
                                         }
                                     } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
                                         // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) && (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                                            temp_sol.push(i + "," + this[pu].number[i][0]);
+                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                            (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                            if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
+                                                let alphabet = this[pu].number[i][0];
+                                                if (alphabet.match(/[a-zA-Z]/g)) {
+                                                    temp_sol.push(i + "," + alphabet.toLowerCase());
+                                                }
+                                            } else {
+                                                temp_sol.push(i + "," + this[pu].number[i][0]);
+                                            }
                                         }
                                     }
                                 }
