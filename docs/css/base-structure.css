@@ -249,6 +249,11 @@ hr.newgridhrline {
     vertical-align: middle;
 }
 
+#stylemode_button sup,
+#submode_button sup {
+    vertical-align: super;
+}
+
 .label_mode {
     display: inline;
     margin: 0px;
