@@ -3030,14 +3030,14 @@ function display_answercheck() {
     var answer_check_opt = pu.get_answercheck_settings();
     if (answer_check_opt.answercheck_opt.length === 0) {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: 'No specific option selected by Author. Answer check looks for all the elements with appropriate accepted colors. Check <a href="https://github.com/swaroopg92/penpa-edit/blob/master/images/multisolution.PNG" target="_blank">this</a> for reference.',
             icon: 'info',
             confirmButtonText: 'ok 🙂',
         })
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'GMPuzzles says:',
             html: answer_check_opt.message,
             icon: 'info',
             confirmButtonText: 'ok 🙂',
