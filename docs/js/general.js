@@ -2027,6 +2027,8 @@ function load(urlParam, type = 'url', origurl = null) {
                     case "consecutive":
                         if (title_words[1].toLowerCase() == "pairs") {
                             pu.user_tags[0] = "consecutivepairs";
+                        } else if (title_words[1].toLowerCase() == "clone") {
+                            pu.user_tags[0] = "classic";
                         } else {
                             pu.user_tags[0] = "consecutive";
                         }
