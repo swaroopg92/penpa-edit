@@ -8294,13 +8294,14 @@ class Puzzle {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
         var allowed_styles = [1, 8, 3, 4]; // Dark Grey, Grey, Light Grey, Black
         this.record("surface", num);
+        let rightclick_color = UserSettings.secondcolor;
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color && allowed_styles.includes(color)) {
-            this[this.mode.qa].surface[num] = 2;
+            this[this.mode.qa].surface[num] = rightclick_color;
             if (document.getElementById("custom_color_opt").value === "2") {
-                this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+                this[this.mode.qa + "_col"].surface[num] = this.get_rgbcolor(rightclick_color);
             }
-            this.drawing_mode = 2;
-        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && allowed_styles.includes(color)))) {
+            this.drawing_mode = rightclick_color;
+        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === rightclick_color && allowed_styles.includes(color)))) {
             delete this[this.mode.qa].surface[num];
             if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].surface[num];
