@@ -3211,14 +3211,16 @@ class Puzzle {
             message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
 
         // loop through and check if any "AND" settings are selected
+        let prev_opt = "";
         for (var i = 0; i < settingstatus_and.length; i++) {
             if (settingstatus_and[i].checked) {
                 // ignore initial characters "sol_"
                 var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
-                if (opt.length !== 0) {
+                if (opt.length !== 0 && opt != prev_opt) {
                     answercheck_opt.push(opt);
                     message += "<li>" + answercheck_message[opt] + "</li>";
                 }
+                prev_opt = opt;
             }
         }
         message += "</ul>";
@@ -3231,10 +3233,11 @@ class Puzzle {
                 if (settingstatus_or[i].checked) {
                     // ignore initial characters "sol_or_"
                     let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
-                    if (opt.length !== 0) {
+                    if (opt.length !== 0 && opt != prev_opt) {
                         answercheck_opt.push(opt);
                         message += "<li>" + answercheck_message[opt] + "</li>";
                     }
+                    prev_opt = opt;
                 }
             }
             message += "</ul>";
