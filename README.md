@@ -8,6 +8,10 @@ If the message "Invalid address" is displayed on a supported browser, try cleari
 
 Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
 
+## Referencing and citing content
+You can now site this in your research and publications using:
+[![DOI](https://zenodo.org/badge/270875169.svg)](https://zenodo.org/badge/latestdoi/270875169)
+
 ## Sample Preview of the possibilities of this tool
 ![Sample of Objects](./images/sample1.png "Sample of Options")
 
@@ -446,74 +450,186 @@ Depending on the browser you can update the page without using the cache with "C
 * This function has multiple purposes. Mainly, it is a solution for "URL too long Error".
 * If the puzzle is too big and contains a lot of elements, it generates a big URL and the size is limited by the internet. In order to address this issue, one can use this Load button option to copy the big URL and click "Load URL" button.
 * Basically, one can share the "Long URL" and ask the user to copy paste in the "Load" button and load the puzzle locally into Penpa.
-* Secondly, it can also be used to import https://puzz.link/db/ puzzles. It currently supports:
-	* Akari
-	* Aqre
-	* Araf
-	* Ayeheya (Ekawayeh)
-	* Balance Loop
-	* Castle Wall
-	* Cave
-	* Cojun
-	* Compass
-	* Country Road
-	* Detour
-	* Easy as ABC
-	* Factors
-	* Fillomino
-	* Geradeweg
-	* Haisu
-	* Hashiwokakero (Hashi/Bridges)
-	* Heyawake
-	* Juosan
-	* Kakuro
-	* Kurochute
-	* Kurodoko
-	* Kurotto
-	* LITS
-	* Masyu
-	* Maxi Loop
-	* Meandering Numbers
-	* Midloop
-	* Mochikoro
-	* Mochinyoro
-	* Moon or Sun
-	* Nagenawa
-	* Nanro
-	* Nonogram
-	* Norinori
-	* Numberlink
-	* Nuribou
-	* Nurikabe
-	* Nurimaze
-	* Nurimisaki
-	* Onsen
-	* Pencils
-	* Regional Yajilin
-	* Renban (Renban-Madoguchi)
-	* Ripple Effect
-	* Shakashaka
-	* Shimaguni (Islands)
-	* Simple Loop
-	* Skyscrapers
-	* Slitherlink
-	* Snake
-	* Star Battle
-	* Stostone
-	* Sudoku
-	* Symmetry Area
-	* Tapa
-	* Tapa-Like Loop
-	* Tents
-	* Toichika 2
-	* View
-	* Yajikazu (Yajisan-Kazusan)
-	* Yajilin
+* Secondly, it can also be used to import https://puzz.link/db/ puzzles. Those with a :heavy_check_mark: the right of the name are supported while those marked with a :x: are not (yet).
+
+Aho-ni-Narikire :heavy_check_mark: ;
+Akari (Light up) :heavy_check_mark: ;
+Amibo :x: ;
+Angle Loop :x: ;
+Aqre :heavy_check_mark: ;
+Aquarium :x: ;
+Araf :heavy_check_mark: ;
+Arukone :x: ;
+Ayeheya (Ekawayeh) :heavy_check_mark: ;
+Balance Loop :heavy_check_mark: ;
+Barns :x: ;
+Border Block :x: ;
+Bosanowa (Bossanova) :x: ;
+Box :x: ;
+Castle Wall :heavy_check_mark: ;
+Cave (Corral/Bag) :heavy_check_mark: ;
+Chocona :x: ;
+Cojun :heavy_check_mark: ;
+Combi Block :x: ;
+Compass :heavy_check_mark: ;
+Country Road :heavy_check_mark: ;
+Creek :x: ;
+Detour :heavy_check_mark: ;
+Doppelblock :x: ;
+Dosun-Fuwari :x: ;
+Double Back :heavy_check_mark: ;
+Double Choco :heavy_check_mark: ;
+Easy as ABC :heavy_check_mark: ;
+Factors (Rooms of Factors) :heavy_check_mark: ;
+Fillmat :heavy_check_mark: ;
+Fillomino :heavy_check_mark: ;
+Firefly (Hotaru Beam) :heavy_check_mark: ;
+FiveCells :x: ;
+FourCells :x: ;
+Geradeweg :heavy_check_mark: ;
+Goats and Wolves :x: ;
+Goishi :x: ;
+Haisu :heavy_check_mark: ;
+Hakoiri-masashi :x: ;
+Hanare-gumi :heavy_check_mark: ;
+Hashiwokakero (Hashi/Bridges) :heavy_check_mark: ;
+Hebi-Ichigo (Snakes) :heavy_check_mark: ;
+Heteromino :x: ;
+Heyawake :heavy_check_mark: ;
+Hitori :heavy_check_mark: ;
+Icebarn :x: ;
+Icelom :x: ;
+Icelom 2 :x: ;
+Ichimaga :heavy_check_mark: ;
+Ichimaga, Crossing :heavy_check_mark: ;
+Ichimaga, Magnetic :heavy_check_mark: ;
+International Borders :x: ;
+Juosan :heavy_check_mark: ;
+KaitoRamma :x: ;
+KaitoRamma, New :x: ;
+Kakuro :heavy_check_mark: ;
+Kakuru :x: ;
+Kazunori Room :x: ;
+Kin-Kon-Kan :x: ;
+Kouchoku :x: ;
+Kropki :heavy_check_mark: ;
+Kurochute :heavy_check_mark: ;
+Kurodoko :heavy_check_mark: ;
+Kurotto :heavy_check_mark: ;
+Kusabi :x: ;
+L-route :x: ;
+LITS :heavy_check_mark: ;
+Look-Air :heavy_check_mark: ;
+Loop Special :x: ;
+Makaro :x: ;
+Masyu (Mashu/Pearl) :heavy_check_mark: ;
+Maxi Loop :heavy_check_mark: ;
+Meandering Numbers :heavy_check_mark: ;
+Mejilink :x: ;
+Midloop :heavy_check_mark: ;
+Minarism :x: ;
+Minesweeper :heavy_check_mark: ;
+Mochikoro :heavy_check_mark: ;
+Mochinyoro :heavy_check_mark: ;
+Moon or Sun :heavy_check_mark: ;
+Nagareru-Loop :x: ;
+Nagenawa :heavy_check_mark: ;
+Nanro :heavy_check_mark: ;
+NIKOJI :x: ;
+Nondango :x: ;
+Nonogram :heavy_check_mark: ;
+Norinori :heavy_check_mark: ;
+Numberlink :heavy_check_mark: ;
+Nuri-Maze :heavy_check_mark: ;
+Nuribou :heavy_check_mark: ;
+Nurikabe :heavy_check_mark: ;
+Nurimisaki :heavy_check_mark: ;
+Onsen-meguri :heavy_check_mark: ;
+Paintarea :heavy_check_mark: ;
+Pencils :heavy_check_mark: ;
+Pipelink :x: ;
+Pipelink Returns :x: ;
+Putteria :heavy_check_mark: ;
+Reflect Link :x: ;
+Regional Yajilin :heavy_check_mark: ;
+Renban (Renban-Madoguchi) :heavy_check_mark: ;
+Ring-ring :heavy_check_mark: ;
+Ripple Effect (Hakyukoka) :heavy_check_mark: ;
+Roma :x: ;
+Sashigane :x: ;
+School Trip (Shugaku) :x: ;
+Scrin :heavy_check_mark: ;
+Shakashaka :heavy_check_mark: ;
+Shikaku :heavy_check_mark: ;
+Shimaguni (Islands) :heavy_check_mark: ;
+Shirokuro-link :x: ;
+Simple Loop :heavy_check_mark: ;
+Skyscrapers (Buildings) :heavy_check_mark: ;
+Slalom (Suraromu) :x: ;
+Slant (Gokigen) :heavy_check_mark: ;
+Slitherlink :heavy_check_mark: ;
+Snake :heavy_check_mark: ;
+Star Battle :heavy_check_mark: ;
+Stostone :heavy_check_mark: ;
+Sudoku :heavy_check_mark: ;
+Sukoro :heavy_check_mark: ;
+Sukoro-room :heavy_check_mark: ;
+Symmetry Area :heavy_check_mark: ;
+Tapa :heavy_check_mark: ;
+Tapa-Like Loop :heavy_check_mark: ;
+Tasquare :heavy_check_mark: ;
+Tatamibari :x: ;
+Tatebo-Yokobo :heavy_check_mark: ;
+Tentaisho (Spiral Galaxies) :heavy_check_mark: ;
+Tents :heavy_check_mark: ;
+Territory (Nawabari) :heavy_check_mark: ;
+Tilepaint :x: ;
+Toichika :x: ;
+Toichika 2 :heavy_check_mark: ;
+Tri-place :x: ;
+Uso-one :heavy_check_mark: ;
+Uso-tatami :heavy_check_mark: ;
+View :heavy_check_mark: ;
+Wagiri :x: ;
+Yajilin :heavy_check_mark: ;
+Yajisan-Kazusan :heavy_check_mark: ;
+Yajitatami :x: ;
+Yin-Yang :heavy_check_mark: ;
+Yosenabe :x: ;
+
+* It can also import puzzles from https://pzprxs.vercel.app/, a fork of puzz.link with different puzzle variants.
+
+Building Walk :x: ;
+Canal View :heavy_check_mark: ;
+Chained Block :heavy_check_mark: ;
+Choco Banana :heavy_check_mark: ;
+Crossstitch :x: ;
+Dotchi Loop :heavy_check_mark: ;
+Lohkous :x: ;
+One Room One Door :heavy_check_mark: ;
+Ovotovata :x: ;
+Rassi Silai :heavy_check_mark: ;
+Tonttiraja :heavy_check_mark: ;
+Voxas :x: ;
+
+* These variants are currently impossible because of the grid or the controls.
+
+Army Ants :x: ;
+Bonsan :x: ;
+Curve Data :x: ;
+Herugolf :x: ;
+Heya-Bon :x: ;
+Rectangle-Slider :x: ;
+Return Home :x: ;
+Satogaeri :x: ;
+Tawamurenga :x: ;
+Wall Logic :x: ;
+
 
 ### Settings
 * This function is to provide Penpa-site general settings like theme, custom color etc.
 	* Display Theme: It currently offers only two options (light and dark).
-	* Responsive Mode: It currently offers two options (buttons to left side and buttons to right side).
+	* Display Layout: It currently offers two options (buttons to left side and buttons to right side).
 	* Custom Colors: To enable custom colors in certain modes.
 	* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
 		* Dynamic - Upto 5 digits its larger size and then it becomes small.
@@ -534,8 +650,8 @@ Depending on the browser you can update the page without using the cache with "C
 	* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
 	* Conflict Detection: It is upcoming feature. Some of the puzzle genres have smart checking ability. Default is ON. User can turn it OFF for the ongoing puzzle or for all the future puzzles.
 	* Save Settings: Selecting yes, will save the following items in the browser cookies:
-		* Theme
-		* Responsive Mode
+		* Display Theme
+		* Display Layout
 		* Tab settings
 		* Reload button status
 		* Gridtype

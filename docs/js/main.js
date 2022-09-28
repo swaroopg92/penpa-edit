@@ -243,6 +243,13 @@ onload = function() {
             var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤";
 
+            // check for caps lock
+            var capslock = false;
+            if ((str_alph_up.indexOf(key) != -1 && !isShiftKeyHeld(e)) ||
+                (str_alph_low.indexOf(key) != -1 && isShiftKeyHeld(e))) {
+                capslock = true;
+            }
+
             if ((Date.now() - shift_release_time) < shift_time_limit) {
                 shift_counter = 1;
                 pu.submode_check("sub_sudoku2");
@@ -364,6 +371,9 @@ onload = function() {
                     (keycode >= 48 && keycode <= 57)) {
                     e.preventDefault();
                     if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                        if (!capslock && keycode >= 65 && keycode <= 90) {
+                            keycode = keycode + 32;
+                        }
                         pu.key_number(String.fromCharCode(keycode));
                     } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         pu.key_number(key);
@@ -548,117 +558,125 @@ onload = function() {
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                switch (key) {
-                    case "z":
-                        // case "Z":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku1").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku1");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "x":
-                        // case "X":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku2").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku2");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "c":
-                        // case "C":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku3").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku3");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "v":
-                        // case "V":
-                        present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    default:
-                        e.returnValue = false;
-                        break;
+                if (!capslock) {
+                    switch (code) {
+                        case "KeyZ":
+                            // case "Z":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku1").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku1");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyX":
+                            // case "X":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku2").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku2");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyC":
+                            // case "C":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku3").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku3");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyV":
+                            // case "V":
+                            present_mode = document.getElementById("mo_surface").checked;
+                            if (!present_mode) {
+                                pu.mode_set("surface");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        default:
+                            e.returnValue = false;
+                            break;
+                    }
+                }
+            }
+
+            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
+                if (!capslock) {
+                    switch (code) {
+                        case "KeyZ":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku1").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku1");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyX":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku2").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku2");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyC":
+                            present_mode = document.getElementById("mo_sudoku").checked;
+                            if (!present_mode) {
+                                pu.mode_set("sudoku");
+                                e.preventDefault();
+                            }
+                            present_submode = document.getElementById("sub_sudoku3").checked;
+                            if (!present_submode) {
+                                pu.submode_check("sub_sudoku3");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "KeyV":
+                            present_mode = document.getElementById("mo_surface").checked;
+                            if (!present_mode) {
+                                pu.mode_set("surface");
+                                e.preventDefault();
+                            }
+                            e.returnValue = false;
+                            break;
+                        default:
+                            e.returnValue = false;
+                            break;
+                    }
                 }
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
                 switch (key) {
-                    case "z":
-                    case "Z":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku1").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku1");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "x":
-                    case "X":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku2").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku2");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "c":
-                    case "C":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku3").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku3");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "v":
-                    case "V":
-                        present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
                     case "1":
                         present_style = document.getElementById("st_surface1").checked;
                         if (!present_style) {
@@ -1758,6 +1776,106 @@ onload = function() {
                 replay_backward();
                 e.preventDefault();
                 break;
+            case "replay_download":
+            case "replay_download_btn":
+                //generate a GIF of the solve path, with title and solve time information above it.
+                if (!document.getElementById("replay_download_btn").disabled) {
+
+                    document.getElementById("replay_download_btn").disabled = true;
+                    document.getElementById("replay_message").style.display = "";
+                    document.getElementById("replay_message").innerHTML = "Preparing your download";
+
+                    setTimeout(function() {
+                        function splitTextLines(ctx, text, maxWidth) {
+                            var words = text.split(" ");
+                            var lines = [];
+                            var currentLine = words[0];
+
+                            for (var i = 1; i < words.length; i++) {
+                                var word = words[i];
+                                var width = ctx.measureText(currentLine + " " + word).width;
+                                if (width < maxWidth) {
+                                    currentLine += " " + word;
+                                } else {
+                                    lines.push(currentLine);
+                                    currentLine = word;
+                                }
+                            }
+                            lines.push(currentLine);
+                            return lines;
+                        }
+
+                        //put the title text on the top
+                        let main_c = $('#canvas')[0];
+                        let main_ctx = main_c.getContext("2d");
+
+                        let gif_c = document.createElement('canvas');
+                        let gif_ctx = gif_c.getContext("2d");
+
+                        let fontSize = 16;
+                        let fontLineSize = fontSize * 1.2;
+                        gif_ctx.font = "bold " + fontSize + "px sans-serif";
+                        let puzzleTitleLines = splitTextLines(gif_ctx, $('#puzzletitle').text(), main_c.offsetWidth);
+                        let gif_vertical_offset = puzzleTitleLines.length * fontLineSize
+                        gif_c.width = main_c.offsetWidth;
+                        gif_c.height = main_c.offsetHeight + gif_vertical_offset;
+                        gif_ctx.font = "bold " + fontSize + "px sans-serif";
+
+                        //clear the gif canvas
+                        gif_ctx.fillStyle = "#fff";
+                        gif_ctx.fillRect(0, 0, gif_c.width, gif_c.height);
+
+                        //draw the title text.
+                        gif_ctx.fillStyle = "#0000ff";
+                        let textY = fontSize;
+                        for (let textLine of puzzleTitleLines) {
+                            gif_ctx.fillText(textLine, (gif_c.width - gif_ctx.measureText(textLine).width) / 2, textY);
+                            textY += fontLineSize;
+                        }
+
+                        //prepare to create gif frames
+                        let gif = new GIF({
+                            workers: 8,
+                            quality: 40,
+                            workerScript: './js/libs/gif.worker.js',
+                            width: gif_c.width,
+                            height: gif_c.height
+                        });
+                        let frame_ms = 500 / parseFloat(document.getElementById("replay_speed").value);
+                        let original_position = pu[pu.mode.qa]["command_undo"].__a.length;
+
+                        //go to first frame of solve
+                        while (pu[pu.mode.qa]["command_undo"].__a.length !== 0) {
+                            pu.undo(replay = true);
+                        }
+
+                        //advance and capture one frame at a time
+                        while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
+                            gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
+                            gif.addFrame(gif_ctx, { delay: frame_ms, copy: true });
+
+                            pu.redo(replay = true);
+                        }
+                        //capture final frame with longer delay
+                        gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
+                        gif.addFrame(gif_ctx, { delay: 2000, copy: true });
+
+                        gif.on('finished', function(blob) {
+                            saveblob_download(blob, "my_solve.gif");
+                            document.getElementById("replay_download_btn").disabled = false;
+                            document.getElementById("replay_message").style.display = "none";
+                            document.getElementById("replay_message").innerHTML = ""
+                        });
+                        gif.render();
+
+                        //return playback position to where it was before.
+                        while (pu[pu.mode.qa]["command_undo"].__a.length !== original_position) {
+                            pu.undo(replay = true);
+                        }
+                    }, 5);
+                }
+                e.preventDefault();
+                break;
         }
         // Main mode
         if (e.target.id.slice(0, 3) === "mo_") {
@@ -1826,12 +1944,24 @@ onload = function() {
         }
         e.preventDefault();
 
+        // restrict the panel movement to not go beyond with top header
+        let el_header = document.getElementById("header");
+        let el_floatheader = document.getElementById("float-key-header");
+
         drag.style.top = event.pageY - y_window + "px";
         drag.style.left = event.pageX - x_window + "px";
-        body.style.top = event.pageY - y_window + "px";
-        body.style.left = event.pageX - x_window + "px";
-        window.panel_toplast = body.style.top;
-        window.panel_leftlast = body.style.left;
+
+        if (el_floatheader.getBoundingClientRect().top > el_header.getBoundingClientRect().bottom) {
+            body.style.top = event.pageY - y_window + "px";
+            body.style.left = event.pageX - x_window + "px";
+
+            window.panel_toplast = body.style.top;
+            window.panel_leftlast = body.style.left;
+        } else {
+            drag.style.top = body.style.top;
+            drag.style.left = body.style.left;
+        }
+
         drag.addEventListener("touchend", mup, { passive: false });
         drag.addEventListener("mouseup", mup, { passive: false });
         document.body.addEventListener("touchleave", mup, { passive: false });
@@ -2202,6 +2332,9 @@ function clear_storage_one() {
             icon: 'info'
         });
     }
+
+    // turn off localstorage
+    UserSettings.local_storage = 3; // not using 4 because this is temporary state
 }
 
 function clear_storage_all() {
@@ -2214,6 +2347,10 @@ function clear_storage_all() {
         }
     }
     // localStorage.clear(); for all clear
+
+    // turn off localstorage
+    UserSettings.local_storage = 3; // not using 4 because this is temporary state
+
     Swal.fire({
         html: '<h2 class="info">Local Storage is Cleared</h2>',
         icon: 'info'
