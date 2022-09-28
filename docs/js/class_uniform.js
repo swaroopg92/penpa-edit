@@ -603,6 +603,115 @@ class Puzzle_truncated_square extends Puzzle {
                         break;
                 }
             }
+            this.selection = [];
+            if (!this.selection.includes(this.cursol)) {
+                this.selection.push(this.cursol);
+            }
+        } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (this.selection.length >= 1) {
+                if (this.cursol % 27 === 0) { // top side
+                    switch (c) {
+                        case 0: //left
+                            // if cursor already on the left border
+                            if (quotient % this.nx0 === 0) {
+                                a = this.cursol + 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 1: //up
+                            a = this.cursol + 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 2: //right
+                            a = this.cursol + 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 3: //down
+                            // if cursor already on the bottom border
+                            if (quotient < this.nx0) {
+                                a = this.cursol * this.nx0 + 2;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27 * this.nx0;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                    }
+                } else if (this.cursol % 27 === 1) { // left side
+                    switch (c) {
+                        case 0: //left
+                            a = this.cursol + 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 1: //up
+                            // if cursor already on the up border
+                            if (quotient % this.nx0 === 0) {
+                                a = this.cursol - 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 2: //right
+                            // if cursor already on the right border
+                            if (quotient < this.nx0) {
+                                a = this.cursol + 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27 * this.nx0;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 3: //down
+                            a = this.cursol + 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                    }
+                } else if (this.cursol % 27 === 2) { // right side
+                    switch (c) {
+                        case 0: //left
+                            // if cursor already on the left border
+                            if (quotient < this.nx0) {
+                                a = this.cursol - 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27 * this.nx0;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 1: //up
+                            // if cursor already on the up border
+                            if (quotient % this.nx0 === 0) {
+                                a = parseInt((this.cursol - 2) / this.nx0);
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 2: //right
+                            a = this.cursol + 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 3: //down
+                            a = this.cursol + 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                    }
+                }
+                if (this.point[a] && this.point[a].use === 1) {
+                    if (!ctrl_key) {
+                        this.selection = [];
+                    }
+                    if (!this.selection.includes(a)) {
+                        this.selection.push(a);
+                    }
+                }
+            }
         }
         this.redraw();
     }

@@ -467,20 +467,107 @@ class Puzzle_hex extends Puzzle {
         // Find the row of cursol
         let count = 1;
         let cursorpos = this.cursol;
-        while ((cursorpos - 3 * this.nx) > first_canvascell) {
+        while ((cursorpos - 3 * this.nx) >= first_canvascell) {
             count = count + 1;
             cursorpos = cursorpos - 3 * this.nx - 1;
         }
 
-        if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
-            if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {} else {
+        if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol" || this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+
+            } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+                if (this.selection.length >= 1) {
+                    switch (c) {
+                        case 0: // right to left for theta = 0
+                            a = this.cursol - 1;
+                            if (this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 1: // bottom right to top left for theta = 0
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
+                                if ((count % 2) === 0) {
+                                    a = this.cursol - (this.nx * 3 + 1);
+                                } else {
+                                    a = this.cursol - (this.nx * 3 + 2);
+                                }
+                            } else {
+                                if ((count % 2) === 0) {
+                                    a = this.cursol - (this.nx * 3 + 2);
+                                } else {
+                                    a = this.cursol - (this.nx * 3 + 1);
+                                }
+                            }
+                            if (this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 2: // left to right for theta = 0
+                            a = this.cursol + 1;
+                            if (this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 3: // top left to bottom right for theta = 0
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
+                                if ((count % 2) === 1) {
+                                    a = this.cursol + (this.nx * 3 + 1);
+                                } else {
+                                    a = this.cursol + (this.nx * 3 + 2);
+                                }
+                            } else {
+                                if ((count % 2) === 1) {
+                                    a = this.cursol + (this.nx * 3 + 2);
+                                } else {
+                                    a = this.cursol + (this.nx * 3 + 1);
+                                }
+                            }
+                            if (this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 4: // top right to bottom left for theta = 0
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
+                                if ((count % 2) === 1) {
+                                    a = this.cursol + (this.nx * 3);
+                                } else {
+                                    a = this.cursol + (this.nx * 3 + 1);
+                                }
+                            } else {
+                                if ((count % 2) === 1) {
+                                    a = this.cursol + (this.nx * 3 + 1);
+                                } else {
+                                    a = this.cursol + (this.nx * 3);
+                                }
+                            }
+                            if (this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 5: // bottom left to top right for theta = 0
+                            if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
+                                if ((count % 2) === 0) {
+                                    a = this.cursol - (this.nx * 3);
+                                } else {
+                                    a = this.cursol - (this.nx * 3 + 1);
+                                }
+                            } else {
+                                if ((count % 2) === 0) {
+                                    a = this.cursol - (this.nx * 3 + 1);
+                                } else {
+                                    a = this.cursol - (this.nx * 3);
+                                }
+                            }
+                            if (this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                    }
+                    if (this.point[a].use === 1) {
+                        if (!ctrl_key) {
+                            this.selection = [];
+                        }
+                        if (!this.selection.includes(a)) {
+                            this.selection.push(a);
+                        }
+                    }
+                }
+            } else {
                 switch (c) {
                     case 0: // right to left for theta = 0
                         a = this.cursol - 1;
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 1: // bottom right to top left for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 0) {
                                 a = this.cursol - (this.nx * 3 + 1);
                             } else {
@@ -500,7 +587,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 3: // top left to bottom right for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 1) {
                                 a = this.cursol + (this.nx * 3 + 1);
                             } else {
@@ -516,7 +603,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 4: // top right to bottom left for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 1) {
                                 a = this.cursol + (this.nx * 3);
                             } else {
@@ -532,7 +619,7 @@ class Puzzle_hex extends Puzzle {
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
                     case 5: // bottom left to top right for theta = 0
-                        if ((this.nx % 2) === 0) {
+                        if ((this.nx % 4) == 0 || (this.nx % 4) == 3) {
                             if ((count % 2) === 0) {
                                 a = this.cursol - (this.nx * 3);
                             } else {
@@ -547,6 +634,10 @@ class Puzzle_hex extends Puzzle {
                         }
                         if (this.point[a].use === 1) { this.cursol = a; }
                         break;
+                }
+                this.selection = [];
+                if (!this.selection.includes(this.cursol)) {
+                    this.selection.push(this.cursol);
                 }
             }
         }

@@ -26,23 +26,13 @@ const UserSettings = {
         const modeInt = newMode ? parseInt(newMode, 10) : 1;
         this._responsive_mode = modeInt;
 
-        let verb = modeInt > 1 ? 'add' : 'remove';
-        let flipVerb = modeInt > 2 ? 'add' : 'remove';
+        let verb = (modeInt === 2 || modeInt === 3) ? 'add' : 'remove';
+        let flipVerb = (modeInt === 3) ? 'add' : 'remove';
+        let streamVerb = (modeInt === 4) ? 'add' : 'remove';
         document.getElementById("app-container").classList[verb]("responsive");
         document.getElementById("app-container").classList[flipVerb]("responsive-flip");
+        document.getElementById("app-container").classList[streamVerb]("streaming-mode");
         document.getElementById("responsive_settings_opt").value = modeInt;
-
-        // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
-        // and responsive mode is not equal to 1, window.screen.width gives laptop size and not current window size
-        if (modeInt === 1 || (modeInt > 1 && window.innerWidth < 850)) {
-            document.getElementById("mode_break").style.display = "inline";
-            document.getElementById("mode_txt_space").style.display = "inline";
-            // document.getElementById("visibility_break").style.display = "none";
-        } else if (modeInt > 1 && window.innerWidth >= 850) {
-            document.getElementById("mode_break").style.display = "none";
-            document.getElementById("mode_txt_space").style.display = "none";
-            // document.getElementById("visibility_break").style.display = "inline";
-        }
 
         // Handle Cookie dynamically (This is to allow Solver Mode also save this setting)
         if (modeInt === 1) {
