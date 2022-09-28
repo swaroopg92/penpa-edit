@@ -3266,28 +3266,9 @@ class Puzzle_hex extends Puzzle {
             if (tags.has('noconflict')) {
                 return false;
             }
-            // if (tags.has('consecutivepairs')) {
-            //     this.conflicts.check_sudoku();
-            //     // check consecutive only if no classic conflict
-            //     if (this.conflict_cells.length === 0) {
-            //         this.conflicts.check_consecutivepairs();
-            //     }
-            // } else if (tags.has('consecutive') || tags.has('nonconsecutive')) {
-            //     this.conflicts.check_sudoku();
-            //     // check consecutive only if no classic conflict
-            //     if (this.conflict_cells.length === 0) {
-            //         this.conflicts.check_consecutive();
-            //     }
-            // } else 
             if (tags.has('classic')) {
-                //this.conflicts.check_latin_square();
                 this.conflicts.check_latin_square_hex();
             }
-            //  else if (tags.has('starbattle')) {
-            //     this.conflicts.check_star_battle();
-            // } else if (tags.has('tomtom')) {
-            //     this.conflicts.check_tomtom();
-            // }
             this.previous_sol = current_sol;
             if (this.conflict_cells.length !== 0) {
                 return true;
