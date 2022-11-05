@@ -3211,14 +3211,16 @@ class Puzzle {
             message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
 
         // loop through and check if any "AND" settings are selected
+        let prev_opt = "";
         for (var i = 0; i < settingstatus_and.length; i++) {
             if (settingstatus_and[i].checked) {
                 // ignore initial characters "sol_"
                 var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
-                if (opt.length !== 0) {
+                if (opt.length !== 0 && opt != prev_opt) {
                     answercheck_opt.push(opt);
                     message += "<li>" + answercheck_message[opt] + "</li>";
                 }
+                prev_opt = opt;
             }
         }
         message += "</ul>";
@@ -3231,10 +3233,11 @@ class Puzzle {
                 if (settingstatus_or[i].checked) {
                     // ignore initial characters "sol_or_"
                     let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
-                    if (opt.length !== 0) {
+                    if (opt.length !== 0 && opt != prev_opt) {
                         answercheck_opt.push(opt);
                         message += "<li>" + answercheck_message[opt] + "</li>";
                     }
+                    prev_opt = opt;
                 }
             }
             message += "</ul>";
@@ -3407,6 +3410,9 @@ class Puzzle {
                             bottomright = 0,
                             numbers;
                         for (var i in this.frame) {
+                            if (i in this.pu_q.deletelineE) {
+                                continue;
+                            }
                             numbers = i.split(",");
                             if (topleft >= parseInt(numbers[0])) {
                                 topleft = parseInt(numbers[0]);
@@ -3747,6 +3753,9 @@ class Puzzle {
                                         bottomright = 0,
                                         numbers;
                                     for (var i in this.frame) {
+                                        if (i in this.pu_q.deletelineE) {
+                                            continue;
+                                        }
                                         numbers = i.split(",");
                                         if (topleft >= parseInt(numbers[0])) {
                                             topleft = parseInt(numbers[0]);
@@ -8294,13 +8303,14 @@ class Puzzle {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
         var allowed_styles = [1, 8, 3, 4]; // Dark Grey, Grey, Light Grey, Black
         this.record("surface", num);
+        let rightclick_color = UserSettings.secondcolor;
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color && allowed_styles.includes(color)) {
-            this[this.mode.qa].surface[num] = 2;
+            this[this.mode.qa].surface[num] = rightclick_color;
             if (document.getElementById("custom_color_opt").value === "2") {
-                this[this.mode.qa + "_col"].surface[num] = Color.GREEN_LIGHT_VERY;
+                this[this.mode.qa + "_col"].surface[num] = this.get_rgbcolor(rightclick_color);
             }
-            this.drawing_mode = 2;
-        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === 2 && allowed_styles.includes(color)))) {
+            this.drawing_mode = rightclick_color;
+        } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === rightclick_color && allowed_styles.includes(color)))) {
             delete this[this.mode.qa].surface[num];
             if (document.getElementById("custom_color_opt").value === "2") {
                 delete this[this.mode.qa + "_col"].surface[num];
