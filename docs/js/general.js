@@ -5,6 +5,7 @@ function boot() {
     obj.appendChild(canvas);
     boot_parameters();
     init_genre_tags();
+    set_answer_setting_table_to("and");
 
     var urlParam = location.search.substring(1);
     if (!urlParam && location.hash) {
@@ -135,6 +136,32 @@ function init_genre_tags() {
 function set_genre_tags(user_tags) {
     $('#genre_tags_opt').val(user_tags);
     $('#genre_tags_opt').trigger("change"); // Update selection
+}
+
+function set_answer_setting_table_to(and_or) {
+    const table = document.getElementById("answersetting");
+
+    let display;
+    let invisible;
+    if (and_or === "and") {
+        display = ["visible", "none"];
+        invisible = [...table.getElementsByClassName("solcheck_or")];
+    } else if (and_or === "or") {
+        display = ["none", "visible"];
+        invisible = [...table.getElementsByClassName("solcheck")];
+    } else {
+        return;
+    }
+
+    // // Disabling this line, as this resets the selection everytime. This is to match original default beahvior.
+    // // Ensure there are no invisible checked boxes
+    // invisible.forEach((elem) => { elem.checked = false });
+
+    // Show only the options relevant to All/Any constraints
+    const ands = table.getElementsByClassName("solcheck_show_and");
+    const ors = table.getElementsByClassName("solcheck_show_or");
+    [...ands].forEach((elem) => elem.setAttribute("style", `display: ${display[0]};`));
+    [...ors].forEach((elem) => elem.setAttribute("style", `display: ${display[1]};`));
 }
 
 function create_newboard() {
@@ -2326,6 +2353,10 @@ function load(urlParam, type = 'url', origurl = null) {
         var answersetting = JSON.parse(rtext[16]);
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
+        }
+        if (pu.multisolution) {
+            set_answer_setting_table_to('or');
+            document.getElementById('or_tmp').checked = true;
         }
     }
 

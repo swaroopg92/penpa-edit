@@ -3410,6 +3410,9 @@ class Puzzle {
                             bottomright = 0,
                             numbers;
                         for (var i in this.frame) {
+                            if (i in this.pu_q.deletelineE) {
+                                continue;
+                            }
                             numbers = i.split(",");
                             if (topleft >= parseInt(numbers[0])) {
                                 topleft = parseInt(numbers[0]);
@@ -3750,6 +3753,9 @@ class Puzzle {
                                         bottomright = 0,
                                         numbers;
                                     for (var i in this.frame) {
+                                        if (i in this.pu_q.deletelineE) {
+                                            continue;
+                                        }
                                         numbers = i.split(",");
                                         if (topleft >= parseInt(numbers[0])) {
                                             topleft = parseInt(numbers[0]);

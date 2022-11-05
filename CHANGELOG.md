@@ -1,5 +1,6 @@
 ## History
-* Unreleased: 
+* Unreleased
+	* Make the answer check table only show one column at a time
 	* Conflict highlighting on hex grid
 * 2022/08/19 ver 3.0.3
 	* Fixed keyboard movement of number and sudoku in hex grids.
