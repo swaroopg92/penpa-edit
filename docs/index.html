@@ -1056,10 +1056,10 @@
                 <h3 id="save3texttitle">Solution will check for the following:</h3>
                 <div class="nb_button">
                     <div>
-                        <input id="and_tmp_lb" name="constraints" type="radio" value="and" checked="checked" onclick="set_answer_setting_table_to('and');" />
-                        <label for="and_tmp_lb" class="label">All constraints</label>
-                        <input id="or_tmp_lb" name="constraints" type="radio" value="or" onclick="set_answer_setting_table_to('or');" />
-                        <label for="or_tmp_lb" class="label">Any of the constraints</label>
+                        <input type="radio" name="constraints" value="and" id=and_tmp checked="checked" />
+                        <label for="and_tmp_lb" class="label" id="and_tmp_lb">All constraints</label>
+                        <input type="radio" name="constraints" value="or" id="or_tmp" />
+                        <label for="or_tmp_lb" class="label" id="or_tmp_lb">Any of the constraints</label>
                     </div>
                     <table id="answersetting">
                         <tr>

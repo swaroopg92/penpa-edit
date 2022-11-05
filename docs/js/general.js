@@ -152,8 +152,10 @@ function set_answer_setting_table_to(and_or) {
     } else {
         return;
     }
-    // Ensure there are no invisible checked boxes
-    invisible.forEach((elem) => {elem.checked = false});
+
+    // // Disabling this line, as this resets the selection everytime. This is to match original default beahvior.
+    // // Ensure there are no invisible checked boxes
+    // invisible.forEach((elem) => { elem.checked = false });
 
     // Show only the options relevant to All/Any constraints
     const ands = table.getElementsByClassName("solcheck_show_and");
@@ -2351,6 +2353,10 @@ function load(urlParam, type = 'url', origurl = null) {
         var answersetting = JSON.parse(rtext[16]);
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
+        }
+        if (pu.multisolution) {
+            set_answer_setting_table_to('or');
+            document.getElementById('or_tmp').checked = true;
         }
     }
 
