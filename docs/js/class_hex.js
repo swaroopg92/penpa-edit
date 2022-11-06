@@ -3260,7 +3260,7 @@ class Puzzle_hex extends Puzzle {
             if (current_sol === this.previous_sol) {
                 return;
             }
-            
+
             this.conflicts.reset();
             const tags = new Set(this.user_tags);
             if (tags.has('noconflict')) {

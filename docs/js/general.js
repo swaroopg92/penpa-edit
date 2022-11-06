@@ -185,7 +185,7 @@ function create_newboard() {
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
 
         // constraints
-        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro" || gridtype === "hex") {
             document.getElementById('constraints').style.display = 'inline';
             $('select').toggleSelect2(true);
         } else {
