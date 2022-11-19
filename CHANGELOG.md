@@ -1,4 +1,7 @@
 ## History
+* 2022/05/11
+	* Make the answer check table only show one column at a time
+	* Conflict highlighting on hex grid for latin square
 * 2022/08/19 ver 3.0.3
 	* Fixed keyboard movement of number and sudoku in hex grids.
 	* Answer check translation and make the Solve Mode title clickable.

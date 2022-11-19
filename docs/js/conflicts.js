@@ -78,6 +78,49 @@ class Conflicts {
         }
     }
 
+    // Check for duplicate numbers on any of the 3 axes.
+    check_latin_square_hex(){
+        let hex_seen_cells = this.stable_lookup("hex_seen_cells","");
+        // Calculate all pairs of cells which see each other along any of the 
+        // three axes on a hex grid, and store pairs of cells as 
+        // Map of [Smaller index number] = [List of larger index numbers]
+        if (!hex_seen_cells){
+            hex_seen_cells = new Map();
+            //for each cell in centerlist
+            for (let sourceIdx of this.pu.centerlist){
+                //for each of the six directions:
+                for (let dir = 0; dir < 6; dir++){
+                    let targetIdx = this.pu.point[sourceIdx].adjacent[dir];
+                    //until we find no more adjacencies:
+                    while (this.pu.centerlist.indexOf(targetIdx) > -1){
+                        //if this pair is not yet recorded, record it.
+                        let lowIdx = Math.min(sourceIdx, targetIdx);
+                        let highIdx = Math.max(sourceIdx, targetIdx);
+                        if (!hex_seen_cells.has(lowIdx)){
+                            hex_seen_cells.set(lowIdx,[highIdx]);
+                        }else if (hex_seen_cells.get(lowIdx).indexOf(highIdx) == -1){
+                            hex_seen_cells.get(lowIdx).push(highIdx);
+                        }
+                        targetIdx = this.pu.point[targetIdx].adjacent[dir];
+                    }
+                }
+            }
+            this.stable_store("hex_seen_cells", "", hex_seen_cells);
+        }
+
+        //do comparison between cells that see each other
+        for (let cellIdx_list of hex_seen_cells){
+            let sourceNum = this.read_number_cell(cellIdx_list[0]);
+            for (let seen_cell of cellIdx_list[1]){
+                if (sourceNum !== undefined && sourceNum === this.read_number_cell(seen_cell)){
+                    //record conflict
+                    this.add_conflict_cell(cellIdx_list[0]);
+                    this.add_conflict_cell(seen_cell);
+                }
+            }
+        }
+    }
+
     // Check a classic sudoku puzzle.
     check_sudoku() {
         const data = this.get_data('number_grid');
@@ -540,7 +583,9 @@ class Conflicts {
     // Returns -1 if there is no number present of the designated color.
     read_number(x, y) {
         // Add space above and to the left.
-        const index = this.xy_to_index(x, y);
+        return this.read_number_cell(this.xy_to_index(x, y));
+    }
+    read_number_cell(index) {
         // For the question entry we check that it is black and large
         let entry = this.pu.pu_q.number[index];
         if (Array.isArray(entry) && entry.length === 3 &&
@@ -568,7 +613,10 @@ class Conflicts {
     // puzzle grid.
     add_conflict(x, y) {
         // Add space above and to the left.
-        const index = this.xy_to_index(x, y);
+        add_conflict_cell(this.xy_to_index(x, y));
+    }
+
+    add_conflict_cell(index) {
         if (this.pu.conflict_cells.includes(index)) return;
         this.pu.conflict_cells.push(index);
     }

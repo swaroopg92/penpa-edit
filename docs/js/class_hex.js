@@ -674,6 +674,7 @@ class Puzzle_hex extends Puzzle {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
+            this.draw_conflicts();
             this.draw_squareframe("pu_q");
             this.draw_squareframe("pu_a");
             this.draw_thermo("pu_q");
@@ -3247,5 +3248,33 @@ class Puzzle_hex extends Puzzle {
         if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
         th = th / 180 * Math.PI;
         return th;
+    }
+    check_conflict(current_sol) {
+        if (UserSettings.conflict_detection > 1) {
+            // User has disabled conflict detection.
+            this.conflict_cells = [];
+            return;
+        }
+        if (this.user_tags) {
+            // Do only if current solution changed
+            if (current_sol === this.previous_sol) {
+                return;
+            }
+
+            this.conflicts.reset();
+            const tags = new Set(this.user_tags);
+            if (tags.has('noconflict')) {
+                return false;
+            }
+            if (tags.has('classic')) {
+                this.conflicts.check_latin_square_hex();
+            }
+            this.previous_sol = current_sol;
+            if (this.conflict_cells.length !== 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

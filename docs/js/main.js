@@ -1274,6 +1274,14 @@ onload = function() {
                 pp_file_open();
                 e.preventDefault();
                 break;
+            case "and_tmp_lb":
+                set_answer_setting_table_to('and');
+                e.preventDefault();
+                break;
+            case "or_tmp_lb":
+                set_answer_setting_table_to('or');
+                e.preventDefault();
+                break;
             case "rt_right":
                 pu.rotate_right();
                 pu.rotate_size(); // fit board to window

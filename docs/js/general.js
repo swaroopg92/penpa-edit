@@ -5,6 +5,7 @@ function boot() {
     obj.appendChild(canvas);
     boot_parameters();
     init_genre_tags();
+    set_answer_setting_table_to("and");
 
     var urlParam = location.search.substring(1);
     if (!urlParam && location.hash) {
@@ -137,6 +138,32 @@ function set_genre_tags(user_tags) {
     $('#genre_tags_opt').trigger("change"); // Update selection
 }
 
+function set_answer_setting_table_to(and_or) {
+    const table = document.getElementById("answersetting");
+
+    let display;
+    let invisible;
+    if (and_or === "and") {
+        display = ["visible", "none"];
+        invisible = [...table.getElementsByClassName("solcheck_or")];
+    } else if (and_or === "or") {
+        display = ["none", "visible"];
+        invisible = [...table.getElementsByClassName("solcheck")];
+    } else {
+        return;
+    }
+
+    // // Disabling this line, as this resets the selection everytime. This is to match original default beahvior.
+    // // Ensure there are no invisible checked boxes
+    // invisible.forEach((elem) => { elem.checked = false });
+
+    // Show only the options relevant to All/Any constraints
+    const ands = table.getElementsByClassName("solcheck_show_and");
+    const ors = table.getElementsByClassName("solcheck_show_or");
+    [...ands].forEach((elem) => elem.setAttribute("style", `display: ${display[0]};`));
+    [...ors].forEach((elem) => elem.setAttribute("style", `display: ${display[1]};`));
+}
+
 function create_newboard() {
 
     var size = UserSettings.displaysize;
@@ -158,7 +185,7 @@ function create_newboard() {
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
 
         // constraints
-        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro") {
+        if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro" || gridtype === "hex") {
             document.getElementById('constraints').style.display = 'inline';
             $('select').toggleSelect2(true);
         } else {
@@ -1930,6 +1957,14 @@ function load(urlParam, type = 'url', origurl = null) {
         pu.version = [0, 0, 0]; // To handle all the old links
     }
 
+    // custom answer check message // Moving earlier to set the value before check_solution is called for first time
+    if (rtext[18] && rtext[18] !== "") {
+        let custom_message = rtext[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
+        if (custom_message != "false") {
+            document.getElementById("custom_message").value = custom_message;
+        }
+    }
+
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);
     pu.reflect[1] = parseInt(rtext_para[6]);
@@ -2327,13 +2362,9 @@ function load(urlParam, type = 'url', origurl = null) {
         for (var i = 0; i < settingstatus.length; i++) {
             settingstatus[i].checked = answersetting[settingstatus[i].id];
         }
-    }
-
-    // custom answer check message
-    if (rtext[18] && rtext[18] !== "") {
-        let custom_message = rtext[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
-        if (custom_message != "false") {
-            document.getElementById("custom_message").value = custom_message;
+        if (pu.multisolution) {
+            set_answer_setting_table_to('or');
+            document.getElementById('or_tmp').checked = true;
         }
     }
 
