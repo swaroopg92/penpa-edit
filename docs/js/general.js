@@ -1955,6 +1955,14 @@ function load(urlParam, type = 'url', origurl = null) {
         pu.version = [0, 0, 0]; // To handle all the old links
     }
 
+    // custom answer check message // Moving earlier to set the value before check_solution is called for first time
+    if (rtext[18] && rtext[18] !== "") {
+        let custom_message = rtext[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
+        if (custom_message != "false") {
+            document.getElementById("custom_message").value = custom_message;
+        }
+    }
+
     pu.theta = parseInt(rtext_para[4]);
     pu.reflect[0] = parseInt(rtext_para[5]);
     pu.reflect[1] = parseInt(rtext_para[6]);
@@ -2357,14 +2365,6 @@ function load(urlParam, type = 'url', origurl = null) {
         if (pu.multisolution) {
             set_answer_setting_table_to('or');
             document.getElementById('or_tmp').checked = true;
-        }
-    }
-
-    // custom answer check message
-    if (rtext[18] && rtext[18] !== "") {
-        let custom_message = rtext[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
-        if (custom_message != "false") {
-            document.getElementById("custom_message").value = custom_message;
         }
     }
 
