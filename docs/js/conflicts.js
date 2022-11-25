@@ -613,7 +613,7 @@ class Conflicts {
     // puzzle grid.
     add_conflict(x, y) {
         // Add space above and to the left.
-        add_conflict_cell(this.xy_to_index(x, y));
+        this.add_conflict_cell(this.xy_to_index(x, y));
     }
 
     add_conflict_cell(index) {
