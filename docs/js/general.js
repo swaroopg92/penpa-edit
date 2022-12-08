@@ -144,18 +144,19 @@ function set_answer_setting_table_to(and_or) {
     let display;
     let invisible;
     if (and_or === "and") {
+        document.getElementById('and_tmp').checked = true;
         display = ["visible", "none"];
         invisible = [...table.getElementsByClassName("solcheck_or")];
     } else if (and_or === "or") {
+        document.getElementById('or_tmp').checked = true;
         display = ["none", "visible"];
         invisible = [...table.getElementsByClassName("solcheck")];
     } else {
         return;
     }
 
-    // // Disabling this line, as this resets the selection everytime. This is to match original default beahvior.
-    // // Ensure there are no invisible checked boxes
-    // invisible.forEach((elem) => { elem.checked = false });
+    // Ensure there are no invisible checked boxes
+    invisible.forEach((elem) => { elem.checked = false });
 
     // Show only the options relevant to All/Any constraints
     const ands = table.getElementsByClassName("solcheck_show_and");
@@ -2365,7 +2366,12 @@ function load(urlParam, type = 'url', origurl = null) {
         if (pu.multisolution) {
             set_answer_setting_table_to('or');
             document.getElementById('or_tmp').checked = true;
+            document.getElementById('and_tmp_lb').style.display = "none";
         }
+    }
+
+    if (!pu.multisolution) {
+        document.getElementById('or_tmp_lb').style.display = "none";
     }
 
     // Save the Puzzle URL info - used as unique id for cache saving of progress
