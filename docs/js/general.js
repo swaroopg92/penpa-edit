@@ -2366,12 +2366,7 @@ function load(urlParam, type = 'url', origurl = null) {
         if (pu.multisolution) {
             set_answer_setting_table_to('or');
             document.getElementById('or_tmp').checked = true;
-            document.getElementById('and_tmp_lb').style.display = "none";
         }
-    }
-
-    if (!pu.multisolution) {
-        document.getElementById('or_tmp_lb').style.display = "none";
     }
 
     // Save the Puzzle URL info - used as unique id for cache saving of progress
