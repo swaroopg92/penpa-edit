@@ -1,7 +1,9 @@
 ## History
-* 2022/05/11
+* 2023/01/05 ver 3.0.4
 	* Make the answer check table only show one column at a time
 	* Conflict highlighting on hex grid for latin square
+	* Setting option to disable Sudoku Shortcuts (Manually or 'Alphabet' genre)
+	* Congratulations message set to "Happy New Year"
 * 2022/08/19 ver 3.0.3
 	* Fixed keyboard movement of number and sudoku in hex grids.
 	* Answer check translation and make the Solve Mode title clickable.
