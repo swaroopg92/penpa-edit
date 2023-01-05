@@ -558,7 +558,7 @@ onload = function() {
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                if (!capslock) {
+                if (!capslock && UserSettings._disable_shortcuts != 2) {
                     switch (code) {
                         case "KeyZ":
                             // case "Z":
@@ -619,7 +619,7 @@ onload = function() {
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-                if (!capslock) {
+                if (!capslock && UserSettings._disable_shortcuts != 2) {
                     switch (code) {
                         case "KeyZ":
                             present_mode = document.getElementById("mo_sudoku").checked;
@@ -2299,6 +2299,11 @@ onload = function() {
     document.getElementById("conflict_detection_opt").onchange = function() {
         UserSettings.conflict_detection = this.value;
         pu.redraw();
+    }
+
+    // Disable Shortcuts
+    document.getElementById("disable_shortcuts_opt").onchange = function() {
+        UserSettings.disable_shortcuts = this.value;
     }
 
     // Timer Bar Setting

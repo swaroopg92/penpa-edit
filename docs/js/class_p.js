@@ -160,7 +160,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 4]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -7375,7 +7375,13 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
-        var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+
+        // If ZXCV is disabled
+        if (UserSettings._disable_shortcuts == 2) {
+            var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        } else {
+            var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        }
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
@@ -7600,7 +7606,10 @@ class Puzzle {
                             this.undoredo_counter = this.undoredo_counter + 1;
                         }
                         for (var k of this.selection) {
-                            if (((this.mode.qa === "pu_a") && this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && Number.isInteger(parseInt(this["pu_q"].number[k][0])))) { // if single digit is present, dont modify that cell
+                            if (((this.mode.qa === "pu_a") &&
+                                    this["pu_q"].number[k] &&
+                                    this["pu_q"].number[k][2] === "1" &&
+                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))) { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if ((this.mode.qa === "pu_a") && this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
                                 // This is for single digit obtained from candidate submode
@@ -7716,7 +7725,7 @@ class Puzzle {
 
                             for (var k of this.selection) {
                                 if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                        Number.isInteger(parseInt(this["pu_q"].number[k][0])) &&
+                                        pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])) &&
                                         this.selection.length > 1) ||
                                     this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                     var single_digit = true;
@@ -7827,7 +7836,7 @@ class Puzzle {
                         }
                         for (var k of this.selection) {
                             var con = "";
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && Number.isInteger(parseInt(this["pu_q"].number[k][0]))) ||
+                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0]))) ||
                                 this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {

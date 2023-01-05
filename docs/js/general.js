@@ -2094,6 +2094,11 @@ function load(urlParam, type = 'url', origurl = null) {
 
     set_genre_tags(pu.user_tags);
 
+    // Set some genre specific settings
+    if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
+        UserSettings.disable_shortcuts = 2;
+    }
+
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {

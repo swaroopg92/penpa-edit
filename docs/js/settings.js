@@ -180,6 +180,17 @@ const UserSettings = {
         return this._reload_button;
     },
 
+    _disable_shortcuts: 1,
+    set disable_shortcuts(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 1;
+        this._disable_shortcuts = valueInt;
+
+        document.getElementById("disable_shortcuts_opt").value = valueInt;
+    },
+    get disable_shortcuts() {
+        return this._disable_shortcuts;
+    },
+
     _gridtype: "square",
     set gridtype(newValue) {
         newValue = newValue || "square";
