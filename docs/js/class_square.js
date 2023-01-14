@@ -3351,18 +3351,21 @@ class Puzzle_square extends Puzzle {
     draw_arrowfouredge(ctx, num, x, y) {
         var len1 = 0.5; //nemoto
         var len2 = 0.5;
-        var t1 = 0.00;
-        var t2 = 0.50;
         var w1 = 0.02;
         var w2 = 0.07;
         var ri = 0.42;
-        var th1, th2;
+        var th1a, th1b, th2;
         for (var i = 0; i < 4; i++) {
             if (num[i] === 1) {
-                th1 = this.rotate_theta(225 + 90 * i);
+                th1a = this.rotate_theta(225 + 90 * i);
+                th1b = this.rotate_theta(315 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.1 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.1 * pu.size * Math.sin(th2), x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.05 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.05 * pu.size * Math.sin(th2),
+                ctx.arrow(
+                    x + len1 * pu.size * Math.cos(th1a) + 0.1 * pu.size * Math.cos(th2),
+                    y + len1 * pu.size * Math.sin(th1a) + 0.1 * pu.size * Math.sin(th2),
+                    x + len2 * pu.size * Math.cos(th1b) - 0.05 * pu.size * Math.cos(th2),
+                    y + len2 * pu.size * Math.sin(th1b) - 0.05 * pu.size * Math.sin(th2),
                     [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
                 ctx.stroke();
@@ -3370,10 +3373,15 @@ class Puzzle_square extends Puzzle {
         }
         for (var i = 4; i < 8; i++) {
             if (num[i] === 1) {
-                th1 = this.rotate_theta(225 + 90 * i);
+                th1a = this.rotate_theta(225 + 90 * i);
+                th1b = this.rotate_theta(315 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.1 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.1 * pu.size * Math.sin(th2), x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.05 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.05 * pu.size * Math.sin(th2),
+                ctx.arrow(
+                    x + len2 * pu.size * Math.cos(th1b) - 0.1 * pu.size * Math.cos(th2), 
+                    y + len2 * pu.size * Math.sin(th1b) - 0.1 * pu.size * Math.sin(th2), 
+                    x + len1 * pu.size * Math.cos(th1a) + 0.05 * pu.size * Math.cos(th2), 
+                    y + len1 * pu.size * Math.sin(th1a) + 0.05 * pu.size * Math.sin(th2),
                     [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
                 ctx.stroke();
