@@ -1245,7 +1245,7 @@ class Puzzle_square extends Puzzle {
                 }
                 var i1 = i.split(",")[0];
                 var i2 = i.split(",")[1];
-                if (this.point[i1].use === -1 || this.point[i2].use === -1) { continue; }
+                if (this.point[i1].use === -1 || this.point[i2].use === -1 || [0, 2, 3].indexOf(this.point[i1].type) === -1 || [0, 2, 3].indexOf(this.point[i2].type) === -1) { continue; }
                 this.ctx.beginPath();
                 if (this[pu].line[i] === 40) {
                     var r = 0.8;
@@ -1307,7 +1307,7 @@ class Puzzle_square extends Puzzle {
                 }
                 var i1 = i.split(",")[0];
                 var i2 = i.split(",")[1];
-                if (this.point[i1].use === -1 || this.point[i2].use === -1) { continue; }
+                if (this.point[i1].use === -1 || this.point[i2].use === -1 || [1].indexOf(this.point[i1].type) === -1 || [1].indexOf(this.point[i2].type) === -1) { continue; }
                 this.ctx.beginPath();
                 if (this[pu].lineE[i] === 30) {
                     var r = 0.15 * this.size;
@@ -1337,7 +1337,7 @@ class Puzzle_square extends Puzzle {
             }
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
-            if (this.point[i1].use === -1 || this.point[i2].use === -1) { continue; }
+            if (this.point[i1].use === -1 || this.point[i2].use === -1 || [0].indexOf(this.point[i1].type) === -1 || [0].indexOf(this.point[i2].type) === -1) { continue; }
             this.ctx.beginPath();
             if (this[pu].freeline[i] === 30) {
                 var r = 0.15 * this.size;
@@ -1362,7 +1362,7 @@ class Puzzle_square extends Puzzle {
             }
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
-            if (this.point[i1].use === -1 || this.point[i2].use === -1) { continue; }
+            if (this.point[i1].use === -1 || this.point[i2].use === -1 || [1].indexOf(this.point[i1].type) === -1 || [1].indexOf(this.point[i2].type) === -1) { continue; }
             this.ctx.beginPath();
             if (this[pu].freelineE[i] === 30) {
                 var r = 0.15 * this.size;
@@ -1391,6 +1391,7 @@ class Puzzle_square extends Puzzle {
             this.ctx.lineCap = "butt";
             var i1 = i.split(",")[0];
             var i2 = i.split(",")[1];
+            if (this.point[i1].use === -1 || this.point[i2].use === -1 || [2, 3].indexOf(this.point[i1].type) === -1 || this.point[i1].type !== this.point[i2].type) { continue; }
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
             this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
