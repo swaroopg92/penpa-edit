@@ -626,14 +626,18 @@ class Puzzle {
             this.ny = this.ny + (1 * sign); // Rows, Adding/Subtracting 1 row
             // this.nx0 = this.nx + 4;
             this.ny0 = this.ny + 4;
-            // this.width0 = this.nx + 1;
-            this.height0 = this.ny + 1;
-            // this.width_c = this.width0;
-            this.height_c = this.height0;
-            // this.width = this.width_c;
-            this.height = this.height_c;
-            // this.canvasx = this.width_c * this.size;
-            this.canvasy = this.height_c * this.size;
+            if ((this.get_orientation('t') % 2) === 0) {
+                this.height0 = this.ny + 1;
+                this.height_c = this.height0;
+                this.height = this.height_c;
+                this.canvasy = this.height_c * this.size;
+            }
+            else {
+                this.width0 = this.ny + 1;
+                this.width_c = this.width0;
+                this.width = this.width_c;
+                this.canvasx = this.width_c * this.size;
+            }
 
             // Find the missing boxes
             var old_centerlist = this.centerlist;
@@ -1008,14 +1012,18 @@ class Puzzle {
             this.ny = this.ny + (1 * sign); // Rows, Adding/Removing 1 row
             // this.nx0 = this.nx + 4;
             this.ny0 = this.ny + 4;
-            // this.width0 = this.nx + 1;
-            this.height0 = this.ny + 1;
-            // this.width_c = this.width0;
-            this.height_c = this.height0;
-            // this.width = this.width_c;
-            this.height = this.height_c;
-            // this.canvasx = this.width_c * this.size;
-            this.canvasy = this.height_c * this.size;
+            if ((this.get_orientation('b') % 2) === 0) {
+                this.height0 = this.ny + 1;
+                this.height_c = this.height0;
+                this.height = this.height_c;
+                this.canvasy = this.height_c * this.size;
+            }
+            else {
+                this.width0 = this.ny + 1;
+                this.width_c = this.width0;
+                this.width = this.width_c;
+                this.canvasx = this.width_c * this.size;
+            }
 
             // Find the missing boxes
             var old_centerlist = this.centerlist;
@@ -1279,14 +1287,18 @@ class Puzzle {
             // this.ny = this.ny; // Rows
             this.nx0 = this.nx + 4;
             // this.ny0 = this.ny + 4;
-            this.width0 = this.nx + 1;
-            // this.height0 = this.ny + 1;
-            this.width_c = this.width0;
-            // this.height_c = this.height0;
-            this.width = this.width_c;
-            // this.height = this.height_c;
-            this.canvasx = this.width_c * this.size;
-            // this.canvasy = this.height_c * this.size;
+            if ((this.get_orientation('l') % 2) === 0) {
+                this.width0 = this.nx + 1;
+                this.width_c = this.width0;
+                this.width = this.width_c;
+                this.canvasx = this.width_c * this.size;
+            }
+            else {
+                this.height0 = this.nx + 1;
+                this.height_c = this.height0;
+                this.height = this.height_c;
+                this.canvasy = this.height_c * this.size;
+            }
 
             // Find the missing boxes
             var old_centerlist = this.centerlist;
@@ -1661,14 +1673,18 @@ class Puzzle {
             // this.ny = this.ny; // Rows
             this.nx0 = this.nx + 4;
             // this.ny0 = this.ny + 4;
-            this.width0 = this.nx + 1;
-            // this.height0 = this.ny + 1;
-            this.width_c = this.width0;
-            // this.height_c = this.height0;
-            this.width = this.width_c;
-            // this.height = this.height_c;
-            this.canvasx = this.width_c * this.size;
-            // this.canvasy = this.height_c * this.size;
+            if ((this.get_orientation('r') % 2) === 0) {
+                this.width0 = this.nx + 1;
+                this.width_c = this.width0;
+                this.width = this.width_c;
+                this.canvasx = this.width_c * this.size;
+            }
+            else {
+                this.height0 = this.nx + 1;
+                this.height_c = this.height0;
+                this.height = this.height_c;
+                this.canvasy = this.height_c * this.size;
+            }
 
             // Find the missing boxes
             var old_centerlist = this.centerlist;
