@@ -454,7 +454,7 @@ describe("puzz.link parser", () => {
     }
 
     forEach(testCases, (_, puzzlink_url, filename) => async () => {
-        penpa.decode_puzzlink(puzzlink_url);
+        penpa.import_url(puzzlink_url);
 
         const contents = {
             ...penpa.pu.pu_q

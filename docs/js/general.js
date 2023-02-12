@@ -1527,11 +1527,13 @@ function savetext() {
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
     document.getElementById("iostring").placeholder = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
+    document.getElementById("iostring").focus();
 }
 
 function i_url() {
     document.getElementById("modal-load").style.display = 'block';
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button. You can also load puzz.link puzzles here";
+    document.getElementById("urlstring").focus();
 }
 
 function p_settings() {
@@ -1827,7 +1829,7 @@ function import_url(urlstring) {
             if (UserSettings.tab_settings > 0) {
                 selectBox.setValue(UserSettings.tab_settings);
             }
-        } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p\.html\?/)) {
+        } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p(\.html)?\?/)) {
             decode_puzzlink(urlstring);
             document.getElementById("modal-load").style.display = 'none';
         } else {
