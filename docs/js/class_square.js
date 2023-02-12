@@ -3351,6 +3351,8 @@ class Puzzle_square extends Puzzle {
     draw_arrowfouredge(ctx, num, x, y) {
         var len1 = 0.5; //nemoto
         var len2 = 0.5;
+        var t1 = 0.0;
+        var t2 = 0.5;
         var w1 = 0.02;
         var w2 = 0.07;
         var ri = 0.42;
@@ -3361,12 +3363,22 @@ class Puzzle_square extends Puzzle {
                 th1b = this.rotate_theta(315 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(
-                    x + len1 * pu.size * Math.cos(th1a) + 0.1 * pu.size * Math.cos(th2),
-                    y + len1 * pu.size * Math.sin(th1a) + 0.1 * pu.size * Math.sin(th2),
-                    x + len2 * pu.size * Math.cos(th1b) - 0.05 * pu.size * Math.cos(th2),
-                    y + len2 * pu.size * Math.sin(th1b) - 0.05 * pu.size * Math.sin(th2),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 108.
+                if (pu.version[0] >= 3 && pu.version[1] >= 0 && pu.version[2] >= 5) {
+                    ctx.arrow(
+                        x + len1 * pu.size * Math.cos(th1a) + 0.1 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a) + 0.1 * pu.size * Math.sin(th2),
+                        x + len2 * pu.size * Math.cos(th1b) - 0.05 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1b) - 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                } else {
+                    ctx.arrow(
+                        x + len1 * pu.size * Math.cos(th1a + Math.PI * t1) + 0.1 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a + Math.PI * t1) + 0.1 * pu.size * Math.sin(th2),
+                        x + len2 * pu.size * Math.cos(th1a + Math.PI * t2) - 0.05 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1a + Math.PI * t2) - 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                }
                 ctx.fill();
                 ctx.stroke();
             }
@@ -3377,12 +3389,22 @@ class Puzzle_square extends Puzzle {
                 th1b = this.rotate_theta(315 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(
-                    x + len2 * pu.size * Math.cos(th1b) - 0.1 * pu.size * Math.cos(th2), 
-                    y + len2 * pu.size * Math.sin(th1b) - 0.1 * pu.size * Math.sin(th2), 
-                    x + len1 * pu.size * Math.cos(th1a) + 0.05 * pu.size * Math.cos(th2), 
-                    y + len1 * pu.size * Math.sin(th1a) + 0.05 * pu.size * Math.sin(th2),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 108.
+                if (pu.version[0] >= 3 && pu.version[1] >= 0 && pu.version[2] >= 5) {
+                    ctx.arrow(
+                        x + len2 * pu.size * Math.cos(th1b) - 0.1 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1b) - 0.1 * pu.size * Math.sin(th2),
+                        x + len1 * pu.size * Math.cos(th1a) + 0.05 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a) + 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                } else {
+                    ctx.arrow(
+                        x + len2 * pu.size * Math.cos(th1a + Math.PI * t2) - 0.1 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1a + Math.PI * t2) - 0.1 * pu.size * Math.sin(th2),
+                        x + len1 * pu.size * Math.cos(th1a + Math.PI * t1) + 0.05 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a + Math.PI * t1) + 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                }
                 ctx.fill();
                 ctx.stroke();
             }
