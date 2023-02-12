@@ -631,8 +631,7 @@ class Puzzle {
                 this.height_c = this.height0;
                 this.height = this.height_c;
                 this.canvasy = this.height_c * this.size;
-            }
-            else {
+            } else {
                 this.width0 = this.ny + 1;
                 this.width_c = this.width0;
                 this.width = this.width_c;
@@ -1017,8 +1016,7 @@ class Puzzle {
                 this.height_c = this.height0;
                 this.height = this.height_c;
                 this.canvasy = this.height_c * this.size;
-            }
-            else {
+            } else {
                 this.width0 = this.ny + 1;
                 this.width_c = this.width0;
                 this.width = this.width_c;
@@ -1292,8 +1290,7 @@ class Puzzle {
                 this.width_c = this.width0;
                 this.width = this.width_c;
                 this.canvasx = this.width_c * this.size;
-            }
-            else {
+            } else {
                 this.height0 = this.nx + 1;
                 this.height_c = this.height0;
                 this.height = this.height_c;
@@ -1678,8 +1675,7 @@ class Puzzle {
                 this.width_c = this.width0;
                 this.width = this.width_c;
                 this.canvasx = this.width_c * this.size;
-            }
-            else {
+            } else {
                 this.height0 = this.nx + 1;
                 this.height_c = this.height0;
                 this.height = this.height_c;
