@@ -12004,7 +12004,7 @@ class Puzzle {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
                         if (message == "" || message.includes("http-equiv=")) {
-                            message = "Happy New Year 🙂";
+                            message = "Congratulations 🙂";
                         }
                         setTimeout(() => {
                             Swal.fire({
@@ -12040,7 +12040,7 @@ class Puzzle {
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             let message = document.getElementById("custom_message").value;
                             if (message == "" || message.includes("http-equiv=")) {
-                                message = "Happy New Year 🙂";
+                                message = "Congratulations 🙂";
                             }
                             setTimeout(() => {
                                 Swal.fire({
