@@ -2124,20 +2124,10 @@ onload = function() {
     document.getElementById("responsive_settings_opt").onchange = function() {
         UserSettings.responsive_mode = this.value;
     }
-
+    
     // Custom Color Setting
     document.getElementById("custom_color_opt").onchange = function() {
-        if (document.getElementById("custom_color_opt").value === "1") {
-            document.getElementById('style_special').style.display = 'none';
-            pu.redraw();
-        } else if (document.getElementById("custom_color_opt").value === "2") {
-            let mode = pu.mode[pu.mode.qa].edit_mode;
-            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" || pu.gridtype === "hex")) &&
-                (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
-                document.getElementById('style_special').style.display = 'inline';
-            }
-            pu.redraw();
-        }
+        UserSettings.custom_colors_on = this.value;
     }
 
     // Save Setting
