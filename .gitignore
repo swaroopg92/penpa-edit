@@ -4,6 +4,7 @@ old_images/
 temp/
 tmp/
 .DS_Store
+notes/
 
 *.log
 
@@ -15,3 +16,4 @@ docs/css/images/parch.psd
 # Visual Studio Code
 .vscode/
 jsconfig.json
+node_modules/

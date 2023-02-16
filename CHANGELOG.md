@@ -1,11 +1,106 @@
 ## History
+* 2023/01/05 ver 3.0.4
+	* Make the answer check table only show one column at a time
+	* Conflict highlighting on hex grid for latin square
+	* Setting option to disable Sudoku Shortcuts (Manually or 'Alphabet' genre)
+	* Congratulations message set to "Happy New Year"
+* 2022/08/19 ver 3.0.3
+	* Fixed keyboard movement of number and sudoku in hex grids.
+	* Answer check translation and make the Solve Mode title clickable.
+	* Allow alphabets to I/O Sudoku.
+	* Added streaming layout 1 beta version.
+	* Updated video tutorials list.
+	* Fixed movement of tools area when switching between modes.
+	* Fixed error when attempting to open streaming view without a puzzle loaded.
+* 2022/08/14 ver 3.0.2
+	* Added answer check options to be displayed on clicking title.
+	* Surface mode, changed GR for green to GN to avoid clash with GREY.
+* 2022/08/07 ver 3.0.1
+	* Fixed cpu usage issue with gif library.
+	* Added Citation reference to readme.
+	* Improvement to sudoku mode to accept QWERTZ keybaord layout for shortcuts.
+	* Improvement to cleaning of edge marks in sudoku mode, only when both cells are filled.
+	* Improvement to help display button.
+* 2022/07/01 ver 2.26.21
+	* Handle long url directly using hash.
+	* Fixed some bugs.
+	* Replay # to replay urls for link identification.
+	* Automatically ignore given edges for answer check if edge answer check is selected (even if user forgets to select ignore edge option).
+	* Keyboard arrow movements to Sudoku mode for Cube grid.
+* 2022/06/02 ver 2.26.20
+	* Implicit edges for region division puzzles solved using Shading.
+	* Improvement to size of Sudoku Mode buttons for Mobile Devices.
+	* Shortcuts to help button.
+	* Display and Design improvements.
+	* Arrow key movements to Hex Sudoku Mode.
+	* Bug fixes.
+* 2022/04/30 ver 2.26.19
+	* Added more puzz link support - kropki, firefly, slant, spiral galaxies, ringring, doubleback, yinyang, hitori, putteria, hanare, aho, shikaku, fillmat, lookair, paintarea, sukoro, sukkororoom, usotatami, usoone, scrin, hebiichigo, tasquare, minesweeper, ichimaga, magneticichimaga, crossingichimaga, territory, doublechoco, tateboyokobo, canalview, chocobanana, tonttiraja, dotchiloop, chainedblock, oneroomonedoor, rassisilai
+	* Added gif download feature to replay
+	* minor improvement to responsive mode for utilizing full space.
+	* improvements to local storage.
+	* improvements to replay feature.
+	* Hexagon shapes to various modes.
+	* improved pause layer to be dark in dark mode.
+	* added top limit for panel movement.
+* 2022/03/17 ver 2.26.18
+	* Feature to share replay.
+	* Fixed an auto redirect bug for custom messages.
+	* Fixed an undo bug.
+	* Custom Color Support Added for Hex Grids.
+	* Added Small Sized Shapes to Triangle and Diamonds.
+* 2022/03/08 ver 2.26.17
+	* Screenshot bug fixed for svg.
+	* Improvements to smart checking for TomTom grid.
+	* Added consecutive pair answer checking.
+	* Rassi Sillai Composite Mode Added.
+	* Updated tests to snapshot specific properties rather than url.
+	* Increased max grid size to 100.
+	* Improvements to answer checking.
+	* Added more attributes to html tag.
+	* Added tags to puzz-link imported puzzles.
+	* Improvements to Cursor and CursoL transition.
+	* Fixed bug for consecutive smart checking.
+	* Custom answer check message.
+* 2022/02/09 ver 2.26.16
+	* Directly generate tinyurl (Optional).
+	* Bookmarklet to open puzz.link, pzv, pzprxs, other penpa forks in Penpa+ with a single click.
+	* Timer improvements.
+	* Code refactoring - All settings are now moved to Settings Class.
+	* Special mode added to Tab list.
+	* Added Nurimaze puzzlink support.
+	* Smart check improvements.
+	* Custom second color for edgexoi mode.
+	* Improvements to Surface Mode.
+	* Bug fixes.
+	* Surface Second Color added to Save Settings.
+* 2022/01/25 ver 2.26.15
+	* Refactor all the user settings into settings class.
+	* Penpa lite button now directly available under tab settings.
+	* Changed git to tinyurl for the url shortener.
+	* Increased grid size limit to 65.
+	* Added new new year message.
+	* Improvements to solution checker for number mode, edge mode and shading mode.
+	* Initiated outside border cells array.
+	* Disabled continuous stretch of crosses using composite modes for mobile/ipad.
+	* Put back the draw on edge/corners option to main screen.
+	* Improved Panel display with a Closing button in top right.
+	* Conflict checker for Star Battle, TomTom, Consecutive, NonConsecutive and Some other Sudokus (Classic only)
+* 2021/12/31 ver 2.26.14
+	* More puzz.link support
+* 2021/12/19 ver 2.26.13
+	* Responsive design - left and right options.
+	* Fixed tab order.
+	* Local storage feature to save the state of the puzzle.
 * 2021/12/16 ver 2.26.12
+	* Fixed SVG export in Safari.
 	* Restored original timer look.
 	* Fixed killer cages bug.
 	* Some display improvements.
 	* Hide timer area option.
 	* Added nonconsecutive tag.
 	* Tapa sol string.
+	* code refactoring.
 * 2021/12/02 ver 2.26.11
 	* Fix aspect ratio of info icon.
 	* Fix minor CSS linting issues.

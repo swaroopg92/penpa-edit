@@ -70,7 +70,7 @@ class Puzzlink {
                     edgey = edgex + 1;
                 }
                 var key = edgex.toString() + "," + edgey.toString();
-                pu["pu_q"]["line"][key] = edge_style;
+                pu["pu_q"]["lineE"][key] = edge_style;
             }
         }
     }
@@ -117,6 +117,10 @@ class Puzzlink {
             return [parseInt(this.gridurl.substr(i + 1, 3), 16) + 4096, 4];
         } else if (ca === "%") {
             return [parseInt(this.gridurl.substr(i + 1, 3), 16) + 8192, 4];
+        } else if (ca === "*") {
+            return [parseInt(this.gridurl.substr(i + 1, 4), 16) + 12240, 5];
+        } else if (ca === "$") {
+            return [parseInt(this.gridurl.substr(i + 1, 5), 16) + 77776, 6];
         } else if (ca === ".") {
             return ['?', 1];
         } else {
@@ -142,10 +146,11 @@ class Puzzlink {
         return bottom <= ca && ca <= up;
     }
 
-    decodeNumber16ExCell() {
+    decodeNumber16ExCell(top_left_only) {
         var number_list = {};
         var ec = 0,
             i = 0;
+        var skipped_bottom = false;
 
         // Top row, bottom row, left column and then right column
         for (i = 0; i < this.gridurl.length; i++) {
@@ -162,8 +167,15 @@ class Puzzlink {
             }
 
             ec++;
-            if (ec >= this.rows * 4) {
-                break;
+            if (top_left_only && !skipped_bottom && ec >= this.cols) {
+                skipped_bottom = true;
+                ec += this.cols; // Skip bottom row if top_left_only
+            }
+            if (top_left_only && ec >= 2 * this.cols + this.rows) {
+                break; // Finished top and left
+            }
+            if (ec >= this.rows * 2 + this.cols * 2) {
+                break; // Finished all four sides
             }
         }
 
@@ -171,6 +183,25 @@ class Puzzlink {
         this.gridurl = this.gridurl.substr(i + 1);
 
         return number_list;
+    }
+
+    drawNumbersExCell(pu, info_number, style, sub_mode, hide_ques) {
+        var cell;
+        for (var i in info_number) {
+            i = parseInt(i);
+            // Top row, bottom row, left column and then right column
+            if (i < this.cols) { // Top Row
+                cell = pu.nx0 * 2 + 2 + i + 1;
+            } else if (i < 2 * this.cols) { // Bottom Row
+                cell = pu.nx0 * (2 + this.rows + 1) + 2 + (i - this.cols) + 1;
+            } else if (i < 2 * this.cols + this.rows) { // Left Column 
+                cell = pu.nx0 * (2 + (i - 2 * this.cols) + 1) + 2;
+            } else {
+                cell = pu.nx0 * (2 + (i - 2 * this.cols - this.rows) + 1) + 2 + this.cols + 1;
+            }
+            var number = hide_ques && info_number[i] === "?" ? " " : info_number[i];
+            pu["pu_q"].number[cell] = [number, style, sub_mode];
+        }
     }
 
     decodeKakuro() {
@@ -250,6 +281,61 @@ class Puzzlink {
         return -1;
     }
 
+    decodeNumber36(max_iter = -1) {
+        var number_list = [];
+        let index;
+
+        for (index = 0; index < this.gridurl.length; index++) {
+            const char = this.gridurl[index];
+            if (char === "-") {
+                number_list.push(parseInt(this.gridurl.substr(index + 1, 2), 36));
+                index += 2;
+            } else if (char === "%") {
+                number_list.push("?");
+            } else if (char === ".") {
+                number_list.push(" ");
+            } else {
+                number_list.push(parseInt(char, 36));
+            }
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
+        }
+
+        // Remove what was parsed so the next function call reads what is left
+        this.gridurl = this.gridurl.substr(index);
+
+        return number_list;
+    }
+
+    decodeNumber10(max_iter = -1) {
+        var number_list = {};
+        let index = 0;
+
+        for (var char of this.gridurl) {
+            if (char === '.') {
+                number_list[index] = '?';
+            } else if (char >= "0" && char <= "9") {
+                number_list[index] = parseInt(char);
+            } else if (char >= "a" && char <= "z") {
+                index += parseInt(char, 36) - 10;
+            }
+            index++;
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
+        }
+
+        // Remove what was parsed so the next function call reads what is left
+        this.gridurl = this.gridurl.substr(index);
+
+        return number_list;
+    }
+
     decodeNumber4() {
         var number_list = {},
             i = 0;
@@ -274,7 +360,7 @@ class Puzzlink {
         return number_list;
     }
 
-    decodeNumber3() {
+    decodeNumber3(max_iter = -1) {
         var number_list = [];
 
         for (var char of this.gridurl) {
@@ -284,7 +370,54 @@ class Puzzlink {
                 parseInt(int / 3) % 3,
                 parseInt(int / 1) % 3,
             );
+
+            max_iter--;
+            if (max_iter === 0) {
+                break;
+            }
         }
+        // Remove what was parsed
+        this.gridurl = this.gridurl.substr(number_list.length / 3);
+
+        return number_list;
+    }
+
+    decodeNumber2() {
+        var number_list = {};
+        var index = 0;
+
+        for (var char of this.gridurl) {
+            if (char >= "i") {
+                index += parseInt(char, 36) - 17;
+            } else {
+                number_list[index] = "1";
+                index += parseInt(char, 36) + 1;
+            }
+        }
+
+        return number_list;
+    }
+
+    decodeNumber2Binary(max_iter = Infinity) {
+        var number_list = [];
+
+        for (var char of this.gridurl) {
+            var int = parseInt(char, 36);
+            number_list.push(
+                parseInt(int / 16) % 2,
+                parseInt(int / 8) % 2,
+                parseInt(int / 4) % 2,
+                parseInt(int / 2) % 2,
+                parseInt(int / 1) % 2,
+            );
+
+            max_iter -= 5;
+            if (max_iter <= 0) {
+                break;
+            }
+        }
+        // Remove what was parsed
+        this.gridurl = this.gridurl.substr(number_list.length / 5);
 
         return number_list;
     }
@@ -378,6 +511,231 @@ class Puzzlink {
             }
             pu["pu_q"].symbol[cell] = [info[i] + 1, "circle_SS", behind_line];
         }
+    }
+
+    decodeYajilinArrows(parsing_castle = false) {
+        // Arrows start with one number giving direction and the next giving the number
+        var arrows = {};
+        var i = 0;
+        var c = 0;
+        var shading = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            if ("a" <= ca && ca <= "z") {
+                c += parseInt(ca, 36) - 9;
+                i++;
+                continue;
+            }
+
+            if (parsing_castle) {
+                shading = parseInt(ca);
+                i++;
+                ca = this.gridurl.charAt(i);
+            }
+
+            var number_length = ca === "-" ? 3 : 1;
+            if (ca === "-") {
+                i++;
+                ca = this.gridurl.charAt(i);
+            }
+
+            var direc = parseInt(ca);
+            number_length += parseInt(direc / 5);
+
+            var cell_value = this.gridurl.substr(i + 1, number_length);
+            if (cell_value === ".") {
+                cell_value = "";
+            } else {
+                cell_value = "" + parseInt(cell_value, 16);
+            }
+            arrows[c] = [direc % 5, cell_value, shading]; // [direction, number, shading]
+            c += 1;
+            i += number_length + 1;
+        }
+
+        return arrows;
+    }
+
+    decodeTapa() {
+        var strings = "?12345";
+        var number_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            if (("0" <= ca && ca <= "9") || ca === ".") {
+                if (ca === ".") {
+                    number_list[c] = "?";
+                } else {
+                    number_list[c] = ca === "9" ? "1111" : ca;
+                }
+                i++;
+                c++;
+            } else if ("a" <= ca && ca <= "f") {
+                var n = parseInt(this.gridurl.substr(i, 2), 36) - 360;
+                if (n < 36) {
+                    number_list[c] = strings[parseInt(n / 6)] + strings[n % 6];
+                } else if (n < 100) {
+                    n -= 36;
+                    number_list[c] = strings[parseInt(n / 16)] + strings[parseInt((n % 16) / 4)] + strings[n % 4];
+                } else if (n < 116) {
+                    // These values are technically impossible to input, but they are included for completeness-sake
+                    n -= 100;
+                    number_list[c] = (n & 4 ? "1" : "?") + (n & 8 ? "1" : "?") + (n & 2 ? "1" : "?") + (n & 1 ? "1" : "?");
+                }
+                i += 2;
+                c++;
+            } else {
+                i++;
+                c += parseInt(ca, 36) - 15;
+            }
+        }
+
+        return number_list;
+    }
+
+    decodeTapaLoop() {
+        // Annoyingly, TapaLoop has a slightly different encoding than Tapa
+        var number_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            if (("0" <= ca && ca <= "8") || ca === ".") {
+                number_list[c] = ca === "." ? "?" : ca;
+                i++;
+                c++;
+            } else if (("a" <= ca && ca <= "f") || ca === "-" || ca === "+") {
+                var n, numbers_per_cell, mod;
+                if (ca === "-") {
+                    numbers_per_cell = 4;
+                    mod = 6;
+                    n = parseInt(this.gridurl.substr(i + 1, 2), 36) - 36;
+                    i += 3
+                } else if (ca === "+") {
+                    numbers_per_cell = 3;
+                    mod = 7;
+                    n = parseInt(this.gridurl.substr(i + 1, 2), 36) - 36;
+                    i += 3
+                } else {
+                    numbers_per_cell = 2;
+                    mod = 8;
+                    n = parseInt(this.gridurl.substr(i, 2), 36) - 360;
+                    i += 2;
+                }
+
+                var s = "";
+                for (var j = 0; j < numbers_per_cell; j++) {
+                    s = (n % mod || "?") + s;
+                    n = parseInt(n / mod);
+                }
+
+                if (numbers_per_cell === 4) {
+                    // puzzlink places numbers clockwise while penpa places top to bottom, left to right
+                    s = s[1] + s[0] + s[2] + s[3];
+                }
+
+                number_list[c] = s;
+                c++;
+            } else {
+                i++;
+                c += parseInt(ca, 36) - 15;
+            }
+        }
+
+        return number_list;
+    }
+
+    drawCompassNumbers(pu, info_number, sub_mode) {
+        // Compass numbers are given as groups of four numbers
+        // Compass lists them in a different order than Penpa+
+        var number_order = [0, 3, 2, 1];
+        var indexes = Object.keys(info_number).sort((a, b) => a - b);
+
+        for (var compass_index = 0; compass_index < indexes.length; compass_index += 4) {
+            var cell_index = indexes[compass_index] - compass_index * (3 / 4);
+            var row_ind = parseInt(cell_index / this.cols);
+            var col_ind = cell_index % this.cols;
+            var cell = 8 * (pu.ny0 * pu.nx0) + 4 * (pu.nx0 * (2 + row_ind) + 2 + col_ind);
+            for (var j = 0; j < 4; j++) {
+                var number = info_number[indexes[compass_index + j]];
+                pu["pu_q"].numberS[cell + number_order[j]] = [number === "?" ? " " : number, sub_mode];
+            }
+            cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+            pu["pu_q"].symbol[cell] = [1, "compass", 1];
+        }
+    }
+
+    decodeNurimaze() {
+        var number_list = {};
+        var shape_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            var res = this.readNumber16(ca, i);
+            if (ca === "1") {
+                number_list[c] = "S";
+            } else if (ca === "2") {
+                number_list[c] = "G";
+            } else if (ca === "3") {
+                shape_list[c] = "o";
+            } else if (ca === "4") {
+                shape_list[c] = "t";
+            } else if ((ca >= "5" && ca <= "9") || (ca >= "a" && ca <= "z")) {
+                c += parseInt(ca, 36) - 5;
+            }
+            i++;
+            c++;
+        }
+        var obj = new Object();
+        obj.number_list = number_list;
+        obj.shape_list = shape_list;
+        return obj;
+    }
+
+    decodeTateyoko() {
+        let info_number = {};
+        let cell_index = 0,
+            index;
+        for (index = 0; index < this.gridurl.length; index++) {
+            let char = this.gridurl[index];
+            // value = [number, is background shaded?]
+            let value = null;
+
+            if (char === "x") {
+                value = ["", true];
+            } else if (this.include(char, "o", "s")) {
+                value = [parseInt(char, 29) - 24, true];
+            } else if (this.include(char, "0", "9") || this.include(char, "a", "f")) {
+                value = [parseInt(char, 16), false];
+            } else if (char === "-") {
+                value = [parseInt(this.gridurl.substr(index + 1, 2), 16), false];
+                index += 2;
+            } else if (char === "i") {
+                cell_index += parseInt(this.gridurl[index + 1], 16);
+                index++;
+                continue;
+            } else {
+                cell_index++;
+                continue;
+            }
+
+            info_number[cell_index] = value;
+            cell_index++;
+
+            if (cell_index >= this.cols * this.rows) {
+                break;
+            }
+        }
+
+        this.gridurl = this.gridurl.substr(this.cols * this.rows);
+
+        return info_number;
     }
 }
 

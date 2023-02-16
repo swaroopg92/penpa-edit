@@ -48,19 +48,19 @@ class Puzzle_truncated_square extends Puzzle {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -82,19 +82,19 @@ class Puzzle_truncated_square extends Puzzle {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -295,7 +295,7 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -309,7 +309,7 @@ class Puzzle_truncated_square extends Puzzle {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [5];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -603,6 +603,115 @@ class Puzzle_truncated_square extends Puzzle {
                         break;
                 }
             }
+            this.selection = [];
+            if (!this.selection.includes(this.cursol)) {
+                this.selection.push(this.cursol);
+            }
+        } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (this.selection.length >= 1) {
+                if (this.cursol % 27 === 0) { // top side
+                    switch (c) {
+                        case 0: //left
+                            // if cursor already on the left border
+                            if (quotient % this.nx0 === 0) {
+                                a = this.cursol + 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 1: //up
+                            a = this.cursol + 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 2: //right
+                            a = this.cursol + 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 3: //down
+                            // if cursor already on the bottom border
+                            if (quotient < this.nx0) {
+                                a = this.cursol * this.nx0 + 2;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27 * this.nx0;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                    }
+                } else if (this.cursol % 27 === 1) { // left side
+                    switch (c) {
+                        case 0: //left
+                            a = this.cursol + 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 1: //up
+                            // if cursor already on the up border
+                            if (quotient % this.nx0 === 0) {
+                                a = this.cursol - 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 2: //right
+                            // if cursor already on the right border
+                            if (quotient < this.nx0) {
+                                a = this.cursol + 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27 * this.nx0;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 3: //down
+                            a = this.cursol + 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                    }
+                } else if (this.cursol % 27 === 2) { // right side
+                    switch (c) {
+                        case 0: //left
+                            // if cursor already on the left border
+                            if (quotient < this.nx0) {
+                                a = this.cursol - 1;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27 * this.nx0;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 1: //up
+                            // if cursor already on the up border
+                            if (quotient % this.nx0 === 0) {
+                                a = parseInt((this.cursol - 2) / this.nx0);
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            } else {
+                                a = this.cursol - 27;
+                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            }
+                            break;
+                        case 2: //right
+                            a = this.cursol + 27 * this.nx0;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                        case 3: //down
+                            a = this.cursol + 27;
+                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
+                            break;
+                    }
+                }
+                if (this.point[a] && this.point[a].use === 1) {
+                    if (!ctrl_key) {
+                        this.selection = [];
+                    }
+                    if (!this.selection.includes(a)) {
+                        this.selection.push(a);
+                    }
+                }
+            }
         }
         this.redraw();
     }
@@ -638,7 +747,7 @@ class Puzzle_truncated_square extends Puzzle {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -1260,9 +1369,53 @@ class Puzzle_truncated_square extends Puzzle {
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
                 break;
+            case "diamond_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.22, 4, 0);
+                break;
             case "diamond_SS":
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
+                break;
+            case "hexpoint_LL":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.48, 6, 30);
+                break;
+            case "hexpoint_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.4, 6, 30);
+                break;
+            case "hexpoint_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.3, 6, 30);
+                break;
+            case "hexpoint_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.2, 6, 30);
+                break;
+            case "hexpoint_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 30);
+                break;
+            case "hexflat_LL":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.48, 6, 0);
+                break;
+            case "hexflat_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.4, 6, 0);
+                break;
+            case "hexflat_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.3, 6, 0);
+                break;
+            case "hexflat_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.2, 6, 0);
+                break;
+            case "hexflat_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 0);
                 break;
             case "ox_B":
                 ctx.setLineDash([]);
@@ -2643,19 +2796,19 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -2677,19 +2830,19 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -2914,7 +3067,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 3, 4];
@@ -2928,7 +3081,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 3, 4];
@@ -3062,7 +3215,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
@@ -3290,19 +3443,19 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -3324,19 +3477,19 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -3632,7 +3785,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -3646,7 +3799,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -3780,7 +3933,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -4043,19 +4196,19 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -4077,19 +4230,19 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -4402,7 +4555,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -4416,7 +4569,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -4550,7 +4703,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
             this.draw_symbol("pu_q", 1);
@@ -4771,19 +4924,19 @@ class Puzzle_iso extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -4805,19 +4958,19 @@ class Puzzle_iso extends Puzzle_truncated_square {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -5107,7 +5260,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2];
@@ -5121,7 +5274,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
                     type = [6];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2];
@@ -5278,7 +5431,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");

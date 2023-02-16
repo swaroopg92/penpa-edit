@@ -48,19 +48,19 @@ class Puzzle_pyramid extends Puzzle {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).style.display = "none";
+            document.getElementById("ms_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "none";
+            document.getElementById("ms1_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "none";
+            document.getElementById("ms3_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
             document.getElementById(i).style.display = "none";
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "none";
+            document.getElementById("combisub_" + i).parentElement.style.display = "none";
         }
         for (var i of penpa_modes["square"]['subcombi']) {
             document.getElementById(i).style.display = "none";
@@ -82,19 +82,19 @@ class Puzzle_pyramid extends Puzzle {
             document.getElementById(i).style.display = "table-row";
         }
         for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).style.display = "inline-block";
+            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).style.display = "inline-block";
+            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).style.display = "inline-block";
+            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['shapemodes']) {
             document.getElementById(i).style.display = "inline-block";
         }
         for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).style.display = "inline-block";
+            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
         }
         for (var i of penpa_modes[this.gridtype]['subcombi']) {
             document.getElementById(i).style.display = "inline-block";
@@ -255,7 +255,7 @@ class Puzzle_pyramid extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (document.getElementById('edge_button').value === "2") {
+                if (!UserSettings.draw_edges) {
                     type = [0];
                 } else {
                     type = [0, 1, 2, 3];
@@ -265,7 +265,7 @@ class Puzzle_pyramid extends Puzzle {
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
                     type = [4];
                 } else {
-                    if (document.getElementById('edge_button').value === "2") {
+                    if (!UserSettings.draw_edges) {
                         type = [0];
                     } else {
                         type = [0, 1, 2, 3];
@@ -517,7 +517,7 @@ class Puzzle_pyramid extends Puzzle {
 
     draw() {
         var present_mode = this.mode.qa;
-        if (present_mode !== "pu_q" || document.getElementById('visibility_button').textContent === "ON") {
+        if (present_mode !== "pu_q" || UserSettings.show_solution) {
             this.draw_frameBold();
             this.draw_surface("pu_q");
             this.draw_surface("pu_a");
@@ -1234,9 +1234,53 @@ class Puzzle_pyramid extends Puzzle {
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
                 break;
+            case "diamond_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.22, 4, 0);
+                break;
             case "diamond_SS":
                 set_circle_style(ctx, num);
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
+                break;
+            case "hexpoint_LL":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.48, 6, 30);
+                break;
+            case "hexpoint_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.4, 6, 30);
+                break;
+            case "hexpoint_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.3, 6, 30);
+                break;
+            case "hexpoint_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.2, 6, 30);
+                break;
+            case "hexpoint_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 30);
+                break;
+            case "hexflat_LL":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.48, 6, 0);
+                break;
+            case "hexflat_L":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.4, 6, 0);
+                break;
+            case "hexflat_M":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.3, 6, 0);
+                break;
+            case "hexflat_S":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.2, 6, 0);
+                break;
+            case "hexflat_SS":
+                set_circle_style(ctx, num);
+                this.draw_polygon(ctx, x, y, 0.13, 6, 0);
                 break;
             case "ox_B":
                 ctx.setLineDash([]);

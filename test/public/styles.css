@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+}
+
+#penpa {
+    width: 100vw;
+    height: 80vh;
+    box-sizing: border-box;
+}

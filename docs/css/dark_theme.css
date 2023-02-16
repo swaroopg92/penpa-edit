@@ -48,6 +48,10 @@
 
 #tb_undo,
 #tb_redo {
+    color: var(--white);
+}
+#tb_undo:disabled,
+#tb_redo:disabled {
     color: var(--greyLight);
 }
 
@@ -61,8 +65,15 @@
     background: var(--greyDark);
 }
 
+#tab-dropdown-lite-btn,
 .button.sw {
     background-color: var(--blueLight);
+    color: var(--white);
+}
+
+#tab-dropdown-lite-btn:hover,
+.button.sw:hover {
+    background-color: var(--blueDark);
     color: var(--white);
 }
 
@@ -71,6 +82,11 @@
 }
 
 .label {
+    color: var(--white);
+    border: 1px solid var(--blueskyMedium);
+}
+
+.labelSu {
     color: var(--white);
     border: 1px solid var(--blueskyMedium);
 }
@@ -92,7 +108,7 @@
 
 .labelL {
     color: var(--white);
-    border: 1px solid var(--blueDark);
+    border: 1px solid var(--blueskyMedium);
 }
 
 .labelL:hover {
@@ -145,7 +161,7 @@
 }
 
 #pause_canvas {
-    background: var(--white);
+    background: var(--blackLight);
     border: 0px none black;
 }
 
@@ -155,34 +171,6 @@
 
 #float-key {
     background-color: var(--black);
-}
-
-#float-key-header {
-    background: var(--grey);
-}
-
-#float-key-body {
-    box-shadow: 4px 4px 4px var(--transparent40);
-    background: var(--greyLightMedium);
-}
-
-#float-key-menu {
-    background: var(--greyLight);
-}
-
-.panel_menu li {
-    border-right: 1px solid var(--white);
-    background-color: var(--greyLight);
-}
-
-.panel_menu_select li {
-    border-left: 1px solid var(--black);
-    border-top: 1px solid var(--black);
-    background-color: var(--greyLight);
-}
-
-.label_menu {
-    background-color: var(--greyLight);
 }
 
 .modal-content,
@@ -196,6 +184,10 @@
 }
 
 header,
+#float-key-header,
+#float-key-body,
+#float-key-menu,
+#float-key-select,
 .modal-header,
 .modal-subheader {
     background: var(--greyDarkVery);
@@ -254,4 +246,8 @@ a:active {
 #puzzlesource,
 #solution_check {
     color: var(--white);
+}
+
+#visibility_button {
+    border: 1px solid var(--blueskyMedium);
 }
