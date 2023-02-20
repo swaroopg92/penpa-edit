@@ -147,25 +147,43 @@ const UserSettings = {
         return this._sudoku_centre_size;
     },
 
-    _custom_colors_on: 1,
+    _custom_colors_on: false,
+    _custom_color_supported_grids: {
+        square: 1,
+        sudoku: 1,
+        kakuro: 1,
+        hex: 1
+    },
+    _custom_color_supported_modes: {
+        line: 1,
+        lineE: 1,
+        wall: 1,
+        surface: 1,
+        cage: 1,
+        special: 1,
+        symbol: 1
+    },
     set custom_colors_on(newValue) {
-        const valueInt = newValue ? parseInt(newValue, 10) : 1;
-        this._custom_colors_on = valueInt;
-
-        if (valueInt === 1) {
-            // Off
-            document.getElementById('style_special').style.display = 'none';
+        if (typeof newValue === 'string') {
+            const valueInt = newValue ? parseInt(newValue, 10) : 1;
+            this._custom_colors_on = (valueInt === 2);
         } else {
+            this._custom_colors_on = !!newValue;
+        }
+
+        if (this._custom_colors_on) {
             // On
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" || pu.gridtype === "hex")) &&
-                (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
+            if (this._custom_color_supported_grids[pu.gridtype] && this._custom_color_supported_modes[mode]) {
                 document.getElementById('style_special').style.display = 'inline';
             }
+        } else {
+            // Off
+            document.getElementById('style_special').style.display = 'none';
         }
+        document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
+        
         pu.redraw();
-
-        document.getElementById("custom_color_opt").value = valueInt;
     },
     get custom_colors_on() {
         return this._custom_colors_on;

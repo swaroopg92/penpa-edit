@@ -2127,7 +2127,7 @@ onload = function() {
     
     // Custom Color Setting
     document.getElementById("custom_color_opt").onchange = function() {
-        UserSettings.custom_colors_on = this.value;
+        UserSettings.custom_colors_on = (parseInt(this.value, 10) === 2);
     }
 
     // Save Setting
