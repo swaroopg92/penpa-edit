@@ -8246,6 +8246,19 @@ class Puzzle {
                     if (submode === "3" || submode === "9") {
                         this.mouse_numberS(x, y, num, submode);
                     } else {
+                        if (ctrl_key && pu.mouse_mode === "down_left") {
+                            if (submode === "8") { // Long
+                                if (pu[pu.mode.qa].number[num]) {
+                                    document.getElementById("inputtext").value = pu[pu.mode.qa].number[num][0];
+                                }
+                            }
+                            else if (submode === "11") { // Killer
+                                var corner_cursor = 4 * (num + this.nx0 * this.ny0);
+                                if (pu[pu.mode.qa].numberS[corner_cursor]) {
+                                    document.getElementById("inputtext").value = pu[pu.mode.qa].numberS[corner_cursor][0].trim();
+                                }
+                            }
+                        }
                         this.mouse_number(x, y, num);
                     }
                     break;
