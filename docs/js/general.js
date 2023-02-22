@@ -3011,7 +3011,6 @@ function set_solvemode(type = "url") {
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
-    document.getElementById('save_settings_opt').style.display = 'none';
 
     // Middle Button settings not applicable in Solve mode
     document.getElementById('mousemiddle_settings_lb').style.display = 'none';

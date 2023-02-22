@@ -2141,11 +2141,6 @@ onload = function() {
     }
 
     // Save Setting
-    document.getElementById("save_settings_opt").onchange = function() {
-        UserSettings.save_settings = this.value;
-    }
-
-    // Save Setting
     document.getElementById("mousemiddle_settings_opt").onchange = function() {
         UserSettings.mousemiddle_button = this.value;
     }
