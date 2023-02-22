@@ -76,7 +76,17 @@ class Panel {
     }
 
     cleartext() {
-        var input_message = document.getElementById("inputtext").value = "";
+        document.getElementById("inputtext").value = "";
+    }
+
+    loadtext() {
+        let isNumberS = ["3", "9", "11"].includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0])
+        if (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]) {
+            document.getElementById("inputtext").value = pu[pu.mode.qa].numberS[pu.cursolS][0].trim();
+        }
+        else if (pu[pu.mode.qa].number[pu.cursol]) {
+            document.getElementById("inputtext").value = pu[pu.mode.qa].number[pu.cursol][0];
+        }
     }
 
     draw_panel() {

@@ -1045,7 +1045,8 @@ body textarea {
 }
 
 #closeBtn_input1,
-#closeBtn_input2 {
+#closeBtn_input2,
+#closeBtn_input3 {
     width: 40px;
 }
 

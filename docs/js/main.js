@@ -1199,6 +1199,10 @@ onload = function() {
                 panel_pu.cleartext();
                 e.preventDefault();
                 break;
+            case "closeBtn_input3":
+                panel_pu.loadtext();
+                e.preventDefault();
+                break;
             case "float-canvas":
                 f_mdown(e);
                 if (checkms === 0) {
