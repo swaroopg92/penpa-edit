@@ -1279,14 +1279,35 @@ input[type=number] {
 }
 
 #settings-table td {
-    border: 0;
     padding: 3px;
-    height: 1.5em;
-    font-size: 1.3em;
+    font-size: 1.1em;
+    line-height: 1.1;
+}
+
+#settings-table tr+tr td {
+    border-top: 1px solid var(--fgSubtle);
 }
 
 #settings-table select {
+    background: var(--bgMain);
+}
+#settings-table button {
+    background: var(--bgMedium);
+}
+#settings-table button:hover{
+    background: var(--bgHover);
+}
+
+#settings-table select,
+#settings-table button {
+    color: var(--fgMain);
+    border: 1px solid var(--fgMedium);
+    display: block;
     font-size: .9em;
+    width: 100%;
+    margin: 2px 0;
+    padding: 2px;
+    border-radius: 3px;
 }
 
 #sol_or_lb,

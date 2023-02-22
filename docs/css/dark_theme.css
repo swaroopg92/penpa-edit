@@ -38,8 +38,11 @@
 
     --bgPage: var(--blackLight);
     --bgMain: var(--black);
+    --bgHover: var(--blackLight);
     --bgMedium: var(--greyDarkVery);
     --fgMain: var(--white);
+    --fgMedium: var(--greyLight);
+    --fgSubtle: var(--greyDarkVery);
 }
 
 .solving {

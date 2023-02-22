@@ -1321,233 +1321,257 @@
             <h3 class="modal-header" id="save7texttitle">General Settings</h3>
             <div id="modal-settings-body">
                 <table id="settings-table">
-                    <tr>
-                        <td>
-                            <label>Display Theme:</label>
-                        </td>
-                        <td>
-                            <select name="theme_mode" id="theme_mode_opt">
-                                <option value="1" selected="selected">Light</option>
-                                <option value="2">Dark</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Display Layout:</label>
-                        </td>
-                        <td>
-                            <select name="responsive_settings" id="responsive_settings_opt">
-                                <option value="1" selected="selected">Default</option>
-                                <option value="2">On (Tools Left)</option>
-                                <option value="3">On (Tools Right)</option>
-                                <option value="4">Streaming 1 (beta)</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr id="custom_color_lb">
-                        <td>
-                            <label>Custom Colors (Beta):</label>
-                        </td>
-                        <td>
-                            <select name="custom_color" id="custom_color_opt">
-                                <option value="1" selected="selected">No</option>
-                                <option value="2">Yes</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Sudoku Pencil Marks:</label>
-                        </td>
-                        <td>
-                            <select name="sudoku_settings" id="sudoku_settings_opt">
-                                <option value="1" selected="selected">Dynamic</option>
-                                <option value="2">Large</option>
-                                <option value="3">Small</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Sudoku Normal:</label>
-                        </td>
-                        <td>
-                            <select name="sudoku_settings_normal" id="sudoku_settings_normal_opt">
-                                <option value="1" selected="selected">Centered</option>
-                                <option value="2">Bottom</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Star Battle Dots:</label>
-                        </td>
-                        <td>
-                            <select name="starbattle_settings" id="starbattle_settings_opt">
-                                <option value="1" selected="selected">High Range</option>
-                                <option value="2">Low Range</option>
-                                <option value="3">Disable</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr id="mousemiddle_settings_lb">
-                        <td>
-                            <label>Mouse Middle Button:</label>
-                        </td>
-                        <td>
-                            <select name="mousemiddle" id="mousemiddle_settings_opt">
-                                <option value="1" selected="selected">No</option>
-                                <option value="2">Yes</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <!-- <tr>
-                        <td>
-                            <h4><label id="multitab_settings_lb">Solution Tab Setting:</label></h4>
-                        </td>
-                        <td>
-                            <select name="multitab_settings" id="multitab_settings_opt">
-                                <option value="1" selected="selected">No</option>
-                                <option value="2">Yes</option>
-                            </select>
-                        </td>
-                    </tr> -->
-                    <tr id="secondcolor_settings_lb">
-                        <td>
-                            <label>Surface Second Color:</label>
-                        </td>
-                        <td>
-                            <select name="secondcolor_settings" id="secondcolor_settings_opt">
-                                <option value="1">Dark Grey</option>
-                                <option value="8">Grey</option>
-                                <option value="3">Light Grey</option>
-                                <option value="4">Black</option>
-                                <option value="2" selected="selected">Green</option>
-                                <option value="5">Blue</option>
-                                <option value="6">Red</option>
-                                <option value="7">Yellow</option>
-                                <option value="9">Pink</option>
-                                <option value="10">Orange</option>
-                                <option value="11">Purple</option>
-                                <option value="12">Brown</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Panel:</label>
-                        </td>
-                        <td>
-                            <select name="panelbutton" id="panel_button">
-                                <option value="1">ON</option>
-                                <option value="2" selected="selected">OFF</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Shorten Links Automatically:</label>
-                        </td>
-                        <td>
-                            <select id="shorten_links_dropdown">
-                                <option value="1">ON</option>
-                                <option value="0" selected>OFF</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <!-- <tr>
-                        <td>
-                            <label>Draw on Edges/Corners:</label>
-                        </td>
-                        <td>
-                            <select name="edgebutton" id="edge_button">
-                                <option value="1">ON</option>
-                                <option value="2" selected="selected">OFF</option>
-                            </select>
-                        </td>
-                    </tr> -->
-                    <tr>
-                        <td>
-                            <label>Reload Protection:</label>
-                        </td>
-                        <td>
-                            <select name="reloadbutton" id="reload_button">
-                                <option value="1">ON</option>
-                                <option value="2" selected="selected">OFF</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <!-- <tr>
-                        <td>
-                            <label>PenpaLite:</label>
-                        </td>
-                        <td>
-                            <select name="advancebutton" id="advance_button">
-                                <option value="1">ON</option>
-                                <option value="2" selected="selected">OFF</option>
-                            </select>
-                        </td>
-                    </tr> -->
-                    <tr>
-                        <td>
-                            <label>Timer:</label>
-                        </td>
-                        <td>
-                            <select name="timerbar" id="timer_bar_opt">
-                                <option value="1" selected="selected">Show</option>
-                                <option value="2">Hide</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Conflict Detection:</label>
-                        </td>
-                        <td>
-                            <select name="conflict_detection" id="conflict_detection_opt">
-                                <option value="1" selected="selected">ON</option>
-                                <option value="2">OFF (this puzzle)</option>
-                                <option value="3">OFF (all puzzles)</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Disable Shortcuts:</label>
-                        </td>
-                        <td>
-                            <select name="disable_shortcuts" id="disable_shortcuts_opt">
-                                <option value="1" selected="selected">NO</option>
-                                <option value="2">Sudoku Z(Y)XCV</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr id="save_settings_lb">
-                        <td>
-                            <label>Save Settings:</label>
-                        </td>
-                        <td>
-                            <select name="save_settings" id="save_settings_opt">
-                                <option value="3" selected="selected"></option>
-                                <option value="1">No</option>
-                                <option value="2">Yes</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Local Storage:</label>
-                        </td>
-                        <td>
-                            <select name="clear_storage" id="clear_storage_opt">
-                                <option value="1" selected="selected">ON</option>
-                                <option value="4">OFF</option>
-                            </select><br>
-                            <button id="clear_storage_one" onclick="clear_storage_one()">Clear this puzzle</button><br>
-                            <button id="clear_storage_all" onclick="clear_storage_all()">Clear all</button>
-                        </td>
-                    </tr>
+                    <colgroup>
+                        <col width="60%" />
+                        <col width="40%" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th colspan="2" class="modal-subheader">App Display</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Display Theme:</label>
+                            </td>
+                            <td>
+                                <select name="theme_mode" id="theme_mode_opt">
+                                    <option value="1" selected="selected">Light</option>
+                                    <option value="2">Dark</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Display Layout:</label>
+                            </td>
+                            <td>
+                                <select name="responsive_settings" id="responsive_settings_opt">
+                                    <option value="1" selected="selected">Classic</option>
+                                    <option value="2">Flex (Tools Left)</option>
+                                    <option value="3">Flex (Tools Right)</option>
+                                    <option value="4">Streaming 1 (beta)</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Timer:</label>
+                            </td>
+                            <td>
+                                <select name="timerbar" id="timer_bar_opt">
+                                    <option value="1" selected="selected">Show</option>
+                                    <option value="2">Hide</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="modal-subheader">Puzzle Display</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Sudoku Pencil Marks:</label>
+                            </td>
+                            <td>
+                                <select name="sudoku_settings" id="sudoku_settings_opt">
+                                    <option value="1" selected="selected">Dynamic</option>
+                                    <option value="2">Large</option>
+                                    <option value="3">Small</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Sudoku Normal:</label>
+                            </td>
+                            <td>
+                                <select name="sudoku_settings_normal" id="sudoku_settings_normal_opt">
+                                    <option value="1" selected="selected">Centered</option>
+                                    <option value="2">Bottom</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Star Battle Dots:</label>
+                            </td>
+                            <td>
+                                <select name="starbattle_settings" id="starbattle_settings_opt">
+                                    <option value="1" selected="selected">High Range</option>
+                                    <option value="2">Low Range</option>
+                                    <option value="3">Disable</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td>
+                                <h4><label id="multitab_settings_lb">Solution Tab Setting:</label></h4>
+                            </td>
+                            <td>
+                                <select name="multitab_settings" id="multitab_settings_opt">
+                                    <option value="1" selected="selected">No</option>
+                                    <option value="2">Yes</option>
+                                </select>
+                            </td>
+                        </tr> -->
+                        <tr id="secondcolor_settings_lb">
+                            <td>
+                                <label>Surface Second Color:</label>
+                            </td>
+                            <td>
+                                <select name="secondcolor_settings" id="secondcolor_settings_opt">
+                                    <option value="1">Dark Grey</option>
+                                    <option value="8">Grey</option>
+                                    <option value="3">Light Grey</option>
+                                    <option value="4">Black</option>
+                                    <option value="2" selected="selected">Green</option>
+                                    <option value="5">Blue</option>
+                                    <option value="6">Red</option>
+                                    <option value="7">Yellow</option>
+                                    <option value="9">Pink</option>
+                                    <option value="10">Orange</option>
+                                    <option value="11">Purple</option>
+                                    <option value="12">Brown</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="modal-subheader">Tools</th>
+                        </tr>
+                        <tr id="custom_color_lb">
+                            <td>
+                                <label>Custom Colors (Beta):</label>
+                            </td>
+                            <td>
+                                <select name="custom_color" id="custom_color_opt">
+                                    <option value="1" selected="selected">No</option>
+                                    <option value="2">Yes</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Floating Panel:</label>
+                            </td>
+                            <td>
+                                <select name="panelbutton" id="panel_button">
+                                    <option value="1">ON</option>
+                                    <option value="2" selected="selected">OFF</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="modal-subheader">Export</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Auto-Shorten Links:</label>
+                            </td>
+                            <td>
+                                <select id="shorten_links_dropdown">
+                                    <option value="1">ON</option>
+                                    <option value="0" selected>OFF</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td>
+                                <label>Draw on Edges/Corners:</label>
+                            </td>
+                            <td>
+                                <select name="edgebutton" id="edge_button">
+                                    <option value="1">ON</option>
+                                    <option value="2" selected="selected">OFF</option>
+                                </select>
+                            </td>
+                        </tr> -->
+                        <!-- <tr>
+                            <td>
+                                <label>PenpaLite:</label>
+                            </td>
+                            <td>
+                                <select name="advancebutton" id="advance_button">
+                                    <option value="1">ON</option>
+                                    <option value="2" selected="selected">OFF</option>
+                                </select>
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <th colspan="2" class="modal-subheader">Input Options</th>
+                        </tr>
+                        <tr id="mousemiddle_settings_lb">
+                            <td>
+                                <label>Mouse Middle Button:</label>
+                            </td>
+                            <td>
+                                <select name="mousemiddle" id="mousemiddle_settings_opt">
+                                    <option value="1" selected="selected">No</option>
+                                    <option value="2">Yes</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Reload Protection:</label>
+                            </td>
+                            <td>
+                                <select name="reloadbutton" id="reload_button">
+                                    <option value="1">ON</option>
+                                    <option value="2" selected="selected">OFF</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Conflict Detection:</label>
+                            </td>
+                            <td>
+                                <select name="conflict_detection" id="conflict_detection_opt">
+                                    <option value="1" selected="selected">ON</option>
+                                    <option value="2">OFF (this puzzle)</option>
+                                    <option value="3">OFF (all puzzles)</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Sudoku Z/Y & XCV Keys:</label>
+                            </td>
+                            <td>
+                                <select name="disable_shortcuts" id="disable_shortcuts_opt">
+                                    <option value="1" selected="selected">On</option>
+                                    <option value="2">Off</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="modal-subheader">Saving/Storage</th>
+                        </tr>
+                        <tr id="save_settings_lb">
+                            <td>
+                                <label>Save Settings:</label>
+                            </td>
+                            <td>
+                                <select name="save_settings" id="save_settings_opt">
+                                    <option value="3" selected="selected"></option>
+                                    <option value="1">No</option>
+                                    <option value="2">Yes</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Local Storage:</label>
+                            </td>
+                            <td>
+                                <select name="clear_storage" id="clear_storage_opt">
+                                    <option value="1" selected="selected">ON</option>
+                                    <option value="4">OFF</option>
+                                </select>
+                                <button id="clear_storage_one" onclick="clear_storage_one()">Clear this puzzle</button>
+                                <button id="clear_storage_all" onclick="clear_storage_all()">Clear all</button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
