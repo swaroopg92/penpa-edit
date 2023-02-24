@@ -1,6 +1,7 @@
 ## History
 * yyyy/mm/dd ver 3.0.5
-	*
+	* Extending arrow cross to corner directions.
+	* Reset the success message to congratulations.
 * 2023/01/05 ver 3.0.4
 	* Make the answer check table only show one column at a time
 	* Conflict highlighting on hex grid for latin square
