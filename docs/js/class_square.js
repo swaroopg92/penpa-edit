@@ -25,7 +25,7 @@ class Puzzle_square extends Puzzle {
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
-            "arrow_cross": 4,
+            "arrow_cross": 8,
             "arrow_fourtip": 4,
             "degital_B": 7,
             "degital_G": 7,
@@ -3281,6 +3281,7 @@ class Puzzle_square extends Puzzle {
         var w2 = 0.12;
         var len1 = 0.5 * w1; //nemoto
         var len2 = 0.45; //tip
+        var len3 = 0.55; //tip 45 deg
         var ri = -0.18;
         var th;
         for (var i = 0; i < 4; i++) {
@@ -3288,6 +3289,15 @@ class Puzzle_square extends Puzzle {
                 th = this.rotate_theta(i * 90 - 180);
                 ctx.beginPath();
                 ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
+                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                ctx.fill();
+            }
+        }
+        for (var i = 4; i < 8; i++) {
+            if (num[i] === 1) {
+                th = this.rotate_theta(i * 90 - 135);
+                ctx.beginPath();
+                ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len3 * pu.size * Math.cos(th), y + len3 * pu.size * Math.sin(th),
                     [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
             }
@@ -4472,7 +4482,7 @@ class Puzzle_sudoku extends Puzzle_square {
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
-            "arrow_cross": 4,
+            "arrow_cross": 8,
             "arrow_fourtip": 4,
             "degital_B": 7,
             "degital_G": 7,
@@ -4559,7 +4569,7 @@ class Puzzle_kakuro extends Puzzle_square {
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
-            "arrow_cross": 4,
+            "arrow_cross": 8,
             "arrow_fourtip": 4,
             "degital_B": 7,
             "degital_G": 7,
