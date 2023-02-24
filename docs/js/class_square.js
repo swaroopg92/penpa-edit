@@ -2701,6 +2701,7 @@ class Puzzle_square extends Puzzle {
             case 4:
                 set_circle_style(ctx, 2, ccolor);
                 ctx.beginPath();
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 120.
                 if (pu.version_ge(3, 0, 5)) {
                     th1 = this.rotate_theta(-90 * (num - 1) - 135);
                     th2 = this.rotate_theta(-90 * (num - 1) - 45);
@@ -2729,6 +2730,7 @@ class Puzzle_square extends Puzzle {
                 set_circle_style(ctx, 3);
                 ctx.fillStyle = Color.GREY;
                 ctx.beginPath();
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 120.
                 if (pu.version_ge(3, 0, 5)) {
                     th1 = this.rotate_theta(-90 * (num - 1) - 135);
                     th2 = this.rotate_theta(-90 * (num - 1) - 45);
