@@ -182,7 +182,7 @@ const UserSettings = {
             document.getElementById('style_special').style.display = 'none';
         }
         document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
-        
+
         pu.redraw();
     },
     get custom_colors_on() {
