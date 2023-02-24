@@ -3361,7 +3361,7 @@ class Puzzle {
                 checkall) {
 
                 // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
-                if ((this.version[0] > 2) || (this.version[0] == 2 && this.version[1] > 26) || (this.version[0] == 2 && this.version[1] == 26 && this.version[2] > 20)) {
+                if (this.version_gt(2, 26, 20)) {
                     if (!document.getElementById("sol_ignoreborder").checked && !checkall) {
                         document.getElementById("sol_ignoreborder").checked = true;
                     }
@@ -12363,4 +12363,29 @@ class Puzzle {
             }
         }
     }
+
+    version_lt(major, minor, revision) {
+        if (this.version[0] < major) return true;
+        if (this.version[0] > major) return false;        
+        if (this.version[1] < minor) return true;
+        if (this.version[1] > minor) return false;
+        return this.version[2] < revision;
+    }
+
+    version_ge(major, minor, revision) {
+        return !version_lt(major, minor, revision);
+    }
+
+    version_gt(major, minor, revision) {
+        if (this.version[0] > major) return true;        
+        if (this.version[0] < major) return false;
+        if (this.version[1] > minor) return true;
+        if (this.version[1] < minor) return false;
+        return this.version[2] > revision;
+    }
+    
+    version_le(major, minor, revision) {
+        return !version_gt(major, minor, revision);
+    }
+
 }
