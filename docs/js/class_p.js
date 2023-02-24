@@ -12373,7 +12373,7 @@ class Puzzle {
     }
 
     version_ge(major, minor, revision) {
-        return !version_lt(major, minor, revision);
+        return !this.version_lt(major, minor, revision);
     }
 
     version_gt(major, minor, revision) {
@@ -12383,9 +12383,9 @@ class Puzzle {
         if (this.version[1] < minor) return false;
         return this.version[2] > revision;
     }
-    
+
     version_le(major, minor, revision) {
-        return !version_gt(major, minor, revision);
+        return !this.version_gt(major, minor, revision);
     }
 
 }
