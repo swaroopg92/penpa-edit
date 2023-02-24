@@ -2128,7 +2128,7 @@ onload = function() {
     document.getElementById("responsive_settings_opt").onchange = function() {
         UserSettings.responsive_mode = this.value;
     }
-    
+
     // Custom Color Setting
     document.getElementById("custom_color_opt").onchange = function() {
         UserSettings.custom_colors_on = (parseInt(this.value, 10) === 2);
