@@ -12366,7 +12366,7 @@ class Puzzle {
 
     version_lt(major, minor, revision) {
         if (this.version[0] < major) return true;
-        if (this.version[0] > major) return false;        
+        if (this.version[0] > major) return false;
         if (this.version[1] < minor) return true;
         if (this.version[1] > minor) return false;
         return this.version[2] < revision;
@@ -12377,7 +12377,7 @@ class Puzzle {
     }
 
     version_gt(major, minor, revision) {
-        if (this.version[0] > major) return true;        
+        if (this.version[0] > major) return true;
         if (this.version[0] < major) return false;
         if (this.version[1] > minor) return true;
         if (this.version[1] < minor) return false;
