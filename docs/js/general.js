@@ -2180,13 +2180,6 @@ function load(urlParam, type = 'url', origurl = null) {
             pu.pu_a.polygon = [];
         }
 
-        // custom color
-        if (rtext[13]) {
-            let parsedValue = JSON.parse(rtext[13]);
-            if (parsedValue === "true" || parsedValue === 1) {
-                UserSettings.custom_colors_on = 2;
-            }
-        }
         if (rtext[14]) {
             pu.pu_q_col = JSON.parse(rtext[14]);
             pu.pu_a_col = JSON.parse(rtext[15]);
