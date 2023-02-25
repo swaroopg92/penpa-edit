@@ -714,12 +714,14 @@ class Puzzle_square extends Puzzle {
             this.draw_line("pu_a");
             this.draw_lattice();
             this.draw_selection();
-            this.draw_symbol("pu_q", 2);
-            this.draw_symbol("pu_a", 2);
+            this.draw_symbol("pu_q", 2, false);
+            this.draw_symbol("pu_a", 2, false);
             this.draw_cage("pu_q");
             this.draw_cage("pu_a");
             this.draw_number("pu_q");
             this.draw_number("pu_a");
+            this.draw_symbol("pu_q", 2, true);
+            this.draw_symbol("pu_a", 2, true);
             this.draw_cursol();
             this.draw_freecircle();
         } else {
@@ -738,9 +740,10 @@ class Puzzle_square extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_lattice();
             this.draw_selection();
-            this.draw_symbol("pu_q", 2);
+            this.draw_symbol("pu_q", 2, false);
             this.draw_cage("pu_q");
             this.draw_number("pu_q");
+            this.draw_symbol("pu_q", 2, true);
             this.draw_cursol();
             this.draw_freecircle();
         }
@@ -1461,7 +1464,7 @@ class Puzzle_square extends Puzzle {
         }
     }
 
-    draw_symbol(pu, layer) {
+    draw_symbol(pu, layer, abovenumber = false) {
         /*symbol_layer*/
         var p_x, p_y;
         for (var i in this[pu].symbol) {
@@ -1473,7 +1476,11 @@ class Puzzle_square extends Puzzle {
                 p_y = this.point[i].y;
             }
             if (this[pu].symbol[i][2] === layer) {
-                this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1], i, pu);
+                // Mutually exclusive condition to draw symbols above or below numbercircles
+                let hasNumberCircle = (this[pu].number[i] && [5, 6, 7, 11].includes(this[pu].number[i][1])) ? true : false;
+                if (layer === 1 || hasNumberCircle === abovenumber) {
+                    this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1], i, pu);
+                }
             }
         }
     }
