@@ -2693,19 +2693,30 @@ class Puzzle_square extends Puzzle {
 
     draw_tri(ctx, num, x, y, ccolor = "none") {
         var r = 0.5,
-            th;
+            th, th1, th2, th3;
         switch (num) {
             case 1:
             case 2:
             case 3:
             case 4:
                 set_circle_style(ctx, 2, ccolor);
-                th = this.rotate_theta(-90 * (num - 1));
                 ctx.beginPath();
-                ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 120.
+                if (pu.version_ge(3, 0, 5)) {
+                    th1 = this.rotate_theta(-90 * (num - 1) - 135);
+                    th2 = this.rotate_theta(-90 * (num - 1) - 45);
+                    th3 = this.rotate_theta(-90 * (num - 1) + 135);
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th2), y + Math.sqrt(2) * r * pu.size * Math.sin(th2));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th3), y + Math.sqrt(2) * r * pu.size * Math.sin(th3));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                } else {
+                    th = this.rotate_theta(-90 * (num - 1));
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                }
                 ctx.fill();
                 break;
             case 5:
@@ -2718,12 +2729,23 @@ class Puzzle_square extends Puzzle {
             case 9:
                 set_circle_style(ctx, 3);
                 ctx.fillStyle = Color.GREY;
-                th = this.rotate_theta(-90 * (num - 1));
                 ctx.beginPath();
-                ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 120.
+                if (pu.version_ge(3, 0, 5)) {
+                    th1 = this.rotate_theta(-90 * (num - 1) - 135);
+                    th2 = this.rotate_theta(-90 * (num - 1) - 45);
+                    th3 = this.rotate_theta(-90 * (num - 1) + 135);
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th2), y + Math.sqrt(2) * r * pu.size * Math.sin(th2));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th3), y + Math.sqrt(2) * r * pu.size * Math.sin(th3));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                } else {
+                    th = this.rotate_theta(-90 * (num - 1));
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                }
                 ctx.fill();
                 break;
             case 0:
@@ -3374,7 +3396,7 @@ class Puzzle_square extends Puzzle {
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
                 // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 108.
-                if (pu.version[0] >= 3 && pu.version[1] >= 0 && pu.version[2] >= 5) {
+                if (pu.version_ge(3, 0, 5)) {
                     ctx.arrow(
                         x + len1 * pu.size * Math.cos(th1a) + 0.1 * pu.size * Math.cos(th2),
                         y + len1 * pu.size * Math.sin(th1a) + 0.1 * pu.size * Math.sin(th2),
@@ -3400,7 +3422,7 @@ class Puzzle_square extends Puzzle {
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
                 // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 108.
-                if (pu.version[0] >= 3 && pu.version[1] >= 0 && pu.version[2] >= 5) {
+                if (pu.version_ge(3, 0, 5)) {
                     ctx.arrow(
                         x + len2 * pu.size * Math.cos(th1b) - 0.1 * pu.size * Math.cos(th2),
                         y + len2 * pu.size * Math.sin(th1b) - 0.1 * pu.size * Math.sin(th2),
@@ -4167,7 +4189,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4200,7 +4222,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4233,7 +4255,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4266,7 +4288,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4313,7 +4335,7 @@ class Puzzle_square extends Puzzle {
             case 4:
                 ctx.beginPath();
                 // This is to not break old puzzles which were constructed assuming this arc bug. Check PR 109.
-                if (pu.version[0] >= 3 && pu.version[1] >= 0 && pu.version[2] >= 5) {
+                if (pu.version_ge(3, 0, 5)) {
                     th1 = this.rotate_theta(45 + 90 * (num - 1));
                     th2 = this.rotate_theta(225 + 90 * (num - 1));
                     th2a = this.rotate_theta(315 + 90 * (num - 1));
@@ -4330,7 +4352,7 @@ class Puzzle_square extends Puzzle {
             case 6:
                 ctx.beginPath();
                 // This is to not break old puzzles which were constructed assuming this arc bug. Check PR 109.
-                if (pu.version[0] >= 3 && pu.version[1] >= 0 && pu.version[2] >= 5) {
+                if (pu.version_ge(3, 0, 5)) {
                     th1 = this.rotate_theta(45 + 90 * (num - 5));
                     th2 = this.rotate_theta(225 + 90 * (num - 5));
                     ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th1)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th1)));
