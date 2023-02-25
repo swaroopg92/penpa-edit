@@ -375,11 +375,11 @@ const UserSettings = {
         'displaysize'
     ],
 
-    clearSettings: function () {
-        this.can_save.forEach(function (setting) {
+    clearSettings: function() {
+        this.can_save.forEach(function(setting) {
             deleteCookie(setting);
         });
-        this.gridtype_size.forEach(function (setting) {
+        this.gridtype_size.forEach(function(setting) {
             deleteCookie(setting);
         });
         deleteCookie('tab_settings');
@@ -392,11 +392,11 @@ const UserSettings = {
             confirmButtonText: 'ok 🙂',
         });
     },
-    
+
     _settingsLoaded: false,
-    
+
     // Handle saving settings if needed
-    attemptSave: function () {
+    attemptSave: function() {
         if (!this._settingsLoaded) {
             return;
         }

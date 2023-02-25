@@ -1292,10 +1292,12 @@ input[type=number] {
 #settings-table select {
     background: var(--bgMain);
 }
+
 #settings-table button {
     background: var(--bgMedium);
 }
-#settings-table button:hover{
+
+#settings-table button:hover {
     background: var(--bgHover);
 }
 

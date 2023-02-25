@@ -53,6 +53,7 @@
 #tb_redo {
     color: var(--white);
 }
+
 #tb_undo:disabled,
 #tb_redo:disabled {
     color: var(--greyLight);
