@@ -2301,7 +2301,8 @@ class Puzzle {
         if (mode === "number") {
             // Update cursolS after mode switch, because it is not set in all modes.
             pu.cursolS = 4 * (pu.cursol + pu.nx0 * pu.ny0);
-            let enableLoadButton = pu[pu.mode.qa].number[pu.cursol] || pu[pu.mode.qa].numberS[pu.cursolS];
+            let isNumberS = ["3", "9", "11"].includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0])
+            let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
             document.getElementById("closeBtn_input3").disabled = !enableLoadButton;
         }
         this.redraw();
@@ -2312,6 +2313,13 @@ class Puzzle {
             document.getElementById(name).checked = true;
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] = document.getElementById(name).value;
             this.cursolcheck(); // override
+
+            if (pu.mode[pu.mode.qa].edit_mode === "number") {
+                let isNumberS = ["3", "9", "11"].includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0])
+                let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
+                document.getElementById("closeBtn_input3").disabled = !enableLoadButton;
+            }
+
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
@@ -8267,7 +8275,8 @@ class Puzzle {
                         this.mouse_number(x, y, num);
                     }
                     if (pu.mouse_mode === "down_left") {
-                        let enableLoadButton = pu[pu.mode.qa].number[pu.cursol] || pu[pu.mode.qa].numberS[pu.cursolS];
+                        let isNumberS = ["3", "9", "11"].includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0])
+                        let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
                         document.getElementById("closeBtn_input3").disabled = !enableLoadButton;
                     }
                     break;
