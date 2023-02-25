@@ -313,12 +313,57 @@ onload = function() {
             }
 
             if (key === "F2") { //function_key
-                pu.mode_qa("pu_q");
-                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                if (pu.mode.qa != 'pu_q') {
+                    if (pu.mmode == 'solve') {
+                        Swal.fire({
+                            title: 'Are you sure to switch to Editing Mode?',
+                            html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: Color.BLUE_SKY,
+                            cancelButtonColor: Color.RED,
+                            confirmButtonText: 'Yes, Switch'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                pu.mode_qa("pu_q");
+                                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                                var title = document.getElementById("title");
+                                title.innerHTML = "Setter Mode (while Solving)";
+                            }
+                        })
+                    } else {
+                        pu.mode_qa("pu_q");
+                        document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                    }
+                }
                 e.returnValue = false;
             } else if (key === "F3") {
-                pu.mode_qa("pu_a");
-                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                if (pu.mode.qa != 'pu_a') {
+                    if (pu.mmode == 'solve') {
+                        Swal.fire({
+                            title: 'Are you sure to switch to Solving Mode?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: Color.BLUE_SKY,
+                            cancelButtonColor: Color.RED,
+                            confirmButtonText: 'Yes, Switch'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                pu.mode_qa("pu_a");
+                                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                                var title = document.getElementById("title");
+                                if (pu.solution) {
+                                    title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+                                } else {
+                                    title.innerHTML = "Solver Mode";
+                                }
+                            }
+                        })
+                    } else {
+                        pu.mode_qa("pu_a");
+                        document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                    }
+                }
                 e.returnValue = false;
             }
 
