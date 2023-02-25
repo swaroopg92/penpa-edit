@@ -7,6 +7,7 @@
 	* Fixed arc and arrowfouredge.
 	* Improved puzz.link parser.
 	* Code refactoring for custom colors (moved to User Settings).
+	* Feature to edit the existing number mode texts.
 * 2023/01/05 ver 3.0.4
 	* Make the answer check table only show one column at a time
 	* Conflict highlighting on hex grid for latin square
