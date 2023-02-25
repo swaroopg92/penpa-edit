@@ -2121,7 +2121,7 @@ function load(urlParam, type = 'url', origurl = null) {
         if (rtext[13]) {
             let parsedValue = JSON.parse(rtext[13]);
             if (parsedValue === "true" || parsedValue === 1) {
-                document.getElementById("custom_color_opt").value = 2;
+                UserSettings.custom_colors_on = 2;
             }
         }
         if (rtext[14]) {
@@ -2255,7 +2255,7 @@ function load(urlParam, type = 'url', origurl = null) {
         if (rtext[13]) {
             let parsedValue = JSON.parse(rtext[13]);
             if (parsedValue === "true" || parsedValue === 1) {
-                document.getElementById("custom_color_opt").value = 2;
+                UserSettings.custom_colors_on = 2;
             }
         }
 

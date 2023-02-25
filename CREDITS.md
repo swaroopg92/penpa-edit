@@ -11,3 +11,4 @@
 * Thanks to <a href="https://thegriddle.net"> davmillar </a> for contributions to redesign the GUI and refactoring the code.
 * Thanks to <a href="https://github.com/kieranclancy"> Kieran Clancy </a> for contributions to smart checking in Penpa+.
 * Thanks to <a href="https://github.com/BenceJoful"> BenceJoful </a> for contributions to hexgrid and replay improvements in Penpa+.
+* Thanks to <a href="https://github.com/marknn3"> Mark Langezaal </a> for contributions to improve Penpa+.
