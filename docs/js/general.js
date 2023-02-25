@@ -2251,14 +2251,6 @@ function load(urlParam, type = 'url', origurl = null) {
             pu.pu_q.polygon = [];
         }
 
-        // custom color
-        if (rtext[13]) {
-            let parsedValue = JSON.parse(rtext[13]);
-            if (parsedValue === "true" || parsedValue === 1) {
-                UserSettings.custom_colors_on = 2;
-            }
-        }
-
         if (rtext[14]) {
             pu.pu_q_col = JSON.parse(rtext[14]);
             if (!pu.pu_q_col.polygon) {
@@ -2373,6 +2365,14 @@ function load(urlParam, type = 'url', origurl = null) {
         if (pu.multisolution) {
             set_answer_setting_table_to('or');
             document.getElementById('or_tmp').checked = true;
+        }
+    }
+
+    // custom color
+    if (rtext[13]) {
+        let parsedValue = JSON.parse(rtext[13]);
+        if (parsedValue === "true" || parsedValue === 1) {
+            UserSettings.custom_colors_on = 2;
         }
     }
 
