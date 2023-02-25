@@ -10,6 +10,7 @@
 	* Feature to edit the existing number mode texts.
 	* Fixes the Triangle rendering for board flip.
 	* Refactoring Settings into appropriate groups.
+	* Improved F2 and F3 functioning while in Solve Mode.
 * 2023/01/05 ver 3.0.4
 	* Make the answer check table only show one column at a time
 	* Conflict highlighting on hex grid for latin square
