@@ -741,7 +741,7 @@ class Puzzle_square extends Puzzle {
             this.draw_lattice();
             this.draw_selection();
             this.draw_number_circle("pu_q");
-            this.draw_symbol("pu_q");
+            this.draw_symbol("pu_q", 2);
             this.draw_cage("pu_q");
             this.draw_number("pu_q");
             this.draw_cursol();
