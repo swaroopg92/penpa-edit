@@ -2313,6 +2313,14 @@ function load(urlParam, type = 'url', origurl = null) {
     pu.make_frameline(); // Draw Board
     panel_pu.draw_panel();
 
+    // custom color
+    if (rtext[13]) {
+        let parsedValue = JSON.parse(rtext[13]);
+        if (parsedValue === "true" || parsedValue === 1) {
+            UserSettings.custom_colors_on = 2;
+        }
+    }
+
     // submode, style settings
     if (rtext[11]) {
         pu.mode = JSON.parse(rtext[11]);
@@ -2358,14 +2366,6 @@ function load(urlParam, type = 'url', origurl = null) {
         if (pu.multisolution) {
             set_answer_setting_table_to('or');
             document.getElementById('or_tmp').checked = true;
-        }
-    }
-
-    // custom color
-    if (rtext[13]) {
-        let parsedValue = JSON.parse(rtext[13]);
-        if (parsedValue === "true" || parsedValue === 1) {
-            UserSettings.custom_colors_on = 2;
         }
     }
 
