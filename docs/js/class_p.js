@@ -4400,6 +4400,370 @@ class Puzzle {
         return text;
     }
 
+    maketext_ppfile2() {
+        var text = "";
+        var gridsize = "1";
+        var fontsize = "30";
+        var header = document.getElementById("savetextarea_pp").value;
+
+        if (!isEmpty(this.pu_a.line)) {
+            text += '#answer line: 2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:80,3,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_a.line) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y;
+                y2 = pu.point[i2].y;
+                x1 = pu.point[i1].x;
+                x2 = pu.point[i2].x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.lineE)) {
+            text += '#problem side:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:100,2,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_q.lineE) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y;
+                y2 = pu.point[i2].y;
+                x1 = pu.point[i1].x;
+                x2 = pu.point[i2].x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+            text += "--------\n";
+        }
+        if (!isEmpty(this.pu_a.lineE)) {
+            text += '#answer side:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:100,2,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_a.lineE) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y;
+                y2 = pu.point[i2].y;
+                x1 = pu.point[i1].x;
+                x2 = pu.point[i2].x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+            text += "--------\n";
+        }
+
+        var max, min, key, corner;
+        var frameline = {};
+        for (var j = 0; j < this.centerlist.length; j++) {
+            corner = this.point[this.centerlist[j]].surround.length;
+            for (var i = 0; i < corner; i++) {
+                max = Math.max(this.point[this.centerlist[j]].surround[i], this.point[this.centerlist[j]].surround[(i + 1) % corner]);
+                min = Math.min(this.point[this.centerlist[j]].surround[i], this.point[this.centerlist[j]].surround[(i + 1) % corner]);
+                key = min.toString() + "," + max.toString();
+                if (frameline[key]) {
+                    frameline[key] = 1;
+                } else {
+                    frameline[key] = 2;
+                }
+            }
+        }
+
+        text += '#Disk inside: 2,True\n' +
+            '*Grid:' + gridsize + ',' + gridsize + '\n' +
+            '*Skew:0,0\n' +
+            '*Offset:0,0\n'
+        if (this.mode.grid[0] === "1") {
+            text += '*Stroke:100,0.4,0,1,1\n'; //solid line
+        } else if (this.mode.grid[0] === "2") {
+            text += '*Stroke:100,0.4,1.804/3.1565/0.902,1,1\n'; // dotted line
+        } else if (this.mode.grid[0] === "3") {
+            text += '*Stroke:-1,0,0,1,1\n'; //none
+        }
+        var i1, i2, x1, x2, y1, y2;
+        for (var i in frameline) {
+            if (frameline[i] == 1) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y;
+                y2 = pu.point[i2].y;
+                x1 = pu.point[i1].x;
+                x2 = pu.point[i2].x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+        }
+        text += "--------\n";
+
+        text += '#Disk outside: 2,True\n' +
+            '*Grid:' + gridsize + ',' + gridsize + '\n' +
+            '*Skew:0,0\n' +
+            '*Offset:0,0\n'
+        if (this.mode.grid[2] === "1") {
+            text += '*Stroke:100,2,0,1,1\n'; //solid line
+        } else if (this.mode.grid[0] === "2") {
+            text += '*Stroke:-1,0,0,1,1\n'; //none
+        }
+        var i1, i2, x1, x2, y1, y2;
+        for (var i in frameline) {
+            if (frameline[i] == 2) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y;
+                y2 = pu.point[i2].y;
+                x1 = pu.point[i1].x;
+                x2 = pu.point[i2].x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+        }
+        text += "--------\n";
+
+        if (!isEmptycontent("pu_a", "number", 2, "1")) {
+            text += '#answer text: 9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + fontsize + '\n' +
+                '*TextAlignment:1,1\n';
+
+            for (var i in this.pu_a.number) {
+                text += this.pu_a.number[i][0] + "@" + this.point[i].y + "," + this.point[i].x + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "1")) {
+            text += '#question text:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + fontsize + '\n' +
+                '*TextAlignment:1,1\n';
+
+            for (var i in this.pu_q.number) {
+                text += this.pu_q.number[i][0] + "@" + this.point[i].y + "," + this.point[i].x + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_M")) {
+            text += '#Question: 8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_M") {
+                    text += "w@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_M") {
+                    text += "b@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+
+        if (!isEmptycontent("pu_a", "symbol", 1, "circle_M")) {
+            text += '#Question: 8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_a.symbol) {
+                if (this.pu_a.symbol[i][0] === 1 && this.pu_a.symbol[i][1] === "circle_M") {
+                    text += "w@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                } else if (this.pu_a.symbol[i][0] === 2 && this.pu_a.symbol[i][1] === "circle_M") {
+                    text += "b@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_a", "symbol", 1, "star")) {
+            text += '#answer star: 8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$ws:\n' +
+                '0.5 w\n' +
+                '1 g\n' +
+                '1 d\n' +
+                '0.00   -9.00   m\n' +
+                '2.02 -2.78 l\n' +
+                '8.56 -2.78 l\n' +
+                '3.27 1.06 l\n' +
+                '5.29 7.28 l\n' +
+                '0.00 3.44 l\n' +
+                '-5.29 7.28 l\n' +
+                '-3.27 1.06 l\n' +
+                '-8.56 -2.78 l\n' +
+                '-2.02 -2.78 l\n' +
+                'h b\n' +
+                '----\n' +
+                '$bs:\n' +
+                '0.5 w\n' +
+                '0 g\n' +
+                '1 d\n' +
+                '0.00   -9.00   m\n' +
+                '2.02 -2.78 l\n' +
+                '8.56 -2.78 l\n' +
+                '3.27 1.06 l\n' +
+                '5.29 7.28 l\n' +
+                '0.00 3.44 l\n' +
+                '-5.29 7.28 l\n' +
+                '-3.27 1.06 l\n' +
+                '-8.56 -2.78 l\n' +
+                '-2.02 -2.78 l\n' +
+                'h b\n' +
+                '####\n'
+
+            for (var i in this.pu_a.symbol) {
+                if (this.pu_a.symbol[i][0] === 1 && this.pu_a.symbol[i][1] === "star") {
+                    text += "ws@" + this.point[i].y + "," + this.point[i].x + ",0,0,1.5,1.5\n";
+                } else if (this.pu_a.symbol[i][0] === 2 && this.pu_a.symbol[i][1] === "star") {
+                    text += "bs@" + this.point[i].y + "," + this.point[i].x + ",0,0,1.5,1.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.surface)) {
+            text += '#problem black square:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+
+            for (var i in this.pu_q.surface) {
+                text += '$' + i + ':\n' +
+                    '0 g ';
+                corner = this.point[i].surround.length;
+                for (var j = 0; j < corner; j++) {
+                    if (j == 0) {
+                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " m ";
+                    } else {
+                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " l ";
+                    }
+                }
+                text += 'h b\n' +
+                    '----\n'
+            }
+
+            text += "####\n";
+
+            for (var i in this.pu_q.surface) {
+                text += "" + i + '@ ' + this.point[i].y + ',' + this.point[i].x + ',0,0,10,10\n'
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_a.surface)) {
+            text += '#answer black square:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:80\n' +
+                '*Stroke:100,0.5,0,1\n';
+
+            for (var i in this.pu_a.surface) {
+                text += '$' + i + ':\n' +
+                    '0.2 g ';
+                corner = this.point[i].surround.length;
+                for (var j = 0; j < corner; j++) {
+                    if (j == 0) {
+                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " m ";
+                    } else {
+                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " l ";
+                    }
+                }
+                text += 'h b\n' +
+                    '----\n'
+            }
+
+            text += "####\n";
+
+            for (var i in this.pu_a.surface) {
+                text += "" + i + '@ ' + this.point[i].y + ',' + this.point[i].x + ',0,0,10,10\n'
+            }
+            text += "--------\n";
+        }
+
+        return text;
+    }
+
     getAllIndexes(arr, val) {
         var indexes = [],
             i;

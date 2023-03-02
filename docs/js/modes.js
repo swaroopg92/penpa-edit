@@ -435,7 +435,7 @@ const penpa_modes = {
         'symmode': ['content'],
         'combimode': ['content'],
         'customcolor': [],
-        'top_buttons': [],
+        'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': []
     },
@@ -488,7 +488,7 @@ const penpa_modes = {
         'symmode': ['content'],
         'combimode': ['content'],
         'customcolor': [],
-        'top_buttons': [],
+        'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': []
     },
@@ -541,7 +541,7 @@ const penpa_modes = {
         'symmode': ['content'],
         'combimode': ['content'],
         'customcolor': [],
-        'top_buttons': [],
+        'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': []
     },
@@ -594,7 +594,7 @@ const penpa_modes = {
         'symmode': ['content'],
         'combimode': ['content'],
         'customcolor': [],
-        'top_buttons': [],
+        'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': []
     },

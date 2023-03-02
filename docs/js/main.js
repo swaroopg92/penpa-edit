@@ -1283,6 +1283,10 @@ onload = function() {
                 make_ppfile();
                 e.preventDefault();
                 break;
+            case "pp_file2":
+                make_ppfile2();
+                e.preventDefault();
+                break;
             case "gmp_file":
                 make_gmpfile();
                 e.preventDefault();
