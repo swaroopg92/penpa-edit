@@ -126,7 +126,9 @@ class Puzzle {
             'tetrakis': 20,
             'truncated': 20,
             'snub': 20,
-            'cairo': 20
+            'cairo': 20,
+            'rhombitrihex': 20,
+            'deltoidal': 20
         }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
@@ -160,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 5]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -9305,7 +9307,8 @@ class Puzzle {
             // if the first selected position is edge then do not consider move
             if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
-                this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal") {
+                this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
+                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
                 // do nothing
             } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);

@@ -215,7 +215,9 @@ function make_class(gridtype, loadtype = 'new') {
         'tetrakis': 20,
         'truncated': 20,
         'snub': 20,
-        'cairo': 20
+        'cairo': 20,
+        'rhombitrihex': 20,
+        'deltoidal': 20
     }; // also defined in class_p.js
     switch (gridtype) {
         case "square":
@@ -540,7 +542,30 @@ function make_class(gridtype, loadtype = 'new') {
                 })
             }
             break;
-
+        case "rhombitrihexagonal":
+            var n0 = parseInt(document.getElementById("nb_size1").value, 10);
+            if (n0 <= 20 && n0 > 0) {
+                pu = new Puzzle_rhombitrihexagonal(n0, n0, size);
+            } else {
+                Swal.fire({
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['rhombitrihex'] + '</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                })
+            }
+            break;
+        case "deltoidal_trihexagonal":
+            var n0 = parseInt(document.getElementById("nb_size1").value, 10);
+            if (n0 <= 20 && n0 > 0) {
+                pu = new Puzzle_deltoidal_trihexagonal(n0, n0, size);
+            } else {
+                Swal.fire({
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['deltoidal'] + '</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                })
+            }
+            break;
     }
     return pu;
 }
@@ -770,6 +795,44 @@ function changetype() {
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
         case "cairo_pentagonal":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size3").value = 38;
+        case "rhombitrihexagonal":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size3").value = 38;
+        case "deltoidal_trihexagonal":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
             }
