@@ -1,4 +1,6 @@
 ## History
+* Unreleased
+	* Tweaked display for mobile devices.
 * 2023/03/02 ver 3.0.6
 	* Added rhombitrihexagonal and deltoidal_trihexagonal boards (Alpha Version).
 	* Added pp_fileoutput2 code.
