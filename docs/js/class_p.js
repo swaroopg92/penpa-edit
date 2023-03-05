@@ -3890,7 +3890,7 @@ class Puzzle {
                         case "math":
                             for (var i in this[pu].symbol) {
                                 if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
-                                    this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                    (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3)) {
                                     temp_sol.push(i + "," + this[pu].symbol[i][0]);
                                 }
                             }
