@@ -3890,7 +3890,7 @@ class Puzzle {
                         case "math":
                             for (var i in this[pu].symbol) {
                                 if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
-                                    this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                    (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3)) {
                                     temp_sol.push(i + "," + this[pu].symbol[i][0]);
                                 }
                             }
@@ -4909,15 +4909,17 @@ class Puzzle {
 
         if (mode === "pu_q") {
             var edge_elements = this.pu_q.lineE;
+            var supportstyles = [2, 21];
         } else if (mode === "pu_a") {
             var edge_elements = this.pu_a.lineE;
+            var supportstyles = [3];
         }
 
         // Setup Edge Matrices
         var pointA, pointA_x, pointA_y, edge, points;
         for (edge in edge_elements) {
-            // If black edge or thicker edge
-            if (edge_elements[edge] === 2 || edge_elements[edge] === 21) {
+            // If black edge or thicker edge in problem, green edge in solution
+            if (supportstyles.includes(edge_elements[edge])) {
                 points = edge.split(',');
                 pointA = Number(points[0]) - (this.nx0 * this.ny0);
                 pointA_x = (pointA % this.nx0); //column
