@@ -2,6 +2,7 @@
 * unreleased
 	* Diagonal connection shape for killer cages with rotation fix.
 	* Tweaked display for mobile devices.
+	* Ability to draw number circles below symbols. Implemented for Square grid. Need to still implement for all other types of boards.
 * 2023/03/02 ver 3.0.6
 	* Added rhombitrihexagonal and deltoidal_trihexagonal boards (Alpha Version).
 	* Added pp_fileoutput2 code.
