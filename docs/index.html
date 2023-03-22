@@ -31,7 +31,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.0.5"; // Also defined in class_p.js
+        var ver = "3.0.6"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -133,7 +133,7 @@
 <body>
     <header id="header">
         <span id="title">Setter Mode</span>
-        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2022 <button id="page_help">Help</button></span>
+        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2023 <button id="page_help">Help</button></span>
     </header>
     <div id="app-container">
         <div id="tool-container">
@@ -805,6 +805,8 @@
                     <option value="truncated_square" id="nb_gridtype9_lb"> Truncated square </option>
                     <option value="snub_square" id="nb_gridtype10_lb"> Snub square </option>
                     <option value="cairo_pentagonal" id="nb_gridtype11_lb"> Cairo pentagonal </option>
+                    <option value="rhombitrihexagonal" id="nb_gridtype12_lb"> Rhombitrihexagonal </option>
+                    <option value="deltoidal_trihexagonal" id="nb_gridtype13_lb"> Deltoidal trihexagonal </option>
                 </select>
             </span><br>
             <h4><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -1266,6 +1268,7 @@
                 <textarea class="text_area" rows="1" cols="50" placeholder="e.g. classicsudoku or cs" id="savetextarea_pp"></textarea>
                 <div class="nb_button">
                     <input type="button" id="pp_file" value="pp_file output" />
+                    <input type="button" id="pp_file2" value="pp_file2 output" />
                     <input type="button" id="gmp_file" value="GMPuzzle output" />
                 </div>
             </div>

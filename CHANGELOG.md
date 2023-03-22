@@ -1,5 +1,11 @@
 ## History
-* yyyy/mm/dd ver 3.0.5
+* unreleased
+	* Diagonal connection shape for killer cages with rotation fix.
+	* Tweaked display for mobile devices.
+* 2023/03/02 ver 3.0.6
+	* Added rhombitrihexagonal and deltoidal_trihexagonal boards (Alpha Version).
+	* Added pp_fileoutput2 code.
+* 2023/02/28 ver 3.0.5
 	* Extending arrow cross to corner directions.
 	* Reset the success message to congratulations.
 	* Fix for board resize after rotate.

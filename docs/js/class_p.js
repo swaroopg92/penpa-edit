@@ -126,7 +126,9 @@ class Puzzle {
             'tetrakis': 20,
             'truncated': 20,
             'snub': 20,
-            'cairo': 20
+            'cairo': 20,
+            'rhombitrihex': 20,
+            'deltoidal': 20
         }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
@@ -160,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 5]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -3888,7 +3890,7 @@ class Puzzle {
                         case "math":
                             for (var i in this[pu].symbol) {
                                 if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
-                                    this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3) {
+                                    (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3)) {
                                     temp_sol.push(i + "," + this[pu].symbol[i][0]);
                                 }
                             }
@@ -4400,6 +4402,722 @@ class Puzzle {
         return text;
     }
 
+    maketext_ppfile2() {
+        var text = "";
+        var gridsize = 19.842 / this.size;
+        var fontsize = 16;
+        var offset_x = this.canvasx * 0.5;
+        var offset_y = this.canvasy * 0.5;
+        var header = document.getElementById("savetextarea_pp").value;
+
+        if (this.mode.grid[2] === "2") {
+            text += "%Margin:5,5,5,5\n";
+        }
+
+        if (!isEmpty(this.pu_a.line)) {
+            text += '#解答線:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:80,3,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_a.line) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.lineE)) {
+            text += '#問題辺太:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:100,2,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_q.lineE) {
+                if (this.pu_q.lineE[i] == 2) {
+                    i1 = Number(i.split(",")[0]);
+                    i2 = Number(i.split(",")[1]);
+                    y1 = pu.point[i1].y - offset_y;
+                    y2 = pu.point[i2].y - offset_y;
+                    x1 = pu.point[i1].x - offset_x;
+                    x2 = pu.point[i2].x - offset_x;
+                    text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.lineE)) {
+            text += '#問題辺細:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:100,0.4,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_q.lineE) {
+                if (this.pu_q.lineE[i] == 80) {
+                    i1 = Number(i.split(",")[0]);
+                    i2 = Number(i.split(",")[1]);
+                    y1 = pu.point[i1].y - offset_y;
+                    y2 = pu.point[i2].y - offset_y;
+                    x1 = pu.point[i1].x - offset_x;
+                    x2 = pu.point[i2].x - offset_x;
+                    text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_a.lineE)) {
+            text += '#解答辺:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:100,2,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_a.lineE) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+            text += "--------\n";
+        }
+
+        var max, min, key, corner;
+        var frameline = {};
+        for (var j = 0; j < this.centerlist.length; j++) {
+            corner = this.point[this.centerlist[j]].surround.length;
+            for (var i = 0; i < corner; i++) {
+                max = Math.max(this.point[this.centerlist[j]].surround[i], this.point[this.centerlist[j]].surround[(i + 1) % corner]);
+                min = Math.min(this.point[this.centerlist[j]].surround[i], this.point[this.centerlist[j]].surround[(i + 1) % corner]);
+                key = min.toString() + "," + max.toString();
+                if (frameline[key]) {
+                    frameline[key] = 1;
+                } else {
+                    frameline[key] = 2;
+                }
+            }
+        }
+
+
+        if (!isEmptycontent("pu_a", "number", 2, "1")) {
+            text += '#解答文字:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + fontsize + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_a.number) {
+                text += this.pu_a.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "1")) {
+            text += '#問題文字:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + fontsize + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.number) {
+                if (this.pu_q.number[i][0] < 10) {
+                    text += this.pu_q.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+                } else {
+                    text += parseInt(this.pu_q.number[i][0] / 10) + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x - this.size * 0.17) + ",0,0,0.85,1\n";
+                    text += this.pu_q.number[i][0] % 10 + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x + this.size * 0.17) + ",0,0,0.85,1\n";
+                }
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "10")) {
+            text += '#問題文字大:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 9 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.number) {
+                text += this.pu_q.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "6")) {
+            text += '#問題文字中:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 6 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.number) {
+                text += this.pu_q.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "4")) {
+            text += '#問題文字Tapa:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 12 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+            for (var i in this.pu_q.number) {
+                if (this.pu_q.number[i][2] == '4') {
+                    let values = [...this.pu_q.number[i][0]];
+                    if (values.length === 1) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+                    } else if (values.length === 2) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y - 0.19 * this.size) + "," + (this.point[i].x - offset_x - 0.21 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[1] + "@" + (this.point[i].y - offset_y + 0.19 * this.size) + "," + (this.point[i].x - offset_x + 0.21 * this.size) + ",0,0,0.75,0.75\n";
+                    } else if (values.length === 3) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y - 0.16 * this.size) + "," + (this.point[i].x - offset_x - 0.22 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[1] + "@" + (this.point[i].y - offset_y - 0.21 * this.size) + "," + (this.point[i].x - offset_x + 0.23 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[2] + "@" + (this.point[i].y - offset_y + 0.20 * this.size) + "," + (this.point[i].x - offset_x - 0.00 * this.size) + ",0,0,0.75,0.75\n";
+                    } else if (values.length === 4) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y - 0.24 * this.size) + "," + (this.point[i].x - offset_x - 0.00 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[1] + "@" + (this.point[i].y - offset_y - 0.00 * this.size) + "," + (this.point[i].x - offset_x - 0.26 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[2] + "@" + (this.point[i].y - offset_y + 0.00 * this.size) + "," + (this.point[i].x - offset_x + 0.26 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[3] + "@" + (this.point[i].y - offset_y + 0.24 * this.size) + "," + (this.point[i].x - offset_x + 0.00 * this.size) + ",0,0,0.75,0.75\n";
+                    }
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.numberS)) {
+            text += '#問題文字四隅:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 6 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.numberS) {
+                text += this.pu_q.numberS[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_L")) {
+            text += '#問題丸大:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_L") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,3.5,3.5\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_L") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,3.5,3.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_M")) {
+            text += '#問題丸:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_M") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_M") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_S")) {
+            text += '#問題丸小:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_S") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1.5,1.5\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_S") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1.5,1.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_SS")) {
+            text += '#問題丸極小:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_SS") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1,1\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_SS") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1,1\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_a", "symbol", 1, "circle_M")) {
+            text += '#解答丸:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_a.symbol) {
+                if (this.pu_a.symbol[i][0] === 1 && this.pu_a.symbol[i][1] === "circle_M") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
+                } else if (this.pu_a.symbol[i][0] === 2 && this.pu_a.symbol[i][1] === "circle_M") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+
+        if (this.mode.grid[1] === "1") {
+            var verticelist = [];
+            for (var i = 0; i < this.centerlist.length; i++) {
+                for (var j = 0; j < this.point[this.centerlist[i]].surround.length; j++) {
+                    verticelist.push(this.point[this.centerlist[i]].surround[j]);
+                }
+            }
+            verticelist = Array.from(new Set(verticelist));
+            text += '#盤面格子点:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$p:\n' +
+                '1.5 0 0 1.5 0 0 cm\n' +
+                '0 1 m\n' +
+                '0.552285 1 1 0.552285 1 0 c\n' +
+                '1 -0.552285 0.552285 -1 0 -1 c\n' +
+                '-0.552285 -1 -1 -0.552285 -1 0 c\n' +
+                '-1 0.552285 -0.552285 1 0 1 c f\n' +
+                '####\n';
+            for (var i of verticelist) {
+                text += "p@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+            text += "--------\n";
+        }
+
+
+        text += '#盤面内側:2,True\n' +
+            '*Grid:' + gridsize + ',' + gridsize + '\n' +
+            '*Skew:0,0\n' +
+            '*Offset:0,0\n'
+        if (this.mode.grid[0] === "1") {
+            text += '*Stroke:100,0.4,0,1,1\n'; //実線
+        } else if (this.mode.grid[0] === "2") {
+            text += '*Stroke:100,0.4,1.804/3.1565/0.902,1,1\n'; //点線
+        } else if (this.mode.grid[0] === "3") {
+            text += '*Stroke:-1,0,0,1,1\n'; //なし
+        }
+        var i1, i2, x1, x2, y1, y2;
+        for (var i in frameline) {
+            if (frameline[i] == 1 && this.pu_q.deletelineE[i] != 1) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+        }
+        text += "--------\n";
+
+        text += '#盤面外側:2,True\n' +
+            '*Grid:' + gridsize + ',' + gridsize + '\n' +
+            '*Skew:0,0\n' +
+            '*Offset:0,0\n'
+        if (this.mode.grid[2] === "1") {
+            text += '*Stroke:100,2,0,1,1\n'; //実線
+        } else if (this.mode.grid[2] === "2") {
+            if (this.mode.grid[0] === "1") {
+                text += '*Stroke:100,0.4,0,1,1\n'; //実線
+            } else if (this.mode.grid[0] === "2") {
+                text += '*Stroke:100,0.4,1.804/3.1565/0.902,1,1\n'; //点線
+            } else if (this.mode.grid[0] === "3") {
+                text += '*Stroke:-1,0,0,1,1\n'; //なし
+            }
+        }
+        var i1, i2, x1, x2, y1, y2;
+        for (var i in frameline) {
+            if (frameline[i] == 2 && this.pu_q.deletelineE[i] != 1) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+        }
+        text += "--------\n";
+
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "star")) {
+            text += '#問題星:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$ws:\n' +
+                '0.05 w\n' +
+                '1 g\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
+                'h b\n' +
+                '----\n' +
+                '$bs:\n' +
+                '0.05 w\n' +
+                '0 g\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
+                'h b\n' +
+                '####\n'
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "star") {
+                    text += "ws@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "star") {
+                    text += "bs@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_a", "symbol", 1, "star")) {
+            text += '#解答星:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$ws:\n' +
+                '0.05 w\n' +
+                '1 g\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
+                'h b\n' +
+                '----\n' +
+                '$bs:\n' +
+                '0.05 w\n' +
+                '0 g\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
+                'h b\n' +
+                '####\n'
+
+            for (var i in this.pu_a.symbol) {
+                if (this.pu_a.symbol[i][0] === 1 && this.pu_a.symbol[i][1] === "star") {
+                    text += "ws@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
+                } else if (this.pu_a.symbol[i][0] === 2 && this.pu_a.symbol[i][1] === "star") {
+                    text += "bs@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.surface)) {
+            var enlarge = 10 * gridsize;
+            text += '#問題黒マス:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+
+            for (var i in this.pu_q.surface) {
+                text += '$' + i + ':\n' +
+                    '0.4 w 0 g ';
+                corner = this.point[i].surround.length;
+                for (var j = 0; j < corner; j++) {
+                    if (j == 0) {
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " m ";
+                    } else {
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " l ";
+                    }
+                }
+                text += 'h f\n' +
+                    '----\n'
+            }
+
+            text += "####\n";
+
+            for (var i in this.pu_q.surface) {
+                text += "" + i + '@ ' + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ',0,0,' + enlarge + ',' + enlarge + '\n'
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_a.surface)) {
+            var enlarge = 10.2 * gridsize;
+            text += '#解答黒マス:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:80\n' +
+                '*Stroke:100,0.5,0,1\n';
+
+            for (var i in this.pu_a.surface) {
+                text += '$' + i + ':\n' +
+                    '0.4 w 0.2 g ';
+                corner = this.point[i].surround.length;
+                for (var j = 0; j < corner; j++) {
+                    if (j == 0) {
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " m ";
+                    } else {
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " l ";
+                    }
+                }
+                text += 'h f\n' +
+                    '----\n'
+            }
+
+            text += "####\n";
+
+            for (var i in this.pu_a.surface) {
+                text += "" + i + '@ ' + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ',0,0,' + enlarge + ',' + enlarge + '\n'
+            }
+            text += "--------\n";
+        }
+
+        return text;
+    }
+
     getAllIndexes(arr, val) {
         var indexes = [],
             i;
@@ -4543,15 +5261,17 @@ class Puzzle {
 
         if (mode === "pu_q") {
             var edge_elements = this.pu_q.lineE;
+            var supportstyles = [2, 21];
         } else if (mode === "pu_a") {
             var edge_elements = this.pu_a.lineE;
+            var supportstyles = [3];
         }
 
         // Setup Edge Matrices
         var pointA, pointA_x, pointA_y, edge, points;
         for (edge in edge_elements) {
-            // If black edge or thicker edge
-            if (edge_elements[edge] === 2 || edge_elements[edge] === 21) {
+            // If black edge or thicker edge in problem, green edge in solution
+            if (supportstyles.includes(edge_elements[edge])) {
                 points = edge.split(',');
                 pointA = Number(points[0]) - (this.nx0 * this.ny0);
                 pointA_x = (pointA % this.nx0); //column
@@ -8941,7 +9661,8 @@ class Puzzle {
             // if the first selected position is edge then do not consider move
             if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
-                this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal") {
+                this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
+                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
                 // do nothing
             } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);

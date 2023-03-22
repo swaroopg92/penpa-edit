@@ -2896,18 +2896,26 @@ class Puzzle_square extends Puzzle {
 
     draw_framelinesym(ctx, num, x, y, ccolor = "none") {
         var r = 0.32;
+        var r2 = 0.17;
+        var d = 0.08;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
         ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
+        let flip = (pu.reflect[0] !== pu.reflect[1]) === ((pu.theta % 180) === 0);
         switch (num) {
             case 1:
                 set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2915,8 +2923,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2924,8 +2937,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2933,8 +2951,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2942,8 +2965,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2951,8 +2979,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2960,8 +2993,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2969,8 +3007,47 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 9:
+                set_line_style(ctx, 16, ccolor)
+                ctx.beginPath();
+                if (flip) {
+                    ctx.moveTo(x - (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x + (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                } else {
+                    ctx.moveTo(x + (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x - (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 0:
+                set_line_style(ctx, 16, ccolor)
+                ctx.beginPath();
+                if (flip) {
+                    ctx.moveTo(x + (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x - (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                } else {
+                    ctx.moveTo(x - (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x + (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
