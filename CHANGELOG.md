@@ -1,4 +1,6 @@
 ## History
+* unreleased
+	* Diagonal connection shape for killer cages with rotation fix.
 * 2023/03/02 ver 3.0.6
 	* Added rhombitrihexagonal and deltoidal_trihexagonal boards (Alpha Version).
 	* Added pp_fileoutput2 code.
