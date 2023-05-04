@@ -714,6 +714,8 @@ class Puzzle_square extends Puzzle {
             this.draw_line("pu_a");
             this.draw_lattice();
             this.draw_selection();
+            this.draw_number_circle("pu_q");
+            this.draw_number_circle("pu_a");
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_cage("pu_q");
@@ -738,6 +740,7 @@ class Puzzle_square extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_lattice();
             this.draw_selection();
+            this.draw_number_circle("pu_q");
             this.draw_symbol("pu_q", 2);
             this.draw_cage("pu_q");
             this.draw_number("pu_q");
@@ -1498,7 +1501,6 @@ class Puzzle_square extends Puzzle {
             }
             switch (this[pu].number[i][2]) {
                 case "1": //normal
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
 
                     // if some numbers present in the corner (like Killer sudoku etc) then displace the numbers slightly lower to avoid overlap
@@ -1508,7 +1510,6 @@ class Puzzle_square extends Puzzle {
                     break;
                 case "2": //arrow
                     var arrowlength = 0.7;
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
                     var direction = {
                         "_0": 90,
@@ -1604,7 +1605,6 @@ class Puzzle_square extends Puzzle {
                     }
                     break;
                 case "4": //tapa
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.44);
                     let values = [...this[pu].number[i][0]]; // This is to handle unicode symbols.
                     if (values.length === 1) {
                         set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
@@ -1627,22 +1627,18 @@ class Puzzle_square extends Puzzle {
                     }
                     break;
                 case "5": //small
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
                     set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * factor * this.size, this.size * 0.9);
                     break;
                 case "6": //medium
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
                     set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.9);
                     break;
                 case "10": //big
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
                     set_font_style(this.ctx, 0.6 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
                     break;
                 case "7": //sudoku
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     var sum = 0,
                         pos = 0;
                     for (var j = 0; j < 9; j++) {
@@ -1700,6 +1696,42 @@ class Puzzle_square extends Puzzle {
                 //  set_font_style(this.ctx,0.28*this.size.toString(10),this[pu].numberS[i][1]);
                 //  this.ctx.textAlign = "left";
                 //  this.ctx.text(this[pu].numberS[i][0],this.point[i].x-0.15*this.size,this.point[i].y+0.03*this.size,this.size*0.8);
+            }
+        }
+    }
+
+    draw_number_circle(pu) {
+        var p_x, p_y;
+        for (var i in this[pu].number) {
+            if (i.slice(-1) === "E") { // Overwriting in Edge Mode
+                p_x = this.point[i.slice(0, -1)].x;
+                p_y = this.point[i.slice(0, -1)].y;
+            } else {
+                p_x = this.point[i].x;
+                p_y = this.point[i].y;
+            }
+            switch (this[pu].number[i][2]) {
+                case "1": //normal
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
+                    break;
+                case "2": //arrow
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
+                    break;
+                case "4": //tapa
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.44);
+                    break;
+                case "5": //small
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
+                    break;
+                case "6": //medium
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
+                    break;
+                case "10": //big
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
+                    break;
+                case "7": //sudoku
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
+                    break;
             }
         }
     }
@@ -2864,18 +2896,26 @@ class Puzzle_square extends Puzzle {
 
     draw_framelinesym(ctx, num, x, y, ccolor = "none") {
         var r = 0.32;
+        var r2 = 0.17;
+        var d = 0.08;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
         ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
+        let flip = (pu.reflect[0] !== pu.reflect[1]) === ((pu.theta % 180) === 0);
         switch (num) {
             case 1:
                 set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2883,8 +2923,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2892,8 +2937,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2901,8 +2951,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2910,8 +2965,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2919,8 +2979,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2928,8 +2993,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2937,8 +3007,47 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 9:
+                set_line_style(ctx, 16, ccolor)
+                ctx.beginPath();
+                if (flip) {
+                    ctx.moveTo(x - (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x + (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                } else {
+                    ctx.moveTo(x + (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x - (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 0:
+                set_line_style(ctx, 16, ccolor)
+                ctx.beginPath();
+                if (flip) {
+                    ctx.moveTo(x + (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x - (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                } else {
+                    ctx.moveTo(x - (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x + (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;

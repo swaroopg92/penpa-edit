@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 7]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -4404,12 +4404,18 @@ class Puzzle {
 
     maketext_ppfile2() {
         var text = "";
-        var gridsize = "1";
-        var fontsize = "30";
+        var gridsize = 19.842 / this.size;
+        var fontsize = 16;
+        var offset_x = this.canvasx * 0.5;
+        var offset_y = this.canvasy * 0.5;
         var header = document.getElementById("savetextarea_pp").value;
 
+        if (this.mode.grid[2] === "2") {
+            text += "%Margin:5,5,5,5\n";
+        }
+
         if (!isEmpty(this.pu_a.line)) {
-            text += '#answer line: 2,True\n' +
+            text += '#解答線:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -4418,35 +4424,59 @@ class Puzzle {
             for (var i in this.pu_a.line) {
                 i1 = Number(i.split(",")[0]);
                 i2 = Number(i.split(",")[1]);
-                y1 = pu.point[i1].y;
-                y2 = pu.point[i2].y;
-                x1 = pu.point[i1].x;
-                x2 = pu.point[i2].x;
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
                 text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
             }
             text += "--------\n";
         }
 
         if (!isEmpty(this.pu_q.lineE)) {
-            text += '#problem side:2,True\n' +
+            text += '#問題辺太:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
                 '*Stroke:100,2,0,1,1\n';
             var i1, i2, x1, x2, y1, y2;
             for (var i in this.pu_q.lineE) {
-                i1 = Number(i.split(",")[0]);
-                i2 = Number(i.split(",")[1]);
-                y1 = pu.point[i1].y;
-                y2 = pu.point[i2].y;
-                x1 = pu.point[i1].x;
-                x2 = pu.point[i2].x;
-                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+                if (this.pu_q.lineE[i] == 2) {
+                    i1 = Number(i.split(",")[0]);
+                    i2 = Number(i.split(",")[1]);
+                    y1 = pu.point[i1].y - offset_y;
+                    y2 = pu.point[i2].y - offset_y;
+                    x1 = pu.point[i1].x - offset_x;
+                    x2 = pu.point[i2].x - offset_x;
+                    text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+                }
             }
             text += "--------\n";
         }
+
+        if (!isEmpty(this.pu_q.lineE)) {
+            text += '#問題辺細:2,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:0,0\n' +
+                '*Stroke:100,0.4,0,1,1\n';
+            var i1, i2, x1, x2, y1, y2;
+            for (var i in this.pu_q.lineE) {
+                if (this.pu_q.lineE[i] == 80) {
+                    i1 = Number(i.split(",")[0]);
+                    i2 = Number(i.split(",")[1]);
+                    y1 = pu.point[i1].y - offset_y;
+                    y2 = pu.point[i2].y - offset_y;
+                    x1 = pu.point[i1].x - offset_x;
+                    x2 = pu.point[i2].x - offset_x;
+                    text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+                }
+            }
+            text += "--------\n";
+        }
+
         if (!isEmpty(this.pu_a.lineE)) {
-            text += '#answer side:2,True\n' +
+            text += '#解答辺:2,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
                 '*Offset:0,0\n' +
@@ -4455,10 +4485,10 @@ class Puzzle {
             for (var i in this.pu_a.lineE) {
                 i1 = Number(i.split(",")[0]);
                 i2 = Number(i.split(",")[1]);
-                y1 = pu.point[i1].y;
-                y2 = pu.point[i2].y;
-                x1 = pu.point[i1].x;
-                x2 = pu.point[i2].x;
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
                 text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
             }
             text += "--------\n";
@@ -4480,102 +4510,158 @@ class Puzzle {
             }
         }
 
-        text += '#Disk inside: 2,True\n' +
-            '*Grid:' + gridsize + ',' + gridsize + '\n' +
-            '*Skew:0,0\n' +
-            '*Offset:0,0\n'
-        if (this.mode.grid[0] === "1") {
-            text += '*Stroke:100,0.4,0,1,1\n'; //solid line
-        } else if (this.mode.grid[0] === "2") {
-            text += '*Stroke:100,0.4,1.804/3.1565/0.902,1,1\n'; // dotted line
-        } else if (this.mode.grid[0] === "3") {
-            text += '*Stroke:-1,0,0,1,1\n'; //none
-        }
-        var i1, i2, x1, x2, y1, y2;
-        for (var i in frameline) {
-            if (frameline[i] == 1) {
-                i1 = Number(i.split(",")[0]);
-                i2 = Number(i.split(",")[1]);
-                y1 = pu.point[i1].y;
-                y2 = pu.point[i2].y;
-                x1 = pu.point[i1].x;
-                x2 = pu.point[i2].x;
-                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
-            }
-        }
-        text += "--------\n";
-
-        text += '#Disk outside: 2,True\n' +
-            '*Grid:' + gridsize + ',' + gridsize + '\n' +
-            '*Skew:0,0\n' +
-            '*Offset:0,0\n'
-        if (this.mode.grid[2] === "1") {
-            text += '*Stroke:100,2,0,1,1\n'; //solid line
-        } else if (this.mode.grid[0] === "2") {
-            text += '*Stroke:-1,0,0,1,1\n'; //none
-        }
-        var i1, i2, x1, x2, y1, y2;
-        for (var i in frameline) {
-            if (frameline[i] == 2) {
-                i1 = Number(i.split(",")[0]);
-                i2 = Number(i.split(",")[1]);
-                y1 = pu.point[i1].y;
-                y2 = pu.point[i2].y;
-                x1 = pu.point[i1].x;
-                x2 = pu.point[i2].x;
-                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
-            }
-        }
-        text += "--------\n";
 
         if (!isEmptycontent("pu_a", "number", 2, "1")) {
-            text += '#answer text: 9,True\n' +
+            text += '#解答文字:9,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:100\n' +
                 '*Stroke:-1,0,0,1\n' +
                 '*Font:IPAGothic,Normal,Normal,Normal,' + fontsize + '\n' +
                 '*TextAlignment:1,1\n';
+            text += '&toWide\n';
 
             for (var i in this.pu_a.number) {
-                text += this.pu_a.number[i][0] + "@" + this.point[i].y + "," + this.point[i].x + "\n";
+                text += this.pu_a.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
             }
 
             text += "--------\n";
         }
 
         if (!isEmptycontent("pu_q", "number", 2, "1")) {
-            text += '#question text:9,True\n' +
+            text += '#問題文字:9,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:100\n' +
                 '*Stroke:-1,0,0,1\n' +
                 '*Font:IPAGothic,Normal,Normal,Normal,' + fontsize + '\n' +
                 '*TextAlignment:1,1\n';
+            text += '&toWide\n';
 
             for (var i in this.pu_q.number) {
-                text += this.pu_q.number[i][0] + "@" + this.point[i].y + "," + this.point[i].x + "\n";
+                if (this.pu_q.number[i][0] < 10) {
+                    text += this.pu_q.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+                } else {
+                    text += parseInt(this.pu_q.number[i][0] / 10) + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x - this.size * 0.17) + ",0,0,0.85,1\n";
+                    text += this.pu_q.number[i][0] % 10 + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x + this.size * 0.17) + ",0,0,0.85,1\n";
+                }
             }
 
             text += "--------\n";
         }
 
-        if (!isEmptycontent("pu_q", "symbol", 1, "circle_M")) {
-            text += '#Question: 8,True\n' +
+        if (!isEmptycontent("pu_q", "number", 2, "10")) {
+            text += '#問題文字大:9,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 9 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.number) {
+                text += this.pu_q.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "6")) {
+            text += '#問題文字中:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 6 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.number) {
+                text += this.pu_q.number[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "number", 2, "4")) {
+            text += '#問題文字Tapa:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 12 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+            for (var i in this.pu_q.number) {
+                if (this.pu_q.number[i][2] == '4') {
+                    let values = [...this.pu_q.number[i][0]];
+                    if (values.length === 1) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+                    } else if (values.length === 2) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y - 0.19 * this.size) + "," + (this.point[i].x - offset_x - 0.21 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[1] + "@" + (this.point[i].y - offset_y + 0.19 * this.size) + "," + (this.point[i].x - offset_x + 0.21 * this.size) + ",0,0,0.75,0.75\n";
+                    } else if (values.length === 3) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y - 0.16 * this.size) + "," + (this.point[i].x - offset_x - 0.22 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[1] + "@" + (this.point[i].y - offset_y - 0.21 * this.size) + "," + (this.point[i].x - offset_x + 0.23 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[2] + "@" + (this.point[i].y - offset_y + 0.20 * this.size) + "," + (this.point[i].x - offset_x - 0.00 * this.size) + ",0,0,0.75,0.75\n";
+                    } else if (values.length === 4) {
+                        text += values[0] + "@" + (this.point[i].y - offset_y - 0.24 * this.size) + "," + (this.point[i].x - offset_x - 0.00 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[1] + "@" + (this.point[i].y - offset_y - 0.00 * this.size) + "," + (this.point[i].x - offset_x - 0.26 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[2] + "@" + (this.point[i].y - offset_y + 0.00 * this.size) + "," + (this.point[i].x - offset_x + 0.26 * this.size) + ",0,0,0.75,0.75\n";
+                        text += values[3] + "@" + (this.point[i].y - offset_y + 0.24 * this.size) + "," + (this.point[i].x - offset_x + 0.00 * this.size) + ",0,0,0.75,0.75\n";
+                    }
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmpty(this.pu_q.numberS)) {
+            text += '#問題文字四隅:9,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:-1,0,0,1\n' +
+                '*Font:IPAGothic,Normal,Normal,Normal,' + 6 + '\n' +
+                '*TextAlignment:1,1\n';
+            text += '&toWide\n';
+
+            for (var i in this.pu_q.numberS) {
+                text += this.pu_q.numberS[i][0] + "@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_L")) {
+            text += '#問題丸大:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:100\n' +
                 '*Stroke:100,0.5,0,1\n';
             text += '$w:\n' +
+                '0.2 w\n' +
                 '1 g\n' +
                 '2.5 0 m\n' +
                 '2.5 1.38 1.38 2.5 0 2.5 c\n' +
@@ -4585,6 +4671,48 @@ class Puzzle {
                 'h b\n' +
                 '----\n' +
                 '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_L") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,3.5,3.5\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_L") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,3.5,3.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_M")) {
+            text += '#問題丸:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
                 '0 g\n' +
                 '2.5 0 m\n' +
                 '2.5 1.38 1.38 2.5 0 2.5 c\n' +
@@ -4597,25 +4725,25 @@ class Puzzle {
 
             for (var i in this.pu_q.symbol) {
                 if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_M") {
-                    text += "w@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
                 } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_M") {
-                    text += "b@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
                 }
             }
             text += "--------\n";
         }
 
-
-        if (!isEmptycontent("pu_a", "symbol", 1, "circle_M")) {
-            text += '#Question: 8,True\n' +
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_S")) {
+            text += '#問題丸小:8,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:100\n' +
                 '*Stroke:100,0.5,0,1\n';
             text += '$w:\n' +
+                '0.2 w\n' +
                 '1 g\n' +
                 '2.5 0 m\n' +
                 '2.5 1.38 1.38 2.5 0 2.5 c\n' +
@@ -4625,6 +4753,89 @@ class Puzzle {
                 'h b\n' +
                 '----\n' +
                 '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_S") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1.5,1.5\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_S") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1.5,1.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "circle_SS")) {
+            text += '#問題丸極小:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
+                '0 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '####\n'
+
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "circle_SS") {
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1,1\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "circle_SS") {
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,1,1\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+        if (!isEmptycontent("pu_a", "symbol", 1, "circle_M")) {
+            text += '#解答丸:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$w:\n' +
+                '0.2 w\n' +
+                '1 g\n' +
+                '2.5 0 m\n' +
+                '2.5 1.38 1.38 2.5 0 2.5 c\n' +
+                '-1.38 2.5 -2.5 1.38 -2.5 0 c\n' +
+                '-2.5 -1.38 -1.38 -2.5 0 -2.5 c\n' +
+                '1.38 -2.5 2.5 -1.38 2.5 0 c\n' +
+                'h b\n' +
+                '----\n' +
+                '$b:\n' +
+                '0.2 w\n' +
                 '0 g\n' +
                 '2.5 0 m\n' +
                 '2.5 1.38 1.38 2.5 0 2.5 c\n' +
@@ -4637,71 +4848,211 @@ class Puzzle {
 
             for (var i in this.pu_a.symbol) {
                 if (this.pu_a.symbol[i][0] === 1 && this.pu_a.symbol[i][1] === "circle_M") {
-                    text += "w@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                    text += "w@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
                 } else if (this.pu_a.symbol[i][0] === 2 && this.pu_a.symbol[i][1] === "circle_M") {
-                    text += "b@" + this.point[i].y + "," + this.point[i].x + ",0,0,4.5,4.5\n";
+                    text += "b@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,2.5,2.5\n";
+                }
+            }
+            text += "--------\n";
+        }
+
+
+        if (this.mode.grid[1] === "1") {
+            var verticelist = [];
+            for (var i = 0; i < this.centerlist.length; i++) {
+                for (var j = 0; j < this.point[this.centerlist[i]].surround.length; j++) {
+                    verticelist.push(this.point[this.centerlist[i]].surround[j]);
+                }
+            }
+            verticelist = Array.from(new Set(verticelist));
+            text += '#盤面格子点:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$p:\n' +
+                '1.5 0 0 1.5 0 0 cm\n' +
+                '0 1 m\n' +
+                '0.552285 1 1 0.552285 1 0 c\n' +
+                '1 -0.552285 0.552285 -1 0 -1 c\n' +
+                '-0.552285 -1 -1 -0.552285 -1 0 c\n' +
+                '-1 0.552285 -0.552285 1 0 1 c f\n' +
+                '####\n';
+            for (var i of verticelist) {
+                text += "p@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + "\n";
+            }
+            text += "--------\n";
+        }
+
+
+        text += '#盤面内側:2,True\n' +
+            '*Grid:' + gridsize + ',' + gridsize + '\n' +
+            '*Skew:0,0\n' +
+            '*Offset:0,0\n'
+        if (this.mode.grid[0] === "1") {
+            text += '*Stroke:100,0.4,0,1,1\n'; //実線
+        } else if (this.mode.grid[0] === "2") {
+            text += '*Stroke:100,0.4,1.804/3.1565/0.902,1,1\n'; //点線
+        } else if (this.mode.grid[0] === "3") {
+            text += '*Stroke:-1,0,0,1,1\n'; //なし
+        }
+        var i1, i2, x1, x2, y1, y2;
+        for (var i in frameline) {
+            if (frameline[i] == 1 && this.pu_q.deletelineE[i] != 1) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+        }
+        text += "--------\n";
+
+        text += '#盤面外側:2,True\n' +
+            '*Grid:' + gridsize + ',' + gridsize + '\n' +
+            '*Skew:0,0\n' +
+            '*Offset:0,0\n'
+        if (this.mode.grid[2] === "1") {
+            text += '*Stroke:100,2,0,1,1\n'; //実線
+        } else if (this.mode.grid[2] === "2") {
+            if (this.mode.grid[0] === "1") {
+                text += '*Stroke:100,0.4,0,1,1\n'; //実線
+            } else if (this.mode.grid[0] === "2") {
+                text += '*Stroke:100,0.4,1.804/3.1565/0.902,1,1\n'; //点線
+            } else if (this.mode.grid[0] === "3") {
+                text += '*Stroke:-1,0,0,1,1\n'; //なし
+            }
+        }
+        var i1, i2, x1, x2, y1, y2;
+        for (var i in frameline) {
+            if (frameline[i] == 2 && this.pu_q.deletelineE[i] != 1) {
+                i1 = Number(i.split(",")[0]);
+                i2 = Number(i.split(",")[1]);
+                y1 = pu.point[i1].y - offset_y;
+                y2 = pu.point[i2].y - offset_y;
+                x1 = pu.point[i1].x - offset_x;
+                x2 = pu.point[i2].x - offset_x;
+                text += y1 + ',' + x1 + ';' + y2 + ',' + x2 + '\n';
+            }
+        }
+        text += "--------\n";
+
+
+        if (!isEmptycontent("pu_q", "symbol", 1, "star")) {
+            text += '#問題星:8,True\n' +
+                '*Grid:' + gridsize + ',' + gridsize + '\n' +
+                '*Skew:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
+                '*Size:' + gridsize + ',' + gridsize + '\n' +
+                '*Alignment:0,0\n' +
+                '*Fill:100\n' +
+                '*Stroke:100,0.5,0,1\n';
+            text += '$ws:\n' +
+                '0.05 w\n' +
+                '1 g\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
+                'h b\n' +
+                '----\n' +
+                '$bs:\n' +
+                '0.05 w\n' +
+                '0 g\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
+                'h b\n' +
+                '####\n'
+
+            for (var i in this.pu_q.symbol) {
+                if (this.pu_q.symbol[i][0] === 1 && this.pu_q.symbol[i][1] === "star") {
+                    text += "ws@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
+                } else if (this.pu_q.symbol[i][0] === 2 && this.pu_q.symbol[i][1] === "star") {
+                    text += "bs@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
                 }
             }
             text += "--------\n";
         }
 
         if (!isEmptycontent("pu_a", "symbol", 1, "star")) {
-            text += '#answer star: 8,True\n' +
+            text += '#解答星:8,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:100\n' +
                 '*Stroke:100,0.5,0,1\n';
             text += '$ws:\n' +
-                '0.5 w\n' +
+                '0.05 w\n' +
                 '1 g\n' +
-                '1 d\n' +
-                '0.00   -9.00   m\n' +
-                '2.02 -2.78 l\n' +
-                '8.56 -2.78 l\n' +
-                '3.27 1.06 l\n' +
-                '5.29 7.28 l\n' +
-                '0.00 3.44 l\n' +
-                '-5.29 7.28 l\n' +
-                '-3.27 1.06 l\n' +
-                '-8.56 -2.78 l\n' +
-                '-2.02 -2.78 l\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
                 'h b\n' +
                 '----\n' +
                 '$bs:\n' +
-                '0.5 w\n' +
+                '0.05 w\n' +
                 '0 g\n' +
-                '1 d\n' +
-                '0.00   -9.00   m\n' +
-                '2.02 -2.78 l\n' +
-                '8.56 -2.78 l\n' +
-                '3.27 1.06 l\n' +
-                '5.29 7.28 l\n' +
-                '0.00 3.44 l\n' +
-                '-5.29 7.28 l\n' +
-                '-3.27 1.06 l\n' +
-                '-8.56 -2.78 l\n' +
-                '-2.02 -2.78 l\n' +
+                '1 j\n' +
+                '0.00   -0.900  m\n' +
+                '0.202  -0.278  l\n' +
+                '0.856  -0.278  l\n' +
+                '0.327  0.106   l\n' +
+                '0.529  0.728   l\n' +
+                '0.00   0.344   l\n' +
+                '-0.529 0.728   l\n' +
+                '-0.327 0.106   l\n' +
+                '-0.856 -0.278  l\n' +
+                '-0.202 -0.278  l\n' +
                 'h b\n' +
                 '####\n'
 
             for (var i in this.pu_a.symbol) {
                 if (this.pu_a.symbol[i][0] === 1 && this.pu_a.symbol[i][1] === "star") {
-                    text += "ws@" + this.point[i].y + "," + this.point[i].x + ",0,0,1.5,1.5\n";
+                    text += "ws@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
                 } else if (this.pu_a.symbol[i][0] === 2 && this.pu_a.symbol[i][1] === "star") {
-                    text += "bs@" + this.point[i].y + "," + this.point[i].x + ",0,0,1.5,1.5\n";
+                    text += "bs@" + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ",0,0,8,8\n";
                 }
             }
             text += "--------\n";
         }
 
         if (!isEmpty(this.pu_q.surface)) {
-            text += '#problem black square:8,True\n' +
+            var enlarge = 10 * gridsize;
+            text += '#問題黒マス:8,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:100\n' +
@@ -4709,32 +5060,33 @@ class Puzzle {
 
             for (var i in this.pu_q.surface) {
                 text += '$' + i + ':\n' +
-                    '0 g ';
+                    '0.4 w 0 g ';
                 corner = this.point[i].surround.length;
                 for (var j = 0; j < corner; j++) {
                     if (j == 0) {
-                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " m ";
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " m ";
                     } else {
-                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " l ";
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " l ";
                     }
                 }
-                text += 'h b\n' +
+                text += 'h f\n' +
                     '----\n'
             }
 
             text += "####\n";
 
             for (var i in this.pu_q.surface) {
-                text += "" + i + '@ ' + this.point[i].y + ',' + this.point[i].x + ',0,0,10,10\n'
+                text += "" + i + '@ ' + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ',0,0,' + enlarge + ',' + enlarge + '\n'
             }
             text += "--------\n";
         }
 
         if (!isEmpty(this.pu_a.surface)) {
-            text += '#answer black square:8,True\n' +
+            var enlarge = 10.2 * gridsize;
+            text += '#解答黒マス:8,True\n' +
                 '*Grid:' + gridsize + ',' + gridsize + '\n' +
                 '*Skew:0,0\n' +
-                '*Offset:0,0\n' +
+                '*Offset:-0.2,-0.2\n' +
                 '*Size:' + gridsize + ',' + gridsize + '\n' +
                 '*Alignment:0,0\n' +
                 '*Fill:80\n' +
@@ -4742,23 +5094,23 @@ class Puzzle {
 
             for (var i in this.pu_a.surface) {
                 text += '$' + i + ':\n' +
-                    '0.2 g ';
+                    '0.4 w 0.2 g ';
                 corner = this.point[i].surround.length;
                 for (var j = 0; j < corner; j++) {
                     if (j == 0) {
-                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " m ";
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " m ";
                     } else {
-                        text += (this.point[this.point[i].surround[j]].x - this.point[i].x) / 10 + " " + (this.point[this.point[i].surround[j]].y - this.point[i].y) / 10 + " l ";
+                        text += Math.round((this.point[this.point[i].surround[j]].x - this.point[i].x) * 1000) / 10000 + " " + Math.round((this.point[this.point[i].surround[j]].y - this.point[i].y) * 1000) / 10000 + " l ";
                     }
                 }
-                text += 'h b\n' +
+                text += 'h f\n' +
                     '----\n'
             }
 
             text += "####\n";
 
             for (var i in this.pu_a.surface) {
-                text += "" + i + '@ ' + this.point[i].y + ',' + this.point[i].x + ',0,0,10,10\n'
+                text += "" + i + '@ ' + (this.point[i].y - offset_y) + "," + (this.point[i].x - offset_x) + ',0,0,' + enlarge + ',' + enlarge + '\n'
             }
             text += "--------\n";
         }
@@ -7169,6 +7521,142 @@ class Puzzle {
                 }
                 sol = sol.sort();
                 text = JSON.stringify(sol);
+            } else if (header === "killersudoku" || header === "ks") {
+
+                // Grid Size
+                row_size = this.ny;
+                col_size = this.nx;
+
+                text += 'Author:\n' +
+                    'Genre: Killer Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                text += col_size + ' ' + row_size + ' ' + '1' + '\n';
+
+                if (row_size == 6) {
+                    text += 'aaabbb\n' +
+                        'aaabbb\n' +
+                        'dddeee\n' +
+                        'dddeee\n' +
+                        'ggghhh\n' +
+                        'ggghhh\n';
+                } else {
+                    text += 'aaabbbccc\n' +
+                        'aaabbbccc\n' +
+                        'aaabbbccc\n' +
+                        'dddeeefff\n' +
+                        'dddeeefff\n' +
+                        'dddeeefff\n' +
+                        'ggghhhiii\n' +
+                        'ggghhhiii\n' +
+                        'ggghhhiii\n';
+                }
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Killer Cages
+                let matrix = [];
+                let k = 0;
+
+                // initialize
+                for (let i = 0; i < row_size; i++) {
+                    matrix[i] = new Array(parseInt(col_size)).fill('Z');
+                }
+
+                // loop through each array
+                for (let iter in this.pu_q.killercages) {
+                    let arr = this.pu_q.killercages[iter];
+                    if (arr.length > 0) {
+                        let cell_char = String.fromCharCode(65 + (k % 26));
+
+                        // find all touching alphabets - Do this only if 26 alphabets are exhausted
+                        if (k > 25) {
+                            console.log('under works')
+                        }
+
+                        // Find unique alphabet otuside of this touching alphabets
+
+                        // loop through each element of the array
+                        for (let j = 0; j < arr.length; j++) {
+                            // row and col index
+                            let rowind = (arr[j] % this.nx0) - 2;
+                            let colind = Math.floor(arr[j] / this.nx0) - 2;
+
+                            // update matrix
+                            matrix[colind][rowind] = cell_char
+                        }
+
+                        // increment alphabet
+                        k += 1;
+                    }
+                }
+
+                // Write the matrix to the text variable
+                for (var i = 0; i < row_size; i++) {
+                    for (var j = 0; j < col_size; j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
+                }
+
+                // Killer Clues
+                if (!isEmptycontent("pu_q", "numberS", 1, null)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            let corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+
+                            // If there is clue in the corner
+                            if (this.pu_q.numberS[corner_cursor]) {
+                                // Replace white spaces in the string
+                                var tomtom_clue = this.pu_q.numberS[corner_cursor][0].replace(/\s+/g, '');
+                                text += tomtom_clue;
+                            } else {
+                                text += ".";
+                            }
+
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
             } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
