@@ -3147,8 +3147,14 @@ function isEmpty(obj) {
 
 function isEmptycontent(pu_qa, array, num, value) {
     for (var i in pu[pu_qa][array]) {
-        if (pu[pu_qa][array][i][num] === value) {
-            return false;
+        if (value != null) {
+            if (pu[pu_qa][array][i][num] === value) {
+                return false;
+            }
+        } else {
+            if (pu[pu_qa][array][i][num]) {
+                return false;
+            }
         }
     }
     return true;

@@ -349,6 +349,12 @@ You can now site this in your research and publications using:
 		* tightfitsudoku (tfs)
 			* (Panel: ON) For Slash/Split: Use Shape Mode -> Shape Submode -> "〇△◻x" from dropdown list -> 6th Shape in the Panel
 			* For numbers: Use "Corner" submode (6th option) to enter in top left or bottom right corner of the split cell, Normal submode for numbers in the cells without split
+		* killersudoku (ks)
+			* Given digits: Use Number -> Normal or Sudoku -> Normal in Problem mode
+			* Cages: Use Cage -> Killer in Problem mode
+			* Cage Clues: Use Number -> Killer in Problem mode
+			* Solution digits: Use Number -> Normal or Sudoku -> Normal in Solution mode
+			* [Alert] Cage definitions might need manual correction in the output file for puzzles with more than 26 cages
 	* Number Placement
 		* tomtom (tt)
 			* Use +, -, x, / from keyboard for mathematical operator

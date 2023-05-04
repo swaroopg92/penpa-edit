@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 7]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -7521,6 +7521,142 @@ class Puzzle {
                 }
                 sol = sol.sort();
                 text = JSON.stringify(sol);
+            } else if (header === "killersudoku" || header === "ks") {
+
+                // Grid Size
+                row_size = this.ny;
+                col_size = this.nx;
+
+                text += 'Author:\n' +
+                    'Genre: Killer Sudoku\n' +
+                    'Variation: Standard\n' +
+                    'Theme:\n' +
+                    'Entry:\n' +
+                    'Solution:\n' +
+                    'Solving Times:\n' +
+                    'Status:\n';
+                text += col_size + ' ' + row_size + ' ' + '1' + '\n';
+
+                if (row_size == 6) {
+                    text += 'aaabbb\n' +
+                        'aaabbb\n' +
+                        'dddeee\n' +
+                        'dddeee\n' +
+                        'ggghhh\n' +
+                        'ggghhh\n';
+                } else {
+                    text += 'aaabbbccc\n' +
+                        'aaabbbccc\n' +
+                        'aaabbbccc\n' +
+                        'dddeeefff\n' +
+                        'dddeeefff\n' +
+                        'dddeeefff\n' +
+                        'ggghhhiii\n' +
+                        'ggghhhiii\n' +
+                        'ggghhhiii\n';
+                }
+
+                //Given Digits
+                if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_q.number[i + j * (this.nx0)][0];
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Solution
+                if (!isEmptycontent("pu_a", "number", 2, "1")) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_a.number[i + j * (this.nx0)][0])) {
+                                text += this.pu_a.number[i + j * (this.nx0)][0];
+                            } else if (!isEmptycontent("pu_q", "number", 2, "1")) {
+                                if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "1" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
+                                    text += this.pu_q.number[i + j * (this.nx0)][0];
+                                } else {
+                                    text += ".";
+                                }
+                            } else {
+                                text += ".";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
+
+                // Killer Cages
+                let matrix = [];
+                let k = 0;
+
+                // initialize
+                for (let i = 0; i < row_size; i++) {
+                    matrix[i] = new Array(parseInt(col_size)).fill('Z');
+                }
+
+                // loop through each array
+                for (let iter in this.pu_q.killercages) {
+                    let arr = this.pu_q.killercages[iter];
+                    if (arr.length > 0) {
+                        let cell_char = String.fromCharCode(65 + (k % 26));
+
+                        // find all touching alphabets - Do this only if 26 alphabets are exhausted
+                        if (k > 25) {
+                            console.log('under works')
+                        }
+
+                        // Find unique alphabet otuside of this touching alphabets
+
+                        // loop through each element of the array
+                        for (let j = 0; j < arr.length; j++) {
+                            // row and col index
+                            let rowind = (arr[j] % this.nx0) - 2;
+                            let colind = Math.floor(arr[j] / this.nx0) - 2;
+
+                            // update matrix
+                            matrix[colind][rowind] = cell_char
+                        }
+
+                        // increment alphabet
+                        k += 1;
+                    }
+                }
+
+                // Write the matrix to the text variable
+                for (var i = 0; i < row_size; i++) {
+                    for (var j = 0; j < col_size; j++) {
+                        text += matrix[i][j];
+                    }
+                    text += '\n';
+                }
+
+                // Killer Clues
+                if (!isEmptycontent("pu_q", "numberS", 1, null)) {
+                    for (var j = 2; j < this.ny0 - 2; j++) {
+                        for (var i = 2; i < this.nx0 - 2; i++) {
+                            let corner_cursor = 4 * (i + j * (this.nx0) + this.nx0 * this.ny0);
+
+                            // If there is clue in the corner
+                            if (this.pu_q.numberS[corner_cursor]) {
+                                // Replace white spaces in the string
+                                var tomtom_clue = this.pu_q.numberS[corner_cursor][0].replace(/\s+/g, '');
+                                text += tomtom_clue;
+                            } else {
+                                text += ".";
+                            }
+
+                            if (i < this.nx0 - 3) {
+                                text += " ";
+                            }
+                        }
+                        text += "\n";
+                    }
+                }
             } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
