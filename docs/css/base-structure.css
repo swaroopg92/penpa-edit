@@ -211,8 +211,9 @@ hr.newgridhrline {
     box-shadow: var(--shadow_low);
     border: 0;
     font-size: 0;
-    box-sizing: border-box;
-    width: min(630px, 100%);
+    width: 600px;
+    /*    box-sizing: border-box;*/
+    /*    width: min(630px, 100%);*/
     margin: 5px auto;
     padding: 10px;
 }
