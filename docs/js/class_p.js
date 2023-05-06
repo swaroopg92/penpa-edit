@@ -6156,6 +6156,7 @@ class Puzzle {
                     'Status:\n';
                 var row_size;
                 var col_size;
+                var allowed_styles = [1, 8, 3, 4]; // Dark Grey, Grey, Light Grey, Black
 
                 // Grid Size
                 row_size = document.getElementById("nb_size2").value;
@@ -6188,7 +6189,7 @@ class Puzzle {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         text += 'X';
                         for (var i = 2; i < this.nx0 - 2; i++) {
-                            if (this.pu_a.surface[i + j * (this.nx0)] && this.pu_a.surface[i + j * (this.nx0)] === 1) {
+                            if (this.pu_a.surface[i + j * (this.nx0)] && allowed_styles.includes(this.pu_a.surface[i + j * (this.nx0)])) {
                                 text += "X";
                             } else {
                                 text += ".";

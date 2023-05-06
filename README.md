@@ -401,6 +401,7 @@ You can now site this in your research and publications using:
 		* fillomino
 		* pentominous
 		* cave
+			* Solution shaded in any shades of grey.
 		* snakepit
 			* Use Number mode -> White circle Style
 			* for empty circle - just place white circle with any digit and then press backspace to remove the digit
