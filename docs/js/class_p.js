@@ -2739,6 +2739,7 @@ class Puzzle {
                 break;
             case "cage":
                 this[this.mode.qa].cage = {};
+                this[this.mode.qa].killercages = [];
                 if (UserSettings.custom_colors_on) {
                     this[this.mode.qa + "_col"].cage = {};
                 }
