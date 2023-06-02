@@ -11522,7 +11522,7 @@ class Puzzle {
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         // submit solution steps
-                        // submit_solution_steps(); // Temporary by Deb
+                        if (pu.puzzle_info.allowSub) submit_solution_steps();
 
                         // Rating and feedback code
                         let wrap = document.createElement('div');

@@ -1066,7 +1066,7 @@ function submit_ratings_feedback(ratings, message) {
             },
             body: JSON.stringify(data)
         },
-        url = pu.puzzle_info.mode === 'expo' ? '/live/misc-pp?action=submit-new' : '/live/misc-daily',
+        url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-ratings-and-message' : '/live/misc-daily',
         request = new Request(url, options);
     fetch(request);
 }
