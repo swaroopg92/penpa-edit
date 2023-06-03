@@ -1267,6 +1267,10 @@ onload = function() {
                 savetext_solve();
                 e.preventDefault();
                 break;
+            case "address_clone":
+                savetext_clone();
+                e.preventDefault();
+                break;
             case "expansion":
                 expansion();
                 e.preventDefault();
