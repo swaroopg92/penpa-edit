@@ -288,17 +288,22 @@ You can now site this in your research and publications using:
 
 * Save Undo/Redo (History) - If you checkmark this option, then your action history will be saved in the URL. This is effective only while using "URL for editing" button. Other options will automatically ignore history. Note: Saving history might make URL too big depending on your usage.
 
-* URL for editing
+* Editing URL
 1. Complete creating puzzle in Edit mode "Problem".
-2. If you need to save your puzzle creation progress and come back later to edit then click on this button
+2. If you need to save your puzzle creation progress and come back later to edit then click on this button.
 3. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
 
-* URL for solving
+* Solving URL
 1. Complete creating puzzle in Edit mode "Problem".
-2. If you want to share your puzzle for others to solve then click on this button
+2. If you want to share your puzzle for others to solve then click on this button.
 3. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
 
-* URL for solving with Solution
+* Clone URL
+1. This is to access the URL as text for the copy/duplicating the puzzle. This is a alternative to the CLONE button.
+2. If you need to save your puzzle creation/solving progress and come back later to edit/solve then click on this button.
+3. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
+
+* URL with Answer Check
 1. Complete creating puzzle in Edit mode "Problem".
 2. Select Edit mode "Solution" and complete the solution. The solution must be entered using certain shape or color which Penpa+ will detect. Check the following image for guidance:
 ![Use the mentioned color/shape for implementing solution](./images/multisolution.PNG "Solution checking settings")

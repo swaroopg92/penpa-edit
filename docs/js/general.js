@@ -1639,6 +1639,14 @@ function savetext_solve() {
     update_textarea(text);
 }
 
+function savetext_clone() {
+    var text = pu.maketext_duplicate();
+    if (pu.mmode === "solve") {
+        text = text + "&l=solvedup";
+    }
+    update_textarea(text);
+}
+
 function savetext_comp() {
     var text = pu.maketext_compsolve();
     update_textarea(text);
