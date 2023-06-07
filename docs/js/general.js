@@ -2169,7 +2169,7 @@ function load(urlParam, type = 'url', origurl = null) {
 
     // Set some genre specific settings
     if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
-        UserSettings.disable_shortcuts = 2;
+        UserSettings.shortcuts_enabled = false;
     }
 
     if (paramArray.m === "edit") { //edit_mode

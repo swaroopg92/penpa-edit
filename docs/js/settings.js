@@ -218,15 +218,14 @@ const UserSettings = {
         return this._reload_button;
     },
 
-    _disable_shortcuts: 1,
-    set disable_shortcuts(newValue) {
-        const valueInt = newValue ? parseInt(newValue, 10) : 1;
-        this._disable_shortcuts = valueInt;
+    _shortcuts_enabled: 1,
+    set shortcuts_enabled(newValue) {
+        this._shortcuts_enabled = newValue;
 
-        document.getElementById("disable_shortcuts_opt").value = valueInt;
+        document.getElementById("enable_shortcuts_opt").value = newValue ? 1 : 2;
     },
-    get disable_shortcuts() {
-        return this._disable_shortcuts;
+    get shortcuts_enabled() {
+        return this._shortcuts_enabled;
     },
 
     _gridtype: "square",

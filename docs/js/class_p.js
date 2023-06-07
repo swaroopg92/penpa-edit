@@ -8261,7 +8261,7 @@ class Puzzle {
         var str_num = "1234567890";
 
         // If ZXCV is disabled
-        if (UserSettings.disable_shortcuts == 2) {
+        if (!UserSettings.shortcuts_enabled) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         } else {
             var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
