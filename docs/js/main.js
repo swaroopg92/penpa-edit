@@ -265,6 +265,12 @@ onload = function() {
                 number_release_time = -1e5;
             }
 
+            if (key === '?') {
+                show_shortcuts();
+                e.returnValue = false;
+                return;
+            }
+
             // For shift shortcut in Sudoku mode, modify the numpad keys
             // keylocation 3 indicates numlock is ON and number pad is being used
             if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && !isShiftKeyPressed(key) && keylocation === 3 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
