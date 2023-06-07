@@ -134,6 +134,21 @@ hr.newgridhrline {
     color: var(--fgMain);
 }
 
+#modal-keys li {
+    display: block;
+    padding: .2em .5em;
+}
+#modal-keys li + li {
+    border-top: 1px solid var(--fgSubtle);
+}
+
+#modal-keys kbd {
+    font-size: .9em;
+    display: inline-block;
+    padding: .1em .3em;
+    border: 1px solid var(--fgMedium);
+}
+
 #modal-help-body p {
     font-size: .8em;
     margin: .5em;
@@ -903,6 +918,7 @@ body textarea {
     background-color: var(--transparent70);
 }
 
+#modal-keys,
 #modal-save2,
 #modal-save-tag,
 #modal-replay {
@@ -927,6 +943,17 @@ body textarea {
     border-radius: 20px;
     overflow: auto;
     box-shadow: var(--shadow_mid);
+}
+
+.modal-content-wide {
+    width: min(100%, 40em);
+}
+
+.modal-inner-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    grid-gap: 1em;
+    gap: 1em;
 }
 
 #modal-image-content {
@@ -1081,8 +1108,15 @@ body textarea {
     padding: 0;
 }
 
+.modal-subheader:first-child,
 .modal-header+.modal-subheader {
     margin-top: 0;
+}
+
+.modal-footnote {
+    font-style: italic;
+    color: var(--fgMedium);
+    font-size:.9em;
 }
 
 .solcheck,
