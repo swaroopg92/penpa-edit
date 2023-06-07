@@ -158,10 +158,12 @@
                         <label class="label_mode" id="constraints">Constraints (Beta):</label>
                         <select name="constraints_settings" id="constraints_settings_opt"> </select>
                         <span id="visibility_button0" class="label_mode">Visibility:</span>
-                        <span id="visibility_button" class="label">ON</span>
+                        <span id="visibility_button" class="label toggle_btn">ON</span>
                         <br id="visibility_break">
                         <span id="edge_button0" class="label_mode">Draw on Edges:</span>
-                        <span id="edge_button" class="label">OFF</span>
+                        <span id="edge_button" class="label toggle_btn">OFF</span>
+                        <span id="quick_panel_toggle_label" class="label_mode is_hidden">Tool Panel:</span>
+                        <span id="quick_panel_toggle" class="label toggle_btn is_hidden">OFF</span>
                     </div>
                     <div id="mode_button" class="mode_button">
                         <label class="label_mode" id="mode_txt">Mode:</label>
@@ -1457,6 +1459,17 @@
                             </td>
                             <td>
                                 <select name="panelbutton" id="panel_button">
+                                    <option value="1">ON</option>
+                                    <option value="2" selected="selected">OFF</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Quick Panel Button:</label>
+                            </td>
+                            <td>
+                                <select name="quickpaneldropdown" id="quick_panel_dropdown">
                                     <option value="1">ON</option>
                                     <option value="2" selected="selected">OFF</option>
                                 </select>

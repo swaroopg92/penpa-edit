@@ -606,15 +606,15 @@ body textarea {
 #visibility_button0,
 #panel_buttons0,
 #panel_buttonc0,
-#edge_button0 {
+#edge_button0,
+#quick_panel_toggle_label {
     width: auto;
     border: none;
     background: none;
     padding-left: 5px;
 }
 
-#visibility_button,
-#edge_button {
+.toggle_btn {
     width: 2.079em;
     font-size: 1em;
     background: transparent;
@@ -622,8 +622,7 @@ body textarea {
     border-radius: .1em;
 }
 
-#visibility_button:hover,
-#edge_button:hover {
+.toggle_btn:hover {
     background: var(--greyLight);
 }
 
@@ -884,6 +883,10 @@ body textarea {
 
 .drag {
     z-index: 101;
+}
+
+.is_hidden {
+    display:none !important;
 }
 
 .modal,

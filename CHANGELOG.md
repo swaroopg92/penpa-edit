@@ -1,4 +1,6 @@
 ## History
+* Unreleased
+	* Added setting for quick panel toggle button, and added quick panel toggle button.
 * 2023/05/03 ver 3.0.7
 	* Diagonal connection shape for killer cages with rotation fix.
 	* Tweaked display for mobile devices.

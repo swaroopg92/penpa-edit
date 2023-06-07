@@ -540,7 +540,7 @@ onload = function() {
                             break;
                         case "i": //Ctrl+i
                         case "I":
-                            if ((document.getElementById('panel_button').value === "1") &&
+                            if (UserSettings.panel_shown &&
                                 (typeof panel_select !== "undefined") &&
                                 (panel_select < panel_pu.cont.length) &&
                                 pu.mode[pu.mode.qa].edit_mode !== "symbol") {
@@ -1789,6 +1789,10 @@ onload = function() {
                 UserSettings.draw_edges = !UserSettings.draw_edges;
                 e.preventDefault();
                 break;
+            case "quick_panel_toggle":
+                UserSettings.panel_shown = !UserSettings.panel_shown;
+                e.preventDefault();
+                break;
             case "visibility_button":
                 UserSettings.show_solution = !UserSettings.show_solution;
                 e.preventDefault();
@@ -2069,7 +2073,7 @@ onload = function() {
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
             panel_pu.edit_num = n;
-            if (document.getElementById('panel_button').value === "1" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
+            if (UserSettings.panel_shown && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     pu.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -2334,7 +2338,11 @@ onload = function() {
 
     // Panel Setting
     document.getElementById("panel_button").onchange = function() {
-        panel_onoff();
+        UserSettings.panel_shown = String(this.value) === "1";
+    }
+    
+    document.getElementById("quick_panel_dropdown").onchange = function() {
+        UserSettings.quick_panel_button = String(this.value) === "1";
     }
 
     // Conflict detection

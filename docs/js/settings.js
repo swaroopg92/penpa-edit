@@ -334,7 +334,7 @@ const UserSettings = {
         const button = document.getElementById("visibility_button");
         this._show_solution = newValue;
         button.textContent = newValue ? "ON" : "OFF";
-
+        
         if (window.pu) {
             pu.redraw();
         }
@@ -342,18 +342,55 @@ const UserSettings = {
     get show_solution() {
         return this._show_solution;
     },
-
+    
     _shorten_links: false,
     set shorten_links(newValue) {
         if (newValue === undefined) { newValue = false; }
         this._shorten_links = newValue;
-
+        
         document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;
         document.getElementById("auto_shorten_chk").checked = newValue ? 'checked' : null;
         this.attemptSave();
     },
     get shorten_links() {
         return this._shorten_links;
+    },
+
+    _panel_shown: false,
+    set panel_shown(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._panel_shown = newValue;
+
+        const dropdown = document.getElementById('panel_button');
+        dropdown.value = newValue ? 1 : 2;
+        
+        const button = document.getElementById("quick_panel_toggle");
+        button.textContent = newValue ? "ON" : "OFF";
+        
+        panel_onoff();
+    },
+    get panel_shown() {
+        return this._panel_shown;
+    },
+    
+    _quick_panel_btn: false,
+    set quick_panel_button(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._quick_panel_btn = newValue;
+        
+        const dropdown = document.getElementById('quick_panel_dropdown');
+        dropdown.value = newValue ? 1 : 2;
+        
+        const button = document.getElementById("quick_panel_toggle");
+        const label = document.getElementById("quick_panel_toggle_label");
+
+        button.classList[newValue ? 'remove' : 'add']('is_hidden');
+        label.classList[newValue ? 'remove' : 'add']('is_hidden');
+
+        this.attemptSave();
+    },
+    get quick_panel_button() {
+        return this._quick_panel_btn;
     },
 
     can_save: [
@@ -368,7 +405,8 @@ const UserSettings = {
         'sudoku_normal_size',
         'timerbar_status',
         'conflict_detection',
-        'shorten_links'
+        'shorten_links',
+        'quickpanelbutton'
     ],
     gridtype_size: [
         'gridtype',
