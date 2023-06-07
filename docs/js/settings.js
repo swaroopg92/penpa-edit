@@ -373,7 +373,7 @@ const UserSettings = {
         return this._panel_shown;
     },
     
-    _quick_panel_btn: false,
+    _quick_panel_btn: true,
     set quick_panel_button(newValue) {
         if (newValue === undefined) { newValue = false; }
         this._quick_panel_btn = newValue;
