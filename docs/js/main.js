@@ -265,7 +265,7 @@ onload = function() {
                 number_release_time = -1e5;
             }
 
-            if (key === '?') {
+            if (key === '?' && pu.mode[pu.mode.qa].edit_mode !== "number") {
                 show_shortcuts();
                 e.returnValue = false;
                 return;
