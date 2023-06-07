@@ -280,7 +280,7 @@ onload = function () {
             e.returnValue = false;
         }
 
-        if (!isCtrlKeyHeld(e) && checkShortcutKeys(e, capslock)) {
+        if (!isCtrlKeyHeld(e) && checkShortcutKeys(e, code, capslock)) {
             return false;
         }
 
@@ -615,7 +615,7 @@ onload = function () {
         "KeyC": "sub_sudoku3"
     };
 
-    function checkShortcutKeys(e, capslock) {
+    function checkShortcutKeys(e, code, capslock) {
         if (pu.mode[pu.mode.qa].edit_mode !== "surface" && pu.mode[pu.mode.qa].edit_mode !== "sudoku") {
             return false;
         }
