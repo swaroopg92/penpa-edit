@@ -2170,12 +2170,16 @@ onload = function () {
 
             // Display generic ones
             for (var i of penpa_constraints["setting"]["general"]) {
-                document.getElementById(i).style.display = "inline-block";
+                let element = document.getElementById(i);
+                let displayType = element.tagName === 'TR' ? 'table-row' : 'inline-block';
+                element.style.display = displayType;
             }
 
             // Display only the selected ones
             for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
-                document.getElementById(i).style.display = "inline-block";
+                let element = document.getElementById(i);
+                let displayType = element.tagName === 'TR' ? 'table-row' : 'inline-block';
+                element.style.display = displayType;
             }
 
             // set the default submode

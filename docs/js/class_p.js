@@ -13167,7 +13167,7 @@ class Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['customcolor']) {
-            document.getElementById(i).style.display = (displaytype === 'inline-block') ? 'table-row' : displaytype;
+            document.getElementById(i).style.display = (displaytype === 'inline-block' || displaytype === 'table-row') ? 'table-row' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms']) {
             document.getElementById("ms_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
