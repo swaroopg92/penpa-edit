@@ -610,6 +610,21 @@ onload = function() {
             }
         }
 
+        const surfaceKeys = {
+            "1": "st_surface1",
+            "2": "st_surface8",
+            "3": "st_surface3",
+            "4": "st_surface4",
+            "5": "st_surface2",
+            "6": "st_surface5",
+            "7": "st_surface6",
+            "8": "st_surface7",
+            "9": "st_surface9",
+            "0": "st_surface10",
+            "11": "st_surface11",
+            "12": "st_surface12"
+        };
+
         if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
             if (!capslock && !UserSettings.shortcuts_enabled) {
                 switch (code) {
@@ -665,110 +680,18 @@ onload = function() {
                         break;
                 }
             }
-        }
 
-        if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-            switch (key) {
-                case "1":
-                    present_style = document.getElementById("st_surface1").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface1");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "2":
-                    present_style = document.getElementById("st_surface8").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface8");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "3":
-                    present_style = document.getElementById("st_surface3").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface3");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "4":
-                    present_style = document.getElementById("st_surface4").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface4");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "5":
-                    present_style = document.getElementById("st_surface2").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface2");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "6":
-                    present_style = document.getElementById("st_surface5").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface5");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "7":
-                    present_style = document.getElementById("st_surface6").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface6");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "8":
-                    present_style = document.getElementById("st_surface7").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface7");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "9":
-                    present_style = document.getElementById("st_surface9").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface9");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "0":
-                    present_style = document.getElementById("st_surface10").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface10");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "11":
-                    present_style = document.getElementById("st_surface11").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface11");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                case "12":
-                    present_style = document.getElementById("st_surface12").checked;
-                    if (!present_style) {
-                        pu.stylemode_check("st_surface12");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                    break;
-                default:
-                    e.returnValue = false;
-                    break;
+            const surfaceCode = surfaceKeys[key];
+
+            if (surfaceCode) {
+                present_style = document.getElementById(surfaceCode).checked;
+                if (!present_style) {
+                    pu.stylemode_check(surfaceCode);
+                    e.preventDefault();
+                }
             }
+
+            e.returnValue = false;
         }
 
         if (key === "Tab" || key === "Enter") {
@@ -846,8 +769,8 @@ onload = function() {
             }
             e.returnValue = false;
             return true;
-        } 
-        
+        }
+
         if (key === "F3") {
             if (pu.mode.qa != 'pu_a') {
                 if (pu.mmode == 'solve') {
