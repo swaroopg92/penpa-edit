@@ -206,8 +206,6 @@ onload = function() {
         "special", "sub_specialthermo", "sub_specialarrows",
         "combi"
     ];
-    let previous_mode = "surface";
-    let previous_submode = 1;
     let previous_length = 2;
     let counter_index = 0;
     let present_submode;
@@ -216,8 +214,6 @@ onload = function() {
     let shift_release_time = -1e5;
     let shift_time_limit = 15; // milliseconds
     let ctrl_counter = 0;
-    let ctrl_numkey = false;
-    let ctrl_release_time = -1e5;
     let number_release_time = -1e5;
     let number_release_limit = 300; // milliseconds
     let previousdigit1 = false;
@@ -906,7 +902,6 @@ onload = function() {
                     pu.submode_check("sub_sudoku3");
                 }
                 ctrl_counter = 0;
-                ctrl_release_time = Date.now();
                 e.returnValue = false;
             } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
                 if (key === "1") {
