@@ -280,6 +280,10 @@ onload = function () {
             e.returnValue = false;
         }
 
+        if (!isCtrlKeyHeld(e) && checkShortcutKeys(e, capslock)) {
+            return false;
+        }
+
         // All of this is specific to sudoku
         if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
 
@@ -334,40 +338,6 @@ onload = function () {
                 // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                 // Sudoku mode, I have assigned it to Delete
                 pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
-                e.returnValue = false;
-            }
-
-            if (!isCtrlKeyHeld(e) && !capslock && UserSettings.shortcuts_enabled) {
-                const subModeMap = {
-                    "KeyZ": "sub_sudoku1",
-                    "KeyX": "sub_sudoku2",
-                    "KeyC": "sub_sudoku3"
-                };
-                let mappedCode = subModeMap[code];
-
-                if (mappedCode) {
-                    present_mode = document.getElementById("mo_sudoku").checked;
-                    if (!present_mode) {
-                        pu.mode_set("sudoku");
-                        e.preventDefault();
-                    }
-                    present_submode = document.getElementById(mappedCode).checked;
-                    if (!present_submode) {
-                        pu.submode_check(mappedCode);
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                }
-
-                if (code === "KeyV") {
-                    present_mode = document.getElementById("mo_surface").checked;
-                    if (!present_mode) {
-                        pu.mode_set("surface");
-                        e.preventDefault();
-                    }
-                    e.returnValue = false;
-                }
-
                 e.returnValue = false;
             }
         }
@@ -578,61 +548,6 @@ onload = function () {
         };
 
         if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-            if (!capslock && !UserSettings.shortcuts_enabled) {
-                switch (code) {
-                    case "KeyZ":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku1").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku1");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyX":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku2").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku2");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyC":
-                        present_mode = document.getElementById("mo_sudoku").checked;
-                        if (!present_mode) {
-                            pu.mode_set("sudoku");
-                            e.preventDefault();
-                        }
-                        present_submode = document.getElementById("sub_sudoku3").checked;
-                        if (!present_submode) {
-                            pu.submode_check("sub_sudoku3");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "KeyV":
-                        present_mode = document.getElementById("mo_surface").checked;
-                        if (!present_mode) {
-                            pu.mode_set("surface");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    default:
-                        e.returnValue = false;
-                        break;
-                }
-            }
-
             const surfaceCode = surfaceKeys[key];
 
             if (surfaceCode) {
@@ -692,6 +607,55 @@ onload = function () {
                 e.returnValue = false;
             }
         }
+    }
+
+    const shortcutModeMap = {
+        "KeyZ": "sub_sudoku1",
+        "KeyX": "sub_sudoku2",
+        "KeyC": "sub_sudoku3"
+    };
+
+    function checkShortcutKeys(e, capslock) {
+        if (pu.mode[pu.mode.qa].edit_mode !== "surface" && pu.mode[pu.mode.qa].edit_mode !== "sudoku") {
+            return false;
+        }
+
+        let detected = false;
+
+        if (!capslock && UserSettings.shortcuts_enabled) {
+            let mappedCode = shortcutModeMap[code];
+
+            if (mappedCode) {
+                let present_mode = document.getElementById("mo_sudoku").checked;
+                if (!present_mode) {
+                    pu.mode_set("sudoku");
+                    detected = true;
+                }
+                let present_submode = document.getElementById(mappedCode).checked;
+                if (!present_submode) {
+                    pu.submode_check(mappedCode);
+                    detected = true;
+                }
+                e.returnValue = false;
+            }
+
+            if (code === "KeyV") {
+                present_mode = document.getElementById("mo_surface").checked;
+                if (!present_mode) {
+                    pu.mode_set("surface");
+                    detected = true;
+                }
+                e.returnValue = false;
+            }
+
+            e.returnValue = false;
+        }
+
+        if (detected) {
+            e.preventDefault();
+        }
+
+        return detected;
     }
 
     function checkFunctionKeys(e, key) {
