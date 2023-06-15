@@ -1694,6 +1694,7 @@ onload = function() {
                 showhide_source();
                 e.preventDefault();
                 break;
+			/*
             case "nb_hidethemeyes_lb":
                 document.getElementById("nb_hidethemeyes").checked = true;
                 e.preventDefault();
@@ -1702,6 +1703,7 @@ onload = function() {
                 document.getElementById("nb_hidethemeno").checked = true;
                 e.preventDefault();
                 break;
+			*/
             case "saveimagename":
                 return;
             case "closeBtn_image2":

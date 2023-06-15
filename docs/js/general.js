@@ -2460,7 +2460,7 @@ function load2(paramArray, type) {
     }
 
     // Hide theme setting
-    if (rtext_para[26]) {
+    if (false && rtext_para[26]) {
         if (rtext_para[26] === "true") {
             document.getElementById("nb_hidethemeyes").checked = true;
         } else {

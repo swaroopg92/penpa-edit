@@ -2869,7 +2869,8 @@ class Puzzle {
         text += "," + document.getElementById("nb_exclusive").checked;
 
         // Hide theme or not
-        text += "," + document.getElementById("nb_hidethemeyes").checked;
+        // text += "," + document.getElementById("nb_hidethemeyes").checked;
+        text += ",true";
 
         // Video Coverage
         text += "," + document.getElementById("video_usage").checked;
