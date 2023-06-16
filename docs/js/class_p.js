@@ -11573,11 +11573,20 @@ class Puzzle {
                         }).then((rating_result) => {
                             if (rating_result.isConfirmed) {
                                 submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
-                                const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+								if (pu.puzzle_info.ppid) {
+									const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+									Swal.fire({
+										html: `<h3 class="info">${redirect}</h3>`,
+										icon: 'success',
+										confirmButtonText: 'Close',
+									});
+								}
+                            } else {
+                                const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
                                 Swal.fire({
                                     html: `<h3 class="info">${redirect}</h3>`,
                                     icon: 'success',
-                                    confirmButtonText: 'Ok',
+                                    confirmButtonText: 'Close',
                                 });
                             }
                         })

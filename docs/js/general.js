@@ -970,8 +970,16 @@ function submit_solution(e) {
                         Swal.fire({
                             html: `<h3 class="info">${redirect}</h3>`,
                             icon: 'success',
-                            confirmButtonText: 'Ok',
+                            confirmButtonText: 'Close',
                         });
+                    } else {
+                        const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                        Swal.fire({
+                            html: `<h3 class="info">${redirect}</h3>`,
+                            icon: 'success',
+                            confirmButtonText: 'Close',
+                        });
+                        
                     }
                 })
             } else {
@@ -2369,6 +2377,10 @@ function load2(paramArray, type) {
         pu.puzzle_info = JSON.parse(qstr);
         if (!pu.puzzle_info.expoEdit) {
             document.getElementById("savetext").style.display = 'none';
+        }
+        if (pu.puzzle_info.ppid) {
+          document.getElementById("puzzlesourcelink").href = `/expo/?ppid=${pu.puzzle_info.ppid}`;
+          document.getElementById("puzzlesource").innerHTML = "Back to Expo";
         }
         if (pu.puzzle_info.title) {
             document.getElementById("puzzletitle").style.display = 'block';
