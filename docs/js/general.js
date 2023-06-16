@@ -2079,7 +2079,7 @@ function validate_entries() {
     }
 
     // Validate at least one genre tag is selected
-    if ($('#genre_tags_opt').select2("data").length === 0) {
+    if (false && $('#genre_tags_opt').select2("data").length === 0) {
         expoError({ html: 'Select at least one tag. It is best to select all related tags.' });
         return false;
     }
