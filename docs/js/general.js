@@ -2408,6 +2408,18 @@ function load2(paramArray, type) {
                 });
             }
         }
+        if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "expo" && !valid_replay) {
+            if (pu.puzzle_info.seconds !== undefined) {
+                document.getElementById("timer").style.display = "block";
+                document.getElementById("stop_watch").style.display = "";
+                sw_timer.start({
+                    precision: 'secondTenths',
+                    startValues: {
+                        seconds: pu.puzzle_info.seconds
+                    }
+                });
+            }
+        }
     }
 
     UserSettings.loadFromCookies("others");
