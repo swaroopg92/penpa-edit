@@ -11513,6 +11513,7 @@ class Puzzle {
     }
 
     check_solution() {
+        if (this.puzzle_info && this.puzzle_info.lmimode === "expo" && this.puzzle_info.allowSub === false) return;
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
