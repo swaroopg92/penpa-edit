@@ -31,7 +31,9 @@ p {
     color: var(--fgMain);
 }
 
-h2 {
+h2,
+h4,
+h5 {
     user-select: text;
 }
 
