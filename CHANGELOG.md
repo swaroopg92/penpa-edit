@@ -1,5 +1,9 @@
 ## History
-* Unreleased
+* 2023/xx/xx ver 3.0.8
+	* Updated jquery, sweetalert to latest.
+	* Fixed the bug of correctly deleteing cagearrays.
+	* Added clone url button.
+	* Enable text selection for the answer check message.
 	* Added setting for quick panel toggle button, and added quick panel toggle button.
 * 2023/05/03 ver 3.0.7
 	* Diagonal connection shape for killer cages with rotation fix.

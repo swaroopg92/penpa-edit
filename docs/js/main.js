@@ -2340,7 +2340,7 @@ onload = function() {
     document.getElementById("panel_button").onchange = function() {
         UserSettings.panel_shown = String(this.value) === "1";
     }
-    
+
     document.getElementById("quick_panel_dropdown").onchange = function() {
         UserSettings.quick_panel_button = String(this.value) === "1";
     }
