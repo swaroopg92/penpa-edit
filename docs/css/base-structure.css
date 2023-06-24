@@ -15,7 +15,6 @@
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: var(--transparentBlack);
     touch-action: manipulation;
-    /*user-select: none;*/
     margin: 0;
     padding: 0;
 }
@@ -30,6 +29,10 @@ body {
 
 p {
     color: var(--fgMain);
+}
+
+h2 {
+    user-select: text;
 }
 
 input {
