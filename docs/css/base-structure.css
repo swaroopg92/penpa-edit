@@ -1579,7 +1579,7 @@ sup {
         margin-top: 5px;
         font-size: 28px;
         text-align: center;
-        line-height: 50px;
+        line-height: 50px !important;
         border-radius: 3px;
     }
 }
