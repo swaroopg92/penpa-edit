@@ -2033,7 +2033,7 @@ function submit_portal(e, isPreview, isExample) {
                             icon: 'error',
                             title: 'Error',
                             text: response.message,
-                            footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+                            footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
                             confirmButtonText: 'Retry',
                         })
                     }
@@ -2042,7 +2042,7 @@ function submit_portal(e, isPreview, isExample) {
             Swal.fire({
                 icon: 'error',
                 title: 'Solution is missing',
-                footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+                footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
                 confirmButtonText: 'Ok',
             })
         }
@@ -2058,7 +2058,7 @@ function expoError(error) {
     Swal.fire({
         icon: 'error',
         confirmButtonText: 'Ok',
-        footer: '<a href="">Refer to this guide before submitting to LMI portal</a>',
+        footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
         ...error
     })
 }
