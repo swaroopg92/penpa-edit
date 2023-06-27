@@ -1724,6 +1724,10 @@ function saveimage_window() {
     }
 }
 
+function betaPhaseMessage() {
+	return `<span>LMI Expo is in beta phase.<br/>Please report any bugs/suggestions <a target="_blank" href="/forum/forums/thread-view.asp?tid=3295">in the forum</a>.</span>`;
+}
+
 function savetextPrecheck() {
     const options = {
             method: 'POST',
@@ -1744,7 +1748,7 @@ function savetextPrecheck() {
                     icon: 'error',
                     confirmButtonText: 'Ok',
                     allowOutsideClick: false,
-                    footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+                    footer: betaPhaseMessage()
                 }).then(function() {
                     window.location = response.redirect;
                 })
@@ -1756,7 +1760,7 @@ function savetextPrecheck() {
                 icon: 'error',
                 confirmButtonText: 'Ok',
                 allowOutsideClick: false,
-                footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+                footer: betaPhaseMessage()
             });
         });
 }
@@ -2015,7 +2019,7 @@ function submit_portal(e, isPreview, isExample) {
                                 html: `Here is the <a target='_blank' href='${response.expoLink}'>link</a> to preview your puzzle. Please note that puzzle will be public only after you submit.`,
                                 icon: 'success',
                                 confirmButtonText: 'I Understand',
-                                footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+                                footer: betaPhaseMessage()
                             })
                         } else {
                             Swal.fire({
@@ -2023,7 +2027,7 @@ function submit_portal(e, isPreview, isExample) {
                                 html: `Here is the <a href='${response.expoLink}'>link</a> to your submitted puzzle.`, // Feel free to share this link with puzzlers around the world.`,
                                 icon: 'success',
                                 confirmButtonText: 'Ok',
-                                footer: `LMI Expo is in beta phase.<br/>Please report any bugs/suggestions to the admins`
+                                footer: betaPhaseMessage()
                             }).then(function() {
                                 window.location = response.expoLink;
                             })
