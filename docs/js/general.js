@@ -4577,14 +4577,28 @@ function load_from_server(paramArray, type, action) {
         })
         .then(function(response) {
             if (response.showStartButton) {
-                Swal.fire({
-                    allowOutsideClick: false,
-                    confirmButtonText: 'Start Puzzle',
-                    text: `Timer will start once you click on "Start Puzzle".`,
-                    footer: `<i>Close this page, if you are not ready yet.</i>`,
-                }).then((result) => {
-                    load_from_server(paramArray, type, 'start-puzzle');
-                });
+				if (data.ppid) {
+					Swal.fire({
+						input: 'checkbox',
+						inputValue: 1,
+						inputPlaceholder: 'Allow my timing to recorded and displayed',
+						allowOutsideClick: false,
+						confirmButtonText: 'Start Puzzle',
+						footer: `<i>Timer will start once you click on "Start Puzzle". Close this page, if you are not ready yet.</i>`,
+					}).then((result) => {
+						paramArray["recordTiming"] = result.value === 1;
+						load_from_server(paramArray, type, 'start-puzzle');
+					});
+				} else {
+					Swal.fire({
+						allowOutsideClick: false,
+						confirmButtonText: 'Start Puzzle',
+						text: `Timer will start once you click on "Start Puzzle".`,
+						footer: `<i>Close this page, if you are not ready yet.</i>`,
+					}).then((result) => {
+						load_from_server(paramArray, type, 'start-puzzle');
+					});
+				}
             } else {
                 if (response.success === false) {
                     if (response.showLoad) {
