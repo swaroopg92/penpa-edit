@@ -11548,6 +11548,8 @@ class Puzzle {
                             showCancelButton: true,
                             confirmButtonText: 'Submit',
                             cancelButtonText: 'Skip',
+                            showDenyButton: true,
+                            denyButtonText: 'Report a Problem',
                             showLoaderOnConfirm: true,
                             preConfirm: (rating) => {
                                 var element = document.getElementsByClassName('rate_lb');
@@ -11582,6 +11584,9 @@ class Puzzle {
 										confirmButtonText: 'Close',
 									});
 								}
+                            } else if (rating_result.isDenied) {
+                                const redirect = `/expo/?ppid=${pu.puzzle_info.ppid}#report-a-problem`;
+                                window.open(redirect, "_blank");
                             } else {
                                 const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
                                 Swal.fire({
