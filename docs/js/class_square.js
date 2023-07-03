@@ -41,7 +41,7 @@ class Puzzle_square extends Puzzle {
 
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -4589,7 +4589,7 @@ class Puzzle_sudoku extends Puzzle_square {
             "polyhex": 7
         };
         this.reset();
-        PenpaUI.set_visible_modes();
+        PenpaUI.set_visible_modes_by_gridtype();
     }
 
     draw_sudokugrid(rows, cols, start, end, linestyle) {
@@ -4677,7 +4677,7 @@ class Puzzle_kakuro extends Puzzle_square {
 
         };
         this.reset();
-        PenpaUI.set_visible_modes();
+        PenpaUI.set_visible_modes_by_gridtype();
     }
 
     draw_kakurogrid() {

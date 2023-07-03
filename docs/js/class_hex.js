@@ -31,7 +31,7 @@ class Puzzle_hex extends Puzzle {
             "polyhex": 7
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {

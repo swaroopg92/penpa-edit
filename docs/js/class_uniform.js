@@ -32,7 +32,7 @@ class Puzzle_truncated_square extends Puzzle {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -2708,7 +2708,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -3283,7 +3283,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -3964,7 +3964,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -4619,7 +4619,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
         document.getElementById("sub_lineE2_lb").style.display = "inline-block";
     }
 
@@ -5797,7 +5797,7 @@ class Puzzle_rhombitrihexagonal extends Puzzle_truncated_square {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -6495,7 +6495,7 @@ class Puzzle_deltoidal_trihexagonal extends Puzzle_truncated_square {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes(this.gridtype);
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
