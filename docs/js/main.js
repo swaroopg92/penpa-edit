@@ -2271,12 +2271,12 @@ onload = function() {
 
             // Display generic ones
             for (var i of penpa_constraints["setting"]["general"]) {
-                document.getElementById(i).style.display = "inline-block";
+                document.getElementById(i).classList.remove('is_hidden');
             }
 
             // Display only the selected ones
             for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
-                document.getElementById(i).style.display = "inline-block";
+                document.getElementById(i).classList.remove('is_hidden');
             }
 
             // set the default submode
