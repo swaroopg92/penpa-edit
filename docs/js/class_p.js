@@ -11576,14 +11576,14 @@ class Puzzle {
                         }).then((rating_result) => {
                             if (rating_result.isConfirmed) {
                                 submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
-								if (pu.puzzle_info.ppid) {
-									const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
-									Swal.fire({
-										html: `<h3 class="info">${redirect}</h3>`,
-										icon: 'success',
-										confirmButtonText: 'Close',
-									});
-								}
+                                if (pu.puzzle_info.ppid) {
+                                    const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+                                    Swal.fire({
+                                        html: `<h3 class="info">${redirect}</h3>`,
+                                        icon: 'success',
+                                        confirmButtonText: 'Close',
+                                    });
+                                }
                             } else if (rating_result.isDenied) {
                                 const redirect = `/expo/?ppid=${pu.puzzle_info.ppid}#report-a-problem`;
                                 window.open(redirect, "_blank");
@@ -11619,11 +11619,11 @@ class Puzzle {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
 
-                        user_sol = author_sol; // Temporary for Deb
+                        // user_sol = author_sol; // Temporary for Deb
 
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             // submit solution steps
-                            submit_solution_steps(); // Temporary by Deb
+                            if (pu.puzzle_info.allowSub) submit_solution_steps();
 
                             // Rating and feedback code
                             let wrap = document.createElement('div');

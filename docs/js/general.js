@@ -979,7 +979,7 @@ function submit_solution(e) {
                             icon: 'success',
                             confirmButtonText: 'Close',
                         });
-                        
+
                     }
                 })
             } else {
@@ -1725,7 +1725,7 @@ function saveimage_window() {
 }
 
 function betaPhaseMessage() {
-	return `<span>LMI Expo is in beta phase.<br/>Please report any bugs/suggestions <a target="_blank" href="/forum/forums/thread-view.asp?tid=3295">in the forum</a>.</span>`;
+    return `<span>LMI Expo is in beta phase.<br/>Please report any bugs/suggestions <a target="_blank" href="/forum/forums/thread-view.asp?tid=3295">in the forum</a>.</span>`;
 }
 
 function savetextPrecheck() {
@@ -2383,8 +2383,8 @@ function load2(paramArray, type) {
             document.getElementById("savetext").style.display = 'none';
         }
         if (pu.puzzle_info.ppid) {
-          document.getElementById("puzzlesourcelink").href = `/expo/?ppid=${pu.puzzle_info.ppid}`;
-          document.getElementById("puzzlesource").innerHTML = "Back to Expo";
+            document.getElementById("puzzlesourcelink").href = `/expo/?ppid=${pu.puzzle_info.ppid}`;
+            document.getElementById("puzzlesource").innerHTML = "Back to Expo";
         }
         if (pu.puzzle_info.title) {
             document.getElementById("puzzletitle").style.display = 'block';
@@ -4577,28 +4577,28 @@ function load_from_server(paramArray, type, action) {
         })
         .then(function(response) {
             if (response.showStartButton) {
-				if (data.ppid) {
-					Swal.fire({
-						input: 'checkbox',
-						inputValue: 1,
-						inputPlaceholder: 'Allow my timing to recorded and displayed',
-						allowOutsideClick: false,
-						confirmButtonText: 'Start Puzzle',
-						footer: `<i>Timer will start once you click on "Start Puzzle". Close this page, if you are not ready yet.</i>`,
-					}).then((result) => {
-						paramArray["recordTiming"] = result.value === 1;
-						load_from_server(paramArray, type, 'start-puzzle');
-					});
-				} else {
-					Swal.fire({
-						allowOutsideClick: false,
-						confirmButtonText: 'Start Puzzle',
-						text: `Timer will start once you click on "Start Puzzle".`,
-						footer: `<i>Close this page, if you are not ready yet.</i>`,
-					}).then((result) => {
-						load_from_server(paramArray, type, 'start-puzzle');
-					});
-				}
+                if (data.ppid) {
+                    Swal.fire({
+                        input: 'checkbox',
+                        inputValue: 1,
+                        inputPlaceholder: 'Allow my timing to recorded and displayed',
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Start Puzzle',
+                        footer: `<i>Timer will start once you click on "Start Puzzle". Close this page, if you are not ready yet.</i>`,
+                    }).then((result) => {
+                        paramArray["recordTiming"] = result.value === 1;
+                        load_from_server(paramArray, type, 'start-puzzle');
+                    });
+                } else {
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Start Puzzle',
+                        text: `Timer will start once you click on "Start Puzzle".`,
+                        footer: `<i>Close this page, if you are not ready yet.</i>`,
+                    }).then((result) => {
+                        load_from_server(paramArray, type, 'start-puzzle');
+                    });
+                }
             } else {
                 if (response.success === false) {
                     if (response.showLoad) {
