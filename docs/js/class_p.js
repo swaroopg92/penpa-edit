@@ -11647,6 +11647,8 @@ class Puzzle {
                                 showCancelButton: true,
                                 confirmButtonText: 'Submit',
                                 cancelButtonText: 'Skip',
+                                showDenyButton: true,
+                                denyButtonText: 'Report a Problem',
                                 showLoaderOnConfirm: true,
                                 preConfirm: (rating) => {
                                     var element = document.getElementsByClassName('rate_lb');
@@ -11673,11 +11675,23 @@ class Puzzle {
                             }).then((rating_result) => {
                                 if (rating_result.isConfirmed) {
                                     submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
-                                    const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                                    if (pu.puzzle_info.ppid) {
+                                        const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+                                        Swal.fire({
+                                            html: `<h3 class="info">${redirect}</h3>`,
+                                            icon: 'success',
+                                            confirmButtonText: 'Close',
+                                        });
+                                    }
+                                } else if (rating_result.isDenied) {
+                                    const redirect = `/expo/?ppid=${pu.puzzle_info.ppid}#report-a-problem`;
+                                    window.open(redirect, "_blank");
+                                } else {
+                                    const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
                                     Swal.fire({
                                         html: `<h3 class="info">${redirect}</h3>`,
                                         icon: 'success',
-                                        confirmButtonText: 'Ok',
+                                        confirmButtonText: 'Close',
                                     });
                                 }
                             })
