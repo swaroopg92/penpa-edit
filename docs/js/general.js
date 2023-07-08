@@ -1161,19 +1161,16 @@ function replay_forward() {
 }
 
 function panel_off() {
-    document.getElementById('panel_button').value = 2;
-    panel_onoff();
+    UserSettings.panel_shown = false;
 }
 
 function panel_toggle() {
-    let button = document.getElementById('panel_button');
-    let ogValue = parseInt(button.value, 10) || 2;
-    button.value = 3 - ogValue;
-    panel_onoff();
+    UserSettings.panel_shown = !UserSettings.panel_shown;
 }
 
 function panel_onoff() {
-    if (document.getElementById('panel_button').value === "1") {
+    console.log('UserSettings.panel_shown', UserSettings.panel_shown);
+    if (UserSettings.panel_shown) {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
             document.getElementById('float-key-body').style.left = window.panel_leftlast;
