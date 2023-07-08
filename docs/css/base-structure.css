@@ -15,7 +15,6 @@
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: var(--transparentBlack);
     touch-action: manipulation;
-    /*user-select: none;*/
     margin: 0;
     padding: 0;
 }
@@ -30,6 +29,12 @@ body {
 
 p {
     color: var(--fgMain);
+}
+
+h2,
+h4,
+h5 {
+    user-select: text;
 }
 
 input {
@@ -212,6 +217,8 @@ hr.newgridhrline {
     border: 0;
     font-size: 0;
     width: 600px;
+    /*    box-sizing: border-box;*/
+    /*    width: min(630px, 100%);*/
     margin: 5px auto;
     padding: 10px;
 }
@@ -604,15 +611,15 @@ body textarea {
 #visibility_button0,
 #panel_buttons0,
 #panel_buttonc0,
-#edge_button0 {
+#edge_button0,
+#quick_panel_toggle_label {
     width: auto;
     border: none;
     background: none;
     padding-left: 5px;
 }
 
-#visibility_button,
-#edge_button {
+.toggle_btn {
     width: 2.079em;
     font-size: 1em;
     background: transparent;
@@ -620,8 +627,7 @@ body textarea {
     border-radius: .1em;
 }
 
-#visibility_button:hover,
-#edge_button:hover {
+.toggle_btn:hover {
     background: var(--greyLight);
 }
 
@@ -884,6 +890,10 @@ body textarea {
     z-index: 101;
 }
 
+.is_hidden {
+    display: none !important;
+}
+
 .modal,
 #modal-image,
 #modal-save,
@@ -1045,7 +1055,8 @@ body textarea {
 }
 
 #closeBtn_input1,
-#closeBtn_input2 {
+#closeBtn_input2,
+#closeBtn_input3 {
     width: 40px;
 }
 
@@ -1279,14 +1290,37 @@ input[type=number] {
 }
 
 #settings-table td {
-    border: 0;
     padding: 3px;
-    height: 1.5em;
-    font-size: 1.3em;
+    font-size: 1.1em;
+    line-height: 1.1;
+}
+
+#settings-table tr+tr td {
+    border-top: 1px solid var(--fgSubtle);
 }
 
 #settings-table select {
+    background: var(--bgMain);
+}
+
+#settings-table button {
+    background: var(--bgMedium);
+}
+
+#settings-table button:hover {
+    background: var(--bgHover);
+}
+
+#settings-table select,
+#settings-table button {
+    color: var(--fgMain);
+    border: 1px solid var(--fgMedium);
+    display: block;
     font-size: .9em;
+    width: 100%;
+    margin: 2px 0;
+    padding: 2px;
+    border-radius: 3px;
 }
 
 #sol_or_lb,
@@ -1545,7 +1579,7 @@ sup {
         margin-top: 5px;
         font-size: 28px;
         text-align: center;
-        line-height: 50px;
+        line-height: 50px !important;
         border-radius: 3px;
     }
 }

@@ -45,17 +45,6 @@ const UserSettings = {
         return this._responsive_mode;
     },
 
-    // Save settings as cookie
-    _save_settings: false,
-    set save_settings(newValue) {
-        this._save_settings = (String(newValue) === "2");
-        document.getElementById("save_settings_opt").value = this._save_settings ? "2" : "1";
-        this.attemptSave();
-    },
-    get save_settings() {
-        return this._save_settings;
-    },
-
     // Toggle timer bar visibility
     _timerbar_status: 1,
     set timerbar_status(newValue) {
@@ -64,6 +53,7 @@ const UserSettings = {
 
         document.getElementById("timer_bar_opt").value = valueInt;
         document.getElementById("stop_watch").style.display = (valueInt === 2) ? 'none' : 'block';
+        this.attemptSave();
     },
     get timerbar_status() {
         return this._timerbar_status;
@@ -76,6 +66,7 @@ const UserSettings = {
         this._mousemiddle_button = valueInt;
 
         document.getElementById("mousemiddle_settings_opt").value = valueInt;
+        this.attemptSave();
     },
     get mousemiddle_button() {
         return this._mousemiddle_button;
@@ -107,6 +98,7 @@ const UserSettings = {
         this._starbattle_dots = valueInt;
 
         document.getElementById("starbattle_settings_opt").value = valueInt;
+        this.attemptSave();
     },
     get starbattle_dots() {
         return this._starbattle_dots;
@@ -119,6 +111,7 @@ const UserSettings = {
         this._secondcolor = valueInt;
 
         document.getElementById("secondcolor_settings_opt").value = valueInt;
+        this.attemptSave();
     },
     get secondcolor() {
         return this._secondcolor;
@@ -131,6 +124,7 @@ const UserSettings = {
         this._sudoku_normal_size = valueInt;
 
         document.getElementById("sudoku_settings_normal_opt").value = valueInt;
+        this.attemptSave();
     },
     get sudoku_normal_size() {
         return this._sudoku_normal_size;
@@ -142,9 +136,52 @@ const UserSettings = {
         this._sudoku_centre_size = valueInt;
 
         document.getElementById("sudoku_settings_opt").value = valueInt;
+        this.attemptSave();
     },
     get sudoku_centre_size() {
         return this._sudoku_centre_size;
+    },
+
+    _custom_colors_on: false,
+    _custom_color_supported_grids: {
+        square: 1,
+        sudoku: 1,
+        kakuro: 1,
+        hex: 1
+    },
+    _custom_color_supported_modes: {
+        line: 1,
+        lineE: 1,
+        wall: 1,
+        surface: 1,
+        cage: 1,
+        special: 1,
+        symbol: 1
+    },
+    set custom_colors_on(newValue) {
+        if (typeof newValue === 'string') {
+            const valueInt = newValue ? parseInt(newValue, 10) : 1;
+            this._custom_colors_on = (valueInt === 2);
+        } else {
+            this._custom_colors_on = !!newValue;
+        }
+
+        if (this._custom_colors_on) {
+            // On
+            let mode = pu.mode[pu.mode.qa].edit_mode;
+            if (this._custom_color_supported_grids[pu.gridtype] && this._custom_color_supported_modes[mode]) {
+                document.getElementById('style_special').style.display = 'inline';
+            }
+        } else {
+            // Off
+            document.getElementById('style_special').style.display = 'none';
+        }
+        document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
+
+        pu.redraw();
+    },
+    get custom_colors_on() {
+        return this._custom_colors_on;
     },
 
     _local_storage: 1,
@@ -175,9 +212,21 @@ const UserSettings = {
         this._reload_button = valueInt;
 
         document.getElementById("reload_button").value = valueInt;
+        this.attemptSave();
     },
     get reload_button() {
         return this._reload_button;
+    },
+
+    _disable_shortcuts: 1,
+    set disable_shortcuts(newValue) {
+        const valueInt = newValue ? parseInt(newValue, 10) : 1;
+        this._disable_shortcuts = valueInt;
+
+        document.getElementById("disable_shortcuts_opt").value = valueInt;
+    },
+    get disable_shortcuts() {
+        return this._disable_shortcuts;
     },
 
     _gridtype: "square",
@@ -223,6 +272,7 @@ const UserSettings = {
             pu.set_redoundocolor();
             pu.redraw();
         }
+        this.attemptSave();
     },
     get color_theme() {
         return this._color_theme;
@@ -300,13 +350,52 @@ const UserSettings = {
 
         document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;
         document.getElementById("auto_shorten_chk").checked = newValue ? 'checked' : null;
+        this.attemptSave();
     },
     get shorten_links() {
         return this._shorten_links;
     },
 
+    _panel_shown: false,
+    set panel_shown(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._panel_shown = newValue;
+
+        const dropdown = document.getElementById('panel_button');
+        dropdown.value = newValue ? 1 : 2;
+
+        const button = document.getElementById("quick_panel_toggle");
+        button.textContent = newValue ? "ON" : "OFF";
+
+        panel_onoff();
+    },
+    get panel_shown() {
+        return this._panel_shown;
+    },
+
+    _quick_panel_btn: true,
+    set quick_panel_button(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._quick_panel_btn = newValue;
+
+        const dropdown = document.getElementById('quick_panel_dropdown');
+        dropdown.value = newValue ? 1 : 2;
+
+        const button = document.getElementById("quick_panel_toggle");
+        const label = document.getElementById("quick_panel_toggle_label");
+
+        button.classList[newValue ? 'remove' : 'add']('is_hidden');
+        label.classList[newValue ? 'remove' : 'add']('is_hidden');
+
+        this.attemptSave();
+    },
+    get quick_panel_button() {
+        return this._quick_panel_btn;
+    },
+
     can_save: [
         'color_theme',
+        'custom_colors_on',
         'mousemiddle_button',
         'reload_button',
         'responsive_mode',
@@ -316,12 +405,33 @@ const UserSettings = {
         'sudoku_normal_size',
         'timerbar_status',
         'conflict_detection',
-        'shorten_links'
+        'shorten_links',
+        'quickpanelbutton'
     ],
     gridtype_size: [
         'gridtype',
         'displaysize'
     ],
+
+    clearSettings: function() {
+        this.can_save.forEach(function(setting) {
+            deleteCookie(setting);
+        });
+        this.gridtype_size.forEach(function(setting) {
+            deleteCookie(setting);
+        });
+        deleteCookie('tab_settings');
+        // deleteCookie("different_solution_tab");
+
+        Swal.fire({
+            title: 'Cookies cleared!',
+            html: 'You must reload the page for the default settings to take effect.',
+            icon: 'info',
+            confirmButtonText: 'ok 🙂',
+        });
+    },
+
+    _settingsLoaded: false,
 
     // Handle saving settings if needed
     attemptSave: function() {
@@ -329,28 +439,16 @@ const UserSettings = {
             return;
         }
 
-        if (this._save_settings) {
-            this.can_save.forEach(function(setting) {
-                setCookie(setting, UserSettings[setting], this._expDate);
-            });
-            this.gridtype_size.forEach(function(setting) {
-                setCookie(setting, UserSettings[setting], this._expDate);
-            });
-            setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), this._expDate);
-            // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, this._expDate);
-        } else {
-            this.can_save.forEach(function(setting) {
-                deleteCookie(setting);
-            });
-            this.gridtype_size.forEach(function(setting) {
-                deleteCookie(setting);
-            });
-            deleteCookie('tab_settings');
-            // deleteCookie("different_solution_tab");
-        }
+        this.can_save.forEach(function(setting) {
+            setCookie(setting, UserSettings[setting], this._expDate);
+        });
+        this.gridtype_size.forEach(function(setting) {
+            setCookie(setting, UserSettings[setting], this._expDate);
+        });
+        setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), this._expDate);
+        // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, this._expDate);
     },
 
-    _settingsLoaded: false,
     loadFromCookies: function(load = "others") {
         if (load === "others") {
             let foundCookie;
@@ -369,12 +467,6 @@ const UserSettings = {
                     // document.getElementById('advance_button').value = "1";
                     advancecontrol_onoff("url");
                 }
-                foundCookie = 1;
-            }
-
-            // If we found any saved setting, turn saving back on.
-            if (foundCookie) {
-                UserSettings.save_settings = 2;
             }
 
             // Check for local storage setting

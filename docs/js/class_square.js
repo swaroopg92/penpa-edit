@@ -25,7 +25,7 @@ class Puzzle_square extends Puzzle {
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
-            "arrow_cross": 4,
+            "arrow_cross": 8,
             "arrow_fourtip": 4,
             "degital_B": 7,
             "degital_G": 7,
@@ -714,6 +714,8 @@ class Puzzle_square extends Puzzle {
             this.draw_line("pu_a");
             this.draw_lattice();
             this.draw_selection();
+            this.draw_number_circle("pu_q");
+            this.draw_number_circle("pu_a");
             this.draw_symbol("pu_q", 2);
             this.draw_symbol("pu_a", 2);
             this.draw_cage("pu_q");
@@ -738,6 +740,7 @@ class Puzzle_square extends Puzzle {
             this.draw_direction("pu_q");
             this.draw_lattice();
             this.draw_selection();
+            this.draw_number_circle("pu_q");
             this.draw_symbol("pu_q", 2);
             this.draw_cage("pu_q");
             this.draw_number("pu_q");
@@ -783,7 +786,7 @@ class Puzzle_square extends Puzzle {
         for (var k = 0; k < keys.length; k++) {
             var i = keys[k];
             set_surface_style(this.ctx, this[pu].surface[i]);
-            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].surface[i]) {
+            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
                 this.ctx.fillStyle = this[pu + "_col"].surface[i];
                 this.ctx.strokeStyle = this.ctx.fillStyle;
             }
@@ -829,7 +832,7 @@ class Puzzle_square extends Puzzle {
             if (this[pu].squareframe[i][0]) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
-                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].squareframe[i]) {
+                if (UserSettings.custom_colors_on && this[pu + "_col"].squareframe[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].squareframe[i];
                 } else {
                     this.ctx.strokeStyle = Color.GREY_LIGHT;
@@ -853,7 +856,7 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].thermo.length; i++) {
                 if (this[pu].thermo[i] && this[pu].thermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].thermo[i]) {
+                    if (UserSettings.custom_colors_on && this[pu + "_col"].thermo[i]) {
                         this.ctx.fillStyle = this[pu + "_col"].thermo[i];
                     } else {
                         this.ctx.fillStyle = Color.GREY_LIGHT;
@@ -861,7 +864,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(this.ctx, this.point[this[pu].thermo[i][0]].x, this.point[this[pu].thermo[i][0]].y, 0.4);
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].thermo[i]) {
+                    if (UserSettings.custom_colors_on && this[pu + "_col"].thermo[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].thermo[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_LIGHT;
@@ -913,14 +916,14 @@ class Puzzle_square extends Puzzle {
             for (var i = 0; i < this[pu].nobulbthermo.length; i++) {
                 if (this[pu].nobulbthermo[i] && this[pu].nobulbthermo[i][0]) {
                     this.ctx.strokeStyle = Color.TRANSPARENTBLACK;
-                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].nobulbthermo[i]) {
+                    if (UserSettings.custom_colors_on && this[pu + "_col"].nobulbthermo[i]) {
                         this.ctx.fillStyle = this[pu + "_col"].nobulbthermo[i];
                     } else {
                         this.ctx.fillStyle = Color.GREY_LIGHT;
                     }
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].nobulbthermo[i]) {
+                    if (UserSettings.custom_colors_on && this[pu + "_col"].nobulbthermo[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].nobulbthermo[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_LIGHT;
@@ -1030,7 +1033,7 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].arrows[i] && this[pu].arrows[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].arrows[i]) {
+                    if (UserSettings.custom_colors_on && this[pu + "_col"].arrows[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
@@ -1064,7 +1067,7 @@ class Puzzle_square extends Puzzle {
                         this.ctx.stroke();
                         this.ctx.setLineDash([]);
                         this.ctx.lineJoin = "miter";
-                        if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].arrows[i]) {
+                        if (UserSettings.custom_colors_on && this[pu + "_col"].arrows[i]) {
                             this.ctx.strokeStyle = this[pu + "_col"].arrows[i];
                         } else {
                             this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
@@ -1090,7 +1093,7 @@ class Puzzle_square extends Puzzle {
                 if (this[pu].direction[i][0]) {
                     this.ctx.setLineDash([]);
                     this.ctx.lineCap = "square";
-                    if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].direction[i]) {
+                    if (UserSettings.custom_colors_on && this[pu + "_col"].direction[i]) {
                         this.ctx.strokeStyle = this[pu + "_col"].direction[i];
                     } else {
                         this.ctx.strokeStyle = Color.GREY_DARK_LIGHT;
@@ -1227,7 +1230,7 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
-                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].line[i]) {
+                if (UserSettings.custom_colors_on && this[pu + "_col"].line[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].line[i];
                 }
                 this.ctx.beginPath();
@@ -1240,7 +1243,7 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].line[i]);
-                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].line[i]) {
+                if (UserSettings.custom_colors_on && this[pu + "_col"].line[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].line[i];
                 }
                 var i1 = i.split(",")[0];
@@ -1288,7 +1291,7 @@ class Puzzle_square extends Puzzle {
                 var x = this.point[i].x;
                 var y = this.point[i].y;
                 set_line_style(this.ctx, 98);
-                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].lineE[i]) {
+                if (UserSettings.custom_colors_on && this[pu + "_col"].lineE[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
                 }
                 this.ctx.beginPath();
@@ -1301,7 +1304,7 @@ class Puzzle_square extends Puzzle {
                 this.ctx.stroke();
             } else {
                 set_line_style(this.ctx, this[pu].lineE[i]);
-                if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].lineE[i]) {
+                if (UserSettings.custom_colors_on && this[pu + "_col"].lineE[i]) {
                     this.ctx.strokeStyle = this[pu + "_col"].lineE[i];
                 }
                 var i1 = i.split(",")[0];
@@ -1330,7 +1333,7 @@ class Puzzle_square extends Puzzle {
         /*freeline*/
         for (var i in this[pu].freeline) {
             set_line_style(this.ctx, this[pu].freeline[i]);
-            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].freeline[i]) {
+            if (UserSettings.custom_colors_on && this[pu + "_col"].freeline[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].freeline[i];
             }
             var i1 = i.split(",")[0];
@@ -1354,7 +1357,7 @@ class Puzzle_square extends Puzzle {
         }
         for (var i in this[pu].freelineE) {
             set_line_style(this.ctx, this[pu].freelineE[i]);
-            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].freelineE[i]) {
+            if (UserSettings.custom_colors_on && this[pu + "_col"].freelineE[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].freelineE[i];
             }
             var i1 = i.split(",")[0];
@@ -1381,7 +1384,7 @@ class Puzzle_square extends Puzzle {
     draw_wall(pu) {
         for (var i in this[pu].wall) {
             set_line_style(this.ctx, this[pu].wall[i]);
-            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].wall[i]) {
+            if (UserSettings.custom_colors_on && this[pu + "_col"].wall[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].wall[i];
             }
             this.ctx.lineCap = "butt";
@@ -1451,7 +1454,7 @@ class Puzzle_square extends Puzzle {
             } else {
                 set_line_style(this.ctx, this[pu].cage[i]);
             }
-            if (document.getElementById("custom_color_opt").value === "2" && this[pu + "_col"].cage[i]) {
+            if (UserSettings.custom_colors_on && this[pu + "_col"].cage[i]) {
                 this.ctx.strokeStyle = this[pu + "_col"].cage[i];
             }
             this.ctx.beginPath();
@@ -1498,7 +1501,6 @@ class Puzzle_square extends Puzzle {
             }
             switch (this[pu].number[i][2]) {
                 case "1": //normal
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
 
                     // if some numbers present in the corner (like Killer sudoku etc) then displace the numbers slightly lower to avoid overlap
@@ -1508,7 +1510,6 @@ class Puzzle_square extends Puzzle {
                     break;
                 case "2": //arrow
                     var arrowlength = 0.7;
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
                     var direction = {
                         "_0": 90,
@@ -1604,7 +1605,6 @@ class Puzzle_square extends Puzzle {
                     }
                     break;
                 case "4": //tapa
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.44);
                     let values = [...this[pu].number[i][0]]; // This is to handle unicode symbols.
                     if (values.length === 1) {
                         set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
@@ -1627,22 +1627,18 @@ class Puzzle_square extends Puzzle {
                     }
                     break;
                 case "5": //small
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
                     set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * factor * this.size, this.size * 0.9);
                     break;
                 case "6": //medium
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
                     set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.9);
                     break;
                 case "10": //big
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
                     set_font_style(this.ctx, 0.6 * this.size.toString(10), this[pu].number[i][1]);
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
                     break;
                 case "7": //sudoku
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     var sum = 0,
                         pos = 0;
                     for (var j = 0; j < 9; j++) {
@@ -1704,6 +1700,42 @@ class Puzzle_square extends Puzzle {
         }
     }
 
+    draw_number_circle(pu) {
+        var p_x, p_y;
+        for (var i in this[pu].number) {
+            if (i.slice(-1) === "E") { // Overwriting in Edge Mode
+                p_x = this.point[i.slice(0, -1)].x;
+                p_y = this.point[i.slice(0, -1)].y;
+            } else {
+                p_x = this.point[i].x;
+                p_y = this.point[i].y;
+            }
+            switch (this[pu].number[i][2]) {
+                case "1": //normal
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
+                    break;
+                case "2": //arrow
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
+                    break;
+                case "4": //tapa
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.44);
+                    break;
+                case "5": //small
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
+                    break;
+                case "6": //medium
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.25);
+                    break;
+                case "10": //big
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.36);
+                    break;
+                case "7": //sudoku
+                    this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
+                    break;
+            }
+        }
+    }
+
     draw_numbercircle(pu, i, p_x, p_y, size) {
         if (this[pu].number[i][1] === 5) {
             set_circle_style(this.ctx, 7);
@@ -1729,7 +1761,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.43);
                     this.draw_circle(ctx, x, y, 0.32);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    if (i !== 'panel' && UserSettings.custom_colors_on &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1744,7 +1776,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.35);
                     this.draw_circle(ctx, x, y, 0.25);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    if (i !== 'panel' && UserSettings.custom_colors_on &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1759,7 +1791,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.22);
                     this.draw_circle(ctx, x, y, 0.14);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    if (i !== 'panel' && UserSettings.custom_colors_on &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1774,7 +1806,7 @@ class Puzzle_square extends Puzzle {
                     this.draw_circle(ctx, x, y, 0.13);
                     this.draw_circle(ctx, x, y, 0.07);
                 } else {
-                    if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                    if (i !== 'panel' && UserSettings.custom_colors_on &&
                         this[qamode + "_col"].symbol[i]) {
                         set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                     } else {
@@ -1784,7 +1816,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "square_LL":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1793,7 +1825,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.5 * Math.sqrt(2), 4, 45);
                 break;
             case "square_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1802,7 +1834,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.4 * Math.sqrt(2), 4, 45);
                 break;
             case "square_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1811,7 +1843,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.35 * Math.sqrt(2), 4, 45);
                 break;
             case "square_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1820,7 +1852,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.22 * Math.sqrt(2), 4, 45);
                 break;
             case "square_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1829,7 +1861,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.13 * Math.sqrt(2), 4, 45);
                 break;
             case "triup_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1838,7 +1870,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.5 * 0.25 * this.size, 0.5, 3, 90);
                 break;
             case "triup_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1847,7 +1879,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.4 * 0.25 * this.size, 0.4, 3, 90);
                 break;
             case "triup_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1856,7 +1888,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.25 * 0.25 * this.size, 0.25, 3, 90);
                 break;
             case "triup_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1865,7 +1897,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y + 0.16 * 0.25 * this.size, 0.16, 3, 90);
                 break;
             case "tridown_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1874,7 +1906,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.5 * 0.25 * this.size, 0.5, 3, -90);
                 break;
             case "tridown_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1883,7 +1915,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.4 * 0.25 * this.size, 0.4, 3, -90);
                 break;
             case "tridown_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1892,7 +1924,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.25 * 0.25 * this.size, 0.25, 3, -90);
                 break;
             case "tridown_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1901,7 +1933,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y - 0.16 * 0.25 * this.size, 0.16, 3, -90);
                 break;
             case "triright_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1910,7 +1942,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.5 * 0.25 * this.size, y, 0.5, 3, 180);
                 break;
             case "triright_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1919,7 +1951,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.4 * 0.25 * this.size, y, 0.4, 3, 180);
                 break;
             case "triright_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1928,7 +1960,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.25 * 0.25 * this.size, y, 0.25, 3, 180);
                 break;
             case "triright_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1937,7 +1969,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x - 0.16 * 0.25 * this.size, y, 0.16, 3, 180);
                 break;
             case "trileft_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1946,7 +1978,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.5 * 0.25 * this.size, y, 0.5, 3, 0);
                 break;
             case "trileft_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1955,7 +1987,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.4 * 0.25 * this.size, y, 0.4, 3, 0);
                 break;
             case "trileft_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1964,7 +1996,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.25 * 0.25 * this.size, y, 0.25, 3, 0);
                 break;
             case "trileft_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1973,7 +2005,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x + 0.16 * 0.25 * this.size, y, 0.16, 3, 0);
                 break;
             case "diamond_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1982,7 +2014,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.43, 4, 0);
                 break;
             case "diamond_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -1991,7 +2023,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.35, 4, 0);
                 break;
             case "diamond_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2000,7 +2032,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.22, 4, 0);
                 break;
             case "diamond_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2009,7 +2041,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.13, 4, 0);
                 break;
             case "hexpoint_LL":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2018,7 +2050,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.48, 6, 30);
                 break;
             case "hexpoint_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2027,7 +2059,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.4, 6, 30);
                 break;
             case "hexpoint_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2036,7 +2068,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.3, 6, 30);
                 break;
             case "hexpoint_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2045,7 +2077,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.2, 6, 30);
                 break;
             case "hexpoint_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2054,7 +2086,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.13, 6, 30);
                 break;
             case "hexflat_LL":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2063,7 +2095,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.48, 6, 0);
                 break;
             case "hexflat_L":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2072,7 +2104,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.4, 6, 0);
                 break;
             case "hexflat_M":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2081,7 +2113,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.3, 6, 0);
                 break;
             case "hexflat_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2090,7 +2122,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_polygon(ctx, x, y, 0.2, 6, 0);
                 break;
             case "hexflat_SS":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, num, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2102,7 +2134,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTWHITE;
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.strokeStyle = this[qamode + "_col"].symbol[i];
                 } else {
@@ -2128,7 +2160,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_ox(ctx, num, x, y);
                 break;
             case "tri":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_tri(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2139,7 +2171,7 @@ class Puzzle_square extends Puzzle {
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
                 ctx.fillStyle = Color.TRANSPARENTBLACK;
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.strokeStyle = this[qamode + "_col"].symbol[i];
                 } else {
@@ -2149,7 +2181,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_cross(ctx, num, x, y);
                 break;
             case "line":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_linesym(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2157,7 +2189,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "frameline":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_framelinesym(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2167,7 +2199,7 @@ class Puzzle_square extends Puzzle {
             case "bars_B":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.fillStyle = this[qamode + "_col"].symbol[i];
                     ctx.strokeStyle = this[qamode + "_col"].symbol[i];
@@ -2181,7 +2213,7 @@ class Puzzle_square extends Puzzle {
             case "bars_G":
                 ctx.setLineDash([]);
                 ctx.lineCap = "butt";
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     ctx.fillStyle = this[qamode + "_col"].symbol[i];
                 } else {
@@ -2201,7 +2233,7 @@ class Puzzle_square extends Puzzle {
                 break;
                 //number
             case "inequality":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 10, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2210,7 +2242,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_inequality(ctx, num, x, y);
                 break;
             case "math":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_font_style(ctx, 0.8 * pu.size.toString(10), 1, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2223,7 +2255,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_math(ctx, num, x, y + 0.05 * pu.size);
                 break;
             case "degital":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2232,7 +2264,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_B":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2249,7 +2281,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_degital(ctx, num, x, y);
                 break;
             case "degital_f":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_degital_f(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2257,7 +2289,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "dice":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2267,7 +2299,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "pills":
                 set_circle_style(ctx, 3);
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_pills(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2277,7 +2309,7 @@ class Puzzle_square extends Puzzle {
 
                 /* arrow */
             case "arrow_B_B":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2294,7 +2326,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowB(ctx, num, x, y);
                 break;
             case "arrow_N_B":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2311,7 +2343,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowN(ctx, num, x, y);
                 break;
             case "arrow_S":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2320,7 +2352,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowS(ctx, num, x, y);
                 break;
             case "arrow_GP":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2329,7 +2361,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowGP(ctx, num, x, y);
                 break;
             case "arrow_GP_C":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2338,7 +2370,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowGP_C(ctx, num, x, y);
                 break;
             case "arrow_Short":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2347,7 +2379,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowShort(ctx, num, x, y);
                 break;
             case "arrow_tri_B":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2364,7 +2396,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowtri(ctx, num, x, y);
                 break;
             case "arrow_cross":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2373,7 +2405,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowcross(ctx, num, x, y);
                 break;
             case "arrow_eight":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2382,7 +2414,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arroweight(ctx, num, x, y);
                 break;
             case "arrow_fourtip":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2391,7 +2423,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_arrowfourtip(ctx, num, x, y);
                 break;
             case "arrow_fouredge_B":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2415,7 +2447,7 @@ class Puzzle_square extends Puzzle {
 
                 /* special */
             case "kakuro":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_kakuro(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2423,7 +2455,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "compass":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_compass(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2431,7 +2463,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "star":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_star(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2439,7 +2471,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "tents":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_tents(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2448,7 +2480,7 @@ class Puzzle_square extends Puzzle {
                 break;
             case "battleship_B":
                 var font_style_type = 1;
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                     this.draw_battleship(ctx, num, x, y, font_style_type, this[qamode + "_col"].symbol[i]);
@@ -2472,7 +2504,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_battleship(ctx, num, x, y);
                 break;
             case "battleship_B+":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     set_circle_style(ctx, 2, this[qamode + "_col"].symbol[i]);
                     this.draw_battleshipplus(ctx, num, x, y);
@@ -2495,7 +2527,7 @@ class Puzzle_square extends Puzzle {
                 this.draw_battleshipplus(ctx, num, x, y);
                 break;
             case "angleloop":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_angleloop(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2503,7 +2535,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "firefly":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_firefly(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2511,7 +2543,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sun_moon":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_sun_moon(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2519,7 +2551,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudokuetc":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_sudokuetc(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2527,7 +2559,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "sudokumore":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_sudokumore(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2535,7 +2567,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "polyomino":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_polyomino(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2543,7 +2575,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "polyhex":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_polyhex(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2551,7 +2583,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "pencils":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_pencils(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2559,7 +2591,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "slovak":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_slovak(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2567,7 +2599,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "arc":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_arc(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2575,7 +2607,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "darts":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_darts(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2583,7 +2615,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "spans":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_spans(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2591,7 +2623,7 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "neighbors":
-                if (i !== 'panel' && document.getElementById("custom_color_opt").value === "2" &&
+                if (i !== 'panel' && UserSettings.custom_colors_on &&
                     this[qamode + "_col"].symbol[i]) {
                     this.draw_neighbors(ctx, num, x, y, this[qamode + "_col"].symbol[i]);
                 } else {
@@ -2693,19 +2725,30 @@ class Puzzle_square extends Puzzle {
 
     draw_tri(ctx, num, x, y, ccolor = "none") {
         var r = 0.5,
-            th;
+            th, th1, th2, th3;
         switch (num) {
             case 1:
             case 2:
             case 3:
             case 4:
                 set_circle_style(ctx, 2, ccolor);
-                th = this.rotate_theta(-90 * (num - 1));
                 ctx.beginPath();
-                ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 120.
+                if (pu.version_ge(3, 0, 5)) {
+                    th1 = this.rotate_theta(-90 * (num - 1) - 135);
+                    th2 = this.rotate_theta(-90 * (num - 1) - 45);
+                    th3 = this.rotate_theta(-90 * (num - 1) + 135);
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th2), y + Math.sqrt(2) * r * pu.size * Math.sin(th2));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th3), y + Math.sqrt(2) * r * pu.size * Math.sin(th3));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                } else {
+                    th = this.rotate_theta(-90 * (num - 1));
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                }
                 ctx.fill();
                 break;
             case 5:
@@ -2718,12 +2761,23 @@ class Puzzle_square extends Puzzle {
             case 9:
                 set_circle_style(ctx, 3);
                 ctx.fillStyle = Color.GREY;
-                th = this.rotate_theta(-90 * (num - 1));
                 ctx.beginPath();
-                ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
-                ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 120.
+                if (pu.version_ge(3, 0, 5)) {
+                    th1 = this.rotate_theta(-90 * (num - 1) - 135);
+                    th2 = this.rotate_theta(-90 * (num - 1) - 45);
+                    th3 = this.rotate_theta(-90 * (num - 1) + 135);
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th2), y + Math.sqrt(2) * r * pu.size * Math.sin(th2));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th3), y + Math.sqrt(2) * r * pu.size * Math.sin(th3));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th1), y + Math.sqrt(2) * r * pu.size * Math.sin(th1));
+                } else {
+                    th = this.rotate_theta(-90 * (num - 1));
+                    ctx.moveTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.25), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.25));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th + Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th + Math.PI * 0.75));
+                    ctx.lineTo(x + Math.sqrt(2) * r * pu.size * Math.cos(th - Math.PI * 0.75), y + Math.sqrt(2) * r * pu.size * Math.sin(th - Math.PI * 0.75));
+                }
                 ctx.fill();
                 break;
             case 0:
@@ -2842,18 +2896,26 @@ class Puzzle_square extends Puzzle {
 
     draw_framelinesym(ctx, num, x, y, ccolor = "none") {
         var r = 0.32;
+        var r2 = 0.17;
+        var d = 0.08;
         ctx.setLineDash([]);
         ctx.lineCap = "round";
         ctx.fillStyle = Color.TRANSPARENTBLACK;
         ctx.strokeStyle = Color.BLACK;
         ctx.lineWidth = 3;
+        let flip = (pu.reflect[0] !== pu.reflect[1]) === ((pu.theta % 180) === 0);
         switch (num) {
             case 1:
                 set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2861,8 +2923,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2870,8 +2937,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2879,8 +2951,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x + r * pu.size, y - r * pu.size);
-                ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2888,8 +2965,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 115, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2897,8 +2979,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 15, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2906,8 +2993,13 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 16, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -2915,8 +3007,47 @@ class Puzzle_square extends Puzzle {
                 set_line_style(ctx, 110, ccolor)
                 r = r / Math.sqrt(2);
                 ctx.beginPath();
-                ctx.moveTo(x - r * pu.size, y - r * pu.size);
-                ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                if (flip && pu.version_ge(3, 0, 5)) {
+                    ctx.moveTo(x + r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x - r * pu.size, y + r * pu.size);
+                } else {
+                    ctx.moveTo(x - r * pu.size, y - r * pu.size);
+                    ctx.lineTo(x + r * pu.size, y + r * pu.size);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 9:
+                set_line_style(ctx, 16, ccolor)
+                ctx.beginPath();
+                if (flip) {
+                    ctx.moveTo(x - (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x + (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                } else {
+                    ctx.moveTo(x + (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x - (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                break;
+            case 0:
+                set_line_style(ctx, 16, ccolor)
+                ctx.beginPath();
+                if (flip) {
+                    ctx.moveTo(x + (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x - (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                } else {
+                    ctx.moveTo(x - (r2 + d) * pu.size, y - (r2 - d) * pu.size);
+                    ctx.lineTo(x + (r2 - d) * pu.size, y + (r2 + d) * pu.size);
+                    ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
+                    ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
+                }
                 ctx.closePath();
                 ctx.stroke();
                 break;
@@ -3281,6 +3412,7 @@ class Puzzle_square extends Puzzle {
         var w2 = 0.12;
         var len1 = 0.5 * w1; //nemoto
         var len2 = 0.45; //tip
+        var len3 = 0.55; //tip 45 deg
         var ri = -0.18;
         var th;
         for (var i = 0; i < 4; i++) {
@@ -3288,6 +3420,15 @@ class Puzzle_square extends Puzzle {
                 th = this.rotate_theta(i * 90 - 180);
                 ctx.beginPath();
                 ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len2 * pu.size * Math.cos(th), y + len2 * pu.size * Math.sin(th),
+                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                ctx.fill();
+            }
+        }
+        for (var i = 4; i < 8; i++) {
+            if (num[i] === 1) {
+                th = this.rotate_theta(i * 90 - 135);
+                ctx.beginPath();
+                ctx.arrow(x - len1 * pu.size * Math.cos(th), y - len1 * pu.size * Math.sin(th), x + len3 * pu.size * Math.cos(th), y + len3 * pu.size * Math.sin(th),
                     [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
                 ctx.fill();
             }
@@ -3351,30 +3492,60 @@ class Puzzle_square extends Puzzle {
     draw_arrowfouredge(ctx, num, x, y) {
         var len1 = 0.5; //nemoto
         var len2 = 0.5;
-        var t1 = 0.00;
-        var t2 = 0.50;
+        var t1 = 0.0;
+        var t2 = 0.5;
         var w1 = 0.02;
         var w2 = 0.07;
         var ri = 0.42;
-        var th1, th2;
+        var th1a, th1b, th2;
         for (var i = 0; i < 4; i++) {
             if (num[i] === 1) {
-                th1 = this.rotate_theta(225 + 90 * i);
+                th1a = this.rotate_theta(225 + 90 * i);
+                th1b = this.rotate_theta(315 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.1 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.1 * pu.size * Math.sin(th2), x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.05 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.05 * pu.size * Math.sin(th2),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 108.
+                if (pu.version_ge(3, 0, 5)) {
+                    ctx.arrow(
+                        x + len1 * pu.size * Math.cos(th1a) + 0.1 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a) + 0.1 * pu.size * Math.sin(th2),
+                        x + len2 * pu.size * Math.cos(th1b) - 0.05 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1b) - 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                } else {
+                    ctx.arrow(
+                        x + len1 * pu.size * Math.cos(th1a + Math.PI * t1) + 0.1 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a + Math.PI * t1) + 0.1 * pu.size * Math.sin(th2),
+                        x + len2 * pu.size * Math.cos(th1a + Math.PI * t2) - 0.05 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1a + Math.PI * t2) - 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                }
                 ctx.fill();
                 ctx.stroke();
             }
         }
         for (var i = 4; i < 8; i++) {
             if (num[i] === 1) {
-                th1 = this.rotate_theta(225 + 90 * i);
+                th1a = this.rotate_theta(225 + 90 * i);
+                th1b = this.rotate_theta(315 + 90 * i);
                 th2 = this.rotate_theta(90 * i);
                 ctx.beginPath();
-                ctx.arrow(x + len2 * pu.size * Math.cos(th1 + Math.PI * t2) - 0.1 * pu.size * Math.cos(th2), y + len2 * pu.size * Math.sin(th1 + Math.PI * t2) - 0.1 * pu.size * Math.sin(th2), x + len1 * pu.size * Math.cos(th1 + Math.PI * t1) + 0.05 * pu.size * Math.cos(th2), y + len1 * pu.size * Math.sin(th1 + Math.PI * t1) + 0.05 * pu.size * Math.sin(th2),
-                    [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                // This is to not break old puzzles which were constructed assuming this rendering bug. Check PR 108.
+                if (pu.version_ge(3, 0, 5)) {
+                    ctx.arrow(
+                        x + len2 * pu.size * Math.cos(th1b) - 0.1 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1b) - 0.1 * pu.size * Math.sin(th2),
+                        x + len1 * pu.size * Math.cos(th1a) + 0.05 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a) + 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                } else {
+                    ctx.arrow(
+                        x + len2 * pu.size * Math.cos(th1a + Math.PI * t2) - 0.1 * pu.size * Math.cos(th2),
+                        y + len2 * pu.size * Math.sin(th1a + Math.PI * t2) - 0.1 * pu.size * Math.sin(th2),
+                        x + len1 * pu.size * Math.cos(th1a + Math.PI * t1) + 0.05 * pu.size * Math.cos(th2),
+                        y + len1 * pu.size * Math.sin(th1a + Math.PI * t1) + 0.05 * pu.size * Math.sin(th2),
+                        [0, w1 * pu.size, ri * pu.size, w1 * pu.size, ri * pu.size, w2 * pu.size]);
+                }
                 ctx.fill();
                 ctx.stroke();
             }
@@ -4127,7 +4298,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4160,7 +4331,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4193,7 +4364,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4226,7 +4397,7 @@ class Puzzle_square extends Puzzle {
                 ctx.lineCap = "round";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([]);
-                if ((this.version[0] < 2) || (this.version[0] == 2 && this.version[1] < 25) || (this.version[0] == 2 && this.version[1] == 25 && this.version[2] < 9)) {
+                if (this.version_lt(2, 25, 9)) {
                     ctx.fillStyle = Color.TRANSPARENTBLACK;
                 } else {
                     ctx.fillStyle = Color.WHITE;
@@ -4254,8 +4425,7 @@ class Puzzle_square extends Puzzle {
     }
 
     draw_arc(ctx, num, x, y, ccolor = "none") {
-        var r = 0.2,
-            th;
+        var th, th1, th2, th2a;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
         if (ccolor !== "none") {
@@ -4273,17 +4443,34 @@ class Puzzle_square extends Puzzle {
             case 3:
             case 4:
                 ctx.beginPath();
-                th = this.rotate_theta(90 * (num - 1));
-                ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th + Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th + Math.PI * 0.25)));
-                ctx.arcTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.25)), (x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.75)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.75)), pu.size);
+                // This is to not break old puzzles which were constructed assuming this arc bug. Check PR 109.
+                if (pu.version_ge(3, 0, 5)) {
+                    th1 = this.rotate_theta(45 + 90 * (num - 1));
+                    th2 = this.rotate_theta(225 + 90 * (num - 1));
+                    th2a = this.rotate_theta(315 + 90 * (num - 1));
+                    ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th1)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th1)));
+                    ctx.arcTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th2a)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th2a)), (x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th2)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th2)), pu.size);
+                } else {
+                    th = this.rotate_theta(90 * (num - 1));
+                    ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th + Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th + Math.PI * 0.25)));
+                    ctx.arcTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.25)), (x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.75)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.75)), pu.size);
+                }
                 ctx.stroke();
                 break;
             case 5:
             case 6:
                 ctx.beginPath();
-                th = this.rotate_theta(90 * (num - 5));
-                ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th + Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th + Math.PI * 0.25)));
-                ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.75)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.75)));
+                // This is to not break old puzzles which were constructed assuming this arc bug. Check PR 109.
+                if (pu.version_ge(3, 0, 5)) {
+                    th1 = this.rotate_theta(45 + 90 * (num - 5));
+                    th2 = this.rotate_theta(225 + 90 * (num - 5));
+                    ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th1)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th1)));
+                    ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th2)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th2)));
+                } else {
+                    th = this.rotate_theta(90 * (num - 5));
+                    ctx.moveTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th + Math.PI * 0.25)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th + Math.PI * 0.25)));
+                    ctx.lineTo((x + Math.sqrt(2) * 0.5 * pu.size * Math.cos(th - Math.PI * 0.75)), (y + Math.sqrt(2) * 0.5 * pu.size * Math.sin(th - Math.PI * 0.75)));
+                }
                 ctx.stroke();
         }
     }
@@ -4426,7 +4613,7 @@ class Puzzle_sudoku extends Puzzle_square {
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
-            "arrow_cross": 4,
+            "arrow_cross": 8,
             "arrow_fourtip": 4,
             "degital_B": 7,
             "degital_G": 7,
@@ -4513,7 +4700,7 @@ class Puzzle_kakuro extends Puzzle_square {
         this.size = size;
         this.onoff_symbolmode_list = {
             "cross": 4,
-            "arrow_cross": 4,
+            "arrow_cross": 8,
             "arrow_fourtip": 4,
             "degital_B": 7,
             "degital_G": 7,

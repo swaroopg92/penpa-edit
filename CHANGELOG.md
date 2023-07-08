@@ -1,7 +1,35 @@
 ## History
-* 2022/05/11
+* 2023/xx/xx ver 3.0.8
+	* Updated jquery, sweetalert to latest.
+	* Fixed the bug of correctly deleteing cagearrays.
+	* Added clone url button.
+	* Enable text selection for the answer check message.
+	* Added setting for quick panel toggle button, and added quick panel toggle button.
+* 2023/05/03 ver 3.0.7
+	* Diagonal connection shape for killer cages with rotation fix.
+	* Tweaked display for mobile devices.
+	* Ability to draw number circles below symbols. Implemented for Square grid. Need to still implement for all other types of boards.
+	* Killer Sudoku output for GMPuzzles
+* 2023/03/02 ver 3.0.6
+	* Added rhombitrihexagonal and deltoidal_trihexagonal boards (Alpha Version).
+	* Added pp_fileoutput2 code.
+* 2023/02/28 ver 3.0.5
+	* Extending arrow cross to corner directions.
+	* Reset the success message to congratulations.
+	* Fix for board resize after rotate.
+	* Fixed a bug in test for puzz link parser.
+	* Fixed arc and arrowfouredge.
+	* Improved puzz.link parser.
+	* Code refactoring for custom colors (moved to User Settings).
+	* Feature to edit the existing number mode texts.
+	* Fixes the Triangle rendering for board flip.
+	* Refactoring Settings into appropriate groups.
+	* Improved F2 and F3 functioning while in Solve Mode.
+* 2023/01/05 ver 3.0.4
 	* Make the answer check table only show one column at a time
 	* Conflict highlighting on hex grid for latin square
+	* Setting option to disable Sudoku Shortcuts (Manually or 'Alphabet' genre)
+	* Congratulations message set to "Happy New Year"
 * 2022/08/19 ver 3.0.3
 	* Fixed keyboard movement of number and sudoku in hex grids.
 	* Answer check translation and make the Solve Mode title clickable.

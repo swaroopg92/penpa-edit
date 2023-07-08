@@ -144,18 +144,19 @@ function set_answer_setting_table_to(and_or) {
     let display;
     let invisible;
     if (and_or === "and") {
+        document.getElementById('and_tmp').checked = true;
         display = ["visible", "none"];
         invisible = [...table.getElementsByClassName("solcheck_or")];
     } else if (and_or === "or") {
+        document.getElementById('or_tmp').checked = true;
         display = ["none", "visible"];
         invisible = [...table.getElementsByClassName("solcheck")];
     } else {
         return;
     }
 
-    // // Disabling this line, as this resets the selection everytime. This is to match original default beahvior.
-    // // Ensure there are no invisible checked boxes
-    // invisible.forEach((elem) => { elem.checked = false });
+    // Ensure there are no invisible checked boxes
+    invisible.forEach((elem) => { elem.checked = false });
 
     // Show only the options relevant to All/Any constraints
     const ands = table.getElementsByClassName("solcheck_show_and");
@@ -214,7 +215,9 @@ function make_class(gridtype, loadtype = 'new') {
         'tetrakis': 20,
         'truncated': 20,
         'snub': 20,
-        'cairo': 20
+        'cairo': 20,
+        'rhombitrihex': 20,
+        'deltoidal': 20
     }; // also defined in class_p.js
     switch (gridtype) {
         case "square":
@@ -539,7 +542,30 @@ function make_class(gridtype, loadtype = 'new') {
                 })
             }
             break;
-
+        case "rhombitrihexagonal":
+            var n0 = parseInt(document.getElementById("nb_size1").value, 10);
+            if (n0 <= 20 && n0 > 0) {
+                pu = new Puzzle_rhombitrihexagonal(n0, n0, size);
+            } else {
+                Swal.fire({
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['rhombitrihex'] + '</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                })
+            }
+            break;
+        case "deltoidal_trihexagonal":
+            var n0 = parseInt(document.getElementById("nb_size1").value, 10);
+            if (n0 <= 20 && n0 > 0) {
+                pu = new Puzzle_deltoidal_trihexagonal(n0, n0, size);
+            } else {
+                Swal.fire({
+                    html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['deltoidal'] + '</h2>',
+                    icon: 'error',
+                    confirmButtonText: 'ok 🙂',
+                })
+            }
+            break;
     }
     return pu;
 }
@@ -769,6 +795,44 @@ function changetype() {
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
         case "cairo_pentagonal":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size3").value = 38;
+        case "rhombitrihexagonal":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            document.getElementById("name_size1").innerHTML = "Side：";
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>**Alpha Version - It's under development and currently has limited functionality</span>";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size3").value = 38;
+        case "deltoidal_trihexagonal":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
             }
@@ -1097,19 +1161,16 @@ function replay_forward() {
 }
 
 function panel_off() {
-    document.getElementById('panel_button').value = 2;
-    panel_onoff();
+    UserSettings.panel_shown = false;
 }
 
 function panel_toggle() {
-    let button = document.getElementById('panel_button');
-    let ogValue = parseInt(button.value, 10) || 2;
-    button.value = 3 - ogValue;
-    panel_onoff();
+    UserSettings.panel_shown = !UserSettings.panel_shown;
 }
 
 function panel_onoff() {
-    if (document.getElementById('panel_button').value === "1") {
+    console.log('UserSettings.panel_shown', UserSettings.panel_shown);
+    if (UserSettings.panel_shown) {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
             document.getElementById('float-key-body').style.left = window.panel_leftlast;
@@ -1528,11 +1589,13 @@ function savetext() {
 function io_sudoku() {
     document.getElementById("modal-input").style.display = 'block';
     document.getElementById("iostring").placeholder = "Enter digits (0-9, 0 or . for an empty cell, no spaces). The number of digits entered should be a perfect square. Default expected length is 81 digits (9x9 sudoku)";
+    document.getElementById("iostring").focus();
 }
 
 function i_url() {
     document.getElementById("modal-load").style.display = 'block';
     document.getElementById("urlstring").placeholder = "In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button. You can also load puzz.link puzzles here";
+    document.getElementById("urlstring").focus();
 }
 
 function p_settings() {
@@ -1572,6 +1635,14 @@ function savetext_edit() {
 
 function savetext_solve() {
     var text = pu.maketext_solve();
+    update_textarea(text);
+}
+
+function savetext_clone() {
+    var text = pu.maketext_duplicate();
+    if (pu.mmode === "solve") {
+        text = text + "&l=solvedup";
+    }
     update_textarea(text);
 }
 
@@ -1828,7 +1899,7 @@ function import_url(urlstring) {
             if (UserSettings.tab_settings > 0) {
                 selectBox.setValue(UserSettings.tab_settings);
             }
-        } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p\.html\?/)) {
+        } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p(\.html)?\?/)) {
             decode_puzzlink(urlstring);
             document.getElementById("modal-load").style.display = 'none';
         } else {
@@ -2093,6 +2164,11 @@ function load(urlParam, type = 'url', origurl = null) {
 
     set_genre_tags(pu.user_tags);
 
+    // Set some genre specific settings
+    if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
+        UserSettings.disable_shortcuts = 2;
+    }
+
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {
@@ -2109,13 +2185,6 @@ function load(urlParam, type = 'url', origurl = null) {
             pu.pu_a.polygon = [];
         }
 
-        // custom color
-        if (rtext[13]) {
-            let parsedValue = JSON.parse(rtext[13]);
-            if (parsedValue === "true" || parsedValue === 1) {
-                document.getElementById("custom_color_opt").value = 2;
-            }
-        }
         if (rtext[14]) {
             pu.pu_q_col = JSON.parse(rtext[14]);
             pu.pu_a_col = JSON.parse(rtext[15]);
@@ -2243,14 +2312,6 @@ function load(urlParam, type = 'url', origurl = null) {
             pu.pu_q.polygon = [];
         }
 
-        // custom color
-        if (rtext[13]) {
-            let parsedValue = JSON.parse(rtext[13]);
-            if (parsedValue === "true" || parsedValue === 1) {
-                document.getElementById("custom_color_opt").value = 2;
-            }
-        }
-
         if (rtext[14]) {
             pu.pu_q_col = JSON.parse(rtext[14]);
             if (!pu.pu_q_col.polygon) {
@@ -2319,6 +2380,14 @@ function load(urlParam, type = 'url', origurl = null) {
     }
     pu.make_frameline(); // Draw Board
     panel_pu.draw_panel();
+
+    // custom color
+    if (rtext[13]) {
+        let parsedValue = JSON.parse(rtext[13]);
+        if (parsedValue === "true" || parsedValue === 1) {
+            UserSettings.custom_colors_on = 2;
+        }
+    }
 
     // submode, style settings
     if (rtext[11]) {
@@ -3003,7 +3072,6 @@ function set_solvemode(type = "url") {
 
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
-    document.getElementById('save_settings_opt').style.display = 'none';
 
     // Middle Button settings not applicable in Solve mode
     document.getElementById('mousemiddle_settings_lb').style.display = 'none';
@@ -3084,8 +3152,14 @@ function isEmpty(obj) {
 
 function isEmptycontent(pu_qa, array, num, value) {
     for (var i in pu[pu_qa][array]) {
-        if (pu[pu_qa][array][i][num] === value) {
-            return false;
+        if (value != null) {
+            if (pu[pu_qa][array][i][num] === value) {
+                return false;
+            }
+        } else {
+            if (pu[pu_qa][array][i][num]) {
+                return false;
+            }
         }
     }
     return true;

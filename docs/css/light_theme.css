@@ -37,8 +37,11 @@
 
     --bgPage: var(--greyLightVery);
     --bgMain: var(--white);
+    --bgHover: var(--greyLightVery);
     --bgMedium: var(--greyLightMedium);
     --fgMain: var(--black);
+    --fgMedium: var(--greyDark);
+    --fgSubtle: var(--greyLightVery);
 }
 
 .solving {
@@ -49,6 +52,7 @@
 #tb_redo {
     color: var(--black);
 }
+
 #tb_undo:disabled,
 #tb_redo:disabled {
     color: var(--greyLight);

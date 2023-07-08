@@ -313,12 +313,57 @@ onload = function() {
             }
 
             if (key === "F2") { //function_key
-                pu.mode_qa("pu_q");
-                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                if (pu.mode.qa != 'pu_q') {
+                    if (pu.mmode == 'solve') {
+                        Swal.fire({
+                            title: 'Are you sure to switch to Editing Mode?',
+                            html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: Color.BLUE_SKY,
+                            cancelButtonColor: Color.RED,
+                            confirmButtonText: 'Yes, Switch'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                pu.mode_qa("pu_q");
+                                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                                var title = document.getElementById("title");
+                                title.innerHTML = "Setter Mode (while Solving)";
+                            }
+                        })
+                    } else {
+                        pu.mode_qa("pu_q");
+                        document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                    }
+                }
                 e.returnValue = false;
             } else if (key === "F3") {
-                pu.mode_qa("pu_a");
-                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                if (pu.mode.qa != 'pu_a') {
+                    if (pu.mmode == 'solve') {
+                        Swal.fire({
+                            title: 'Are you sure to switch to Solving Mode?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: Color.BLUE_SKY,
+                            cancelButtonColor: Color.RED,
+                            confirmButtonText: 'Yes, Switch'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                pu.mode_qa("pu_a");
+                                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                                var title = document.getElementById("title");
+                                if (pu.solution) {
+                                    title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+                                } else {
+                                    title.innerHTML = "Solver Mode";
+                                }
+                            }
+                        })
+                    } else {
+                        pu.mode_qa("pu_a");
+                        document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                    }
+                }
                 e.returnValue = false;
             }
 
@@ -495,7 +540,7 @@ onload = function() {
                             break;
                         case "i": //Ctrl+i
                         case "I":
-                            if ((document.getElementById('panel_button').value === "1") &&
+                            if (UserSettings.panel_shown &&
                                 (typeof panel_select !== "undefined") &&
                                 (panel_select < panel_pu.cont.length) &&
                                 pu.mode[pu.mode.qa].edit_mode !== "symbol") {
@@ -558,7 +603,7 @@ onload = function() {
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                if (!capslock) {
+                if (!capslock && UserSettings._disable_shortcuts != 2) {
                     switch (code) {
                         case "KeyZ":
                             // case "Z":
@@ -619,7 +664,7 @@ onload = function() {
             }
 
             if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-                if (!capslock) {
+                if (!capslock && UserSettings._disable_shortcuts != 2) {
                     switch (code) {
                         case "KeyZ":
                             present_mode = document.getElementById("mo_sudoku").checked;
@@ -1199,6 +1244,10 @@ onload = function() {
                 panel_pu.cleartext();
                 e.preventDefault();
                 break;
+            case "closeBtn_input3":
+                panel_pu.loadtext();
+                e.preventDefault();
+                break;
             case "float-canvas":
                 f_mdown(e);
                 if (checkms === 0) {
@@ -1218,6 +1267,10 @@ onload = function() {
                 savetext_solve();
                 e.preventDefault();
                 break;
+            case "address_clone":
+                savetext_clone();
+                e.preventDefault();
+                break;
             case "expansion":
                 expansion();
                 e.preventDefault();
@@ -1232,6 +1285,10 @@ onload = function() {
                 break;
             case "pp_file":
                 make_ppfile();
+                e.preventDefault();
+                break;
+            case "pp_file2":
+                make_ppfile2();
                 e.preventDefault();
                 break;
             case "gmp_file":
@@ -1732,6 +1789,10 @@ onload = function() {
                 UserSettings.draw_edges = !UserSettings.draw_edges;
                 e.preventDefault();
                 break;
+            case "quick_panel_toggle":
+                UserSettings.panel_shown = !UserSettings.panel_shown;
+                e.preventDefault();
+                break;
             case "visibility_button":
                 UserSettings.show_solution = !UserSettings.show_solution;
                 e.preventDefault();
@@ -2012,7 +2073,7 @@ onload = function() {
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
             panel_pu.edit_num = n;
-            if (document.getElementById('panel_button').value === "1" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
+            if (UserSettings.panel_shown && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     pu.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -2127,22 +2188,7 @@ onload = function() {
 
     // Custom Color Setting
     document.getElementById("custom_color_opt").onchange = function() {
-        if (document.getElementById("custom_color_opt").value === "1") {
-            document.getElementById('style_special').style.display = 'none';
-            pu.redraw();
-        } else if (document.getElementById("custom_color_opt").value === "2") {
-            let mode = pu.mode[pu.mode.qa].edit_mode;
-            if (((pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" || pu.gridtype === "hex")) &&
-                (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
-                document.getElementById('style_special').style.display = 'inline';
-            }
-            pu.redraw();
-        }
-    }
-
-    // Save Setting
-    document.getElementById("save_settings_opt").onchange = function() {
-        UserSettings.save_settings = this.value;
+        UserSettings.custom_colors_on = (parseInt(this.value, 10) === 2);
     }
 
     // Save Setting
@@ -2261,7 +2307,7 @@ onload = function() {
             if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
                 pu.borderwarning = false;
                 Swal.fire({
-                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
+                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn "Draw on Edges": ON</h2>',
                     timer: 8000,
                     icon: 'info'
                 })
@@ -2292,13 +2338,22 @@ onload = function() {
 
     // Panel Setting
     document.getElementById("panel_button").onchange = function() {
-        panel_onoff();
+        UserSettings.panel_shown = String(this.value) === "1";
+    }
+
+    document.getElementById("quick_panel_dropdown").onchange = function() {
+        UserSettings.quick_panel_button = String(this.value) === "1";
     }
 
     // Conflict detection
     document.getElementById("conflict_detection_opt").onchange = function() {
         UserSettings.conflict_detection = this.value;
         pu.redraw();
+    }
+
+    // Disable Shortcuts
+    document.getElementById("disable_shortcuts_opt").onchange = function() {
+        UserSettings.disable_shortcuts = this.value;
     }
 
     // Timer Bar Setting
