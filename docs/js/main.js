@@ -2307,7 +2307,7 @@ onload = function() {
             if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
                 pu.borderwarning = false;
                 Swal.fire({
-                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
+                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn "Draw on Edges": ON</h2>',
                     timer: 8000,
                     icon: 'info'
                 })
