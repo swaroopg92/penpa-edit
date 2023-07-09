@@ -2036,7 +2036,7 @@ function submit_portal(e, isPreview, isExample) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: response.message,
+                            html: response.message,
                             footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
                             confirmButtonText: 'Retry',
                         })
