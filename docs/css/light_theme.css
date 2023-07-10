@@ -24,6 +24,7 @@
     --orangeLight: #ffcc80;
     --pinkLight: #ffb3ff;
     --purpleLight: #cc99ff;
+    --rating_background: #dddddd;
     --red: #ff0000;
     --redDark: #dd0000;
     --redLight: #ffa3a3;
@@ -208,5 +209,10 @@ header,
 }
 
 #visibility_button {
+    border: 1px solid var(--blueDark);
+}
+
+.submit {
+    color: var(--black);
     border: 1px solid var(--blueDark);
 }

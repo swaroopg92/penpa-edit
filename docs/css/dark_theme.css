@@ -25,6 +25,7 @@
     --orangeLight: #ffcc80;
     --pinkLight: #ffb3ff;
     --purpleLight: #cc99ff;
+    --rating_background: #dddddd;
     --red: #ff0000;
     --redLight: #ffa3a3;
     --transparentBlack: rgba(0, 0, 0, 0);
@@ -253,5 +254,10 @@ a:active {
 }
 
 #visibility_button {
+    border: 1px solid var(--blueskyMedium);
+}
+
+.submit {
+    color: var(--white);
     border: 1px solid var(--blueskyMedium);
 }

@@ -997,9 +997,17 @@ body textarea {
 #saveinfoauthor,
 #saveinfotitle,
 #saveinfosource,
-#saveinforules {
+#saveinforules,
+#saveinfoex,
+#saveinfoinfo,
+#saveinfoexclusivity {
     margin: 2px auto;
     width: 95%;
+}
+
+#saveinfotype {
+    margin: 2px auto;
+    width: 68%;
 }
 
 #savetextname {
@@ -1584,9 +1592,80 @@ sup {
     }
 }
 
+
+/* Ratings widget */
+.rate {
+    display: inline-block;
+    border: 0;
+}
+
+/* Order correctly by floating highest to the right */
+.rate>label {
+    float: right;
+    color: #ddd;
+    /*  color: var(--rating_background);*/
+}
+
+/* The star of the show */
+.rate>label:before {
+    display: inline-block;
+    font-size: 1.1rem;
+    padding: .3rem .2rem;
+    margin: 0;
+    font-family: FontAwesome;
+    content: "\f005 ";
+    /* full star */
+}
+
+/* Half star trick */
+.rate .half:before {
+    content: "\f089 ";
+    /* half star no outline */
+    position: absolute;
+    padding-right: 0;
+}
+
+/* Click + hover color */
+.rate>input:checked~label,
+/* color current and previous stars on checked */
+.rate>label:hover,
+.rate>label:hover~label {
+    color: #9954bb;
+}
+
+/* color previous stars on hover */
+
+/* Hover highlights */
+.rate>input:checked+label:hover,
+/* highlight current and previous stars */
+.rate>input:checked~label:hover~label,
+    {
+    color: #CF95DD;
+}
+
+/* Remove orange box shadow defined for other buttons*/
+.rate input[type="radio"]:checked+label {
+    background-color: var(--transparentWhite) !important;
+    box-shadow: 0 0 0 0px var(--transparentWhite) !important;
+}
+
 /* Replay */
 .replay {
     margin: 5px;
     font-size: 30px;
     padding: 2px;
+}
+
+.submit {
+    display: inline-block;
+    height: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 28px;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 3px;
 }

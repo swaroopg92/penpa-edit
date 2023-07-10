@@ -1,0 +1,19 @@
+.lmi-puzzle-input {
+    font-family: Consolas;
+}
+
+.lmi-puzzle-input:invalid {
+    border: 1px dashed red;
+}
+
+.lmi-puzzle-input.invalid {
+    border: 1px dashed red;
+}
+
+.lmi-puzzle-input:invalid:focus {
+    border: 2px dashed red;
+}
+
+.lmi-puzzle-input.invalid:focus {
+    border: 2px dashed red;
+}

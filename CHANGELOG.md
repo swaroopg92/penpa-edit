@@ -114,6 +114,7 @@
 	* Conflict checker for Star Battle, TomTom, Consecutive, NonConsecutive and Some other Sudokus (Classic only)
 * 2021/12/31 ver 2.26.14
 	* More puzz.link support
+	* Portal Support initialization
 * 2021/12/19 ver 2.26.13
 	* Responsive design - left and right options.
 	* Fixed tab order.

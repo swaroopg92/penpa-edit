@@ -29,6 +29,7 @@
     <!-- STYLES -->
     <!-- Online styles -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/lib/emoji-picker.css" type="text/css" />
     <!-- Local styles -->
     <script>
         var ver = "3.0.7"; // Also defined in class_p.js
@@ -82,6 +83,7 @@
     <!-- Online libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+    <script src="/lib/emoji-picker.js"></script>
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
@@ -110,21 +112,13 @@
             document.head.appendChild(script);
         }
     </script>
-    <!-- Global site tag (gtag.js) - Google Analytics (support for this tag will end in June 2023)-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180924087-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-180924087-1');
-    </script>
     <!-- Global site tag (gtag.js) - Google Analytics (New GA4 Tag)-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WQYM10ZE7"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EN08Z7BFJH"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-2WQYM10ZE7');
+        gtag('config', 'G-EN08Z7BFJH');
     </script>
 </head>
 
@@ -141,11 +135,12 @@
                     <button id="rotation">Transform</button>
                     <button id="newsize" style="display:none;">Resize</button>
                     <button id="saveimage">Screenshot</button>
-                    <button id="savetext">Share</button>
+                    <button id="savetext">Submit to LMI Expo</button>
                     <a id="download_link"></a>
                     <button id="duplicate" onclick="duplicate();">Clone</button>
                     <button id="input_sudoku">I/O Sudoku</button>
                     <button id="input_url">Load</button>
+                    <input type="button" id="tb_delete_top" value="Delete all" class="button" style="display:none;" />
                     <button id="page_settings">Settings</button>
                 </div>
                 <div id="buttons">
@@ -706,7 +701,7 @@
             <div id="puzzleinfo">
                 <label id="puzzletitle" class="info"></label>
                 <label id="puzzleauthor" class="info"></label>
-                <div><input type="button" id="puzzlerules" value="Show Rules" /></div>
+                <div><input type="button" id="puzzlerules" value="Show Rules" style="display:none;" /></div>
                 <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a></div>
                 <div><label id="solution_check" class="info" /></label></div>
             </div>
@@ -736,14 +731,14 @@
                 </span>
                 <br>
             </div>
-            <div id="stop_watch">
-                <h1 id="timer" class="values">00:00:00:00:0</h1>
+            <div id="stop_watch" style="display:none;">
+                <h1 id="timer" class="values" style="display:none;">00:00:00:00:0</h1>
                 <div>
-                    <button id="sw_start" class="button sw">Start</button>
-                    <button id="sw_pause" class="button sw">Pause</button>
-                    <button id="sw_stop" class="button sw">Stop</button>
-                    <button id="sw_reset" class="button sw">Reset</button>
-                    <button id="sw_hide" class="button sw">Hide</button>
+                    <button id="sw_start" class="button sw" style="display:none;">Start</button>
+                    <button id="sw_pause" class="button sw" style="display:none;">Pause</button>
+                    <button id="sw_stop" class="button sw" style="display:none;">Stop</button>
+                    <button id="sw_reset" class="button sw" style="display:none;">Reset</button>
+                    <button id="sw_hide" class="button sw" style="display:none;">Hide</button>
                 </div>
             </div>
         </div>
@@ -996,47 +991,93 @@
     </div>
     <div id="modal-save" class="modal">
         <div id="modal-save-content">
-            <h3 class="modal-header" id="savetexttitle">Share Puzzle</h3>
-            <h5 class="modal-subheader">Puzzle Information</h5>
+            <h3 class="modal-header" id="sharetitle">Submit to LMI Expo</h3>
             <div id="modal-save-info">
-                <span class="DM">Title:<input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <label class="label_nb" id="isitsudoku_lb">*What is it?</label>
+                <input type="radio" name="nb_isitsudoku" value="1" id="nb_issudoku">
+                <label for="nb_issudoku" class="label" id="nb_issudoku_lb">Sudoku</label>
+                <input type="radio" name="nb_isitsudoku" value="2" id="nb_ispuzzle">
+                <label for="nb_ispuzzle" class="label" id="nb_ispuzzle_lb">Puzzle</label>
                 <br>
-                <span class="DM">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
+                <span class="DM" id="saveinfogenremain_lb">*Genre:</span>
+                <select id="saveinfogenremain" disabled></select>
                 <br>
-                <span class="DM">Rules:<textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <span class="DM" id="saveinfoauthor_lb" style="display:none;">Author:<input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor" style="display:none;"></span>
+                <span class="DM" id="saveinfotitle_lb">Theme:<input type="text" placeholder="Puzzle Theme (Optional)" value="" id="saveinfotitle"></span>
                 <br>
-                <input type="button" id="saveinfogenre" value="Select Genre/Tags (Optional)" />
+                <!--
+                <label class="label_nb" id="hidetheme_lb">Hide theme until player starts?</label>
+                <input type="radio" name="nb_hidetheme" value="1" id="nb_hidethemeyes">
+                <label for="nb_hidethemeyes" class="label" id="nb_hidethemeyes_lb">Yes</label>
+                <input type="radio" name="nb_hidetheme" value="2" id="nb_hidethemeno" checked="checked">
+                <label for="nb_hidethemeno" class="label" id="nb_hidethemeno_lb">No</label>
                 <br>
-                <span class="DM">
-                    Source:
-                    <span id="sourcewarning">* If you are not the author of the puzzle, please specify the source URL</span>
-                    <input type="text" placeholder="https://example.com" id="saveinfosource"></span>
+                -->
+                <span class="DM" id="saveinforules_lb">*Rules:</span><textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
+                <br>
+                <span class="DM" id="saveinfoex_lb">Example link:</span><input type="text" placeholder="Example Puzzle link" value="" id="saveinfoex"></input></span>
+                <br>
+                <span class="DM" id="saveinfoinfo_lb">Info:<textarea class="text_area" rows="1" cols="10" placeholder="Any additional information like example link, background story, collaborating authors goes here (Optional)" value="" id="saveinfoinfo"></textarea></span>
+                <br>
+                <span class="DM" id="saveinfotype_lb">Variant Type:
+                    <select id="saveinfotype">
+                        <option value="standard" id="puzzletype_standard" selected="selected">Standard</option>
+                        <option value="variant" id="puzzletype_variant">Variant</option>
+                        <option value="hybrid" id="puzzletype_hybrid">Hybrid</option>
+                    </select>
+                </span>
+                <br>
+                <label class="label_nb" id="isitoriginal_lb">Original (Your Invention)?</label>
+                <input type="radio" name="nb_isitoriginal" value="1" id="nb_originalyes">
+                <label for="nb_originalyes" class="label" id="nb_originalyes_lb">Yes</label>
+                <input type="radio" name="nb_isitoriginal" value="2" id="nb_originalno" checked="checked">
+                <label for="nb_originalno" class="label" id="nb_originalno_lb">No</label>
+                <br>
+                <label class="label_nb" id="isitexclusive_lb">Exclusivity?</label>
+                <input type="radio" name="nb_isitexclusive" value="1" id="nb_exclusive" checked="checked">
+                <label for="nb_exclusive" class="label" id="nb_exclusive_lb">Exclusive</label>
+                <input type="radio" name="nb_isitexclusive" value="2" id="nb_repost">
+                <label for="nb_repost" class="label" id="nb_repost_lb">Repost</label>
+                <br id="saveinfosource_brk" style="display:none;">
+                <span class="DM" id="saveinfosource_lb" style="display:none;">*Original Source Link:<input type="text" placeholder="https://blogpost.com" id="saveinfosource" style="display:none;"></span>
+                <br>
+                <span id="sourcewarning" style="display:none;">*Type anything here</span>
+                <label class="label_nb" id="saveinfo_gridsize">Puzzle Size:</label>
+                <span><label class="label_nb" id="saveinfo_rows_lb">Rows:</label></span>
+                <input type="number" pattern="\d*" name="saveinfo_rows" id="saveinfo_rows" value="" min="1" max="60" step="1" placeholder="1">
+                <span><label class="label_nb" id="saveinfo_cols_lb">Columns:</label></span>
+                <input type="number" pattern="\d*" name="saveinfo_cols" id="saveinfo_cols" value="" min="1" max="60" step="1" placeholder="1">
             </div>
-            <h5 class="modal-subheader">Generate URL</h5>
-            <div class="modal-save-inset">
-                <label class="label_nb" for="save_undo" id="save_undo_lb">Save Undo/Redo (History)</label>
-                <input type="checkbox" name="save_undo" id="save_undo"><br />
-                <label class="label_nb" for="auto_shorten_chk" id="auto_shorten_chk_lb">Automatically Shorten with TinyURL</label>
-                <input type="checkbox" name="auto_shorten_chk" id="auto_shorten_chk" />
+            <div class="nb_button" style="display:none">
+                <input type="button" id="saveinfogenre" value="*Select Tags" />
             </div>
             <div class="nb_button">
-                <input type="button" id="address_edit" value="Editing URL" />
-                <input type="button" id="address_solve" value="Solving URL" />
-                <input type="button" id="address_clone" value="Clone URL" />
+                <input type="button" id="address_edit" value="URL for editing" style="display:none;" />
+                <input type="button" id="address_solve" value="URL for solving" style="display:none;" />
                 <!--For Competitive Solving-->
-                <input type="button" id="address_comp" value="Contest-Mode URL" />
-                <input type="button" id="expansion_replay" value="Replay URL" style="display:none;" /> <br />
-                <input type="button" id="expansion" value="URL with Answer Check / Advanced Options" />
+                <input type="button" id="address_comp" value="URL for contests" style="display:none;" />
+                <input type="button" id="expansion_replay" value="Replay URL" style="display:none;" />
+                <input type="button" id="expansion" value="*Select answer checking options" />
             </div>
-            <div id="modal-save-body">
+            <div style="display:none;">
+                <span><label class="label_nb" id="video_usage_lb">Allow for video coverage?</label></span>
+                <input type="checkbox" name="video_usage" id="video_usage">
+            </div>
+            <div style="display:none;">
+                <span><label class="label_nb" id="save_undo_lb">Save Undo/Redo (History)</label></span>
+                <input type="checkbox" name="save_undo" id="save_undo">
+            </div>
+            <div id="modal-save-body" style="display:none;">
                 <textarea class="text_area" readonly rows="1" cols="50" id="savetextarea"></textarea>
                 <span class="DM">Filename:<input type="text" placeholder="sample.txt" id="savetextname"></span>
             </div>
             <div class="nb_button">
-                <input type="button" id="closeBtn_save1" value="Copy" />
-                <input type="button" id="closeBtn_save2" value="Download" />
-                <input type="button" id="closeBtn_save3" value="Open" onclick="savetext_window();" />
-                <input type="button" id="closeBtn_save6" value="Shorten" onclick="shorturl_tab();" />
+                <input type="button" id="preview_portal" value="Preview" />
+                <input type="button" id="submit_portal" value="Submit" />
+                <input type="button" id="submit_portal_ex" value="Submit as Example" />
+                <input type="button" id="closeBtn_save1" value="Copy" style="display:none;" />
+                <input type="button" id="closeBtn_save2" value="Download" style="display:none;" />
+                <input type="button" id="closeBtn_save6" value="URL_short" onclick="shorturl_tab();" style="display:none;" />
                 <input type="button" id="closeBtn_save4" value="Close" />
             </div>
         </div>
@@ -1051,13 +1092,13 @@
     </div>
     <div id="modal-save2" class="modal">
         <div id="modal-save2-content" class="modal-content">
-            <h3 class="modal-header">Extended Output</h3>
+            <h3 class="modal-header">Solution will check for the following:</h3>
             <div class="nb_button">
-                <input type="button" id="solution_open" value="Answer check" />
-                <input type="button" id="pp_file_open" style="margin-top: 5px;" value="puzzle_output_file" />
+                <input type="button" id="solution_open" value="Answer check" style="display:none;" />
+                <input type="button" id="pp_file_open" value="puzzle_output_file" style="display:none;" />
             </div>
             <div id="modal-save2-solution">
-                <h3 id="save3texttitle">Solution will check for the following:</h3>
+                <h3 id="save3texttitle" style="display:none;">Solution will check for the following:</h3>
                 <div class="nb_button">
                     <div>
                         <input type="radio" name="constraints" value="and" id=and_tmp checked="checked" />
@@ -1258,10 +1299,10 @@
                             </td>
                         </tr>
                     </table>
-                    <h5 id="save6texttitle">Custom Message</h5>
-                    <textarea class="text_area" rows="1" cols="50" placeholder="Custom Congratulation Message on answer check pop up" id="custom_message"></textarea>
+                    <h5 id="save6texttitle" style="display:none;">Custom Message</h5>
+                    <textarea class="text_area" rows="1" cols="50" placeholder="Custom Congratulation Message on answer check pop up" id="custom_message" style="display:none;"></textarea>
                     <br>
-                    <input type="button" id="closeBtn_save5" value="Generate URL with answer check" />
+                    <input type="button" id="closeBtn_save5" value="Generate URL with answer check" style="display:none;" />
                 </div>
             </div>
             <div id="modal-save2-pp" style="display:none;">
