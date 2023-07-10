@@ -2541,7 +2541,7 @@ function load(urlParam, type = 'url', origurl = null) {
     if (paramArray.p) {
         load2(paramArray, type, origurl);
     } else {
-        load_from_server(paramArray, type, 'na', origurl);
+        load_from_server(paramArray, type, 'pqr', origurl);
     }
 }
 
@@ -5694,7 +5694,7 @@ function decode_puzzlink(url) {
 }
 
 function load_from_server(paramArray, type, action, origurl) {
-    const data = Object.keys(paramArray).reduce(function(a, c) { a[c] = paramArray[c]; return a; }, { action: action || 'na' }),
+    const data = Object.keys(paramArray).reduce(function(a, c) { a[c] = paramArray[c]; return a; }, { action: action || 'pqr' }),
         options = {
             method: 'POST',
             headers: {

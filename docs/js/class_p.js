@@ -182,6 +182,7 @@ class Puzzle {
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
+        this.reset_board_clicks = 0;
     }
 
     reset() {
@@ -246,6 +247,9 @@ class Puzzle {
     }
 
     reset_board() {
+        // Set the flag to true
+        this.reset_board_clicks = this.reset_board_clicks + this[this.mode.qa]["command_undo"].__a.length;
+
         this[this.mode.qa] = {};
         this[this.mode.qa].command_redo = new Stack();
         this[this.mode.qa].command_undo = new Stack();
@@ -2165,6 +2169,68 @@ class Puzzle {
         return canvastext;
     }
 
+    puzzlepreview() {
+        // Save Current Mode and Solution Visibility Setting
+        var currentMode = this.mode.qa;
+        var currentVisibility = UserSettings.show_solution;
+        var currentdisplay = UserSettings.displaysize;
+
+        // Update display size
+        UserSettings.displaysize = (this.canvasx > 300 || this.canvasy > 300) ? 20 : 30;
+        this.redraw();
+
+        // Switch to Problem Mode
+        this.mode_qa("pu_q");
+
+        // Hide Solution
+        UserSettings.show_solution = false;
+
+        var resizedCanvas = document.createElement("canvas");
+        var resizedContext = resizedCanvas.getContext("2d");
+        var mode = this.mode[this.mode.qa].edit_mode;
+
+        var cx = this.canvasx;
+        var cy = this.canvasy;
+
+        this.mode[this.mode.qa].edit_mode = "surface"; // For deleting selection frame
+        var obj = this.gridspace_calculate();
+        var yu = obj.yu,
+            yd = obj.yd,
+            xl = obj.xl,
+            xr = obj.xr;
+        this.canvasx = xr - xl;
+        this.canvasy = yd - yu;
+        this.point_move(-xl, -yu, 0);
+        this.canvas_size_setting();
+        this.redraw();
+
+        var qual = 1.5;
+        var width = this.canvas.width / qual;
+        resizedCanvas.width = width.toString();
+        resizedCanvas.height = (width * this.canvas.height / this.canvas.width).toString();
+
+        resizedContext.drawImage(this.canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+
+        var canvastext = resizedCanvas.toDataURL("image/png");
+
+        // Switch back to original mode and visibility setting
+        this.mode_qa(currentMode);
+        UserSettings.show_solution = currentVisibility;
+
+        this.canvasx = cx;
+        this.canvasy = cy;
+        this.point_move(xl, yu, 0);
+        this.canvas_size_setting();
+
+        // Update display size
+        UserSettings.displaysize = currentdisplay;
+
+        this.redraw(); // Back to original display
+        this.mode[this.mode.qa].edit_mode = mode; // retain original mode
+
+        return canvastext;
+    }
+
     gridspace_calculate() {
         this.redraw();
         // ピクセルデータから計算
@@ -2828,11 +2894,52 @@ class Puzzle {
         return puzzle_data;
     }
 
+    __export_lmiexpo_info() {
+        // Is it Sudoku or Puzzle
+        var text = "," + document.getElementById("nb_issudoku").checked;
+
+        // Puzzle info
+        let infoinfo = document.getElementById("saveinfoinfo").value;
+        text += "," + infoinfo.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+
+        // Variant Level
+        text += "," + document.getElementById("saveinfotype").value;
+
+        // Original
+        text += "," + document.getElementById("nb_originalyes").checked;
+
+        // Exclusivity
+        text += "," + document.getElementById("nb_exclusive").checked;
+
+        // Hide theme or not
+        // text += "," + document.getElementById("nb_hidethemeyes").checked;
+        text += ",true";
+
+        // Video Coverage
+        text += "," + document.getElementById("video_usage").checked;
+
+        // Save genre
+        if (document.getElementById("saveinfogenremain").disabled) {
+            text += "," + false;
+        } else {
+            let genre = $('#saveinfogenremain').select2("data")[0].text,
+                genreText = genre.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
+            text += "," + genreText;
+        }
+
+        // Example link
+        text += "," + document.getElementById("saveinfoex").value;
+
+        return text;
+    }
+
     maketext() {
         var text = this.__export_text_shared();
 
         // Multi Solution status, it will be true only when generating solution checking
-        text += "," + false + "\n";
+        text += "," + false;
+
+        text += this.__export_lmiexpo_info() + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2920,11 +3027,13 @@ class Puzzle {
         // if solution check exists, then read multisolution variable or else set to false
         if (this.solution) {
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + this.multisolution + "\n";
+            text += "," + this.multisolution;
         } else {
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + false + "\n";
+            text += "," + false;
         }
+
+        text += this.__export_lmiexpo_info() + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -2937,8 +3046,9 @@ class Puzzle {
         this.pu_q.command_redo.__a = [];
         this.pu_q.command_undo.__a = [];
         this.pu_a.command_redo.__a = [];
-        if (this.mmode === "solve") {
-            // Retain undo in solve mode
+
+        if (pu.puzzle_info && (pu.puzzle_info.lmimode === "daily" || pu.puzzle_info.lmimode === "expo")) {
+            // Daily puzzle contests, retain undo
         } else {
             this.pu_a.command_undo.__a = [];
             this.pu_a.command_replay.__a = [];
@@ -2978,8 +3088,8 @@ class Puzzle {
         this.pu_q_col.command_undo.__a = [];
         this.pu_a_col.command_redo.__a = [];
 
-        if (this.mmode === "solve") {
-            // Retain undo in solve mode
+        if (pu.puzzle_info && (pu.puzzle_info.lmimode === "daily" || pu.puzzle_info.lmimode === "expo")) {
+            // Daily puzzle contests, retain undo
         } else {
             this.pu_a_col.command_undo.__a = [];
             this.pu_a_col.command_replay.__a = [];
@@ -3025,9 +3135,24 @@ class Puzzle {
                 solution_clone = this.solution;
             }
             var ba_s = encrypt_data(solution_clone);
-            return url + "#m=edit&p=" + ba + "&a=" + ba_s;
+
+            // if LMI server info exist
+            if (pu.puzzle_info) {
+                let qstr = JSON.stringify(pu.puzzle_info);
+                let ba_q = btoa(qstr);
+                return url + "#m=edit&p=" + ba + "&a=" + ba_s + "&q=" + ba_q;
+            } else {
+                return url + "#m=edit&p=" + ba + "&a=" + ba_s;
+            }
         } else {
-            return url + "#m=edit&p=" + ba;
+            // if LMI server info exist
+            if (pu.puzzle_info) {
+                let qstr = JSON.stringify(pu.puzzle_info);
+                let ba_q = btoa(qstr);
+                return url + "#m=edit&p=" + ba + "&q=" + ba_q;
+            } else {
+                return url + "#m=edit&p=" + ba;
+            }
         }
     }
 
@@ -3038,11 +3163,13 @@ class Puzzle {
         if (type === "answercheck") {
             this.checkall_status(); // this will update the multisolution status
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + this.multisolution + "\n";
+            text += "," + this.multisolution;
         } else {
             // Multi Solution status, it will be true only when generating solution checking
-            text += "," + false + "\n";
+            text += "," + false;
         }
+
+        text += this.__export_lmiexpo_info() + "\n";
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -7646,6 +7773,22 @@ class Puzzle {
                         text += "\n";
                     }
                 }
+            } else if (header === "voxas_contest" ||
+                header === "vc") {
+                // Answer - Line Segments
+                let sol = [];
+                for (var i in this.pu_a.lineE) {
+                    if ((this.frame[i] && this.frame[i] === 2) ||
+                        (this.pu_q.lineE[i] && this.pu_q.lineE[i] === 2)) {
+                        // Ignore the Edge
+                    } else {
+                        if (this.pu_a.lineE[i] === 3) {
+                            sol.push(i);
+                        }
+                    }
+                }
+                sol = sol.sort();
+                text = sol.join(':');
             } else if (header === "test") {
                 console.log(this.pu_q);
                 console.log(this.pu_a);
@@ -7876,11 +8019,7 @@ class Puzzle {
                     }
 
                     if (!replay) {
-                        // Introducing timestamp for live replay (in milli seconds)
-                        let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['secondTenths'])) * 100;
-                        if (timestamp > this.replaycutoff) {
-                            timestamp = null;
-                        }
+                        let timestamp = get_time_stamp();
 
                         // Save the record
                         a_replay[5] = timestamp;
@@ -8093,11 +8232,7 @@ class Puzzle {
                     }
 
                     if (!replay) {
-                        // Introducing timestamp for live replay (in milli seconds)
-                        let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['secondTenths'])) * 100;
-                        if (timestamp > this.replaycutoff) {
-                            timestamp = null;
-                        }
+                        let timestamp = get_time_stamp();
 
                         // Save the record
                         a[5] = timestamp;
@@ -8198,12 +8333,7 @@ class Puzzle {
 
     record_replay(arr, num, groupcounter = 0) {
         if (this.mode.qa === "pu_a") {
-            // Introducing timestamp for live replay (in milli seconds)
-            let timestamp = parseInt(sw_timer.getTotalTimeValues().toString(['secondTenths'])) * 100;
-            if (timestamp > this.replaycutoff) {
-                timestamp = null;
-            }
-
+            let timestamp = get_time_stamp();
             if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
                 this.pu_a.command_replay.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
                 this.pu_a_col.command_replay.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
@@ -8234,6 +8364,38 @@ class Puzzle {
                 }
             }
         }
+    }
+
+    get_time_stamp() {
+        // Introducing timestamp for live replay
+        // get time-stamp (ts) of puzzle start
+        var prev_ts;
+        if (pu.puzzle_info) {
+            prev_ts = pu.puzzle_info.startTimeMS;
+        } else {
+            prev_ts = new Date();
+        }
+
+        // get time-stamp (ts) of next action
+        let next_ts = new Date();
+
+        // time difference
+        let timestamp = new Date(next_ts).getTime() - new Date(prev_ts).getTime(); // in milliseconds
+
+        if (pu.puzzle_info && pu.puzzle_info.replayCutOff &&
+            (pu.puzzle_info.lmimode === "daily" || pu.puzzle_info.lmimode === "expo")) {
+            let cutoff = (pu.puzzle_info.replayCutOff + 300) * 1000; // 5 min buffer
+            if (timestamp > cutoff) {
+                timestamp = null;
+            }
+        } else {
+            let cutoff = 25 * 60 * 1000; // 25 min
+            if (timestamp > cutoff) {
+                timestamp = null;
+            }
+        }
+
+        return timestamp;
     }
 
     /////////////////////////////
@@ -12861,37 +13023,101 @@ class Puzzle {
     }
 
     check_solution() {
+        if (this.puzzle_info && this.puzzle_info.lmimode === "expo" && this.puzzle_info.allowSub === false) return;
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
+
+                // text = this.solution; // Temporary for Deb
+
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
-                        let message = document.getElementById("custom_message").value;
-                        if (message == "" || message.includes("http-equiv=")) {
-                            message = "Congratulations 🙂";
-                        }
-                        setTimeout(() => {
-                            Swal.fire({
-                                // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                html: '<h2 class="wish">' + message + '</h2>',
-                                background: 'url(js/images/new_year.jpg)',
-                                icon: 'success',
-                                confirmButtonText: 'Hurray!',
-                                // timer: 5000
-                            })
-                        }, 20);
+                        // submit solution steps
+                        if (pu.puzzle_info.allowSub) submit_solution_steps();
+
+                        // Rating and feedback code
+                        let wrap = document.createElement('div');
+                        wrap.setAttribute('class', 'text-muted');
+                        wrap.innerHTML = '<p>Rate the puzzle: </p><div class="rate">' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                            '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                            '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
+                            '<br/><div id="swal-text-area-emoji"/>';
+                        Swal.fire({
+                            title: 'Solution is correct',
+                            html: wrap,
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            cancelButtonText: 'Skip',
+                            showDenyButton: true,
+                            denyButtonText: 'Report a Problem',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (rating) => {
+                                var element = document.getElementsByClassName('rate_lb');
+                                var selected_rating;
+
+                                for (var i = 0; i < element.length; i++) {
+                                    let unselected_color = "rgb(221, 221, 221)";
+                                    // let unselected_color = Color.RATING_BACKGROUND;
+                                    let element_color = getComputedStyle(element[i]).getPropertyValue("color");
+                                    if (element_color !== unselected_color) {
+                                        selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
+                                        break;
+                                    }
+                                }
+                                if (selected_rating >= 0.5) {
+                                    return selected_rating;
+                                } else {
+                                    Swal.showValidationMessage(
+                                        `No rating selected`
+                                    )
+                                }
+                            },
+                            allowOutsideClick: false
+                        }).then((rating_result) => {
+                            if (rating_result.isConfirmed) {
+                                submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
+                                if (pu.puzzle_info.ppid) {
+                                    const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+                                    Swal.fire({
+                                        html: `<h3 class="info">${redirect}</h3>`,
+                                        icon: 'success',
+                                        confirmButtonText: 'Close',
+                                    });
+                                }
+                            } else if (rating_result.isDenied) {
+                                const redirect = `/expo/?ppid=${pu.puzzle_info.ppid}#report-a-problem`;
+                                window.open(redirect, "_blank");
+                            } else {
+                                const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+                                Swal.fire({
+                                    html: `<h3 class="info">${redirect}</h3>`,
+                                    icon: 'success',
+                                    confirmButtonText: 'Close',
+                                });
+                            }
+                        })
                         sw_timer.pause();
                         // this.mouse_mode = "out";
                         // this.mouseevent(0, 0, 0);
                         this.sol_flag = 1;
                         // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                         // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
-                    } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
-                        this.sol_flag = 0;
-                        // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                        // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
                     }
+                    // else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
+                    //     this.sol_flag = 0;
+                    //     // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                    //     // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                    // }
                 }
                 this.redraw(false, false);
             }
@@ -12902,20 +13128,83 @@ class Puzzle {
                 if (author_sol) {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
+
+                        // user_sol = author_sol; // Temporary for Deb
+
                         if (user_sol === author_sol && this.sol_flag === 0) {
-                            let message = document.getElementById("custom_message").value;
-                            if (message == "" || message.includes("http-equiv=")) {
-                                message = "Congratulations 🙂";
-                            }
-                            setTimeout(() => {
-                                Swal.fire({
-                                    // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
-                                    html: '<h2 class="wish">' + message + '</h2>',
-                                    background: 'url(js/images/new_year.jpg)',
-                                    icon: 'success',
-                                    confirmButtonText: 'Hurray!',
-                                })
-                            }, 20);
+                            // submit solution steps
+                            if (pu.puzzle_info.allowSub) submit_solution_steps();
+
+                            // Rating and feedback code
+                            let wrap = document.createElement('div');
+                            wrap.setAttribute('class', 'text-muted');
+                            wrap.innerHTML = '<p>Rate the puzzle: </p><div class="rate">' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                                '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                                '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
+                                '<br/><div id="swal-text-area-emoji"/>';
+                            Swal.fire({
+                                title: 'Solution is correct',
+                                html: wrap,
+                                showCancelButton: true,
+                                confirmButtonText: 'Submit',
+                                cancelButtonText: 'Skip',
+                                showDenyButton: true,
+                                denyButtonText: 'Report a Problem',
+                                showLoaderOnConfirm: true,
+                                preConfirm: (rating) => {
+                                    var element = document.getElementsByClassName('rate_lb');
+                                    var selected_rating;
+
+                                    for (var i = 0; i < element.length; i++) {
+                                        let unselected_color = "rgb(221, 221, 221)";
+                                        // let unselected_color = Color.RATING_BACKGROUND;
+                                        let element_color = getComputedStyle(element[i]).getPropertyValue("color");
+                                        if (element_color !== unselected_color) {
+                                            selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
+                                            break;
+                                        }
+                                    }
+                                    if (selected_rating >= 0.5) {
+                                        return selected_rating;
+                                    } else {
+                                        Swal.showValidationMessage(
+                                            `No rating selected`
+                                        )
+                                    }
+                                },
+                                allowOutsideClick: false
+                            }).then((rating_result) => {
+                                if (rating_result.isConfirmed) {
+                                    submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
+                                    if (pu.puzzle_info.ppid) {
+                                        const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+                                        Swal.fire({
+                                            html: `<h3 class="info">${redirect}</h3>`,
+                                            icon: 'success',
+                                            confirmButtonText: 'Close',
+                                        });
+                                    }
+                                } else if (rating_result.isDenied) {
+                                    const redirect = `/expo/?ppid=${pu.puzzle_info.ppid}#report-a-problem`;
+                                    window.open(redirect, "_blank");
+                                } else {
+                                    const redirect = `Click <a href='/expo/?ppid=${pu.puzzle_info.ppid}#timing-replay'>here</a> to proceed to Expo Leaderboard`;
+                                    Swal.fire({
+                                        html: `<h3 class="info">${redirect}</h3>`,
+                                        icon: 'success',
+                                        confirmButtonText: 'Close',
+                                    });
+                                }
+                            })
                             sw_timer.pause();
                             this.sol_flag = 1;
                             // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
@@ -12928,13 +13217,13 @@ class Puzzle {
                         }
                     }
                 }
-                if (i === (this.solution.length - 1) && this.sol_flag === 1) {
-                    // If there was any change in the grid and none of the solution matches then reset the flag
-                    // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
-                    this.sol_flag = 0;
-                    // document.getElementById("pu_a_label").innerHTML = "Check Solution";
-                    // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
-                }
+                // if (i === (this.solution.length - 1) && this.sol_flag === 1) {
+                //     // If there was any change in the grid and none of the solution matches then reset the flag
+                //     // last iteration of outer for loop and if sol_flag is still up then it needs to be reset
+                //     this.sol_flag = 0;
+                //     // document.getElementById("pu_a_label").innerHTML = "Check Solution";
+                //     // document.getElementById("pu_a_label").style.backgroundColor = Color.GREY_LIGHT;
+                // }
             }
         }
     }
