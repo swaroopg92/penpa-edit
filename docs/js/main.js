@@ -87,7 +87,13 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            if (pu.point[num].use === 1) {
+            let skip_mouseevent = false;
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmimode === "daily" &&
+                (pu.cellsoutsideFrame.includes(num) || pu.ignorecells.includes(num))) {
+                skip_mouseevent = true;
+            }
+            if (pu.point[num].use === 1 && !skip_mouseevent) {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
@@ -119,9 +125,18 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            pu.mouse_mode = "up";
-            pu.mouse_click = 0;
-            pu.mouseevent(x, y, num);
+            let skip_mouseevent = false;
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmimode === "daily" &&
+                (pu.cellsoutsideFrame.includes(num) || pu.ignorecells.includes(num))) {
+                skip_mouseevent = true;
+                onOut();
+            }
+            if (!skip_mouseevent) {
+                pu.mouse_mode = "up";
+                pu.mouse_click = 0;
+                pu.mouseevent(x, y, num);
+            }
         }
     }
 
@@ -151,7 +166,14 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            if (pu.point[num].use === 1) {
+            let skip_mouseevent = false;
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmimode === "daily" &&
+                (pu.cellsoutsideFrame.includes(num) || pu.ignorecells.includes(num))) {
+                skip_mouseevent = true;
+                onOut();
+            }
+            if (pu.point[num].use === 1 && !skip_mouseevent) {
                 pu.mouse_mode = "move";
                 pu.mouseevent(x, y, num);
             }
@@ -231,6 +253,8 @@ onload = function() {
             e.target.id === "inputtext" ||
             e.target.id === "select2_search" ||
             e.target.id === "saveinforules" ||
+            e.target.id === "saveinfoex" ||
+            e.target.id === "saveinfoinfo" ||
             e.target.id === "urlstring") {
             // For input form
         } else {
@@ -312,69 +336,75 @@ onload = function() {
                 }
             }
 
+            // Do not allow in Contest Mode
             if (key === "F2") { //function_key
-                if (pu.mode.qa != 'pu_q') {
-                    if (pu.mmode == 'solve') {
-                        Swal.fire({
-                            title: 'Are you sure to switch to Editing Mode?',
-                            html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: Color.BLUE_SKY,
-                            cancelButtonColor: Color.RED,
-                            confirmButtonText: 'Yes, Switch'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                pu.mode_qa("pu_q");
-                                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
-                                var title = document.getElementById("title");
-                                title.innerHTML = "Setter Mode (while Solving)";
-                            }
-                        })
-                    } else {
-                        pu.mode_qa("pu_q");
-                        document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                if (!pu.puzzle_info) {
+                    if (pu.mode.qa != 'pu_q') {
+                        if (pu.mmode == 'solve') {
+                            Swal.fire({
+                                title: 'Are you sure to switch to Editing Mode?',
+                                html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: Color.BLUE_SKY,
+                                cancelButtonColor: Color.RED,
+                                confirmButtonText: 'Yes, Switch'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    pu.mode_qa("pu_q");
+                                    document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                                    var title = document.getElementById("title");
+                                    title.innerHTML = "Setter Mode (while Solving)";
+                                }
+                            })
+                        } else {
+                            pu.mode_qa("pu_q");
+                            document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                        }
                     }
                 }
                 e.returnValue = false;
             } else if (key === "F3") {
-                if (pu.mode.qa != 'pu_a') {
-                    if (pu.mmode == 'solve') {
-                        Swal.fire({
-                            title: 'Are you sure to switch to Solving Mode?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: Color.BLUE_SKY,
-                            cancelButtonColor: Color.RED,
-                            confirmButtonText: 'Yes, Switch'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                pu.mode_qa("pu_a");
-                                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
-                                var title = document.getElementById("title");
-                                if (pu.solution) {
-                                    title.innerHTML = "Solver Mode (Answer Checking Enabled)";
-                                } else {
-                                    title.innerHTML = "Solver Mode";
+                if (!pu.puzzle_info) {
+                    if (pu.mode.qa != 'pu_a') {
+                        if (pu.mmode == 'solve') {
+                            Swal.fire({
+                                title: 'Are you sure to switch to Solving Mode?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: Color.BLUE_SKY,
+                                cancelButtonColor: Color.RED,
+                                confirmButtonText: 'Yes, Switch'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    pu.mode_qa("pu_a");
+                                    document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                                    var title = document.getElementById("title");
+                                    if (pu.solution) {
+                                        title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+                                    } else {
+                                        title.innerHTML = "Solver Mode";
+                                    }
                                 }
-                            }
-                        })
-                    } else {
-                        pu.mode_qa("pu_a");
-                        document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                            })
+                        } else {
+                            pu.mode_qa("pu_a");
+                            document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                        }
                     }
                 }
                 e.returnValue = false;
             }
 
-            if (key === "F4") { //function_key
-                if (sw_timer.isPaused()) {
-                    startTimer();
-                } else {
-                    pauseTimer();
-                }
-                e.returnValue = false;
-            }
+            // Not needed for LMI branch
+            // if (key === "F4") { //function_key
+            //     if (sw_timer.isPaused()) {
+            //         startTimer();
+            //     } else {
+            //         pauseTimer();
+            //     }
+            //     e.returnValue = false;
+            // }
 
             if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
                 pu.key_arrow(key, isCtrlKeyHeld(e));
@@ -881,6 +911,8 @@ onload = function() {
             e.target.id === "iostring" ||
             e.target.id === "inputtext" ||
             e.target.id === "saveinforules" ||
+            e.target.id === "saveinfoex" ||
+            e.target.id === "saveinfoinfo" ||
             e.target.id === "urlstring") {
             // For input form
         } else {
@@ -1104,6 +1136,7 @@ onload = function() {
             //canvas
             case "canvas":
                 document.getElementById("inputtext").blur(); // Remove focus from text box
+                document.querySelectorAll('.lmi-puzzle-input').forEach(el => el.blur()); // Remove focus from answer key box
                 onDown(e);
                 if (checkms === 0) {
                     e.preventDefault();
@@ -1127,7 +1160,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "savetext":
-                savetext();
+                savetextPrecheck();
                 e.preventDefault();
                 break;
             case "input_sudoku":
@@ -1157,6 +1190,7 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "tb_delete":
+            case "tb_delete_top":
                 DeleteCheck();
                 e.preventDefault();
                 break;
@@ -1303,6 +1337,18 @@ onload = function() {
                 return;
             case "iostring":
                 return;
+            case "submit_portal":
+                e.preventDefault();
+                submit_portal(e);
+                break;
+            case "submit_portal_ex":
+                e.preventDefault();
+                submit_portal_ex(e);
+                break;
+            case "preview_portal":
+                e.preventDefault();
+                preview_portal(e);
+                break;
             case "closeBtn_save1":
                 savetext_copy();
                 e.preventDefault();
@@ -1710,6 +1756,44 @@ onload = function() {
                 document.getElementById("nb_margin2").checked = true;
                 e.preventDefault();
                 break;
+            case "nb_issudoku_lb":
+                document.getElementById("nb_issudoku").checked = true;
+                document.getElementById("saveinfogenremain").removeAttribute("disabled");
+                e.preventDefault();
+                break;
+            case "nb_ispuzzle_lb":
+                document.getElementById("nb_ispuzzle").checked = true;
+                document.getElementById("saveinfogenremain").removeAttribute("disabled");
+                e.preventDefault();
+                break;
+            case "nb_originalyes_lb":
+                document.getElementById("nb_originalyes").checked = true;
+                e.preventDefault();
+                break;
+            case "nb_originalno_lb":
+                document.getElementById("nb_originalno").checked = true;
+                e.preventDefault();
+                break;
+            case "nb_exclusive_lb":
+                document.getElementById("nb_exclusive").checked = true;
+                showhide_source();
+                e.preventDefault();
+                break;
+            case "nb_repost_lb":
+                document.getElementById("nb_repost").checked = true;
+                showhide_source();
+                e.preventDefault();
+                break;
+                /*
+            case "nb_hidethemeyes_lb":
+                document.getElementById("nb_hidethemeyes").checked = true;
+                e.preventDefault();
+                break;
+            case "nb_hidethemeno_lb":
+                document.getElementById("nb_hidethemeno").checked = true;
+                e.preventDefault();
+                break;
+            */
             case "saveimagename":
                 return;
             case "closeBtn_image2":
@@ -1818,6 +1902,10 @@ onload = function() {
                 break;
             case "puzzlerules":
                 display_rules();
+                e.preventDefault();
+                break;
+            case "submit_sol":
+                submit_solution(e);
                 e.preventDefault();
                 break;
             case "replay_play":
@@ -2382,7 +2470,20 @@ onload = function() {
         pu.hide_pause_layer();
         sw_timer.start({ precision: 'secondTenths' });
     }
-};
+
+    // Exclusivity and Repost Setting
+    function showhide_source() {
+        if (document.getElementById("nb_repost").checked) {
+            document.getElementById("saveinfosource_lb").style.display = "";
+            document.getElementById("saveinfosource").style.display = "";
+            document.getElementById("saveinfosource_brk").style.display = "";
+        } else {
+            document.getElementById("saveinfosource_lb").style.display = "none";
+            document.getElementById("saveinfosource").style.display = "none";
+            document.getElementById("saveinfosource_brk").style.display = "none";
+        }
+    }
+}
 
 function clear_storage_one() {
     // check for local progress

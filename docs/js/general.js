@@ -1579,9 +1579,123 @@ function saveimage_window() {
     }
 }
 
+function savetextPrecheck() {
+    const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        },
+        url = `/live/misc-pp?action=penpa-search-genre&q=abcdefgh&sudoku=false`,
+        request = new Request(url, options);
+    fetch(request)
+        .then(r => { return r.json(); })
+        .then(function(response) {
+            if (response.success) {
+                savetext();
+            } else {
+                Swal.fire({
+                    html: response.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    allowOutsideClick: false,
+                    footer: betaPhaseMessage()
+                }).then(function() {
+                    window.location = response.redirect;
+                })
+            }
+        })
+        .catch(function(err) {
+            Swal.fire({
+                html: err.toString(),
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                allowOutsideClick: false,
+                footer: betaPhaseMessage()
+            });
+        });
+}
+
 function savetext() {
+    const newGenreRule = 'Rules for this type is not available. Please ensure to provide clear and concise rules. If an example is available, please provide a link in "Info" section.';
+    $("#saveinfogenremain").select2({
+        ajax: {
+            url: '/live/misc-pp?action=penpa-search-genre',
+            dataType: 'json',
+            delay: 1000,
+            data: function(params) {
+                return {
+                    q: params.term, // search term
+                    sudoku: document.getElementById('nb_issudoku').checked,
+                    page: params.page
+                };
+            },
+            processResults: function(data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        placeholder: 'Type a Genre',
+        tags: true,
+        width: "100%",
+        minimumInputLength: 3,
+        templateResult: function(puzzle) {
+            if (puzzle.loading) {
+                return puzzle.text;
+            }
+            return $(`
+  <div>
+    <div><strong>${puzzle.text}</strong></div>
+    <div><small>${puzzle.rules || newGenreRule}</small></div>
+  </div>
+            `);
+        },
+    }).on('change', function(e) {
+        const genredata = $(e.currentTarget).select2('data')[0],
+            options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    id: genredata.id,
+                    dbId: genredata.dbId
+                })
+            },
+            url = `/live/misc-pp?action=penpa-single-genre-details`,
+            request = new Request(url, options);
+        fetch(request)
+            .then(r => { return r.json(); })
+            .then(function(response) {
+                document.getElementById('saveinforules').value = response.data.newGenre ? newGenreRule : response.data.rules;
+                if (response.data.variant) {
+                    document.getElementById('puzzletype_' + response.data.variant.toLowerCase()).selected = true;
+                } else {
+                    document.getElementById('puzzletype_standard').selected = true;
+                }
+                document.getElementById('saveinfoex').value = response.data.exampleLink || '';
+                $("#genre_tags_opt").empty();
+                $('#genre_tags_opt').select2({
+                    data: response.taggings,
+                    tags: true
+                });
+            })
+            .catch(function(err) {
+                console.warn(err);
+            });
+    });
     document.getElementById("modal-save").style.display = 'block';
     document.getElementById("savetextarea").value = "";
+
+    // populate grid sizes
+    document.getElementById("saveinfo_rows").value = pu.ny;
+    document.getElementById("saveinfo_cols").value = pu.nx;
 }
 
 function io_sudoku() {
