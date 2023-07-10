@@ -2133,7 +2133,7 @@ class Puzzle {
         return canvastext;
     }
 
-    puzzlepreview() {
+    puzzlepreview(show_solution) {
         // Save Current Mode and Solution Visibility Setting
         var currentMode = this.mode.qa;
         var currentVisibility = UserSettings.show_solution;
@@ -2147,7 +2147,7 @@ class Puzzle {
         this.mode_qa("pu_q");
 
         // Hide Solution
-        UserSettings.show_solution = false;
+        UserSettings.show_solution = show_solution;
 
         var resizedCanvas = document.createElement("canvas");
         var resizedContext = resizedCanvas.getContext("2d");
