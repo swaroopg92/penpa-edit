@@ -3145,11 +3145,22 @@ class Puzzle {
         return url + "#m=solve&p=" + ba;
     }
 
-    maketext_solve_solution() {
+    maketext_solve_solution(validate = false) {
         var text_head = this.maketext_solve("answercheck");
-        var text;
-        text = JSON.stringify(this.make_solution());
+        var text, sol;
+        sol = this.make_solution();
 
+        // validate if some solution exist and its not empty
+        if (validate && Object.keys(sol).every((k) => sol[k].length === 0)) {
+            Swal.fire({
+                html: '<h3 class="warn">Please add solution and enable answer check</h3>',
+                icon: 'error',
+                confirmButtonText: 'ok',
+            })
+            return false;
+        }
+
+        text = JSON.stringify(sol);
         var ba = encrypt_data(text);
         return text_head + "&a=" + ba;
     }

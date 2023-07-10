@@ -908,6 +908,312 @@ function display_rules() {
     })
 }
 
+function submit_solution(e) {
+    let solution = "";
+    let sol = [];
+    let skipsol;
+    switch (pu.puzzle_info.genre) {
+        case "tapa":
+        case "kurotto":
+        case "nurimisaki":
+            // Answer - Shading
+            if (!isEmpty(pu.pu_a.surface)) {
+                for (var j = 2; j < pu.ny0 - 2; j++) {
+                    for (var i = 2; i < pu.nx0 - 2; i++) {
+                        if (pu.pu_q.number[i + j * (pu.nx0)] && pu.pu_q.number[i + j * (pu.nx0)][0] != '') {
+                            skipsol = true;
+                        } else {
+                            skipsol = false;
+                        }
+                        if (!skipsol && pu.pu_a.surface[i + j * (pu.nx0)] && (
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 4)) { // Black
+                            solution += "1";
+                        } else {
+                            solution += "0";
+                        }
+                    }
+                }
+            }
+            break;
+        case "heyawake":
+            // Answer - Shading
+            if (!isEmpty(pu.pu_a.surface)) {
+                for (var j = 2; j < pu.ny0 - 2; j++) {
+                    for (var i = 2; i < pu.nx0 - 2; i++) {
+                        if (pu.pu_a.surface[i + j * (pu.nx0)] && (
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 1 || // Dark Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 8 || // Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 3 || // Light Grey
+                                pu.pu_a.surface[i + j * (pu.nx0)] === 4)) { // Black
+                            solution += "1";
+                        } else {
+                            solution += "0";
+                        }
+                    }
+                }
+            }
+            break;
+        case "rassisillai":
+        case "yajilin":
+            // Answer - Line
+            sol = [];
+            for (var i in pu.pu_a.line) {
+                if (pu.pu_q.line[i] && pu.ignored_line_types[pu.pu_q.line[i]]) {
+                    // Ignore the line
+                } else {
+                    if (pu.pu_a.line[i] === 3 || // Green
+                        pu.pu_a.line[i] === 2 || // Black
+                        pu.pu_a.line[i] === 5 || // Grey
+                        pu.pu_a.line[i] === 8 || // Red
+                        pu.pu_a.line[i] === 9) { // Blue
+                        sol.push(i);
+                    }
+                }
+            }
+            sol = sol.sort();
+            solution = sol.join(':');
+            break;
+        case "voxas":
+            // Answer - Edge
+            sol = [];
+            for (var i in pu.pu_a.lineE) {
+                if ((pu.frame[i] && pu.frame[i] === 2) ||
+                    (pu.pu_q.lineE[i] && pu.pu_q.lineE[i] === 2)) {
+                    // Ignore the Edge
+                } else {
+                    if (pu.pu_a.lineE[i] === 3 || // Green
+                        pu.pu_a.lineE[i] === 2 || // Black
+                        pu.pu_a.lineE[i] === 5 || // Grey
+                        pu.pu_a.lineE[i] === 8 || // Red
+                        pu.pu_a.lineE[i] === 9) { // Blue
+                        sol.push(i);
+                    }
+                }
+            }
+            sol = sol.sort();
+            solution = sol.join(':');
+            break;
+        case "kakuro":
+            // Answer - number
+            let ind;
+            for (var j = 3; j < pu.ny0 - 2; j++) {
+                for (var i = 3; i < pu.nx0 - 2; i++) {
+                    ind = i + j * (pu.nx0);
+                    if (pu.pu_q.symbol[ind]) {
+                        // if its a clue cell then ignore
+                    } else if (pu.pu_q.number[ind] && pu.pu_q.number[ind][1] === 1 && (pu.pu_q.number[ind][2] === "1" || pu.pu_q.number[ind][2] === "10")) {
+                        // (Black) and (Normal or L) in Problem mode then ignore
+                    } else {
+                        // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                        if (pu.pu_a.number[ind] && pu.pu_a.number[ind][2] === "7") {
+                            var sum = 0,
+                                a;
+                            for (var k = 0; k < 10; k++) {
+                                if (pu.pu_a.number[ind][0][k] === 1) {
+                                    sum += 1;
+                                    a = k + 1;
+                                }
+                            }
+                            if (sum === 1) {
+                                solution += a.toString();
+                            }
+                        } else if (pu.pu_a.number[ind] && (!isNaN(pu.pu_a.number[ind][0]) || !pu.pu_a.number[ind][0].match(/[^A-Za-z]+/))) {
+                            // ((any color) and (Normal, M, S, L))
+                            if (pu.pu_a.number[ind][1] && (pu.pu_a.number[ind][2] === "1" ||
+                                    pu.pu_a.number[ind][2] === "5" ||
+                                    pu.pu_a.number[ind][2] === "6" ||
+                                    pu.pu_a.number[ind][2] === "10")) {
+                                solution += pu.pu_a.number[ind][0].toString();
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+    }
+    const data = {
+        contest: pu.puzzle_info.cid,
+        sequence: pu.puzzle_info.pid,
+        answer: solution
+    };
+    if (e.altKey && e.ctrlKey) {
+        data.authorSolution = true;
+    }
+    const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        request = new Request('/live/submit-daily', options);
+    fetch(request)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(response) {
+            if (response.correct) {
+                document.getElementById('submit_sol').style.display = 'none';
+                sw_timer.stop();
+                if (response.firstTimeCorrect) {
+                    submit_solution_steps();
+                }
+
+                // Rating and feedback code
+                let wrap = document.createElement('div');
+                wrap.setAttribute('class', 'text-muted');
+                wrap.innerHTML = '<p>Quality Rating: </p><div class="rate">' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating10" name="rating" value="10" /><label class="rate_lb" for="rating10" title="5 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating9" name="rating" value="9" /><label class="half rate_lb" for="rating9" title="4 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating8" name="rating" value="8" /><label class="rate_lb" for="rating8" title="4 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating7" name="rating" value="7" /><label class="half rate_lb" for="rating7" title="3 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating6" name="rating" value="6" /><label class="rate_lb" for="rating6" title="3 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating5" name="rating" value="5" /><label class="half rate_lb" for="rating5" title="2 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating4" name="rating" value="4" /><label class="rate_lb" for="rating4" title="2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating3" name="rating" value="3" /><label class="half rate_lb" for="rating3" title="1 1/2 stars"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating2" name="rating" value="2" /><label class="rate_lb" for="rating2" title="1 star"></label>' +
+                    '<input type="radio" onclick="createEmojiBar()" id="rating1" name="rating" value="1" /><label class="half rate_lb" for="rating1" title="1/2 stars"></label>' +
+                    '</div><br><textarea oninput="createEmojiBar()" id="swal-feedback-2" class="swal2-input" placeholder="Feedback (Optional)" rows="2"></textarea>' +
+                    '<br/>';
+                Swal.fire({
+                    title: 'Solution is correct',
+                    html: wrap,
+                    showCancelButton: true,
+                    confirmButtonText: 'Submit',
+                    cancelButtonText: 'Skip',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (rating) => {
+                        var element = document.getElementsByClassName('rate_lb');
+                        var selected_rating;
+
+                        for (var i = 0; i < element.length; i++) {
+                            let unselected_color = "rgb(221, 221, 221)";
+                            // let unselected_color = Color.RATING_BACKGROUND;
+                            let element_color = getComputedStyle(element[i]).getPropertyValue("color");
+                            if (element_color !== unselected_color) {
+                                selected_rating = parseInt(element[i].getAttribute('for').replace(/^\D+/g, '')) * 0.5;
+                                break;
+                            }
+                        }
+                        if (selected_rating >= 0.5) {
+                            return selected_rating;
+                        } else {
+                            Swal.showValidationMessage(
+                                `No rating selected`
+                            )
+                        }
+                    },
+                    allowOutsideClick: false
+                }).then((rating_result) => {
+                    if (rating_result.isConfirmed) {
+                        submit_ratings_feedback(rating_result.value, document.getElementById('swal-feedback-2').value);
+                        const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                        Swal.fire({
+                            html: `<h3 class="info">${redirect}</h3>`,
+                            icon: 'success',
+                            confirmButtonText: 'Close',
+                        });
+                    } else {
+                        const redirect = `Click <a href='${response.redirect}'>here</a> to proceed to main page`;
+                        Swal.fire({
+                            html: `<h3 class="info">${redirect}</h3>`,
+                            icon: 'success',
+                            confirmButtonText: 'Close',
+                        });
+
+                    }
+                })
+            } else {
+                if (response.solutionRecorded) {
+                    Swal.fire({
+                        html: `Solution to puzzle recorded. Please submit again to double check`,
+                        icon: 'success',
+                        confirmButtonText: 'Okay',
+                    });
+                } else {
+                    Swal.fire({
+                        html: `<h3 class='warn'">${response.message||'Solution is wrong'}</h3>`,
+                        icon: 'error',
+                        confirmButtonText: 'Try Again',
+                        timer: 3000
+                    });
+                }
+            }
+        })
+        .catch(function(err) {
+            Swal.fire({
+                title: '<h3 class="warn">Something went wrong while connecting to the LMI Server</h3>',
+                html: '<h2 class="warn">Try again</h2>',
+                icon: 'error',
+                confirmButtonText: 'Try Again',
+                timer: 3000
+            });
+        });
+}
+
+function createEmojiBar() {
+    if (document.getElementsByClassName("emoji-picker-button").length === 0) {
+        const emojiPicker = new EmojiPicker('swal-feedback-2', "100%", "50px", null);
+        emojiPicker.show(false);
+    }
+}
+
+function submit_solution_steps() {
+    // encrypt the data
+    var replay, replay_arr, clicks;
+    replay_arr = [...pu["pu_a"]["command_replay"].__a];
+    try {
+        replay = encrypt_data(JSON.stringify(replay_arr.reverse()));
+        clicks = pu["pu_a"]["command_replay"].__a.length + pu.reset_board_clicks;
+    } catch (err) {
+        replay = "penpaerror";
+    }
+    if (replay == null || replay == "") {
+        replay = "penpaerror-replayisblank";
+    }
+    const data = {
+            contest: pu.puzzle_info.cid,
+            sequence: pu.puzzle_info.pid,
+            ppid: pu.puzzle_info.ppid,
+            replay: replay,
+            clicks: clicks
+        },
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-solution' : '/live/submit-daily?replay',
+        request = new Request(url, options);
+    fetch(request);
+}
+
+function submit_ratings_feedback(ratings, message) {
+    const data = {
+            contest: pu.puzzle_info.cid,
+            action: 'update-ratings-no-refresh',
+            sequence: pu.puzzle_info.pid,
+            ppid: pu.puzzle_info.ppid,
+            ratings: ratings,
+            message: message
+        },
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        url = pu.puzzle_info.lmimode === 'expo' ? '/live/misc-pp?action=submit-ratings-and-message' : '/live/misc-daily',
+        request = new Request(url, options);
+    fetch(request);
+}
+
 function replay_choice() {
     if (document.getElementById("replay_choice").value == "2") {
 
@@ -922,7 +1228,8 @@ function replay_choice() {
         var undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
         // Live replay only if within time limit and there is timestamp data
-        if ((pu.puzzleinfo.totalMS <= pu.replaycutoff) && ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
+        if ((parseInt(pu.puzzle_info.seconds) <= pu.puzzle_info.replayCutOff) &&
+            ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
                 (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
 
             // hide forward, backward and speed buttons
@@ -955,8 +1262,8 @@ function replay_choice() {
             }
 
             pu.live_replay = function() {
-                // If daily puzzles then enable time for first click, not needed for regular contests
-                if (undo_len === 0 && pu.first_click) {
+                // If daily or expo puzzles then enable time for first click, not needed for regular contests
+                if ((pu.puzzle_info.lmimode === "daily" || pu.puzzle_info.lmimode === "expo") && undo_len === 0 && pu.first_click) {
                     // get time-stamp (ts) of next action
                     let next_ts = pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5];
 
@@ -1579,6 +1886,10 @@ function saveimage_window() {
     }
 }
 
+function betaPhaseMessage() {
+    return `<span>LMI Expo is in beta phase.<br/>Please report any bugs/suggestions <a target="_blank" href="/forum/forums/thread-view.asp?tid=3295">in the forum</a>.</span>`;
+}
+
 function savetextPrecheck() {
     const options = {
             method: 'POST',
@@ -1819,6 +2130,180 @@ function make_gmpfile() {
     document.getElementById("modal-save2").style.display = 'none';
 }
 
+function preview_portal(e) {
+    submit_portal(e, true);
+}
+
+function submit_portal_ex(e) {
+    submit_portal(e, false, true);
+}
+
+function submit_portal(e, isPreview, isExample) {
+    var entries_flag = validate_entries();
+
+    if (typeof entries_flag !== "boolean") {
+        var solve_link;
+        if (pu.mmode === "solve") {
+            if (pu.solution.length === 0) {
+                solve_link = false;
+            } else {
+                solve_link = pu.maketext_solve() + "&a=" + encrypt_data(pu.solution);
+            }
+        } else {
+            // Generate Answer check link and validate solution is entered
+            var solve_link = pu.maketext_solve_solution(true);
+        }
+
+        if (solve_link) {
+            // Generate Edit link if in Setter mode
+            if (pu.mmode === "solve") {
+                var edit_link = "";
+            } else {
+                var edit_link = pu.maketext();
+            }
+
+            const puzzle = {
+                    ppid: pu.puzzle_info && pu.puzzle_info.ppid,
+                    solveLink: solve_link,
+                    isPreview: isPreview,
+                    isExample: isExample,
+                    exampleLink: document.getElementById("saveinfoex").value,
+                    isSudoku: document.getElementById("nb_issudoku").checked,
+                    editLink: edit_link,
+                    titletheme: document.getElementById("saveinfotitle").value,
+                    genre: $('#saveinfogenremain').select2("data")[0].text,
+                    rules: document.getElementById("saveinforules").value,
+                    info: document.getElementById("saveinfoinfo").value,
+                    variantLevel: document.getElementById("saveinfotype").value,
+                    exclusivity: document.getElementById('nb_exclusive').checked,
+                    originalPost: document.getElementById("saveinfosource").value,
+                    gridtype: pu.gridtype,
+                    numRows: document.getElementById("saveinfo_rows").value,
+                    numCols: document.getElementById("saveinfo_cols").value,
+                    genresTags: $('#genre_tags_opt').select2("data").map((c) => c.id),
+                    solvingTags: entries_flag.answercheck_opt,
+                    onlineSolveMessage: entries_flag.message,
+                    allowVideo: document.getElementById("video_usage").checked,
+                    imgdata: pu.puzzlepreview()
+                },
+                options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(puzzle)
+                },
+                request = new Request('/live/misc-pp?action=submit-new', options);
+            fetch(request)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(response) {
+                    if (response.success) {
+                        if (response.previewId) {
+                            pu.puzzle_info = pu.puzzle_info || {};
+                            pu.puzzle_info.ppid = response.previewId;
+                            Swal.fire({
+                                title: response.message,
+                                html: `Here is the <a target='_blank' href='${response.expoLink}'>link</a> to preview your puzzle. Please note that puzzle will be public only after you submit.`,
+                                icon: 'success',
+                                confirmButtonText: 'I Understand',
+                                footer: betaPhaseMessage()
+                            })
+                        } else {
+                            Swal.fire({
+                                title: response.message,
+                                html: `Here is the <a href='${response.expoLink}'>link</a> to your submitted puzzle.`, // Feel free to share this link with puzzlers around the world.`,
+                                icon: 'success',
+                                confirmButtonText: 'Ok',
+                                footer: betaPhaseMessage()
+                            }).then(function() {
+                                window.location = response.expoLink;
+                            })
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            html: response.message,
+                            footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
+                            confirmButtonText: 'Retry',
+                        })
+                    }
+                });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Solution is missing',
+                footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
+                confirmButtonText: 'Ok',
+            })
+        }
+    }
+}
+
+function isValidURL(string) {
+    var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    return (res !== null)
+};
+
+function expoError(error) {
+    Swal.fire({
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        footer: '<a target="_blank" href="/forum/forums/thread-view.asp?tid=3294&start=1">Refer to this guide before submitting to LMI Puzzle Expo</a>',
+        ...error
+    })
+}
+
+function validate_entries() {
+    // Validate "What is it" is selected
+    if (!document.getElementById("nb_issudoku").checked && !document.getElementById("nb_ispuzzle").checked) {
+        expoError({ html: 'Select if its a Sudoku or Puzzle' });
+        return false;
+    }
+    if (!$('#saveinfogenremain').select2("val")) {
+        expoError({ html: 'Select a puzzle genre. Make sure to fill in the rules in case of a new Genre.' });
+        return false;
+    }
+
+    // Validate title is not empty
+    if (false && document.getElementById("saveinfotitle").value.length === 0) {
+        expoError({ html: 'Title | Theme is empty' });
+        return false;
+    }
+
+    // Validate Rules are not empty
+    if (document.getElementById("saveinforules").value.length === 0) {
+        expoError({ html: 'Rules not provided' });
+        return false;
+    }
+
+    // Validate at least one genre tag is selected
+    if (false && $('#genre_tags_opt').select2("data").length === 0) {
+        expoError({ html: 'Select at least one tag. It is best to select all related tags.' });
+        return false;
+    }
+
+    // Validate Other Source Url is specified
+    if (document.getElementById("nb_repost").checked) {
+        let validateurl = isValidURL(document.getElementById("saveinfosource").value);
+        if (!validateurl) {
+            expoError({ html: 'Enter a valid Source URL' });
+            return false;
+        }
+    }
+
+    // Validate at least one answer check option is selected
+    var answer_check_opt = pu.get_answercheck_settings();
+    if (answer_check_opt.answercheck_opt.length === 0) {
+        expoError({ html: 'Select at least one answer checking option' });
+        return false;
+    }
+
+    return answer_check_opt;
+}
+
 function savetext_copy() {
     Swal.fire({
         title: 'Swaroop says:',
@@ -2053,6 +2538,15 @@ function load(urlParam, type = 'url', origurl = null) {
         return;
     }
 
+    if (paramArray.p) {
+        load2(paramArray, type, origurl);
+    } else {
+        load_from_server(paramArray, type, 'na', origurl);
+    }
+}
+
+
+function load2(paramArray, type, origurl) {
     // Decrypt P
     var rtext = decrypt_data(paramArray.p);
     rtext = rtext.split("\n");
@@ -2110,6 +2604,55 @@ function load(urlParam, type = 'url', origurl = null) {
     if (paramArray.r && !paramArray.r.includes("penpaerror")) {
         valid_replay = true;
     }
+    if (paramArray.q) {
+        let qstr = atob(paramArray.q);
+        pu.puzzle_info = JSON.parse(qstr);
+        if (!pu.puzzle_info.expoEdit) {
+            document.getElementById("savetext").style.display = 'none';
+        }
+        if (pu.puzzle_info.ppid) {
+            document.getElementById("puzzlesourcelink").href = `/expo/?ppid=${pu.puzzle_info.ppid}`;
+            document.getElementById("puzzlesource").innerHTML = "Back to Expo";
+        }
+        if (pu.puzzle_info.title) {
+            document.getElementById("puzzletitle").style.display = 'block';
+            document.getElementById("puzzletitle").innerHTML = pu.puzzle_info.title;
+        } else {
+            document.getElementById("puzzletitle").style.display = 'none';
+        }
+        if (pu.puzzle_info.iframe || pu.puzzle_info.lmimode === "daily") {
+            document.getElementById("header").style.display = 'none';
+            document.getElementById("puzzleauthor").style.display = 'none';
+        }
+        if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !valid_replay) {
+            let contestinfo = document.getElementById("contestinfo");
+            let submitContents = `<div><input type="button" id="submit_sol" class="submit" value="Submit Solution" style="display: inline;"/></div>`;
+            contestinfo.innerHTML = submitContents;
+            contestinfo.style.display = "block";
+            if (pu.puzzle_info.seconds !== undefined) {
+                document.getElementById("timer").style.display = "block";
+                document.getElementById("stop_watch").style.display = "";
+                sw_timer.start({
+                    precision: 'secondTenths',
+                    startValues: {
+                        seconds: pu.puzzle_info.seconds
+                    }
+                });
+            }
+        }
+        if (pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "expo" && !valid_replay) {
+            if (pu.puzzle_info.seconds !== undefined) {
+                document.getElementById("timer").style.display = "block";
+                document.getElementById("stop_watch").style.display = "";
+                sw_timer.start({
+                    precision: 'secondTenths',
+                    startValues: {
+                        seconds: pu.puzzle_info.seconds
+                    }
+                });
+            }
+        }
+    }
 
     UserSettings.loadFromCookies("others");
 
@@ -2131,6 +2674,77 @@ function load(urlParam, type = 'url', origurl = null) {
     // multisolution status
     if (rtext_para[20] && rtext_para[20] === "true") {
         pu.multisolution = true;
+    }
+
+    // Is it Sudoku or Puzzle
+    if (rtext_para[21]) {
+        if (rtext_para[21] === "true") {
+            document.getElementById("nb_issudoku").checked = true;
+        } else {
+            document.getElementById("nb_ispuzzle").checked = true;
+        }
+    }
+
+    // Additional Info
+    if (rtext_para[22] && rtext_para[22] !== "") {
+        document.getElementById("saveinfoinfo").value = rtext_para[22].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '=');
+    }
+
+    // Variant Level
+    if (rtext_para[23] && rtext_para[23] !== "") {
+        document.getElementById("saveinfotype").value = rtext_para[23];
+    }
+
+    // Original Idea
+    if (rtext_para[24]) {
+        if (rtext_para[24] === "true") {
+            document.getElementById("nb_originalyes").checked = true;
+        } else {
+            document.getElementById("nb_originalno").checked = true;
+        }
+    }
+
+    // Exclusivity
+    if (rtext_para[25]) {
+        if (rtext_para[25] === "true") {
+            document.getElementById("nb_exclusive").checked = true;
+        } else {
+            document.getElementById("nb_repost").checked = true;
+            document.getElementById("saveinfosource_lb").style.display = "";
+            document.getElementById("saveinfosource").style.display = "";
+            document.getElementById("saveinfosource_brk").style.display = "";
+        }
+    }
+
+    // Hide theme setting
+    if (false && rtext_para[26]) {
+        if (rtext_para[26] === "true") {
+            document.getElementById("nb_hidethemeyes").checked = true;
+        } else {
+            document.getElementById("nb_hidethemeno").checked = true;
+        }
+    }
+
+    // Video Coverage
+    if (rtext_para[27] && rtext_para[27] !== "" && rtext_para[27] === "true") {
+        document.getElementById("video_usage").checked = true;
+    }
+
+    // Main genre
+    if (rtext_para[28]) {
+        document.getElementById("saveinfogenremain").disabled = false;
+        savetext();
+        let genre = rtext_para[28].replace(/%2C/g, ',').replace(/%2D/g, '\n').replace(/%2E/g, '&').replace(/%2F/g, '='),
+            newOption = new Option(genre, genre, false, false);
+        $('#saveinfogenremain').append(newOption);
+        if (pu && pu.puzzle_info && pu.puzzle_info.expoEdit) {} else {
+            document.getElementById('modal-save').style.display = 'none';
+        }
+    }
+
+    // Example link
+    if (rtext_para[29] && rtext_para[29] !== "") {
+        document.getElementById("saveinfoex").value = rtext_para[29];
     }
 
     // version save
@@ -2225,56 +2839,57 @@ function load(urlParam, type = 'url', origurl = null) {
         pu.user_tags = JSON.parse(rtext[17]);
     }
 
+    // Not needed in LMI Version
     // Detect tag using title information if author did not define tags
     // This is to add tags for the previously created URLs
-    if (pu.user_tags.length === 0) {
-        let wordsRegex = /([^\x00-\x7F]|\w)+/g;
-        let title = document.getElementById("saveinfotitle").value;
-        let title_words = title.match(wordsRegex);
-        let allow_genres = ["arrow", "thermo", "even", "consecutive", "killer", "nonconsecutive"];
+    // if (pu.user_tags.length === 0) {
+    //     let wordsRegex = /([^\x00-\x7F]|\w)+/g;
+    //     let title = document.getElementById("saveinfotitle").value;
+    //     let title_words = title.match(wordsRegex);
+    //     let allow_genres = ["arrow", "thermo", "even", "consecutive", "killer", "nonconsecutive"];
 
-        // find position of "sudoku"
-        if (title_words) {
-            let sudoku_index = title_words.findIndex(element => {
-                return element.toLowerCase() === "sudoku";
-            });
+    //     // find position of "sudoku"
+    //     if (title_words) {
+    //         let sudoku_index = title_words.findIndex(element => {
+    //             return element.toLowerCase() === "sudoku";
+    //         });
 
-            if (sudoku_index === 0) {
-                pu.user_tags[0] = "classic";
-            } else if ((sudoku_index === 1 || sudoku_index === 2) &&
-                (allow_genres.includes(title_words[0].toLowerCase()))) {
-                switch (title_words[0].toLowerCase()) {
-                    case "consecutive":
-                        if (title_words[1].toLowerCase() == "pairs") {
-                            pu.user_tags[0] = "consecutivepairs";
-                        } else if (title_words[1].toLowerCase() == "clone") {
-                            pu.user_tags[0] = "classic";
-                        } else {
-                            pu.user_tags[0] = "consecutive";
-                        }
-                        break;
-                    case "nonconsecutive":
-                        pu.user_tags[0] = "nonconsecutive";
-                        break;
-                    default:
-                        pu.user_tags[0] = "classic";
-                        break;
-                }
-            } else if (title_words[0].toLowerCase() === "star" && title_words[1].toLowerCase() === "battle") {
-                pu.user_tags[0] = "starbattle";
-            } else if (title_words[0].toLowerCase() === "tomtom") {
-                pu.user_tags[0] = "tomtom";
-            } else if (title_words[0].toLowerCase() === "fillomino") {
-                pu.user_tags[0] = "fillomino";
-            } else if (title_words[0].toLowerCase() === "pentominous") {
-                pu.user_tags[0] = "pentominous";
-            } else if (title_words[0].toLowerCase() === "spiral" && title_words[1].toLowerCase() === "galaxies") {
-                pu.user_tags[0] = "spiralgalaxies";
-            } else if (title_words[0].toLowerCase() === "araf") {
-                pu.user_tags[0] = "araf";
-            }
-        }
-    }
+    //         if (sudoku_index === 0) {
+    //             pu.user_tags[0] = "classic";
+    //         } else if ((sudoku_index === 1 || sudoku_index === 2) &&
+    //             (allow_genres.includes(title_words[0].toLowerCase()))) {
+    //             switch (title_words[0].toLowerCase()) {
+    //                 case "consecutive":
+    //                     if (title_words[1].toLowerCase() == "pairs") {
+    //                         pu.user_tags[0] = "consecutivepairs";
+    //                     } else if (title_words[1].toLowerCase() == "clone") {
+    //                         pu.user_tags[0] = "classic";
+    //                     } else {
+    //                         pu.user_tags[0] = "consecutive";
+    //                     }
+    //                     break;
+    //                 case "nonconsecutive":
+    //                     pu.user_tags[0] = "nonconsecutive";
+    //                     break;
+    //                 default:
+    //                     pu.user_tags[0] = "classic";
+    //                     break;
+    //             }
+    //         } else if (title_words[0].toLowerCase() === "star" && title_words[1].toLowerCase() === "battle") {
+    //             pu.user_tags[0] = "starbattle";
+    //         } else if (title_words[0].toLowerCase() === "tomtom") {
+    //             pu.user_tags[0] = "tomtom";
+    //         } else if (title_words[0].toLowerCase() === "fillomino") {
+    //             pu.user_tags[0] = "fillomino";
+    //         } else if (title_words[0].toLowerCase() === "pentominous") {
+    //             pu.user_tags[0] = "pentominous";
+    //         } else if (title_words[0].toLowerCase() === "spiral" && title_words[1].toLowerCase() === "galaxies") {
+    //             pu.user_tags[0] = "spiralgalaxies";
+    //         } else if (title_words[0].toLowerCase() === "araf") {
+    //             pu.user_tags[0] = "araf";
+    //         }
+    //     }
+    // }
 
     set_genre_tags(pu.user_tags);
 
@@ -2328,6 +2943,9 @@ function load(urlParam, type = 'url', origurl = null) {
         }
 
         if (paramArray.l === "solvedup") { // Basically clone of solve mode
+            if (pu.puzzle_info && pu.puzzle_info.iframe) {
+                pu.puzzle_info.iframe = false;
+            }
             set_solvemode(type);
 
             // Decrypt a
@@ -2390,6 +3008,11 @@ function load(urlParam, type = 'url', origurl = null) {
 
             if (rtext[9] && rtext[9].indexOf("comp") !== -1) { // Competitive mode
                 set_contestmode();
+                if (document.getElementById("saveinfosource").value) {
+                    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+                } else if (pu.puzzle_info && pu.puzzle_info.lmimode !== "daily") {
+                    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to Contest Page and enter in the Submissions Box*";
+                }
             }
         } else {
             if (rtext[7]) {
@@ -2694,31 +3317,37 @@ function load(urlParam, type = 'url', origurl = null) {
 
         // Update title
         document.getElementById("title").innerHTML = "Replay Mode"
+    }
 
-        // Show Solver Name and his time
-        if (paramArray.q) {
-            var qstr = JSON.parse(decrypt_data(paramArray.q));
-            pu.puzzleinfo = qstr;
-            let disptext = '';
-            if (document.getElementById("saveinfotitle").value) {
-                disptext += document.getElementById("saveinfotitle").value + ' | ';
-            }
-            if (document.getElementById("saveinfoauthor").value) {
-                disptext += 'Author: ' + document.getElementById("saveinfoauthor").value + ' | ';
-            }
-            if (qstr.sname) {
-                disptext += 'Solver: ' + qstr.sname + ' | ';
-            }
-            if (qstr.stime) {
-                disptext += 'Time: ' + qstr.stime + " (d:h:m:s:ts)";
-            }
-            document.getElementById("puzzletitle").innerHTML = disptext;
-            document.getElementById("puzzletitle").style.display = '';
+    if (parent && parent.resizeiframe) {
+        parent.resizeiframe();
+    }
 
-            // Calculate Total MS for later use
-            let solvetime = qstr.stime.split(':');
-            // Days, Hours, Min, Seconds, 10th Seconds
-            pu.puzzleinfo.totalMS = ((+solvetime[0]) * 24 * 60 * 60 + (+solvetime[1]) * 60 * 60 + (+solvetime[2]) * 60 + (+solvetime[3]) + (+solvetime[4]) * 0.1) * 1000;
+    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !valid_replay) {
+        // Enable timer for resolves
+        document.getElementById("timer").style.display = "";
+        document.getElementById("stop_watch").style.display = "";
+        document.getElementById("sw_start").style.display = "";
+        document.getElementById("sw_pause").style.display = "";
+        document.getElementById("sw_reset").style.display = "";
+        document.getElementById("sw_stop").style.display = "";
+        document.getElementById("sw_hide").style.display = "";
+
+        // Enable undo redo after solver is done or contest is over.
+        pu.undoredo_disable = false;
+        document.getElementById("bottom_button").style.display = "";
+        document.getElementById("tb_undo").style.display = "";
+        document.getElementById("tb_redo").style.display = "";
+        document.getElementById("tb_reset").style.display = "";
+    }
+
+    // remove access for given shaded cells
+    pu.ignorecells = [];
+    if (pu.puzzle_info && pu.puzzle_info.lmimode === "daily" && pu.puzzle_info.genre === "rassisillai") {
+        if (!isEmpty(pu.pu_q.surface)) {
+            for (key in pu.pu_q.surface) {
+                pu.ignorecells.push(parseInt(key));
+            }
         }
     }
 }
@@ -3209,24 +3838,32 @@ function set_solvemode(type = "url") {
     }
     document.getElementById('constraints_settings_opt').style.display = 'none';
 
-    // No need of Solving URL in Solver Mode, instead show replay url
+    // No need of Solving URL and Replay URL in Solver Mode (Replay automatically comes from LMI Server)
     document.getElementById('address_solve').style.display = 'none';
-    document.getElementById('expansion_replay').style.display = '';
+    document.getElementById('expansion_replay').style.display = 'none';
 }
 
 function set_contestmode() {
     // Disable Share, Undo/Redo buttons, IO sudoku
-    document.getElementById("title").innerHTML = "Contest Mode"
+    document.getElementById("title").innerHTML = "Contest mode"
     document.getElementById("savetext").style.display = "none";
+    document.getElementById("address_edit").style.display = "none";
+    document.getElementById("address_solve").style.display = "none";
+    document.getElementById("expansion").style.display = "none";
+    document.getElementById("save_undo_lb").style.display = "none";
+    document.getElementById("save_undo").style.display = "none";
     document.getElementById("input_sudoku").style.display = "none";
     document.getElementById("bottom_button").style.display = "none";
     document.getElementById("tb_undo").style.display = "none";
     document.getElementById("tb_redo").style.display = "none";
     document.getElementById("tb_reset").style.display = "none";
     document.getElementById("tb_delete").style.display = "none";
+    document.getElementById("tb_delete_top").style.display = "inline-block";
     document.getElementById("mo_move_lb").style.display = "none";
     document.getElementById("puzzlesourcelink").style.display = "none";
-    document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
+    document.getElementById("saveinfotitle_lb").style.display = "none";
+    document.getElementById("saveinfotitle").style.display = "none";
+
     pu.undoredo_disable = true;
     pu.comp = true;
 }
@@ -5051,8 +5688,71 @@ function decode_puzzlink(url) {
 
     // Set the Source
     document.getElementById("saveinfosource").value = url;
+
     // Set the tags
     set_genre_tags(pu.user_tags);
+}
+
+function load_from_server(paramArray, type, action, origurl) {
+    const data = Object.keys(paramArray).reduce(function(a, c) { a[c] = paramArray[c]; return a; }, { action: action || 'na' }),
+        options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        },
+        url = data.ppid ? `/live/misc-pp?action=${data.action}` : '/live/misc-daily',
+        request = new Request(url, options);
+    fetch(request)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(response) {
+            if (response.showStartButton) {
+                if (data.ppid) {
+                    Swal.fire({
+                        input: 'checkbox',
+                        inputValue: 1,
+                        inputPlaceholder: 'Allow my timing to recorded and displayed',
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Start Puzzle',
+                        footer: `<i>Timer will start once you click on "Start Puzzle". Close this page, if you are not ready yet.</i>`,
+                    }).then((result) => {
+                        paramArray["recordTiming"] = result.value === 1;
+                        load_from_server(paramArray, type, 'start-puzzle', origurl);
+                    });
+                } else {
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Start Puzzle',
+                        text: `Timer will start once you click on "Start Puzzle".`,
+                        footer: `<i>Close this page, if you are not ready yet.</i>`,
+                    }).then((result) => {
+                        load_from_server(paramArray, type, 'start-puzzle', origurl);
+                    });
+                }
+            } else {
+                if (response.success === false) {
+                    if (response.showLoad) {
+                        create();
+                        i_url();
+                    } else {
+                        Swal.fire({
+                            html: `${response.message}. Click <a href='${response.redirect}'>here</a> to proceed to main page.`,
+                            icon: 'error'
+                        });
+                    }
+                }
+                if (response.q) {
+                    response.q = window.btoa(JSON.stringify(response.q));
+                }
+                load2(response, type, origurl);
+            }
+        })
+        .catch(function(err) {
+            create();
+        });
 }
 
 function encrypt_data(puzdata) {
