@@ -22,10 +22,15 @@ function boot() {
             paramArray[paramItem[0]] = paramItem[1];
         }
 
-        let hash = "penpa_" + md5(paramArray.p);
+        let local_data;
+        if (paramArray.p) {
+            let hash = "penpa_" + md5(paramArray.p);
 
-        // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
+            // Decrypt puzzle data
+            local_data = localStorage.getItem(hash);
+        } else {
+            local_data = null;
+        }
         if (local_data && local_data.includes('&p=')) {
             // This is to account for old links and new links together
             var url;
