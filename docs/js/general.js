@@ -1232,7 +1232,8 @@ function replay_choice() {
         var undo_len = pu[pu.mode.qa]["command_undo"].__a.length;
 
         // Live replay only if within time limit and there is timestamp data
-        if ((parseInt(pu.puzzle_info.seconds) <= pu.puzzle_info.replayCutOff) &&
+        let cutoff = (pu.puzzle_info.replayCutOff + 300) * 1000; // 5 min buffer
+        if ((parseInt(pu.puzzle_info.seconds) <= cutoff) &&
             ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
                 (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
 
@@ -1287,10 +1288,17 @@ function replay_choice() {
                     pu.first_click = false;
                 } else {
                     redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
+
                     if (redo_len != 0) {
                         pu.redo(replay = true);
                     }
+
                     redo_len = pu[pu.mode.qa]["command_redo"].__a.length;
+
+                    // redo correction
+                    if (redo_len == 1 && (pu[pu.mode.qa]["command_redo"].__a[0] === null)) {
+                        redo_len = 0;
+                    }
 
                     let speed_factor = parseFloat(document.getElementById("replay_speed").value);
 
