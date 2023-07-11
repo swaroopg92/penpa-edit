@@ -2309,10 +2309,12 @@ onload = function() {
     }
 
     $(document).ready(function() {
-        if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
-            $('#constraints_settings_opt').select2({
-                'width': "resolve" // 25% was used before
-            });
+        if (typeof pu !== 'undefined') {
+            if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
+                $('#constraints_settings_opt').select2({
+                    'width': "resolve" // 25% was used before
+                });
+            }
         }
     });
 

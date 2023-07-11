@@ -21,7 +21,6 @@ function boot() {
             let paramItem = param[i].split('=');
             paramArray[paramItem[0]] = paramItem[1];
         }
-
         let local_data;
         if (paramArray.p) {
             let hash = "penpa_" + md5(paramArray.p);
@@ -1481,7 +1480,6 @@ function panel_toggle() {
 }
 
 function panel_onoff() {
-    console.log('UserSettings.panel_shown', UserSettings.panel_shown);
     if (UserSettings.panel_shown) {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
@@ -5752,7 +5750,39 @@ function load_from_server(paramArray, type, action, origurl) {
                 if (response.q) {
                     response.q = window.btoa(JSON.stringify(response.q));
                 }
-                load2(response, type, origurl);
+
+                // Check for local storage
+                let hash = "penpa_" + md5(response.p);
+
+                // Decrypt puzzle data
+                let local_data = localStorage.getItem(hash);
+
+                // If its not a replay
+                if (local_data && local_data.includes('&p=') && (paramArray.mode.indexOf("replay") === -1)) {
+                    // This is to account for old links and new links together
+                    var url;
+                    if (local_data.includes("#")) {
+                        url = local_data.split('#')[1];
+                    } else {
+                        url = local_data.split('?')[1];
+                    }
+
+                    let param = url.split('&');
+                    let paramArray_local = [];
+
+                    // Decompose address into elements
+                    for (var i = 0; i < param.length; i++) {
+                        var paramItem = param[i].split('=');
+                        paramArray_local[paramItem[0]] = paramItem[1];
+                    }
+
+                    // update q string for latest information
+                    paramArray_local.q = response.q;
+
+                    load2(paramArray_local, 'localstorage', response.p);
+                } else {
+                    load2(response, type, origurl);
+                }
             }
         })
         .catch(function(err) {

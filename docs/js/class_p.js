@@ -8019,7 +8019,7 @@ class Puzzle {
                     }
 
                     if (!replay) {
-                        let timestamp = get_time_stamp();
+                        let timestamp = this.get_time_stamp();
 
                         // Save the record
                         a_replay[5] = timestamp;
@@ -8232,7 +8232,7 @@ class Puzzle {
                     }
 
                     if (!replay) {
-                        let timestamp = get_time_stamp();
+                        let timestamp = this.get_time_stamp();
 
                         // Save the record
                         a[5] = timestamp;
@@ -8333,7 +8333,7 @@ class Puzzle {
 
     record_replay(arr, num, groupcounter = 0) {
         if (this.mode.qa === "pu_a") {
-            let timestamp = get_time_stamp();
+            let timestamp = this.get_time_stamp();
             if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
                 this.pu_a.command_replay.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
                 this.pu_a_col.command_replay.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
