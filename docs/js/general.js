@@ -2195,7 +2195,8 @@ function submit_portal(e, isPreview, isExample) {
                     solvingTags: entries_flag.answercheck_opt,
                     onlineSolveMessage: entries_flag.message,
                     allowVideo: document.getElementById("video_usage").checked,
-                    imgdata: pu.puzzlepreview()
+                    imgdata: pu.puzzlepreview(),
+                    solimgdata: isExample ? pu.puzzlepreview(true) : ''
                 },
                 options = {
                     method: 'POST',
