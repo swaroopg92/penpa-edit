@@ -406,7 +406,7 @@ const UserSettings = {
         'timerbar_status',
         'conflict_detection',
         'shorten_links',
-        'quickpanelbutton'
+        'quick_panel_button'
     ],
     gridtype_size: [
         'gridtype',
