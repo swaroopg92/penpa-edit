@@ -1169,7 +1169,6 @@ function panel_toggle() {
 }
 
 function panel_onoff() {
-    console.log('UserSettings.panel_shown', UserSettings.panel_shown);
     if (UserSettings.panel_shown) {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
