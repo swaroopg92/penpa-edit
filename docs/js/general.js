@@ -3193,59 +3193,6 @@ function load2(paramArray, type, origurl) {
         pu.url = paramArray.p;
     }
 
-    if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup") && (type != "localstorage")) {
-        // check for local progres
-        // get md5 hash for unique id
-
-        let hash = "penpa_" + md5(pu.url);
-
-        // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
-
-        if (local_data !== null) {
-            var local_copy = JSON.parse(decrypt_data(local_data));
-            pu.pu_q = local_copy.pu_q;
-            pu.pu_a = local_copy.pu_a;
-            pu.pu_q_col = local_copy.pu_q_col;
-            pu.pu_a_col = local_copy.pu_a_col;
-
-            // Because class cannot be copied, its set in different way
-            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-            let undo_redo = ["command_redo", "command_undo", "command_replay"];
-            for (var i of pu_qa) {
-                for (var j of undo_redo) {
-                    if (typeof pu[i][j] != "undefined") {
-                        var t = pu[i][j].__a;
-                        pu[i][j] = new Stack();
-                        pu[i][j].set(t);
-                    } else {
-                        pu[i][j] = new Stack();
-                    }
-                }
-            }
-            pu.redraw();
-
-            if (local_copy.timer) {
-                let starttime = local_copy.timer.split(":");
-                var puzzle_solved = sw_timer.isPaused() ? true : false;
-                sw_timer.stop(); // stop previously running timer and start with stored starting time
-                sw_timer.start({
-                    precision: 'secondTenths',
-                    startValues: {
-                        days: parseInt(starttime[0]),
-                        hours: parseInt(starttime[1]),
-                        minutes: parseInt(starttime[2]),
-                        seconds: parseInt(starttime[3]),
-                        secondTenths: parseInt(starttime[4])
-                    }
-                });
-                if (puzzle_solved) {
-                    sw_timer.pause();
-                }
-            }
-        }
-    }
-
     // Enable Replay Buttons
     if (valid_replay) {
         // Decrypt Replay
@@ -3335,7 +3282,10 @@ function load2(paramArray, type, origurl) {
         parent.resizeiframe();
     }
 
-    if (pu.puzzle_info && !pu.puzzle_info.allowSub && pu.puzzle_info.lmimode === "daily" && !valid_replay) {
+    if (pu.puzzle_info &&
+        !pu.puzzle_info.allowSub &&
+        (pu.puzzle_info.lmimode === "daily" || pu.puzzle_info.lmimode === "expo") &&
+        !valid_replay) {
         // Enable timer for resolves
         document.getElementById("timer").style.display = "";
         document.getElementById("stop_watch").style.display = "";
@@ -5765,9 +5715,16 @@ function load_from_server(paramArray, type, action, origurl) {
 
                 // Decrypt puzzle data
                 let local_data = localStorage.getItem(hash);
+                let replay_url = false;
+
+                if ("mode" in paramArray) {
+                    if (paramArray.mode.indexOf("replay") !== -1) {
+                        replay_url = true;
+                    }
+                }
 
                 // If its not a replay
-                if (local_data && local_data.includes('&p=') && (paramArray.mode.indexOf("replay") === -1)) {
+                if (local_data && local_data.includes('&p=') && !replay_url) {
                     // This is to account for old links and new links together
                     var url;
                     if (local_data.includes("#")) {
