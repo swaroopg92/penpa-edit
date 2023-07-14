@@ -2270,8 +2270,12 @@ function export_sudoku() {
 function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/?") !== -1) {
-            urlstring = urlstring.split("/penpa-edit/?")[1];
+        if (urlstring.indexOf("/penpa-edit/") !== -1) {
+            if (urlstring.includes("#")) {
+                urlstring = urlstring.split("/penpa-edit/#")[1];
+            } else {
+                urlstring = urlstring.split("/penpa-edit/?")[1];
+            }
             load(urlstring, 'local');
             document.getElementById("modal-load").style.display = 'none';
             if (UserSettings.tab_settings > 0) {
