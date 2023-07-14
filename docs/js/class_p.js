@@ -971,14 +971,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Min row size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -1245,14 +1245,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Min row size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -1630,14 +1630,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Min column size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -2014,14 +2014,14 @@ class Puzzle {
         } else {
             if (sign === 1) {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
                 })
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Min column size reached <h2 class="warn">1</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -3346,12 +3346,16 @@ class Puzzle {
         return checkall;
     }
 
-    get_answercheck_settings() {
+    get_answercheck_settings(usecase = 'penpa') {
         let answersetting = document.getElementById("answersetting");
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
-        var answercheck_opt = [],
-            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+        var answercheck_opt = [];
+        if (usecase == 'lmi') {
+            var message = "Solution checker looks for ALL of the following:<ul>";
+        } else {
+            var message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+        }
 
         // loop through and check if any "AND" settings are selected
         let prev_opt = "";
@@ -3370,7 +3374,12 @@ class Puzzle {
 
         // If answercheck list is 0, it means, no "AND" option was selected
         if (answercheck_opt.length === 0) {
-            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            if (usecase == 'lmi') {
+                message = "Solution checker looks for ONE of the following:<ul>";
+            } else {
+                message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            }
+
             // loop through and check if any "OR" settings are selected
             for (var i = 0; i < settingstatus_or.length; i++) {
                 if (settingstatus_or[i].checked) {

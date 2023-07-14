@@ -199,7 +199,7 @@ function create_newboard() {
         }
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'LMI says:',
             html: 'Display size must be in the range <h2 class="warn">12-90</h2>',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -249,7 +249,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_square(nx, ny, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Rows/Columns Size must be in the range <h2 class="warn">1-' + gridmax['square'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -265,7 +265,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_hex(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['hex'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -281,7 +281,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_tri(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['tri'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -297,7 +297,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_pyramid(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['pyramid'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -310,7 +310,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['iso'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -487,7 +487,7 @@ function make_class(gridtype, loadtype = 'new') {
                 }
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Rows/Columns Size must be in the range <h2 class="warn">1-' + gridmax['kakuro'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -500,7 +500,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['truncated'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -513,7 +513,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['tetrakis'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -526,7 +526,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['snub'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -539,7 +539,7 @@ function make_class(gridtype, loadtype = 'new') {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: 'Side Size must be in the range <h2 class="warn">1-' + gridmax['cairo'] + '</h2>',
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -1864,7 +1864,7 @@ function saveimage_download() {
         }
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'LMI says:',
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -2307,7 +2307,7 @@ function validate_entries() {
     }
 
     // Validate at least one answer check option is selected
-    var answer_check_opt = pu.get_answercheck_settings();
+    var answer_check_opt = pu.get_answercheck_settings('lmi');
     if (answer_check_opt.answercheck_opt.length === 0) {
         expoError({ html: 'Select at least one answer checking option' });
         return false;
@@ -2318,7 +2318,7 @@ function validate_entries() {
 
 function savetext_copy() {
     Swal.fire({
-        title: 'Swaroop says:',
+        title: 'LMI says:',
         html: '<h2 class="info">URL is copied to clipboard</h2>',
         icon: 'info'
     })
@@ -2375,7 +2375,7 @@ function saveblob_download(blob, defaultFilename) {
         }
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'LMI says:',
             html: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -3844,14 +3844,14 @@ function display_answercheck() {
     var answer_check_opt = pu.get_answercheck_settings();
     if (answer_check_opt.answercheck_opt.length === 0) {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'LMI says:',
             html: 'No specific option selected by Author. Answer check looks for all the elements with appropriate accepted colors. Check <a href="https://github.com/swaroopg92/penpa-edit/blob/master/images/multisolution.PNG" target="_blank">this</a> for reference.',
             icon: 'info',
             confirmButtonText: 'ok 🙂',
         })
     } else {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'LMI says:',
             html: answer_check_opt.message,
             icon: 'info',
             confirmButtonText: 'ok 🙂',
@@ -3893,7 +3893,7 @@ function decode_puzzlink(url) {
 
     if ((cols > 65) || (rows > 65)) {
         Swal.fire({
-            title: 'Swaroop says:',
+            title: 'LMI says:',
             html: 'Penpa+ does not support grid size greater than 65 rows or columns',
             icon: 'error',
             confirmButtonText: 'ok 🙂',
@@ -3995,7 +3995,7 @@ function decode_puzzlink(url) {
                 pu = new Puzzle_square(10, 10, size);
                 setupProblem(pu, "surface");
                 Swal.fire({
-                    title: 'Swaroop says:',
+                    title: 'LMI says:',
                     html: `Sorry, sudoku grids of size: ${cols}x${rows} are not supported`,
                     icon: 'error',
                     confirmButtonText: 'ok 🙂',
@@ -5611,7 +5611,7 @@ function decode_puzzlink(url) {
             break;
         default:
             Swal.fire({
-                title: 'Swaroop says:',
+                title: 'LMI says:',
                 html: 'It currently does not support puzzle type: ' + type,
                 icon: 'error',
                 confirmButtonText: 'ok 🙂',
