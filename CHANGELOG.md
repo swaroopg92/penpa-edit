@@ -5,6 +5,7 @@
 	* Added clone url button.
 	* Enable text selection for the answer check message.
 	* Added setting for quick panel toggle button, and added quick panel toggle button.
+	* Improved shortcuts display under Help, adding ? to access Help
 * 2023/05/03 ver 3.0.7
 	* Diagonal connection shape for killer cages with rotation fix.
 	* Tweaked display for mobile devices.
