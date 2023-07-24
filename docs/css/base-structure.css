@@ -605,6 +605,10 @@ hr.newgridhrline {
     font-size: 15px;
 }
 
+.error_msg {
+    color: red;
+}
+
 input[type=radio] {
     display: none;
     /* Hide radio buttons */

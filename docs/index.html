@@ -1287,7 +1287,7 @@
     </div>
     <div id="modal-input" class="modal">
         <div id="modal-input-content">
-            <h3 class="modal-header" id="save4texttitle">Input/Output sudoku string</h3>
+            <h3 class="modal-header" id="save4texttitle">Input/Output Sudoku String</h3>
             <div id="modal-save-body">
                 <textarea class="text_area" rows="1" cols="81" id="iostring"></textarea>
             </div>
@@ -1301,9 +1301,18 @@
                 <input type="number" pattern="\d*" name="sudokusize" id="sudokusize" value="" min="1" max="9" step="1" placeholder="9">
             </div>
             <div>
-                <span><label class="label_nb" id="ignore_pencilmarks_lb">Ignore Pencil Marks (L, M, S values)</label></span>
+                <span><label class="label_nb" id="ignore_pencilmarks_lb" for="ignore_pencilmarks">Ignore Pencil Marks (L, M, S values)</label></span>
                 <input type="checkbox" name="ignore_pencilmarks" id="ignore_pencilmarks">
             </div>
+            <div>
+                <span><label class="label_nb" id="sudokuIgnoreSpaces_lb" for="sudokuIgnoreSpaces">Ignore Whitespace for Import</label></span>
+                <input type="checkbox" name="sudokuIgnoreSpaces" id="sudokuIgnoreSpaces">
+            </div>
+            <div>
+                <span><label class="label_nb" id="sudokuIgnoreNotSquare_lb" for="sudokuIgnoreNotSquare">Skip Import Non-Square Check</label></span>
+                <input type="checkbox" name="sudokuIgnoreNotSquare" id="sudokuIgnoreNotSquare">
+            </div>
+            <div id="sudokuIOFail" class="is_hidden error_msg">Error: it contains non-alpha-numeric characters</div>
             <div class="nb_button">
                 <input type="button" id="load_input" value="Import Sudoku" onclick="import_sudoku();" />
                 <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();" />
