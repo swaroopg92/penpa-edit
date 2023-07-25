@@ -275,6 +275,12 @@ onload = function () {
             number_release_time = -1e5;
         }
 
+        if (key === '?' && pu.mode[pu.mode.qa].edit_mode !== "number") {
+            show_shortcuts();
+            e.returnValue = false;
+            return;
+        }
+
         // keylocation 3 indicates numlock is ON and number pad is being used
         const keylocation = e.location;
 
@@ -412,73 +418,73 @@ onload = function () {
             }
         }
 
-        if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
-            if (!isCtrlKeyPressed(key)) {
-                if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                    switch (code) {
-                        case "Digit0":
-                            key = "0";
-                            break;
-                        case "Digit1":
-                            key = "1";
-                            break;
-                        case "Digit2":
-                            key = "2";
-                            break;
-                        case "Digit3":
-                            key = "3";
-                            break;
-                        case "Digit4":
-                            key = "4";
-                            break;
-                        case "Digit5":
-                            key = "5";
-                            break;
-                        case "Digit6":
-                            key = "6";
-                            break;
-                        case "Digit7":
-                            key = "7";
-                            break;
-                        case "Digit8":
-                            key = "8";
-                            break;
-                        case "Digit9":
-                            key = "9";
-                            break;
+            if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
+                if (!isCtrlKeyPressed(key)) {
+                    if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                        switch (code) {
+                            case "Digit0":
+                                key = "0";
+                                break;
+                            case "Digit1":
+                                key = "1";
+                                break;
+                            case "Digit2":
+                                key = "2";
+                                break;
+                            case "Digit3":
+                                key = "3";
+                                break;
+                            case "Digit4":
+                                key = "4";
+                                break;
+                            case "Digit5":
+                                key = "5";
+                                break;
+                            case "Digit6":
+                                key = "6";
+                                break;
+                            case "Digit7":
+                                key = "7";
+                                break;
+                            case "Digit8":
+                                key = "8";
+                                break;
+                            case "Digit9":
+                                key = "9";
+                                break;
+                        }
                     }
-                }
-                switch (key) {
-                    case "d": //Ctrl+d
-                    case "D":
-                        duplicate();
-                        e.returnValue = false;
-                        break;
-                    case "y": //Ctrl+y
-                    case "Y":
-                        if (!pu.undoredo_disable) {
-                            pu.redo();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "z": //Ctrl+z
-                    case "Z":
-                        if (!pu.undoredo_disable) {
-                            pu.undo();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case " ": //Ctrl+space
-                        pu.key_shiftspace();
-                        e.returnValue = false;
-                        break;
-                    case "i": //Ctrl+i
-                    case "I":
-                        if ((document.getElementById('panel_button').value === "1") &&
-                            (typeof panel_select !== "undefined") &&
-                            (panel_select < panel_pu.cont.length) &&
-                            pu.mode[pu.mode.qa].edit_mode !== "symbol") {
-                            var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
+                    switch (key) {
+                        case "d": //Ctrl+d
+                        case "D":
+                            duplicate();
+                            e.returnValue = false;
+                            break;
+                        case "y": //Ctrl+y
+                        case "Y":
+                            if (!pu.undoredo_disable) {
+                                pu.redo();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case "z": //Ctrl+z
+                        case "Z":
+                            if (!pu.undoredo_disable) {
+                                pu.undo();
+                            }
+                            e.returnValue = false;
+                            break;
+                        case " ": //Ctrl+space
+                            pu.key_shiftspace();
+                            e.returnValue = false;
+                            break;
+                        case "i": //Ctrl+i
+                        case "I":
+                            if ((document.getElementById('panel_button').value === "1") &&
+                                (typeof panel_select !== "undefined") &&
+                                (panel_select < panel_pu.cont.length) &&
+                                pu.mode[pu.mode.qa].edit_mode !== "symbol") {
+                                var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
 
                             if (panel_pu.panelmode === "number") {
                                 if (0 <= panel_select && panel_select <= 9) {
@@ -1649,6 +1655,10 @@ onload = function () {
                 UserSettings.draw_edges = !UserSettings.draw_edges;
                 e.preventDefault();
                 break;
+            case "quick_panel_toggle":
+                UserSettings.panel_shown = !UserSettings.panel_shown;
+                e.preventDefault();
+                break;
             case "visibility_button":
                 UserSettings.show_solution = !UserSettings.show_solution;
                 e.preventDefault();
@@ -1929,7 +1939,7 @@ onload = function () {
 
         if (pu.mode[pu.mode.qa].edit_mode === "symbol") {
             panel_pu.edit_num = n;
-            if (document.getElementById('panel_button').value === "1" && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
+            if (UserSettings.panel_shown && pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     pu.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -2167,7 +2177,7 @@ onload = function () {
             if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
                 pu.borderwarning = false;
                 Swal.fire({
-                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn Border: ON</h2>',
+                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn "Draw on Edges": ON</h2>',
                     timer: 8000,
                     icon: 'info'
                 })
@@ -2197,7 +2207,7 @@ onload = function () {
     }
 
     // Panel Setting
-    document.getElementById("panel_button").onchange = function () {
+    document.getElementById("panel_button").onchange = function() {
         panel_onoff();
     }
 

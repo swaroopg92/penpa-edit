@@ -1161,19 +1161,15 @@ function replay_forward() {
 }
 
 function panel_off() {
-    document.getElementById('panel_button').value = 2;
-    panel_onoff();
+    UserSettings.panel_shown = false;
 }
 
 function panel_toggle() {
-    let button = document.getElementById('panel_button');
-    let ogValue = parseInt(button.value, 10) || 2;
-    button.value = 3 - ogValue;
-    panel_onoff();
+    UserSettings.panel_shown = !UserSettings.panel_shown;
 }
 
 function panel_onoff() {
-    if (document.getElementById('panel_button').value === "1") {
+    if (UserSettings.panel_shown) {
         document.getElementById('float-key').style.display = "block";
         if (window.panel_toplast && window.panel_leftlast) {
             document.getElementById('float-key-body').style.left = window.panel_leftlast;
@@ -1920,10 +1916,7 @@ function load_feedback() {
 }
 
 function show_shortcuts() {
-    Swal.fire({
-        title: 'Shortcuts',
-        html: '<table style="width:100%" class="shortcuts"><tr><th style="color:Green;" colspan="2">General</th></tr><tr><th style="color:red;">F2</th><th>Problem mode</th></tr><tr><th style="color:red;">F3</th><th>Solution mode</th></tr><tr><th style="color:red;">F4</th><th>Hide/Show Timer</th></tr><tr><th style="color:red;">Ctrl + D</th><th>Clone/Duplicate</th></tr><tr><th style="color:Green;" colspan="2">Sudoku Mode</th></tr><tr><th style="color:red;">Z</th><th>Normal Submode</th></tr><tr><th style="color:red;">X</th><th>Corner Submode</th></tr><tr><th style="color:red;">C</th><th>Centre Submode</th></tr><tr><th style="color:red;">V</th><th>Shading (Surface Mode)</th></tr><tr><th style="color:red;">SHIFT</th><th>For Temporary Corner Submode</th></tr><tr><th style="color:red;">SHIFT + DEL</th><th>Deletes only corner pencil marks from the selected cells</th></tr><tr><th style="color:red;">CTRL</th><th>For Temporary Centre Submode</th></tr><tr><th style="color:red;">CTRL + DEL</th><th>Deletes only centre pencil marks from the selected cells</th></tr><tr><th style="color:red;">Border: ON</th><th>will allow you to write digits on the edges</th></tr><tr><th style="color:Green;" colspan="2">Surface Mode</th></tr><tr><th colspan="2">Use number keys to switch between styles</th></tr> </table>',
-    })
+    document.getElementById("modal-keys").style.display = 'block';
 }
 
 function load(urlParam, type = 'url', origurl = null) {

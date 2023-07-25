@@ -57,6 +57,7 @@ You can now site this in your research and publications using:
 * Special: The tip position can be returned to the front by returning to the path that was used during input.
 * V: Visibility Button. Users can now choose if they dont want the solution visible in the "Problem" mode. Default is "ON". In "Solution" mode everything will be visible.
 * Draw on Edges: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
+* Panel: Turning on this button will popup a panel box useful for Number/Sudoku/Shape Modes.
 * Constraints (Beta): This feature is to aid puzzle constructors to find certain elements quickly for well known puzzle types. It is currently supported for square grid type. [Note - I will frequently add new types and expand the support to other grid types but if you have a certain genre in mind, you can send a request to penpaplus@gmail.com or contact via other options available through "i" information button on the top right]
 
 ## Current functions

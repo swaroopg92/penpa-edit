@@ -355,6 +355,43 @@ const UserSettings = {
         return this._shorten_links;
     },
 
+    _panel_shown: false,
+    set panel_shown(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._panel_shown = newValue;
+
+        const dropdown = document.getElementById('panel_button');
+        dropdown.value = newValue ? 1 : 2;
+
+        const button = document.getElementById("quick_panel_toggle");
+        button.textContent = newValue ? "ON" : "OFF";
+
+        panel_onoff();
+    },
+    get panel_shown() {
+        return this._panel_shown;
+    },
+
+    _quick_panel_btn: true,
+    set quick_panel_button(newValue) {
+        if (newValue === undefined) { newValue = false; }
+        this._quick_panel_btn = newValue;
+
+        const dropdown = document.getElementById('quick_panel_dropdown');
+        dropdown.value = newValue ? 1 : 2;
+
+        const button = document.getElementById("quick_panel_toggle");
+        const label = document.getElementById("quick_panel_toggle_label");
+
+        button.classList[newValue ? 'remove' : 'add']('is_hidden');
+        label.classList[newValue ? 'remove' : 'add']('is_hidden');
+
+        this.attemptSave();
+    },
+    get quick_panel_button() {
+        return this._quick_panel_btn;
+    },
+
     can_save: [
         'color_theme',
         'custom_colors_on',
@@ -367,7 +404,8 @@ const UserSettings = {
         'sudoku_normal_size',
         'timerbar_status',
         'conflict_detection',
-        'shorten_links'
+        'shorten_links',
+        'quick_panel_button'
     ],
     gridtype_size: [
         'gridtype',

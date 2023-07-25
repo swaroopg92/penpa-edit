@@ -80,7 +80,7 @@
         }
     </script>
     <!-- Online libs -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
     <!--  rest -->
     <script type="text/javascript">
@@ -158,10 +158,12 @@
                         <label class="label_mode" id="constraints">Constraints (Beta):</label>
                         <select name="constraints_settings" id="constraints_settings_opt"> </select>
                         <span id="visibility_button0" class="label_mode">Visibility:</span>
-                        <span id="visibility_button" class="label">ON</span>
+                        <span id="visibility_button" class="label toggle_btn">ON</span>
                         <br id="visibility_break">
                         <span id="edge_button0" class="label_mode">Draw on Edges:</span>
-                        <span id="edge_button" class="label">OFF</span>
+                        <span id="edge_button" class="label toggle_btn">OFF</span>
+                        <span id="quick_panel_toggle_label" class="label_mode">Panel:</span>
+                        <span id="quick_panel_toggle" class="label toggle_btn">OFF</span>
                     </div>
                     <div id="mode_button" class="mode_button">
                         <label class="label_mode" id="mode_txt">Mode:</label>
@@ -1463,6 +1465,17 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>
+                                <label>Quick Panel Button:</label>
+                            </td>
+                            <td>
+                                <select name="quickpaneldropdown" id="quick_panel_dropdown">
+                                    <option value="1" selected="selected">ON</option>
+                                    <option value="2">OFF</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th colspan="2" class="modal-subheader">Export</th>
                         </tr>
                         <tr>
@@ -1572,6 +1585,50 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div id="modal-keys" class="modal">
+        <div id="modal-keys-content" class="modal-content modal-content-wide">
+            <h3 class="modal-header">Keyboard Shortcuts</h3>
+            <div class="modal-inner-wrapper">
+                <div>
+                    <ul>
+                        <li><kbd>Ctrl</kbd> + <kbd>Z</kbd>: Undo</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Y</kbd>: Redo</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>D</kbd>: Clone</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>I</kbd>: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Space</kbd>: Delete numbers and symbols at the same time</li>
+                        <li><kbd>Shift</kbd> + <kbd>Space</kbd>: Enter a space (Works in "Number" Mode => "L", "M", "S" and Long" SubMode options only)</li>
+                        <li><kbd>F2</kbd>: Problem mode</li>
+                        <li><kbd>F3</kbd>: Solution mode</li>
+                        <li><kbd>F4</kbd>: Hide/Show Timer</li>
+                        <li><kbd>Tab</kbd> or <kbd>Enter</kbd>: Cycle Input Tools</li>
+                        <li><kbd>?</kbd>: Show keyboard shortcuts</li>
+                    </ul>
+
+                </div>
+                <div>
+                    <h5 class="modal-subheader">In Sudoku Mode</h5>
+                    <ul>
+                        <li><kbd>Z</kbd>: Normal Submode*</li>
+                        <li><kbd>X</kbd>: Corner Submode*</li>
+                        <li><kbd>C</kbd>: Centre Submode*</li>
+                        <li><kbd>V</kbd>: Shading (Surface Mode)*</li>
+                        <li><kbd>Shift</kbd>: For Temporary Corner Submode</li>
+                        <li><kbd>Shift</kbd> + <kbd>Delete</kbd>: Deletes only corner pencil marks from the selected cells</li>
+                        <li><kbd>Ctrl</kbd> - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Delete</kbd>: Deletes only centre pencil marks from the selected cells</li>
+                        <li><kbd>Delete</kbd>: To delete all the contents of the cell</li>
+                        <li><kbd>Space</kbd>: To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)</li>
+                    </ul>
+
+                    <p class="modal-footnote">* These can be disabled from Settings.</p>
+
+                    <h5 class="modal-subheader">In Surface Mode</h5>
+
+                    <p>Use number keys <kbd>0</kbd> - <kbd>9</kbd> to quickly switch between styles. For styles 11 and 12, press <kbd>1</kbd> and the second digit in quick succession.</p>
+                </div>
             </div>
         </div>
     </div>

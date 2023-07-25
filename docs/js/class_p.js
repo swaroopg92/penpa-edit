@@ -2237,43 +2237,19 @@ class Puzzle {
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
         if (mode === "symbol" && !this.panelflag) {
             // Show the panel on the first time landing and then respect user's choice
-            if (document.getElementById('panel_button').value === "2") {
-                document.getElementById('panel_button').value = "1";
-                document.getElementById('float-key').style.display = "block";
-                if (window.panel_toplast && window.panel_leftlast) {
-                    document.getElementById('float-key-body').style.left = window.panel_leftlast;
-                    document.getElementById('float-key-body').style.top = window.panel_toplast;
-                    document.getElementById('float-key-header').style.left = window.panel_leftlast;
-                    document.getElementById('float-key-header').style.top = window.panel_toplast;
-                } else {
-                    document.getElementById('float-key-body').style.left = 0 + "px";
-                    document.getElementById('float-key-body').style.top = 0 + "px";
-                    document.getElementById('float-key-header').style.left = 0 + "px";
-                    document.getElementById('float-key-header').style.top = 0 + "px";
-                }
+            if (!UserSettings.panel_shown) {
+                UserSettings.panel_shown = true;
             }
             this.panelflag = true;
         } else if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
             // Automatically show panel while in number or shape or sudoku mode on the Mobile/Ipad device
-            if (document.getElementById('panel_button').value === "2") {
-                document.getElementById('panel_button').value = "1";
-                document.getElementById('float-key').style.display = "block";
-                if (window.panel_toplast && window.panel_leftlast) {
-                    document.getElementById('float-key-body').style.left = window.panel_leftlast;
-                    document.getElementById('float-key-body').style.top = window.panel_toplast;
-                    document.getElementById('float-key-header').style.left = window.panel_leftlast;
-                    document.getElementById('float-key-header').style.top = window.panel_toplast;
-                } else {
-                    document.getElementById('float-key-body').style.left = 0 + "px";
-                    document.getElementById('float-key-body').style.top = 0 + "px";
-                    document.getElementById('float-key-header').style.left = 0 + "px";
-                    document.getElementById('float-key-header').style.top = 0 + "px";
-                }
+            if (!UserSettings.panel_shown) {
+                UserSettings.panel_shown = true;
             }
         } else if (this.ondown_key === "touchstart") {
             // Turn off panel while switching to other modes on Mobile/Ipad
-            document.getElementById('panel_button').value = "2";
+            UserSettings.panel_shown = false;
             document.getElementById('float-key').style.display = "none";
         }
         if (mode === "symbol") {
@@ -2295,7 +2271,7 @@ class Puzzle {
         }
 
         // If panel is ON, show Mode info on header
-        if (document.getElementById('panel_button').value === "1") {
+        if (UserSettings.panel_shown) {
             let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
             let mode_loc = penpa_modes["square"]["mode"].indexOf(mode);
             document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
@@ -9859,7 +9835,7 @@ class Puzzle {
     mouse_symbol(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.cursol = num;
-            if (document.getElementById('panel_button').value === "1" && !this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) {
+            if (UserSettings.panel_shown && !this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) {
                 if (0 <= panel_pu.edit_num && panel_pu.edit_num <= 8) {
                     this.key_number((panel_pu.edit_num + 1).toString());
                 } else if (panel_pu.edit_num === 9) {
@@ -12673,7 +12649,7 @@ class Puzzle {
         /*cursol*/
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
             set_line_style(this.ctx, 99);
-            if (this.mode[this.mode.qa].edit_mode === "symbol" && document.getElementById('panel_button').value === "1" && !pu.onoff_symbolmode_list[pu.mode[this.mode.qa].symbol[0]]) {
+            if (this.mode[this.mode.qa].edit_mode === "symbol" && UserSettings.panel_shown && !pu.onoff_symbolmode_list[pu.mode[this.mode.qa].symbol[0]]) {
                 this.ctx.strokeStyle = Color.BLUE_DARK_VERY;
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
