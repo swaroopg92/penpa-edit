@@ -284,21 +284,11 @@ const UserSettings = {
 
         if (valueInt > 90) {
             valueInt = 90;
-            Swal.fire({
-                title: 'Swaroop says:',
-                html: 'Display Size must be in the range <h2 class="warn">12-90</h2> It is set to max value.',
-                icon: 'info',
-                confirmButtonText: 'ok 🙂',
-            })
+            infoMsg('Display Size must be in the range <h2 class="warn">12-90</h2> It is set to max value.');
         }
         if (valueInt < 12) {
             valueInt = 12;
-            Swal.fire({
-                title: 'Swaroop says:',
-                html: 'Display Size must be in the range <h2 class="warn">12-90</h2> It is set to min value.',
-                icon: 'info',
-                confirmButtonText: 'ok 🙂',
-            })
+            infoMsg('Display Size must be in the range <h2 class="warn">12-90</h2> It is set to min value.');
         }
 
         this._displaysize = valueInt;
@@ -423,12 +413,7 @@ const UserSettings = {
         deleteCookie('tab_settings');
         // deleteCookie("different_solution_tab");
 
-        Swal.fire({
-            title: 'Cookies cleared!',
-            html: 'You must reload the page for the default settings to take effect.',
-            icon: 'info',
-            confirmButtonText: 'ok 🙂',
-        });
+        infoMsg('You must reload the page for the default settings to take effect.');
     },
 
     _settingsLoaded: false,

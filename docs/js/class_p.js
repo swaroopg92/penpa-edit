@@ -966,19 +966,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min row size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -1240,19 +1230,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min row size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -1625,19 +1605,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min column size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -2009,19 +1979,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min column size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
             }
         }
     }
