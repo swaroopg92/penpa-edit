@@ -275,9 +275,16 @@ onload = function () {
             number_release_time = -1e5;
         }
 
+        // keylocation 3 indicates numlock is ON and number pad is being used
+        const keylocation = e.location;
+
         if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
-            pu.key_arrow(key, isCtrlKeyHeld(e));
-            e.returnValue = false;
+            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && keylocation === 3) {
+                // Skip arrow behavior deliberately for sudoku numpad usage.
+            } else {
+                pu.key_arrow(key, isCtrlKeyHeld(e));
+                e.returnValue = false;
+            }
         }
 
         if (!isCtrlKeyHeld(e) && checkShortcutKeys(e, code, capslock)) {
@@ -286,9 +293,6 @@ onload = function () {
 
         // All of this is specific to sudoku
         if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-
-            // keylocation 3 indicates numlock is ON and number pad is being used
-            const keylocation = e.location;
 
             // For shift shortcut in Sudoku mode, modify the numpad keys
             if (keylocation === 3 && !isShiftKeyPressed(key) && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
