@@ -1062,7 +1062,11 @@ body textarea {
 }
 
 #ignore_pencilmarks_lb,
-#ignore_pencilmarks {
+#ignore_pencilmarks,
+#sudokuIgnoreSpaces_lb,
+#sudokuIgnoreSpaces,
+#sudokuIgnoreNotSquare_lb,
+#sudokuIgnoreNotSquare {
     margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 5px;

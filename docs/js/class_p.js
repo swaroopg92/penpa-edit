@@ -12987,7 +12987,7 @@ class Puzzle {
         }
 
         // Helper method
-        const placeChar = function (thisRef, x, y, char, color) {
+        const placeChar = function(thisRef, x, y, char, color) {
             thisRef.record("number", x + y);
             thisRef[thisRef.mode.qa].number[x + y] = [char, color, "1"];
         };
