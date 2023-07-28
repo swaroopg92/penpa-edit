@@ -5870,11 +5870,17 @@ class Puzzle {
                 text += col_size + ' ' + row_size + '\n';
 
                 //Tapa clues
+                let cell_v;
                 if (!isEmptycontent("pu_q", "number", 2, "4")) {
                     for (var j = 2; j < this.ny0 - 2; j++) {
                         for (var i = 2; i < this.nx0 - 2; i++) {
-                            if (this.pu_q.number[i + j * (this.nx0)] && this.pu_q.number[i + j * (this.nx0)][2] === "4" && !isNaN(this.pu_q.number[i + j * (this.nx0)][0])) {
-                                text += this.pu_q.number[i + j * (this.nx0)][0].split('').sort().join('');
+                            if (this.pu_q.number[i + j * (this.nx0)]) {
+                                cell_v = this.pu_q.number[i + j * (this.nx0)];
+                                if (cell_v[2] === "4" && (!isNaN(cell_v[0]) || cell_v[0].includes("?"))) {
+                                    text += cell_v[0].split('').sort().join('');
+                                } else {
+                                    text += ".";
+                                }
                             } else {
                                 text += ".";
                             }
@@ -7643,12 +7649,12 @@ class Puzzle {
                 console.log(this);
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Please see instructions (link in the bottom) for supported puzzle types\n' +
+                    'Please see instructions (Help) for supported puzzle types\n' +
                     'For additional genre support please submit your request to penpaplus@gmail.com';
             }
         } else {
             text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Please see instructions (link in the bottom) for supported puzzle types\n';
+                'Please see instructions (Help) for supported puzzle types\n';
         }
 
         return text;
