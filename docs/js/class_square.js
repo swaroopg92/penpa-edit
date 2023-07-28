@@ -41,46 +41,7 @@ class Puzzle_square extends Puzzle {
 
         };
         this.reset();
-        this.erase_buttons();
-    }
-
-    erase_buttons() {
-        for (var i of penpa_modes[this.gridtype]['mode']) {
-            document.getElementById("mo_" + i + "_lb").style.display = "inline-block";
-        }
-        for (var i of penpa_modes[this.gridtype]['sub']) {
-            document.getElementById("sub_" + i + "_lb").style.display = "inline-block";
-        }
-        for (var i of penpa_modes[this.gridtype]['customcolor']) {
-            document.getElementById(i).style.display = "table-row";
-        }
-        for (var i of penpa_modes[this.gridtype]['ms']) {
-            document.getElementById("ms_" + i).parentElement.style.display = "list-item";
-        }
-        for (var i of penpa_modes[this.gridtype]['ms1']) {
-            document.getElementById("ms1_" + i).parentElement.style.display = "list-item";
-        }
-        for (var i of penpa_modes[this.gridtype]['ms3']) {
-            document.getElementById("ms3_" + i).parentElement.style.display = "list-item";
-        }
-        for (var i of penpa_modes[this.gridtype]['ms4']) {
-            document.getElementById("ms4_" + i).style.display = "inline-block";
-        }
-        for (var i of penpa_modes[this.gridtype]['shapemodes']) {
-            document.getElementById(i).style.display = "inline-block";
-        }
-        for (var i of penpa_modes[this.gridtype]['combisub']) {
-            document.getElementById("combisub_" + i).parentElement.style.display = "list-item";
-        }
-        for (var i of penpa_modes[this.gridtype]['subcombi']) {
-            document.getElementById(i).style.display = "inline-block";
-        }
-        for (var i of penpa_modes[this.gridtype]['top_buttons']) {
-            document.getElementById(i).style.display = "inline-block";
-        }
-        for (var i of penpa_modes[this.gridtype]['exceptions']) {
-            document.getElementById(i).style.display = "inline-block";
-        }
+        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
     }
 
     create_point() {
@@ -4628,7 +4589,7 @@ class Puzzle_sudoku extends Puzzle_square {
             "polyhex": 7
         };
         this.reset();
-        this.erase_buttons();
+        PenpaUI.set_visible_modes_by_gridtype();
     }
 
     draw_sudokugrid(rows, cols, start, end, linestyle) {
@@ -4716,7 +4677,7 @@ class Puzzle_kakuro extends Puzzle_square {
 
         };
         this.reset();
-        this.erase_buttons();
+        PenpaUI.set_visible_modes_by_gridtype();
     }
 
     draw_kakurogrid() {
