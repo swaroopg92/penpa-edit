@@ -31,7 +31,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.0.7"; // Also defined in class_p.js
+        var ver = "3.0.8"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -1553,7 +1553,7 @@
                                 <label>Sudoku Z/Y & XCV Keys:</label>
                             </td>
                             <td>
-                                <select name="disable_shortcuts" id="disable_shortcuts_opt">
+                                <select name="enable_shortcuts" id="enable_shortcuts_opt">
                                     <option value="1" selected="selected">ON</option>
                                     <option value="2">OFF</option>
                                 </select>
@@ -1606,7 +1606,6 @@
                         <li><kbd>Tab</kbd> or <kbd>Enter</kbd>: Cycle Input Tools</li>
                         <li><kbd>?</kbd>: Show keyboard shortcuts</li>
                     </ul>
-
                 </div>
                 <div>
                     <h5 class="modal-subheader">In Sudoku Mode</h5>
@@ -1622,11 +1621,8 @@
                         <li><kbd>Delete</kbd>: To delete all the contents of the cell</li>
                         <li><kbd>Space</kbd>: To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)</li>
                     </ul>
-
                     <p class="modal-footnote">* These can be disabled from Settings.</p>
-
                     <h5 class="modal-subheader">In Surface Mode</h5>
-
                     <p>Use number keys <kbd>0</kbd> - <kbd>9</kbd> to quickly switch between styles. For styles 11 and 12, press <kbd>1</kbd> and the second digit in quick succession.</p>
                 </div>
             </div>
