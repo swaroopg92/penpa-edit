@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 7]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 8]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -5876,7 +5876,7 @@ class Puzzle {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             if (this.pu_q.number[i + j * (this.nx0)]) {
                                 cell_v = this.pu_q.number[i + j * (this.nx0)];
-                                if (cell_v[2] === "4" && (!isNaN(cell_v[0]) || cell_v[0].includes("?"))) {
+                                if (cell_v[2] === "4" && (pu.only_alphanumeric(cell_v[0]) || cell_v[0].includes("?"))) {
                                     text += cell_v[0].split('').sort().join('');
                                 } else {
                                     text += ".";
@@ -8243,7 +8243,7 @@ class Puzzle {
         var str_num = "1234567890";
 
         // If ZXCV is disabled
-        if (UserSettings.disable_shortcuts == 2) {
+        if (!UserSettings.shortcuts_enabled) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         } else {
             var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
@@ -13149,7 +13149,7 @@ class Puzzle {
             document.getElementById("sub_" + i + "_lb").style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['customcolor']) {
-            document.getElementById(i).style.display = (displaytype === 'inline-block') ? 'table-row' : displaytype;
+            document.getElementById(i).style.display = (displaytype === 'inline-block' || displaytype === 'table-row') ? 'table-row' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms']) {
             document.getElementById("ms_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
