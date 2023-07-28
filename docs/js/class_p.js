@@ -7649,12 +7649,12 @@ class Puzzle {
                 console.log(this);
             } else {
                 text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Please see instructions (link in the bottom) for supported puzzle types\n' +
+                    'Please see instructions (Help) for supported puzzle types\n' +
                     'For additional genre support please submit your request to penpaplus@gmail.com';
             }
         } else {
             text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Please see instructions (link in the bottom) for supported puzzle types\n';
+                'Please see instructions (Help) for supported puzzle types\n';
         }
 
         return text;
