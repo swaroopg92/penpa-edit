@@ -5876,7 +5876,7 @@ class Puzzle {
                         for (var i = 2; i < this.nx0 - 2; i++) {
                             if (this.pu_q.number[i + j * (this.nx0)]) {
                                 cell_v = this.pu_q.number[i + j * (this.nx0)];
-                                if (cell_v[2] === "4" && (!isNaN(cell_v[0]) || cell_v[0].includes("?"))) {
+                                if (cell_v[2] === "4" && (pu.only_alphanumeric(cell_v[0]) || cell_v[0].includes("?"))) {
                                     text += cell_v[0].split('').sort().join('');
                                 } else {
                                     text += ".";
