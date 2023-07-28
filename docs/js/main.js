@@ -6,7 +6,7 @@ let isShiftKeyPressed = key => key === "Shift";
 let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
 
-onload = function() {
+onload = function () {
 
     // Detect mobile or Ipad beforing booting
     var ua = navigator.userAgent;
@@ -55,7 +55,7 @@ onload = function() {
 
     boot();
 
-    document.addEventListener("beforeunload", function(eve) {
+    document.addEventListener("beforeunload", function (eve) {
         eve.returnValue = "Move page.";
     }, { passive: false });
 
@@ -152,7 +152,7 @@ onload = function() {
                 var obj = coord_point(event, 'flex');
             } else {
                 if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                        pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
+                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
                     var obj = coord_point(event, 'flex');
                 } else {
                     var obj = coord_point(event);
@@ -222,8 +222,6 @@ onload = function() {
         "special", "sub_specialthermo", "sub_specialarrows",
         "combi"
     ];
-    let previous_mode = "surface";
-    let previous_submode = 1;
     let previous_length = 2;
     let counter_index = 0;
     let present_submode;
@@ -232,273 +230,209 @@ onload = function() {
     let shift_release_time = -1e5;
     let shift_time_limit = 15; // milliseconds
     let ctrl_counter = 0;
-    let ctrl_numkey = false;
-    let ctrl_release_time = -1e5;
     let number_release_time = -1e5;
     let number_release_limit = 300; // milliseconds
     let previousdigit1 = false;
 
+    // Allow typing as usual when appropriate.
+    const targetTypes = {
+        "number": 1,
+        "text": 1
+    };
+
+    const targetIDs = {
+        "savetextarea_pp": 1,
+        "custom_message": 1,
+        "iostring": 1,
+        "inputtext": 1,
+        "select2_search": 1,
+        "saveinforules": 1,
+        "urlstring": 1
+    };
+
     function onKeyDown(e) {
-        if (e.target.type === "number" ||
-            e.target.type === "text" ||
-            e.target.id === "savetextarea_pp" ||
-            e.target.id === "custom_message" ||
-            e.target.id === "iostring" ||
-            e.target.id === "inputtext" ||
-            e.target.id === "select2_search" ||
-            e.target.id === "saveinforules" ||
-            e.target.id === "urlstring") {
-            // For input form
-        } else {
-            var key = e.key;
-            var keycode = e.keyCode;
-            var code = e.code;
-            var keylocation = e.location;
-            var str_num = "1234567890";
-            var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
-            var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤";
+        // Allow normal typing in these cases and bail on special handling.
+        if (targetTypes[e.target.type] || targetIDs[e.target.id]) {
+            return;
+        }
 
-            // check for caps lock
-            var capslock = false;
-            if ((str_alph_up.indexOf(key) != -1 && !isShiftKeyHeld(e)) ||
-                (str_alph_low.indexOf(key) != -1 && isShiftKeyHeld(e))) {
-                capslock = true;
-            }
+        var key = e.key;
 
-            if ((Date.now() - shift_release_time) < shift_time_limit) {
-                shift_counter = 1;
-                pu.submode_check("sub_sudoku2");
-                shift_release_time = -1e5;
-            }
+        if (checkFunctionKeys(e, key)) {
+            return;
+        }
 
-            // shortcut to styles in surface mode
-            if (pu.mode[pu.mode.qa].edit_mode === "surface" &&
-                str_num.indexOf(key) != -1 &&
-                previousdigit1 &&
-                ((Date.now() - number_release_time) < number_release_limit)) {
-                key = 1 + key;
-                number_release_time = -1e5;
-            }
+        var keycode = e.keyCode;
+        var code = e.code;
+        var str_num = "1234567890";
+        var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
+        var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤";
 
-            if (key === '?' && pu.mode[pu.mode.qa].edit_mode !== "number") {
-                show_shortcuts();
-                e.returnValue = false;
-                return;
-            }
+        // check for caps lock
+        var capslock = false;
+        if ((str_alph_up.indexOf(key) != -1 && !isShiftKeyHeld(e)) ||
+            (str_alph_low.indexOf(key) != -1 && isShiftKeyHeld(e))) {
+            capslock = true;
+        }
 
-            // For shift shortcut in Sudoku mode, modify the numpad keys
-            // keylocation 3 indicates numlock is ON and number pad is being used
-            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && !isShiftKeyPressed(key) && keylocation === 3 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
-                switch (keycode) {
-                    case 45:
-                        key = "0";
-                        shift_numkey = true;
-                        break;
-                    case 35:
-                        key = "1";
-                        shift_numkey = true;
-                        break;
-                    case 40:
-                        key = "2";
-                        shift_numkey = true;
-                        break;
-                    case 34:
-                        key = "3";
-                        shift_numkey = true;
-                        break;
-                    case 37:
-                        key = "4";
-                        shift_numkey = true;
-                        break;
-                    case 12:
-                        key = "5";
-                        shift_numkey = true;
-                        break;
-                    case 39:
-                        key = "6";
-                        shift_numkey = true;
-                        break;
-                    case 36:
-                        key = "7";
-                        shift_numkey = true;
-                        break;
-                    case 38:
-                        key = "8";
-                        shift_numkey = true;
-                        break;
-                    case 33:
-                        key = "9";
-                        shift_numkey = true;
-                        break;
-                }
-            }
+        if ((Date.now() - shift_release_time) < shift_time_limit) {
+            shift_counter = 1;
+            pu.submode_check("sub_sudoku2");
+            shift_release_time = -1e5;
+        }
 
-            if (key === "F2") { //function_key
-                if (pu.mode.qa != 'pu_q') {
-                    if (pu.mmode == 'solve') {
-                        Swal.fire({
-                            title: 'Are you sure to switch to Editing Mode?',
-                            html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: Color.BLUE_SKY,
-                            cancelButtonColor: Color.RED,
-                            confirmButtonText: 'Yes, Switch'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                pu.mode_qa("pu_q");
-                                document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
-                                var title = document.getElementById("title");
-                                title.innerHTML = "Setter Mode (while Solving)";
-                            }
-                        })
-                    } else {
-                        pu.mode_qa("pu_q");
-                        document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
-                    }
-                }
-                e.returnValue = false;
-            } else if (key === "F3") {
-                if (pu.mode.qa != 'pu_a') {
-                    if (pu.mmode == 'solve') {
-                        Swal.fire({
-                            title: 'Are you sure to switch to Solving Mode?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: Color.BLUE_SKY,
-                            cancelButtonColor: Color.RED,
-                            confirmButtonText: 'Yes, Switch'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                pu.mode_qa("pu_a");
-                                document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
-                                var title = document.getElementById("title");
-                                if (pu.solution) {
-                                    title.innerHTML = "Solver Mode (Answer Checking Enabled)";
-                                } else {
-                                    title.innerHTML = "Solver Mode";
-                                }
-                            }
-                        })
-                    } else {
-                        pu.mode_qa("pu_a");
-                        document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
-                    }
-                }
-                e.returnValue = false;
-            }
+        // shortcut to styles in surface mode
+        if (pu.mode[pu.mode.qa].edit_mode === "surface" &&
+            str_num.indexOf(key) != -1 &&
+            previousdigit1 &&
+            ((Date.now() - number_release_time) < number_release_limit)) {
+            key = 1 + key;
+            number_release_time = -1e5;
+        }
 
-            if (key === "F4") { //function_key
-                if (sw_timer.isPaused()) {
-                    startTimer();
-                } else {
-                    pauseTimer();
-                }
-                e.returnValue = false;
-            }
+        if (key === '?' && pu.mode[pu.mode.qa].edit_mode !== "number") {
+            show_shortcuts();
+            e.returnValue = false;
+            return;
+        }
 
-            if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
+        // keylocation 3 indicates numlock is ON and number pad is being used
+        const keylocation = e.location;
+
+        if (key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowUp" || key === "ArrowDown") { //arrow
+            if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && keylocation === 3) {
+                // Skip arrow behavior deliberately for sudoku numpad usage.
+            } else {
                 pu.key_arrow(key, isCtrlKeyHeld(e));
                 e.returnValue = false;
+            }
+        }
+
+        if (!isCtrlKeyHeld(e) && checkShortcutKeys(e, code, capslock)) {
+            return false;
+        }
+
+        // All of this is specific to sudoku
+        if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+
+            // For shift shortcut in Sudoku mode, modify the numpad keys
+            if (keylocation === 3 && !isShiftKeyPressed(key) && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
+                const numpadMap = {
+                    45: "0",
+                    35: "1",
+                    40: "2",
+                    34: "3",
+                    37: "4",
+                    12: "5",
+                    39: "6",
+                    36: "7",
+                    38: "8",
+                    33: "9"
+                };
+                if (numpadMap[keycode]) {
+                    key = numpadMap[keycode];
+                    shift_numkey = true;
+                }
             }
 
             if (isShiftKeyPressed(key)) {
                 shift_counter = shift_counter + 1;
-            }
 
-            if (isShiftKeyPressed(key) && shift_counter === 1 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
-                if (present_submode !== 2) {
-                    pu.submode_check("sub_sudoku2");
+                if (shift_counter === 1 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
+                    present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
+                    if (present_submode !== 2) {
+                        pu.submode_check("sub_sudoku2");
+                    }
+                    e.returnValue = false;
                 }
-                e.returnValue = false;
             }
 
             if (isCtrlKeyPressed(key)) {
                 ctrl_counter = ctrl_counter + 1;
-            }
 
-            if (isCtrlKeyPressed(key) && ctrl_counter === 1 && !isShiftKeyHeld(e) && !isAltKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
-                if (present_submode !== 3) {
-                    pu.submode_check("sub_sudoku3");
-                }
-                e.returnValue = false;
-            }
-
-            if (!isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
-                if (isShiftKeyHeld(e) && key === " ") {
-                    pu.key_number(key);
-                    e.returnValue = false;
-                } else if (str_num.indexOf(key) != -1 ||
-                    str_alph_low.indexOf(key) != -1 ||
-                    str_alph_up.indexOf(key) != -1 ||
-                    str_sym.indexOf(key) != -1 ||
-                    (keycode >= 48 && keycode <= 57)) {
-                    e.preventDefault();
-                    if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                        if (!capslock && keycode >= 65 && keycode <= 90) {
-                            keycode = keycode + 32;
-                        }
-                        pu.key_number(String.fromCharCode(keycode));
-                    } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                        pu.key_number(key);
-                        shift_numkey = false;
-                    } else {
-                        if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                            switch (code) {
-                                case "Digit0":
-                                    key = "0";
-                                    break;
-                                case "Digit1":
-                                    key = "1";
-                                    break;
-                                case "Digit2":
-                                    key = "2";
-                                    break;
-                                case "Digit3":
-                                    key = "3";
-                                    break;
-                                case "Digit4":
-                                    key = "4";
-                                    break;
-                                case "Digit5":
-                                    key = "5";
-                                    break;
-                                case "Digit6":
-                                    key = "6";
-                                    break;
-                                case "Digit7":
-                                    key = "7";
-                                    break;
-                                case "Digit8":
-                                    key = "8";
-                                    break;
-                                case "Digit9":
-                                    key = "9";
-                                    break;
-                            }
-                        }
-                        pu.key_number(key);
+                if (ctrl_counter === 1 && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
+                    present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
+                    if (present_submode !== 3) {
+                        pu.submode_check("sub_sudoku3");
                     }
-                } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
-                    // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
-                    // Sudoku mode, I have assigned it to Delete
-                    pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
-                    e.returnValue = false;
-                } else if (key === "Backspace") {
-                    pu.key_backspace();
                     e.returnValue = false;
                 }
             }
 
-            if (isCtrlKeyHeld(e) && (keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku"))) {
+            if (isCtrlKeyHeld(e) && (keycode === 46 || (keycode === 8))) {
                 // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
                 // Sudoku mode, I have assigned it to Delete
                 pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
                 e.returnValue = false;
             }
+        }
+
+        if (!isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
+            if (isShiftKeyHeld(e) && key === " ") {
+                pu.key_number(key);
+                e.returnValue = false;
+            } else if (str_num.indexOf(key) != -1 ||
+                str_alph_low.indexOf(key) != -1 ||
+                str_alph_up.indexOf(key) != -1 ||
+                str_sym.indexOf(key) != -1 ||
+                (keycode >= 48 && keycode <= 57)) {
+                e.preventDefault();
+                if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                    if (!capslock && keycode >= 65 && keycode <= 90) {
+                        keycode = keycode + 32;
+                    }
+                    pu.key_number(String.fromCharCode(keycode));
+                } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                    pu.key_number(key);
+                    shift_numkey = false;
+                } else {
+                    if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                        switch (code) {
+                            case "Digit0":
+                                key = "0";
+                                break;
+                            case "Digit1":
+                                key = "1";
+                                break;
+                            case "Digit2":
+                                key = "2";
+                                break;
+                            case "Digit3":
+                                key = "3";
+                                break;
+                            case "Digit4":
+                                key = "4";
+                                break;
+                            case "Digit5":
+                                key = "5";
+                                break;
+                            case "Digit6":
+                                key = "6";
+                                break;
+                            case "Digit7":
+                                key = "7";
+                                break;
+                            case "Digit8":
+                                key = "8";
+                                break;
+                            case "Digit9":
+                                key = "9";
+                                break;
+                        }
+                    }
+                    pu.key_number(key);
+                }
+            } else if (key === " " || keycode === 46 || (keycode === 8 && pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
+                // 46 is for Enter, 8 is for backspace which behaves as Enter for Mac Devices. Since Penpa doesnt use backspace in
+                // Sudoku mode, I have assigned it to Delete
+                pu.key_space(keycode, isShiftKeyHeld(e), isCtrlKeyHeld(e));
+                e.returnValue = false;
+            } else if (key === "Backspace") {
+                pu.key_backspace();
+                e.returnValue = false;
+            }
+        }
 
             if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
                 if (!isCtrlKeyPressed(key)) {
@@ -562,353 +496,281 @@ onload = function() {
                             break;
                         case "i": //Ctrl+i
                         case "I":
-                            if (UserSettings.panel_shown &&
+                            if ((document.getElementById('panel_button').value === "1") &&
                                 (typeof panel_select !== "undefined") &&
                                 (panel_select < panel_pu.cont.length) &&
                                 pu.mode[pu.mode.qa].edit_mode !== "symbol") {
                                 var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
 
-                                if (panel_pu.panelmode === "number") {
-                                    if (0 <= panel_select && panel_select <= 9) {
-                                        pu.key_number(panel_pu.cont[panel_select].toString());
-                                    } else if (panel_select === 10) {
-                                        pu.key_backspace();
-                                    } else if (panel_select === 11) {
-                                        pu.key_space();
-                                    }
-                                } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
-                                    if (0 <= panel_select && panel_select <= 27) {
-                                        pu.key_number(panel_pu.cont[panel_select].toString());
-                                    } else if (panel_select === 28) {
-                                        pu.key_number(" ");
-                                    } else if (panel_select >= 29) {
-                                        pu.key_space();
-                                    }
-                                } else if (panel_pu.panelmode === "Text") {
-                                    panel_pu.inputtext();
-                                } else if (panel_pu.panelmode === "key_symbol") {
-                                    if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != " ") {
-                                        pu.key_number(panel_pu.cont[panel_select]);
-                                    } else if (panel_pu.cont[panel_select] === " ") {
-                                        pu.key_space();
-                                    }
-                                } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
-                                    if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != "　") {
-                                        pu.key_number(panel_pu.cont[panel_select]);
-                                    } else if (panel_pu.cont[panel_select] === "　") {
-                                        pu.key_space();
-                                    }
+                            if (panel_pu.panelmode === "number") {
+                                if (0 <= panel_select && panel_select <= 9) {
+                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                } else if (panel_select === 10) {
+                                    pu.key_backspace();
+                                } else if (panel_select === 11) {
+                                    pu.key_space();
+                                }
+                            } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
+                                if (0 <= panel_select && panel_select <= 27) {
+                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                } else if (panel_select === 28) {
+                                    pu.key_number(" ");
+                                } else if (panel_select >= 29) {
+                                    pu.key_space();
+                                }
+                            } else if (panel_pu.panelmode === "Text") {
+                                panel_pu.inputtext();
+                            } else if (panel_pu.panelmode === "key_symbol") {
+                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != " ") {
+                                    pu.key_number(panel_pu.cont[panel_select]);
+                                } else if (panel_pu.cont[panel_select] === " ") {
+                                    pu.key_space();
+                                }
+                            } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
+                                if (panel_pu.cont[panel_select] && panel_pu.cont[panel_select] != "　") {
+                                    pu.key_number(panel_pu.cont[panel_select]);
+                                } else if (panel_pu.cont[panel_select] === "　") {
+                                    pu.key_space();
                                 }
                             }
-                            e.returnValue = false;
-                            break;
-                        case "0":
-                        case "1":
-                        case "2":
-                        case "3":
-                        case "4":
-                        case "5":
-                        case "6":
-                        case "7":
-                        case "8":
-                        case "9":
-                            if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                                e.preventDefault();
-                            }
-                            pu.key_number(key);
-                            e.returnValue = false;
-                            break;
-                    }
-                } else {
-                    e.returnValue = false;
-                }
-            }
-
-            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                if (!capslock && UserSettings._disable_shortcuts != 2) {
-                    switch (code) {
-                        case "KeyZ":
-                            // case "Z":
-                            present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            present_submode = document.getElementById("sub_sudoku1").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku1");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "KeyX":
-                            // case "X":
-                            present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            present_submode = document.getElementById("sub_sudoku2").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku2");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "KeyC":
-                            // case "C":
-                            present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            present_submode = document.getElementById("sub_sudoku3").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku3");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "KeyV":
-                            // case "V":
-                            present_mode = document.getElementById("mo_surface").checked;
-                            if (!present_mode) {
-                                pu.mode_set("surface");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        default:
-                            e.returnValue = false;
-                            break;
-                    }
-                }
-            }
-
-            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-                if (!capslock && UserSettings._disable_shortcuts != 2) {
-                    switch (code) {
-                        case "KeyZ":
-                            present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            present_submode = document.getElementById("sub_sudoku1").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku1");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "KeyX":
-                            present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            present_submode = document.getElementById("sub_sudoku2").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku2");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "KeyC":
-                            present_mode = document.getElementById("mo_sudoku").checked;
-                            if (!present_mode) {
-                                pu.mode_set("sudoku");
-                                e.preventDefault();
-                            }
-                            present_submode = document.getElementById("sub_sudoku3").checked;
-                            if (!present_submode) {
-                                pu.submode_check("sub_sudoku3");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "KeyV":
-                            present_mode = document.getElementById("mo_surface").checked;
-                            if (!present_mode) {
-                                pu.mode_set("surface");
-                                e.preventDefault();
-                            }
-                            e.returnValue = false;
-                            break;
-                        default:
-                            e.returnValue = false;
-                            break;
-                    }
-                }
-            }
-
-            if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
-                switch (key) {
-                    case "1":
-                        present_style = document.getElementById("st_surface1").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface1");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "2":
-                        present_style = document.getElementById("st_surface8").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface8");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "3":
-                        present_style = document.getElementById("st_surface3").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface3");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "4":
-                        present_style = document.getElementById("st_surface4").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface4");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "5":
-                        present_style = document.getElementById("st_surface2").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface2");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "6":
-                        present_style = document.getElementById("st_surface5").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface5");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "7":
-                        present_style = document.getElementById("st_surface6").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface6");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "8":
-                        present_style = document.getElementById("st_surface7").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface7");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "9":
-                        present_style = document.getElementById("st_surface9").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface9");
-                            e.preventDefault();
                         }
                         e.returnValue = false;
                         break;
                     case "0":
-                        present_style = document.getElementById("st_surface10").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface10");
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                    case "6":
+                    case "7":
+                    case "8":
+                    case "9":
+                        if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                             e.preventDefault();
                         }
+                        pu.key_number(key);
                         e.returnValue = false;
                         break;
-                    case "11":
-                        present_style = document.getElementById("st_surface11").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface11");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    case "12":
-                        present_style = document.getElementById("st_surface12").checked;
-                        if (!present_style) {
-                            pu.stylemode_check("st_surface12");
-                            e.preventDefault();
-                        }
-                        e.returnValue = false;
-                        break;
-                    default:
-                        e.returnValue = false;
-                        break;
+                }
+            } else {
+                e.returnValue = false;
+            }
+        }
+
+        const surfaceKeys = {
+            "1": "st_surface1",
+            "2": "st_surface8",
+            "3": "st_surface3",
+            "4": "st_surface4",
+            "5": "st_surface2",
+            "6": "st_surface5",
+            "7": "st_surface6",
+            "8": "st_surface7",
+            "9": "st_surface9",
+            "0": "st_surface10",
+            "11": "st_surface11",
+            "12": "st_surface12"
+        };
+
+        if (!isCtrlKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "surface") {
+            const surfaceCode = surfaceKeys[key];
+
+            if (surfaceCode) {
+                present_style = document.getElementById(surfaceCode).checked;
+                if (!present_style) {
+                    pu.stylemode_check(surfaceCode);
+                    e.preventDefault();
                 }
             }
 
-            if (key === "Tab" || key === "Enter") {
-                let user_choices = UserSettings.tab_settings;
-                if (user_choices.length !== 0) {
-                    if (previous_length != user_choices.length) {
-                        previous_length = user_choices.length;
-                        counter_index = 0; // reset the counter
-                    } else if (isShiftKeyHeld(e)) { // if SHIFT is held down cycle backward
-                        counter_index += user_choices.length - 1;
-                    } else {
-                        counter_index++;
-                    }
-                    counter_index %= user_choices.length
-                    let mode_loc = modes.indexOf(user_choices[counter_index]);
+            e.returnValue = false;
+        }
 
-                    // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
-                    let mode_name = modes_mapping[mode_loc];
-                    if (mode_name.includes("surface") ||
-                        mode_name.includes("wall") ||
-                        mode_name.includes("symbol") ||
-                        mode_name.includes("combi") ||
-                        mode_name === "special") {
-                        pu.mode_set(mode_name)
+        if (key === "Tab" || key === "Enter") {
+            let user_choices = UserSettings.tab_settings;
+            if (user_choices.length !== 0) {
+                if (previous_length != user_choices.length) {
+                    previous_length = user_choices.length;
+                    counter_index = 0; // reset the counter
+                } else if (isShiftKeyHeld(e)) { // if SHIFT is held down cycle backward
+                    counter_index += user_choices.length - 1;
+                } else {
+                    counter_index++;
+                }
+                counter_index %= user_choices.length
+                let mode_loc = modes.indexOf(user_choices[counter_index]);
+
+                // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
+                let mode_name = modes_mapping[mode_loc];
+                if (mode_name.includes("surface") ||
+                    mode_name.includes("wall") ||
+                    mode_name.includes("symbol") ||
+                    mode_name.includes("combi") ||
+                    mode_name === "special") {
+                    pu.mode_set(mode_name)
+                    e.preventDefault();
+                } else {
+                    if (mode_name.includes("number")) {
+                        pu.mode_set('number');
+                        e.preventDefault();
+                    } else if (mode_name.includes("sudoku")) {
+                        pu.mode_set('sudoku');
+                        e.preventDefault();
+                    } else if (mode_name.includes("lineE")) {
+                        pu.mode_set('lineE');
+                        e.preventDefault();
+                    } else if (mode_name.includes("special")) {
+                        pu.mode_set('special');
                         e.preventDefault();
                     } else {
-                        if (mode_name.includes("number")) {
-                            pu.mode_set('number');
-                            e.preventDefault();
-                        } else if (mode_name.includes("sudoku")) {
-                            pu.mode_set('sudoku');
-                            e.preventDefault();
-                        } else if (mode_name.includes("lineE")) {
-                            pu.mode_set('lineE');
-                            e.preventDefault();
-                        } else if (mode_name.includes("special")) {
-                            pu.mode_set('special');
-                            e.preventDefault();
-                        } else {
-                            pu.mode_set('line');
-                            e.preventDefault();
-                        }
-                        pu.submode_check(mode_name);
+                        pu.mode_set('line');
                         e.preventDefault();
                     }
-                    e.returnValue = false;
+                    pu.submode_check(mode_name);
+                    e.preventDefault();
                 }
+                e.returnValue = false;
             }
         }
     }
 
+    const shortcutModeMap = {
+        "KeyZ": "sub_sudoku1",
+        "KeyX": "sub_sudoku2",
+        "KeyC": "sub_sudoku3"
+    };
+
+    function checkShortcutKeys(e, code, capslock) {
+        if (pu.mode[pu.mode.qa].edit_mode !== "surface" && pu.mode[pu.mode.qa].edit_mode !== "sudoku") {
+            return false;
+        }
+
+        let detected = false;
+
+        if (!capslock && UserSettings.shortcuts_enabled) {
+            let mappedCode = shortcutModeMap[code];
+
+            if (mappedCode) {
+                let present_mode = document.getElementById("mo_sudoku").checked;
+                if (!present_mode) {
+                    pu.mode_set("sudoku");
+                    detected = true;
+                }
+                let present_submode = document.getElementById(mappedCode).checked;
+                if (!present_submode) {
+                    pu.submode_check(mappedCode);
+                    detected = true;
+                }
+                e.returnValue = false;
+            }
+
+            if (code === "KeyV") {
+                present_mode = document.getElementById("mo_surface").checked;
+                if (!present_mode) {
+                    pu.mode_set("surface");
+                    detected = true;
+                }
+                e.returnValue = false;
+            }
+
+            e.returnValue = false;
+        }
+
+        if (detected) {
+            e.preventDefault();
+        }
+
+        return detected;
+    }
+
+    function checkFunctionKeys(e, key) {
+        if (key === "F2") { //function_key
+            if (pu.mode.qa != 'pu_q') {
+                if (pu.mmode == 'solve') {
+                    Swal.fire({
+                        title: 'Are you sure to switch to Editing Mode?',
+                        html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: Color.BLUE_SKY,
+                        cancelButtonColor: Color.RED,
+                        confirmButtonText: 'Yes, Switch'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            pu.mode_qa("pu_q");
+                            document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                            var title = document.getElementById("title");
+                            title.innerHTML = "Setter Mode (while Solving)";
+                        }
+                    })
+                } else {
+                    pu.mode_qa("pu_q");
+                    document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
+                }
+            }
+            e.returnValue = false;
+            return true;
+        }
+
+        if (key === "F3") {
+            if (pu.mode.qa != 'pu_a') {
+                if (pu.mmode == 'solve') {
+                    Swal.fire({
+                        title: 'Are you sure to switch to Solving Mode?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: Color.BLUE_SKY,
+                        cancelButtonColor: Color.RED,
+                        confirmButtonText: 'Yes, Switch'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            pu.mode_qa("pu_a");
+                            document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                            var title = document.getElementById("title");
+                            if (pu.solution) {
+                                title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+                            } else {
+                                title.innerHTML = "Solver Mode";
+                            }
+                        }
+                    })
+                } else {
+                    pu.mode_qa("pu_a");
+                    document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
+                }
+            }
+            e.returnValue = false;
+            return true;
+        }
+
+        if (key === "F4") { //function_key
+            if (sw_timer.isPaused()) {
+                startTimer();
+            } else {
+                pauseTimer();
+            }
+            e.returnValue = false;
+            return true;
+        }
+
+        if (key === "F12") {
+            return true;
+        }
+
+        return false;
+    }
+
     function onKeyUp(e) {
-        if (e.target.type === "number" ||
-            e.target.type === "text" ||
-            e.target.id === "savetextarea_pp" ||
-            e.target.id === "custom_message" ||
-            e.target.id === "iostring" ||
-            e.target.id === "inputtext" ||
-            e.target.id === "saveinforules" ||
-            e.target.id === "urlstring") {
-            // For input form
-        } else {
-            var key = e.key;
-            var keylocation = e.location;
-            if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+        // Allow normal typing in these cases and bail on special handling.
+        if (targetTypes[e.target.type] || targetIDs[e.target.id]) {
+            return;
+        }
+
+        var key = e.key;
+        const keylocation = e.location;
+        if (keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isShiftKeyPressed(key)) {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
                 } else if (present_submode === "2") {
@@ -919,7 +781,7 @@ onload = function() {
                 shift_counter = 0;
                 shift_release_time = Date.now();
                 e.returnValue = false;
-            } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            } else if (isCtrlKeyPressed(key)) {
                 if (present_submode === "1") {
                     pu.submode_check("sub_sudoku1");
                 } else if (present_submode === "2") {
@@ -928,7 +790,6 @@ onload = function() {
                     pu.submode_check("sub_sudoku3");
                 }
                 ctrl_counter = 0;
-                ctrl_release_time = Date.now();
                 e.returnValue = false;
             } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
                 if (key === "1") {
@@ -941,7 +802,6 @@ onload = function() {
                     e.returnValue = false;
                 }
             }
-
         }
     }
 
@@ -956,7 +816,7 @@ onload = function() {
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
+                (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 type = pu.type;
                 pu.type = [0];
@@ -976,7 +836,7 @@ onload = function() {
         // resetting the type for starbattle composite mode
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
+                (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 pu.type = type;
             }
@@ -1131,7 +991,7 @@ onload = function() {
                     e.preventDefault();
                 }
                 break;
-                //top/bottom button
+            //top/bottom button
             case "newboard":
                 newboard();
                 e.preventDefault();
@@ -1183,7 +1043,7 @@ onload = function() {
                 e.preventDefault();
                 break;
 
-                //panel_menu
+            //panel_menu
             case "panel_1_lbmenu":
                 panel_pu.mode_set('number');
                 panel_pu.select_close();
@@ -1276,7 +1136,7 @@ onload = function() {
                     e.preventDefault();
                 }
                 break;
-                //savetext
+            //savetext
             case "saveinfogenre":
                 show_genretags();
                 e.preventDefault();
@@ -1723,7 +1583,7 @@ onload = function() {
                 document.getElementById('modal-rotate').style.display = 'none';
                 e.preventDefault();
                 break;
-                //saveimage
+            //saveimage
             case "nb_margin1_lb":
                 document.getElementById("nb_margin1").checked = true;
                 e.preventDefault();
@@ -1742,7 +1602,7 @@ onload = function() {
                 document.getElementById('modal-image').style.display = 'none';
                 e.preventDefault();
                 break;
-                //newboard
+            //newboard
             case "nb_size1":
             case "nb_size2":
             case "nb_size3":
@@ -1781,7 +1641,7 @@ onload = function() {
                 document.getElementById('modal').style.display = 'none';
                 e.preventDefault();
                 break;
-                //newsize
+            //newsize
             case "nb_size3_r":
                 return;
             case "closeBtn_size1":
@@ -1876,7 +1736,7 @@ onload = function() {
                     document.getElementById("replay_message").style.display = "";
                     document.getElementById("replay_message").innerHTML = "Preparing your download";
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         function splitTextLines(ctx, text, maxWidth) {
                             var words = text.split(" ");
                             var lines = [];
@@ -1951,7 +1811,7 @@ onload = function() {
                         gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
                         gif.addFrame(gif_ctx, { delay: 2000, copy: true });
 
-                        gif.on('finished', function(blob) {
+                        gif.on('finished', function (blob) {
                             saveblob_download(blob, "my_solve.gif");
                             document.getElementById("replay_download_btn").disabled = false;
                             document.getElementById("replay_message").style.display = "none";
@@ -2173,7 +2033,7 @@ onload = function() {
     liteModeButton.addEventListener('click', advancecontrol_toggle);
     selectContainer.appendChild(liteModeButton);
 
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
         if (UserSettings.reload_button === 1) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -2199,50 +2059,50 @@ onload = function() {
 
     // Adding on change events for general settings
     // Theme Setting
-    document.getElementById("theme_mode_opt").onchange = function() {
+    document.getElementById("theme_mode_opt").onchange = function () {
         UserSettings.color_theme = this.value;
     }
 
     // Toggle responsiveness
-    document.getElementById("responsive_settings_opt").onchange = function() {
+    document.getElementById("responsive_settings_opt").onchange = function () {
         UserSettings.responsive_mode = this.value;
     }
 
     // Custom Color Setting
-    document.getElementById("custom_color_opt").onchange = function() {
+    document.getElementById("custom_color_opt").onchange = function () {
         UserSettings.custom_colors_on = (parseInt(this.value, 10) === 2);
     }
 
     // Save Setting
-    document.getElementById("mousemiddle_settings_opt").onchange = function() {
+    document.getElementById("mousemiddle_settings_opt").onchange = function () {
         UserSettings.mousemiddle_button = this.value;
     }
 
-    document.getElementById("starbattle_settings_opt").onchange = function() {
+    document.getElementById("starbattle_settings_opt").onchange = function () {
         UserSettings.starbattle_dots = this.value;
     }
 
-    document.getElementById("secondcolor_settings_opt").onchange = function() {
+    document.getElementById("secondcolor_settings_opt").onchange = function () {
         UserSettings.secondcolor = this.value;
     }
 
-    document.getElementById("sudoku_settings_normal_opt").onchange = function() {
+    document.getElementById("sudoku_settings_normal_opt").onchange = function () {
         UserSettings.sudoku_normal_size = this.value;
     }
 
-    document.getElementById("sudoku_settings_opt").onchange = function() {
+    document.getElementById("sudoku_settings_opt").onchange = function () {
         UserSettings.sudoku_centre_size = this.value;
     }
 
-    document.getElementById("reload_button").onchange = function() {
+    document.getElementById("reload_button").onchange = function () {
         UserSettings.reload_button = this.value;
     }
 
-    document.getElementById("clear_storage_opt").onchange = function() {
+    document.getElementById("clear_storage_opt").onchange = function () {
         UserSettings.local_storage = this.value;
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
                 'width': "resolve" // 25% was used before
@@ -2250,13 +2110,13 @@ onload = function() {
         }
     });
 
-    $.fn.toggleSelect2 = function(state) {
-        return this.each(function() {
+    $.fn.toggleSelect2 = function (state) {
+        return this.each(function () {
             $.fn[state ? 'show' : 'hide'].apply($(this).next('.select2-container'));
         });
     };
 
-    document.getElementById("constraints_settings_opt").onchange = function() {
+    document.getElementById("constraints_settings_opt").onchange = function () {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
         if (current_constraint === "all") {
             // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
@@ -2304,12 +2164,16 @@ onload = function() {
 
             // Display generic ones
             for (var i of penpa_constraints["setting"]["general"]) {
-                document.getElementById(i).style.display = "inline-block";
+                let element = document.getElementById(i);
+                let displayType = element.tagName === 'TR' ? 'table-row' : 'inline-block';
+                element.style.display = displayType;
             }
 
             // Display only the selected ones
             for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
-                document.getElementById(i).style.display = "inline-block";
+                let element = document.getElementById(i);
+                let displayType = element.tagName === 'TR' ? 'table-row' : 'inline-block';
+                element.style.display = displayType;
             }
 
             // set the default submode
@@ -2338,7 +2202,7 @@ onload = function() {
         pu.redraw();
     }
 
-    document.getElementById("mode_choices").onchange = function() {
+    document.getElementById("mode_choices").onchange = function () {
         UserSettings.tab_settings = getValues('mode_choices');
 
         if (can_use_lite()) {
@@ -2360,34 +2224,30 @@ onload = function() {
 
     // Panel Setting
     document.getElementById("panel_button").onchange = function() {
-        UserSettings.panel_shown = String(this.value) === "1";
-    }
-
-    document.getElementById("quick_panel_dropdown").onchange = function() {
-        UserSettings.quick_panel_button = String(this.value) === "1";
+        panel_onoff();
     }
 
     // Conflict detection
-    document.getElementById("conflict_detection_opt").onchange = function() {
+    document.getElementById("conflict_detection_opt").onchange = function () {
         UserSettings.conflict_detection = this.value;
         pu.redraw();
     }
 
-    // Disable Shortcuts
-    document.getElementById("disable_shortcuts_opt").onchange = function() {
-        UserSettings.disable_shortcuts = this.value;
+    // Enable or Disable Shortcuts
+    document.getElementById("enable_shortcuts_opt").onchange = function () {
+        UserSettings.shortcuts_enabled = String(this.value) === '1';
     }
 
     // Timer Bar Setting
-    document.getElementById("timer_bar_opt").onchange = function() {
+    document.getElementById("timer_bar_opt").onchange = function () {
         UserSettings.timerbar_status = this.value;
     }
 
     // Shorten links setting
-    document.getElementById("shorten_links_dropdown").onchange = function() {
+    document.getElementById("shorten_links_dropdown").onchange = function () {
         UserSettings.shorten_links = String(this.value) === "1";
     }
-    document.getElementById("auto_shorten_chk").onchange = function() {
+    document.getElementById("auto_shorten_chk").onchange = function () {
         UserSettings.shorten_links = this.checked;
     }
 
