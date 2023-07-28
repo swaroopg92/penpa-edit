@@ -966,19 +966,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min row size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -1240,19 +1230,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min row size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -1625,19 +1605,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min column size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -2009,19 +1979,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                Swal.fire({
-                    title: 'Swaroop says:',
-                    html: 'Min column size reached <h2 class="warn">1</h2>',
-                    icon: 'error',
-                    confirmButtonText: 'ok 🙂',
-                })
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -12864,15 +12824,15 @@ class Puzzle {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
                         if (message == "" || message.includes("http-equiv=")) {
-                            message = "Congratulations 🙂";
+                            message = Branding.solveDefaultMessage;
                         }
                         setTimeout(() => {
                             Swal.fire({
-                                // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
+                                title: Branding.solveTitle ? '<h3 class="wish">' + Branding.solveTitle + '</h3>' : undefined,
                                 html: '<h2 class="wish">' + message + '</h2>',
                                 background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
-                                confirmButtonText: 'Hurray!',
+                                confirmButtonText: Branding.solveOKButtonText,
                                 // timer: 5000
                             })
                         }, 20);
@@ -12900,15 +12860,15 @@ class Puzzle {
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             let message = document.getElementById("custom_message").value;
                             if (message == "" || message.includes("http-equiv=")) {
-                                message = "Congratulations 🙂";
+                                message = Branding.solveDefaultMessage;
                             }
                             setTimeout(() => {
                                 Swal.fire({
-                                    // title: '<h3 class="wish">Happy New Year 2022 🙂</h3>',
+                                    title: Branding.solveTitle ? '<h3 class="wish">' + Branding.solveTitle + '</h3>' : undefined,
                                     html: '<h2 class="wish">' + message + '</h2>',
                                     background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
-                                    confirmButtonText: 'Hurray!',
+                                    confirmButtonText: Branding.solveOKButtonText,
                                 })
                             }, 20);
                             sw_timer.pause();
