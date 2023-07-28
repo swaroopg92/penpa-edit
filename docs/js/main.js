@@ -6,7 +6,7 @@ let isShiftKeyPressed = key => key === "Shift";
 let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
 
-onload = function () {
+onload = function() {
 
     // Detect mobile or Ipad beforing booting
     var ua = navigator.userAgent;
@@ -55,7 +55,7 @@ onload = function () {
 
     boot();
 
-    document.addEventListener("beforeunload", function (eve) {
+    document.addEventListener("beforeunload", function(eve) {
         eve.returnValue = "Move page.";
     }, { passive: false });
 
@@ -152,7 +152,7 @@ onload = function () {
                 var obj = coord_point(event, 'flex');
             } else {
                 if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
+                        pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
                     var obj = coord_point(event, 'flex');
                 } else {
                     var obj = coord_point(event);
@@ -434,73 +434,73 @@ onload = function () {
             }
         }
 
-            if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
-                if (!isCtrlKeyPressed(key)) {
-                    if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-                        switch (code) {
-                            case "Digit0":
-                                key = "0";
-                                break;
-                            case "Digit1":
-                                key = "1";
-                                break;
-                            case "Digit2":
-                                key = "2";
-                                break;
-                            case "Digit3":
-                                key = "3";
-                                break;
-                            case "Digit4":
-                                key = "4";
-                                break;
-                            case "Digit5":
-                                key = "5";
-                                break;
-                            case "Digit6":
-                                key = "6";
-                                break;
-                            case "Digit7":
-                                key = "7";
-                                break;
-                            case "Digit8":
-                                key = "8";
-                                break;
-                            case "Digit9":
-                                key = "9";
-                                break;
-                        }
+        if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
+            if (!isCtrlKeyPressed(key)) {
+                if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+                    switch (code) {
+                        case "Digit0":
+                            key = "0";
+                            break;
+                        case "Digit1":
+                            key = "1";
+                            break;
+                        case "Digit2":
+                            key = "2";
+                            break;
+                        case "Digit3":
+                            key = "3";
+                            break;
+                        case "Digit4":
+                            key = "4";
+                            break;
+                        case "Digit5":
+                            key = "5";
+                            break;
+                        case "Digit6":
+                            key = "6";
+                            break;
+                        case "Digit7":
+                            key = "7";
+                            break;
+                        case "Digit8":
+                            key = "8";
+                            break;
+                        case "Digit9":
+                            key = "9";
+                            break;
                     }
-                    switch (key) {
-                        case "d": //Ctrl+d
-                        case "D":
-                            duplicate();
-                            e.returnValue = false;
-                            break;
-                        case "y": //Ctrl+y
-                        case "Y":
-                            if (!pu.undoredo_disable) {
-                                pu.redo();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case "z": //Ctrl+z
-                        case "Z":
-                            if (!pu.undoredo_disable) {
-                                pu.undo();
-                            }
-                            e.returnValue = false;
-                            break;
-                        case " ": //Ctrl+space
-                            pu.key_shiftspace();
-                            e.returnValue = false;
-                            break;
-                        case "i": //Ctrl+i
-                        case "I":
-                            if ((document.getElementById('panel_button').value === "1") &&
-                                (typeof panel_select !== "undefined") &&
-                                (panel_select < panel_pu.cont.length) &&
-                                pu.mode[pu.mode.qa].edit_mode !== "symbol") {
-                                var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
+                }
+                switch (key) {
+                    case "d": //Ctrl+d
+                    case "D":
+                        duplicate();
+                        e.returnValue = false;
+                        break;
+                    case "y": //Ctrl+y
+                    case "Y":
+                        if (!pu.undoredo_disable) {
+                            pu.redo();
+                        }
+                        e.returnValue = false;
+                        break;
+                    case "z": //Ctrl+z
+                    case "Z":
+                        if (!pu.undoredo_disable) {
+                            pu.undo();
+                        }
+                        e.returnValue = false;
+                        break;
+                    case " ": //Ctrl+space
+                        pu.key_shiftspace();
+                        e.returnValue = false;
+                        break;
+                    case "i": //Ctrl+i
+                    case "I":
+                        if ((document.getElementById('panel_button').value === "1") &&
+                            (typeof panel_select !== "undefined") &&
+                            (panel_select < panel_pu.cont.length) &&
+                            pu.mode[pu.mode.qa].edit_mode !== "symbol") {
+                            var paneletc = ["ja_K", "ja_H", "Kan", "Rome", "Greek", "Cyrillic", "europe", "Chess", "card"];
 
                             if (panel_pu.panelmode === "number") {
                                 if (0 <= panel_select && panel_select <= 9) {
@@ -816,7 +816,7 @@ onload = function () {
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
+                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 type = pu.type;
                 pu.type = [0];
@@ -836,7 +836,7 @@ onload = function () {
         // resetting the type for starbattle composite mode
         if (fittype === 'flex') {
             if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
+                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
                 (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
                 pu.type = type;
             }
@@ -991,7 +991,7 @@ onload = function () {
                     e.preventDefault();
                 }
                 break;
-            //top/bottom button
+                //top/bottom button
             case "newboard":
                 newboard();
                 e.preventDefault();
@@ -1043,7 +1043,7 @@ onload = function () {
                 e.preventDefault();
                 break;
 
-            //panel_menu
+                //panel_menu
             case "panel_1_lbmenu":
                 panel_pu.mode_set('number');
                 panel_pu.select_close();
@@ -1136,7 +1136,7 @@ onload = function () {
                     e.preventDefault();
                 }
                 break;
-            //savetext
+                //savetext
             case "saveinfogenre":
                 show_genretags();
                 e.preventDefault();
@@ -1583,7 +1583,7 @@ onload = function () {
                 document.getElementById('modal-rotate').style.display = 'none';
                 e.preventDefault();
                 break;
-            //saveimage
+                //saveimage
             case "nb_margin1_lb":
                 document.getElementById("nb_margin1").checked = true;
                 e.preventDefault();
@@ -1602,7 +1602,7 @@ onload = function () {
                 document.getElementById('modal-image').style.display = 'none';
                 e.preventDefault();
                 break;
-            //newboard
+                //newboard
             case "nb_size1":
             case "nb_size2":
             case "nb_size3":
@@ -1641,7 +1641,7 @@ onload = function () {
                 document.getElementById('modal').style.display = 'none';
                 e.preventDefault();
                 break;
-            //newsize
+                //newsize
             case "nb_size3_r":
                 return;
             case "closeBtn_size1":
@@ -1736,7 +1736,7 @@ onload = function () {
                     document.getElementById("replay_message").style.display = "";
                     document.getElementById("replay_message").innerHTML = "Preparing your download";
 
-                    setTimeout(function () {
+                    setTimeout(function() {
                         function splitTextLines(ctx, text, maxWidth) {
                             var words = text.split(" ");
                             var lines = [];
@@ -1811,7 +1811,7 @@ onload = function () {
                         gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
                         gif.addFrame(gif_ctx, { delay: 2000, copy: true });
 
-                        gif.on('finished', function (blob) {
+                        gif.on('finished', function(blob) {
                             saveblob_download(blob, "my_solve.gif");
                             document.getElementById("replay_download_btn").disabled = false;
                             document.getElementById("replay_message").style.display = "none";
@@ -2033,7 +2033,7 @@ onload = function () {
     liteModeButton.addEventListener('click', advancecontrol_toggle);
     selectContainer.appendChild(liteModeButton);
 
-    window.addEventListener('beforeunload', function (e) {
+    window.addEventListener('beforeunload', function(e) {
         if (UserSettings.reload_button === 1) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -2059,50 +2059,50 @@ onload = function () {
 
     // Adding on change events for general settings
     // Theme Setting
-    document.getElementById("theme_mode_opt").onchange = function () {
+    document.getElementById("theme_mode_opt").onchange = function() {
         UserSettings.color_theme = this.value;
     }
 
     // Toggle responsiveness
-    document.getElementById("responsive_settings_opt").onchange = function () {
+    document.getElementById("responsive_settings_opt").onchange = function() {
         UserSettings.responsive_mode = this.value;
     }
 
     // Custom Color Setting
-    document.getElementById("custom_color_opt").onchange = function () {
+    document.getElementById("custom_color_opt").onchange = function() {
         UserSettings.custom_colors_on = (parseInt(this.value, 10) === 2);
     }
 
     // Save Setting
-    document.getElementById("mousemiddle_settings_opt").onchange = function () {
+    document.getElementById("mousemiddle_settings_opt").onchange = function() {
         UserSettings.mousemiddle_button = this.value;
     }
 
-    document.getElementById("starbattle_settings_opt").onchange = function () {
+    document.getElementById("starbattle_settings_opt").onchange = function() {
         UserSettings.starbattle_dots = this.value;
     }
 
-    document.getElementById("secondcolor_settings_opt").onchange = function () {
+    document.getElementById("secondcolor_settings_opt").onchange = function() {
         UserSettings.secondcolor = this.value;
     }
 
-    document.getElementById("sudoku_settings_normal_opt").onchange = function () {
+    document.getElementById("sudoku_settings_normal_opt").onchange = function() {
         UserSettings.sudoku_normal_size = this.value;
     }
 
-    document.getElementById("sudoku_settings_opt").onchange = function () {
+    document.getElementById("sudoku_settings_opt").onchange = function() {
         UserSettings.sudoku_centre_size = this.value;
     }
 
-    document.getElementById("reload_button").onchange = function () {
+    document.getElementById("reload_button").onchange = function() {
         UserSettings.reload_button = this.value;
     }
 
-    document.getElementById("clear_storage_opt").onchange = function () {
+    document.getElementById("clear_storage_opt").onchange = function() {
         UserSettings.local_storage = this.value;
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
                 'width': "resolve" // 25% was used before
@@ -2110,13 +2110,13 @@ onload = function () {
         }
     });
 
-    $.fn.toggleSelect2 = function (state) {
-        return this.each(function () {
+    $.fn.toggleSelect2 = function(state) {
+        return this.each(function() {
             $.fn[state ? 'show' : 'hide'].apply($(this).next('.select2-container'));
         });
     };
 
-    document.getElementById("constraints_settings_opt").onchange = function () {
+    document.getElementById("constraints_settings_opt").onchange = function() {
         let current_constraint = document.getElementById("constraints_settings_opt").value;
         if (current_constraint === "all") {
             // Display the mode break line if min-width greater than 850px (defined in base-structure.css media)
@@ -2202,7 +2202,7 @@ onload = function () {
         pu.redraw();
     }
 
-    document.getElementById("mode_choices").onchange = function () {
+    document.getElementById("mode_choices").onchange = function() {
         UserSettings.tab_settings = getValues('mode_choices');
 
         if (can_use_lite()) {
@@ -2228,26 +2228,26 @@ onload = function () {
     }
 
     // Conflict detection
-    document.getElementById("conflict_detection_opt").onchange = function () {
+    document.getElementById("conflict_detection_opt").onchange = function() {
         UserSettings.conflict_detection = this.value;
         pu.redraw();
     }
 
     // Enable or Disable Shortcuts
-    document.getElementById("enable_shortcuts_opt").onchange = function () {
+    document.getElementById("enable_shortcuts_opt").onchange = function() {
         UserSettings.shortcuts_enabled = String(this.value) === '1';
     }
 
     // Timer Bar Setting
-    document.getElementById("timer_bar_opt").onchange = function () {
+    document.getElementById("timer_bar_opt").onchange = function() {
         UserSettings.timerbar_status = this.value;
     }
 
     // Shorten links setting
-    document.getElementById("shorten_links_dropdown").onchange = function () {
+    document.getElementById("shorten_links_dropdown").onchange = function() {
         UserSettings.shorten_links = String(this.value) === "1";
     }
-    document.getElementById("auto_shorten_chk").onchange = function () {
+    document.getElementById("auto_shorten_chk").onchange = function() {
         UserSettings.shorten_links = this.checked;
     }
 
