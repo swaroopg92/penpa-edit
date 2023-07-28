@@ -799,7 +799,7 @@ class Puzzle {
                 }
 
 
-                // shift DeleteEdge elements to next row            
+                // shift DeleteEdge elements to next row
                 if (this[i].deletelineE) {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
@@ -1168,7 +1168,7 @@ class Puzzle {
                     }
                 }
 
-                // Maintain DeleteEdge elements in the same row     
+                // Maintain DeleteEdge elements in the same row
                 if (this[i].deletelineE) {
                     let m;
                     let temp = this[i].deletelineE;
@@ -1455,7 +1455,7 @@ class Puzzle {
                     }
                 }
 
-                // shift DeleteEdge elements to next column           
+                // shift DeleteEdge elements to next column
                 if (this[i].deletelineE) {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
@@ -1840,7 +1840,7 @@ class Puzzle {
                     }
                 }
 
-                // Maintain DeleteEdge elements in the same column           
+                // Maintain DeleteEdge elements in the same column
                 if (this[i].deletelineE) {
                     let temp = this[i].deletelineE;
                     this[i].deletelineE = {};
@@ -12943,59 +12943,87 @@ class Puzzle {
         let pcolor = 1; //black
         let scolor = 9; //blue, 2 for green
 
-        // Data checking
-        // Check if length is a square number
-        if (Number.isInteger(Math.sqrt(iostring.length))) {
-
-            // Replace dots with zeros
-            iostring = iostring.replace(/\./g, 0);
-
-            let digits = iostring.split("");
-            let size = Math.sqrt(iostring.length);
-
-            // check all are digits or alphabets
-            if (!pu.only_alphanumeric(iostring)) {
-                document.getElementById("iostring").value = "Error: it contains non-alpha-numeric characters";
-                return "failed";
+        // Replace spaces if user desires. Keep line breaks if using non-square mode.
+        if (document.getElementById("sudokuIgnoreSpaces").checked) {
+            if (document.getElementById("sudokuIgnoreNotSquare").checked) {
+                iostring = iostring.replace(' ', '');
+            } else {
+                iostring = iostring.replace(/\s/g, '');
             }
+        }
 
-            // Data check passed, proceed
-            let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
-            let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+        // Replace dots with zeros
+        iostring = iostring.replace(/\./g, 0);
 
-            // if user has defined the starting cell then use that
-            if (document.getElementById("firstcell_row").value !== "") {
-                r_start = parseInt(document.getElementById("firstcell_row").value) - 1;
-            }
-            if (document.getElementById("firstcell_column").value !== "") {
-                c_start = parseInt(document.getElementById("firstcell_column").value) - 1;
-            }
+        let digits = iostring.split("");
+        let size = Math.sqrt(iostring.length);
 
-            if (this.mode.qa === "pu_q") {
-                for (var j = r_start; j < (size + r_start); j++) { //  row
-                    for (var i = c_start; i < (size + c_start); i++) { // column
-                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
-                            this.record("number", (i + 2) + ((j + 2) * this.nx0));
-                            this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], pcolor, "1"];
-                        }
-                    }
-                }
-            } else if (this.mode.qa === "pu_a") {
-                for (var j = r_start; j < (size + r_start); j++) { //  row
-                    for (var i = c_start; i < (size + c_start); i++) { // column
-                        if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
-                            if (!(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)])) {
-                                this.record("number", (i + 2) + ((j + 2) * this.nx0));
-                                this[this.mode.qa].number[(i + 2) + ((j + 2) * this.nx0)] = [digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], scolor, "1"];
-                            }
-                        }
-                    }
-                }
-            }
+        // check all are digits or alphabets (or spacing)
+        if (!document.getElementById("sudokuIgnoreNotSquare").checked && !pu.only_alphanumeric(iostring)) {
+            document.getElementById("sudokuIOFail").classList.remove('is_hidden');
+            return "failed";
+        } else if (document.getElementById("sudokuIgnoreNotSquare").checked && !(/^[A-Za-z0-9\s]*$/.test(iostring))) {
+            document.getElementById("sudokuIOFail").classList.remove('is_hidden');
+            return "failed";
         } else {
+            document.getElementById("sudokuIOFail").classList.add('is_hidden');
+        }
+
+        // Data check passed, proceed
+        let r_start = parseInt(document.getElementById("nb_space1").value, 10); // over white space
+        let c_start = parseInt(document.getElementById("nb_space3").value, 10); // left white space
+
+        // if user has defined the starting cell then use that
+        if (document.getElementById("firstcell_row").value !== "") {
+            r_start = parseInt(document.getElementById("firstcell_row").value) - 1;
+        }
+        if (document.getElementById("firstcell_column").value !== "") {
+            c_start = parseInt(document.getElementById("firstcell_column").value) - 1;
+        }
+
+        if (!document.getElementById("sudokuIgnoreNotSquare").checked && !Number.isInteger(Math.sqrt(iostring.length))) {
             document.getElementById("iostring").value = "Error: Number of digits is not a perfect square";
             return "failed";
         }
+
+        // Helper method
+        const placeChar = function (thisRef, x, y, char, color) {
+            thisRef.record("number", x + y);
+            thisRef[thisRef.mode.qa].number[x + y] = [char, color, "1"];
+        };
+
+        let colorToUse = this.mode.qa === "pu_q" ? pcolor : scolor;
+
+        if (document.getElementById("sudokuIgnoreNotSquare").checked) {
+            // Ignoring square rule, use line breaks to do import.
+            let j = r_start;
+            let i = c_start;
+            let nextChar;
+            for (let k = 0; k < digits.length; k++) {
+                nextChar = digits[k];
+                if (nextChar.charCodeAt(0) === 10) {
+                    i = c_start;
+                    j++;
+                } else {
+                    if (this.mode.qa === "pu_q" || !(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)])) {
+                        placeChar(this, i + 2, (j + 2) * this.nx0, nextChar, colorToUse);
+                    }
+                    i++;
+                }
+            }
+        } else if (Number.isInteger(Math.sqrt(iostring.length))) {
+            // Using classic square mode
+            for (var j = r_start; j < (size + r_start); j++) { //  row
+                for (var i = c_start; i < (size + c_start); i++) { // column
+                    if (parseInt(digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], 10) !== 0) {
+                        if (this.mode.qa === "pu_q" || !(this["pu_q"].number[(i + 2) + ((j + 2) * this.nx0)])) {
+                            placeChar(this, i + 2, (j + 2) * this.nx0, digits[j - r_start + i - c_start + (j - r_start) * (size - 1)], colorToUse);
+                        }
+                    }
+                }
+            }
+        }
+
         this.redraw();
     }
 

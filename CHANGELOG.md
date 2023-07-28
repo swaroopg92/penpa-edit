@@ -1,4 +1,6 @@
 ## History
+* unreleased
+	* Improved sudoku string IO to add whitespace suppression option and import non-square text blocks.
 * 2023/07/28 ver 3.0.8
 	* Updated jquery, sweetalert to latest.
 	* Fixed the bug of correctly deleteing cagearrays.
