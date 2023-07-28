@@ -463,14 +463,39 @@ class Puzzle {
             this.gridtype === "sudoku" ||
             this.gridtype === "kakuro") {
             for (var i = 1; i < this.nx0 - 1; i++) {
-                this.cellsoutsideFrame.push(i + 1 * this.nx0); // first row
-                this.cellsoutsideFrame.push(i + (this.ny0 - 2) * this.nx0); // last row
+                // Cell Center
+                let cell_firstrow = i + 1 * this.nx0;
+                let cell_lastrow = i + (this.ny0 - 2) * this.nx0;
+                this.cellsoutsideFrame.push(cell_firstrow);
+                this.cellsoutsideFrame.push(cell_lastrow);
+
+                // Left and Right Edges of first row cell
+                let lr_firstrow = this.point[cell_firstrow].neighbor.sort().reverse().slice(0, 2);
+                this.cellsoutsideFrame.push(lr_firstrow[0], lr_firstrow[1]);
+
+                // Left and Right Edges of last row cell
+                let lr_lastrow = this.point[cell_lastrow].neighbor.sort().reverse().slice(0, 2);
+                this.cellsoutsideFrame.push(lr_lastrow[0], lr_lastrow[1]);
             }
             for (var j = 1; j < this.ny0 - 1; j++) {
-                this.cellsoutsideFrame.push(1 + j * this.nx0); // first column
-                this.cellsoutsideFrame.push(this.nx0 - 2 + j * this.nx0); // last column
+                // Cell Center
+                let cell_firstcol = 1 + j * this.nx0;
+                let cell_lastcol = this.nx0 - 2 + j * this.nx0;
+                this.cellsoutsideFrame.push(cell_firstcol);
+                this.cellsoutsideFrame.push(cell_lastcol);
+
+                // Top and bottom Edges of first column cell
+                let lr_firstcol = this.point[cell_firstcol].neighbor.sort().slice(0, 2);
+                this.cellsoutsideFrame.push(lr_firstcol[0], lr_firstcol[1]);
+
+                // Top and bottom Edges of last column cell
+                let lr_lastcol = this.point[cell_lastcol].neighbor.sort().slice(0, 2);
+                this.cellsoutsideFrame.push(lr_lastcol[0], lr_lastcol[1]);
             }
         }
+
+        // Remove duplicates
+        this.cellsoutsideFrame = [...new Set(this.cellsoutsideFrame.sort())]
     }
 
     point_move(x, y, theta) {
