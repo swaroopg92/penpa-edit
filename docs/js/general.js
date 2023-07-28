@@ -3071,7 +3071,7 @@ function display_answercheck() {
     if (answer_check_opt.answercheck_opt.length === 0) {
         infoMsg('No specific option selected by Author. Answer check looks for all the elements with appropriate accepted colors. Check <a href="https://github.com/swaroopg92/penpa-edit/blob/master/images/multisolution.PNG" target="_blank">this</a> for reference.');
     } else {
-        infoMsg( answer_check_opt.message);
+        infoMsg(answer_check_opt.message);
     }
 }
 
