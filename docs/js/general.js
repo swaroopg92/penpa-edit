@@ -1261,7 +1261,9 @@ function advancecontrol_on() {
     if (document.getElementById('tab-dropdown-lite-btn')) {
         document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
     }
-    pu.erase_buttons();
+
+    // pu.erase_buttons();
+    PenpaUI.set_visible_modes_by_gridtype(pu.gridtype);
 
     // Set the solve mode
     if (pu.mmode === "solve") {
