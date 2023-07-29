@@ -2669,7 +2669,7 @@ function load2(paramArray, type, origurl) {
     UserSettings.loadFromCookies("others");
 
     if (rtext_para[18] && rtext_para[18] !== "") {
-        document.getElementById("puzzlerules").classList.add("rules-present");
+        document.getElementById("puzzlerules").style.display = "inline-block";
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
         document.getElementById("ruletext").innerHTML = pu.rules;
         document.getElementById("saveinforules").value = pu.rules.replace(/<br>/g, '\n');
@@ -3272,7 +3272,7 @@ function load2(paramArray, type, origurl) {
         // Hide title, author, rules
         // document.getElementById("puzzletitle").style.display = 'none';
         document.getElementById("puzzleauthor").style.display = 'none';
-        document.getElementById("puzzlerules").classList.remove("rules-present");
+        document.getElementById("puzzlerules").style.display = 'none';
 
         // Update title
         document.getElementById("title").innerHTML = "Replay Mode"
