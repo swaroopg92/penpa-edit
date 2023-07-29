@@ -3270,7 +3270,7 @@ function load2(paramArray, type, origurl) {
         document.getElementById("tb_reset").style.display = "none";
 
         // Hide title, author, rules
-        document.getElementById("puzzletitle").style.display = 'none';
+        // document.getElementById("puzzletitle").style.display = 'none';
         document.getElementById("puzzleauthor").style.display = 'none';
         document.getElementById("puzzlerules").classList.remove("rules-present");
 
