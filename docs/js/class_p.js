@@ -3303,6 +3303,12 @@ class Puzzle {
                     }
                 } else {
                     for (var i in this[pu].line) {
+                        // Ignoring the half cells standred line marks
+                        let cells = i.split(",");
+                        if (this.cellsoutsideFrame.includes(parseInt(cells[0])) &&
+                            this.cellsoutsideFrame.includes(parseInt(cells[1]))) {
+                            continue;
+                        }
                         if (this[pu].line[i] === 3) {
                             sol[1].push(i + ",1");
                         } else if (this[pu].line[i] === 30) {
