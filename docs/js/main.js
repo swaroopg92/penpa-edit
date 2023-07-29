@@ -2143,9 +2143,20 @@ onload = function() {
                 }
             }
 
-            PenpaUI.set_all_modes_hidden(false);
+            // Display all modes
+            pu.set_allmodes("inline-block");
         } else {
-            PenpaUI.set_all_modes_hidden(true);
+            // Remove all modes, default is none
+            pu.set_allmodes();
+
+            // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
+            // and responsive mode is not equal to 1
+            // let responsive_mode = UserSettings.responsive_mode;
+            // if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
+            //     document.getElementById("visibility_break").style.display = "none";
+            // } else if (responsive_mode > 1 && window.innerWidth >= 850) {
+            //     document.getElementById("visibility_break").style.display = "inline";
+            // }
 
             // Remove the mode break line
             document.getElementById("mode_break").classList.add('is_hidden');

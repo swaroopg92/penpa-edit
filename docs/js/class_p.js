@@ -13154,6 +13154,45 @@ class Puzzle {
         return "rgba(" + Math.round(customcolor._r) + "," + Math.round(customcolor._g) + "," + Math.round(customcolor._b) + "," + customcolor._a + ")";
     }
 
+    set_allmodes(displaytype = "none") {
+        for (var i of penpa_modes["square"]['mode']) {
+            document.getElementById("mo_" + i + "_lb").classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['sub']) {
+            document.getElementById("sub_" + i + "_lb").classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['customcolor']) {
+            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['ms']) {
+            document.getElementById("ms_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['ms1']) {
+            document.getElementById("ms1_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['ms3']) {
+            document.getElementById("ms3_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['shapemodes']) {
+            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['combisub']) {
+            document.getElementById("combisub_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['subcombi']) {
+            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['top_buttons']) {
+            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['exceptions']) {
+            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+        }
+        for (var i of penpa_modes["square"]['li']) {
+            document.getElementById("li_" + i).classList.toggle('is_hidden', displaytype === 'none');
+        }
+    }
+
     check_conflict(current_sol) {
         if (UserSettings.conflict_detection > 1) {
             // User has disabled conflict detection.

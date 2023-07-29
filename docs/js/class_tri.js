@@ -29,7 +29,7 @@ class Puzzle_tri extends Puzzle {
             "polyomino": 9
         };
         this.reset();
-        PenpaUI.set_visible_modes_by_gridtype(this.gridtype);
+        PenpaUI.set_visible_modes(this.gridtype);
     }
 
     create_point() {

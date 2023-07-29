@@ -1263,7 +1263,7 @@ function advancecontrol_on() {
     }
 
     // pu.erase_buttons();
-    PenpaUI.set_visible_modes_by_gridtype(pu.gridtype);
+    PenpaUI.set_visible_modes(pu.gridtype);
 
     // Set the solve mode
     if (pu.mmode === "solve") {
