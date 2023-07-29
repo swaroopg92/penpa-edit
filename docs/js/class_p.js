@@ -13156,40 +13156,40 @@ class Puzzle {
 
     set_allmodes(displaytype = "none") {
         for (var i of penpa_modes["square"]['mode']) {
-            document.getElementById("mo_" + i + "_lb").classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("mo_" + i + "_lb").style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['sub']) {
-            document.getElementById("sub_" + i + "_lb").classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("sub_" + i + "_lb").style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['customcolor']) {
-            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById(i).style.display = (displaytype === 'inline-block') ? 'table-row' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms']) {
-            document.getElementById("ms_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("ms_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms1']) {
-            document.getElementById("ms1_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("ms1_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['ms3']) {
-            document.getElementById("ms3_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("ms3_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['shapemodes']) {
-            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById(i).style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['combisub']) {
-            document.getElementById("combisub_" + i).parentElement.classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("combisub_" + i).parentElement.style.display = (displaytype === 'inline-block') ? 'list-item' : displaytype;
         }
         for (var i of penpa_modes["square"]['subcombi']) {
-            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById(i).style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['top_buttons']) {
-            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById(i).style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['exceptions']) {
-            document.getElementById(i).classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById(i).style.display = displaytype;
         }
         for (var i of penpa_modes["square"]['li']) {
-            document.getElementById("li_" + i).classList.toggle('is_hidden', displaytype === 'none');
+            document.getElementById("li_" + i).style.display = displaytype;
         }
     }
 

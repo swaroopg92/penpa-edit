@@ -1167,14 +1167,14 @@ function advancecontrol_onoff(loadtype = "new") {
     if (!can_use_lite() || loadtype === "off") {
         // Lite Version OFF, Display all the modes
         // Display the mode break line again
-        document.getElementById("mode_break").classList.remove('is_hidden');
-        document.getElementById("mode_txt_space").classList.remove('is_hidden');
+        document.getElementById("mode_break").style.display = "inline";
+        document.getElementById("mode_txt_space").style.display = "inline";
         advancecontrol_on();
     } else {
         // Lite Version ON, so turn off extra modes
         // Remove the mode break line again
-        document.getElementById("mode_break").classList.add('is_hidden');
-        document.getElementById("mode_txt_space").classList.add('is_hidden');
+        document.getElementById("mode_break").style.display = "none";
+        document.getElementById("mode_txt_space").style.display = "none";
         advancecontrol_off(loadtype);
     }
 }
@@ -1188,14 +1188,14 @@ function advancecontrol_off(loadtype) {
     }
 
     if (user_choices.indexOf("Surface") === -1) {
-        document.getElementById("mo_surface_lb").classList.add('is_hidden');
+        document.getElementById("mo_surface_lb").style.display = "none";
     }
     if (user_choices.indexOf("Line Normal") === -1 &&
         user_choices.indexOf("Line Diagonal") === -1 &&
         user_choices.indexOf("Line Free") === -1 &&
         user_choices.indexOf("Line Middle") === -1 &&
         user_choices.indexOf("Line Helper") === -1) {
-        document.getElementById("mo_line_lb").classList.add('is_hidden');
+        document.getElementById("mo_line_lb").style.display = "none";
     } else {
         // document.getElementById("st_line80_lb").style.display = "none";
         // document.getElementById("st_line12_lb").style.display = "none";
@@ -1206,7 +1206,7 @@ function advancecontrol_off(loadtype) {
         user_choices.indexOf("Edge Diagonal") === -1 &&
         user_choices.indexOf("Edge Free") === -1 &&
         user_choices.indexOf("Edge Helper") === -1) {
-        document.getElementById("mo_lineE_lb").classList.add('is_hidden');
+        document.getElementById("mo_lineE_lb").style.display = "none";
     } else {
         // document.getElementById("st_lineE80_lb").style.display = "none";
         // document.getElementById("st_lineE12_lb").style.display = "none";
@@ -1214,7 +1214,7 @@ function advancecontrol_off(loadtype) {
         // document.getElementById("st_lineE21_lb").style.display = "none";
     }
     if (user_choices.indexOf("Wall") === -1) {
-        document.getElementById("mo_wall_lb").classList.add('is_hidden');
+        document.getElementById("mo_wall_lb").style.display = "none";
     } else {
         // document.getElementById("st_wall1_lb").style.display = "none";
         // document.getElementById("st_wall12_lb").style.display = "none";
@@ -1228,32 +1228,32 @@ function advancecontrol_off(loadtype) {
         user_choices.indexOf("Number 1/4") === -1 &&
         user_choices.indexOf("Number Side") === -1 &&
         user_choices.indexOf("Candidates") === -1) {
-        document.getElementById("mo_number_lb").classList.add('is_hidden');
+        document.getElementById("mo_number_lb").style.display = "none";
     }
     if (user_choices.indexOf("Shape") === -1) {
-        document.getElementById("mo_symbol_lb").classList.add('is_hidden');
+        document.getElementById("mo_symbol_lb").style.display = "none";
     }
     if (user_choices.indexOf("Special") === -1 &&
         user_choices.indexOf("Thermo") === -1 &&
         user_choices.indexOf("Sudoku Arrow") === -1) {
-        document.getElementById("mo_special_lb").classList.add('is_hidden');
+        document.getElementById("mo_special_lb").style.display = "none";
     }
     if (user_choices.indexOf("Cage") === -1) {
-        document.getElementById("mo_cage_lb").classList.add('is_hidden');
+        document.getElementById("mo_cage_lb").style.display = "none";
     }
     if (user_choices.indexOf("Composite") === -1) {
-        document.getElementById("mo_combi_lb").classList.add('is_hidden');
+        document.getElementById("mo_combi_lb").style.display = "none";
     }
     if (user_choices.indexOf("Sudoku Normal") === -1 &&
         user_choices.indexOf("Sudoku Corner") === -1 &&
         user_choices.indexOf("Sudoku Centre") === -1) {
-        document.getElementById("mo_sudoku_lb").classList.add('is_hidden');
+        document.getElementById("mo_sudoku_lb").style.display = "none";
     }
     if (user_choices.indexOf("Box") === -1) {
-        document.getElementById("mo_board_lb").classList.add('is_hidden');
+        document.getElementById("mo_board_lb").style.display = "none";
     }
     if (user_choices.indexOf("Move") === -1) {
-        document.getElementById("mo_move_lb").classList.add('is_hidden');
+        document.getElementById("mo_move_lb").style.display = "none";
     }
 }
 
@@ -1261,9 +1261,7 @@ function advancecontrol_on() {
     if (document.getElementById('tab-dropdown-lite-btn')) {
         document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
     }
-
-    // pu.erase_buttons();
-    PenpaUI.set_visible_modes(pu.gridtype);
+    pu.erase_buttons();
 
     // Set the solve mode
     if (pu.mmode === "solve") {
@@ -2993,7 +2991,7 @@ function set_solvemode(type = "url") {
     document.getElementById("pu_a_label").style.display = "none";
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
-    document.getElementById("mo_board_lb").classList.add('is_hidden');
+    document.getElementById("mo_board_lb").style.display = "none";
     document.getElementById("sub_number2_lb").style.display = "none";
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";
@@ -3049,7 +3047,7 @@ function set_contestmode() {
     document.getElementById("tb_redo").style.display = "none";
     document.getElementById("tb_reset").style.display = "none";
     document.getElementById("tb_delete").style.display = "none";
-    document.getElementById("mo_move_lb").classList.add('is_hidden');
+    document.getElementById("mo_move_lb").style.display = "none";
     document.getElementById("puzzlesourcelink").style.display = "none";
     document.getElementById("answer_key").innerHTML = "*Note the Solution Code, go back to <a href=" + document.getElementById("saveinfosource").value + " target=\"_blank\">Source</a> and enter in the Submissions Box*";
     pu.undoredo_disable = true;
@@ -4822,8 +4820,8 @@ function decode_puzzlink(url) {
 
     // Set PenpaLite
     // document.getElementById('advance_button').value = "1";
-    document.getElementById("mode_break").classList.add('is_hidden');
-    document.getElementById("mode_txt_space").classList.add('is_hidden');
+    document.getElementById("mode_break").style.display = "none";
+    document.getElementById("mode_txt_space").style.display = "none";
     advancecontrol_off("url");
 
     var tabSelect = document.querySelector('ul.multi');
