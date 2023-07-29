@@ -2164,12 +2164,12 @@ onload = function() {
 
             // Display generic ones
             for (var i of penpa_constraints["setting"]["general"]) {
-                document.getElementById(i).classList.remove('is_hidden');
+                document.getElementById(i).style.display = "inline-block";
             }
 
             // Display only the selected ones
             for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
-                document.getElementById(i).classList.remove('is_hidden');
+                document.getElementById(i).style.display = "inline-block";
             }
 
             // set the default submode
