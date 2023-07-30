@@ -1689,9 +1689,9 @@ onload = function() {
                 if (pu.solution && pu.sol_flag === 0) {
                     Swal.fire({
                         title: '<h3>Your solution is incorrect.</h3>',
-                        html: '<h2>Keep trying!</h2>',
+                        html: '<h2>' + Branding.incorrectMessage + '</h2>',
                         icon: 'error',
-                        confirmButtonText: 'ok',
+                        confirmButtonText: Branding.okButtonText,
                     })
                     document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
                 }
@@ -2123,8 +2123,8 @@ onload = function() {
             // and responsive mode is not equal to 1
             let responsive_mode = UserSettings.responsive_mode;
             if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
-                document.getElementById("mode_break").style.display = "inline";
-                document.getElementById("mode_txt_space").style.display = "inline";
+                document.getElementById("mode_break").classList.remove('is_hidden');
+                document.getElementById("mode_txt_space").classList.remove('is_hidden');
                 // document.getElementById("visibility_break").style.display = "none";
             } else if (responsive_mode > 1 && window.innerWidth >= 850) {
                 // document.getElementById("visibility_break").style.display = "inline";
@@ -2143,37 +2143,22 @@ onload = function() {
                 }
             }
 
-            // Display all modes
-            pu.set_allmodes("inline-block");
+            PenpaUI.set_all_modes_hidden(false);
         } else {
-            // Remove all modes, default is none
-            pu.set_allmodes();
-
-            // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
-            // and responsive mode is not equal to 1
-            // let responsive_mode = UserSettings.responsive_mode;
-            // if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
-            //     document.getElementById("visibility_break").style.display = "none";
-            // } else if (responsive_mode > 1 && window.innerWidth >= 850) {
-            //     document.getElementById("visibility_break").style.display = "inline";
-            // }
+            PenpaUI.set_all_modes_hidden(true);
 
             // Remove the mode break line
-            document.getElementById("mode_break").style.display = "none";
-            document.getElementById("mode_txt_space").style.display = "none";
+            document.getElementById("mode_break").classList.add('is_hidden');
+            document.getElementById("mode_txt_space").classList.add('is_hidden');
 
             // Display generic ones
             for (var i of penpa_constraints["setting"]["general"]) {
-                let element = document.getElementById(i);
-                let displayType = element.tagName === 'TR' ? 'table-row' : 'inline-block';
-                element.style.display = displayType;
+                document.getElementById(i).classList.remove('is_hidden');
             }
 
             // Display only the selected ones
             for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
-                let element = document.getElementById(i);
-                let displayType = element.tagName === 'TR' ? 'table-row' : 'inline-block';
-                element.style.display = displayType;
+                document.getElementById(i).classList.remove('is_hidden');
             }
 
             // set the default submode
