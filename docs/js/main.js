@@ -71,6 +71,24 @@ onload = function() {
     document.addEventListener("keydown", onKeyDown, { passive: false });
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
+    let restrict_grids = ["square", "sudoku", "kakuro"];
+    let restrict_modes = ["line", "linex", "lineox", "yajilin", "rassisillai"];
+
+    function restrict_mouse(num) {
+        let current_mode = pu.mode[pu.mode.qa].edit_mode;
+        if (current_mode == "combi") {
+            current_mode = pu.mode[pu.mode.qa][current_mode][0];
+        }
+        if (pu &&
+            restrict_grids.includes(pu.gridtype) &&
+            restrict_modes.includes(current_mode) &&
+            pu.cellsoutsideFrame.includes(num)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function onDown(e) {
         if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousedown") {
@@ -87,10 +105,7 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            let skip_mouseevent = false;
-            if (pu && (pu.cellsoutsideFrame.includes(num))) {
-                skip_mouseevent = true;
-            }
+            let skip_mouseevent = restrict_mouse(num);
             if (pu.point[num].use === 1 && !skip_mouseevent) {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
@@ -123,9 +138,8 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            let skip_mouseevent = false;
-            if (pu && (pu.cellsoutsideFrame.includes(num))) {
-                skip_mouseevent = true;
+            let skip_mouseevent = restrict_mouse(num);
+            if (skip_mouseevent) {
                 onOut();
             }
             if (!skip_mouseevent) {
@@ -162,9 +176,8 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            let skip_mouseevent = false;
-            if (pu && (pu.cellsoutsideFrame.includes(num))) {
-                skip_mouseevent = true;
+            let skip_mouseevent = restrict_mouse(num);
+            if (skip_mouseevent) {
                 onOut();
             }
             if (pu.point[num].use === 1 && !skip_mouseevent) {
@@ -2123,8 +2136,8 @@ onload = function() {
             // and responsive mode is not equal to 1
             let responsive_mode = UserSettings.responsive_mode;
             if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
-                document.getElementById("mode_break").style.display = "inline";
-                document.getElementById("mode_txt_space").style.display = "inline";
+                document.getElementById("mode_break").classList.remove('is_hidden');
+                document.getElementById("mode_txt_space").classList.remove('is_hidden');
                 // document.getElementById("visibility_break").style.display = "none";
             } else if (responsive_mode > 1 && window.innerWidth >= 850) {
                 // document.getElementById("visibility_break").style.display = "inline";
@@ -2143,33 +2156,22 @@ onload = function() {
                 }
             }
 
-            // Display all modes
-            pu.set_allmodes("inline-block");
+            PenpaUI.set_all_modes_hidden(false);
         } else {
-            // Remove all modes, default is none
-            pu.set_allmodes();
-
-            // Display the visibility break line if min-width greater than 850px (defined in base-structure.css media)
-            // and responsive mode is not equal to 1
-            // let responsive_mode = UserSettings.responsive_mode;
-            // if (responsive_mode === 1 || (responsive_mode > 1 && window.innerWidth < 850)) {
-            //     document.getElementById("visibility_break").style.display = "none";
-            // } else if (responsive_mode > 1 && window.innerWidth >= 850) {
-            //     document.getElementById("visibility_break").style.display = "inline";
-            // }
+            PenpaUI.set_all_modes_hidden(true);
 
             // Remove the mode break line
-            document.getElementById("mode_break").style.display = "none";
-            document.getElementById("mode_txt_space").style.display = "none";
+            document.getElementById("mode_break").classList.add('is_hidden');
+            document.getElementById("mode_txt_space").classList.add('is_hidden');
 
             // Display generic ones
             for (var i of penpa_constraints["setting"]["general"]) {
-                document.getElementById(i).style.display = "inline-block";
+                document.getElementById(i).classList.remove('is_hidden');
             }
 
             // Display only the selected ones
             for (var i of penpa_constraints["setting"][current_constraint]["show"]) {
-                document.getElementById(i).style.display = "inline-block";
+                document.getElementById(i).classList.remove('is_hidden');
             }
 
             // set the default submode
