@@ -71,6 +71,24 @@ onload = function() {
     document.addEventListener("keydown", onKeyDown, { passive: false });
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
+    let restrict_grids = ["square", "sudoku", "kakuro"];
+    let restrict_modes = ["line", "linex", "lineox", "yajilin", "rassisillai"];
+
+    function restrict_mouse(num) {
+        let current_mode = pu.mode[pu.mode.qa].edit_mode;
+        if (current_mode == "combi") {
+            current_mode = pu.mode[pu.mode.qa][current_mode][0];
+        }
+        if (pu &&
+            restrict_grids.includes(pu.gridtype) &&
+            restrict_modes.includes(current_mode) &&
+            pu.cellsoutsideFrame.includes(num)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function onDown(e) {
         if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousedown") {
@@ -87,10 +105,7 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            let skip_mouseevent = false;
-            if (pu && (pu.cellsoutsideFrame.includes(num))) {
-                skip_mouseevent = true;
-            }
+            let skip_mouseevent = restrict_mouse(num);
             if (pu.point[num].use === 1 && !skip_mouseevent) {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
@@ -123,9 +138,8 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            let skip_mouseevent = false;
-            if (pu && (pu.cellsoutsideFrame.includes(num))) {
-                skip_mouseevent = true;
+            let skip_mouseevent = restrict_mouse(num);
+            if (skip_mouseevent) {
                 onOut();
             }
             if (!skip_mouseevent) {
@@ -162,9 +176,8 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
-            let skip_mouseevent = false;
-            if (pu && (pu.cellsoutsideFrame.includes(num))) {
-                skip_mouseevent = true;
+            let skip_mouseevent = restrict_mouse(num);
+            if (skip_mouseevent) {
                 onOut();
             }
             if (pu.point[num].use === 1 && !skip_mouseevent) {

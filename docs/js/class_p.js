@@ -470,11 +470,15 @@ class Puzzle {
                 this.cellsoutsideFrame.push(cell_lastrow);
 
                 // Left and Right Edges of first row cell
-                let lr_firstrow = this.point[cell_firstrow].neighbor.sort().reverse().slice(0, 2);
+                let lr_firstrow = this.point[cell_firstrow].neighbor.sort(function(a, b) {
+                    return b - a; // Descending
+                }).slice(0, 2);
                 this.cellsoutsideFrame.push(lr_firstrow[0], lr_firstrow[1]);
 
                 // Left and Right Edges of last row cell
-                let lr_lastrow = this.point[cell_lastrow].neighbor.sort().reverse().slice(0, 2);
+                let lr_lastrow = this.point[cell_lastrow].neighbor.sort(function(a, b) {
+                    return b - a; // Descending
+                }).slice(0, 2);
                 this.cellsoutsideFrame.push(lr_lastrow[0], lr_lastrow[1]);
             }
             for (var j = 1; j < this.ny0 - 1; j++) {
@@ -485,17 +489,23 @@ class Puzzle {
                 this.cellsoutsideFrame.push(cell_lastcol);
 
                 // Top and bottom Edges of first column cell
-                let lr_firstcol = this.point[cell_firstcol].neighbor.sort().slice(0, 2);
+                let lr_firstcol = this.point[cell_firstcol].neighbor.sort(function(a, b) {
+                    return a - b; // Ascending
+                }).slice(0, 2);
                 this.cellsoutsideFrame.push(lr_firstcol[0], lr_firstcol[1]);
 
                 // Top and bottom Edges of last column cell
-                let lr_lastcol = this.point[cell_lastcol].neighbor.sort().slice(0, 2);
+                let lr_lastcol = this.point[cell_lastcol].neighbor.sort(function(a, b) {
+                    return a - b; // Ascending
+                }).slice(0, 2);
                 this.cellsoutsideFrame.push(lr_lastcol[0], lr_lastcol[1]);
             }
         }
 
         // Remove duplicates
-        this.cellsoutsideFrame = [...new Set(this.cellsoutsideFrame.sort())]
+        this.cellsoutsideFrame = [...new Set(this.cellsoutsideFrame.sort(function(a, b) {
+            return a - b; // Ascending
+        }))]
     }
 
     point_move(x, y, theta) {
@@ -3688,6 +3698,12 @@ class Puzzle {
                             break;
                         case "loopline":
                             for (var i in this[pu].line) {
+                                // Ignoring the half cells standred line marks
+                                let cells = i.split(",");
+                                if (this.cellsoutsideFrame.includes(parseInt(cells[0])) &&
+                                    this.cellsoutsideFrame.includes(parseInt(cells[1]))) {
+                                    continue;
+                                }
                                 if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
                                     // Ignore the line
                                 } else {
