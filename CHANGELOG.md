@@ -1,10 +1,15 @@
 ## History
-* 2023/xx/xx ver 3.0.8
+* 2023/07/28 ver 3.0.8
 	* Updated jquery, sweetalert to latest.
 	* Fixed the bug of correctly deleteing cagearrays.
 	* Added clone url button.
 	* Enable text selection for the answer check message.
 	* Added setting for quick panel toggle button, and added quick panel toggle button.
+	* Improved shortcuts display under Help, adding ? to access Help.
+	* Fixed ? in tapa gmpuzzles output text, minor display improvements.
+	* Code cleanup
+	* Improved sudoku string IO to add whitespace suppression option and import non-square text blocks.
+	* Separated branding for easy access in future to other applications.
 * 2023/05/03 ver 3.0.7
 	* Diagonal connection shape for killer cages with rotation fix.
 	* Tweaked display for mobile devices.

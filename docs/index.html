@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="/lib/emoji-picker.css" type="text/css" />
     <!-- Local styles -->
     <script>
-        var ver = "3.0.7"; // Also defined in class_p.js
+        var ver = "3.0.8"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -87,7 +87,9 @@
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
+            "./branding.js",
             "./js/settings.js",
+            "./js/interface.js",
             "./js/conflicts.js",
             "./js/puzzlink.js",
             "./js/modes.js",
@@ -1331,7 +1333,7 @@
     </div>
     <div id="modal-input" class="modal">
         <div id="modal-input-content">
-            <h3 class="modal-header" id="save4texttitle">Input/Output sudoku string</h3>
+            <h3 class="modal-header" id="save4texttitle">Input/Output Sudoku String</h3>
             <div id="modal-save-body">
                 <textarea class="text_area" rows="1" cols="81" id="iostring"></textarea>
             </div>
@@ -1345,9 +1347,18 @@
                 <input type="number" pattern="\d*" name="sudokusize" id="sudokusize" value="" min="1" max="9" step="1" placeholder="9">
             </div>
             <div>
-                <span><label class="label_nb" id="ignore_pencilmarks_lb">Ignore Pencil Marks (L, M, S values)</label></span>
+                <span><label class="label_nb" id="ignore_pencilmarks_lb" for="ignore_pencilmarks">Ignore Pencil Marks (L, M, S values)</label></span>
                 <input type="checkbox" name="ignore_pencilmarks" id="ignore_pencilmarks">
             </div>
+            <div>
+                <span><label class="label_nb" id="sudokuIgnoreSpaces_lb" for="sudokuIgnoreSpaces">Ignore Whitespace for Import</label></span>
+                <input type="checkbox" name="sudokuIgnoreSpaces" id="sudokuIgnoreSpaces">
+            </div>
+            <div>
+                <span><label class="label_nb" id="sudokuIgnoreNotSquare_lb" for="sudokuIgnoreNotSquare">Skip Import Non-Square Check</label></span>
+                <input type="checkbox" name="sudokuIgnoreNotSquare" id="sudokuIgnoreNotSquare">
+            </div>
+            <div id="sudokuIOFail" class="is_hidden error_msg">Error: it contains non-alpha-numeric characters</div>
             <div class="nb_button">
                 <input type="button" id="load_input" value="Import Sudoku" onclick="import_sudoku();" />
                 <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();" />
@@ -1597,7 +1608,7 @@
                                 <label>Sudoku Z/Y & XCV Keys:</label>
                             </td>
                             <td>
-                                <select name="disable_shortcuts" id="disable_shortcuts_opt">
+                                <select name="enable_shortcuts" id="enable_shortcuts_opt">
                                     <option value="1" selected="selected">ON</option>
                                     <option value="2">OFF</option>
                                 </select>
@@ -1632,13 +1643,53 @@
             </div>
         </div>
     </div>
+    <div id="modal-keys" class="modal">
+        <div id="modal-keys-content" class="modal-content modal-content-wide">
+            <h3 class="modal-header">Keyboard Shortcuts</h3>
+            <div class="modal-inner-wrapper">
+                <div>
+                    <ul>
+                        <li><kbd>Ctrl</kbd> + <kbd>Z</kbd>: Undo</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Y</kbd>: Redo</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>D</kbd>: Clone</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>I</kbd>: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Space</kbd>: Delete numbers and symbols at the same time</li>
+                        <li><kbd>Shift</kbd> + <kbd>Space</kbd>: Enter a space (Works in "Number" Mode => "L", "M", "S" and Long" SubMode options only)</li>
+                        <li><kbd>F2</kbd>: Problem mode</li>
+                        <li><kbd>F3</kbd>: Solution mode</li>
+                        <li><kbd>F4</kbd>: Hide/Show Timer</li>
+                        <li><kbd>Tab</kbd> or <kbd>Enter</kbd>: Cycle Input Tools</li>
+                        <li><kbd>?</kbd>: Show keyboard shortcuts</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="modal-subheader">In Sudoku Mode</h5>
+                    <ul>
+                        <li><kbd>Z</kbd>: Normal Submode*</li>
+                        <li><kbd>X</kbd>: Corner Submode*</li>
+                        <li><kbd>C</kbd>: Centre Submode*</li>
+                        <li><kbd>V</kbd>: Shading (Surface Mode)*</li>
+                        <li><kbd>Shift</kbd>: For Temporary Corner Submode</li>
+                        <li><kbd>Shift</kbd> + <kbd>Delete</kbd>: Deletes only corner pencil marks from the selected cells</li>
+                        <li><kbd>Ctrl</kbd> - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>Delete</kbd>: Deletes only centre pencil marks from the selected cells</li>
+                        <li><kbd>Delete</kbd>: To delete all the contents of the cell</li>
+                        <li><kbd>Space</kbd>: To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)</li>
+                    </ul>
+                    <p class="modal-footnote">* These can be disabled from Settings.</p>
+                    <h5 class="modal-subheader">In Surface Mode</h5>
+                    <p>Use number keys <kbd>0</kbd> - <kbd>9</kbd> to quickly switch between styles. For styles 11 and 12, press <kbd>1</kbd> and the second digit in quick succession.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="modal-help" class="modal">
         <div id="modal-help-content" class="modal-content">
             <h3 class="modal-header">Welcome to Penpa+</h3>
             <div id="modal-help-body">
                 <p>It's a web application and universal pencil puzzle editor capable of drawing many different kinds of pencil puzzles. You can download your puzzles as images and save puzzle links in the form of URLs to share with others.</p>
                 <h5 class="modal-subheader">Usage</h5>
-                <div class="nb_button">
+                <div class="nb_button" id="usageButtons">
                     <a class="button" onclick="show_shortcuts();">Shortcuts</a>
                     <a class="button" target="_blank" href="https://github.com/swaroopg92/penpa-edit/blob/master/README.md">Tool Instructions</a>
                     <a class="button" target="_blank" href="https://www.youtube.com/channel/UCAv0bBz7MTVJOlHzINnHhYQ/videos">Youtube Tutorials</a>
