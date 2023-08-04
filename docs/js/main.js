@@ -1208,15 +1208,15 @@ onload = function() {
                 return;
             case "submit_portal":
                 e.preventDefault();
-                submit_portal(e);
+                submit_portal();
                 break;
             case "submit_portal_ex":
                 e.preventDefault();
-                submit_portal_ex(e);
+                submit_portal_ex();
                 break;
             case "preview_portal":
                 e.preventDefault();
-                preview_portal(e);
+                preview_portal();
                 break;
             case "closeBtn_save1":
                 savetext_copy();
