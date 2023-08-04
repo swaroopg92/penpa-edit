@@ -2122,8 +2122,17 @@ onload = function() {
             pu.mmode === "solve" &&
             local_storage_setting === "1" &&
             !pu.replay) {
+            // set lmi username as prefix
+            let prefix;
+            if (pu.puzzle_info &&
+                pu.puzzle_info.lmiUserName) {
+                prefix = pu.puzzle_info.lmiUserName + "_penpa_";
+            } else {
+                prefix = "penpa_";
+            }
+
             // get md5 hash for unique id
-            let hash = "penpa_" + md5(pu.url);
+            let hash = prefix + md5(pu.url);
 
             // generate duplicate link
             let rstr = pu.maketext_duplicate() + "&l=solvedup";
@@ -2345,7 +2354,17 @@ function clear_storage_one() {
     // check for local progress
     // get md5 hash for unique id
     if (typeof pu.url === 'string') {
-        let hash = "penpa_" + md5(pu.url);
+        // set lmi username as prefix
+        let prefix;
+        if (pu.puzzle_info &&
+            pu.puzzle_info.lmiUserName) {
+            prefix = pu.puzzle_info.lmiUserName + "_penpa_";
+        } else {
+            prefix = "penpa_";
+        }
+
+        // get md5 hash for unique id
+        let hash = prefix + md5(pu.url);
         localStorage.removeItem(hash);
         Swal.fire({
             html: '<h2 class="info">Local Storage is Cleared</h2>',

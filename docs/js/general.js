@@ -5625,8 +5625,17 @@ function load_from_server(paramArray, type, action, origurl) {
                     response.q = window.btoa(JSON.stringify(response.q));
                 }
 
-                // Check for local storage
-                let hash = "penpa_" + md5(response.p);
+                // set lmi username as prefix
+                let prefix;
+                if (response.q &&
+                    response.q.lmiUserName) {
+                    prefix = response.q.lmiUserName + "_penpa_";
+                } else {
+                    prefix = "penpa_";
+                }
+
+                // get md5 hash for unique id
+                let hash = prefix + md5(response.p);
 
                 // Decrypt puzzle data
                 let local_data = localStorage.getItem(hash);
