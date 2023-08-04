@@ -2093,18 +2093,19 @@ function make_gmpfile() {
     document.getElementById("modal-save2").style.display = 'none';
 }
 
-function preview_portal(e) {
-    submit_portal(e, true);
+function preview_portal() {
+    submit_portal(true);
 }
 
-function submit_portal_ex(e) {
-    submit_portal(e, false, true);
+function submit_portal_ex() {
+    submit_portal(false, true);
 }
 
-function submit_portal(e, isPreview, isExample) {
-    var entries_flag = validate_entries();
+function submit_portal(isPreview, isExample) {
+    var entries_flag = validate_entries(isPreview, isExample);
 
-    if (typeof entries_flag !== "boolean") {
+    if (typeof entries_flag !== "undefined" &&
+        typeof entries_flag !== "boolean") {
         var solve_link;
         if (pu.mmode === "solve") {
             if (pu.solution.length === 0) {
@@ -2220,7 +2221,7 @@ function expoError(error) {
     })
 }
 
-function validate_entries() {
+function validate_entries(isPreview, isExample) {
     // Validate "What is it" is selected
     if (!document.getElementById("nb_issudoku").checked && !document.getElementById("nb_ispuzzle").checked) {
         expoError({ html: 'Select if its a Sudoku or Puzzle' });
@@ -2265,7 +2266,65 @@ function validate_entries() {
         return false;
     }
 
-    return answer_check_opt;
+    // Validate the starting solver mode with answer check option selected
+    let start_mode = pu.mode["pu_a"].edit_mode;
+    let start_mode_conv;
+    if (Object.keys(solver_startingmode).includes(start_mode)) {
+        start_mode_conv = solver_startingmode[start_mode];
+    } else {
+        start_mode_conv = "none";
+    }
+
+    if (document.getElementById("nb_issudoku").checked) {
+        if (!pu.ignore_start_mode && start_mode != "sudoku") {
+            Swal.fire({
+                allowOutsideClick: false,
+                icon: 'warning',
+                confirmButtonText: 'Continue',
+                showDenyButton: true,
+                denyButtonText: "Go Back",
+                footer: "If you Continue, this warning will not be displayed again",
+                html: `You selected genre type as "Sudoku" but the Solver starting mode is not "Sudoku". <br> Would you like to go back and make the change or Continue?`
+            }).then((result) => {
+                if (result.isDenied) {
+                    document.getElementById("modal-save").style.display = 'none';
+                } else {
+                    pu.ignore_start_mode = true;
+                    submit_portal(isPreview, isExample);
+                }
+            });
+        } else {
+            return answer_check_opt;
+        }
+    } else {
+        if (start_mode == "symbol" || start_mode == "combi") {
+            let sub_mode = pu.mode["pu_a"][start_mode][0];
+            if (Object.keys(solver_startingmode).includes(sub_mode)) {
+                start_mode_conv = solver_startingmode[sub_mode];
+            } else {
+                start_mode_conv = "none";
+            }
+            start_mode = start_mode + " : " + sub_mode;
+        }
+        let valid_start_mode = false;
+        for (var sm in start_mode_conv) {
+            if (answer_check_opt.answercheck_opt.includes(start_mode_conv[sm])) {
+                valid_start_mode = true;
+                break;
+            }
+        }
+        if (!valid_start_mode) {
+            expoError({
+                html: '<h2 class="info">Solver starting mode: ' +
+                    start_mode + '</h2>' +
+                    ', <br> <h2 class="warn"> does not match <br> Answer Check Options: ' +
+                    answer_check_opt.answercheck_opt.toString() + '</h2>' +
+                    ', <br> <h2 class="info"> Please select appropriate solve mode.</h2>'
+            });
+            return false;
+        }
+        return answer_check_opt;
+    }
 }
 
 function savetext_copy() {

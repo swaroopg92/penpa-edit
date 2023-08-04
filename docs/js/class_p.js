@@ -183,6 +183,7 @@ class Puzzle {
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
         this.reset_board_clicks = 0;
+        this.ignore_start_mode = false;
     }
 
     reset() {
