@@ -15,27 +15,33 @@ const penpa_constraints = {
             "sandwich",
             "quadruple",
             "xv",
-            "between line"
+            "between line",
+            "battenberg"
         ],
         "puzzle": [
             "slitherlink",
             "tapa",
-            // "star battle",
+            "star battle",
+            "tents",
             // "heyawake",
             // "nurikabe",
             // "lits",
             // "battleships",
-            // "minesweeper",
-            // "akari",
+            "minesweeper",
+            "akari",
             // "sun and moon",
             // "statue park",
             // "kakuro",
             // "kurotto",
             // "pentominous",
-            // "yajilin"
+            // "yajilin",
+            // "pencils",
+            // "darts",
+            // "anglers",
+            // "hotaru beam"
         ]
     },
-    "border": ["difference", "kropki", "quadruple", "xv"], // puzzle types that involves placing clues on edges and corners
+    "border": ["difference", "kropki", "quadruple", "xv", "battenberg"], // puzzle types that involves placing clues on edges and corners
     "setting": {
         "all": {
             "modeset": ["surface", "line", "lineE", "wall", "cage", "number", "symbol", "special", "combi", "sudoku"],
@@ -163,6 +169,15 @@ const penpa_constraints = {
             "submodeset": ["1", "circle_L", "2"],
             "styleset": ["", "", 5],
         },
+        "battenberg": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms4", "ms_sudokuetc", "li_sudokuetc"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "sudokuetc"],
+            "styleset": ["", ""],
+        },
         "slitherlink": {
             "show": ["mo_surface_lb",
                 "mo_number_lb", "sub_number1_lb",
@@ -181,6 +196,60 @@ const penpa_constraints = {
             "submodeset": ["4"],
             "styleset": [1]
         },
+        "star battle": {
+            "show": ["mo_surface_lb",
+                "mo_lineE_lb", "sub_lineE1_lb", "sub_lineE2_lb", "sub_lineE5_lb",
+                "mo_combi_lb", "subc4", "combisub_star", "combili_star",
+                "mo_symbol_lb", "ms4", "li_star", "ms_star"
+            ],
+            "modeset": ["symbol", "combi"],
+            "submodeset": ["star", "star"],
+            "styleset": ["", ""]
+        },
+        "tents": {
+            "show": ["mo_surface_lb",
+                "mo_number_lb", "sub_number1_lb",
+                "mo_combi_lb", "subc4", "combisub_tents", "combili_tents",
+                "mo_symbol_lb", "ms4", "li_tents", "ms_tents"
+            ],
+            "modeset": ["number", "combi", "symbol"],
+            "submodeset": ["1", "tents", "tents"],
+            "styleset": [1, "", ""]
+        },
+        "heyawake": {},
+        "nurikabe": {},
+        "lits": {},
+        "battleships": {},
+        "minesweeper": {
+            "show": ["mo_surface_lb",
+                "mo_number_lb", "sub_number1_lb",
+                "mo_combi_lb", "subc4", "combisub_mines", "combili_mines",
+                "mo_symbol_lb", "ms5", "li_sun_moon", "ms_sun_moon"
+            ],
+            "modeset": ["number", "symbol", "combi"],
+            "submodeset": ["1", "sun_moon", "mines"],
+            "styleset": [1, "", ""]
+        },
+        "akari": {
+            "show": ["mo_surface_lb",
+                "mo_lineE_lb", "sub_lineE1_lb", "sub_lineE2_lb", "sub_lineE5_lb",
+                "mo_combi_lb", "subc4", "combisub_akari", "combili_akari",
+                "mo_symbol_lb", "ms5", "li_sun_moon", "ms_sun_moon"
+            ],
+            "modeset": ["symbol", "combi"],
+            "submodeset": ["sun_moon", "akari"],
+            "styleset": ["", ""]
+        },
+        "sun and moon": {},
+        "statue park": {},
+        "kakuro": {},
+        "kurotto": {},
+        "pentominous": {},
+        "yajilin": {},
+        "pencils": {},
+        "darts": {},
+        "anglers": {},
+        "hotaru beam": {}
     },
     "solving": {
 
