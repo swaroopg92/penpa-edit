@@ -5680,24 +5680,40 @@ function load_from_server(paramArray, type, action, origurl) {
                         });
                     }
                 }
+
+                // set lmi username as prefix
+                let prefix;
+                let username = false;
+                if (response.q &&
+                    response.q.lmiUserName) {
+                    prefix = response.q.lmiUserName + "_penpa_";
+                    username = true;
+                }
+
                 if (response.q) {
                     response.q = window.btoa(JSON.stringify(response.q));
                 }
 
-                // set lmi username as prefix
-                let prefix;
-                if (response.q &&
-                    response.q.lmiUserName) {
-                    prefix = response.q.lmiUserName + "_penpa_";
-                } else {
-                    prefix = "penpa_";
+                let local_data = null;
+                let hash;
+
+                // First try - Access local data with username
+                if (username) {
+                    // get md5 hash for unique id
+                    hash = prefix + md5(response.p);
+                    local_data = localStorage.getItem(hash);
                 }
 
-                // get md5 hash for unique id
-                let hash = prefix + md5(response.p);
+                // Second try - Access local data without username
+                if (!local_data) {
+                    prefix = "penpa_";
+
+                    // get md5 hash for unique id
+                    hash = prefix + md5(response.p);
+                    local_data = localStorage.getItem(hash);
+                }
 
                 // Decrypt puzzle data
-                let local_data = localStorage.getItem(hash);
                 let replay_url = false;
 
                 if ("mode" in paramArray) {
