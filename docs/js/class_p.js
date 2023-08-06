@@ -6026,7 +6026,7 @@ class Puzzle {
                                 this.pu_q.symbol[i + j * (this.nx0)] &&
                                 !isNaN(this.pu_q.symbol[i + j * (this.nx0)][0]) &&
                                 this.pu_q.symbol[i + j * (this.nx0)][1].substring(0, 6) === "square") {
-                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2 || this.pu_q.symbol[i + j * (this.nx0)][0] === 9) {
+                                if (this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
                                     clueshade = 'b';
                                 } else if (this.pu_q.symbol[i + j * (this.nx0)][0] === 8) {
                                     clueshade = 'w';
