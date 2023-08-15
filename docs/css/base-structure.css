@@ -1145,6 +1145,25 @@ h4 {
     display: inline;
 }
 
+#modal-save-content textarea,
+#modal-save-content input[type=text] {
+    padding: 2pt 5pt;
+}
+
+#modal-save-content button,
+#modal-save-content input[type=button] {
+    border-radius: 3px;
+}
+
+textarea {
+    background-color: inherit;
+    transition: ease 0.3s all;
+}
+
+.copied {
+    transition: ease 0.8s all;
+}
+
 #savetextarea_pp {
     min-width: 200px;
     min-height: 40px;

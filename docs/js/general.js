@@ -1657,9 +1657,12 @@ function make_gmpfile() {
 }
 
 function savetext_copy() {
-    infoMsg('<h2 class="info">URL is copied to clipboard</h2>');
-
     const textarea = document.getElementById("savetextarea");
+
+    textarea.classList.add('copied');
+    setTimeout(() => {
+        textarea.classList.remove('copied');
+    }, 2500);
 
     if (navigator.clipboard) {
         navigator.clipboard.writeText(textarea.value);
