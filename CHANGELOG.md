@@ -1,4 +1,6 @@
 ## History
+* Unreleased
+    * Use new clipboard API when able. (Fixes Copy on iOS.)
 * 2023/07/28 ver 3.0.8
 	* Updated jquery, sweetalert to latest.
 	* Fixed the bug of correctly deleteing cagearrays.

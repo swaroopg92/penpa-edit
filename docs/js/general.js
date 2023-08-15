@@ -1658,15 +1658,21 @@ function make_gmpfile() {
 
 function savetext_copy() {
     infoMsg('<h2 class="info">URL is copied to clipboard</h2>');
-    var textarea = document.getElementById("savetextarea");
-    textarea.select();
-    var range = document.createRange();
-    range.selectNodeContents(textarea);
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    textarea.setSelectionRange(0, 1e5);
-    document.execCommand("copy");
+
+    const textarea = document.getElementById("savetextarea");
+
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textarea.value);
+    } else {
+        textarea.select();
+        let range = document.createRange();
+        range.selectNodeContents(textarea);
+        let sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        textarea.setSelectionRange(0, 1e5);
+        document.execCommand("copy");
+    }
 }
 
 function savetext_download() {
@@ -1722,15 +1728,21 @@ function savetext_window() {
 }
 
 function shorturl_tab() {
-    var textarea = document.getElementById("savetextarea");
-    textarea.select();
-    var range = document.createRange();
-    range.selectNodeContents(textarea);
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    textarea.setSelectionRange(0, 1e5);
-    document.execCommand("copy");
+    const textarea = document.getElementById("savetextarea");
+
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textarea.value);
+    } else {
+        textarea.select();
+        let range = document.createRange();
+        range.selectNodeContents(textarea);
+        let sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        textarea.setSelectionRange(0, 1e5);
+        document.execCommand("copy");
+    }
+
     window.open('https://tinyurl.com/app', '_blank');
 }
 
