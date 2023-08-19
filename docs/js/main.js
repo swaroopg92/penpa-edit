@@ -136,7 +136,7 @@ onload = function() {
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
                     pu.mouse_click_last = 1;
-                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
+                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e) || isShiftKeyHeld(e));
                 }
             }
         }
@@ -994,7 +994,7 @@ onload = function() {
         // This segment of code I added for a purpose but don't recollect the reason.
         // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
-            e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
+            e.target.id != "float-canvas" && !isCtrlKeyHeld(e) && !isShiftKeyHeld(e)) {
             // clear selection
             pu.selection = [];
             pu.redraw();
