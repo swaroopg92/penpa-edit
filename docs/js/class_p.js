@@ -12331,8 +12331,8 @@ class Puzzle {
                 // set_surface_style(this.ctx, 13);
 
                 // Shadow for the selected cell
-                this.ctx.shadowBlur = 10;
-                this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
+                this.ctx.shadowBlur = 5;
+                this.ctx.shadowColor = Color.BLUE_DARK_VERY;
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 if (factor < 1) {
