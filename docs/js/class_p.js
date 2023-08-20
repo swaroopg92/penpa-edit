@@ -1,7 +1,7 @@
 const MAX_EXPORT_LENGTH = 7360;
 
 class Point {
-    constructor(x, y, type, adjacent, surround, use, neighbor = [], adjacent_dia = [], type2 = 0) {
+    constructor(x, y, type, adjacent, surround, use, neighbor = [], adjacent_dia = [], type2 = 0, index = null) {
         this.x = x;
         this.y = y;
         this.type = type;
@@ -11,6 +11,7 @@ class Point {
         this.surround = surround;
         this.neighbor = neighbor;
         this.use = use;
+        this.index = index;
     }
 }
 

@@ -50,6 +50,7 @@ class Puzzle_square extends Puzzle {
         var ny = this.ny0;
         var adjacent, surround, type, use, neighbor, adjacent_dia;
         var point = [];
+        const index = (x, y) => [x, y, this.nx0 * y + x];
         //center
         type = 0;
         for (var j = 0; j < ny; j++) {
@@ -59,7 +60,7 @@ class Puzzle_square extends Puzzle {
                 adjacent_dia = [k - nx - 1, k - nx + 1, k + nx - 1, k + nx + 1];
                 surround = [k + nx * ny - nx - 1, k + nx * ny - nx, k + nx * ny, k + nx * ny - 1];
                 neighbor = [k + 2 * nx * ny - nx, k + 2 * nx * ny, k + 3 * nx * ny - 1, k + 3 * nx * ny];
-                point[k] = new Point((i + 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use, neighbor, adjacent_dia);
+                point[k] = new Point((i + 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use, neighbor, adjacent_dia, 0, index(i, j));
                 k++;
             }
         }
@@ -71,7 +72,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k - nx, k - 1, k + 1, k + nx];
                 adjacent_dia = [k - nx - 1, k - nx + 1, k + nx - 1, k + nx + 1];
                 surround = [];
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia);
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia, 0, index(i, j));
                 k++;
             }
         }
@@ -85,7 +86,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k + nx, k - nx];
                 surround = [];
                 neighbor = [k - 2 * nx * ny, k - 2 * nx * ny + nx];
-                point[k] = new Point(point[i + j * nx].x, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, neighbor);
+                point[k] = new Point(point[i + j * nx].x, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
                 k++;
             }
         }
@@ -96,7 +97,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k + 1, k - 1];
                 surround = [];
                 neighbor = [k - 3 * nx * ny, k - 3 * nx * ny + 1];
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use, neighbor);
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
                 k++;
             }
         }
@@ -109,16 +110,16 @@ class Puzzle_square extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 surround = [];
                 adjacent = [k - 4 * nx + 2, k - 3, k + 1, k + 2];
-                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
                 adjacent = [k - 4 * nx + 2, k - 1, k + 3, k + 2];
-                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
                 adjacent = [k - 2, k - 3, k + 1, k + 4 * nx - 2];
-                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
                 adjacent = [k - 2, k - 1, k + 3, k + 4 * nx - 2];
-                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
             }
         }
@@ -131,13 +132,13 @@ class Puzzle_square extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 adjacent = [];
                 surround = [];
-                point[k] = new Point(point[i + j * nx].x - 0 * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - 0 * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
-                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - 0 * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - 0 * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
-                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + 0 * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + 0 * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
-                point[k] = new Point(point[i + j * nx].x + 0 * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + 0 * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
             }
         }
