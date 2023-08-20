@@ -12026,14 +12026,15 @@ class Puzzle {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         if (edit_mode === "sudoku" ||
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
+            // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
             // since we dont want single cell highlighed while in killer submode
-            if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
-                // check if cursor is in centerlist, to avoid border/edge case
-                let cursorexist = this.centerlist.indexOf(this.cursol);
-                if (cursorexist !== -1) {
-                    this.selection.push(this.cursol);
-                }
-            }
+            //if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
+            //    // check if cursor is in centerlist, to avoid border/edge case
+            //    let cursorexist = this.centerlist.indexOf(this.cursol);
+            //    if (cursorexist !== -1) {
+            //        this.selection.push(this.cursol);
+            //    }
+            //}
 
             // Handling rotation and reflection of the grid
             var a = [0, 1, 2, 3],

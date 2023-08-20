@@ -348,6 +348,28 @@ onload = function() {
             return false;
         }
 
+        if (key === 'Escape') {
+            // Escape out of any modal dialogs if they're open
+
+            // Weird hack to make sure any sub-dialogs are exited first
+            const sub_modals = ["modal-save-tag", "modal-save2"];
+            let modals = [...document.getElementsByClassName('modal')];
+            modals.sort((a, b) => !sub_modals.includes(a.id) && sub_modals.includes(b.id));
+
+            for (var m of modals) {
+                if (m.style.display && m.style.display !== 'none') {
+                    e.preventDefault();
+                    m.style.display = 'none';
+                    return false;
+                }
+            }
+
+            pu.selection = [];
+            pu.redraw();
+            e.returnValue = false;
+            return false;
+        }
+
         // All of this is specific to sudoku
         if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
 
@@ -802,6 +824,7 @@ onload = function() {
         }
 
         var key = e.key;
+
         const keylocation = e.location;
         if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
             if (present_submode === "1") {
