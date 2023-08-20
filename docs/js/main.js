@@ -339,7 +339,7 @@ onload = function() {
             if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && keylocation === 3) {
                 // Skip arrow behavior deliberately for sudoku numpad usage.
             } else {
-                pu.key_arrow(key, isCtrlKeyHeld(e));
+                pu.key_arrow(key, isCtrlKeyHeld(e) || isShiftKeyHeld(e));
                 e.returnValue = false;
             }
         }
