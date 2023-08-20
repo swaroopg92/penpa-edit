@@ -40,39 +40,28 @@ class Conflicts {
             // Empty or not square
             return;
         }
-        const row = new Array(n);
-        const col = new Array(n);
         for (let i = 0; i < n; i++) {
-            row.fill(0);
-            col.fill(0);
-            let row_conflict = false;
-            let col_conflict = false;
             for (let j = 0; j < n; j++) {
-                // Subtract one to get 0-based index.
-                const row_el = data[i][j] - 1;
-                const col_el = data[j][i] - 1;
-                if (row_el >= 0 && row_el < n) {
-                    if (row[row_el]++) {
-                        row_conflict = true;
+                const row_el = data[i][j];
+                if (row_el >= 1 && row_el <= n) {
+                    for (let k = j+1; k < n; k++) {
+                        const el2 = data[i][k];
+                        if (row_el === el2) {
+                            this.add_conflict(j, i);
+                            this.add_conflict(k, i);
+                        }
                     }
                 }
-                if (col_el >= 0 && col_el < n) {
-                    if (col[col_el]++) {
-                        col_conflict = true;
+
+                const col_el = data[j][i];
+                if (col_el >= 1 && col_el <= n) {
+                    for (let k = j+1; k < n; k++) {
+                        const el2 = data[k][i];
+                        if (col_el === el2) {
+                            this.add_conflict(i, j);
+                            this.add_conflict(i, k);
+                        }
                     }
-                }
-            }
-            // Mark whole row as in conflict.
-            // We could also consider just marking the affected cells?
-            if (row_conflict) {
-                for (let j = 0; j < n; j++) {
-                    this.add_conflict(j, i);
-                }
-            }
-            // Mark whole column as in conflict.
-            if (col_conflict) {
-                for (let j = 0; j < n; j++) {
-                    this.add_conflict(i, j);
                 }
             }
         }
@@ -130,32 +119,25 @@ class Conflicts {
             return;
         }
         this.check_latin_square();
-        // Stop early if there are already conflicts.
-        if (this.has_conflicts()) return;
         // Check 3x3 cells
-        const cell = new Array(9);
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                cell.fill(0);
-                let cell_conflict = false;
-                // Iterate over cell starting at (3i, 3j)
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                const el = data[i][j];
+                if (!(el >= 1 && el <= n)) continue;
+
+                // Get coordinates of this box's top-left corner
+                let bi = 3*((i/3)|0);
+                let bj = 3*((j/3)|0);
+
                 for (let k = 0; k < 3; k++) {
                     for (let l = 0; l < 3; l++) {
-                        // Convert to 0-based index
-                        const el = data[3 * i + k][3 * j + l] - 1;
-                        if (!(el >= 0 && el < n)) continue;
-                        if (cell[el]++) {
-                            cell_conflict = true;
-                            break;
-                        }
-                    }
-                }
-                if (!cell_conflict) continue;
-                // Mark whole cell as in conflict.
-                // We could also consider just marking the affected cells?
-                for (let k = 0; k < 3; k++) {
-                    for (let l = 0; l < 3; l++) {
-                        this.add_conflict(3 * j + l, 3 * i + k);
+                        let kk = bi + k;
+                        let ll = bj + l;
+                        if (kk === i && ll === j)
+                            continue;
+                        const el2 = data[kk][ll];
+                        if (el2 === el)
+                            this.add_conflict(ll, kk);
                     }
                 }
             }

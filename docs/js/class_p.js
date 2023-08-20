@@ -11820,12 +11820,12 @@ class Puzzle {
     redraw(svgcall = false, check_sol = true) {
         try {
             this.flushcanvas(svgcall);
-            panel_pu.draw_panel();
-            this.draw();
-            this.set_redoundocolor();
             if (check_sol) {
                 this.check_solution();
             }
+            panel_pu.draw_panel();
+            this.draw();
+            this.set_redoundocolor();
         }
         // don't crash the UI
         catch (err) {
@@ -12179,10 +12179,10 @@ class Puzzle {
     }
 
     check_solution() {
+        var text = JSON.stringify(this.make_solution());
+        let conflict = this.check_conflict(text);
         if (!this.multisolution) {
             if (this.solution) {
-                var text = JSON.stringify(this.make_solution());
-                let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
@@ -12506,10 +12506,6 @@ class Puzzle {
             return;
         }
         if (this.user_tags) {
-            // Do only if current solution changed
-            if (current_sol === this.previous_sol) {
-                return;
-            }
             this.conflicts.reset();
             const tags = new Set(this.user_tags);
             if (tags.has('noconflict')) {
