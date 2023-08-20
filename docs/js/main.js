@@ -567,6 +567,17 @@ onload = function() {
                     }
                 }
                 switch (key) {
+                    case "a": //Ctrl+a
+                    case "A":
+                        // Don't trigger ctrl-a sequence if a target is selected (eg a textbox)
+                        if (e.target.id !== "") {
+                            e.returnValue = true;
+                            break;
+                        }
+                        pu.selection = pu.centerlist.slice();
+                        pu.redraw();
+                        e.returnValue = false;
+                        break;
                     case "d": //Ctrl+d
                     case "D":
                         duplicate();
