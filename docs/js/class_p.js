@@ -7985,6 +7985,40 @@ class Puzzle {
         }
     }
 
+    // Double click: select all cells with the same value as the clicked cell
+    // XXX: support other cell types
+    dblmouseevent(x, y, num, ctrl_key = false) {
+        if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            if (!ctrl_key)
+                this.selection = [];
+
+            let value = this[this.mode.qa].number[num];
+            let remove = this.selection.indexOf(num) !== -1;
+
+            // Normal sudoku values
+            if (value && value[2] == "1") {
+                let n = value[0];
+
+                for (let qa of ["pu_q", "pu_a"]) {
+                    let puzzle = this[qa];
+
+                    for (let c of this.centerlist) {
+                        if (puzzle.number[c] && puzzle.number[c][0] == n &&
+                                puzzle.number[c][2] == "1") {
+                            if (remove) {
+                                var index = this.selection.indexOf(c);
+                                if (index !== -1)
+                                    this.selection.splice(index, 1);
+                            } else if (this.selection.indexOf(c) === -1)
+                                this.selection.push(c);
+                        }
+                    }
+                }
+            }
+            this.redraw();
+        }
+    }
+
     //////////////////////////
     // surface
     //////////////////////////

@@ -111,7 +111,7 @@ onload = function() {
 
     function onDown(e) {
         if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
-            if (e.type === "mousedown") {
+            if (e.type === "mousedown" || e.type === "dblclick") {
                 var event = e;
             } else {
                 var event = e.changedTouches[0];
@@ -127,7 +127,11 @@ onload = function() {
                 num = obj.num;
             let skip_mouseevent = restrict_mouse(num);
             if (pu.point[num].use === 1 && !skip_mouseevent) {
-                if (event.button === 2) { // right click
+                if (e.type === "dblclick") {
+                    pu.mouse_mode = "down_left";
+                    pu.mouse_click = 0;
+                    pu.dblmouseevent(x, y, num, isCtrlKeyHeld(e) || isShiftKeyHeld(e));
+                } else if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
                     pu.mouse_click_last = 2;
@@ -1919,6 +1923,18 @@ onload = function() {
         }
         lines.push(currentLine);
         return lines;
+    }
+
+    // Double click to select all of a certain element
+    document.addEventListener("dblclick", window_dblclick, { passive: false });
+    function window_dblclick(e) {
+        if (e.target.id === "canvas") {
+            document.getElementById("inputtext").blur(); // Remove focus from text box
+            onDown(e);
+            if (checkms === 0) {
+                e.preventDefault();
+            }
+        }
     }
 
     //panel(drag_window)
