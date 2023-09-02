@@ -1850,7 +1850,7 @@ function saveimage_window() {
 }
 
 function betaPhaseMessage() {
-    return `<span>LMI Expo is in beta phase.<br/>Please report any bugs/suggestions <a target="_blank" href="/forum/forums/thread-view.asp?tid=3295">in the forum</a>.</span>`;
+    return `<span><small>Please report any bugs/suggestions <a target="_blank" href="/forum/forums/thread-view.asp?tid=3295">in the forum</a>.</small></span>`;
 }
 
 function savetextPrecheck() {
