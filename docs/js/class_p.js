@@ -12666,20 +12666,28 @@ class Puzzle {
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             if (this.mode[this.mode.qa].edit_mode === "number" && (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9")) {
-                this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
+                if (this.cursolS) {
+                    this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
+                } else {
+                    this.default_cursol();
+                }
             } else if (UserSettings.draw_edges) {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.point[this.point[this.cursol].surround[0]].x, this.point[this.point[this.cursol].surround[0]].y);
-                for (var j = 1; j < this.point[this.cursol].surround.length; j++) {
-                    this.ctx.lineTo(this.point[this.point[this.cursol].surround[j]].x, this.point[this.point[this.cursol].surround[j]].y);
-                }
-                this.ctx.closePath();
-                this.ctx.stroke();
-                this.ctx.fill();
+                this.default_cursol();
             }
         }
+    }
+
+    default_cursol() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.point[this.point[this.cursol].surround[0]].x, this.point[this.point[this.cursol].surround[0]].y);
+        for (var j = 1; j < this.point[this.cursol].surround.length; j++) {
+            this.ctx.lineTo(this.point[this.point[this.cursol].surround[j]].x, this.point[this.point[this.cursol].surround[j]].y);
+        }
+        this.ctx.closePath();
+        this.ctx.stroke();
+        this.ctx.fill();
     }
 
     draw_conflicts() {
