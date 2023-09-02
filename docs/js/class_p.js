@@ -8205,7 +8205,6 @@ class Puzzle {
             if (timestamp > this.replaycutoff) {
                 timestamp = null;
             }
-
             if ((arr === "thermo" || arr === "nobulbthermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "killercages") && num === -1) {
                 this.pu_a.command_replay.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
                 this.pu_a_col.command_replay.push([arr, num, null, this.mode.qa + "_col", groupcounter]);
@@ -8222,13 +8221,13 @@ class Puzzle {
                 }
             } else {
                 if (this.pu_a[arr][num]) {
-                    this.pu_a.command_replay.push([arr, num, this.pu_a[arr][num], this.mode.qa, groupcounter, timestamp]); // Array is also recorded in JSON
+                    this.pu_a.command_replay.push([arr, num, structuredClone(this.pu_a[arr][num]), this.mode.qa, groupcounter, timestamp]); // Array is also recorded in JSON
                     if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
                         (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
                             arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
-                        this.pu_a_col.command_replay.push([arr, num, this.pu_a_col[arr][num], this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        this.pu_a_col.command_replay.push([arr, num, structuredClone(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     } else {
-                        this.pu_a_col.command_replay.push([arr, num, this.pu_a[arr][num], this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
+                        this.pu_a_col.command_replay.push([arr, num, structuredClone(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     }
                 } else {
                     this.pu_a.command_replay.push([arr, num, null, this.mode.qa, groupcounter, timestamp]);
