@@ -266,7 +266,7 @@ onload = function() {
         "inputtext": 1,
         "select2_search": 1,
         "saveinforules": 1,
-		"saveinfoinfo": 1,
+        "saveinfoinfo": 1,
         "urlstring": 1
     };
 
