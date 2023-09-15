@@ -73,6 +73,8 @@ class Puzzle {
         this.drawing_mode = -1;
         this.cursol = 0;
         this.cursolS = 0;
+        this.old_selection = null;
+        this.rect_select_base = null;
         this.select_remove = false;
         this.panelflag = false;
         // Drawing mode
@@ -7911,7 +7913,29 @@ class Puzzle {
         return num;
     }
 
-    mouseevent(x, y, num, ctrl_key = false) {
+    handle_rect_mousedown(e, ctrl, num, obj) {
+        this.rect_surface_draw = false;
+
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+
+        const modes = ['sudoku', 'number'];
+
+        // Check if this is the start of an alt-drag rectangular selection event
+        if (isAltKeyHeld(e) && this.grid_is_square() && modes.includes(edit_mode)) {
+            if (!isShiftKeyHeld(e))
+                this.selection = [];
+
+            // Remember the first cell clicked for rectangular selection, as well as the
+            // old selection so we can easily combine them
+            this.rect_select_base = obj.index;
+            this.old_selection = this.selection;
+        } else {
+            this.rect_select_base = null;
+            this.old_selection = [];
+        }
+    }
+
+    mouseevent(x, y, num, ctrl_key = false, e = null, obj = null) {
         if (!pu.replay) {
             num = this.recalculate_num(x, y, num); //for uniform tiling
             let edit_mode = this.mode[this.mode.qa].edit_mode;
@@ -7924,6 +7948,10 @@ class Puzzle {
                 this.mouse_click = 2;
                 this.mouse_click_last = 2;
             }
+
+            // Deal with starting a rectangular selection
+            if (e !== null && (this.mouse_mode === "down_left" || this.mouse_mode === "down_right"))
+                this.handle_rect_mousedown(e, ctrl_key, num, obj);
 
             switch (edit_mode) {
                 case "surface":

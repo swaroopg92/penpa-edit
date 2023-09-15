@@ -144,12 +144,12 @@ onload = function() {
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
                     pu.mouse_click_last = 2;
-                    pu.mouseevent(x, y, num, ctrl);
+                    pu.mouseevent(x, y, num, ctrl, e, obj);
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
                     pu.mouse_click_last = 1;
-                    pu.mouseevent(x, y, num, ctrl);
+                    pu.mouseevent(x, y, num, ctrl, e, obj);
                 }
             }
         }
@@ -218,10 +218,32 @@ onload = function() {
             let skip_mouseevent = restrict_mouse(num);
             if (skip_mouseevent) {
                 onOut();
-            }
-            if (pu.point[num].use === 1 && !skip_mouseevent) {
-                pu.mouse_mode = "move";
-                pu.mouseevent(x, y, num);
+            } else if (pu.point[num].use === 1) {
+                // Handle alt+drag for rectangular selection
+                if (event.buttons > 0 && pu.rect_select_base !== null) {
+                    pu.selection = pu.old_selection.slice();
+                    let [nx, ny, _] = obj.index;
+                    let [ox, oy, __] = pu.rect_select_base;
+                    let [left, right] = [Math.min(nx, ox), Math.max(nx, ox)];
+                    let [top, bottom] = [Math.min(ny, oy), Math.max(ny, oy)];
+                    for (let xx = left; xx <= right; xx++) {
+                        for (let yy = top; yy <= bottom; yy++) {
+                            let n = (pu.nx0) * yy + xx;
+                            if (pu.point[n].use) {
+                                let index = pu.selection.indexOf(n);
+                                if (pu.select_remove) {
+                                    if (index !== -1)
+                                        pu.selection.splice(index, 1);
+                                } else if (index === -1)
+                                    pu.selection.push(n);
+                            }
+                        }
+                    }
+                    pu.redraw();
+                } else {
+                    pu.mouse_mode = "move";
+                    pu.mouseevent(x, y, num);
+                }
             }
         }
     }
@@ -912,6 +934,7 @@ onload = function() {
         obj.x = x;
         obj.y = y;
         obj.num = num;
+        obj.index = pu.point[num].index;
         return obj;
     }
 
