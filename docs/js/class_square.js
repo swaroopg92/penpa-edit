@@ -181,8 +181,9 @@ class Puzzle_square extends Puzzle {
 
     type_set() {
         var type
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
         let submode = this.mode[this.mode.qa][edit_mode][0];
-        switch (this.mode[this.mode.qa].edit_mode) {
+        switch (edit_mode) {
             case "surface":
             case "board":
                 type = [0];
@@ -443,7 +444,7 @@ class Puzzle_square extends Puzzle {
                 if (!this.selection.includes(this.cursol)) {
                     this.selection.push(this.cursol);
                 }
-            } else if (edit_mode === "sudoku") {
+            } else if (edit_mode === "sudoku" || (edit_mode === "number" && this.number_multi_enabled())) {
                 if (this.selection.length >= 1) {
                     var current_cursor = this.cursol;
                     switch (c) {

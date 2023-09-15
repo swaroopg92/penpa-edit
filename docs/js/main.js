@@ -117,7 +117,9 @@ onload = function() {
                 var event = e.changedTouches[0];
                 e.preventDefault(); // When both mouse and touch start, only touch
             }
-            if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
+            if (ondown_key === "mousedown" && event.button !== 2 &&
+                pu.mode[pu.mode.qa].edit_mode !== "number" &&
+                pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -147,6 +149,7 @@ onload = function() {
     }
 
     function onUp(e) {
+        let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mouseup") {
                 var event = e;
@@ -154,9 +157,10 @@ onload = function() {
                 var event = e.changedTouches[0];
                 e.preventDefault(); // When both mouse and touch start, only touch
             }
-            if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") && // to handle mobile/ipad users for up events for certain modes
-                (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) {
+            // to handle mobile/ipad users for up events for certain modes
+            if (ondown_key === "mousedown" && (edit_mode === "sudoku" || edit_mode === "number" ||
+                (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                    pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -177,6 +181,7 @@ onload = function() {
     }
 
     function onMove(e) {
+        let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.buttons !== 4) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousemove") {
                 var event = e;
@@ -187,12 +192,13 @@ onload = function() {
             if (event.buttons === 2) { // Right click and moving
                 pu.mouse_click = 2;
                 var obj = coord_point(event, 'flex');
-            } else if ((ondown_key === "touchstart" || event.buttons === 1) && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click/Ipad and moving in Sudoku Mode
+            } else if ((ondown_key === "touchstart" || event.buttons === 1) && 
+                (edit_mode === "sudoku" || edit_mode === "number")) { // Left click/Ipad and moving in Sudoku Mode
                 pu.mouse_click = 0;
                 var obj = coord_point(event, 'flex');
             } else {
-                if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                        pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
+                if (((edit_mode === "combi") && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                        pu.mode[pu.mode.qa][edit_mode][0] === "akari"))) {
                     var obj = coord_point(event, 'flex');
                 } else {
                     var obj = coord_point(event);
@@ -870,35 +876,25 @@ onload = function() {
         var y = e.pageY - canvas.offsetTop;
         var min0, min = 10e6;
         var num = 0;
-        let type;
         var improve_modes = ["star", "yajilin", "mines", "doublemines", "akari"];
+        let edit_mode = pu.mode[pu.mode.qa].edit_mode;
+
+        let type = pu.type;
 
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
-                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
-                type = pu.type;
-                pu.type = [0];
-            }
+            if ((edit_mode === "combi" && improve_modes.includes(pu.mode[pu.mode.qa][edit_mode][0])) ||
+                    edit_mode === "sudoku" || edit_mode === "number")
+                type = [0];
         }
 
         for (var i = 0; i < pu.point.length; i++) {
-            if (pu.point[i] && pu.type.indexOf(pu.point[i].type) != -1) {
+            if (pu.point[i] && type.indexOf(pu.point[i].type) != -1) {
                 min0 = (x - pu.point[i].x) ** 2 + (y - pu.point[i].y) ** 2;
                 if (min0 < min) {
                     min = min0;
                     num = i;
                 }
-            }
-        }
-
-        // resetting the type for starbattle composite mode
-        if (fittype === 'flex') {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
-                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
-                pu.type = type;
             }
         }
 

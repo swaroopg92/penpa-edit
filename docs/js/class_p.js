@@ -1302,6 +1302,12 @@ class Puzzle {
         this.redraw();
     }
 
+    number_multi_enabled() {
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+        let submode = this.mode[this.mode.qa][edit_mode][0];
+        return (edit_mode === "number" && !["2"].includes(submode));
+    }
+
     submode_check(name) {
         if (document.getElementById(name)) {
             document.getElementById(name).checked = true;
@@ -7086,185 +7092,150 @@ class Puzzle {
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
         if (this.mode[this.mode.qa].edit_mode === "number") {
-            switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
-                case "1":
-                    // If the there are corner or sides present then get rid of them
-                    // Only in Answer mode
-                    if (this.mode.qa === "pu_a") {
-                        var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                        var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
+            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode];
+            if (this.selection.length === 1) {
+                let clean_flag = this.check_neighbors(this.selection[0]);
+                if (!clean_flag) {
+                    this.undoredo_counter = 0;
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+            } else {
+                this.undoredo_counter = this.undoredo_counter + 1;
+            }
+            let cells = null;
+            if (this.number_multi_enabled())
+                cells = this.selection; 
+            else
+                cells = [this.cursol];
+            for (var k of cells) {
+                switch (submode[0]) {
+                    case "1":
+                        // If the there are corner or sides present then get rid of them
+                        // Only in Answer mode
+                        if (this.mode.qa === "pu_a") {
+                            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                        for (var j = 0; j < 4; j++) {
-                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                this.record("numberS", corner_cursor + j);
-                                delete this[this.mode.qa].numberS[corner_cursor + j];
-                                this.record_replay("numberS", corner_cursor + j);
-                            }
+                            for (var j = 0; j < 4; j++)
+                                if (this[this.mode.qa].numberS[corner_cursor + j])
+                                    this.remove_value("numberS", corner_cursor + j);
+
+                            for (var j = 0; j < 4; j++)
+                                if (this[this.mode.qa].numberS[side_cursor + j])
+                                    this.remove_value("numberS", side_cursor + j);
                         }
 
-                        for (var j = 0; j < 4; j++) {
-                            if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                this.record("numberS", side_cursor + j);
-                                delete this[this.mode.qa].numberS[side_cursor + j];
-                                this.record_replay("numberS", side_cursor + j);
+                        if (str_num.indexOf(key) != -1 && this[this.mode.qa].number[k]) {
+                            con = parseInt(this[this.mode.qa].number[k][0], 10); // Convert to number
+                            if (con >= 1 && con <= 9 && this[this.mode.qa].number[k][2] != "7") { // If already 1-9 exist, go to 2nd digit
+                                number = con.toString() + key;
+                            } else {
+                                // It enters here when the cell already contains 2 digits.
+                                number = key;
                             }
-                        }
-                    }
-
-                    this.record("number", this.cursol);
-                    if (str_num.indexOf(key) != -1 && this[this.mode.qa].number[this.cursol]) {
-                        con = parseInt(this[this.mode.qa].number[this.cursol][0], 10); // Convert to number
-                        if (con >= 1 && con <= 9 && this[this.mode.qa].number[this.cursol][2] != "7") { // If already 1-9 exist, go to 2nd digit
-                            number = con.toString() + key;
                         } else {
-                            // It enters here when the cell already contains 2 digits.
+                            // It enters for first entry in a cell and then for alphabets or special characters i.e. non numbers
                             number = key;
                         }
-                    } else {
-                        // It enters for first entry in a cell and then for alphabets or special characters i.e. non numbers
-                        number = key;
-                    }
-                    this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                    this.record_replay("number", this.cursol);
-                    break;
-                case "2": // Arrow
-                    this.record("number", this.cursol);
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
-                    }
-                    if (con.slice(-2, -1) === "_") {
-                        conA = parseInt(con.slice(0, -2), 10);
-                        arrow = con.slice(-2);
-                    } else {
-                        conA = parseInt(con, 10);
-                        arrow = "";
-                    }
-                    if (str_num.indexOf(key) != -1) {
-                        if (conA >= 1 && conA <= 9) { // If 1 to 9 got to the second digit
-                            number = conA.toString() + key;
-                        } else {
-                            number = key;
-                        }
-                    } else {
-                        number = key;
-                    }
-                    this[this.mode.qa].number[this.cursol] = [number + arrow, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                    this.record_replay("number", this.cursol);
-                    break;
-                case "3": // 1/4, corner
-                case "9": // Sides
-                    this.record("numberS", this.cursolS);
-                    if (this[this.mode.qa].numberS[this.cursolS]) {
-                        con = this[this.mode.qa].numberS[this.cursolS][0];
-                    } else {
-                        con = "";
-                    }
-                    number = con + key;
-                    this[this.mode.qa].numberS[this.cursolS] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                    this.record_replay("numberS", this.cursolS);
-                    break;
-                case "4": //tapa
-                    if (key === ".") { key = " "; }
-                    this.record("number", this.cursol);
-                    if (this[this.mode.qa].number[this.cursol]) {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                        mode = this[this.mode.qa].number[this.cursol][2];
-                    } else {
-                        con = "";
-                        mode = "";
-                    }
-                    let con_expand = [...con];
-                    if (mode != 2 && mode != 7) { // If not arrow mode
-                        if (con_expand.length >= 0 && con_expand.length <= 3) { // Max 4 values
-                            number = con + key;
-                        } else {
-                            number = con; // Don't update if more than 4 values
-                        }
-                    } else { // Overwrite if arrow
-                        number = key;
-                    }
-                    this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                    this.record_replay("number", this.cursol);
-                    break;
-                case "5": // Small
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
-                    }
-                    if (con.length < 10) {
-                        this.record("number", this.cursol);
-                        number = con + key;
-                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                        this.record_replay("number", this.cursol);
-                    }
-                    break;
-                case "6": // Medium
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
-                    }
-                    if (con.length < 10) {
-                        this.record("number", this.cursol);
-                        number = con + key;
-                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                        this.record_replay("number", this.cursol);
-                    }
-                    break;
-                case "10": //big
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
-                    }
-                    if (con.length < 10) {
-                        this.record("number", this.cursol);
-                        number = con + key;
-                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                        this.record_replay("number", this.cursol);
-                    }
-                    break;
-                case "7": // Candidates
-                    if (str_num_no0.indexOf(key) != -1) {
-                        this.record("number", this.cursol);
-                        if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] === "7") {
-                            con = this[this.mode.qa].number[this.cursol][0];
+
+                        this.set_value("number", k, [number, submode[1], submode[0]]);
+                        break;
+                    case "2": // Arrow
+                        if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] != "7") {
+                            con = this[this.mode.qa].number[k][0];
                         } else {
                             con = "";
                         }
-                        number = this.onofftext(9, key, con);
-                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                        this.record_replay("number", this.cursol);
-                    }
-                    break;
-                case "8": // Long
-                    if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != "2" && this[this.mode.qa].number[this.cursol][2] != "7") {
-                        con = this[this.mode.qa].number[this.cursol][0];
-                    } else {
-                        con = "";
-                    }
-                    if (con.length < 50) {
-                        this.record("number", this.cursol);
+                        if (con.slice(-2, -1) === "_") {
+                            conA = parseInt(con.slice(0, -2), 10);
+                            arrow = con.slice(-2);
+                        } else {
+                            conA = parseInt(con, 10);
+                            arrow = "";
+                        }
+                        if (str_num.indexOf(key) != -1) {
+                            if (conA >= 1 && conA <= 9) { // If 1 to 9 got to the second digit
+                                number = conA.toString() + key;
+                            } else {
+                                number = key;
+                            }
+                        } else {
+                            number = key;
+                        }
+                        this.set_value("number", k, [number + arrow, submode[1], submode[0]]);
+                        break;
+                    case "3": // 1/4, corner
+                    case "9": // Sides
+                        if (this[this.mode.qa].numberS[k]) {
+                            con = this[this.mode.qa].numberS[k][0];
+                        } else {
+                            con = "";
+                        }
                         number = con + key;
-                        this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                        this.record_replay("number", this.cursol);
-                    }
-                    break;
-                case "11": // Killer Sum
-                    var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                    this.record("numberS", corner_cursor);
-                    if (this[this.mode.qa].numberS[corner_cursor]) {
-                        con = " " + this[this.mode.qa].numberS[corner_cursor][0];
-                    } else {
-                        con = "";
-                    }
-                    number = con + key;
-                    this[this.mode.qa].numberS[corner_cursor] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                    this.record_replay("numberS", corner_cursor);
-                    break;
+                        this.set_value("numberS", k, [number, submode[1]]);
+                        break;
+                    case "4": //tapa
+                        if (key === ".") { key = " "; }
+                        if (this[this.mode.qa].number[k]) {
+                            con = this[this.mode.qa].number[k][0];
+                            mode = this[this.mode.qa].number[k][2];
+                        } else {
+                            con = "";
+                            mode = "";
+                        }
+                        let con_expand = [...con];
+                        if (mode != 2 && mode != 7) { // If not arrow mode
+                            if (con_expand.length >= 0 && con_expand.length <= 3) { // Max 4 values
+                                number = con + key;
+                            } else {
+                                number = con; // Don't update if more than 4 values
+                            }
+                        } else { // Overwrite if arrow
+                            number = key;
+                        }
+                        this.set_value("number", k, [number, submode[1], submode[0]]);
+                        break;
+                    case "5": // Small
+                    case "6": // Medium
+                    case "10": //big
+                    case "8": // Long
+                        if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] != "2" && this[this.mode.qa].number[k][2] != "7") {
+                            con = this[this.mode.qa].number[k][0];
+                        } else {
+                            con = "";
+                        }
+                        // Length limit of 10 except for Long submode which has 50
+                        const limit = (submode[0] === "8") ? 50 : 10;
+                        if (con.length < limit) {
+                            number = con + key;
+                            this.set_value("number", k, [number, submode[1], submode[0]]);
+                        }
+                        break;
+
+                    case "7": // Candidates
+                        if (str_num_no0.indexOf(key) != -1) {
+                            if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === "7") {
+                                con = this[this.mode.qa].number[k][0];
+                            } else {
+                                con = "";
+                            }
+                            number = this.onofftext(9, key, con);
+                            this.set_value("number", k, [number, submode[1], submode[0]]);
+                        }
+                        break;
+
+                    case "11": // Killer Sum
+                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                        if (this[this.mode.qa].numberS[corner_cursor]) {
+                            con = " " + this[this.mode.qa].numberS[corner_cursor][0];
+                        } else {
+                            con = "";
+                        }
+                        number = con + key;
+                        this.set_value("numberS", corner_cursor, [number, submode[1]]);
+                        break;
+                }
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             if (str_num.indexOf(key) != -1) {
@@ -7857,53 +7828,74 @@ class Puzzle {
     key_backspace() {
         var number;
         if (this.mode[this.mode.qa].edit_mode === "number") {
-            if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") { // 1/4 and side
-                if (this[this.mode.qa].numberS[this.cursolS]) {
-                    this.record("numberS", this.cursolS);
-                    number = this[this.mode.qa].numberS[this.cursolS][0].slice(0, -1);
-                    if (number) {
-                        this[this.mode.qa].numberS[this.cursolS][0] = number;
+            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
+            if (this.selection.length > 0) {
+                if (this.selection.length === 1) {
+                    let clean_flag = this.check_neighbors(this.selection[0]);
+                    if (!clean_flag) {
+                        this.undoredo_counter = 0;
                     } else {
-                        delete this[this.mode.qa].numberS[this.cursolS];
+                        this.undoredo_counter = this.undoredo_counter + 1;
                     }
-                    this.record_replay("numberS", this.cursolS);
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
                 }
-            } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "11") {
-                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                if (this[this.mode.qa].numberS[corner_cursor]) {
-                    this.record("numberS", corner_cursor);
-                    number = this[this.mode.qa].numberS[corner_cursor][0].slice(1, -1);
-                    if (number) {
-                        this[this.mode.qa].numberS[corner_cursor][0] = number;
-                    } else {
-                        delete this[this.mode.qa].numberS[corner_cursor];
-                    }
-                    this.record_replay("numberS", corner_cursor);
-                }
-            } else {
-                if (this[this.mode.qa].number[this.cursol] && this[this.mode.qa].number[this.cursol][2] != 7) {
-                    this.record("number", this.cursol);
-                    number = this[this.mode.qa].number[this.cursol][0];
-                    if (number) {
-                        if (this[this.mode.qa].number[this.cursol][2] === "2") {
-                            if (number.slice(-2, -1) === "_") {
-                                number = number.slice(0, -2).slice(0, -1) + number.slice(-2);
+                let cells = null;
+                if (this.number_multi_enabled())
+                    cells = this.selection; 
+                else
+                    cells = [this.cursol];
+
+                for (var k of cells) {
+                    if (submode === "3" || submode === "9") { // 1/4 and side
+                        if (this[this.mode.qa].numberS[k]) {
+                            this.record("numberS", k, this.undoredo_counter);
+                            number = this[this.mode.qa].numberS[k][0].slice(0, -1);
+                            if (number) {
+                                this[this.mode.qa].numberS[k][0] = number;
                             } else {
-                                number = number.slice(0, -1);
+                                delete this[this.mode.qa].numberS[k];
                             }
-                        } else {
-                            number = number.slice(0, -1);
+                            this.record_replay("numberS", k, this.undoredo_counter);
                         }
-                        if (number ||
-                            this[this.mode.qa].number[this.cursol][1] === 6 ||
-                            this[this.mode.qa].number[this.cursol][1] === 7 ||
-                            this[this.mode.qa].number[this.cursol][1] === 11) {
-                            this[this.mode.qa].number[this.cursol][0] = number;
-                        } else {
-                            delete this[this.mode.qa].number[this.cursol];
+                    } else if (submode === "11") {
+                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                        if (this[this.mode.qa].numberS[corner_cursor]) {
+                            this.record("numberS", corner_cursor, this.undoredo_counter);
+                            number = this[this.mode.qa].numberS[corner_cursor][0].slice(1, -1);
+                            if (number) {
+                                this[this.mode.qa].numberS[corner_cursor][0] = number;
+                            } else {
+                                delete this[this.mode.qa].numberS[corner_cursor];
+                            }
+                            this.record_replay("numberS", corner_cursor, this.undoredo_counter);
+                        }
+                    } else {
+                        if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] != 7) {
+                            this.record("number", k, this.undoredo_counter);
+                            number = this[this.mode.qa].number[k][0];
+                            if (number) {
+                                if (this[this.mode.qa].number[k][2] === "2") {
+                                    if (number.slice(-2, -1) === "_") {
+                                        number = number.slice(0, -2).slice(0, -1) + number.slice(-2);
+                                    } else {
+                                        number = number.slice(0, -1);
+                                    }
+                                } else {
+                                    number = number.slice(0, -1);
+                                }
+                                if (number ||
+                                    this[this.mode.qa].number[k][1] === 6 ||
+                                    this[this.mode.qa].number[k][1] === 7 ||
+                                    this[this.mode.qa].number[k][1] === 11) {
+                                    this[this.mode.qa].number[k][0] = number;
+                                } else {
+                                    delete this[this.mode.qa].number[k];
+                                }
+                            }
+                            this.record_replay("number", k, this.undoredo_counter);
                         }
                     }
-                    this.record_replay("number", this.cursol);
                 }
             }
         }
@@ -7948,12 +7940,12 @@ class Puzzle {
                     this.mouse_wall(x, y, num);
                     break;
                 case "number":
-                    let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
-                    if (submode === "3" || submode === "9") {
-                        this.mouse_numberS(x, y, num, submode);
-                    } else {
-                        this.mouse_number(x, y, num);
-                    }
+                    // Multi-selection mode: treat this just like sudoku mode if we're in
+                    // a submode that can work with multiple cells
+                    if (this.number_multi_enabled())
+                        this.mouse_sudoku(x, y, num, ctrl_key);
+                    else
+                        this.mouse_number(x, y, num, ctrl_key);
                     if (pu.mouse_mode === "down_left") {
                         let isNumberS = ["3", "9", "11"].includes(submode)
                         let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
@@ -8659,26 +8651,6 @@ class Puzzle {
         }
     }
 
-    mouse_numberS(x, y, num, submode) {
-        if (this.mouse_mode === "down_left") {
-            this.cursolS = num;
-
-            // Remember cursol
-            if (this.grid_is_square()) {
-                if (submode === "3") {
-                    this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
-                } else if (submode === "9") {
-                    this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
-                }
-            }
-            this.redraw();
-        } else if (this.mouse_mode === "down_right") {
-            this.cursolS = num;
-            this.redraw();
-        }
-    }
-
-
     mouse_sudoku(x, y, num, ctrl_key = false) {
         // if (this.point[num].type === 0) {}  // Add this line, to ignore corners and allow diagonal selection, and set type = [0, 1]
         if (this.mouse_mode === "down_left") {
@@ -8705,12 +8677,12 @@ class Puzzle {
             this.redraw();
         } else if (this.mouse_mode === "move") {
             // if the first selected position is edge then do not consider move
-            if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
+            if (this.cursol && this.cursol >= this.nx0 * this.ny0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
                 this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
                 this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
                 // do nothing
-            } else if (!this.selection.includes(num) & this.drawing) {
+            } else if (!this.selection.includes(num) && this.drawing) {
                 this.selection.push(num);
             }
             this.redraw();
@@ -12008,20 +11980,14 @@ class Puzzle {
     draw_cursol() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         /*cursol*/
-        if (edit_mode === "number" || edit_mode === "symbol") {
+        if ((edit_mode === "number" && !this.number_multi_enabled()) || edit_mode === "symbol") {
             set_line_style(this.ctx, 99);
             if (edit_mode === "symbol" && UserSettings.panel_shown && !pu.onoff_symbolmode_list[pu.mode[this.mode.qa].symbol[0]]) {
                 this.ctx.strokeStyle = Color.BLUE_DARK_VERY;
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             let submode = this.mode[this.mode.qa][edit_mode][0];
-            if (edit_mode === "number" && (submode === "3" || submode === "9")) {
-                if (this.cursolS) {
-                    this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
-                } else {
-                    this.default_cursol();
-                }
-            } else if (UserSettings.draw_edges) {
+            if (UserSettings.draw_edges) {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.default_cursol();
@@ -12058,7 +12024,7 @@ class Puzzle {
 
     draw_selection() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
-        if (edit_mode === "sudoku" ||
+        if (edit_mode === "sudoku" || this.number_multi_enabled() ||
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
             // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
             // since we dont want single cell highlighed while in killer submode
