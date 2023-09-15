@@ -7514,12 +7514,19 @@ class Puzzle {
                         } else {
                             this.undoredo_counter = this.undoredo_counter + 1;
                         }
+                        // First step: go through all cells in the selection that don't have a main single digit, and
+                        // collect the digits that are in the center of each
+                        let cells = [];
                         for (var k of this.selection) {
                             var con = "";
-                            if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" && pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0]))) ||
-                                this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
-                                var single_digit = true;
-                            } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
+                            // if single digit is present, dont modify that cell
+                            if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
+                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
+                                continue;
+                            if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1")
+                                continue;
+
+                            if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
                                 // This is for single digit obtained from candidate submode
                                 var sum = 0;
                                 for (var j = 0; j < 10; j++) {
@@ -7528,11 +7535,9 @@ class Puzzle {
                                         con += (j + 1).toString();
                                     }
                                 }
-                                if (sum === 1) {
-                                    var single_digit = true;
-                                } else {
-                                    var single_digit = false;
-                                }
+                                // Single candidate: skip
+                                if (sum === 1)
+                                    continue;
                             } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
                                 // This is for digits obtained from candidate submode
                                 var sum = 0;
@@ -7542,57 +7547,58 @@ class Puzzle {
                                         con += (j + 1).toString();
                                     }
                                 }
-                                if (sum === 1) {
-                                    var single_digit = true;
-                                } else {
-                                    var single_digit = false;
+                                // Single candidate: skip
+                                if (sum === 1)
+                                    continue;
+                            } else {
+                                if (this["pu_q"].number[k])
+                                    con = this["pu_q"].number[k][0];
+                                else if (this["pu_a"].number[k])
+                                    con = this["pu_a"].number[k][0];
+                            }
+
+                            cells.push([k, con]);
+                        }
+
+                        // Second step: check if the new digit is present in all the cells. If so, we remove the digit, otherwise
+                        // we add it to all the cells that don't have it yet
+                        let remove = cells.map(([k, con]) => con).every(con => con && con.indexOf(key) !== -1);
+
+                        // Third step: actually add or remove the new digit
+                        for (var [k, con] of cells) {
+                            number = "";
+                            this.record("number", k, this.undoredo_counter);
+
+                            // Check if we're removing, or if not, if the digit isn't already there
+                            if (remove)
+                                number = con.split("").filter(c => c !== key);
+                            else if (con.indexOf(key) === -1)
+                                number = (con + key).split("");
+                            else
+                                continue;
+
+                            number = number.sort().join("");
+
+                            // if number empty then delete the entry
+                            if (number !== "") {
+                                // S submode is 5, M submode is 6
+                                // dynamic (i.e. upto 5 digits larger size and then smaller size)
+                                if (UserSettings.sudoku_centre_size === 1) {
+                                    if (number.length > 5) {
+                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
+                                    } else {
+                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                    }
+                                } else if (UserSettings.sudoku_centre_size === 2) { // all large
+                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
+                                } else if (UserSettings.sudoku_centre_size === 3) { // all small
+                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                 }
                             } else {
-                                var single_digit = false;
+                                delete this[this.mode.qa].number[k];
                             }
-                            if (!single_digit) {
-                                number = "";
-                                if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] != "2" && this[this.mode.qa].number[k][2] != "7") {
-                                    if (con.length === 0) {
-                                        con = this[this.mode.qa].number[k][0];
-                                    }
-                                    if (con.indexOf(key) != -1) {
-                                        con = con.split("").sort();
-                                        for (var m of con) {
-                                            if (m != key) {
-                                                number += m;
-                                            }
-                                        }
-                                    } else {
-                                        number = con + key;
-                                        number = number.split("").sort().join("");
-                                    }
-                                } else {
-                                    number += key;
-                                }
-                                this.record("number", k, this.undoredo_counter);
 
-                                // if number empty then delete the entry
-                                if (number !== "") {
-                                    // S submode is 5, M submode is 6
-                                    // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                    if (UserSettings.sudoku_centre_size === 1) {
-                                        if (number.length > 5) {
-                                            this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
-                                        } else {
-                                            this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                        }
-                                    } else if (UserSettings.sudoku_centre_size === 2) { // all large
-                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                    } else if (UserSettings.sudoku_centre_size === 3) { // all small
-                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
-                                    }
-                                } else {
-                                    delete this[this.mode.qa].number[k];
-                                }
-
-                                this.record_replay("number", k, this.undoredo_counter);
-                            }
+                            this.record_replay("number", k, this.undoredo_counter);
                         }
                     }
                     break;
