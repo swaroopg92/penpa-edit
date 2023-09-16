@@ -11907,10 +11907,10 @@ class Puzzle {
                 delete this[this.mode.qa].symbol[num];
                 this.record_replay("symbol", num);
             }
-            this.drawing_mode = -1;
-            this.last = -1;
             this.redraw();
         }
+        this.drawing_mode = -1; // always exit drawing mode
+        this.last = -1;
     }
 
     get_neighbors(num, options = 'all') {
