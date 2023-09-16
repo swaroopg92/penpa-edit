@@ -11823,41 +11823,41 @@ class Puzzle {
                     this.redraw();
                 }
             } else if (this.drawing_mode === 4) {
-                if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 7)) {
+                if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 7) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [7, "battleship_B", 2];
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
             } else if (this.drawing_mode === 3) {
-                if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 8)) {
+                if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 8) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [8, "battleship_B", 2];
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
             } else if (this.drawing_mode === 2) {
-                if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 7)) {
+                if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 7) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [7, "battleship_B", 2];
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
             } else if (this.drawing_mode === 1) {
-                var battleshipdirection;
-                if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
-                    battleshipdirection = this.direction_battleship4(x, y, this.lastx, this.lasty);
-                } else {
+                if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 < (0.3 * this.size) ** 2) {
                     return;
                 }
+                var battleshipdirection = this.direction_battleship4(x, y, this.lastx, this.lasty);
                 // battleshipdirection = 1 (left pointing), 0 (up pointing), 3 (right pointing), 2 (down pointing)
                 var a = [6, 5, 4, 3];
-                this.record("symbol", this.last);
-                this[this.mode.qa].symbol[this.last] = [a[battleshipdirection], "battleship_B", 2];
-                this.record_replay("symbol", this.last);
+                if (!this[this.mode.qa].symbol[this.last] || this[this.mode.qa].symbol[this.last][0] !== a[battleshipdirection]) {
+                    this.record("symbol", this.last);
+                    this[this.mode.qa].symbol[this.last] = [a[battleshipdirection], "battleship_B", 2];
+                    this.record_replay("symbol", this.last);
+                    this.redraw();
+                }
                 this.drawing_mode = -1;
                 this.last = -1;
-                this.redraw();
             }
         }
     }
