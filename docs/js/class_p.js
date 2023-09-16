@@ -11822,6 +11822,7 @@ class Puzzle {
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 4) {
                 if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 7) {
                     this.record("symbol", num);
@@ -11829,6 +11830,7 @@ class Puzzle {
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 3) {
                 if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 8) {
                     this.record("symbol", num);
@@ -11836,6 +11838,7 @@ class Puzzle {
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 2) {
                 if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 7) {
                     this.record("symbol", num);
@@ -11843,6 +11846,7 @@ class Puzzle {
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 1) {
                 if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 < (0.3 * this.size) ** 2) {
                     return;
