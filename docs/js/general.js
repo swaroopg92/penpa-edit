@@ -1661,6 +1661,11 @@ function savetext_copy() {
 
     const textarea = document.getElementById("savetextarea");
 
+    textarea.classList.add('copied');
+    setTimeout(() => {
+        textarea.classList.remove('copied');
+    }, 2500);
+
     if (navigator.clipboard) {
         navigator.clipboard.writeText(textarea.value);
     } else {

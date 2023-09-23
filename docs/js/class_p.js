@@ -13135,7 +13135,6 @@ class Puzzle {
         // Sanity check
         if (outputstring.length === size * size) {
             let textarea = document.getElementById("iostring");
-
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(textarea.value);
             } else {
