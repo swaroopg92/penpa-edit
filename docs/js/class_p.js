@@ -2182,12 +2182,13 @@ class Puzzle {
         let puzzleTitleLines = this.splitTextLines(gif_ctx, puzzleTitle, main_c.offsetWidth);
         let puzzleRulesLines = this.splitTextLines(gif_ctx, puzzleRules, main_c.offsetWidth);
         let puzzleAuthor = ('Author: ' + document.getElementById("saveinfoauthor").value).split(",");
+        var puzzletext;
         if (document.getElementById("nb_title1").checked && document.getElementById("nb_rules1").checked) {
-            let puzzletext = puzzleTitleLines.concat(puzzleAuthor.concat(puzzleRulesLines));
+            puzzletext = puzzleTitleLines.concat(puzzleAuthor.concat(puzzleRulesLines));
         } else if (document.getElementById("nb_title1").checked) {
-            let puzzletext = puzzleTitleLines.concat(puzzleAuthor);
+            puzzletext = puzzleTitleLines.concat(puzzleAuthor);
         } else {
-            let puzzletext = puzzleRulesLines;
+            puzzletext = puzzleRulesLines;
         }
 
         let gif_vertical_offset = puzzletext.length * fontLineSize;
