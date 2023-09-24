@@ -1750,25 +1750,6 @@ onload = function() {
                     document.getElementById("replay_message").innerHTML = "Preparing your download";
 
                     setTimeout(function() {
-                        function splitTextLines(ctx, text, maxWidth) {
-                            var words = text.split(" ");
-                            var lines = [];
-                            var currentLine = words[0];
-
-                            for (var i = 1; i < words.length; i++) {
-                                var word = words[i];
-                                var width = ctx.measureText(currentLine + " " + word).width;
-                                if (width < maxWidth) {
-                                    currentLine += " " + word;
-                                } else {
-                                    lines.push(currentLine);
-                                    currentLine = word;
-                                }
-                            }
-                            lines.push(currentLine);
-                            return lines;
-                        }
-
                         //put the title text on the top
                         let main_c = $('#canvas')[0];
                         let main_ctx = main_c.getContext("2d");
@@ -1874,6 +1855,25 @@ onload = function() {
             checkms = 0;
             return;
         }
+    }
+
+    function splitTextLines(ctx, text, maxWidth) {
+        var words = text.split(" ");
+        var lines = [];
+        var currentLine = words[0];
+
+        for (var i = 1; i < words.length; i++) {
+            var word = words[i];
+            var width = ctx.measureText(currentLine + " " + word).width;
+            if (width < maxWidth) {
+                currentLine += " " + word;
+            } else {
+                lines.push(currentLine);
+                currentLine = word;
+            }
+        }
+        lines.push(currentLine);
+        return lines;
     }
 
     //panel(drag_window)

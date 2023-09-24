@@ -1,4 +1,8 @@
 ## History
+* 2023/09/24 ver 3.0.9
+    * New options in Screenshot to include Author and Rules for png and jpeg. svg support not included.
+    * Use new clipboard API when able. (Fixes Copy on iOS.)
+    * Minor bug fixes and code refactoring.
 * 2023/07/28 ver 3.0.8
 	* Updated jquery, sweetalert to latest.
 	* Fixed the bug of correctly deleteing cagearrays.

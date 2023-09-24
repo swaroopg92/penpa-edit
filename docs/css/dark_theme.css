@@ -198,6 +198,31 @@ header,
     color: var(--white);
 }
 
+#modal-save-content textarea,
+#modal-save-content input[type=text] {
+    border: 1px solid var(--greyDark);
+    background: var(--greyDarkVery);
+    color: var(--white);
+}
+
+#modal-save-content button,
+#modal-save-content input[type=button] {
+    border: 1px solid var(--greyDark);
+    background: var(--black);
+    color: var(--white);
+}
+
+#modal-save-content button:hover,
+#modal-save-content input[type=button]:hover {
+    background: var(--greyDarkVery);
+}
+
+.copied {
+    color: var(--greenLightVery) !important;
+    border-color: var(--greenLightVery) !important;
+    background: var(--green) !important;
+}
+
 #save3texttitle,
 #nb_note {
     color: var(--white);
