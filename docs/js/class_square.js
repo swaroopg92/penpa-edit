@@ -1092,6 +1092,12 @@ class Puzzle_square extends Puzzle {
                                             arrowsum_present = true;
                                         }
                                         break;
+                                    case 5:
+                                        // 1 cell sum
+                                        if (this[pu].direction[i][0] == parseInt(shape)) {
+                                            arrowsum_present = true;
+                                        }
+                                        break;
                                 }
                             }
                             if (arrowsum_present) {
@@ -4381,6 +4387,17 @@ class Puzzle_square extends Puzzle {
                 ctx.closePath();
                 ctx.fill();
                 ctx.stroke();
+                break;
+            case 5:
+                ctx.lineWidth = 3;
+                ctx.setLineDash([]);
+                ctx.fillStyle = Color.WHITE;
+                if (ccolor !== "none") {
+                    ctx.strokeStyle = ccolor;
+                } else {
+                    ctx.strokeStyle = Color.GREY_DARK_LIGHT;
+                }
+                this.draw_circle(ctx, x, y, 0.4);
                 break;
         }
     }
