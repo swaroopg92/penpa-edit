@@ -82,10 +82,26 @@
     <!-- Online libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+    <!-- gtag -->
+    <script src="./branding.js"></script>
+    <script type="text/javascript">
+        if (Branding.googleTag) {
+            let script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "https://www.googletagmanager.com/gtag/js?id=" + Branding.googleTag;
+            script.async = true;
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', Branding.googleTag);
+        }
+    </script>
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
-            "./branding.js",
             "./js/settings.js",
             "./js/interface.js",
             "./js/conflicts.js",
