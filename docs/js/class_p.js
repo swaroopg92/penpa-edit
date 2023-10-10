@@ -10563,6 +10563,7 @@ class Puzzle {
                 this.drawing = false;
             }
         }
+        this.redraw();
     }
 
     //////////////////////////
@@ -12709,7 +12710,11 @@ class Puzzle {
         if (((this.mode[this.mode.qa].edit_mode === "line" || this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
             this.ctx.setLineDash([]);
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
-            this.ctx.strokeStyle = Color.BLUE_LIGHT;
+            if (this.drawing && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
+                this.ctx.strokeStyle = Color.RED;
+            } else {
+                this.ctx.strokeStyle = Color.BLUE_LIGHT;
+            }
             this.ctx.lineWidth = 4;
             let i1 = this.freelinecircle_g[0];
             let i2 = this.freelinecircle_g[1];
