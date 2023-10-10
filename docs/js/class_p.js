@@ -12711,15 +12711,16 @@ class Puzzle {
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             this.ctx.strokeStyle = Color.BLUE_LIGHT;
             this.ctx.lineWidth = 4;
-            if (this.freelinecircle_g[0] != -1) {
-                this.draw_circle(this.ctx, this.point[this.freelinecircle_g[0]].x, this.point[this.freelinecircle_g[0]].y, 0.3);
+            let i1 = this.freelinecircle_g[0];
+            let i2 = this.freelinecircle_g[1];
+            if (i1 != -1) {
+                this.draw_circle(this.ctx, this.point[i1].x, this.point[i1].y, 0.3);
             }
-            if (this.freelinecircle_g[1] != -1) {
-                this.draw_circle(this.ctx, this.point[this.freelinecircle_g[1]].x, this.point[this.freelinecircle_g[1]].y, 0.3);
-
-                // Preview the line
-                var i1 = this.freelinecircle_g[0];
-                var i2 = this.freelinecircle_g[1];
+            if (i2 != -1) {
+                this.draw_circle(this.ctx, this.point[i2].x, this.point[i2].y, 0.3);
+            }
+            // Preview the line 
+            if (i1 != -1 && i2 != -1) {
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
                 this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
