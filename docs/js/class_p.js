@@ -12624,12 +12624,18 @@ class Puzzle {
 
 
     redraw(svgcall = false, check_sol = true) {
-        this.flushcanvas(svgcall);
-        panel_pu.draw_panel();
-        this.draw();
-        this.set_redoundocolor();
-        if (check_sol) {
-            this.check_solution();
+        try {
+            this.flushcanvas(svgcall);
+            panel_pu.draw_panel();
+            this.draw();
+            this.set_redoundocolor();
+            if (check_sol) {
+                this.check_solution();
+            }
+        }
+        // don't crash the UI
+        catch (err) {
+            console.error(err);
         }
     }
 
