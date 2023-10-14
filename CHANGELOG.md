@@ -1,7 +1,7 @@
 ## History
 * unreleased
 	* Arrow circle without arrow single cell added to arrowsums option
-	* moved gtag code back to html file as Adblock Ultimate was blocking branding.js file for some users
+	* moved gtag code back to html file as Adblock Ultimate was blocking Identity.js file for some users
 * 2023/09/24 ver 3.0.9
     * New options in Screenshot to include Author and Rules for png and jpeg. svg support not included.
     * Use new clipboard API when able. (Fixes Copy on iOS.)
@@ -16,7 +16,7 @@
 	* Fixed ? in tapa gmpuzzles output text, minor display improvements.
 	* Code cleanup
 	* Improved sudoku string IO to add whitespace suppression option and import non-square text blocks.
-	* Separated branding for easy access in future to other applications.
+	* Separated Identity for easy access in future to other applications.
 * 2023/05/03 ver 3.0.7
 	* Diagonal connection shape for killer cages with rotation fix.
 	* Tweaked display for mobile devices.

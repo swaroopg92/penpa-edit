@@ -10,7 +10,7 @@ Depending on the browser you can update the page without using the cache with "C
 
 ## Referencing and citing content
 You can now site this in your research and publications using:
-[![DOI](https://zenodo.org/badge/270875169.svg)](https://zenodo.org/badge/latestdoi/270875169)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8374111.svg)](https://doi.org/10.5281/zenodo.8374111)
 
 ## Sample Preview of the possibilities of this tool
 ![Sample of Objects](./images/sample1.png "Sample of Options")

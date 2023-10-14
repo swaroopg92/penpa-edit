@@ -1,18 +1,18 @@
 function errorMsg(html) {
     Swal.fire({
-        title: Branding.errorTitle,
+        title: Identity.errorTitle,
         html: html,
         icon: 'error',
-        confirmButtonText: Branding.okButtonText,
+        confirmButtonText: Identity.okButtonText,
     })
 }
 
 function infoMsg(html) {
     Swal.fire({
-        title: Branding.infoTitle,
+        title: Identity.infoTitle,
         html: html,
         icon: 'info',
-        confirmButtonText: Branding.okButtonText,
+        confirmButtonText: Identity.okButtonText,
     })
 }
 
