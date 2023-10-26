@@ -283,19 +283,30 @@ class Panel {
             i = 11;
             this.ctxf.fillRect((i % this.nxf) * (this.sizef + this.spacef), (i / this.nxf | 0) * (this.sizef + this.spacef), this.sizef, this.sizef);
 
-            if (pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) {
-                this.cont = this.makecont(pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]);
+            const symbolname = pu.mode[pu.mode.qa].symbol[0];
+            if (pu.onoff_symbolmode_list[symbolname]) {
+                this.cont = this.makecont(pu.onoff_symbolmode_list[symbolname]);
             } else {
                 this.cont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, " "];
             }
             var size = pu.size;
             pu.size = this.sizef;
+            pu.panel_col = {symbol: {}};
+            if (UserSettings.custom_colors_on) {
+                let cc = pu.get_customcolor();
+                if (cc && !tinycolor.equals(cc, CustomColor.default_symbol_color(symbolname))) {
+                    pu.panel_col.symbol[0] = cc;
+                }
+            }
             for (var i = 0; i < this.cont.length; i++) {
-                pu.draw_symbol_select(this.ctxf, (i % this.nxf + this.offset) * (this.sizef + this.spacef), ((i / this.nxf | 0) + this.offset) * (this.sizef + this.spacef), this.cont[i], pu.mode[pu.mode.qa].symbol[0]);
+                pu.draw_symbol_select(this.ctxf,
+                     (i % this.nxf + this.offset) * (this.sizef + this.spacef),
+                     ((i / this.nxf | 0) + this.offset) * (this.sizef + this.spacef),
+                     this.cont[i], symbolname, 0, 'panel');
             }
             pu.size = size;
 
-            if (!pu.onoff_symbolmode_list[pu.mode[pu.mode.qa].symbol[0]]) { //onoffモードでなければ赤カーソル
+            if (!pu.onoff_symbolmode_list[symbolname]) { //onoffモードでなければ赤カーソル
                 var i_n
                 if (this.edit_num >= 0 && this.edit_num <= 11 && this.edit_num != 10) {
                     i_n = this.edit_num;

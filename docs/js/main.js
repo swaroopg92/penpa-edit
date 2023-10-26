@@ -26,19 +26,20 @@ onload = function() {
 
     // Declare custom color picker
     $(colorpicker_special).spectrum({
-        type: "component",
+        type: "color",
         preferredFormat: "hex",
         showInput: true,
         chooseText: "OK",
         // cancelText: "No way",
         // showAlpha: true,
-        // allowAlpha: true,
-        // allowEmpty: true,
+        allowAlpha: true,
+        allowEmpty: true,
+        showInitial: true,
         togglePaletteOnly: true,
         togglePaletteMoreText: 'more',
         togglePaletteLessText: 'less',
         showPalette: true,
-        hideAfterPaletteSelect: true,
+        //hideAfterPaletteSelect: true,
         maxSelectionSize: 8,
         showSelectionPalette: true,
         palette: [
@@ -52,6 +53,7 @@ onload = function() {
         ],
         localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
+    $(colorpicker_special).on('change', function(e, color) { pu.update_customcolor(color ? color.toRgbString() : color); });
 
     boot();
 
