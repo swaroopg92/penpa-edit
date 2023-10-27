@@ -9337,16 +9337,20 @@ class Puzzle {
                     this.redraw();
                 }
             } else {
-                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode) {
+                let cc = undefined;
+                if (UserSettings.custom_colors_on) {
+                    // If left click second time (i.e. DG option) and moving or right click and moving
+                    if (this.drawing_mode === 2 || this.mouse_click === 2) {
+                        cc = this.get_rgbcolor(this.drawing_mode);
+                    } else {
+                        cc = this.get_customcolor();
+                    }
+                }
+                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode || this[this.mode.qa + "_col"].surface[num] != cc) {
                     this.record("surface", num);
                     this[this.mode.qa].surface[num] = this.drawing_mode;
                     if (UserSettings.custom_colors_on) {
-                        // If left click second time (i.e. DG option) and moving or right click and moving
-                        if (this.drawing_mode === 2 || this.mouse_click === 2) {
-                            this[this.mode.qa + "_col"].surface[num] = this.get_rgbcolor(this.drawing_mode);
-                        } else {
-                            this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
-                        }
+                        this[this.mode.qa + "_col"].surface[num] = cc;
                     }
                     this.record_replay("surface", num);
                     this.redraw();
