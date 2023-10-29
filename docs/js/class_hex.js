@@ -676,24 +676,6 @@ class Puzzle_hex extends Puzzle {
         }
     }
 
-    draw_surface(pu) {
-        for (var i in this[pu].surface) {
-            set_surface_style(this.ctx, this[pu].surface[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
-                this.ctx.fillStyle = this[pu + "_col"].surface[i];
-                this.ctx.strokeStyle = this.ctx.fillStyle;
-            }
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
-            for (var j = 1; j < this.point[i].surround.length; j++) {
-                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
-            }
-            this.ctx.closePath();
-            this.ctx.fill();
-            this.ctx.stroke();
-        }
-    }
-
     draw_polygon(ctx, x, y, r, n, th) {
         ctx.LineCap = "round";
         ctx.beginPath();

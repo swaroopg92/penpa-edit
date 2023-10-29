@@ -12545,6 +12545,40 @@ class Puzzle {
         }
     }
 
+    draw_surface(pu, num = "") {
+        if (num) {
+            var keys = [],
+                key0 = num + "";
+            if (this[pu].surface[key0]) {
+                keys.push(key0);
+            }
+            for (var i = 0; i < this.point[num].adjacent.length; i++) {
+                key0 = this.point[num].adjacent[i] + "";
+                if (keys.indexOf(key0) === -1 && this[pu].surface[key0]) {
+                    keys.push(key0);
+                }
+            }
+        } else {
+            var keys = Object.keys(this[pu].surface);
+        }
+        for (var k = 0; k < keys.length; k++) {
+            var i = keys[k];
+            set_surface_style(this.ctx, this[pu].surface[i]);
+            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
+                this.ctx.fillStyle = this[pu + "_col"].surface[i];
+                this.ctx.strokeStyle = this.ctx.fillStyle;
+            }
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
+            for (var j = 1; j < this.point[i].surround.length; j++) {
+                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+    }
+
     draw_freecircle() {
         /*free_circle*/
         if (((this.mode[this.mode.qa].edit_mode === "line" || this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {

@@ -731,36 +731,6 @@ class Puzzle_truncated_square extends Puzzle {
         }
     }
 
-    draw_surface(pu, num = "") {
-        if (num) {
-            var keys = [],
-                key0 = num + "";
-            if (this[pu].surface[key0]) {
-                keys.push(key0);
-            }
-            for (var i = 0; i < this.point[num].adjacent.length; i++) {
-                key0 = this.point[num].adjacent[i] + "";
-                if (keys.indexOf(key0) === -1 && this[pu].surface[key0]) {
-                    keys.push(key0);
-                }
-            }
-        } else {
-            var keys = Object.keys(this[pu].surface);
-        }
-        for (var k = 0; k < keys.length; k++) {
-            var i = keys[k];
-            set_surface_style(this.ctx, this[pu].surface[i]);
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
-            for (var j = 1; j < this.point[i].surround.length; j++) {
-                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
-            }
-            this.ctx.closePath();
-            this.ctx.fill();
-            this.ctx.stroke();
-        }
-    }
-
     draw_polygon(ctx, x, y, r, n, th) {
         ctx.LineCap = "round";
         ctx.beginPath();
