@@ -348,10 +348,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'wall', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': ['msli_degital', 'ul_degital']
+        'exceptions': ['custom_color_lb', 'msli_degital', 'ul_degital']
     },
     'iso': {
         //modes
