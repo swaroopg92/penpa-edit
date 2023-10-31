@@ -401,10 +401,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': ['msli_degital', 'ul_degital']
+        'exceptions': ['custom_color_lb', 'msli_degital', 'ul_degital']
     },
     'tetrakis_square': {
         //modes
@@ -454,10 +454,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': []
+        'exceptions': ['custom_color_lb']
     },
     'truncated_square': {
         //modes
@@ -507,10 +507,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': []
+        'exceptions': ['custom_color_lb']
     },
     'snub_square': {
         //modes
@@ -560,10 +560,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': []
+        'exceptions': ['custom_color_lb']
     },
     'cairo_pentagonal': {
         //modes
@@ -613,10 +613,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': []
+        'exceptions': ['custom_color_lb']
     },
     'rhombitrihexagonal': {
         //modes
@@ -666,10 +666,10 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': []
+        'exceptions': ['custom_color_lb']
     },
     'deltoidal_trihexagonal': {
         //modes
@@ -719,9 +719,9 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': [],
+        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
-        'exceptions': []
+        'exceptions': ['custom_color_lb']
     },
 };
