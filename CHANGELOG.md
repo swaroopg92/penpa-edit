@@ -1,5 +1,20 @@
 ## History
 * unreleased
+	* Persist custom color selection per edit mode
+	* Preview symbols in Panel with custom color
+	* Implement custom color for Triangle
+	* Implement custom color for Pyramid
+	* Implement custom color for Cube
+	* Implement custom color for Kakuro
+	* Implement custom color for Truncated square
+	* Implement custom color for Snub square
+	* Implement custom color for Cairo pentagonal
+	* Implement custom color for Rhombitrihexagonal
+	* Implement custom color for Deltoidal trihexagonal
+	* Fixed surface painting with custom color
+	* Fixed custom color with transparancy
+	* Fixed selection of unavailable sub mode or symbol. Rare but could cause corruption and unresponsive puzzle.
+* unreleased
 	* Arrow circle without arrow single cell added to arrowsums option
 	* moved gtag code back to html file as Adblock Ultimate was blocking branding.js file for some users
 * 2023/09/24 ver 3.0.9
