@@ -2070,6 +2070,25 @@ onload = function() {
         }
     });
 
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+            // Save puzzle progress
+            let local_storage_setting = document.getElementById("clear_storage_opt").value;
+            if (pu.url.length !== 0 &&
+                pu.mmode === "solve" &&
+                local_storage_setting === "1" &&
+                !pu.replay) {
+                // get md5 hash for unique id
+                let hash = "penpa_" + md5(pu.url);
+
+                // generate duplicate link
+                let rstr = pu.maketext_duplicate() + "&l=solvedup";
+
+                localStorage.setItem(hash, rstr);
+            }
+        }
+    });
+
     // Adding on change events for general settings
     // Theme Setting
     document.getElementById("theme_mode_opt").onchange = function() {
