@@ -2055,10 +2055,9 @@ onload = function() {
         }
 
         // Save puzzle progress
-        let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting === "1" &&
+            UserSettings.save_current_puzzle &&
             !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
@@ -2111,8 +2110,8 @@ onload = function() {
         UserSettings.reload_button = this.value;
     }
 
-    document.getElementById("clear_storage_opt").onchange = function() {
-        UserSettings.local_storage = this.value;
+    document.getElementById("allow_local_storage").onchange = function() {
+        UserSettings.local_storage = (parseInt(this.value, 10) === 1);
     }
 
     $(document).ready(function() {
@@ -2276,8 +2275,8 @@ function clear_storage_one() {
         });
     }
 
-    // turn off localstorage
-    UserSettings.local_storage = 3; // not using 4 because this is temporary state
+    // turn off localstorage for this puzzle
+    UserSettings.save_current_puzzle = false;
 }
 
 function clear_storage_all() {
@@ -2291,8 +2290,8 @@ function clear_storage_all() {
     }
     // localStorage.clear(); for all clear
 
-    // turn off localstorage
-    UserSettings.local_storage = 3; // not using 4 because this is temporary state
+    // turn off localstorage for current puzzle
+    UserSettings.save_current_puzzle = false;
 
     Swal.fire({
         html: '<h2 class="info">Local Storage is Cleared</h2>',
