@@ -1157,6 +1157,7 @@ h4 {
 
 textarea {
     background-color: inherit;
+    color: inherit;
     transition: ease 0.3s all;
 }
 
