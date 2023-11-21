@@ -250,7 +250,7 @@ const penpa_modes = {
         // shapes
         'ms': ['cross', 'line', 'frameline', 'inequality', 'degital_f', 'dice', 'pills',
             'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight',
-            'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'polyomino',
+            'tents', 'star', 'compass', 'sudokuetc', 'polyomino',
             'angleloop', 'firefly', 'sun_moon'
         ],
         'ms1': ['circle', 'square', 'triup', 'tridown', 'diamond', 'hexpoint', 'hexflat', 'ox', 'degital'],
@@ -266,7 +266,7 @@ const penpa_modes = {
             'cage10', 'cage7', 'cage15', 'cage16',
             'sudoku1', 'sudoku2', 'sudoku8', 'sudoku3', 'sudoku9', 'sudoku10'
         ],
-        'li': ['battleship', 'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
+        'li': ['battleship', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
             'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'circle', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'hexpoint', 'hexflat', 'ox', 'cross', 'line', 'frameline', 'bars', 'tri',
             'circle_L', 'circle_M', 'circle_S', 'circle_SS', 'square_LL', 'square_L', 'square_M', 'square_S', 'square_SS',
