@@ -2303,20 +2303,15 @@ class Puzzle {
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
         if (mode === "symbol" && !this.panelflag) {
             // Show the panel on the first time landing and then respect user's choice
-            if (!UserSettings.panel_shown) {
-                UserSettings.panel_shown = true;
-            }
+            UserSettings.panel_shown = true;
             this.panelflag = true;
         } else if ((mode === "number" || mode === "symbol" || mode === "sudoku") &&
             ((this.ondown_key === "touchstart") || (loadtype === "url" && window.ondown_key === "touchstart"))) {
             // Automatically show panel while in number or shape or sudoku mode on the Mobile/Ipad device
-            if (!UserSettings.panel_shown) {
-                UserSettings.panel_shown = true;
-            }
+            UserSettings.panel_shown = true;
         } else if (this.ondown_key === "touchstart") {
             // Turn off panel while switching to other modes on Mobile/Ipad
             UserSettings.panel_shown = false;
-            document.getElementById('float-key').style.display = "none";
         }
         if (mode === "symbol") {
             this.stylemode_check('st_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10);
@@ -2338,7 +2333,7 @@ class Puzzle {
 
         // If panel is ON, show Mode info on header
         document.getElementById('float-key-header-lb').innerHTML = "Mode: " + mode_names[mode];
-        
+
         if (mode === "number") {
             // Update cursolS after mode switch, because it is not set in all modes.
             pu.cursolS = 4 * (pu.cursol + pu.nx0 * pu.ny0);
