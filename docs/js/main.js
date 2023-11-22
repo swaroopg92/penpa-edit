@@ -203,38 +203,36 @@ onload = function() {
     }
 
     // Variables for Tab selector
-    let modes = ["Surface",
-        "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
-        "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper", "Edge Erase",
-        "Wall",
-        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
-        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
-        "Shape",
-        "Special", "Thermo", "Sudoku Arrow",
-        "Composite"
-    ];
+    let tab_modes = {
+        "Surface": "surface",
+        "Line Normal": "sub_line1",
+        "Line Diagonal": "sub_line2",
+        "Line Free": "sub_line3",
+        "Line Middle": "sub_line5",
+        "Line Helper": "sub_line4",
+        "Edge Normal": "sub_lineE1",
+        "Edge Diagonal": "sub_lineE2",
+        "Edge Free": "sub_lineE3",
+        "Edge Helper": "sub_lineE4",
+        "Edge Erase": "sub_lineE5",
+        "Wall": "wall",
+        "Number Normal": "sub_number1",
+        "Number L": "sub_number10",
+        "Number M": "sub_number6",
+        "Number S": "sub_number5",
+        "Candidates": "sub_number7",
+        "Number 1/4": "sub_number3",
+        "Number Side": "sub_number9",
+        "Sudoku Normal": "sub_sudoku1",
+        "Sudoku Corner": "sub_sudoku2",
+        "Sudoku Centre": "sub_sudoku3",
+        "Shape": "symbol",
+        "Special": "special",
+        "Thermo": "sub_specialthermo",
+        "Sudoku Arrow": "sub_specialarrows",
+        "Composite": "combi"
+    };
 
-    let modes_text = ["Surface",
-        "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
-        "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper", "Edge Erase",
-        "Wall",
-        "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
-        "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
-        "Shape",
-        "Special", "Thermo", "Sudoku Arrow",
-        "Composite"
-    ];
-
-    let modes_mapping = ["surface",
-        "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
-        "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4", "sub_lineE5",
-        "wall",
-        "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
-        "sub_sudoku1", "sub_sudoku2", "sub_sudoku3",
-        "symbol",
-        "special", "sub_specialthermo", "sub_specialarrows",
-        "combi"
-    ];
     let previous_length = 2;
     let counter_index = 0;
     let present_submode;
@@ -611,11 +609,10 @@ onload = function() {
                 } else {
                     counter_index++;
                 }
-                counter_index %= user_choices.length
-                let mode_loc = modes.indexOf(user_choices[counter_index]);
+                counter_index %= user_choices.length;
 
                 // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
-                let mode_name = modes_mapping[mode_loc];
+                let mode_name = tab_modes[user_choices[counter_index]];
                 if (mode_name.includes("surface") ||
                     mode_name.includes("wall") ||
                     mode_name.includes("symbol") ||
@@ -2010,19 +2007,19 @@ onload = function() {
     }
 
     let select = document.getElementById("mode_choices");
-    for (var i = 0; i < modes.length; i++) {
-        var option = document.createElement("option");
-        option.value = modes[i];
-        option.text = modes_text[i];
+    Object.keys(tab_modes).forEach((key, i) => {
+        let option = document.createElement("option");
+        option.value = key;
+        option.text = key;
         if (UserSettings.tab_settings) {
 
             // Load the author defined tab settings if any
-            if (UserSettings.tab_settings.indexOf(modes[i]) > -1) {
+            if (UserSettings.tab_settings.indexOf(key) > -1) {
                 option.setAttribute("selected", true);
             }
         }
         select.appendChild(option);
-    }
+    });
 
     selectBox = new vanillaSelectBox("#mode_choices", {
         "disableSelectAll": false,
