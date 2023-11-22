@@ -418,7 +418,7 @@ class Puzzle {
             textwidth = pause_ctx.measureText(lines[j]).width;
             pause_ctx.fillText(lines[j], (pause_canvas.width) / 2 - (textwidth / 2), (j + 1) * (pause_canvas.height / (lines.length + 1)));
         }
-        document.getElementById("pause_canvas").style.display = "inline-block";
+        pause_canvas.style.display = "inline-block";
     }
 
     hide_pause_layer() {
@@ -429,7 +429,7 @@ class Puzzle {
         pause_ctx.fillStyle = Color.TRANSPARENTWHITE;
         pause_ctx.fillRect(0, 0, this.canvasx, this.canvasy);
 
-        document.getElementById("pause_canvas").style.display = "none";
+        pause_canvas.style.display = "none";
     }
 
     make_frameline() {
