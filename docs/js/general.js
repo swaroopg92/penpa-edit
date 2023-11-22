@@ -1137,14 +1137,8 @@ function panel_onoff() {
             document.getElementById('float-key-header').style.left = 0 + "px";
             document.getElementById('float-key-header').style.top = 0 + "px";
         }
-        // Show Mode info on Panel Header
-        let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
-        let mode_loc = penpa_modes["square"]["mode"].indexOf(pu.mode[pu.mode.qa].edit_mode);
-        document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
-        // document.getElementById('toggle_panel_visibility').style.opacity = .3;
     } else {
         document.getElementById('float-key').style.display = "none";
-        // document.getElementById('toggle_panel_visibility').style.opacity = 1;
     }
     pu.redraw();
 }

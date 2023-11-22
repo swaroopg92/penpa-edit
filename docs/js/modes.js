@@ -1,5 +1,21 @@
 /* Contains complete list of all the supported modes */
 const penpa_types = ['mode', 'sub', 'combisub', 'ms', 'ms1', 'ms3', 'ms4', 'st', 'symmode', 'combimode', 'customcolor'];
+
+const mode_names = {
+    'surface': 'Surface',
+    'line': 'Line',
+    'lineE': 'Edge',
+    'wall': 'Wall',
+    'number': 'Number',
+    'symbol': 'Shape',
+    'special': 'Special',
+    'cage': 'Cage',
+    'combi': 'Composite',
+    'sudoku': 'Sudoku',
+    'board': 'Box',
+    'move': 'Move'
+};
+
 const penpa_modes = {
     'square': {
         //modes

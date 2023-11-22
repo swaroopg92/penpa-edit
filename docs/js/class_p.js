@@ -2337,11 +2337,8 @@ class Puzzle {
         }
 
         // If panel is ON, show Mode info on header
-        if (UserSettings.panel_shown) {
-            let modes_mapping = ['Surface', 'Line', 'Edge', 'Wall', 'Number', 'Shape', 'Special', 'Cage', 'Composite', 'Sudoku', 'Box', 'Move'];
-            let mode_loc = penpa_modes["square"]["mode"].indexOf(mode);
-            document.getElementById('float-key-header-lb').innerHTML = "Mode: " + modes_mapping[mode_loc];
-        }
+        document.getElementById('float-key-header-lb').innerHTML = "Mode: " + mode_names[mode];
+        
         if (mode === "number") {
             // Update cursolS after mode switch, because it is not set in all modes.
             pu.cursolS = 4 * (pu.cursol + pu.nx0 * pu.ny0);
