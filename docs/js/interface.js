@@ -84,5 +84,36 @@ const PenpaUI = {
         for (var i of allPossible.exceptions) {
             document.getElementById(i).classList.toggle('is_hidden', selectedGrid.exceptions.indexOf(i) < 0);
         }
+    },
+
+    _custom_color_supported_grids: {
+        square: 1,
+        sudoku: 1,
+        kakuro: 1,
+        hex: 1
+    },
+    
+    _custom_color_supported_modes: {
+        line: 1,
+        lineE: 1,
+        wall: 1,
+        surface: 1,
+        cage: 1,
+        special: 1,
+        symbol: 1
+    },
+
+    toggleCustomColor: function (gridtype, mode) {
+        mode = mode || pu.mode[pu.mode.qa].edit_mode;
+        gridtype = gridtype || pu.gridtype;
+        if (
+            UserSettings.custom_colors_on && 
+            this._custom_color_supported_grids[gridtype] &&
+            this._custom_color_supported_modes[mode]
+        ) {
+            document.getElementById('style_special').style.display = 'inline';
+        } else {
+            document.getElementById('style_special').style.display = 'none';
+        }
     }
 };
