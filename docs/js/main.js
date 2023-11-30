@@ -2307,4 +2307,4 @@ function clear_storage_all() {
         html: '<h2 class="info">Local Storage is Cleared</h2>',
         icon: 'info'
     });
-}
+}
