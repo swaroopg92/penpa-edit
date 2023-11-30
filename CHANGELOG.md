@@ -2,6 +2,7 @@
 * unreleased
 	* Arrow circle without arrow single cell added to arrowsums option
 	* moved gtag code back to html file as Adblock Ultimate was blocking Identity.js file for some users
+	* Make puzzle progress saving more robust, especially on mobile browsers.
 * 2023/09/24 ver 3.0.9
     * New options in Screenshot to include Author and Rules for png and jpeg. svg support not included.
     * Use new clipboard API when able. (Fixes Copy on iOS.)
