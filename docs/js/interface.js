@@ -78,5 +78,18 @@ const PenpaUI = {
         for (var i of allPossible.exceptions) {
             document.getElementById(i).classList.toggle('is_hidden', selectedGrid.exceptions.indexOf(i) < 0);
         }
+    },
+
+    requestScripting() {
+        return Swal.fire({
+            title: 'Puzzle may contain scripting!',
+            html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: Color.RED,
+            cancelButtonColor: Color.BLUE_SKY,
+            confirmButtonText: 'Allow it to run.',
+            cancelButtonText: 'Remove it! (Recommended)'
+        });
     }
 };

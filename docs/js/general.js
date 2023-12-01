@@ -1927,16 +1927,7 @@ function load(urlParam, type = 'url', origurl = null) {
         ptitle = ptitle.replace(/^Title\:\s/, '');
         if (ptitle !== "Title: ") {
             if (ptitle.indexOf('<') > -1) {
-                Swal.fire({
-                    title: 'Puzzle may contain scripting!',
-                    html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: Color.RED,
-                    cancelButtonColor: Color.BLUE_SKY, 
-                    confirmButtonText: 'Allow it to run.',
-                    cancelButtonText: 'Remove it! (Recommended)'
-                }).then((result) => {
+                PenpaUI.requestScripting().then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById("puzzletitle").innerHTML = ptitle;
                         document.getElementById("saveinfotitle").value = ptitle;
@@ -1954,16 +1945,7 @@ function load(urlParam, type = 'url', origurl = null) {
         pauthor = pauthor.replace(/^Author\:\s/, '');
         if (pauthor != "") {
             if (pauthor.indexOf('<') > -1) {
-                Swal.fire({
-                    title: 'Puzzle may contain scripting!',
-                    html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: Color.RED,
-                    cancelButtonColor: Color.BLUE_SKY,
-                    confirmButtonText: 'Allow it to run.',
-                    cancelButtonText: 'Remove it! (Recommended)'
-                }).then((result) => {
+                PenpaUI.requestScripting().then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById("puzzleauthor").innerHTML = pauthor;
                         document.getElementById("saveinfoauthor").value = pauthor;
@@ -2593,16 +2575,7 @@ function load(urlParam, type = 'url', origurl = null) {
                 disptext += 'Time: ' + qstr.stime + " (d:h:m:s:ts)";
             }
             if (disptext.indexOf('<') > -1) {
-                Swal.fire({
-                    title: 'Puzzle may contain scripting!',
-                    html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: Color.RED,
-                    cancelButtonColor: Color.BLUE_SKY,
-                    confirmButtonText: 'Allow it to run.',
-                    cancelButtonText: 'Remove it! (Recommended)'
-                }).then((result) => {
+                PenpaUI.requestScripting().then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById("puzzletitle").innerHTML = disptext;
                         document.getElementById("puzzletitle").style.display = '';
