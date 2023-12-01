@@ -1926,21 +1926,59 @@ function load(urlParam, type = 'url', origurl = null) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
         ptitle = ptitle.replace(/^Title\:\s/, '');
         if (ptitle !== "Title: ") {
-            document.getElementById("puzzletitle").innerHTML = ptitle;
-            document.getElementById("saveinfotitle").value = ptitle;
+            if (ptitle.indexOf('<') > -1) {
+                Swal.fire({
+                    title: 'Puzzle may contain scripting!',
+                    html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: Color.RED,
+                    cancelButtonColor: Color.BLUE_SKY, 
+                    confirmButtonText: 'Allow it to run.',
+                    cancelButtonText: 'Remove it! (Recommended)'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("puzzletitle").innerHTML = ptitle;
+                        document.getElementById("saveinfotitle").value = ptitle;
+                    } else {
+                        ptitle = ptitle.replace(/<\/?[^>]+(>|$)/g, "");
+                        document.getElementById("puzzletitle").innerText = ptitle;
+                        document.getElementById("saveinfotitle").value = ptitle;
+                    }
+                });
+            }
         }
     }
     if (rtext_para[16]) {
         let pauthor = rtext_para[16].replace(/%2C/g, ',')
         pauthor = pauthor.replace(/^Author\:\s/, '');
         if (pauthor != "") {
-            document.getElementById("puzzleauthor").innerHTML = pauthor;
-            document.getElementById("saveinfoauthor").value = pauthor;
+            if (pauthor.indexOf('<') > -1) {
+                Swal.fire({
+                    title: 'Puzzle may contain scripting!',
+                    html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: Color.RED,
+                    cancelButtonColor: Color.BLUE_SKY,
+                    confirmButtonText: 'Allow it to run.',
+                    cancelButtonText: 'Remove it! (Recommended)'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("puzzleauthor").innerHTML = pauthor;
+                        document.getElementById("saveinfoauthor").value = pauthor;
+                    } else {
+                        pauthor = pauthor.replace(/<\/?[^>]+(>|$)/g, "");
+                        document.getElementById("puzzleauthor").innerText = pauthor;
+                        document.getElementById("saveinfoauthor").value = pauthor;
+                    }
+                });
+            }
         }
     }
     if (rtext_para[17] && rtext_para[17] !== "") {
         document.getElementById("puzzlesourcelink").href = rtext_para[17];
-        document.getElementById("puzzlesource").innerHTML = "Source";
+        document.getElementById("puzzlesource").innerText = "Source";
         document.getElementById("saveinfosource").value = rtext_para[17];
     }
 
@@ -2554,8 +2592,27 @@ function load(urlParam, type = 'url', origurl = null) {
             if (qstr.stime) {
                 disptext += 'Time: ' + qstr.stime + " (d:h:m:s:ts)";
             }
-            document.getElementById("puzzletitle").innerHTML = disptext;
-            document.getElementById("puzzletitle").style.display = '';
+            if (disptext.indexOf('<') > -1) {
+                Swal.fire({
+                    title: 'Puzzle may contain scripting!',
+                    html: 'It could be something fun, but it could also be dangerous. You should not allow it to run unless it is from a trusted source.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: Color.RED,
+                    cancelButtonColor: Color.BLUE_SKY,
+                    confirmButtonText: 'Allow it to run.',
+                    cancelButtonText: 'Remove it! (Recommended)'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("puzzletitle").innerHTML = disptext;
+                        document.getElementById("puzzletitle").style.display = '';
+                    } else {
+                        disptext = disptext.replace(/<\/?[^>]+(>|$)/g, "");
+                        document.getElementById("puzzletitle").innerText = disptext;
+                        document.getElementById("puzzletitle").style.display = '';
+                    }
+                });
+            }
 
             // Calculate Total MS for later use
             let solvetime = qstr.stime.split(':');
