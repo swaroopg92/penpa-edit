@@ -859,7 +859,8 @@ function newsize() {
 function display_rules() {
     Swal.fire({
         title: 'Rules:',
-        html: '<h5 class="info">' + pu.rules + '</h5>'
+        html: PenpaUI.allowScripting === true ? '<h5 class="info">' + pu.rules.replace(/%2D/g, '<br>') + '</h5>' : null,
+        text: PenpaUI.allowScripting === true ? null : pu.rules,
     })
 }
 
@@ -1982,10 +1983,26 @@ function load(urlParam, type = 'url', origurl = null) {
     UserSettings.loadFromCookies("others");
 
     if (rtext_para[18] && rtext_para[18] !== "") {
+        let ruleText = rtext_para[18].replace(/%2C/g, ',').replace(/%2E/g, '&').replace(/%2F/g, '=');
+        if (ruleText.indexOf('<') > -1) {
+            PenpaUI.requestScripting().then((result) => {
+                if (result.isConfirmed) {
+                    pu.rules = ruleText;
+                    PenpaUI.allowScripting = true;
+                    document.getElementById("ruletext").innerHTML = pu.rules.replace(/%2D/g, '<br>');
+                } else {
+                    ruleText = ruleText.replace(/<\/?[^>]+(>|$)/g, "");
+                    PenpaUI.allowScripting = false;
+                    pu.rules = ruleText;
+                    document.getElementById("ruletext").innerText = pu.rules;
+                }
+            });
+        } else {
+            pu.rules = ruleText;
+            document.getElementById("ruletext").innerText = pu.rules.replace(/%2D/g, '<br>');
+        }
+        document.getElementById("saveinforules").value = ruleText;
         document.getElementById("puzzlerules").classList.add("rules-present");
-        pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
-        document.getElementById("ruletext").innerHTML = pu.rules;
-        document.getElementById("saveinforules").value = pu.rules.replace(/<br>/g, '\n');
     }
 
     // Border button status
