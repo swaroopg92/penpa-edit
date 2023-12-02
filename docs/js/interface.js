@@ -91,5 +91,23 @@ const PenpaUI = {
             confirmButtonText: 'Allow it to run.',
             cancelButtonText: 'Remove it! (Recommended)'
         });
+    },
+
+    _allowScripting: undefined,
+
+    async allowScripting() {
+        if (this._allowScripting !== undefined) {
+            return this._allowScripting;
+        }
+
+        return this.requestScripting().then((result) => {
+            if (result.isConfirmed) {
+                this._allowScripting = true;
+            } else {
+                this._allowScripting = false;
+            }
+
+            return this._allowScripting;
+        });
     }
 };

@@ -1880,7 +1880,7 @@ function show_shortcuts() {
     document.getElementById("modal-keys").style.display = 'block';
 }
 
-function load(urlParam, type = 'url', origurl = null) {
+async function load(urlParam, type = 'url', origurl = null) {
     var param = urlParam.split('&');
     var paramArray = [];
 
@@ -1928,16 +1928,14 @@ function load(urlParam, type = 'url', origurl = null) {
         ptitle = ptitle.replace(/^Title\:\s/, '');
         if (ptitle !== "Title: ") {
             if (ptitle.indexOf('<') > -1) {
-                PenpaUI.requestScripting().then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("puzzletitle").innerHTML = ptitle;
-                        document.getElementById("saveinfotitle").value = ptitle;
-                    } else {
-                        ptitle = ptitle.replace(/<\/?[^>]+(>|$)/g, "");
-                        document.getElementById("puzzletitle").innerText = ptitle;
-                        document.getElementById("saveinfotitle").value = ptitle;
-                    }
-                });
+                if (await PenpaUI.allowScripting()){
+                    document.getElementById("puzzletitle").innerHTML = ptitle;
+                    document.getElementById("saveinfotitle").value = ptitle;
+                } else {
+                    ptitle = ptitle.replace(/<\/?[^>]+(>|$)/g, "");
+                    document.getElementById("puzzletitle").innerText = ptitle;
+                    document.getElementById("saveinfotitle").value = ptitle;
+                }
             }
         } else { 
             document.getElementById("puzzletitle").innerText = ptitle;
@@ -1949,16 +1947,14 @@ function load(urlParam, type = 'url', origurl = null) {
         pauthor = pauthor.replace(/^Author\:\s/, '');
         if (pauthor != "") {
             if (pauthor.indexOf('<') > -1) {
-                PenpaUI.requestScripting().then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("puzzleauthor").innerHTML = pauthor;
-                        document.getElementById("saveinfoauthor").value = pauthor;
-                    } else {
-                        pauthor = pauthor.replace(/<\/?[^>]+(>|$)/g, "");
-                        document.getElementById("puzzleauthor").innerText = pauthor;
-                        document.getElementById("saveinfoauthor").value = pauthor;
-                    }
-                });
+                if (await PenpaUI.allowScripting()) {
+                    document.getElementById("puzzleauthor").innerHTML = pauthor;
+                    document.getElementById("saveinfoauthor").value = pauthor;
+                } else {
+                    pauthor = pauthor.replace(/<\/?[^>]+(>|$)/g, "");
+                    document.getElementById("puzzleauthor").innerText = pauthor;
+                    document.getElementById("saveinfoauthor").value = pauthor;
+                }
             }
         } else {
             document.getElementById("puzzleauthor").innerText = pauthor;
@@ -1985,18 +1981,16 @@ function load(urlParam, type = 'url', origurl = null) {
     if (rtext_para[18] && rtext_para[18] !== "") {
         let ruleText = rtext_para[18].replace(/%2C/g, ',').replace(/%2E/g, '&').replace(/%2F/g, '=');
         if (ruleText.indexOf('<') > -1) {
-            PenpaUI.requestScripting().then((result) => {
-                if (result.isConfirmed) {
-                    pu.rules = ruleText;
-                    PenpaUI.allowScripting = true;
-                    document.getElementById("ruletext").innerHTML = pu.rules.replace(/%2D/g, '<br>');
-                } else {
-                    ruleText = ruleText.replace(/<\/?[^>]+(>|$)/g, "");
-                    PenpaUI.allowScripting = false;
-                    pu.rules = ruleText;
-                    document.getElementById("ruletext").innerText = pu.rules;
-                }
-            });
+            if (await PenpaUI.allowScripting()) {
+                pu.rules = ruleText;
+                PenpaUI.allowScripting = true;
+                document.getElementById("ruletext").innerHTML = pu.rules.replace(/%2D/g, '<br>');
+            } else {
+                ruleText = ruleText.replace(/<\/?[^>]+(>|$)/g, "");
+                PenpaUI.allowScripting = false;
+                pu.rules = ruleText;
+                document.getElementById("ruletext").innerText = pu.rules;
+            }
         } else {
             pu.rules = ruleText;
             document.getElementById("ruletext").innerText = pu.rules.replace(/%2D/g, '<br>');
@@ -2598,16 +2592,14 @@ function load(urlParam, type = 'url', origurl = null) {
                 disptext += 'Time: ' + qstr.stime + " (d:h:m:s:ts)";
             }
             if (disptext.indexOf('<') > -1) {
-                PenpaUI.requestScripting().then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("puzzletitle").innerHTML = disptext;
-                        document.getElementById("puzzletitle").style.display = '';
-                    } else {
-                        disptext = disptext.replace(/<\/?[^>]+(>|$)/g, "");
-                        document.getElementById("puzzletitle").innerText = disptext;
-                        document.getElementById("puzzletitle").style.display = '';
-                    }
-                });
+                if (await PenpaUI.allowScripting()) {
+                    document.getElementById("puzzletitle").innerHTML = disptext;
+                    document.getElementById("puzzletitle").style.display = '';
+                } else {
+                    disptext = disptext.replace(/<\/?[^>]+(>|$)/g, "");
+                    document.getElementById("puzzletitle").innerText = disptext;
+                    document.getElementById("puzzletitle").style.display = '';
+                }
             } else {
                 document.getElementById("puzzletitle").innerText = disptext;
                 document.getElementById("puzzletitle").style.display = '';
