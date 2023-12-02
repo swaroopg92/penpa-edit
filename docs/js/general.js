@@ -856,11 +856,12 @@ function newsize() {
     document.getElementById('modal-newsize').style.display = 'block';
 }
 
-function display_rules() {
+async function display_rules() {
+    let allowScripting = await PenpaUI.allowScripting();
     Swal.fire({
         title: 'Rules:',
-        html: PenpaUI.allowScripting === true ? '<h5 class="info">' + pu.rules.replace(/%2D/g, '<br>') + '</h5>' : null,
-        text: PenpaUI.allowScripting === true ? null : pu.rules,
+        html: allowScripting === true ? '<h5 class="info">' + pu.rules.replace(/%2D/g, '<br>') + '</h5>' : null,
+        text: allowScripting === true ? null : pu.rules.replace(/\<br\/?\>/ig, '\n'),
     })
 }
 
@@ -1156,7 +1157,7 @@ function can_use_lite() {
 }
 
 function advancecontrol_toggle() {
-    let currentState = document.getElementById('tab-dropdown-lite-btn').innerText;
+    let currentState = document.getElementById('tab-dropdown-lite-btn').textContent;
     if (currentState === "Disable Penpa Lite") {
         advancecontrol_onoff("off");
     } else {
@@ -1185,7 +1186,7 @@ function advancecontrol_off(loadtype) {
     var user_choices = (loadtype === "url") ? UserSettings.tab_settings : getValues('mode_choices');
 
     if (document.getElementById('tab-dropdown-lite-btn')) {
-        document.getElementById('tab-dropdown-lite-btn').innerText = "Disable Penpa Lite";
+        document.getElementById('tab-dropdown-lite-btn').textContent = "Disable Penpa Lite";
     }
 
     if (user_choices.indexOf("Surface") === -1) {
@@ -1260,7 +1261,7 @@ function advancecontrol_off(loadtype) {
 
 function advancecontrol_on() {
     if (document.getElementById('tab-dropdown-lite-btn')) {
-        document.getElementById('tab-dropdown-lite-btn').innerText = "Enable Penpa Lite";
+        document.getElementById('tab-dropdown-lite-btn').textContent = "Enable Penpa Lite";
     }
 
     // pu.erase_buttons();
@@ -1933,12 +1934,12 @@ async function load(urlParam, type = 'url', origurl = null) {
                     document.getElementById("saveinfotitle").value = ptitle;
                 } else {
                     ptitle = ptitle.replace(/<\/?[^>]+(>|$)/g, "");
-                    document.getElementById("puzzletitle").innerText = ptitle;
+                    document.getElementById("puzzletitle").textContent = ptitle;
                     document.getElementById("saveinfotitle").value = ptitle;
                 }
             }
         } else { 
-            document.getElementById("puzzletitle").innerText = ptitle;
+            document.getElementById("puzzletitle").textContent = ptitle;
             document.getElementById("saveinfotitle").value = ptitle;
         }
     }
@@ -1952,18 +1953,18 @@ async function load(urlParam, type = 'url', origurl = null) {
                     document.getElementById("saveinfoauthor").value = pauthor;
                 } else {
                     pauthor = pauthor.replace(/<\/?[^>]+(>|$)/g, "");
-                    document.getElementById("puzzleauthor").innerText = pauthor;
+                    document.getElementById("puzzleauthor").textContent = pauthor;
                     document.getElementById("saveinfoauthor").value = pauthor;
                 }
             }
         } else {
-            document.getElementById("puzzleauthor").innerText = pauthor;
+            document.getElementById("puzzleauthor").textContent = pauthor;
             document.getElementById("saveinfoauthor").value = pauthor;
         }
     }
     if (rtext_para[17] && rtext_para[17] !== "") {
         document.getElementById("puzzlesourcelink").href = rtext_para[17];
-        document.getElementById("puzzlesource").innerText = "Source";
+        document.getElementById("puzzlesource").textContent = "Source";
         document.getElementById("saveinfosource").value = rtext_para[17];
     }
 
@@ -1989,11 +1990,11 @@ async function load(urlParam, type = 'url', origurl = null) {
                 ruleText = ruleText.replace(/<\/?[^>]+(>|$)/g, "");
                 PenpaUI.allowScripting = false;
                 pu.rules = ruleText;
-                document.getElementById("ruletext").innerText = pu.rules;
+                document.getElementById("ruletext").textContent = pu.rules;
             }
         } else {
             pu.rules = ruleText;
-            document.getElementById("ruletext").innerText = pu.rules.replace(/%2D/g, '<br>');
+            document.getElementById("ruletext").textContent = pu.rules.replace(/%2D/g, '<br>');
         }
         document.getElementById("saveinforules").value = ruleText;
         document.getElementById("puzzlerules").classList.add("rules-present");
@@ -2597,11 +2598,11 @@ async function load(urlParam, type = 'url', origurl = null) {
                     document.getElementById("puzzletitle").style.display = '';
                 } else {
                     disptext = disptext.replace(/<\/?[^>]+(>|$)/g, "");
-                    document.getElementById("puzzletitle").innerText = disptext;
+                    document.getElementById("puzzletitle").textContent = disptext;
                     document.getElementById("puzzletitle").style.display = '';
                 }
             } else {
-                document.getElementById("puzzletitle").innerText = disptext;
+                document.getElementById("puzzletitle").textContent = disptext;
                 document.getElementById("puzzletitle").style.display = '';
             }
 
