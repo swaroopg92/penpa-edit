@@ -1938,6 +1938,9 @@ function load(urlParam, type = 'url', origurl = null) {
                     }
                 });
             }
+        } else { 
+            document.getElementById("puzzletitle").innerText = ptitle;
+            document.getElementById("saveinfotitle").value = ptitle;
         }
     }
     if (rtext_para[16]) {
@@ -1956,6 +1959,9 @@ function load(urlParam, type = 'url', origurl = null) {
                     }
                 });
             }
+        } else {
+            document.getElementById("puzzleauthor").innerText = pauthor;
+            document.getElementById("saveinfoauthor").value = pauthor;
         }
     }
     if (rtext_para[17] && rtext_para[17] !== "") {
@@ -2585,6 +2591,9 @@ function load(urlParam, type = 'url', origurl = null) {
                         document.getElementById("puzzletitle").style.display = '';
                     }
                 });
+            } else {
+                document.getElementById("puzzletitle").innerText = disptext;
+                document.getElementById("puzzletitle").style.display = '';
             }
 
             // Calculate Total MS for later use
