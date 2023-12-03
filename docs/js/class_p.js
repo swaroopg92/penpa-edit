@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 9]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 10]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -12948,6 +12948,7 @@ class Puzzle {
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
+                        message = DOMPurify.sanitize(message);
                         if (message == "" || message.includes("http-equiv=")) {
                             message = Identity.solveDefaultMessage;
                         }
@@ -12984,6 +12985,7 @@ class Puzzle {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             let message = document.getElementById("custom_message").value;
+                            message = DOMPurify.sanitize(message);
                             if (message == "" || message.includes("http-equiv=")) {
                                 message = Identity.solveDefaultMessage;
                             }

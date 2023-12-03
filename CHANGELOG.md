@@ -1,7 +1,8 @@
 ## History
-* unreleased
-	* Arrow circle without arrow single cell added to arrowsums option
-	* moved gtag code back to html file as Adblock Ultimate was blocking Identity.js file for some users
+* 2023/12/02 ver 3.0.10
+	* User input sanitization to prevent XSS attacks.
+	* Arrow circle without arrow single cell added to arrowsums option.
+	* moved gtag code back to html file as Adblock Ultimate was blocking Identity.js file for some users.
 * 2023/09/24 ver 3.0.9
     * New options in Screenshot to include Author and Rules for png and jpeg. svg support not included.
     * Use new clipboard API when able. (Fixes Copy on iOS.)
