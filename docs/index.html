@@ -31,7 +31,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.0.8"; // Also defined in class_p.js
+        var ver = "3.0.10"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -62,6 +62,7 @@
     <!-- local libs -->
     <script type="text/javascript">
         let library_sources = ["./js/libs/jquery-3.7.0.min.js",
+            "./js/libs/purify.min.js",
             "./js/libs/CanvasRenderingContext2D.ext.js",
             "./js/libs/encoding.js",
             "./js/libs/vanillaSelectBox.js",
@@ -85,7 +86,7 @@
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
-            "./branding.js",
+            "./identity.js",
             "./js/settings.js",
             "./js/interface.js",
             "./js/conflicts.js",
@@ -111,22 +112,6 @@
             script.async = false;
             document.head.appendChild(script);
         }
-    </script>
-    <!-- Global site tag (gtag.js) - Google Analytics (support for this tag will end in June 2023)-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180924087-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-180924087-1');
-    </script>
-    <!-- Global site tag (gtag.js) - Google Analytics (New GA4 Tag)-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WQYM10ZE7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-2WQYM10ZE7');
     </script>
 </head>
 
@@ -942,6 +927,18 @@
                 <label for="nb_type2" class="label" id="nb_type2_lb">jpeg</label>
                 <input type="radio" name="nb_type" value="3" id="nb_type3">
                 <label for="nb_type3" class="label" id="nb_type3_lb">svg</label>
+                <br>
+                <h4><label class="label_imagespace" id="nb_title_lb">Title &amp; Author:</label></h4>
+                <input type="radio" name="nb_title" value="1" id="nb_title1">
+                <label for="nb_title1" class="label" id="nb_title1_lb">Yes</label>
+                <input type="radio" name="nb_title" value="2" id="nb_title2" checked="checked">
+                <label for="nb_title2" class="label" id="nb_title2_lb">No</label>
+                <br>
+                <h4><label class="label_imagespace" id="nb_rules_lb">Rules:</label></h4>
+                <input type="radio" name="nb_rules" value="1" id="nb_rules1">
+                <label for="nb_rules1" class="label" id="nb_rules1_lb">Yes</label>
+                <input type="radio" name="nb_rules" value="2" id="nb_rules2" checked="checked">
+                <label for="nb_rules2" class="label" id="nb_rules2_lb">No</label>
                 <br><br>
                 <span id="saveimagename_lb">File name:<input type="text" placeholder="sample_name" id="saveimagename"></span>
             </div>

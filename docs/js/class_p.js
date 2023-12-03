@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 8]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 10]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -2094,8 +2094,14 @@ class Puzzle {
 
         resizedContext.drawImage(this.canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
         if (document.getElementById("nb_type1").checked) {
+            if (document.getElementById("nb_title1").checked || document.getElementById("nb_rules1").checked) {
+                resizedCanvas = this.canvaswithinfo();
+            }
             var canvastext = resizedCanvas.toDataURL("image/png");
         } else if (document.getElementById("nb_type2").checked) {
+            if (document.getElementById("nb_title1").checked || document.getElementById("nb_rules1").checked) {
+                resizedCanvas = this.canvaswithinfo();
+            }
             var canvastext = resizedCanvas.toDataURL("image/jpeg");
         } else if (document.getElementById("nb_type3").checked) {
             var svg_canvas = new C2S(this.canvasx, this.canvasy);
@@ -2158,6 +2164,71 @@ class Puzzle {
         }
         this.redraw();
         return canvastext;
+    }
+
+    canvaswithinfo() {
+        //put the title text on the top
+        let main_c = $('#canvas')[0];
+        let main_ctx = main_c.getContext("2d");
+
+        let gif_c = document.createElement('canvas');
+        let gif_ctx = gif_c.getContext("2d");
+
+        let fontSize = 16;
+        let fontLineSize = fontSize * 1.2;
+        gif_ctx.font = "bold " + fontSize + "px sans-serif";
+        let puzzleTitle = 'Title: ' + document.getElementById("saveinfotitle").value;
+        let puzzleRules = document.getElementById("saveinforules").value;
+        let puzzleTitleLines = this.splitTextLines(gif_ctx, puzzleTitle, main_c.offsetWidth);
+        let puzzleRulesLines = this.splitTextLines(gif_ctx, puzzleRules, main_c.offsetWidth);
+        let puzzleAuthor = ('Author: ' + document.getElementById("saveinfoauthor").value).split(",");
+        var puzzletext;
+        if (document.getElementById("nb_title1").checked && document.getElementById("nb_rules1").checked) {
+            puzzletext = puzzleTitleLines.concat(puzzleAuthor.concat(puzzleRulesLines));
+        } else if (document.getElementById("nb_title1").checked) {
+            puzzletext = puzzleTitleLines.concat(puzzleAuthor);
+        } else {
+            puzzletext = puzzleRulesLines;
+        }
+
+        let gif_vertical_offset = puzzletext.length * fontLineSize;
+        gif_c.width = main_c.offsetWidth;
+        gif_c.height = main_c.offsetHeight + gif_vertical_offset;
+        gif_ctx.font = "bold " + fontSize + "px sans-serif";
+
+        //clear the gif canvas
+        gif_ctx.fillStyle = "#fff";
+        gif_ctx.fillRect(0, 0, gif_c.width, gif_c.height);
+
+        //draw the title text.
+        gif_ctx.fillStyle = "#0000ff";
+        let textY = fontSize;
+        for (let textLine of puzzletext) {
+            gif_ctx.fillText(textLine, (gif_c.width - gif_ctx.measureText(textLine).width) / 2, textY);
+            textY += fontLineSize;
+        }
+
+        gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
+        return gif_c;
+    }
+
+    splitTextLines(ctx, text, maxWidth) {
+        var words = text.split(" ");
+        var lines = [];
+        var currentLine = words[0];
+
+        for (var i = 1; i < words.length; i++) {
+            var word = words[i];
+            var width = ctx.measureText(currentLine + " " + word).width;
+            if (width < maxWidth) {
+                currentLine += " " + word;
+            } else {
+                lines.push(currentLine);
+                currentLine = word;
+            }
+        }
+        lines.push(currentLine);
+        return lines;
     }
 
     gridspace_calculate() {
@@ -12881,16 +12952,17 @@ class Puzzle {
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
+                        message = DOMPurify.sanitize(message);
                         if (message == "" || message.includes("http-equiv=")) {
-                            message = Branding.solveDefaultMessage;
+                            message = Identity.solveDefaultMessage;
                         }
                         setTimeout(() => {
                             Swal.fire({
-                                title: Branding.solveTitle ? '<h3 class="wish">' + Branding.solveTitle + '</h3>' : undefined,
+                                title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                 html: '<h2 class="wish">' + message + '</h2>',
                                 background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
-                                confirmButtonText: Branding.solveOKButtonText,
+                                confirmButtonText: Identity.solveOKButtonText,
                                 // timer: 5000
                             })
                         }, 20);
@@ -12917,16 +12989,17 @@ class Puzzle {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             let message = document.getElementById("custom_message").value;
+                            message = DOMPurify.sanitize(message);
                             if (message == "" || message.includes("http-equiv=")) {
-                                message = Branding.solveDefaultMessage;
+                                message = Identity.solveDefaultMessage;
                             }
                             setTimeout(() => {
                                 Swal.fire({
-                                    title: Branding.solveTitle ? '<h3 class="wish">' + Branding.solveTitle + '</h3>' : undefined,
+                                    title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                     html: '<h2 class="wish">' + message + '</h2>',
                                     background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
-                                    confirmButtonText: Branding.solveOKButtonText,
+                                    confirmButtonText: Identity.solveOKButtonText,
                                 })
                             }, 20);
                             sw_timer.pause();
@@ -13138,16 +13211,20 @@ class Puzzle {
 
         // Sanity check
         if (outputstring.length === size * size) {
-            document.getElementById("iostring").value = outputstring;
             let textarea = document.getElementById("iostring");
-            textarea.select();
-            let range = document.createRange();
-            range.selectNodeContents(textarea);
-            let sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(range);
-            textarea.setSelectionRange(0, 1e5);
-            document.execCommand("copy");
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(textarea.value);
+            } else {
+                document.getElementById("iostring").value = outputstring;
+                textarea.select();
+                let range = document.createRange();
+                range.selectNodeContents(textarea);
+                let sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                textarea.setSelectionRange(0, 1e5);
+                document.execCommand("copy");
+            }
         } else {
             document.getElementById("iostring").value = "Error: Some cells have more than 1 digit";
         }
