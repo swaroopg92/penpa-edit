@@ -1,4 +1,6 @@
 ## History
+* unlreleased
+	* Fix battleship composite mode. Avoid duplicating undo commands.
 * 2023/12/02 ver 3.0.10
 	* User input sanitization to prevent XSS attacks.
 	* Arrow circle without arrow single cell added to arrowsums option.
