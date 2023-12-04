@@ -1702,9 +1702,9 @@ onload = function() {
                 if (pu.solution && pu.sol_flag === 0) {
                     Swal.fire({
                         title: '<h3>Your solution is incorrect.</h3>',
-                        html: '<h2>' + Branding.incorrectMessage + '</h2>',
+                        html: '<h2>' + Identity.incorrectMessage + '</h2>',
                         icon: 'error',
-                        confirmButtonText: Branding.okButtonText,
+                        confirmButtonText: Identity.okButtonText,
                     })
                     document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
                 }

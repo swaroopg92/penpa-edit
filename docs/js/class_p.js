@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 9]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 10]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -11894,42 +11894,46 @@ class Puzzle {
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 4) {
-                if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 7)) {
+                if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 7) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [7, "battleship_B", 2];
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 3) {
-                if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 8)) {
+                if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 8) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [8, "battleship_B", 2];
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 2) {
-                if (!this[this.mode.qa].symbol[num] || (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] !== 7)) {
+                if (!this[this.mode.qa].symbol[num] || this[this.mode.qa].symbol[num][0] !== 7) {
                     this.record("symbol", num);
                     this[this.mode.qa].symbol[num] = [7, "battleship_B", 2];
                     this.record_replay("symbol", num);
                     this.redraw();
                 }
+                this.last = -1;
             } else if (this.drawing_mode === 1) {
-                var battleshipdirection;
-                if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
-                    battleshipdirection = this.direction_battleship4(x, y, this.lastx, this.lasty);
-                } else {
+                if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 < (0.3 * this.size) ** 2) {
                     return;
                 }
+                var battleshipdirection = this.direction_battleship4(x, y, this.lastx, this.lasty);
                 // battleshipdirection = 1 (left pointing), 0 (up pointing), 3 (right pointing), 2 (down pointing)
                 var a = [6, 5, 4, 3];
-                this.record("symbol", this.last);
-                this[this.mode.qa].symbol[this.last] = [a[battleshipdirection], "battleship_B", 2];
-                this.record_replay("symbol", this.last);
+                if (!this[this.mode.qa].symbol[this.last] || this[this.mode.qa].symbol[this.last][0] !== a[battleshipdirection]) {
+                    this.record("symbol", this.last);
+                    this[this.mode.qa].symbol[this.last] = [a[battleshipdirection], "battleship_B", 2];
+                    this.record_replay("symbol", this.last);
+                    this.redraw();
+                }
                 this.drawing_mode = -1;
                 this.last = -1;
-                this.redraw();
             }
         }
     }
@@ -11975,10 +11979,10 @@ class Puzzle {
                 delete this[this.mode.qa].symbol[num];
                 this.record_replay("symbol", num);
             }
-            this.drawing_mode = -1;
-            this.last = -1;
             this.redraw();
         }
+        this.drawing_mode = -1; // always exit drawing mode
+        this.last = -1;
     }
 
     get_neighbors(num, options = 'all') {
@@ -12960,16 +12964,17 @@ class Puzzle {
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
+                        message = DOMPurify.sanitize(message);
                         if (message == "" || message.includes("http-equiv=")) {
-                            message = Branding.solveDefaultMessage;
+                            message = Identity.solveDefaultMessage;
                         }
                         setTimeout(() => {
                             Swal.fire({
-                                title: Branding.solveTitle ? '<h3 class="wish">' + Branding.solveTitle + '</h3>' : undefined,
+                                title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                 html: '<h2 class="wish">' + message + '</h2>',
                                 background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
-                                confirmButtonText: Branding.solveOKButtonText,
+                                confirmButtonText: Identity.solveOKButtonText,
                                 // timer: 5000
                             })
                         }, 20);
@@ -12996,16 +13001,17 @@ class Puzzle {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
                             let message = document.getElementById("custom_message").value;
+                            message = DOMPurify.sanitize(message);
                             if (message == "" || message.includes("http-equiv=")) {
-                                message = Branding.solveDefaultMessage;
+                                message = Identity.solveDefaultMessage;
                             }
                             setTimeout(() => {
                                 Swal.fire({
-                                    title: Branding.solveTitle ? '<h3 class="wish">' + Branding.solveTitle + '</h3>' : undefined,
+                                    title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                     html: '<h2 class="wish">' + message + '</h2>',
                                     background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
-                                    confirmButtonText: Branding.solveOKButtonText,
+                                    confirmButtonText: Identity.solveOKButtonText,
                                 })
                             }, 20);
                             sw_timer.pause();
