@@ -2009,6 +2009,7 @@ function load(urlParam, type = 'url', origurl = null) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        rtext[5] = rtext[5].split(pu.replace[i][1]).join(pu.replace[i][0]);
 
         // submode, style settings
         if (rtext[11]) {
@@ -2027,6 +2028,10 @@ function load(urlParam, type = 'url', origurl = null) {
         }
     }
     rtext[5] = JSON.parse(rtext[5]);
+    // workaround for incorrectly encoded empty centerlist
+    if (rtext[5][0] == null) {
+        rtext[5] = [];
+    }
     for (var i = 1; i < rtext[5].length; i++) {
         rtext[5][i] = (rtext[5][i - 1] + rtext[5][i]);
     }

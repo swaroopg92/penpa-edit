@@ -2827,9 +2827,12 @@ class Puzzle {
     }
 
     __export_list_tab_shared() {
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        var list = [];
+        if (this.centerlist.length > 0) {
+            list.push(this.centerlist[0]);
+            for (var i = 1; i < this.centerlist.length; i++) {
+                list.push(this.centerlist[i] - this.centerlist[i - 1]);
+            }
         }
         var text = JSON.stringify(list) + "\n";
 
