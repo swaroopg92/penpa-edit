@@ -6782,7 +6782,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
-                    this.pu_q.command_undo.push(a);
+                    if (a) {
+                        this.pu_q.command_undo.push(a);
+                    }
                     if (a_col) {
                         this.pu_q_col.command_undo.push(a_col);
                     }
@@ -6886,7 +6888,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
-                    this.pu_a.command_undo.push(a);
+                    if (a) {
+                        this.pu_a.command_undo.push(a);
+                    }
                     if (a_col) {
                         this.pu_a_col.command_undo.push(a_col);
                     }
@@ -6985,7 +6989,6 @@ class Puzzle {
                             this.pu_a_col.command_replay.push(a_col_replay);
                         }
                     }
-
                     this.redraw();
                 }
             }
@@ -7014,7 +7017,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else { // group redo is done, stop
-                    this.pu_q.command_redo.push(a);
+                    if (a) {
+                        this.pu_q.command_redo.push(a);
+                    }
                     if (a_col) {
                         this.pu_q_col.command_redo.push(a_col);
                     }
@@ -7114,7 +7119,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else {
-                    this.pu_a.command_redo.push(a); // group redo is done, stop
+                    if (a) {
+                        this.pu_a.command_redo.push(a); // group redo is done, stop
+                    }
                     if (a_col) {
                         this.pu_a_col.command_redo.push(a_col);
                     }
