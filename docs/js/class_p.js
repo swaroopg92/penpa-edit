@@ -640,9 +640,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                errorMsg('Max column size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
-            } else {column
-                errorMsg('Min column size reached <h2 class="warn">1</h2>');
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+            } else {
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -654,9 +654,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                errorMsg('Max column size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                errorMsg('Min column size reached <h2 class="warn">1</h2>');
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -668,9 +668,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+                errorMsg('Max column size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                errorMsg('Min row size reached <h2 class="warn">1</h2>');
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -682,9 +682,9 @@ class Puzzle {
             this.redraw();
         } else {
             if (sign === 1) {
-                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+                errorMsg('Max column size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
             } else {
-                errorMsg('Min row size reached <h2 class="warn">1</h2>');
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
             }
         }
     }
@@ -699,8 +699,7 @@ class Puzzle {
                     let band = Math.floor(k / stride);
                     let offset = [1, 2, 3, 4, 8, 8, 8, 8, 12, 12, 12, 12][band] * originalnx0 || 0;
                     return k + offset * sign;
-                } 
-                else {
+                } else {
                     return k;
                 }
             }
@@ -713,8 +712,7 @@ class Puzzle {
                     let band = Math.floor(k / stride);
                     let offset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][band] * originalnx0 || 0;
                     return k + offset * sign;
-                } 
-                else {
+                } else {
                     return k;
                 }
             }
@@ -727,11 +725,10 @@ class Puzzle {
                     let factor = Math.floor(k / stride);
                     let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
                     let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
-                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);                                            
+                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);
                     let offset = (parseInt(normal_cursor / originalnx0) + 1) * pointsPerType + typeOffset * originalny0;
                     return k + offset * sign;
-                } 
-                else {
+                } else {
                     return k;
                 }
             }
@@ -744,11 +741,10 @@ class Puzzle {
                     let factor = Math.floor(k / stride);
                     let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
                     let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
-                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);                        
-                    let offset = (parseInt(normal_cursor / originalnx0)) * pointsPerType + typeOffset * originalny0;                        
+                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);
+                    let offset = (parseInt(normal_cursor / originalnx0)) * pointsPerType + typeOffset * originalny0;
                     return k + offset * sign;
-                } 
-                else {
+                } else {
                     return k;
                 }
             }
@@ -765,8 +761,7 @@ class Puzzle {
             } else {
                 if (this.space[spaceSide] > 0) {
                     this.space[spaceSide] = this.space[spaceSide] - 1;
-                }
-                else if (pu.mode.qa === 'pu_a' ) {
+                } else if (pu.mode.qa === 'pu_a') {
                     return; // Protect board content
                 }
             }
@@ -788,8 +783,7 @@ class Puzzle {
                 this.width = this.width_c;
                 this.canvasx = this.width_c * this.size;
             }
-        }
-        else {
+        } else {
             this.nx = this.nx + (1 * sign); // Columns, Adding/Removing 1 column
             this.nx0 = this.nx + 4;
             if ((this.get_orientation('r') % 2) === 0) {
@@ -808,7 +802,7 @@ class Puzzle {
         // Find the missing boxes
         let old_centerlist = this.centerlist;
         let old_idealcenterlist = []; // If no box was missing
-        for (let j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {                
+        for (let j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
             for (let i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
                 old_idealcenterlist.push(i + j * originalnx0);
             }
@@ -836,10 +830,11 @@ class Puzzle {
             this.point_reflect_UD();
         }
 
-        const translate = this.make_resize_point_translator(side, sign, originalnx0, originalny0);
+        // Translate function
+        const translate_fn = this.make_resize_point_translator(side, sign, originalnx0, originalny0);
 
         // Reset centerlist to match the margins
-        this.centerlist = [] 
+        this.centerlist = []
         for (let j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
             for (let i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
                 this.centerlist.push(i + j * (this.nx0));
@@ -848,15 +843,14 @@ class Puzzle {
         // Remove Box elements
         for (let n = 0; n < boxremove.length; n++) {
             let num = boxremove[n];
-            let m = translate(num);
+            let m = translate_fn(num);
             let index = this.centerlist.indexOf(m);
             if (index !== -1) {
                 this.centerlist.splice(index, 1);
             }
         }
         this.make_frameline();
-
-        this.translate_puzzle_elements(translate);
+        this.translate_puzzle_elements(translate_fn);
     }
 
     // Universal function to translate all elements in a puzzle:
@@ -864,17 +858,17 @@ class Puzzle {
     // - selection
     // - conflicts
     // - all pu_q and pu_a puzzle elements
-    // - embedded soltion (single and multiple)
+    // - embedded solution (single and multiple)
     // 
     // Currently used for resizing the board.
     // Or in the future to insert or delete a row/col, given the proper translate function.
-    translate_puzzle_elements(translate) {
-        this.cursol = translate(this.cursol);
-        this.cursolS = translate(this.cursolS);
-        this.freelinecircle_g[0] = translate(this.freelinecircle_g[0]);
-        this.freelinecircle_g[1] = translate(this.freelinecircle_g[1]);
-        this.selection = this.selection.map(translate);
-        this.conflict_cells = this.conflict_cells.map(translate);
+    translate_puzzle_elements(translate_fn) {
+        this.cursol = translate_fn(this.cursol);
+        this.cursolS = translate_fn(this.cursolS);
+        this.freelinecircle_g[0] = translate_fn(this.freelinecircle_g[0]);
+        this.freelinecircle_g[1] = translate_fn(this.freelinecircle_g[1]);
+        this.selection = this.selection.map(translate_fn);
+        this.conflict_cells = this.conflict_cells.map(translate_fn);
 
         let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
@@ -885,19 +879,17 @@ class Puzzle {
                     if (a && a.length >= 4) {
                         // ['line', '25,39', ... ]
                         if (typeof a[1] === 'string') {
-                            a[1] = a[1].split(',').map(translate).join(',');
+                            a[1] = a[1].split(',').map(translate_fn).join(',');
                         }
                         // ['arrows', -1, [216, ... ], ...]
                         else if (a[1] === -1) {
                             if (a[2]) {
                                 for (let a2 in a[2]) {
-                                    a[2][a2] = translate(a[2][a2]);
+                                    a[2][a2] = translate_fn(a[2][a2]);
                                 }
                             }
-                        }
-                        // ['number', 45, ... ]
-                        else {
-                            a[1] = translate(a[1]);
+                        } else {
+                            a[1] = translate_fn(a[1]);
                         }
                     }
                 }
@@ -910,7 +902,7 @@ class Puzzle {
                     this[i][feature] = {};
                     let keys = Object.keys(temp);
                     for (let k = 0; k < keys.length; k++) {
-                        let m = translate(keys[k]);
+                        let m = translate_fn(keys[k]);
                         this[i][feature][m] = temp[keys[k]];
                     }
                 }
@@ -923,13 +915,12 @@ class Puzzle {
                     this[i][feature] = {};
                     for (let k in temp) {
                         if (k.includes(',')) {
-                            let k1 = translate(k.split(",")[0]);
-                            let k2 = translate(k.split(",")[1]);
+                            let k1 = translate_fn(k.split(",")[0]);
+                            let k2 = translate_fn(k.split(",")[1]);
                             let key = (k1.toString() + "," + k2.toString());
                             this[i][feature][key] = temp[k];
-                        }
-                        else { // Exception for 'x' mark
-                            let m = translate(k);
+                        } else { // Exception for 'x' mark
+                            let m = translate_fn(k);
                             this[i][feature][m] = temp[k];
                         }
                     }
@@ -944,7 +935,7 @@ class Puzzle {
                     for (let k in temp) {
                         if (Array.isArray(temp[k])) {
                             for (let m = 0; m <= (temp[k].length - 1); m++) {
-                                temp[k][m] = translate(temp[k][m]);
+                                temp[k][m] = translate_fn(temp[k][m]);
                             }
                         }
                         this[i][feature][k] = temp[k];
@@ -956,15 +947,15 @@ class Puzzle {
         // Translate solution
         if (this.solution) {
             let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
-            
+
             if (!this.multisolution) {
                 let sol = JSON.parse(this.solution);
                 for (let sol_count in sol) {
                     if (sol[sol_count]) {
-                        switch(parseInt(sol_count)) {
+                        switch (parseInt(sol_count)) {
                             case 0: // shading
                                 for (let i in sol[sol_count]) {
-                                    sol[sol_count][i] = translate(sol[sol_count][i]).toString();
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
                                 }
                                 break;
                             case 1: // Line / FreeLine
@@ -972,21 +963,21 @@ class Puzzle {
                             case 3: // Wall
                                 for (let i in sol[sol_count]) {
                                     let parts = sol[sol_count][i].split(",");
-                                    parts[0] = translate(parts[0]);
-                                    parts[1] = translate(parts[1]);
+                                    parts[0] = translate_fn(parts[0]);
+                                    parts[1] = translate_fn(parts[1]);
                                     sol[sol_count][i] = parts.join(",");
                                 }
                                 break;
                             case 4: // Number
                                 for (let i in sol[sol_count]) {
                                     let parts = sol[sol_count][i].split(",");
-                                    parts[0] = translate(parts[0]);
+                                    parts[0] = translate_fn(parts[0]);
                                     sol[sol_count][i] = parts.join(",");
                                 }
                                 break;
                             case 5: // Symbol
                                 for (let i in sol[sol_count]) {
-                                    sol[sol_count][i] = translate(sol[sol_count][i]).toString();
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
                                 }
                                 break;
                         }
@@ -994,11 +985,10 @@ class Puzzle {
                     }
                 }
                 pu.solution = JSON.stringify(sol);
-            }
-            else {
+            } else {
                 let sol = this.solution;
                 let sol_count = -1; // as list indexing starts at 0
-    
+
                 // loop through and check which "OR" settings are selected
                 for (let m = 0; m < settingstatus_or.length; m++) {
                     if (settingstatus_or[m].checked) {
@@ -1011,13 +1001,13 @@ class Puzzle {
                         switch (sol_id) {
                             case "surface":
                                 for (let i in sol[sol_count]) {
-                                    sol[sol_count][i] = translate(sol[sol_count][i]).toString();
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
                                 }
                                 break;
                             case "number":
                                 for (let i in sol[sol_count]) {
                                     let parts = sol[sol_count][i].split(",");
-                                    parts[0] = translate(parts[0]);
+                                    parts[0] = translate_fn(parts[0]);
                                     sol[sol_count][i] = parts.join(",");
                                 }
                                 break;
@@ -1026,8 +1016,8 @@ class Puzzle {
                             case "wall":
                                 for (let i in sol[sol_count]) {
                                     let parts = sol[sol_count][i].split(",");
-                                    parts[0] = translate(parts[0]);
-                                    parts[1] = translate(parts[1]);
+                                    parts[0] = translate_fn(parts[0]);
+                                    parts[1] = translate_fn(parts[1]);
                                     sol[sol_count][i] = parts.join(",");
                                 }
                                 break;
@@ -1042,7 +1032,7 @@ class Puzzle {
                             case "akari":
                             case "mine":
                                 for (let i in sol[sol_count]) {
-                                    sol[sol_count][i] = translate(sol[sol_count][i]).toString();
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
                                 }
                                 break;
                         }
