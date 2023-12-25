@@ -1,18 +1,7 @@
 ## History
 * unreleased
-	* Persist custom color selection per edit mode
-	* Preview symbols in Panel with custom color
-	* Implement custom color for Triangle
-	* Implement custom color for Pyramid
-	* Implement custom color for Cube
-	* Implement custom color for Kakuro
-	* Implement custom color for Truncated square
-	* Implement custom color for Snub square
-	* Implement custom color for Cairo pentagonal
-	* Implement custom color for Rhombitrihexagonal
-	* Implement custom color for Deltoidal trihexagonal
-	* Fixed surface painting with custom color
-	* Fixed custom color with transparancy
+	* Fixed I/O Sudoku Text Area visibility in dark mode.
+	* Code rehaul and improvements for custom colors. Preview symbols in Panel with custom color. Custom color added for Triangle, Pyramid, Cube, Kakuro, Truncated square, Snub square, Cairo pentagonal, Rhombitrihexagonal, Deltoidal trihexagonal. Fixed custom color with transparancy.
 	* Fixed selection of unavailable sub mode or symbol. Rare but could cause corruption and unresponsive puzzle.
 	* Handle empty centerlist for old links. Added protection from removing the last cell using Box mode.
 	* Make puzzle progress saving more robust, especially on mobile browsers.
