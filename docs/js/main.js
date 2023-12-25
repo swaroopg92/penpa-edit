@@ -2054,12 +2054,20 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+        save_progress();
+    });
 
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+            save_progress();
+        }
+    });
+
+    function save_progress() {
         // Save puzzle progress
-        let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting === "1" &&
+            UserSettings.local_storage === 1 &&
             !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
@@ -2069,7 +2077,7 @@ onload = function() {
 
             localStorage.setItem(hash, rstr);
         }
-    });
+    }
 
     // Adding on change events for general settings
     // Theme Setting
