@@ -782,38 +782,37 @@ onload = function() {
 
         var key = e.key;
         const keylocation = e.location;
-        if (keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            if (isShiftKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                shift_counter = 0;
-                shift_release_time = Date.now();
+        if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            shift_counter = 0;
+            shift_release_time = Date.now();
+            e.returnValue = false;
+        } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            ctrl_counter = 0;
+            ctrl_release_time = Date.now();
+            e.returnValue = false;
+        } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
+            if (key === "1") {
+                number_release_time = Date.now();
+                previousdigit1 = true;
                 e.returnValue = false;
-            } else if (isCtrlKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                ctrl_counter = 0;
+            } else {
+                previousdigit1 = false;
+                number_release_time = -1e5;
                 e.returnValue = false;
-            } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
-                if (key === "1") {
-                    number_release_time = Date.now();
-                    previousdigit1 = true;
-                    e.returnValue = false;
-                } else {
-                    previousdigit1 = false;
-                    number_release_time = -1e5;
-                    e.returnValue = false;
-                }
             }
         }
     }
@@ -971,6 +970,8 @@ onload = function() {
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
         }
+        // This segment of code I added for a purpose but don't recollect the reason.
+        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
             e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
@@ -2053,7 +2054,16 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+        save_progress();
+    });
 
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+            save_progress();
+        }
+    });
+
+    function save_progress() {
         // Save puzzle progress
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
@@ -2067,7 +2077,7 @@ onload = function() {
 
             localStorage.setItem(hash, rstr);
         }
-    });
+    }
 
     // Adding on change events for general settings
     // Theme Setting
