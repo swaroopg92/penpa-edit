@@ -1,5 +1,6 @@
 ## History
 * unreleased
+	* Fixed I/O Sudoku Text Area visibility in dark mode.
 	* Handle empty centerlist for old links. Added protection from removing the last cell using Box mode.
 	* Make puzzle progress saving more robust, especially on mobile browsers.
 * 2023/12/25 ver 3.0.11
