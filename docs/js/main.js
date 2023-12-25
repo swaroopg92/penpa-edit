@@ -782,38 +782,37 @@ onload = function() {
 
         var key = e.key;
         const keylocation = e.location;
-        if (keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            if (isShiftKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                shift_counter = 0;
-                shift_release_time = Date.now();
+        if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            shift_counter = 0;
+            shift_release_time = Date.now();
+            e.returnValue = false;
+        } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            ctrl_counter = 0;
+            ctrl_release_time = Date.now();
+            e.returnValue = false;
+        } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
+            if (key === "1") {
+                number_release_time = Date.now();
+                previousdigit1 = true;
                 e.returnValue = false;
-            } else if (isCtrlKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                ctrl_counter = 0;
+            } else {
+                previousdigit1 = false;
+                number_release_time = -1e5;
                 e.returnValue = false;
-            } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
-                if (key === "1") {
-                    number_release_time = Date.now();
-                    previousdigit1 = true;
-                    e.returnValue = false;
-                } else {
-                    previousdigit1 = false;
-                    number_release_time = -1e5;
-                    e.returnValue = false;
-                }
             }
         }
     }
