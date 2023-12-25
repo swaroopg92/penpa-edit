@@ -1186,7 +1186,7 @@ class Puzzle_truncated_square extends Puzzle {
     }
 
     draw_symbol_select(ctx, x, y, num, sym, i = 'panel', qamode) {
-        var ccolor = "none";
+        let ccolor = undefined;
         if (i !== 'panel' && UserSettings.custom_colors_on && this[qamode + "_col"].symbol[i]) {
             ccolor = this[qamode + "_col"].symbol[i];
         }
