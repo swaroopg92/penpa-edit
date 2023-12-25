@@ -199,9 +199,9 @@ const UserSettings = {
                 valueInt = valueString === 'true' ? 1 : 4;
             }
         }
-        
+
         this._local_storage = (valueInt === 1);
-        
+
         document.getElementById("allow_local_storage").value = valueInt;
         this.attemptSave();
     },
@@ -219,7 +219,7 @@ const UserSettings = {
         if (this._save_current_puzzle !== undefined) {
             return this._save_current_puzzle;
         }
-        
+
         // Default to whether saving is turned on in general.
         return (this._local_storage === 1);
     },
