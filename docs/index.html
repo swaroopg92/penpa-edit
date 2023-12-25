@@ -26,6 +26,24 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <link rel="apple-touch-icon" href="./css/images/logo.png" />
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TSBMV8L8');
+    </script>
+    <!-- End Google Tag Manager -->
     <!-- STYLES -->
     <!-- Online styles -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -116,6 +134,9 @@
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSBMV8L8" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <header id="header">
         <span id="title">Setter Mode</span>
         <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2023 <button id="page_help">Help</button></span>
