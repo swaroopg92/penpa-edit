@@ -1,5 +1,6 @@
 ## History
 * unlreleased
+	* code refactoring of board resizing feature. Solution check/ undo/ redo are retained even after board resizing.
 	* Fix battleship composite mode. Avoid duplicating undo commands.
 	* Polygon shape improvements.
 * 2023/12/02 ver 3.0.10

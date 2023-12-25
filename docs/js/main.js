@@ -971,6 +971,8 @@ onload = function() {
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
         }
+        // This segment of code I added for a purpose but don't recollect the reason.
+        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
             e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
