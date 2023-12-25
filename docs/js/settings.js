@@ -221,7 +221,7 @@ const UserSettings = {
         }
 
         // Default to whether saving is turned on in general.
-        return (this._local_storage === 1);
+        return this._local_storage;
     },
 
     _reload_button: 2,
