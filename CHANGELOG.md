@@ -1,5 +1,6 @@
 ## History
 * unreleased
+	* Handle empty centerlist for old links. Added protection from removing the last cell using Box mode.
 	* Make puzzle progress saving more robust, especially on mobile browsers.
 * 2023/12/25 ver 3.0.11
 	* code refactoring of board resizing feature. Solution check/ undo/ redo are retained even after board resizing.

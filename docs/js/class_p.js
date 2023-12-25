@@ -1849,9 +1849,12 @@ class Puzzle {
     }
 
     __export_list_tab_shared() {
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        var list = [];
+        if (this.centerlist.length > 0) {
+            list.push(this.centerlist[0]);
+            for (var i = 1; i < this.centerlist.length; i++) {
+                list.push(this.centerlist[i] - this.centerlist[i - 1]);
+            }
         }
         var text = JSON.stringify(list) + "\n";
 
@@ -9621,11 +9624,26 @@ class Puzzle {
             this.centerlist.push(num);
             this.drawing_mode = 1;
         } else {
-            this.centerlist.splice(index, 1);
-            this.drawing_mode = 0;
+            let status = this.check_last_cell();
+            if (!status) {
+                this.centerlist.splice(index, 1);
+                this.drawing_mode = 0;
+            } else {
+                this.drawing = false;
+                this.last = -1
+            }
         }
         this.make_frameline();
         this.redraw();
+    }
+
+    check_last_cell() {
+        if (this.centerlist.length == 1) {
+            infoMsg('<h3 class="info">Last cell cannot be removed using the "Box" mode. For a blank grid use the following approach:</h3><ol><li>Click on "New Grid / Update"</li><li>Set "Gridlines" to "None"</li><li>Set "Gridpoints" to "No"</li><li>Set "Outside frame" to "No"</li><li>Click on "Update display"</li></ol>');
+            return true;
+        } else {
+            return false;
+        }
     }
 
     re_boardmove(num) {
@@ -9634,7 +9652,10 @@ class Puzzle {
             if (this.drawing_mode === 1 && index === -1) {
                 this.centerlist.push(num);
             } else if (this.drawing_mode === 0 && index != -1) {
-                this.centerlist.splice(index, 1);
+                let status = this.check_last_cell();
+                if (!status) {
+                    this.centerlist.splice(index, 1);
+                }
             }
             this.make_frameline();
             this.redraw();
