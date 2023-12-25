@@ -12972,7 +12972,7 @@ class Puzzle {
                             Swal.fire({
                                 title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                 html: '<h2 class="wish">' + message + '</h2>',
-                                background: 'url(js/images/new_year.jpg)',
+                                background: 'url(js/images/christmas.jpg)',
                                 icon: 'success',
                                 confirmButtonText: Identity.solveOKButtonText,
                                 // timer: 5000
@@ -13009,7 +13009,7 @@ class Puzzle {
                                 Swal.fire({
                                     title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                     html: '<h2 class="wish">' + message + '</h2>',
-                                    background: 'url(js/images/new_year.jpg)',
+                                    background: 'url(js/images/christmas.jpg)',
                                     icon: 'success',
                                     confirmButtonText: Identity.solveOKButtonText,
                                 })
