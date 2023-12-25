@@ -784,38 +784,37 @@ onload = function() {
 
         var key = e.key;
         const keylocation = e.location;
-        if (keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            if (isShiftKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                shift_counter = 0;
-                shift_release_time = Date.now();
+        if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            shift_counter = 0;
+            shift_release_time = Date.now();
+            e.returnValue = false;
+        } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            ctrl_counter = 0;
+            ctrl_release_time = Date.now();
+            e.returnValue = false;
+        } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
+            if (key === "1") {
+                number_release_time = Date.now();
+                previousdigit1 = true;
                 e.returnValue = false;
-            } else if (isCtrlKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                ctrl_counter = 0;
+            } else {
+                previousdigit1 = false;
+                number_release_time = -1e5;
                 e.returnValue = false;
-            } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
-                if (key === "1") {
-                    number_release_time = Date.now();
-                    previousdigit1 = true;
-                    e.returnValue = false;
-                } else {
-                    previousdigit1 = false;
-                    number_release_time = -1e5;
-                    e.returnValue = false;
-                }
             }
         }
     }
@@ -973,6 +972,8 @@ onload = function() {
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
         }
+        // This segment of code I added for a purpose but don't recollect the reason.
+        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
             e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
@@ -1704,9 +1705,9 @@ onload = function() {
                 if (pu.solution && pu.sol_flag === 0) {
                     Swal.fire({
                         title: '<h3>Your solution is incorrect.</h3>',
-                        html: '<h2>' + Branding.incorrectMessage + '</h2>',
+                        html: '<h2>' + Identity.incorrectMessage + '</h2>',
                         icon: 'error',
-                        confirmButtonText: Branding.okButtonText,
+                        confirmButtonText: Identity.okButtonText,
                     })
                     document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
                 }
@@ -2055,12 +2056,20 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+        save_progress();
+    });
 
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+            save_progress();
+        }
+    });
+
+    function save_progress() {
         // Save puzzle progress
-        let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting === "1" &&
+            UserSettings.local_storage === 1 &&
             !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
@@ -2070,7 +2079,7 @@ onload = function() {
 
             localStorage.setItem(hash, rstr);
         }
-    });
+    }
 
     // Adding on change events for general settings
     // Theme Setting

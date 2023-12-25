@@ -1,4 +1,4 @@
-const Branding = {
+const Identity = {
     // For messages speaking in the first person
     appOwner: "Swaroop",
     // For dismissing popups
@@ -8,7 +8,7 @@ const Branding = {
     infoTitle: "Swaroop says",
 
     solveTitle: undefined,
-    solveDefaultMessage: "Congratulations 🙂",
+    solveDefaultMessage: "Merry Christmas 🙂", // Default - Congratulations 🙂
     solveOKButtonText: "Hurray!",
 
     incorrectMessage: "Keep trying 🙂",
@@ -23,12 +23,26 @@ const Branding = {
 
 (function() {
     const usageButtons = document.getElementById('usageButtons');
-    for (let buttonName in Branding.addUsageButtons) {
+    for (let buttonName in Identity.addUsageButtons) {
         let button = document.createElement('a');
-        button.setAttribute('href', Branding.addUsageButtons[buttonName]);
+        button.setAttribute('href', Identity.addUsageButtons[buttonName]);
         button.setAttribute('target', '_blank');
         button.classList.add('button');
         button.textContent = buttonName;
         usageButtons.appendChild(button);
+    }
+
+    if (Identity.googleTag) {
+        let script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://www.googletagmanager.com/gtag/js?id=" + Identity.googleTag;
+        script.async = true;
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', Identity.googleTag);
     }
 })();

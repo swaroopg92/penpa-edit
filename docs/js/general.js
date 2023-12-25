@@ -1,18 +1,18 @@
 function errorMsg(html) {
     Swal.fire({
-        title: Branding.errorTitle,
+        title: Identity.errorTitle,
         html: html,
         icon: 'error',
-        confirmButtonText: Branding.okButtonText,
+        confirmButtonText: Identity.okButtonText,
     })
 }
 
 function infoMsg(html) {
     Swal.fire({
-        title: Branding.infoTitle,
+        title: Identity.infoTitle,
         html: html,
         icon: 'info',
-        confirmButtonText: Branding.okButtonText,
+        confirmButtonText: Identity.okButtonText,
     })
 }
 
@@ -1943,6 +1943,7 @@ function load(urlParam, type = 'url', origurl = null) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
         ptitle = ptitle.replace(/^Title\:\s/, '');
         if (ptitle !== "Title: ") {
+            ptitle = DOMPurify.sanitize(ptitle);
             document.getElementById("puzzletitle").innerHTML = ptitle;
             document.getElementById("saveinfotitle").value = ptitle;
         }
@@ -1951,14 +1952,16 @@ function load(urlParam, type = 'url', origurl = null) {
         let pauthor = rtext_para[16].replace(/%2C/g, ',')
         pauthor = pauthor.replace(/^Author\:\s/, '');
         if (pauthor != "") {
+            pauthor = DOMPurify.sanitize(pauthor);
             document.getElementById("puzzleauthor").innerHTML = pauthor;
             document.getElementById("saveinfoauthor").value = pauthor;
         }
     }
     if (rtext_para[17] && rtext_para[17] !== "") {
-        document.getElementById("puzzlesourcelink").href = rtext_para[17];
+        psource = DOMPurify.sanitize(rtext_para[17]);
+        document.getElementById("puzzlesourcelink").href = psource;
         document.getElementById("puzzlesource").innerHTML = "Source";
-        document.getElementById("saveinfosource").value = rtext_para[17];
+        document.getElementById("saveinfosource").value = psource;
     }
 
     make_class(rtext_para[0], 'url');
@@ -1975,6 +1978,7 @@ function load(urlParam, type = 'url', origurl = null) {
     if (rtext_para[18] && rtext_para[18] !== "") {
         document.getElementById("puzzlerules").classList.add("rules-present");
         pu.rules = rtext_para[18].replace(/%2C/g, ',').replace(/%2D/g, '<br>').replace(/%2E/g, '&').replace(/%2F/g, '=');
+        pu.rules = DOMPurify.sanitize(pu.rules);
         document.getElementById("ruletext").innerHTML = pu.rules;
         document.getElementById("saveinforules").value = pu.rules.replace(/<br>/g, '\n');
     }
@@ -2022,6 +2026,7 @@ function load(urlParam, type = 'url', origurl = null) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        rtext[5] = rtext[5].split(pu.replace[i][1]).join(pu.replace[i][0]);
 
         // submode, style settings
         if (rtext[11]) {
@@ -2040,6 +2045,12 @@ function load(urlParam, type = 'url', origurl = null) {
         }
     }
     rtext[5] = JSON.parse(rtext[5]);
+
+    // workaround for incorrectly encoded empty centerlist
+    if (rtext[5][0] == null) {
+        rtext[5] = [];
+    }
+
     for (var i = 1; i < rtext[5].length; i++) {
         rtext[5][i] = (rtext[5][i - 1] + rtext[5][i]);
     }
@@ -2571,6 +2582,7 @@ function load(urlParam, type = 'url', origurl = null) {
             if (qstr.stime) {
                 disptext += 'Time: ' + qstr.stime + " (d:h:m:s:ts)";
             }
+            disptext = DOMPurify.sanitize(disptext);
             document.getElementById("puzzletitle").innerHTML = disptext;
             document.getElementById("puzzletitle").style.display = '';
 

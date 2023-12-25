@@ -14,9 +14,16 @@
 	* Fixed surface painting with custom color
 	* Fixed custom color with transparancy
 	* Fixed selection of unavailable sub mode or symbol. Rare but could cause corruption and unresponsive puzzle.
-* unreleased
-	* Arrow circle without arrow single cell added to arrowsums option
-	* moved gtag code back to html file as Adblock Ultimate was blocking branding.js file for some users
+	* Handle empty centerlist for old links. Added protection from removing the last cell using Box mode.
+	* Make puzzle progress saving more robust, especially on mobile browsers.
+* 2023/12/25 ver 3.0.11
+	* code refactoring of board resizing feature. Solution check/ undo/ redo are retained even after board resizing.
+	* Fix battleship composite mode. Avoid duplicating undo commands.
+	* Polygon shape improvements.
+* 2023/12/02 ver 3.0.10
+	* User input sanitization to prevent XSS attacks.
+	* Arrow circle without arrow single cell added to arrowsums option.
+	* moved gtag code back to html file as Adblock Ultimate was blocking Identity.js file for some users.
 * 2023/09/24 ver 3.0.9
     * New options in Screenshot to include Author and Rules for png and jpeg. svg support not included.
     * Use new clipboard API when able. (Fixes Copy on iOS.)
@@ -31,7 +38,7 @@
 	* Fixed ? in tapa gmpuzzles output text, minor display improvements.
 	* Code cleanup
 	* Improved sudoku string IO to add whitespace suppression option and import non-square text blocks.
-	* Separated branding for easy access in future to other applications.
+	* Separated Identity for easy access in future to other applications.
 * 2023/05/03 ver 3.0.7
 	* Diagonal connection shape for killer cages with rotation fix.
 	* Tweaked display for mobile devices.

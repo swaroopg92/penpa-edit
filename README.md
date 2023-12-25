@@ -4,13 +4,13 @@ Universal pencil puzzle editor capable of drawing many different kinds of pencil
 
 You can save images and text in the form of URLs that can be loaded in a browser.
 
-If the message "Invalid address" is displayed on a supported browser, try clearing the cache.
+If the message “Invalid address” is displayed on a supported browser, try clearing the cache.
 
-Depending on the browser you can update the page without using the cache with "Ctrl" + "R", "Ctrl" + "F5", "Shift" + "F5", etc.
+Depending on the browser you can update the page without using the cache with <kbd>Ctrl</kbd> + <kbd>R</kbd>, <kbd>Ctrl</kbd> + <kbd>F5</kbd>, <kbd>Shift</kbd> + <kbd>F5</kbd>, etc.
 
 ## Referencing and citing content
-You can now site this in your research and publications using:
-[![DOI](https://zenodo.org/badge/270875169.svg)](https://zenodo.org/badge/latestdoi/270875169)
+You can now cite this in your research and publications using:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8374111.svg)](https://doi.org/10.5281/zenodo.8374111)
 
 ## Sample Preview of the possibilities of this tool
 ![Sample of Objects](./images/sample1.png "Sample of Options")
