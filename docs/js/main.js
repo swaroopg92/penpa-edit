@@ -39,7 +39,7 @@ onload = function() {
         togglePaletteMoreText: 'more',
         togglePaletteLessText: 'less',
         showPalette: true,
-        //hideAfterPaletteSelect: true,
+        // hideAfterPaletteSelect: true,
         maxSelectionSize: 8,
         showSelectionPalette: true,
         palette: [

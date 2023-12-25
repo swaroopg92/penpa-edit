@@ -1351,7 +1351,7 @@ class Puzzle {
         if (UserSettings.custom_colors_on && penpa_modes[this.gridtype].customcolor.includes(mode)) {
             let cc = this.mode[this.mode.qa][mode][2];
             if (cc) {
-                $("#colorpicker_special").spectrum("set", cc); 
+                $("#colorpicker_special").spectrum("set", cc);
             }
             document.getElementById('style_special').style.display = 'inline';
         } else {
@@ -8179,7 +8179,7 @@ class Puzzle {
                         cc = this.get_customcolor();
                     }
                 }
-                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode || this[this.mode.qa + "_col"].surface[num] != cc) {
+                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode) {
                     this.record("surface", num);
                     this[this.mode.qa].surface[num] = this.drawing_mode;
                     if (UserSettings.custom_colors_on) {
