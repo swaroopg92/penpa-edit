@@ -2237,7 +2237,7 @@ onload = function() {
     }
 
     // Quick Panel Toggle Setting
-    document.getElementById("quick_panel_dropdown").onchange = function () {
+    document.getElementById("quick_panel_dropdown").onchange = function() {
         UserSettings.quick_panel_button = String(this.value) === "1";
     }
 
