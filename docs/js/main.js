@@ -2236,6 +2236,11 @@ onload = function() {
         panel_onoff();
     }
 
+    // Quick Panel Toggle Setting
+    document.getElementById("quick_panel_dropdown").onchange = function () {
+        UserSettings.quick_panel_button = String(this.value) === "1";
+    }
+
     // Conflict detection
     document.getElementById("conflict_detection_opt").onchange = function() {
         UserSettings.conflict_detection = this.value;
