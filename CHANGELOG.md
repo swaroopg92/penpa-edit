@@ -1,5 +1,6 @@
 ## History
-* unreleased
+* 2023/12/26 ver 3.1.1
+	* Cleaned up available penpa modes for relevant board types.
 	* Improve UserSettings around Local Storage.
 	* Fixed I/O Sudoku Text Area visibility in dark mode.
 	* Code rehaul and improvements for custom colors. Preview symbols in Panel with custom color. Custom color added for Triangle, Pyramid, Cube, Kakuro, Truncated square, Snub square, Cairo pentagonal, Rhombitrihexagonal, Deltoidal trihexagonal. Fixed custom color with transparancy.
