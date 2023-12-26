@@ -5,6 +5,7 @@ let isShiftKeyHeld = e => e.shiftKey;
 let isShiftKeyPressed = key => key === "Shift";
 let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
+let localStorageAvailable = false;
 
 onload = function() {
 
@@ -14,6 +15,15 @@ onload = function() {
     let is_iPad = (!(ua.toLowerCase().match("iphone")) && ua.maxTouchPoints > 1);
     let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    try {
+        if (window.localStorage) {
+            window.localStorage.setItem('test', 123);
+            localStorageAvailable = (window.localStorage.getItem('test') === 123);
+        }
+    } catch (e) {
+        localStorageAvailable = false;
+    }
 
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
@@ -2056,7 +2066,8 @@ onload = function() {
 
         // Save puzzle progress
         let local_storage_setting = document.getElementById("clear_storage_opt").value;
-        if (pu.url.length !== 0 &&
+        if (localStorageAvailable &&
+            pu.url.length !== 0 &&
             pu.mmode === "solve" &&
             local_storage_setting === "1" &&
             !pu.replay) {

@@ -43,7 +43,11 @@ function boot() {
         let hash = "penpa_" + md5(paramArray.p);
 
         // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
+        let local_data;
+        if (localStorageAvailable) {
+            local_data = localStorage.getItem(hash);
+        }
+
         if (local_data && local_data.includes('&p=')) {
             // This is to account for old links and new links together
             var url;
@@ -1833,7 +1837,11 @@ function import_url(urlstring) {
             let hash = "penpa_" + md5(paramArray.p);
 
             // Decrypt puzzle data
-            let local_data = localStorage.getItem(hash);
+            let local_data;
+            if (localStorageAvailable) {
+                local_data = localStorage.getItem(hash);
+            }
+
             if (local_data && local_data.includes('&p=')) {
                 // This is to account for old links and new links together
                 var url;
@@ -2411,7 +2419,10 @@ function load(urlParam, type = 'url', origurl = null) {
         let hash = "penpa_" + md5(pu.url);
 
         // Decrypt puzzle data
-        let local_data = localStorage.getItem(hash);
+        let local_data = null;
+        if (localStorageAvailable) {
+            local_data = localStorage.getItem(hash);
+        }
 
         if (local_data !== null) {
             var local_copy = JSON.parse(decrypt_data(local_data));
