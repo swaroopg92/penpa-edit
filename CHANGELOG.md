@@ -2,6 +2,8 @@
 * unreleased
 	* Improve UserSettings around Local Storage.
 	* Fixed I/O Sudoku Text Area visibility in dark mode.
+	* Code rehaul and improvements for custom colors. Preview symbols in Panel with custom color. Custom color added for Triangle, Pyramid, Cube, Kakuro, Truncated square, Snub square, Cairo pentagonal, Rhombitrihexagonal, Deltoidal trihexagonal. Fixed custom color with transparancy.
+	* Fixed selection of unavailable sub mode or symbol. Rare but could cause corruption and unresponsive puzzle.
 	* Handle empty centerlist for old links. Added protection from removing the last cell using Box mode.
 	* Make puzzle progress saving more robust, especially on mobile browsers.
 * 2023/12/25 ver 3.0.11

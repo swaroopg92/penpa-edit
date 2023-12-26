@@ -7,9 +7,6 @@ const PenpaUI = {
         for (var i of allModes.sub) {
             document.getElementById("sub_" + i + "_lb").classList.toggle('is_hidden', hidden);
         }
-        for (var i of allModes.customcolor) {
-            document.getElementById(i).classList.toggle('is_hidden', hidden);
-        }
         for (var i of allModes.ms) {
             document.getElementById("ms_" + i).parentElement.classList.toggle('is_hidden', hidden);
         }
@@ -50,9 +47,6 @@ const PenpaUI = {
         }
         for (var i of allPossible.sub) {
             document.getElementById("sub_" + i + "_lb").classList.toggle('is_hidden', selectedGrid.sub.indexOf(i) < 0);
-        }
-        for (var i of allPossible.customcolor) {
-            document.getElementById(i).classList.toggle('is_hidden', selectedGrid.customcolor.indexOf(i) < 0);
         }
         for (var i of allPossible.ms) {
             document.getElementById("ms_" + i).parentElement.classList.toggle('is_hidden', selectedGrid.ms.indexOf(i) < 0);
