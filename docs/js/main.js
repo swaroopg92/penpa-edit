@@ -25,6 +25,13 @@ onload = function() {
         localStorageAvailable = false;
     }
 
+    if (!localStorageAvailable) {
+        document.getElementById('clear_storage_opt').classList.add('is_hidden');
+        document.getElementById('clear_storage_one').classList.add('is_hidden');
+        document.getElementById('clear_storage_all').classList.add('is_hidden');
+        document.getElementById('local_storage_browser_message').classList.remove('is_hidden');
+    }
+
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
     } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0 || is_iPad || is_iPad2 || is_iPad3) {
