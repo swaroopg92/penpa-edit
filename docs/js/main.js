@@ -26,7 +26,7 @@ onload = function() {
     }
 
     if (!localStorageAvailable) {
-        document.getElementById('clear_storage_opt').classList.add('is_hidden');
+        document.getElementById('allow_local_storage').classList.add('is_hidden');
         document.getElementById('clear_storage_one').classList.add('is_hidden');
         document.getElementById('clear_storage_all').classList.add('is_hidden');
         document.getElementById('local_storage_browser_message').classList.remove('is_hidden');
