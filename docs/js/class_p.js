@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 10]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 1, 1]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -634,34 +634,143 @@ class Puzzle {
     }
 
     resize_top(sign, celltype = 'black') {
-        // reset the selection while resizing the grid
-        this.selection = [];
-
         sign = parseInt(sign);
         if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
-            let originalspace = [...this.space];
-            if (celltype === 'white') {
-                // Over, under, left, right
-                if (sign === 1) {
-                    this.space[0] = this.space[0] + 1;
+            this.resize_board('t', sign, celltype);
+            this.redraw();
+        } else {
+            if (sign === 1) {
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+            } else {
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
+            }
+        }
+    }
+
+    resize_bottom(sign, celltype = 'black') {
+        sign = parseInt(sign);
+        if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
+            this.resize_board('b', sign, celltype);
+            this.redraw();
+        } else {
+            if (sign === 1) {
+                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+            } else {
+                errorMsg('Min row size reached <h2 class="warn">1</h2>');
+            }
+        }
+    }
+
+    resize_left(sign, celltype = 'black') {
+        sign = parseInt(sign);
+        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
+            this.resize_board('l', sign, celltype);
+            this.redraw();
+        } else {
+            if (sign === 1) {
+                errorMsg('Max column size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+            } else {
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
+            }
+        }
+    }
+
+    resize_right(sign, celltype = 'black') {
+        sign = parseInt(sign);
+        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
+            this.resize_board('r', sign, celltype);
+            this.redraw();
+        } else {
+            if (sign === 1) {
+                errorMsg('Max column size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+            } else {
+                errorMsg('Min column size reached <h2 class="warn">1</h2>');
+            }
+        }
+    }
+
+    make_resize_point_translator(side, sign, originalnx0, originalny0) {
+        const stride = originalnx0 * originalny0;
+        if (side === 't') {
+            // Shift point to the next row
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let band = Math.floor(k / stride);
+                    let offset = [1, 2, 3, 4, 8, 8, 8, 8, 12, 12, 12, 12][band] * originalnx0 || 0;
+                    return k + offset * sign;
                 } else {
-                    if (this.space[0] > 0) {
-                        this.space[0] = this.space[0] - 1;
-                    }
+                    return k;
                 }
             }
-            if (!this.originalnx) {
-                this.originalnx = this.nx;
+        }
+        if (side === 'b') {
+            // Maintain point in the same row
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let band = Math.floor(k / stride);
+                    let offset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][band] * originalnx0 || 0;
+                    return k + offset * sign;
+                } else {
+                    return k;
+                }
             }
-            if (!this.originalny) {
-                this.originalny = this.ny;
+        }
+        if (side === 'l') {
+            // Shift point to next column
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let factor = Math.floor(k / stride);
+                    let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
+                    let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
+                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);
+                    let offset = (parseInt(normal_cursor / originalnx0) + 1) * pointsPerType + typeOffset * originalny0;
+                    return k + offset * sign;
+                } else {
+                    return k;
+                }
             }
-            let originalnx0 = this.nx0;
-            let originalny0 = this.ny0;
+        }
+        if (side === 'r') {
+            // Maintain point in the same column
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let factor = Math.floor(k / stride);
+                    let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
+                    let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
+                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);
+                    let offset = (parseInt(normal_cursor / originalnx0)) * pointsPerType + typeOffset * originalny0;
+                    return k + offset * sign;
+                } else {
+                    return k;
+                }
+            }
+        }
+    }
 
-            // this.nx = nx; // Columns
-            this.ny = this.ny + (1 * sign); // Rows, Adding/Subtracting 1 row
-            // this.nx0 = this.nx + 4;
+    resize_board(side, sign, celltype = 'black') {
+        let originalspace = [...this.space];
+        if (celltype === 'white') {
+            let spaceSide = ['t', 'b', 'l', 'r'].indexOf(side);
+            // Over, under, left, right
+            if (sign === 1) {
+                this.space[spaceSide] = this.space[spaceSide] + 1;
+            } else {
+                if (this.space[spaceSide] > 0) {
+                    this.space[spaceSide] = this.space[spaceSide] - 1;
+                } else if (pu.mode.qa === 'pu_a') {
+                    return; // Protect board content
+                }
+            }
+        }
+        let originalnx0 = parseInt(this.nx0);
+        let originalny0 = parseInt(this.ny0);
+
+        if (side === 't' || side === 'b') {
+            this.ny = this.ny + (1 * sign); // Rows, Adding/Removing 1 row
             this.ny0 = this.ny + 4;
             if ((this.get_orientation('t') % 2) === 0) {
                 this.height0 = this.ny + 1;
@@ -674,1009 +783,9 @@ class Puzzle {
                 this.width = this.width_c;
                 this.canvasx = this.width_c * this.size;
             }
-
-            // Find the missing boxes
-            var old_centerlist = this.centerlist;
-            var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
-                // the top and left edges are unused
-                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) {
-                    old_idealcenterlist.push(i + j * (originalnx0));
-                }
-            }
-            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
-
-            this.create_point();
-            this.centerlist = []
-            for (var j = 2; j < this.ny0 - 2; j++) {
-                for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
-            this.search_center();
-            this.center_n0 = this.center_n;
-            this.canvasxy_update();
-            this.canvas_size_setting();
-            this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
-            if (this.reflect[0] === -1) {
-                this.point_reflect_LR();
-            }
-            if (this.reflect[1] === -1) {
-                this.point_reflect_UD();
-            }
-            this.centerlist = [] //reset centerlist to match the margins
-            for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
-
-            // Remove Box elements
-            if (boxremove) {
-                for (let n = 0; n < boxremove.length; n++) {
-                    let num = boxremove[n];
-                    let m = num + parseInt(originalnx0) * sign;
-                    let index = this.centerlist.indexOf(m);
-                    if (index !== -1) {
-                        this.centerlist.splice(index, 1);
-                    }
-                }
-            }
-
-            this.make_frameline();
-            this.cursol = this.centerlist[0];
-            this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-
-            for (var i of pu_qa) {
-                this[i].command_redo = new Stack();
-                this[i].command_undo = new Stack();
-                this[i].command_replay = new Stack();
-
-                // shift Surface elements to next row
-                if (this[i].surface) {
-                    let temp = this[i].surface;
-                    this[i].surface = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + parseInt(originalnx0) * sign;
-                        this.record("surface", m);
-                        this[i].surface[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Number elements to next row
-                if (this[i].number) {
-                    let temp = this[i].number;
-                    this[i].number = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        let m = parseInt(keys[k]) + (factor + 1) * parseInt(originalnx0) * sign;
-                        this.record("number", m);
-                        this[i].number[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Number elements to next row
-                if (this[i].numberS) {
-                    let m;
-                    let temp = this[i].numberS;
-                    this[i].numberS = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        if (factor >= 8) {
-                            m = parseInt(keys[k]) + 12 * parseInt(originalnx0) * sign;
-                        } else {
-                            m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
-                        }
-                        this.record("numberS", m);
-                        this[i].numberS[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Symbol elements to next row
-                if (this[i].symbol) {
-                    let m;
-                    let temp = this[i].symbol;
-                    this[i].symbol = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        m = parseInt(keys[k]) + (factor + 1) * parseInt(originalnx0) * sign;
-                        this.record("symbol", m);
-                        this[i].symbol[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Line elements to next row
-                if (this[i].line) {
-                    let m;
-                    let temp = this[i].line;
-                    this[i].line = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (factor + 1) * parseInt(originalnx0) * sign;
-                            this.record("line", m);
-                            this[i].line[m] = temp[k];
-                        } else {
-                            let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
-                            var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0) * sign;
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("line", key);
-                            this[i].line[key] = temp[k];
-                        }
-                    }
-                }
-
-                // shift Edge elements to next row
-                if (this[i].lineE) {
-                    let m;
-                    let temp = this[i].lineE;
-                    this[i].lineE = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (factor + 1) * parseInt(originalnx0) * sign;
-                            this.record("lineE", m);
-                            this[i].lineE[m] = temp[k];
-                        } else {
-                            var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0) * sign;
-                            var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0) * sign;
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("lineE", key);
-                            this[i].lineE[key] = temp[k];
-                        }
-                    }
-                }
-
-
-                // shift DeleteEdge elements to next row
-                if (this[i].deletelineE) {
-                    let temp = this[i].deletelineE;
-                    this[i].deletelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("deletelineE", key);
-                        this[i].deletelineE[key] = temp[k];
-                    }
-                }
-
-                // shift FreeLine elements to next row
-                if (this[i].freeline) {
-                    let temp = this[i].freeline;
-                    this[i].freeline = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freeline", key);
-                        this[i].freeline[key] = temp[k];
-                    }
-                }
-
-                // shift FreeEdge elements to next row
-                if (this[i].freelineE) {
-                    let temp = this[i].freelineE;
-                    this[i].freelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 2 * parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + 2 * parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freelineE", key);
-                        this[i].freelineE[key] = temp[k];
-                    }
-                }
-
-                // shift Thermo elements to next row
-                if (this[i].thermo) {
-                    let temp = this[i].thermo;
-                    this[i].thermo = {};
-                    this[i].thermo = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("thermo", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].thermo[k] = temp[k];
-                    }
-                }
-
-                // shift No Bulb Thermo elements to next row
-                if (this[i].nobulbthermo) {
-                    let temp = this[i].nobulbthermo;
-                    this[i].nobulbthermo = {};
-                    this[i].nobulbthermo = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("nobulbthermo", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].nobulbthermo[k] = temp[k];
-                    }
-                }
-
-                // shift Arrow elements to next row
-                if (this[i].arrows) {
-                    let temp = this[i].arrows;
-                    this[i].arrows = {};
-                    this[i].arrows = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("arrows", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].arrows[k] = temp[k];
-                    }
-                }
-
-                // shift Direction elements to next row
-                if (this[i].direction) {
-                    let temp = this[i].direction;
-                    this[i].direction = {};
-                    this[i].direction = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("direction", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].direction[k] = temp[k];
-                    }
-                }
-
-                // shift RectangleFrame elements to next row
-                if (this[i].squareframe) {
-                    let temp = this[i].squareframe;
-                    this[i].squareframe = {};
-                    this[i].squareframe = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("squareframe", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].squareframe[k] = temp[k];
-                    }
-                }
-
-                // shift Wall elements to next row
-                if (this[i].wall) {
-                    let temp = this[i].wall;
-                    this[i].wall = {};
-                    for (var k in temp) {
-                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + (factor + 1) * parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (factor + 1) * parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("wall", key);
-                        this[i].wall[key] = temp[k];
-                    }
-                }
-
-                // shift Cage elements to next row
-                if (this[i].cage) {
-                    let temp = this[i].cage;
-                    this[i].cage = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 8 * parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + 8 * parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("cage", key);
-                        this[i].cage[key] = temp[k];
-                    }
-                }
-
-                // shift Killer Cages to next row
-                if (this[i].killercages) {
-                    let temp = this[i].killercages;
-                    this[i].killercages = {};
-                    this[i].killercages = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("killercages", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].killercages[k] = temp[k];
-                    }
-                }
-
-                // shift Polygon elements to next row
-                if (this[i].polygon) {
-                    let temp = this[i].polygon;
-                    this[i].polygon = {};
-                    this[i].polygon = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("polygon", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + 2 * parseInt(originalnx0) * sign;
-                        }
-                        this[i].polygon[k] = temp[k];
-                    }
-                }
-            }
-            this.redraw();
         } else {
-            if (sign === 1) {
-                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
-            } else {
-                errorMsg('Min row size reached <h2 class="warn">1</h2>');
-            }
-        }
-    }
-
-    resize_bottom(sign, celltype = 'black') {
-        // reset the selection while resizing the grid
-        this.selection = [];
-
-        sign = parseInt(sign);
-        if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {
-            let originalspace = [...this.space];
-            if (celltype === 'white') {
-                // Over, under, left, right
-                if (sign === 1) {
-                    this.space[1] = this.space[1] + 1;
-                } else {
-                    if (this.space[1] > 0) {
-                        this.space[1] = this.space[1] - 1;
-                    }
-                }
-            }
-            if (!this.originalnx) {
-                this.originalnx = this.nx;
-            }
-            if (!this.originalny) {
-                this.originalny = this.ny;
-            }
-            let originalnx0 = this.nx0;
-            let originalny0 = this.ny0;
-
-            // this.nx = nx; // Columns
-            this.ny = this.ny + (1 * sign); // Rows, Adding/Removing 1 row
-            // this.nx0 = this.nx + 4;
-            this.ny0 = this.ny + 4;
-            if ((this.get_orientation('b') % 2) === 0) {
-                this.height0 = this.ny + 1;
-                this.height_c = this.height0;
-                this.height = this.height_c;
-                this.canvasy = this.height_c * this.size;
-            } else {
-                this.width0 = this.ny + 1;
-                this.width_c = this.width0;
-                this.width = this.width_c;
-                this.canvasx = this.width_c * this.size;
-            }
-
-            // Find the missing boxes
-            var old_centerlist = this.centerlist;
-            var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
-                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
-                    old_idealcenterlist.push(i + j * (originalnx0));
-                }
-            }
-            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
-            this.create_point();
-            this.centerlist = []
-            for (var j = 2; j < this.ny0 - 2; j++) {
-                for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
-            this.search_center();
-            this.center_n0 = this.center_n;
-            this.canvasxy_update();
-            this.canvas_size_setting();
-            this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
-            if (this.reflect[0] === -1) {
-                this.point_reflect_LR();
-            }
-            if (this.reflect[1] === -1) {
-                this.point_reflect_UD();
-            }
-            this.centerlist = [] //reset centerlist to match the margins
-            for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
-
-            // Remove Box elements
-            if (boxremove) {
-                for (let n = 0; n < boxremove.length; n++) {
-                    let num = boxremove[n];
-                    let index = this.centerlist.indexOf(num);
-                    if (index !== -1) {
-                        this.centerlist.splice(index, 1);
-                    }
-                }
-            }
-
-            this.make_frameline();
-            this.cursol = this.centerlist[0];
-            this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-
-            for (var i of pu_qa) {
-                this[i].command_redo = new Stack();
-                this[i].command_undo = new Stack();
-                this[i].command_replay = new Stack();
-
-                // shift Number elements to next row
-                if (this[i].number) {
-                    let temp = this[i].number;
-                    this[i].number = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        let m = parseInt(keys[k]) + factor * parseInt(originalnx0) * sign;
-                        this.record("number", m);
-                        this[i].number[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain NumberS elements to be in the same row
-                if (this[i].numberS) {
-                    let m;
-                    let temp = this[i].numberS;
-                    this[i].numberS = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        if (factor >= 8) {
-                            m = parseInt(keys[k]) + 8 * parseInt(originalnx0) * sign;
-                        } else {
-                            m = parseInt(keys[k]) + 4 * parseInt(originalnx0) * sign;
-                        }
-                        this.record("numberS", m);
-                        this[i].numberS[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain Symbol elements to be in the same row
-                if (this[i].symbol) {
-                    let m;
-                    let temp = this[i].symbol;
-                    this[i].symbol = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        m = parseInt(keys[k]) + factor * parseInt(originalnx0) * sign;
-                        this.record("symbol", m);
-                        this[i].symbol[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain cross elements to be in the same row
-                if (this[i].line) {
-                    let m;
-                    let temp = this[i].line;
-                    this[i].line = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (factor * parseInt(originalnx0)) * sign;
-                            this.record("line", m);
-                            this[i].line[m] = temp[k];
-                        } else {
-                            let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]);
-                            var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0) * sign;
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("line", key);
-                            this[i].line[key] = temp[k];
-                        }
-                    }
-                }
-
-                // Maintain Edge elements in the same row
-                if (this[i].lineE) {
-                    let m;
-                    let temp = this[i].lineE;
-                    this[i].lineE = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + (factor * parseInt(originalnx0)) * sign;
-                            this.record("lineE", m);
-                            this[i].lineE[m] = temp[k];
-                        } else {
-                            var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
-                            var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("lineE", key);
-                            this[i].lineE[key] = temp[k];
-                        }
-                    }
-                }
-
-                // Maintain DeleteEdge elements in the same row
-                if (this[i].deletelineE) {
-                    let m;
-                    let temp = this[i].deletelineE;
-                    this[i].deletelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("deletelineE", key);
-                        this[i].deletelineE[key] = temp[k];
-                    }
-                }
-
-                // Maintain FreeEdge elements in the same place
-                if (this[i].freelineE) {
-                    let m;
-                    let temp = this[i].freelineE;
-                    this[i].freelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freelineE", key);
-                        this[i].freelineE[key] = temp[k];
-                    }
-                }
-
-                // Maintain Wall elements in the same row
-                if (this[i].wall) {
-                    let temp = this[i].wall;
-                    this[i].wall = {};
-                    for (var k in temp) {
-                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + factor * parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + factor * parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("wall", key);
-                        this[i].wall[key] = temp[k];
-                    }
-                }
-
-                // Maintain Cage elements in the same row
-                if (this[i].cage) {
-                    let temp = this[i].cage;
-                    this[i].cage = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + 4 * parseInt(originalnx0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + 4 * parseInt(originalnx0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("cage", key);
-                        this[i].cage[key] = temp[k];
-                    }
-                }
-
-                // Maintain Polygon elements in the same row
-                if (this[i].polygon) {
-                    let temp = this[i].polygon;
-                    this[i].polygon = {};
-                    this[i].polygon = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("polygon", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + parseInt(originalnx0) * sign;
-                        }
-                        this[i].polygon[k] = temp[k];
-                    }
-                }
-            }
-            this.redraw();
-        } else {
-            if (sign === 1) {
-                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
-            } else {
-                errorMsg('Min row size reached <h2 class="warn">1</h2>');
-            }
-        }
-    }
-
-    resize_left(sign, celltype = 'black') {
-        // reset the selection while resizing the grid
-        this.selection = [];
-
-        sign = parseInt(sign);
-        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
-            let originalspace = [...this.space];
-            if (celltype === 'white') {
-                // Over, under, left, right
-                if (sign === 1) {
-                    this.space[2] = this.space[2] + 1;
-                } else {
-                    if (this.space[2] > 0) {
-                        this.space[2] = this.space[2] - 1;
-                    }
-                }
-            }
-            if (!this.originalnx) {
-                this.originalnx = this.nx;
-            }
-            if (!this.originalny) {
-                this.originalny = this.ny;
-            }
-            let originalnx0 = this.nx0;
-            let originalny0 = this.ny0;
-
             this.nx = this.nx + (1 * sign); // Columns, Adding/Removing 1 column
-            // this.ny = this.ny; // Rows
             this.nx0 = this.nx + 4;
-            // this.ny0 = this.ny + 4;
-            if ((this.get_orientation('l') % 2) === 0) {
-                this.width0 = this.nx + 1;
-                this.width_c = this.width0;
-                this.width = this.width_c;
-                this.canvasx = this.width_c * this.size;
-            } else {
-                this.height0 = this.nx + 1;
-                this.height_c = this.height0;
-                this.height = this.height_c;
-                this.canvasy = this.height_c * this.size;
-            }
-
-            // Find the missing boxes
-            var old_centerlist = this.centerlist;
-            var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
-                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
-                    old_idealcenterlist.push(i + j * (originalnx0));
-                }
-            }
-            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
-
-            this.create_point();
-            this.centerlist = []
-            for (var j = 2; j < this.ny0 - 2; j++) {
-                for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
-            this.search_center();
-            this.center_n0 = this.center_n;
-            this.canvasxy_update();
-            this.canvas_size_setting();
-            this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
-            if (this.reflect[0] === -1) {
-                this.point_reflect_LR();
-            }
-            if (this.reflect[1] === -1) {
-                this.point_reflect_UD();
-            }
-            this.centerlist = [] //reset centerlist to match the margins
-            for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
-
-            // Remove Box elements
-            if (boxremove) {
-                for (let n = 0; n < boxremove.length; n++) {
-                    let num = boxremove[n];
-                    let m = num + ((parseInt(num / originalnx0) - 2) + 3) * sign;
-                    let index = this.centerlist.indexOf(m);
-                    if (index !== -1) {
-                        this.centerlist.splice(index, 1);
-                    }
-                }
-            }
-
-            this.make_frameline();
-            this.cursol = this.centerlist[0];
-            this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
-
-            for (var i of pu_qa) {
-                this[i].command_redo = new Stack();
-                this[i].command_undo = new Stack();
-                this[i].command_replay = new Stack();
-
-                // shift Surface elements to next column
-                if (this[i].surface) {
-                    let temp = this[i].surface;
-                    this[i].surface = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 3) * sign;
-                        this.record("surface", m);
-                        this[i].surface[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Number elements to next column
-                if (this[i].number) {
-                    let temp = this[i].number;
-                    this[i].number = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / ((originalnx0) * (originalny0)));
-                        let m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                        this.record("number", m);
-                        this[i].number[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift NumberS elements to next column
-                if (this[i].numberS) {
-                    let temp = this[i].numberS;
-                    this[i].numberS = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let normal_cursor = parseInt(keys[k] / 4) - (originalnx0 * originalny0);
-                        let m = parseInt(keys[k]) + (4 * (parseInt(normal_cursor / originalnx0) + originalny0) + 4) * sign;
-                        this.record("numberS", m);
-                        this[i].numberS[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Symbol elements to next column
-                if (this[i].symbol) {
-                    let m;
-                    let temp = this[i].symbol;
-                    this[i].symbol = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
-                        m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                        this.record("symbol", m);
-                        this[i].symbol[m] = temp[keys[k]];
-                    }
-                }
-
-                // shift Line elements to next column
-                if (this[i].line) {
-                    let m;
-                    let temp = this[i].line;
-                    this[i].line = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                            this.record("line", m);
-                            this[i].line[m] = temp[k];
-                        } else {
-                            let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3) * sign;
-                            if (factor == 0) {
-                                var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3) * sign;
-                            } else {
-                                var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                            }
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("line", key);
-                            this[i].line[key] = temp[k];
-                        }
-                    }
-                }
-
-                // shift Edge elements to next column
-                if (this[i].lineE) {
-                    let m;
-                    let temp = this[i].lineE;
-                    this[i].lineE = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                            this.record("lineE", m);
-                            this[i].lineE[m] = temp[k];
-                        } else {
-                            var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                            var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("lineE", key);
-                            this[i].lineE[key] = temp[k];
-                        }
-                    }
-                }
-
-                // shift DeleteEdge elements to next column
-                if (this[i].deletelineE) {
-                    let temp = this[i].deletelineE;
-                    this[i].deletelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("deletelineE", key);
-                        this[i].deletelineE[key] = temp[k];
-                    }
-                }
-
-                // shift FreeLine elements to next column
-                if (this[i].freeline) {
-                    let temp = this[i].freeline;
-                    this[i].freeline = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 3) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 3) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freeline", key);
-                        this[i].freeline[key] = temp[k];
-                    }
-                }
-
-                // shift FreeEdge elements to next column
-                if (this[i].freelineE) {
-                    let temp = this[i].freelineE;
-                    this[i].freelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freelineE", key);
-                        this[i].freelineE[key] = temp[k];
-                    }
-                }
-
-                // shift Thermo elements to next column
-                if (this[i].thermo) {
-                    let temp = this[i].thermo;
-                    this[i].thermo = {};
-                    this[i].thermo = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("thermo", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
-                        }
-                        this[i].thermo[k] = temp[k];
-                    }
-                }
-
-                // shift No Bulb Thermo elements to next column
-                if (this[i].nobulbthermo) {
-                    let temp = this[i].nobulbthermo;
-                    this[i].nobulbthermo = {};
-                    this[i].nobulbthermo = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("nobulbthermo", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
-                        }
-                        this[i].nobulbthermo[k] = temp[k];
-                    }
-                }
-
-                // shift Arrow elements to next column
-                if (this[i].arrows) {
-                    let temp = this[i].arrows;
-                    this[i].arrows = {};
-                    this[i].arrows = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("arrows", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
-                        }
-                        this[i].arrows[k] = temp[k];
-                    }
-                }
-
-                // shift Direction elements to next column
-                if (this[i].direction) {
-                    let temp = this[i].direction;
-                    this[i].direction = {};
-                    this[i].direction = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("direction", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
-                        }
-                        this[i].direction[k] = temp[k];
-                    }
-                }
-
-                // shift RectangleFrame elements to next column
-                if (this[i].squareframe) {
-                    let temp = this[i].squareframe;
-                    this[i].squareframe = {};
-                    this[i].squareframe = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("squareframe", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
-                        }
-                        this[i].squareframe[k] = temp[k];
-                    }
-                }
-
-                // shift Wall elements to next column
-                if (this[i].wall) {
-                    let temp = this[i].wall;
-                    this[i].wall = {};
-                    for (var k in temp) {
-                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + ((parseInt((parseInt(k.split(",")[0]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0)) + 1) + factor * originalny0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("wall", key);
-                        this[i].wall[key] = temp[k];
-                    }
-                }
-
-                // shift Cage elements to next column
-                if (this[i].cage) {
-                    let temp = this[i].cage;
-                    this[i].cage = {};
-                    for (var k in temp) {
-                        let normal_cursor1 = parseInt(parseInt(k.split(",")[0]) / 4) - (originalnx0 * originalny0);
-                        let normal_cursor2 = parseInt(parseInt(k.split(",")[1]) / 4) - (originalnx0 * originalny0);
-                        var k1 = parseInt(k.split(",")[0]) + (4 * (parseInt(normal_cursor1 / originalnx0) + originalny0) + 4) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (4 * (parseInt(normal_cursor2 / originalnx0) + originalny0) + 4) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("cage", key);
-                        this[i].cage[key] = temp[k];
-                    }
-                }
-
-                // shift Killer cages to next column
-                if (this[i].killercages) {
-                    let temp = this[i].killercages;
-                    this[i].killercages = {};
-                    this[i].killercages = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("killercages", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 3) * sign;
-                        }
-                        this[i].killercages[k] = temp[k];
-                    }
-                }
-
-
-                // shift Polygon elements to next column
-                if (this[i].polygon) {
-                    let temp = this[i].polygon;
-                    this[i].polygon = {};
-                    this[i].polygon = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("polygon", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0) + 1) + parseInt(originalny0)) * sign;
-                        }
-                        this[i].polygon[k] = temp[k];
-                    }
-                }
-            }
-            this.redraw();
-        } else {
-            if (sign === 1) {
-                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
-            } else {
-                errorMsg('Min column size reached <h2 class="warn">1</h2>');
-            }
-        }
-    }
-
-    resize_right(sign, celltype = 'black') {
-        // reset the selection while resizing the grid
-        this.selection = [];
-
-        sign = parseInt(sign);
-        if ((this.nx + 1 * sign) <= this.gridmax['square'] && (this.nx + 1 * sign) > 0) {
-            let originalspace = [...this.space];
-            if (celltype === 'white') {
-                // Over, under, left, right
-                if (sign === 1) {
-                    this.space[3] = this.space[3] + 1;
-                } else {
-                    if (this.space[3] > 0) {
-                        this.space[3] = this.space[3] - 1;
-                    }
-                }
-            }
-            if (!this.originalnx) {
-                this.originalnx = this.nx;
-            }
-            if (!this.originalny) {
-                this.originalny = this.ny;
-            }
-            let originalnx0 = this.nx0;
-            let originalny0 = this.ny0;
-
-            this.nx = this.nx + (1 * sign); // Columns, Adding/Removing 1 column
-            // this.ny = this.ny; // Rows
-            this.nx0 = this.nx + 4;
-            // this.ny0 = this.ny + 4;
             if ((this.get_orientation('r') % 2) === 0) {
                 this.width0 = this.nx + 1;
                 this.width_c = this.width0;
@@ -1688,335 +797,248 @@ class Puzzle {
                 this.height = this.height_c;
                 this.canvasy = this.height_c * this.size;
             }
+        }
 
-            // Find the missing boxes
-            var old_centerlist = this.centerlist;
-            var old_idealcenterlist = []; // If no box was missing
-            for (var j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
-                for (var i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
-                    old_idealcenterlist.push(i + j * (originalnx0));
-                }
+        // Find the missing boxes
+        let old_centerlist = this.centerlist;
+        let old_idealcenterlist = []; // If no box was missing
+        for (let j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
+            for (let i = 2 + originalspace[2]; i < originalnx0 - 2 - originalspace[3]; i++) { // the top and left edges are unused
+                old_idealcenterlist.push(i + j * originalnx0);
             }
-            var boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
+        }
+        let boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
 
-            this.create_point();
-            this.centerlist = []
-            for (var j = 2; j < this.ny0 - 2; j++) {
-                for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
+        this.create_point();
+        this.centerlist = [];
+        // Create full centerlist to allow correct board centering
+        for (var j = 2; j < this.ny0 - 2; j++) {
+            for (var i = 2; i < this.nx0 - 2; i++) {
+                this.centerlist.push(i + j * (this.nx0));
             }
-            this.search_center();
-            this.center_n0 = this.center_n;
-            this.canvasxy_update();
-            this.canvas_size_setting();
-            this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
-            if (this.reflect[0] === -1) {
-                this.point_reflect_LR();
+        }
+
+        this.search_center();
+        this.center_n0 = this.center_n;
+        this.canvasxy_update();
+        this.canvas_size_setting();
+        this.point_move((this.canvasx * 0.5 - this.point[this.center_n].x + 0.5), (this.canvasy * 0.5 - this.point[this.center_n].y + 0.5), this.theta);
+        if (this.reflect[0] === -1) {
+            this.point_reflect_LR();
+        }
+        if (this.reflect[1] === -1) {
+            this.point_reflect_UD();
+        }
+
+        // Translate function
+        const translate_fn = this.make_resize_point_translator(side, sign, originalnx0, originalny0);
+
+        // Reset centerlist to match the margins
+        this.centerlist = []
+        for (let j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
+            for (let i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
+                this.centerlist.push(i + j * (this.nx0));
             }
-            if (this.reflect[1] === -1) {
-                this.point_reflect_UD();
+        }
+        // Remove Box elements
+        for (let n = 0; n < boxremove.length; n++) {
+            let num = boxremove[n];
+            let m = translate_fn(num);
+            let index = this.centerlist.indexOf(m);
+            if (index !== -1) {
+                this.centerlist.splice(index, 1);
             }
-            this.centerlist = [] //reset centerlist to match the margins
-            for (var j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
-                for (var i = 2 + this.space[2]; i < this.nx0 - 2 - this.space[3]; i++) { // the top and left edges are unused
-                    this.centerlist.push(i + j * (this.nx0));
-                }
-            }
+        }
+        this.make_frameline();
+        this.translate_puzzle_elements(translate_fn);
+    }
 
-            // Remove Box elements
-            if (boxremove) {
-                for (let n = 0; n < boxremove.length; n++) {
-                    let num = boxremove[n];
-                    let m = num + ((parseInt(num / originalnx0) - 2) + 2) * sign;
-                    let index = this.centerlist.indexOf(m);
-                    if (index !== -1) {
-                        this.centerlist.splice(index, 1);
-                    }
-                }
-            }
+    // Universal function to translate all elements in a puzzle:
+    // - cursor
+    // - selection
+    // - conflicts
+    // - all pu_q and pu_a puzzle elements
+    // - embedded solution (single and multiple)
+    // 
+    // Currently used for resizing the board.
+    // Or in the future to insert or delete a row/col, given the proper translate function.
+    translate_puzzle_elements(translate_fn) {
+        this.cursol = translate_fn(this.cursol);
+        this.cursolS = translate_fn(this.cursolS);
+        this.freelinecircle_g[0] = translate_fn(this.freelinecircle_g[0]);
+        this.freelinecircle_g[1] = translate_fn(this.freelinecircle_g[1]);
+        this.selection = this.selection.map(translate_fn);
+        this.conflict_cells = this.conflict_cells.map(translate_fn);
 
-            this.make_frameline();
-            this.cursol = this.centerlist[0];
-            this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
-            let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
+        let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
-            for (var i of pu_qa) {
-                this[i].command_redo = new Stack();
-                this[i].command_undo = new Stack();
-                this[i].command_replay = new Stack();
-
-                // Maintain Surface elements in the same column
-                if (this[i].surface) {
-                    let temp = this[i].surface;
-                    this[i].surface = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let m = parseInt(keys[k]) + ((parseInt(parseInt(keys[k]) / originalnx0) - 2) + 2) * sign;
-                        this.record("surface", m);
-                        this[i].surface[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain Number elements in the same column
-                if (this[i].number) {
-                    let temp = this[i].number;
-                    this[i].number = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
-                        let m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
-                        this.record("number", m);
-                        this[i].number[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain NumberS elements in the same column
-                if (this[i].numberS) {
-                    let temp = this[i].numberS;
-                    this[i].numberS = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let normal_cursor = parseInt(keys[k] / 4) - (originalnx0 * originalny0);
-                        let m = parseInt(keys[k]) + (4 * (parseInt(normal_cursor / originalnx0) + originalny0)) * sign;
-                        this.record("numberS", m);
-                        this[i].numberS[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain Symbol elements in the same column
-                if (this[i].symbol) {
-                    let m;
-                    let temp = this[i].symbol;
-                    this[i].symbol = {};
-                    let keys = Object.keys(temp);
-                    for (var k = 0; k < keys.length; k++) {
-                        let factor = Math.floor(parseInt(keys[k]) / (originalnx0 * originalny0));
-                        m = parseInt(keys[k]) + ((parseInt((keys[k] - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
-                        this.record("symbol", m);
-                        this[i].symbol[m] = temp[keys[k]];
-                    }
-                }
-
-                // Maintain Line elements in the same column
-                if (this[i].line) {
-                    let m;
-                    let temp = this[i].line;
-                    this[i].line = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
-                            this.record("line", m);
-                            this[i].line[m] = temp[k];
-                        } else {
-                            let factor = Math.floor(parseInt(k.split(",")[1]) / ((originalnx0) * (originalny0)));
-                            var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2) * sign;
-                            if (factor == 0) {
-                                var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2) * sign;
-                            } else {
-                                var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
+        for (let i of pu_qa) {
+            // Translate redo/undo/replay buffer
+            for (let commandstack of ['command_redo', 'command_undo', 'command_replay']) {
+                for (let a of this[i][commandstack].__a) {
+                    if (a && a.length >= 4) {
+                        // ['line', '25,39', ... ]
+                        if (typeof a[1] === 'string') {
+                            a[1] = a[1].split(',').map(translate_fn).join(',');
+                        }
+                        // ['arrows', -1, [216, ... ], ...]
+                        else if (a[1] === -1) {
+                            if (a[2]) {
+                                for (let a2 in a[2]) {
+                                    a[2][a2] = translate_fn(a[2][a2]);
+                                }
                             }
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("line", key);
-                            this[i].line[key] = temp[k];
-                        }
-                    }
-                }
-
-                // Maintain Edge elements in the same column
-                if (this[i].lineE) {
-                    let m;
-                    let temp = this[i].lineE;
-                    this[i].lineE = {};
-                    for (var k in temp) {
-                        if (temp[k] === 98) {
-                            let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                            m = parseInt(k) + ((parseInt((parseInt(k) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
-                            this.record("lineE", m);
-                            this[i].lineE[m] = temp[k];
                         } else {
-                            var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                            var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                            var key = (k1.toString() + "," + k2.toString());
-                            this.record("lineE", key);
-                            this[i].lineE[key] = temp[k];
+                            a[1] = translate_fn(a[1]);
                         }
-                    }
-                }
-
-                // Maintain DeleteEdge elements in the same column
-                if (this[i].deletelineE) {
-                    let temp = this[i].deletelineE;
-                    this[i].deletelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("deletelineE", key);
-                        this[i].deletelineE[key] = temp[k];
-                    }
-                }
-
-                // Maintain FreeLine elements in the same column
-                if (this[i].freeline) {
-                    let temp = this[i].freeline;
-                    this[i].freeline = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + ((parseInt(parseInt(k.split(",")[0]) / originalnx0) - 2) + 2) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + ((parseInt(parseInt(k.split(",")[1]) / originalnx0) - 2) + 2) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freeline", key);
-                        this[i].freeline[key] = temp[k];
-                    }
-                }
-
-                // Maintain FreeEdge elements in the same column
-                if (this[i].freelineE) {
-                    let temp = this[i].freelineE;
-                    this[i].freelineE = {};
-                    for (var k in temp) {
-                        var k1 = parseInt(k.split(",")[0]) + (parseInt((parseInt(k.split(",")[0]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (parseInt((parseInt(k.split(",")[1]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("freelineE", key);
-                        this[i].freelineE[key] = temp[k];
-                    }
-                }
-
-                // Maintain Thermo elements in the same column
-                if (this[i].thermo) {
-                    let temp = this[i].thermo;
-                    this[i].thermo = {};
-                    this[i].thermo = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("thermo", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
-                        }
-                        this[i].thermo[k] = temp[k];
-                    }
-                }
-
-                // Maintain No Bulb Thermo elements in the same column
-                if (this[i].nobulbthermo) {
-                    let temp = this[i].nobulbthermo;
-                    this[i].nobulbthermo = {};
-                    this[i].nobulbthermo = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("nobulbthermo", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
-                        }
-                        this[i].nobulbthermo[k] = temp[k];
-                    }
-                }
-
-                // Maintain Arrow elements in the same column
-                if (this[i].arrows) {
-                    let temp = this[i].arrows;
-                    this[i].arrows = {};
-                    this[i].arrows = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("arrows", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
-                        }
-                        this[i].arrows[k] = temp[k];
-                    }
-                }
-
-                // Maintain Direction elements in the same column
-                if (this[i].direction) {
-                    let temp = this[i].direction;
-                    this[i].direction = {};
-                    this[i].direction = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("direction", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
-                        }
-                        this[i].direction[k] = temp[k];
-                    }
-                }
-
-                // Maintain RectangleFrame elements in the same column
-                if (this[i].squareframe) {
-                    let temp = this[i].squareframe;
-                    this[i].squareframe = {};
-                    this[i].squareframe = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("squareframe", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
-                        }
-                        this[i].squareframe[k] = temp[k];
-                    }
-                }
-
-                // Maintain Wall elements in the same column
-                if (this[i].wall) {
-                    let temp = this[i].wall;
-                    this[i].wall = {};
-                    for (var k in temp) {
-                        let factor = Math.floor(parseInt(k) / ((originalnx0) * (originalny0)));
-                        var k1 = parseInt(k.split(",")[0]) + ((parseInt((parseInt(k.split(",")[0]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + ((parseInt((parseInt(k.split(",")[1]) - (factor * originalnx0 * originalny0)) / (originalnx0))) + factor * originalny0) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("wall", key);
-                        this[i].wall[key] = temp[k];
-                    }
-                }
-
-                // Maintain Cage elements in the same column
-                if (this[i].cage) {
-                    let temp = this[i].cage;
-                    this[i].cage = {};
-                    for (var k in temp) {
-                        let normal_cursor1 = parseInt(parseInt(k.split(",")[0]) / 4) - (originalnx0 * originalny0);
-                        let normal_cursor2 = parseInt(parseInt(k.split(",")[1]) / 4) - (originalnx0 * originalny0);
-                        var k1 = parseInt(k.split(",")[0]) + (4 * (parseInt(normal_cursor1 / originalnx0) + originalny0)) * sign;
-                        var k2 = parseInt(k.split(",")[1]) + (4 * (parseInt(normal_cursor2 / originalnx0) + originalny0)) * sign;
-                        var key = (k1.toString() + "," + k2.toString());
-                        this.record("cage", key);
-                        this[i].cage[key] = temp[k];
-                    }
-                }
-
-                // Maintain Killer Cages in the same column
-                if (this[i].killercages) {
-                    let temp = this[i].killercages;
-                    this[i].killercages = {};
-                    this[i].killercages = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("killercages", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + ((parseInt(parseInt(temp[k][m]) / originalnx0) - 2) + 2) * sign;
-                        }
-                        this[i].killercages[k] = temp[k];
-                    }
-                }
-
-                // Maintain Polygon elements in the same column
-                if (this[i].polygon) {
-                    let temp = this[i].polygon;
-                    this[i].polygon = {};
-                    this[i].polygon = new Array(temp.length);
-                    for (var k in temp) {
-                        this.record("polygon", k);
-                        for (var m = 0; m <= (temp[k].length - 1); m++) {
-                            temp[k][m] = parseInt(temp[k][m]) + (parseInt((parseInt(temp[k][m]) - (originalnx0 * originalny0)) / (originalnx0)) + parseInt(originalny0)) * sign;
-                        }
-                        this[i].polygon[k] = temp[k];
                     }
                 }
             }
-            this.redraw();
-        } else {
-            if (sign === 1) {
-                errorMsg('Max row size reached <h2 class="warn">' + this.gridmax['square'] + '</h2>');
+
+            // Translate point features
+            for (let feature of ['surface', 'number', 'numberS', 'symbol']) {
+                if (this[i][feature]) {
+                    let temp = this[i][feature];
+                    this[i][feature] = {};
+                    let keys = Object.keys(temp);
+                    for (let k = 0; k < keys.length; k++) {
+                        let m = translate_fn(keys[k]);
+                        this[i][feature][m] = temp[keys[k]];
+                    }
+                }
+            }
+
+            // Translate point-pair features
+            for (let feature of ['line', 'lineE', 'deletelineE', 'freeline', 'freelineE', 'wall', 'cage']) {
+                if (this[i][feature]) {
+                    let temp = this[i][feature];
+                    this[i][feature] = {};
+                    for (let k in temp) {
+                        if (k.includes(',')) {
+                            let k1 = translate_fn(k.split(",")[0]);
+                            let k2 = translate_fn(k.split(",")[1]);
+                            let key = (k1.toString() + "," + k2.toString());
+                            this[i][feature][key] = temp[k];
+                        } else { // Exception for 'x' mark
+                            let m = translate_fn(k);
+                            this[i][feature][m] = temp[k];
+                        }
+                    }
+                }
+            }
+
+            // Translate point array features
+            for (let feature of ['thermo', 'nobulbthermo', 'arrows', 'direction', 'squareframe', 'killercages', 'polygon']) {
+                if (this[i][feature]) {
+                    let temp = this[i][feature];
+                    this[i][feature] = new Array(temp.length);
+                    for (let k in temp) {
+                        if (Array.isArray(temp[k])) {
+                            for (let m = 0; m <= (temp[k].length - 1); m++) {
+                                temp[k][m] = translate_fn(temp[k][m]);
+                            }
+                        }
+                        this[i][feature][k] = temp[k];
+                    }
+                }
+            }
+        }
+
+        // Translate solution
+        if (this.solution) {
+            let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+
+            if (!this.multisolution) {
+                let sol = JSON.parse(this.solution);
+                for (let sol_count in sol) {
+                    if (sol[sol_count]) {
+                        switch (parseInt(sol_count)) {
+                            case 0: // shading
+                                for (let i in sol[sol_count]) {
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
+                                }
+                                break;
+                            case 1: // Line / FreeLine
+                            case 2: // Edge / FreeEdge
+                            case 3: // Wall
+                                for (let i in sol[sol_count]) {
+                                    let parts = sol[sol_count][i].split(",");
+                                    parts[0] = translate_fn(parts[0]);
+                                    parts[1] = translate_fn(parts[1]);
+                                    sol[sol_count][i] = parts.join(",");
+                                }
+                                break;
+                            case 4: // Number
+                                for (let i in sol[sol_count]) {
+                                    let parts = sol[sol_count][i].split(",");
+                                    parts[0] = translate_fn(parts[0]);
+                                    sol[sol_count][i] = parts.join(",");
+                                }
+                                break;
+                            case 5: // Symbol
+                                for (let i in sol[sol_count]) {
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
+                                }
+                                break;
+                        }
+                        sol[sol_count].sort();
+                    }
+                }
+                pu.solution = JSON.stringify(sol);
             } else {
-                errorMsg('Min column size reached <h2 class="warn">1</h2>');
+                let sol = this.solution;
+                let sol_count = -1; // as list indexing starts at 0
+
+                // loop through and check which "OR" settings are selected
+                for (let m = 0; m < settingstatus_or.length; m++) {
+                    if (settingstatus_or[m].checked) {
+
+                        // incrementing solution count by 1
+                        sol_count++;
+
+                        // Extracting the checkbox id. First 7 chracters "sol_or_" are sliced.
+                        let sol_id = settingstatus_or[m].id.slice(7);
+                        switch (sol_id) {
+                            case "surface":
+                                for (let i in sol[sol_count]) {
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
+                                }
+                                break;
+                            case "number":
+                                for (let i in sol[sol_count]) {
+                                    let parts = sol[sol_count][i].split(",");
+                                    parts[0] = translate_fn(parts[0]);
+                                    sol[sol_count][i] = parts.join(",");
+                                }
+                                break;
+                            case "loopline":
+                            case "loopedge":
+                            case "wall":
+                                for (let i in sol[sol_count]) {
+                                    let parts = sol[sol_count][i].split(",");
+                                    parts[0] = translate_fn(parts[0]);
+                                    parts[1] = translate_fn(parts[1]);
+                                    sol[sol_count][i] = parts.join(",");
+                                }
+                                break;
+                            case "square":
+                            case "circle":
+                            case "tri":
+                            case "arrow":
+                            case "math":
+                            case "battleship":
+                            case "tent":
+                            case "star":
+                            case "akari":
+                            case "mine":
+                                for (let i in sol[sol_count]) {
+                                    sol[sol_count][i] = translate_fn(sol[sol_count][i]).toString();
+                                }
+                                break;
+                        }
+                        sol[sol_count].sort();
+                    }
+                }
             }
         }
     }
@@ -2300,7 +1322,7 @@ class Puzzle {
             document.getElementById('style_' + mode).style.display = 'inline-block';
         }
         document.getElementById('mo_' + mode).checked = true;
-        this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
+        this.submode_check('sub_' + mode + this.mode[this.mode.qa][mode][0]);
         if (mode === "symbol" && !this.panelflag) {
             // Show the panel on the first time landing and then respect user's choice
             if (!UserSettings.panel_shown) {
@@ -2318,19 +1340,19 @@ class Puzzle {
             UserSettings.panel_shown = false;
             document.getElementById('float-key').style.display = "none";
         }
+        const submode = this.mode[this.mode.qa][mode][0];
+        const style = this.mode[this.mode.qa][mode][1];
+        this.stylemode_check('st_' + mode + style);
         if (mode === "symbol") {
-            this.stylemode_check('st_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10);
-            this.stylemode_check('st_' + mode + parseInt(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] / 10) * 10);
-        } else {
-            this.stylemode_check('st_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]);
+            this.subsymbolmode(submode);
+        } else if (mode === "combi") {
+            this.subcombimode(submode);
         }
-        if (this.mode[this.mode.qa].edit_mode === "symbol") {
-            this.subsymbolmode(this.mode[this.mode.qa].symbol[0]);
-        } else if (this.mode[this.mode.qa].edit_mode === "combi") {
-            this.subcombimode(this.mode[this.mode.qa].combi[0]);
-        }
-        if ((UserSettings.custom_colors_on) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex")) &&
-            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
+        if (UserSettings.custom_colors_on && penpa_modes[this.gridtype].customcolor.includes(mode)) {
+            let cc = this.mode[this.mode.qa][mode][2];
+            if (cc) {
+                $("#colorpicker_special").spectrum("set", cc);
+            }
             document.getElementById('style_special').style.display = 'inline';
         } else {
             document.getElementById('style_special').style.display = 'none';
@@ -2363,31 +1385,14 @@ class Puzzle {
                 let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
                 document.getElementById("closeBtn_input3").disabled = !enableLoadButton;
             }
-
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
         if (UserSettings.custom_colors_on) {
             // set the custom color to default
-            switch (name) {
-                case "sub_specialthermo":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                    break;
-                case "sub_specialnobulbthermo":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                    break;
-                case "sub_specialarrows":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
-                    break;
-                case "sub_specialdirection":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_LIGHT);
-                    break;
-                case "sub_specialsquareframe":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                    break;
-                case "sub_specialpolygon":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
+            let cc = CustomColor.default_specialmode_color(name);
+            if (cc) {
+                $("#colorpicker_special").spectrum("set", cc);
             }
         }
     }
@@ -2406,142 +1411,9 @@ class Puzzle {
 
         if (UserSettings.custom_colors_on) {
             // set the custom color to default
-            switch (name) {
-                case "st_surface1":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                    break;
-                case "st_surface8":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-                case "st_surface3":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                    break;
-                case "st_surface4":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_surface2":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN_LIGHT_VERY);
-                    break;
-                case "st_surface5":
-                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT_VERY);
-                    break;
-                case "st_surface6":
-                    $("#colorpicker_special").spectrum("set", Color.RED_LIGHT);
-                    break;
-                case "st_surface7":
-                    $("#colorpicker_special").spectrum("set", Color.YELLOW);
-                    break;
-                case "st_surface9":
-                    $("#colorpicker_special").spectrum("set", Color.PINK_LIGHT);
-                    break;
-                case "st_surface10":
-                    $("#colorpicker_special").spectrum("set", Color.ORANGE_LIGHT);
-                    break;
-                case "st_surface11":
-                    $("#colorpicker_special").spectrum("set", Color.PURPLE_LIGHT);
-                    break;
-                case "st_surface12":
-                    $("#colorpicker_special").spectrum("set", Color.BROWN_LIGHT);
-                    break;
-                case "st_line3":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN);
-                    break;
-                case "st_line2":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_line5":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-                case "st_line8":
-                    $("#colorpicker_special").spectrum("set", Color.RED);
-                    break;
-                case "st_line9":
-                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
-                    break;
-                case "st_line80":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_line12":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                    break;
-                case "st_line13":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_line40":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-                case "st_line30":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN);
-                    break;
-                case "st_lineE3":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN);
-                    break;
-                case "st_lineE2":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_lineE5":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-                case "st_lineE8":
-                    $("#colorpicker_special").spectrum("set", Color.RED);
-                    break;
-                case "st_lineE9":
-                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
-                    break;
-                case "st_lineE21":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_lineE80":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_lineE12":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                    break;
-                case "st_lineE13":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_lineE30":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN);
-                    break;
-                case "st_wall3":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN);
-                    break;
-                case "st_wall2":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_wall5":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-                case "st_wall8":
-                    $("#colorpicker_special").spectrum("set", Color.RED);
-                    break;
-                case "st_wall9":
-                    $("#colorpicker_special").spectrum("set", Color.BLUE_LIGHT);
-                    break;
-                case "st_wall1":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_wall12":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK_VERY);
-                    break;
-                case "st_wall17":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_wall14":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                    break;
-                case "st_cage10":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
-                case "st_cage7":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                    break;
-                case "st_cage15":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                    break;
-                case "st_cage16":
-                    $("#colorpicker_special").spectrum("set", Color.BLACK);
-                    break;
+            let cc = CustomColor.default_stylemode_color(name);
+            if (cc) {
+                $("#colorpicker_special").spectrum("set", cc);
             }
         }
     }
@@ -2551,66 +1423,8 @@ class Puzzle {
         document.getElementById("symmode_content").innerHTML = mode;
         if (UserSettings.custom_colors_on) {
             // set the custom color to default
-            switch ("ms_" + mode) {
-                case "ms_circle_L":
-                case "ms_circle_M":
-                case "ms_circle_S":
-                case "ms_circle_SS":
-                case "ms_square_LL":
-                case "ms_square_L":
-                case "ms_square_M":
-                case "ms_square_S":
-                case "ms_square_SS":
-                case "ms_triup_L":
-                case "ms_triup_M":
-                case "ms_triup_S":
-                case "ms_triup_SS":
-                case "ms_tridown_L":
-                case "ms_tridown_M":
-                case "ms_tridown_S":
-                case "ms_tridown_SS":
-                case "ms_triright_L":
-                case "ms_triright_M":
-                case "ms_triright_S":
-                case "ms_triright_SS":
-                case "ms_trileft_L":
-                case "ms_trileft_M":
-                case "ms_trileft_S":
-                case "ms_trileft_SS":
-                case "ms_diamond_L":
-                case "ms_diamond_M":
-                case "ms_diamond_S":
-                case "ms_diamond_SS":
-                case "ms_hexpoint_LL":
-                case "ms_hexpoint_L":
-                case "ms_hexpoint_M":
-                case "ms_hexpoint_S":
-                case "ms_hexpoint_SS":
-                case "ms_hexflat_LL":
-                case "ms_hexflat_L":
-                case "ms_hexflat_M":
-                case "ms_hexflat_S":
-                case "ms_hexflat_SS":
-                case "ms_star":
-                case "ms_firefly":
-                case "ms_sun_moon":
-                case "ms_slovak":
-                    $("#colorpicker_special").spectrum("set", Color.WHITE);
-                    break;
-                case "ms_frameline":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_DARK);
-                    break;
-                case "ms_pills":
-                case "ms_tents":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-                case "ms_sudokuetc":
-                case "ms_polyomino":
-                case "ms_polyhex":
-                case "ms_neighbors":
-                    $("#colorpicker_special").spectrum("set", Color.GREY_LIGHT);
-                    break;
-            }
+            let cc = CustomColor.default_symbol_color(mode);
+            $("#colorpicker_special").spectrum("set", cc);
         }
         panel_pu.draw_panel();
         this.redraw();
@@ -2621,19 +1435,8 @@ class Puzzle {
         document.getElementById("combimode_content").innerHTML = mode;
         if (UserSettings.custom_colors_on) {
             // set the custom color to default
-            switch (mode) {
-                case "linex":
-                case "lineox":
-                case "edgex":
-                case "edgexoi":
-                case "yajilin":
-                case "hashi":
-                    $("#colorpicker_special").spectrum("set", Color.GREEN);
-                    break;
-                case "edgesub":
-                    $("#colorpicker_special").spectrum("set", Color.GREY);
-                    break;
-            }
+            let cc = CustomColor.default_combimode_color(mode);
+            $("#colorpicker_special").spectrum("set", cc);
         }
         this.type = this.type_set();
         this.redraw();
@@ -2827,9 +1630,12 @@ class Puzzle {
     }
 
     __export_list_tab_shared() {
-        var list = [this.centerlist[0]];
-        for (var i = 1; i < this.centerlist.length; i++) {
-            list.push(this.centerlist[i] - this.centerlist[i - 1]);
+        var list = [];
+        if (this.centerlist.length > 0) {
+            list.push(this.centerlist[0]);
+            for (var i = 1; i < this.centerlist.length; i++) {
+                list.push(this.centerlist[i] - this.centerlist[i - 1]);
+            }
         }
         var text = JSON.stringify(list) + "\n";
 
@@ -7760,7 +6566,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
-                    this.pu_q.command_undo.push(a);
+                    if (a) {
+                        this.pu_q.command_undo.push(a);
+                    }
                     if (a_col) {
                         this.pu_q_col.command_undo.push(a_col);
                     }
@@ -7864,7 +6672,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     undocounter = 0;
                 } else { // group undo is done, stop
-                    this.pu_a.command_undo.push(a);
+                    if (a) {
+                        this.pu_a.command_undo.push(a);
+                    }
                     if (a_col) {
                         this.pu_a_col.command_undo.push(a_col);
                     }
@@ -7963,7 +6773,6 @@ class Puzzle {
                             this.pu_a_col.command_replay.push(a_col_replay);
                         }
                     }
-
                     this.redraw();
                 }
             }
@@ -7992,7 +6801,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else { // group redo is done, stop
-                    this.pu_q.command_redo.push(a);
+                    if (a) {
+                        this.pu_q.command_redo.push(a);
+                    }
                     if (a_col) {
                         this.pu_q_col.command_redo.push(a_col);
                     }
@@ -8092,7 +6903,9 @@ class Puzzle {
                 } else if (!groupindex) {
                     redocounter = 0;
                 } else {
-                    this.pu_a.command_redo.push(a); // group redo is done, stop
+                    if (a) {
+                        this.pu_a.command_redo.push(a); // group redo is done, stop
+                    }
                     if (a_col) {
                         this.pu_a_col.command_redo.push(a_col);
                     }
@@ -8203,18 +7016,14 @@ class Puzzle {
                 if (this.pu_q[arr][num]) {
                     if (groupcounter === 0) {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
+                        if (penpa_modes[this.gridtype].customcolor.includes(penpa_modes_map[arr])) {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         } else {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col"]); // Array is also recorded in JSON
                         }
                     } else {
                         this.pu_q.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa, groupcounter]); // Array is also recorded in JSON
-                        if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
-                            (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                                arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
+                        if (penpa_modes[this.gridtype].customcolor.includes(penpa_modes_map[arr])) {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                         } else {
                             this.pu_q_col.command_undo.push([arr, num, JSON.stringify(this.pu_q[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
@@ -8252,9 +7061,7 @@ class Puzzle {
             } else {
                 if (this.pu_a[arr][num]) {
                     this.pu_a.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa, groupcounter, timestamp]); // Array is also recorded in JSON
-                    if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
-                        (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                            arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
+                    if (penpa_modes[this.gridtype].customcolor.includes(penpa_modes_map[arr])) {
                         this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     } else {
                         this.pu_a_col.command_undo.push([arr, num, JSON.stringify(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
@@ -8293,9 +7100,7 @@ class Puzzle {
             } else {
                 if (this.pu_a[arr][num]) {
                     this.pu_a.command_replay.push([arr, num, structuredClone(this.pu_a[arr][num]), this.mode.qa, groupcounter, timestamp]); // Array is also recorded in JSON
-                    if ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex") &&
-                        (arr === "thermo" || arr === "arrows" || arr === "direction" || arr === "squareframe" || arr === "surface" || arr === "wall" || arr === "symbol" ||
-                            arr === "line" || arr === "lineE" || arr === "polygon" || arr === "freeline" || arr === "freelineE" || arr === "cage" || arr === "killercages")) { // Update this as more support for custom colors are added
+                    if (penpa_modes[this.gridtype].customcolor.includes(penpa_modes_map[arr])) {
                         this.pu_a_col.command_replay.push([arr, num, structuredClone(this.pu_a_col[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
                     } else {
                         this.pu_a_col.command_replay.push([arr, num, structuredClone(this.pu_a[arr][num]), this.mode.qa + "_col", groupcounter]); // Array is also recorded in JSON
@@ -8511,8 +7316,9 @@ class Puzzle {
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             if (str_num.indexOf(key) != -1) {
+                const symbolname = this.mode[this.mode.qa].symbol[0];
                 if (this[this.mode.qa].symbol[this.cursol]) {
-                    if (this[this.mode.qa].symbol[this.cursol][0] === parseInt(key, 10) && this[this.mode.qa].symbol[this.cursol][1] === this.mode[this.mode.qa].symbol[0]) {
+                    if (this[this.mode.qa].symbol[this.cursol][0] === parseInt(key, 10) && this[this.mode.qa].symbol[this.cursol][1] === symbolname) {
                         this.key_space(); // Delete if the contents are the same
                         return;
                     } else {
@@ -8523,14 +7329,19 @@ class Puzzle {
                 }
                 this.record("symbol", this.cursol);
 
-                if (this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]]) { // List in ON-OFF mode
-                    number = this.onofftext(this.onoff_symbolmode_list[this.mode[this.mode.qa].symbol[0]], key, con);
+                if (this.onoff_symbolmode_list[symbolname]) { // List in ON-OFF mode
+                    number = this.onofftext(this.onoff_symbolmode_list[symbolname], key, con);
                 } else {
                     number = parseInt(key, 10);
                 }
-                this[this.mode.qa].symbol[this.cursol] = [number, this.mode[this.mode.qa].symbol[0], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                this[this.mode.qa].symbol[this.cursol] = [number, symbolname, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
                 if (UserSettings.custom_colors_on) {
-                    this[this.mode.qa + "_col"].symbol[this.cursol] = this.get_customcolor();
+                    let cc = this.get_customcolor();
+                    if (!cc || tinycolor.equals(cc, CustomColor.default_symbol_color(symbolname))) {
+                        delete this[this.mode.qa + "_col"].symbol[this.cursol];
+                    } else {
+                        this[this.mode.qa + "_col"].symbol[this.cursol] = cc;
+                    }
                 }
                 this.record_replay("symbol", this.cursol);
             }
@@ -9264,7 +8075,12 @@ class Puzzle {
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color && allowed_styles.includes(color)) {
             this[this.mode.qa].surface[num] = rightclick_color;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"].surface[num] = this.get_rgbcolor(rightclick_color);
+                let cc = this.get_rgbcolor(rightclick_color);
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_color(rightclick_color))) {
+                    delete this[this.mode.qa + "_col"].surface[num];
+                } else {
+                    this[this.mode.qa + "_col"].surface[num] = cc;
+                }
             }
             this.drawing_mode = rightclick_color;
         } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === rightclick_color && allowed_styles.includes(color)))) {
@@ -9276,7 +8092,12 @@ class Puzzle {
         } else {
             this[this.mode.qa].surface[num] = color;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+                let cc = this.get_customcolor();
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_color(color))) {
+                    delete this[this.mode.qa + "_col"].surface[num];
+                } else {
+                    this[this.mode.qa + "_col"].surface[num] = cc;
+                }
             }
             this.drawing_mode = color;
         }
@@ -9296,7 +8117,12 @@ class Puzzle {
         } else {
             this[this.mode.qa].surface[num] = color;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+                let cc = this.get_customcolor();
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(color))) {
+                    delete this[this.mode.qa + "_col"].surface[num];
+                } else {
+                    this[this.mode.qa + "_col"].surface[num] = cc;
+                }
             }
             this.drawing_mode = color;
         }
@@ -9316,7 +8142,12 @@ class Puzzle {
         } else {
             this[this.mode.qa].surface[num] = rightclick_color;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"].surface[num] = this.get_rgbcolor(rightclick_color);
+                let cc = this.get_rgbcolor(rightclick_color);
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(rightclick_color))) {
+                    delete this[this.mode.qa + "_col"].surface[num];
+                } else {
+                    this[this.mode.qa + "_col"].surface[num] = cc;
+                }
             }
             this.drawing_mode = rightclick_color;
         }
@@ -9337,15 +8168,24 @@ class Puzzle {
                     this.redraw();
                 }
             } else {
-                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode) {
+                let cc = undefined;
+                if (UserSettings.custom_colors_on) {
+                    // Not right click
+                    if (this.mouse_click !== 2) {
+                        cc = this.get_customcolor();
+                        if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(this.drawing_mode))) {
+                            cc = undefined;
+                        }
+                    }
+                }
+                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode || this[this.mode.qa + "_col"].surface[num] != cc) {
                     this.record("surface", num);
                     this[this.mode.qa].surface[num] = this.drawing_mode;
                     if (UserSettings.custom_colors_on) {
-                        // If left click second time (i.e. DG option) and moving or right click and moving
-                        if (this.drawing_mode === 2 || this.mouse_click === 2) {
-                            this[this.mode.qa + "_col"].surface[num] = this.get_rgbcolor(this.drawing_mode);
+                        if (!cc) {
+                            delete this[this.mode.qa + "_col"].surface[num];
                         } else {
-                            this[this.mode.qa + "_col"].surface[num] = this.get_customcolor();
+                            this[this.mode.qa + "_col"].surface[num] = cc;
                         }
                     }
                     this.record_replay("surface", num);
@@ -9432,9 +8272,6 @@ class Puzzle {
                 }
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
-                    if (UserSettings.custom_colors_on) {
-                        delete this["pu_q_col"][array][num];
-                    }
                 } else {
                     delete this[this.mode.qa][array][num];
                     if (UserSettings.custom_colors_on) {
@@ -9453,9 +8290,6 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     delete this["pu_q"][array][num];
-                    if (UserSettings.custom_colors_on) {
-                        delete this["pu_q_col"][array][num];
-                    }
                 } else {
                     delete this[this.mode.qa][array][num];
                     if (UserSettings.custom_colors_on) {
@@ -9473,13 +8307,15 @@ class Puzzle {
                 }
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
-                    if (UserSettings.custom_colors_on) {
-                        this["pu_q_col"][array][num] = this.get_customcolor();
-                    }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
                     if (UserSettings.custom_colors_on) {
-                        this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
+                        let cc = this.get_customcolor();
+                        if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(line_style))) {
+                            delete this[this.mode.qa + "_col"][array][num];
+                        } else {
+                            this[this.mode.qa + "_col"][array][num] = cc;
+                        }
                     }
                 }
                 if (group_counter > 0) {
@@ -9494,13 +8330,15 @@ class Puzzle {
                 this.record(array, num);
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
-                    if (UserSettings.custom_colors_on) {
-                        this["pu_q_col"][array][num] = this.get_customcolor();
-                    }
                 } else {
                     this[this.mode.qa][array][num] = line_style;
                     if (UserSettings.custom_colors_on) {
-                        this[this.mode.qa + "_col"][array][num] = this.get_customcolor();
+                        let cc = this.get_customcolor();
+                        if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(line_style))) {
+                            delete this[this.mode.qa + "_col"][array][num];
+                        } else {
+                            this[this.mode.qa + "_col"][array][num] = cc;
+                        }
                     }
                 }
                 this.record_replay(array, num);
@@ -9575,7 +8413,12 @@ class Puzzle {
             } else {
                 this[this.mode.qa].freeline[key] = this.drawing_mode;
                 if (UserSettings.custom_colors_on) {
-                    this[this.mode.qa + "_col"].freeline[key] = this.get_customcolor();
+                    let cc = this.get_customcolor();
+                    if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(this.drawing_mode))) {
+                        delete this[this.mode.qa + "_col"].freeline[key];
+                    } else {
+                        this[this.mode.qa + "_col"].freeline[key] = cc;
+                    }
                 }
             }
             this.record_replay("freeline", key);
@@ -9600,7 +8443,12 @@ class Puzzle {
             this.record("line", num);
             this[this.mode.qa].line[num] = 98;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"].line[num] = this.get_customcolor();
+                let cc = this.get_customcolor();
+                if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(98))) {
+                    delete this[this.mode.qa + "_col"].line[num];
+                } else {
+                    this[this.mode.qa + "_col"].line[num] = cc;
+                }
             }
             this.record_replay("line", num);
         }
@@ -9699,7 +8547,13 @@ class Puzzle {
             } else {
                 this[this.mode.qa].freelineE[key] = this.drawing_mode;
                 if (UserSettings.custom_colors_on) {
-                    this[this.mode.qa + "_col"].freelineE[key] = this.get_customcolor();
+                    let cc = this.get_customcolor();
+                    if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(this.drawing_mode))) {
+                        delete this[this.mode.qa + "_col"].freelineE[key];
+                    } else {
+                        this[this.mode.qa + "_col"].freelineE[key] = cc;
+                    }
+
                 }
             }
             this.record_replay("freelineE", key);
@@ -9724,7 +8578,12 @@ class Puzzle {
             this.record("lineE", num);
             this[this.mode.qa].lineE[num] = 98;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"].lineE[num] = this.get_customcolor();
+                let cc = this.get_customcolor();
+                if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(98))) {
+                    delete this[this.mode.qa + "_col"].lineE[num];
+                } else {
+                    this[this.mode.qa + "_col"].lineE[num] = cc;
+                }
             }
             this.record_replay("lineE", num);
         }
@@ -10490,7 +9349,13 @@ class Puzzle {
         }
         if (this[this.mode.qa][arr].slice(-1)[0] && this[this.mode.qa][arr].slice(-1)[0].length > 1) {
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
+                let cc = this.get_customcolor();
+                let cc_idx = this[this.mode.qa][arr].length - 1;
+                if (!cc || tinycolor.equals(cc, CustomColor.default_special_style_color(arr))) {
+                    delete this[this.mode.qa + "_col"][arr][cc_idx];
+                } else {
+                    this[this.mode.qa + "_col"][arr][cc_idx] = cc;
+                }
             }
         }
         this.redraw();
@@ -10533,7 +9398,13 @@ class Puzzle {
         if (this.drawing) {
             this[this.mode.qa][arr].slice(-1)[0][this[this.mode.qa][arr].slice(-1)[0].length - 1] = num;
             if (UserSettings.custom_colors_on) {
-                this[this.mode.qa + "_col"][arr][this[this.mode.qa][arr].length - 1] = this.get_customcolor();
+                let cc = this.get_customcolor();
+                let cc_idx = this[this.mode.qa][arr].length - 1;
+                if (!cc || tinycolor.equals(cc, CustomColor.default_special_style_color(arr))) {
+                    delete this[this.mode.qa + "_col"][arr][cc_idx];
+                } else {
+                    this[this.mode.qa + "_col"][arr][cc_idx] = cc;
+                }
             }
         }
         this.redraw();
@@ -10592,11 +9463,26 @@ class Puzzle {
             this.centerlist.push(num);
             this.drawing_mode = 1;
         } else {
-            this.centerlist.splice(index, 1);
-            this.drawing_mode = 0;
+            let status = this.check_last_cell();
+            if (!status) {
+                this.centerlist.splice(index, 1);
+                this.drawing_mode = 0;
+            } else {
+                this.drawing = false;
+                this.last = -1
+            }
         }
         this.make_frameline();
         this.redraw();
+    }
+
+    check_last_cell() {
+        if (this.centerlist.length == 1) {
+            infoMsg('<h3 class="info">Last cell cannot be removed using the "Box" mode. For a blank grid use the following approach:</h3><ol><li>Click on "New Grid / Update"</li><li>Set "Gridlines" to "None"</li><li>Set "Gridpoints" to "No"</li><li>Set "Outside frame" to "No"</li><li>Click on "Update display"</li></ol>');
+            return true;
+        } else {
+            return false;
+        }
     }
 
     re_boardmove(num) {
@@ -10605,7 +9491,10 @@ class Puzzle {
             if (this.drawing_mode === 1 && index === -1) {
                 this.centerlist.push(num);
             } else if (this.drawing_mode === 0 && index != -1) {
-                this.centerlist.splice(index, 1);
+                let status = this.check_last_cell();
+                if (!status) {
+                    this.centerlist.splice(index, 1);
+                }
             }
             this.make_frameline();
             this.redraw();
@@ -12715,6 +11604,40 @@ class Puzzle {
         }
     }
 
+    draw_surface(pu, num = "") {
+        if (num) {
+            var keys = [],
+                key0 = num + "";
+            if (this[pu].surface[key0]) {
+                keys.push(key0);
+            }
+            for (var i = 0; i < this.point[num].adjacent.length; i++) {
+                key0 = this.point[num].adjacent[i] + "";
+                if (keys.indexOf(key0) === -1 && this[pu].surface[key0]) {
+                    keys.push(key0);
+                }
+            }
+        } else {
+            var keys = Object.keys(this[pu].surface);
+        }
+        for (var k = 0; k < keys.length; k++) {
+            var i = keys[k];
+            set_surface_style(this.ctx, this[pu].surface[i]);
+            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
+                this.ctx.fillStyle = this[pu + "_col"].surface[i];
+                this.ctx.strokeStyle = this.ctx.fillStyle;
+            }
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
+            for (var j = 1; j < this.point[i].surround.length; j++) {
+                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
+            }
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+    }
+
     draw_freecircle() {
         /*free_circle*/
         if (((this.mode[this.mode.qa].edit_mode === "line" || this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
@@ -12972,7 +11895,7 @@ class Puzzle {
                             Swal.fire({
                                 title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                 html: '<h2 class="wish">' + message + '</h2>',
-                                background: 'url(js/images/new_year.jpg)',
+                                background: 'url(js/images/christmas.jpg)',
                                 icon: 'success',
                                 confirmButtonText: Identity.solveOKButtonText,
                                 // timer: 5000
@@ -13009,7 +11932,7 @@ class Puzzle {
                                 Swal.fire({
                                     title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                     html: '<h2 class="wish">' + message + '</h2>',
-                                    background: 'url(js/images/new_year.jpg)',
+                                    background: 'url(js/images/christmas.jpg)',
                                     icon: 'success',
                                     confirmButtonText: Identity.solveOKButtonText,
                                 })
@@ -13273,6 +12196,7 @@ class Puzzle {
 
     get_customcolor() {
         let customcolor = $("#colorpicker_special").spectrum("get");
+        if (!customcolor) return customcolor;
         return "rgba(" + Math.round(customcolor._r) + "," + Math.round(customcolor._g) + "," + Math.round(customcolor._b) + "," + customcolor._a + ")";
     }
 
@@ -13318,6 +12242,13 @@ class Puzzle {
                 return false;
             }
         }
+    }
+
+    update_customcolor(color) {
+        const mode = this.mode[this.mode.qa].edit_mode;
+        this.mode[this.mode.qa][mode][2] = color;
+
+        panel_pu.draw_panel();
     }
 
     version_lt(major, minor, revision) {

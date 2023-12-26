@@ -7,9 +7,6 @@ const PenpaUI = {
         for (var i of allModes.sub) {
             document.getElementById("sub_" + i + "_lb").classList.toggle('is_hidden', hidden);
         }
-        for (var i of allModes.customcolor) {
-            document.getElementById(i).classList.toggle('is_hidden', hidden);
-        }
         for (var i of allModes.ms) {
             document.getElementById("ms_" + i).parentElement.classList.toggle('is_hidden', hidden);
         }
@@ -18,6 +15,9 @@ const PenpaUI = {
         }
         for (var i of allModes.ms3) {
             document.getElementById("ms3_" + i).parentElement.classList.toggle('is_hidden', hidden);
+        }
+        for (var i of allModes.ms4) {
+            document.getElementById("ms4_" + i).parentElement.classList.toggle('is_hidden', hidden);
         }
         for (var i of allModes.shapemodes) {
             document.getElementById(i).classList.toggle('is_hidden', hidden);
@@ -51,9 +51,6 @@ const PenpaUI = {
         for (var i of allPossible.sub) {
             document.getElementById("sub_" + i + "_lb").classList.toggle('is_hidden', selectedGrid.sub.indexOf(i) < 0);
         }
-        for (var i of allPossible.customcolor) {
-            document.getElementById(i).classList.toggle('is_hidden', selectedGrid.customcolor.indexOf(i) < 0);
-        }
         for (var i of allPossible.ms) {
             document.getElementById("ms_" + i).parentElement.classList.toggle('is_hidden', selectedGrid.ms.indexOf(i) < 0);
         }
@@ -62,6 +59,9 @@ const PenpaUI = {
         }
         for (var i of allPossible.ms3) {
             document.getElementById("ms3_" + i).parentElement.classList.toggle('is_hidden', selectedGrid.ms3.indexOf(i) < 0);
+        }
+        for (var i of allPossible.ms4) {
+            document.getElementById("ms4_" + i).parentElement.classList.toggle('is_hidden', selectedGrid.ms4.indexOf(i) < 0);
         }
         for (var i of allPossible.shapemodes) {
             document.getElementById(i).classList.toggle('is_hidden', selectedGrid.shapemodes.indexOf(i) < 0);

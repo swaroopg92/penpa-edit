@@ -43,19 +43,20 @@ onload = function() {
 
     // Declare custom color picker
     $(colorpicker_special).spectrum({
-        type: "component",
+        type: "color",
         preferredFormat: "hex",
         showInput: true,
         chooseText: "OK",
         // cancelText: "No way",
         // showAlpha: true,
-        // allowAlpha: true,
-        // allowEmpty: true,
+        allowAlpha: true,
+        allowEmpty: true,
+        showInitial: true,
         togglePaletteOnly: true,
         togglePaletteMoreText: 'more',
         togglePaletteLessText: 'less',
         showPalette: true,
-        hideAfterPaletteSelect: true,
+        // hideAfterPaletteSelect: true,
         maxSelectionSize: 8,
         showSelectionPalette: true,
         palette: [
@@ -69,6 +70,7 @@ onload = function() {
         ],
         localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
+    $(colorpicker_special).on('change', function(e, color) { pu.update_customcolor(color ? color.toRgbString() : color); });
 
     boot();
 
@@ -799,38 +801,37 @@ onload = function() {
 
         var key = e.key;
         const keylocation = e.location;
-        if (keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            if (isShiftKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                shift_counter = 0;
-                shift_release_time = Date.now();
+        if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            shift_counter = 0;
+            shift_release_time = Date.now();
+            e.returnValue = false;
+        } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+            ctrl_counter = 0;
+            ctrl_release_time = Date.now();
+            e.returnValue = false;
+        } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
+            if (key === "1") {
+                number_release_time = Date.now();
+                previousdigit1 = true;
                 e.returnValue = false;
-            } else if (isCtrlKeyPressed(key)) {
-                if (present_submode === "1") {
-                    pu.submode_check("sub_sudoku1");
-                } else if (present_submode === "2") {
-                    pu.submode_check("sub_sudoku2");
-                } else if (present_submode === "3") {
-                    pu.submode_check("sub_sudoku3");
-                }
-                ctrl_counter = 0;
+            } else {
+                previousdigit1 = false;
+                number_release_time = -1e5;
                 e.returnValue = false;
-            } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
-                if (key === "1") {
-                    number_release_time = Date.now();
-                    previousdigit1 = true;
-                    e.returnValue = false;
-                } else {
-                    previousdigit1 = false;
-                    number_release_time = -1e5;
-                    e.returnValue = false;
-                }
             }
         }
     }
@@ -988,6 +989,8 @@ onload = function() {
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
         }
+        // This segment of code I added for a purpose but don't recollect the reason.
+        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
         if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
             e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
@@ -2070,13 +2073,21 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
+        save_progress();
+    });
 
+    document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+            save_progress();
+        }
+    });
+
+    function save_progress() {
         // Save puzzle progress
-        let local_storage_setting = document.getElementById("clear_storage_opt").value;
         if (localStorageAvailable &&
             pu.url.length !== 0 &&
             pu.mmode === "solve" &&
-            local_storage_setting === "1" &&
+            UserSettings.save_current_puzzle &&
             !pu.replay) {
             // get md5 hash for unique id
             let hash = "penpa_" + md5(pu.url);
@@ -2086,7 +2097,7 @@ onload = function() {
 
             localStorage.setItem(hash, rstr);
         }
-    });
+    }
 
     // Adding on change events for general settings
     // Theme Setting
@@ -2129,8 +2140,8 @@ onload = function() {
         UserSettings.reload_button = this.value;
     }
 
-    document.getElementById("clear_storage_opt").onchange = function() {
-        UserSettings.local_storage = this.value;
+    document.getElementById("allow_local_storage").onchange = function() {
+        UserSettings.local_storage = (parseInt(this.value, 10) === 1);
     }
 
     $(document).ready(function() {
@@ -2294,8 +2305,8 @@ function clear_storage_one() {
         });
     }
 
-    // turn off localstorage
-    UserSettings.local_storage = 3; // not using 4 because this is temporary state
+    // turn off localstorage for this puzzle
+    UserSettings.save_current_puzzle = false;
 }
 
 function clear_storage_all() {
@@ -2309,8 +2320,8 @@ function clear_storage_all() {
     }
     // localStorage.clear(); for all clear
 
-    // turn off localstorage
-    UserSettings.local_storage = 3; // not using 4 because this is temporary state
+    // turn off localstorage for current puzzle
+    UserSettings.save_current_puzzle = false;
 
     Swal.fire({
         html: '<h2 class="info">Local Storage is Cleared</h2>',

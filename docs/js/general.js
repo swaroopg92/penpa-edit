@@ -196,10 +196,27 @@ function create_newboard() {
         pu = make_class(gridtype);
         pu.mode = mode;
 
-        // update default composite mode for special grids
+        // update mode defaults for special grids
         if (!(gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro")) {
             pu.mode["pu_q"]["combi"] = ["linex", ""];
             pu.mode["pu_a"]["combi"] = ["linex", ""];
+            pu.mode["pu_q"]["symbol"] = ["circle_L", 1];
+            pu.mode["pu_a"]["symbol"] = ["circle_L", 1];
+        }
+
+        // Update mode states for grid type having unavailable sub modes
+        for (let q of ["pu_q", "pu_a"]) {
+            for (let mode in pu.mode[q]) {
+                const submode = `${mode}${pu.mode[q][mode][0]}`;
+                // A valid but unavailable sub mode
+                if (penpa_modes["square"].sub.includes(submode) && !penpa_modes[pu.gridtype].sub.includes(submode)) {
+                    // Replace state with first sub mode which is available for this grid type
+                    let newsub = penpa_modes[pu.gridtype].sub.find(s => s.startsWith(mode));
+                    if (newsub) {
+                        pu.mode[q][mode][0] = newsub.substring(mode.length);
+                    }
+                }
+            }
         }
 
         pu.reset_frame(); // Draw the board
@@ -302,7 +319,7 @@ function make_class(gridtype, loadtype = 'new') {
             if (n0 <= gridmax['cube'] && n0 > 0) {
                 pu = new Puzzle_iso(n0, n0, size);
             } else {
-                errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['iso'] + '</h2>');
+                errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['cube'] + '</h2>');
             }
             break;
         case "sudoku":
@@ -479,7 +496,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "truncated_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['truncated'] && n0 > 0) {
                 pu = new Puzzle_truncated_square(n0, n0, size);
             } else {
                 errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['truncated'] + '</h2>');
@@ -487,7 +504,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "tetrakis_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['tetrakis'] && n0 > 0) {
                 pu = new Puzzle_tetrakis_square(n0, n0, size);
             } else {
                 errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['tetrakis'] + '</h2>');
@@ -495,7 +512,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "snub_square":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['snub'] && n0 > 0) {
                 pu = new Puzzle_snub_square(n0, n0, size);
             } else {
                 errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['snub'] + '</h2>');
@@ -503,7 +520,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "cairo_pentagonal":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['cairo'] && n0 > 0) {
                 pu = new Puzzle_cairo_pentagonal(n0, n0, size);
             } else {
                 errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['cairo'] + '</h2>');
@@ -511,7 +528,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "rhombitrihexagonal":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['rhombitrihex'] && n0 > 0) {
                 pu = new Puzzle_rhombitrihexagonal(n0, n0, size);
             } else {
                 errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['rhombitrihex'] + '</h2>');
@@ -519,7 +536,7 @@ function make_class(gridtype, loadtype = 'new') {
             break;
         case "deltoidal_trihexagonal":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
-            if (n0 <= 20 && n0 > 0) {
+            if (n0 <= gridmax['deltoidal'] && n0 > 0) {
                 pu = new Puzzle_deltoidal_trihexagonal(n0, n0, size);
             } else {
                 errorMsg('Side Size must be in the range <h2 class="warn">1-' + gridmax['deltoidal'] + '</h2>');
@@ -2017,6 +2034,7 @@ function load(urlParam, type = 'url', origurl = null) {
         rtext[2] = rtext[2].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[3] = rtext[3].split(pu.replace[i][1]).join(pu.replace[i][0]);
         rtext[4] = rtext[4].split(pu.replace[i][1]).join(pu.replace[i][0]);
+        rtext[5] = rtext[5].split(pu.replace[i][1]).join(pu.replace[i][0]);
 
         // submode, style settings
         if (rtext[11]) {
@@ -2035,6 +2053,12 @@ function load(urlParam, type = 'url', origurl = null) {
         }
     }
     rtext[5] = JSON.parse(rtext[5]);
+
+    // workaround for incorrectly encoded empty centerlist
+    if (rtext[5][0] == null) {
+        rtext[5] = [];
+    }
+
     for (var i = 1; i < rtext[5].length; i++) {
         rtext[5][i] = (rtext[5][i - 1] + rtext[5][i]);
     }
@@ -4908,4 +4932,14 @@ function decrypt_data(puzdata) {
 function hide_element_by_id(s) {
     let element = document.getElementById(s);
     element.parentElement.style.contentVisibility = 'hidden';
+}
+
+// Polyfills
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        value: function(search, rawPos) {
+            var pos = rawPos > 0 ? rawPos|0 : 0;
+            return this.substring(pos, pos + search.length) === search;
+        }
+    });
 }
