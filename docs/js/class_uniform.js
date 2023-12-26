@@ -1186,7 +1186,7 @@ class Puzzle_truncated_square extends Puzzle {
     }
 
     draw_symbol_select(ctx, x, y, num, sym, i = 'panel', qamode) {
-        var ccolor = "none";
+        let ccolor = undefined;
         if (i !== 'panel' && UserSettings.custom_colors_on && this[qamode + "_col"].symbol[i]) {
             ccolor = this[qamode + "_col"].symbol[i];
         }
@@ -1490,35 +1490,35 @@ class Puzzle_truncated_square extends Puzzle {
                 break;
 
                 /* special */
-            // case "kakuro":
-            //     this.draw_kakuro(ctx, num, x, y, ccolor);
-            //     break;
-            // case "compass":
-            //     this.draw_compass(ctx, num, x, y, ccolor);
-            //     break;
+                // case "kakuro":
+                //     this.draw_kakuro(ctx, num, x, y, ccolor);
+                //     break;
+                // case "compass":
+                //     this.draw_compass(ctx, num, x, y, ccolor);
+                //     break;
             case "star":
                 this.draw_star(ctx, num, x, y, loc, ccolor);
                 break;
             case "tents":
                 this.draw_tents(ctx, num, x, y, ccolor);
                 break;
-            // case "battleship_B":
-            //     set_circle_style(ctx, 2);
-            //     this.draw_battleship(ctx, num, x, y, ccolor);
-            //     break;
-            // case "battleship_G":
-            //     set_circle_style(ctx, 3);
-            //     ctx.fillStyle = Color.GREY;
-            //     this.draw_battleship(ctx, num, x, y);
-            //     break;
-            // case "battleship_W":
-            //     ctx.setLineDash([]);
-            //     ctx.lineCap = "butt";
-            //     ctx.fillStyle = Color.TRANSPARENTBLACK;
-            //     ctx.strokeStyle = Color.BLACK;
-            //     ctx.lineWidth = 2;
-            //     this.draw_battleship(ctx, num, x, y);
-            //     break;
+                // case "battleship_B":
+                //     set_circle_style(ctx, 2);
+                //     this.draw_battleship(ctx, num, x, y, ccolor);
+                //     break;
+                // case "battleship_G":
+                //     set_circle_style(ctx, 3);
+                //     ctx.fillStyle = Color.GREY;
+                //     this.draw_battleship(ctx, num, x, y);
+                //     break;
+                // case "battleship_W":
+                //     ctx.setLineDash([]);
+                //     ctx.lineCap = "butt";
+                //     ctx.fillStyle = Color.TRANSPARENTBLACK;
+                //     ctx.strokeStyle = Color.BLACK;
+                //     ctx.lineWidth = 2;
+                //     this.draw_battleship(ctx, num, x, y);
+                //     break;
             case "angleloop":
                 this.draw_angleloop(ctx, num, x, y, ccolor);
                 break;
@@ -1534,9 +1534,9 @@ class Puzzle_truncated_square extends Puzzle {
             case "polyomino":
                 this.draw_polyomino(ctx, num, x, y, ccolor);
                 break;
-            // case "pencils":
-            //     this.draw_pencils(ctx, num, x, y);
-            //     break;
+                // case "pencils":
+                //     this.draw_pencils(ctx, num, x, y);
+                //     break;
         }
     }
 
@@ -2432,7 +2432,7 @@ class Puzzle_truncated_square extends Puzzle {
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        const thMap = {1: -90, 2: 90, 3: -45, 4: 45, 5: -225, 6: 225, 7: 135, 8: 180, 9: 0};
+        const thMap = { 1: -90, 2: 90, 3: -45, 4: 45, 5: -225, 6: 225, 7: 135, 8: 180, 9: 0 };
         switch (num) {
             case 1:
             case 2:
@@ -3762,7 +3762,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        const thMap = {1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30};
+        const thMap = { 1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30 };
         switch (num) {
             case 1:
             case 2:
@@ -4346,8 +4346,8 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        const thMap = {1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30};
-        switch (num) {            
+        const thMap = { 1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30 };
+        switch (num) {
             case 1:
             case 2:
             case 3:
@@ -4365,7 +4365,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 ctx.strokeStyle = Color.TRANSPARENTBLACK;
                 ctx.lineWidth = 2;
                 this.draw_circle(ctx, x - r1 * pu.size * Math.cos(th), y - r1 * pu.size * Math.sin(th), r2);
-                break;        
+                break;
         }
     }
 }
@@ -5488,7 +5488,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        const thMap = {1: -90, 2: 90, 3: -30, 4: 30, 5: -210, 6: 210, 7: 150};
+        const thMap = { 1: -90, 2: 90, 3: -30, 4: 30, 5: -210, 6: 210, 7: 150 };
         switch (num) {
             case 1:
             case 2:
@@ -5496,7 +5496,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
             case 4:
             case 5:
             case 6:
-            case 7:                
+            case 7:
                 var th = this.rotate_theta(thMap[num]);
                 set_circle_style(ctx, 1, ccolor);
                 this.draw_circle(ctx, x, y, r1);
@@ -6116,7 +6116,7 @@ class Puzzle_rhombitrihexagonal extends Puzzle_truncated_square {
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        const thMap = {1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30};
+        const thMap = { 1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30 };
         switch (num) {
             case 1:
             case 2:
@@ -6756,7 +6756,7 @@ class Puzzle_deltoidal_trihexagonal extends Puzzle_truncated_square {
             r2 = 0.09;
         ctx.setLineDash([]);
         ctx.lineCap = "butt";
-        const thMap = {1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30};
+        const thMap = { 1: -90, 2: 90, 3: -30, 4: 60, 5: 150, 6: 240, 7: 210, 8: 180, 9: 0, 0: 30 };
         switch (num) {
             case 1:
             case 2:
