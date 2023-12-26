@@ -1113,8 +1113,8 @@ class Puzzle_tri extends Puzzle {
         }
         this.draw_symbol_select_ccolor(ctx, x, y, num, sym, i, ccolor);
     }
-    
-    draw_symbol_select_ccolor(ctx, x, y, num, sym, i, ccolor) {    
+
+    draw_symbol_select_ccolor(ctx, x, y, num, sym, i, ccolor) {
         switch (sym) {
             /* figure */
             case "circle_L":

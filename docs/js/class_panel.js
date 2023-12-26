@@ -291,7 +291,7 @@ class Panel {
             }
             var size = pu.size;
             pu.size = this.sizef;
-            pu.panel_col = {symbol: {}};
+            pu.panel_col = { symbol: {} };
             if (UserSettings.custom_colors_on) {
                 let cc = pu.get_customcolor();
                 if (cc && !tinycolor.equals(cc, CustomColor.default_symbol_color(symbolname))) {
@@ -300,9 +300,9 @@ class Panel {
             }
             for (var i = 0; i < this.cont.length; i++) {
                 pu.draw_symbol_select(this.ctxf,
-                     (i % this.nxf + this.offset) * (this.sizef + this.spacef),
-                     ((i / this.nxf | 0) + this.offset) * (this.sizef + this.spacef),
-                     this.cont[i], symbolname, 0, 'panel');
+                    (i % this.nxf + this.offset) * (this.sizef + this.spacef),
+                    ((i / this.nxf | 0) + this.offset) * (this.sizef + this.spacef),
+                    this.cont[i], symbolname, 0, 'panel');
             }
             pu.size = size;
 

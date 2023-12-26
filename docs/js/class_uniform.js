@@ -1488,7 +1488,6 @@ class Puzzle_truncated_square extends Puzzle {
                 ctx.fillStyle = Color.GREEN_LIGHT;
                 this.draw_arrowfouredge(ctx, num, x, y);
                 break;
-
                 /* special */
                 // case "kakuro":
                 //     this.draw_kakuro(ctx, num, x, y, ccolor);
