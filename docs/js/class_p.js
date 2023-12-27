@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 1, 1]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 1, 2]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -11887,7 +11887,7 @@ class Puzzle {
                             Swal.fire({
                                 title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                 html: '<h2 class="wish">' + message + '</h2>',
-                                background: 'url(js/images/christmas.jpg)',
+                                background: 'url(js/images/new_year.jpg)',
                                 icon: 'success',
                                 confirmButtonText: Identity.solveOKButtonText,
                                 // timer: 5000
@@ -11924,7 +11924,7 @@ class Puzzle {
                                 Swal.fire({
                                     title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
                                     html: '<h2 class="wish">' + message + '</h2>',
-                                    background: 'url(js/images/christmas.jpg)',
+                                    background: 'url(js/images/new_year.jpg)',
                                     icon: 'success',
                                     confirmButtonText: Identity.solveOKButtonText,
                                 })

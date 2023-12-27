@@ -1,4 +1,8 @@
 ## History
+* 2023/12/27 ver 3.1.2
+	* code clean up and refactoring.
+	* detect if local storage is off or disabled in the browser and accordingly disable this feature in penpa.
+	* Reset Merry Christmas Message.
 * 2023/12/26 ver 3.1.1
 	* Cleaned up available penpa modes for relevant board types.
 	* Improve UserSettings around Local Storage.
