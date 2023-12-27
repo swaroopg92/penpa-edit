@@ -143,6 +143,21 @@ const UserSettings = {
     },
 
     _custom_colors_on: false,
+    _custom_color_supported_grids: {
+        square: 1,
+        sudoku: 1,
+        kakuro: 1,
+        hex: 1
+    },
+    _custom_color_supported_modes: {
+        line: 1,
+        lineE: 1,
+        wall: 1,
+        surface: 1,
+        cage: 1,
+        special: 1,
+        symbol: 1
+    },
     set custom_colors_on(newValue) {
         if (typeof newValue === 'string') {
             const valueInt = newValue ? parseInt(newValue, 10) : 1;
@@ -151,7 +166,16 @@ const UserSettings = {
             this._custom_colors_on = !!newValue;
         }
 
-        PenpaUI.toggleCustomColor();
+        if (this._custom_colors_on) {
+            // On
+            let mode = pu.mode[pu.mode.qa].edit_mode;
+            if (this._custom_color_supported_grids[pu.gridtype] && this._custom_color_supported_modes[mode]) {
+                document.getElementById('style_special').style.display = 'inline';
+            }
+        } else {
+            // Off
+            document.getElementById('style_special').style.display = 'none';
+        }
         document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
 
         pu.redraw();

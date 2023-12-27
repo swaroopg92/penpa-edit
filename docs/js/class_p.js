@@ -2301,10 +2301,6 @@ class Puzzle {
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]);
-
-        // Manage panel header and visibility
-        document.getElementById('float-key-header-lb').innerHTML = "Mode: " + mode_names[mode];
-        
         if (mode === "symbol" && !this.panelflag) {
             // Show the panel on the first time landing and then respect user's choice
             UserSettings.panel_shown = true;
@@ -2317,7 +2313,6 @@ class Puzzle {
             // Turn off panel while switching to other modes on Mobile/Ipad
             UserSettings.panel_shown = false;
         }
-
         if (mode === "symbol") {
             this.stylemode_check('st_' + mode + this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] % 10);
             this.stylemode_check('st_' + mode + parseInt(this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] / 10) * 10);
@@ -2329,8 +2324,15 @@ class Puzzle {
         } else if (this.mode[this.mode.qa].edit_mode === "combi") {
             this.subcombimode(this.mode[this.mode.qa].combi[0]);
         }
+        if ((UserSettings.custom_colors_on) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex")) &&
+            (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
+            document.getElementById('style_special').style.display = 'inline';
+        } else {
+            document.getElementById('style_special').style.display = 'none';
+        }
 
-        PenpaUI.toggleCustomColor();
+        // If panel is ON, show Mode info on header
+        document.getElementById('float-key-header-lb').innerHTML = "Mode: " + mode_names[mode];
 
         if (mode === "number") {
             // Update cursolS after mode switch, because it is not set in all modes.
