@@ -19,7 +19,8 @@ onload = function() {
     try {
         if (window.localStorage) {
             window.localStorage.setItem('test', 123);
-            localStorageAvailable = (window.localStorage.getItem('test') === 123);
+            localStorageAvailable = (window.localStorage.getItem('test') === "123");
+            window.localStorage.removeItem('test');
         }
     } catch (e) {
         localStorageAvailable = false;
