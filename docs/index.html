@@ -26,12 +26,30 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="./css/images/logo.png" />
     <link rel="apple-touch-icon" href="./css/images/logo.png" />
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TSBMV8L8');
+    </script>
+    <!-- End Google Tag Manager -->
     <!-- STYLES -->
     <!-- Online styles -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.0.9"; // Also defined in class_p.js
+        var ver = "3.1.1"; // Also defined in class_p.js
         let style_sources = [
             "./css/light_theme.css",
             "./css/base-structure.css",
@@ -62,6 +80,7 @@
     <!-- local libs -->
     <script type="text/javascript">
         let library_sources = ["./js/libs/jquery-3.7.0.min.js",
+            "./js/libs/purify.min.js",
             "./js/libs/CanvasRenderingContext2D.ext.js",
             "./js/libs/encoding.js",
             "./js/libs/vanillaSelectBox.js",
@@ -102,7 +121,8 @@
             "./js/class_uniform.js",
             "./js/class_panel.js",
             "./js/style.js",
-            "./js/general.js"
+            "./js/general.js",
+            "./js/customcolor.js"
         ];
         for (let i = 0; i < script_sources.length; i++) {
             let script = document.createElement("script");
@@ -115,6 +135,9 @@
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSBMV8L8" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <header id="header">
         <span id="title">Setter Mode</span>
         <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2023 <button id="page_help">Help</button></span>
@@ -781,11 +804,11 @@
                 <h4><label class="label_nb" id="nb_gridtype_lb">Board type:</label></h4>
                 <select id="gridtype" onchange="changetype()">
                     <option value="square" id="nb_gridtype1_lb" selected="selected">Square</option>
+                    <option value="sudoku" id="nb_gridtype6_lb">Sudoku</option>
                     <option value="hex" id="nb_gridtype2_lb">Hexagon</option>
                     <option value="tri" id="nb_gridtype3_lb">Triangle</option>
                     <option value="pyramid" id="nb_gridtype4_lb">Pyramid</option>
                     <option value="iso" id="nb_gridtype5_lb">Cube</option>
-                    <option value="sudoku" id="nb_gridtype6_lb">Sudoku</option>
                     <option value="kakuro" id="nb_gridtype7_lb">Kakuro</option>
                     <option value="tetrakis_square" id="nb_gridtype8_lb"> Tetrakis square </option>
                     <option value="truncated_square" id="nb_gridtype9_lb"> Truncated square </option>
@@ -888,7 +911,7 @@
             <br>
             <div class="nb_button">
                 <h4><label id="rt4_lb_r">Add/Remove Rows/Columns:</label></h4>
-                <p><label id="rt5_lb_r">*Works only in Square Board Type, it also resets undo/redo. Answer checking if enabled, will only work with original grid size.</label></p>
+                <p><label id="rt5_lb_r">*Works only in Square Board Type.</label></p>
                 <div class="resize-grid-buttons">
                     <div class="existing-grid">Existing Grid</div>
                     <button class="addtop" id="rt_addtop_r">+ &#9650;</button>
@@ -973,7 +996,7 @@
             <br>
             <div class="nb_button">
                 <h4><label id="rt4_lb">Add/Remove Rows/Columns:</label></h4>
-                <p><label id="rt5_lb">*Works only in Square Board Type, it also resets undo/redo. Ensure empty row/column before removing.</label></p>
+                <p><label id="rt5_lb">*Works only in Square Board Type.</label></p>
                 <div class="resize-grid-buttons">
                     <div class="existing-grid">Existing Grid</div>
                     <button class="addtop" id="rt_addtop">+ &#9650;</button>
@@ -1451,7 +1474,7 @@
                         </tr>
                         <tr id="custom_color_lb">
                             <td>
-                                <label>Custom Colors (Beta):</label>
+                                <label>Custom Colors:</label>
                             </td>
                             <td>
                                 <select name="custom_color" id="custom_color_opt">
@@ -1582,7 +1605,8 @@
                                 <label>Local Storage:</label>
                             </td>
                             <td>
-                                <select name="clear_storage" id="clear_storage_opt">
+                                <em id="local_storage_browser_message" class="is_hidden">Your browser has disabled or doesn't support local storage.</em>
+                                <select id="allow_local_storage">
                                     <option value="1" selected="selected">ON</option>
                                     <option value="4">OFF</option>
                                 </select>

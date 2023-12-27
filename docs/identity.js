@@ -8,7 +8,7 @@ const Identity = {
     infoTitle: "Swaroop says",
 
     solveTitle: undefined,
-    solveDefaultMessage: "Congratulations 🙂",
+    solveDefaultMessage: "Merry Christmas 🙂", // Default - Congratulations 🙂
     solveOKButtonText: "Hurray!",
 
     incorrectMessage: "Keep trying 🙂",

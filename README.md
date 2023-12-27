@@ -32,6 +32,7 @@ You can now cite this in your research and publications using:
 * F3: Solution mode
 * F4: Hide/Show Timer
 * TAB/ENTER: checkout the TAB section below in "Current functions". Tab settings are now retained in the shared URL.
+* ?: To display keyboard shortcuts. You may need to press SHIFT + "/?" to access "?" in some keyboards.
 * In Sudoku Mode
 	* Z : Normal Submode
 	* X : Corner Submode
@@ -46,11 +47,11 @@ You can now cite this in your research and publications using:
 	* Drag the mouse pressing left click / drag your finger holding down on Mobile or Ipad for multiple cell selection
 	* Border: ON - will allow you to write digits on the edges
 * In Surface Mode
-	* Use number keys to quickly switch between styles.
+	* Use number keys to quickly switch between styles. For styles 11 and 12, press 1 and the second digit in quick succession.
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
-* Number>Arrow: Enter an arrow in the direction you dragged the square.
+* Number -> Arrow: Enter an arrow in the direction you dragged the square.
 * Symbol: Input with the numeric keys 1-9,0. When the panel is turned on, a list of symbols that can be entered is displayed, and it corresponds to 1, 2, ... from the upper left. To use the panel place the cursor on the panel symbol and click the board. Erase with two clicks.
 * Some symbols such as symbol> figure> cross are onoff input formats. Click the panel to enter directly. Special example: Digital (frame) with the same key. If you press it twice, only the frame will be displayed.
 * Special: Delete by clicking the first square of the entered symbol.
@@ -58,7 +59,7 @@ You can now cite this in your research and publications using:
 * V: Visibility Button. Users can now choose if they dont want the solution visible in the "Problem" mode. Default is "ON". In "Solution" mode everything will be visible.
 * Draw on Edges: Turning on this button will allow users to place the objects (shapes, numbers) on the edges/corners of the grid.
 * Panel: Turning on this button will popup a panel box useful for Number/Sudoku/Shape Modes.
-* Constraints (Beta): This feature is to aid puzzle constructors to find certain elements quickly for well known puzzle types. It is currently supported for square grid type. [Note - I will frequently add new types and expand the support to other grid types but if you have a certain genre in mind, you can send a request to penpaplus@gmail.com or contact via other options available through "i" information button on the top right]
+* Constraints (Beta): This feature is to aid puzzle constructors to find certain elements quickly for well known puzzle types. It is currently supported for square grid type. [Note - I will frequently add new types and expand the support to other grid types but if you have a certain genre in mind, you can send a request to penpaplus@gmail.com or contact via other options available through "Help" information button on the top right]
 
 ## Current functions
 
@@ -72,9 +73,15 @@ You can now cite this in your research and publications using:
 		* Left: Number of empty columns from the left. They are removed from the Column Size.
 		* Right: Number of empty columns from the right. They are removed from the Column Size.
 	* Example: If you want grid size of 9x9 and 3 empty rows and columns on either side. Then you need to set Rows - 15, Columns - 15, Over - 3, Under - 3, Left - 3, Right -3
+* Sudoku
+	* Diagonal \
+	* Diagonal /
+	* Outside clues (For extra row and column around the Sudoku)
+	* Outside clues  (top/left)
+	* Sizes 4x4, 6x6, 8x8, 9x9 (default)
 * Hexagon
 	* Side
-	* White Space: Side
+	* White Space: Side (Note - White space is subtracted from the Side Size)
 * Triangle
 	* Side
 	* White Space: Border
@@ -83,12 +90,6 @@ You can now cite this in your research and publications using:
 	* White Space: Border
 * Cube
 	* Side
-* Sudoku
-	* Diagonal \
-	* Diagonal /
-	* Skyscraper/Little Killer
-	* Sandwich
-	* Sizes 4x4, 6x6, 8x8, 9x9 (default)
 * Kakuro
 	* Rows
 	* Columns
@@ -100,14 +101,20 @@ You can now cite this in your research and publications using:
 	* Side
 * Cairo Pentagonal
 	* Side
+* Rhombitrihexagonal
+	* Side
+* Deltoidal Trihexagonal
+	* Side
 
-### Surface
+### Modes
+
+#### Surface
 * Fill cells. Select a color by style. (Nurikabe, Iceburn, Shakashaka etc.)
 * In Dark grey mode only, click twice to get a green square.
 * Light grey is used when hiding grey letters and symbols.
-* Irrespective of any Style selected, Right click to enter the green square. This feature is to provide a quick access to secondary color (fixed to green currently)
+* Irrespective of any Style selected, Right click to enter the green square. This feature is to provide a quick access to secondary color (default is green). For more options on the secondary color, go to Settings -> Surface Second Color.
 
-### Line
+#### Line
 * Normal: A line connecting the center of the square to the horizontal and vertical. (Masyu, Hashi, Palindrome Sudoku, etc.)
 * Diagonal: A line connecting the centers of two diagonally adjacent squares. (Zigzag etc.)
 * Free: A line that connects arbitrary squares. (Night tour etc.)
@@ -115,7 +122,7 @@ You can now cite this in your research and publications using:
 * Helper (x): An auxiliary cross mark placed on the side.
 * Select the color and thickness of the line by style.
 
-### Edge
+#### Edge
 * Normal: A line that connects two horizontal or vertical vertices of a square. (Heyawake, Slitherlink etc.)
 * Diagonal line: A line connecting two diagonal vertices of a square. (Diagonal Sudoku etc.)
 * Free line: A line that connects the vertices of any square. (Sharp and blunt loop etc.)
@@ -123,11 +130,11 @@ You can now cite this in your research and publications using:
 * Erase: Delete the border of the board.
 * Select the color and thickness of the line by style.
 
-### Wall
+#### Wall
 * A vertical or horizontal line drawn inside the square. (Slalom etc.)
 * Select the color and thickness of the line by style.
 
-### Number		  
+#### Number		  
 * Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. Some other special symbols are allowed through Panel: ON mode. It also allows custom symbols in the "text" tab (checkout next section for more details)
 * L, M, S: Large, medium or small size numbers.
 * Candidates: Candidate numbers for Latin Square such as Sudoku. Compatible with 1-9. onoff input.
@@ -141,7 +148,7 @@ You can now cite this in your research and publications using:
 * White BG: Draw a white circle behind the numbers. Useful when you can't see the numbers because they are hidden behind the lines.
 * When the BORDER input is turned on, the character is placed on the side/vertex.
 
-#### Any Unicode Symbol
+##### Any Unicode Symbol
 * Select "Number" mode.
 * Then select "Long" or "L" or "M" submode. (Preferrable is Long submode, although it should also work in some other Number submodes (i.e. corner, side, arrow, S)).
 * Panel: ON.
@@ -151,27 +158,27 @@ You can now cite this in your research and publications using:
 * One can also type in the sentence of words and "Insert".
 * Clear button to clear the text area.
 
-### Shape
+#### Shape
 * Numerous symbols. You can browse the symbols that can be entered by opening the panel. Figures such as 〇 and □, inequality signs, digital numbers, and other symbols unique to puzzles.
 * Depending on the style, you can select whether to place the figure on the front side or the back side of the line.
 * When the BORDER input is turned ON, the character is placed on the side/vertex.
 
-### Special
+#### Special
 * A special symbol that spans multiple squares. (Arrow Sudoku, Thermo Sudoku, moving arrows, square area)
 * Click the first cell you entered to erase it.
 * Polygon: The vertices are selected in the order in which they are clicked. Click the last clicked vertex or the first clicked vertex again to end selection.
 
-### Cage
+#### Cage
 * A line that surrounds multiple squares. (Killer Sudoku etc.)
 * Killer submode - Automatic drawing of cages. Click and drag to draw the cage. Click on any cell inside the cage to delete it. Overlapping of cages is not allowed using this automatic mode. You may want to use the Free submode to do that.
 * Free submode - Complete control over to the user to draw the cages.
 * There are 4 styles: black dotted line, black solid line, grey dotted line, and grey solid line.
 * Available in square and regular hexagon.
 
-### Box
+#### Box
 * Click to remove or add the square that draws the frame of the board. Useful for irregular board shapes.
 
-### Tab
+#### Tab
 * This is tab selector button.
 * User can now select which modes/sub-modes they wan't to rotate when pressing TAB/Enter key.
 	* There is search option available.
@@ -181,11 +188,11 @@ You can now cite this in your research and publications using:
 * To clear all selections - Click twice on Select All (It changes to Clear ALL on first click).
 * Enable PenpaLite: Turning on this button will remove all the non-preferred modes from the display thereby simplfiying the display. The preferred modes are determined through tab setting. Select your preferrable modes under "Tab/↵" and then turn "ON" PenpaLite.
 
-### Move
+#### Move
 * You can move numbers and symbols by dragging. Originally, you cannot move to a square with a number or sign.
 * All can be set to move both numbers and symbols, or either numbers or symbols.
 
-### Composite
+#### Composite
 * Ability to use multiple input methods simultaneously.
 * Paint:
 	* Black / dot: Black square drag input and dot
@@ -198,12 +205,13 @@ You can now cite this in your research and publications using:
 	* Edge IO: Edge, auxiliary x, and inside/outside painted yellow and green. ("Surface Second Color" preference can be used to change green.) (Slitherlink, Cave) - Right Click for cross and Left Click for Line
 	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot in center, cross (x) on edges
 	* Hashi: Draw the line again to make a double line
+	* RassiSilai: Left mouse click - grey circle, Left mouse click drag - green line, Right click - Yellow square
 * Area / Field:
 	* Edge/Aux line: An auxiliary line that represents the connection between the edge and the square
 * Object:
 	* Battleships: Left click will rotate between circle, square, dot and water. Drag in a direction for that directional ship segment. Right click and drag - multiple water. Once you have a single dot, you can left click and drag to multiple cells. Once you have a water, you can left click and drag to multiple cells as well.
 	* Star Battle: Left click - star, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
-	* Tents: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
+	* Tent: A tent and a point, an auxiliary x on the side, and a line that connects the tent and a tree - Right click for cross and left click for tent and a point, drag for the line.
 	* Magnets: +, - and black square
 	* Minesweeper: Left click - mine, Right click - X, Right click and drag - Multiple X's, Right click on edges or corners for green dot.
 	* Akari: Left mouse click - Light bulb, Left mouse click drag - dotted black line, Right click - dot in center, cross (x) on edges
@@ -213,7 +221,7 @@ You can now cite this in your research and publications using:
 	* Numerical flick: Input the numerical flick. 123456789 from top left to bottom right.
 	* Alphabet flick: Enter the alphabet by flick. ABCDEFGH- from top left to bottom right. Enter '-' in the lower right corner.
 
-### Sudoku
+#### Sudoku
 * This mode is for Sudoku Solving (It can be used for Creating as well but "Number" mode offers more flexibility for creations. Please checkout "Number" section for more details)
 * You can select multiple cells at the same time.
 	* Drag the mouse on the cells by holding Left Click
@@ -231,25 +239,27 @@ You can now cite this in your research and publications using:
 	* CTRL + DEL : Deletes only centre pencil marks from the selected cells
 	* DEL : To delete all the contents of the cell
 	* SPACEBAR : To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
-* Border: ON
-	* IF border is ON then you can write digits on the edges of the cells.
+* Draw on Edges: ON
+	* IF Draw on Edges is ON then you can write digits on the edges of the cells.
 * 6 Color choices for User Solving
 	* Answer check only looks for Green/Blue/Red color if enabled
 * Normal, Corner and Centre submodes are also available as part of Tab Selector. Please checkout "Tab selector" section for more details.
 
-### Grid
+### Grid Options
 * You can change the border of the board from the "New grid / Update" menu.
-* Grid: Border type
-* Gridpoints: Whether to place points at vertices
+* Display Size: To change the cell size of the grid.
+* Gridlines: The grid lines can be solid or dotted or none.
+* Gridpoints: Display vertex points on the grid.
 * Outside frame: Whether to draw a line around the board
 * White space: Used when placing numbers outside the grid on the board. (Sandwich puzzle etc.)
 * "New grid" button resets the board. The "Update display" button does not reset the board (i.e. it will keep all the puzzle elements you have entered so far), but updates only display size and frame type.
+* Example --> If you want a completely blank grid then set GridLines to None, Gridpoints to No, and Outside frame to No and click on "Update display".
 
 ### Transform
 * You can rotate and flip the board or remove and add columns or rows from the "Rotate / Move / Add / Remove" menu. Square and pyramid rotate 90°. Regular hexagon and regular triangle rotate 30° on the board surface.
 * Adjust the margin of the board with the "Move board to center" and "Fit window to board" buttons.
 * After creating the grid, if you want to add additional rows and columns without resetting the board then you can these buttons:
-	* Note: This feature only works on Square grid type. It also rests Undo/Redo history. Before removing a row/column ensure they are empty and contains no elements.
+	* Note: This feature only works on Square grid type. Before removing a row/column ensure they are empty and contains no elements.
 	* Top +: Adds a row on the top of the grid
 	* Top -: Removes a row from the top of the grid
 	* Bottom +: Adds a row in the bottom of the grid
@@ -263,10 +273,13 @@ You can now cite this in your research and publications using:
 * Settings:
 1. White Border: Setting "No" will remove the extra white space around the grid.
 2. Image quality: The higher the quality, the better the image quality, but the larger the image size.
-3. File Type: Supported image types: PNG, JPG
+3. File Type: Supported image types: PNG, JPG, SVG
+4. Title & Author: To include this information in the image, select Yes.
+5. Rules: To include this information in the image, select Yes.
+6. File name: Specify the image file name.
 * Options:
 1. Open in new window: Opens the image in a new TAB
-2. Download: .png or .jpg image will be downloaded
+2. Download: .png/.jpg/.svg image will be downloaded
 3. Cancel: Close the window
 
 ### Share
@@ -277,17 +290,20 @@ You can now cite this in your research and publications using:
 * Rules - Enter rules here
 
 * Genre/Tags - Select specific tags that suit your puzzle. These tags will be used for smart answer checking features. The smart checking supports following tags (Under development):
-1. Classic Sudoku (9x9)
-2. Consecutive Sudoku
-3. Nonconsecutive Sudoku
-4. Consecutive Pairs Sudoku
-5. Star Battle
-6. TomTom
-7. Arrow/Thermo/Even/Odd/Killer (Only Classic Check, 9x9)
+1. Classic Sudoku (9x9) [Square Grid]
+2. Consecutive Sudoku [Square Grid]
+3. Nonconsecutive Sudoku [Square Grid]
+4. Consecutive Pairs Sudoku [Square Grid]
+5. Star Battle [Square Grid]
+6. TomTom [Square Grid]
+7. Arrow/Thermo/Even/Odd/Killer (Only Classic Check, 9x9) [Square Grid]
+8. Latin Square [Hex Grid]
 
 * Source - If you are not the author of the puzzle, specify the source URL
 
 * Save Undo/Redo (History) - If you checkmark this option, then your action history will be saved in the URL. This is effective only while using "URL for editing" button. Other options will automatically ignore history. Note: Saving history might make URL too big depending on your usage.
+
+* Automatically Shorten with TinyURL - If you checkmark this option, the generated share link will be a shortened link.
 
 * Editing URL
 1. Complete creating puzzle in Edit mode "Problem".
@@ -304,23 +320,23 @@ You can now cite this in your research and publications using:
 2. If you need to save your puzzle creation/solving progress and come back later to edit/solve then click on this button.
 3. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Look at the Options section below for more detailed description.
 
-* URL with Answer Check
+* URL with Answer Check / Advanced Options
 1. Complete creating puzzle in Edit mode "Problem".
 2. Select Edit mode "Solution" and complete the solution. The solution must be entered using certain shape or color which Penpa+ will detect. Check the following image for guidance:
 ![Use the mentioned color/shape for implementing solution](./images/multisolution.PNG "Solution checking settings")
 3. If you want to share your puzzle for others to solve with the ability to verify the solution then click on "URL with answer check / Extra options" button. A new window will appear.
 	1. Please note that the solution will check only for a certain elements with a certain color and style.
 	2. The new window that appeared will show you all the possibilities. Select the relevant options. There are two choices:
-		1. "AND" column - Solution will check for all the selected elements.
-		2. "OR" column - Solution will check if at least any one of the selected elements is completed.
-		3. If both "AND", "OR" column has some checkmarks then Penpa+ will ignore the "OR" column and only consider "AND" column.
-		4. If no option is selected, then it will check for all the elements.
+		1. "All constraints" column - Solution will check for all the selected elements.
+		2. "Any of the constraints" column - Solution will check if at least any one of the selected elements is completed.
+		3. If no option is selected, then it will check for all the elements.
 	3. You should enter the solution in Step 2 using one of the accepted color and style as shown in the window.
-4. Click on "Generate URL with answer check".
-5. Then you can copy the URL generated or use URL_short button to shorten the generated URL. Clicking on the "URL_short" button automatically copies the URL, look at the Options section below for more detailed description.
-6. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode and a text "Automatic answer checking is enabled" is displayed.
+4. Custom Message: Default answer validation message is "Congratulations". User can provide a custom congratulatory message in this textbox.
+5. Click on "Generate URL with answer check".
+6. Then you can copy the URL generated.
+7. You can verify if the solution check is enabled if "Solution Button" is green colored in Solver mode and a text "Automatic answer checking is enabled" is displayed.
 
-* URL for contests
+* Contest-Mode URL
 1. This is almost like URL for solving with following exceptions:
 	1. No Undo/Redo feature.
 	2. No I/O Sudoku Option.
@@ -332,14 +348,15 @@ You can now cite this in your research and publications using:
 1. Copy: copies the URL to the clipboard
 2. Download: downloads a .txt file with the url
 3. Open: opens a new TAB with the same url
-4. URL_short:
+4. Shorten:
 	1. First create an URL using one of the four methods described above.
-	2. Click on "URL_short" (It will open a new TAB, URL is automatically copied to your clipboard).
+	2. Click on "Shorten" (It will open a new TAB with TinyURL Website, URL is automatically copied to your clipboard).
 	3. Paste the URL (CTRL + V on windows).
 	4. Click "Shorten"
-4. Cancel: close the window
+	Note - User can use their own URL shortening services too, default is TinyURL.
+5. Close: Close the window
 
-* URL with answer check / Extra options (puzzle_output_file -> GMPuzzle output:)
+* URL with answer check / Advanced options (puzzle_output_file -> GMPuzzle output:)
 1. This allows user to generate a text file output that follows the submission formatting rules for GMPuzzles (https://tinyurl.com/GMPuzzlesFormatting).
 2. It currently supports (this list is frequently updated):
 	* Sudoku
@@ -455,9 +472,12 @@ You can now cite this in your research and publications using:
 		* User can also select a square portion of the grid and import the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.
 	* Export Sudoku
 		* If its default sudoku grid created from the New Grid options then Penpa automatically knows the position of the Sudoku grid.
-		* User can also select a square portion of the grid and export the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.
-		* Ignore Pencil Marks - Sometimes we want to export the Sudoku grid in the middle of the solve. Checkmark this option and then export to ignore the Corner and Centre digits used while solving.
+		* User can also select a square portion of the grid and export the digits. User needs to specify the location of the first cell in terms of Row and Column. Then specify the Sudoku gridsize (Size:). Default is 9x9.		
 		* Pressing Export button also automatically copies the output string to the clipboard.
+	* Options
+		* Ignore Pencil Marks - Sometimes we want to export the Sudoku grid in the middle of the solve. Checkmark this option and then export to ignore the Corner and Centre digits used while solving.
+		* Ignore Whitespace for Import - Some softwares generate row wise sudoku information. Such outputs which has space in between digits can now be directly imported using this option.
+		* Skip Import Non-Square Check - If one needs to import only some digits and not entire Sudoku.
 
 ### Load
 * This function has multiple purposes. Mainly, it is a solution for "URL too long Error".
@@ -640,43 +660,47 @@ Wall Logic :x: ;
 
 
 ### Settings
-* This function is to provide Penpa-site general settings like theme, custom color etc.
-	* Display Theme: It currently offers only two options (light and dark).
-	* Display Layout: It currently offers two options (buttons to left side and buttons to right side).
-	* Custom Colors: To enable custom colors in certain modes.
-	* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
-		* Dynamic - Upto 5 digits its larger size and then it becomes small.
-		* Large - All digits are large.
-		* Small - All digits are small.
-	* Sudoku Normal: User preference for "Normal" digits in "Sudoku" mode.
-		* Centered - All digits are centered to the cell.
-		* Bottom - All digits are shifted downward and close to the bottom of the cell. (Useful to avoid overlap with Killer clues)
-	* Starbattle Dots: User preference for Right Click dots in Star battle composite mode.
-		* High Range - Default.
-		* Low Range - User needs to click much closer to corners and edges for dots.
-		* Disable - Completely disable the dot feature and only have Star/Cross.
-	* Mouse Middle Button: Shortcut to switch between Problem/Solution mode while in "setter mode". To activate, select YES.
-	* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color. This also affects Composite Edge IO.
-	* Reload Protection: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
-	* Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
-	* Shorten Links Automatically: Turning on this button will shorten the Share URL automatically.
-	* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
-	* Conflict Detection: It is upcoming feature. Some of the puzzle genres have smart checking ability. Default is ON. User can turn it OFF for the ongoing puzzle or for all the future puzzles.
-	* Save Settings: Selecting yes, will save the following items in the browser cookies:
-		* Display Theme
-		* Display Layout
-		* Tab settings
-		* Reload button status
-		* Gridtype
-		* Displaysize
-		* Sudoku PencilMarks setting
-		* Sudoku Normal setting
-		* Mouse Middle Button choice
-		* Local Storage
-		* Conflict Detection
-		* Shorten Links Automatically
-		When the user returns to fresh Penpa page, these settings are recovered.
-	* Local Storage: Default is ON. It stores the local progress of the solution in the solver mode. User can clear the storage of ongoing puzzle using "Clear this puzzle" button or entire storage using "clear all" button.
+
+#### App Display
+* Display Theme: It currently offers only two options (light and dark).
+* Display Layout: It currently offers three options.
+	* Flex Tools Left
+	* Flex Tools Right
+	* Streaming Layout (beta version)
+* Timer: User can prefer to hide the entire timer area by selecting "hide" option.
+
+#### Puzzle Display
+* Sudoku PencilMarks: User preference for "Center" pencil mark size in "Sudoku" mode.
+	* Dynamic - Upto 5 digits its larger size and then it becomes small.
+	* Large - All digits are large.
+	* Small - All digits are small.
+* Sudoku Normal: User preference for "Normal" digits in "Sudoku" mode.
+	* Centered - All digits are centered to the cell.
+	* Bottom - All digits are shifted downward and close to the bottom of the cell. (Useful to avoid overlap with Killer clues)
+* Starbattle Dots: User preference for Right Click dots in Star battle composite mode.
+	* High Range - Default.
+	* Low Range - User needs to click much closer to corners and edges for dots.
+	* Disable - Completely disable the dot feature and only have Star/Cross.
+* Surface Second Color: In Surface Mode, by default right click uses green color for any selected choice of primary color. Using this setting user can choose their own choice of right click (secondary) color. This also affects Composite Edge IO.
+
+#### Tools
+* Custom Colors: To enable custom colors.
+* Floating Panel: Turning on this button will visually display the options to the user while using Number or Shape modes.
+* Quick Panel Button: To hide the Panel Button Option from the display area.
+
+#### Export
+* Auto-Shorten Links: Turning on this button will shorten the Share URL links automatically.
+
+#### Input Options
+* Mouse Middle Button: Shortcut to switch between Problem/Solution mode while in "setter mode". To activate, select YES.
+* Reload Protection: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
+* Conflict Detection: It is upcoming feature. Some of the puzzle genres have smart checking ability. Default is ON. User can turn it OFF for the ongoing puzzle or for all the future puzzles.
+* Sudoku Z/Y & XCV Keys: User can turn off Sudoku Shortcut Keys. Useful in puzzles involving alphabets.
+
+#### Saving/Storage
+Note - Settings are saved locally for the best user experience.
+* Saved Settings: Clear cookies -> To reset the settings.
+* Local Storage: Default is ON. It stores the local progress of the solution in the solver mode. User can clear the storage of ongoing puzzle using "Clear this puzzle" button or entire storage using "clear all" button.
 
 ### Stop Watch
 * start - starts the timer. Lowest precision is 1/10th of a second.

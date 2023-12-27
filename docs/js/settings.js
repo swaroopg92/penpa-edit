@@ -143,21 +143,6 @@ const UserSettings = {
     },
 
     _custom_colors_on: false,
-    _custom_color_supported_grids: {
-        square: 1,
-        sudoku: 1,
-        kakuro: 1,
-        hex: 1
-    },
-    _custom_color_supported_modes: {
-        line: 1,
-        lineE: 1,
-        wall: 1,
-        surface: 1,
-        cage: 1,
-        special: 1,
-        symbol: 1
-    },
     set custom_colors_on(newValue) {
         if (typeof newValue === 'string') {
             const valueInt = newValue ? parseInt(newValue, 10) : 1;
@@ -169,9 +154,7 @@ const UserSettings = {
         if (this._custom_colors_on) {
             // On
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            if (this._custom_color_supported_grids[pu.gridtype] && this._custom_color_supported_modes[mode]) {
-                document.getElementById('style_special').style.display = 'inline';
-            }
+            pu.mode_set(mode);  // Update mode UI, including custom color selector
         } else {
             // Off
             document.getElementById('style_special').style.display = 'none';
@@ -184,22 +167,43 @@ const UserSettings = {
         return this._custom_colors_on;
     },
 
-    _local_storage: 1,
+    // This setting is for whether the user wants local storage to be used at all, ever
+    _local_storage: true,
     set local_storage(newValue) {
-        const valueInt = newValue ? parseInt(newValue, 10) : 1;
-        this._local_storage = valueInt;
+        let valueInt;
+        if (typeof newValue === 'boolean') {
+            valueInt = newValue ? 1 : 4;
+        } else {
+            valueString = String(newValue);
 
-        document.getElementById("clear_storage_opt").value = valueInt;
-        switch (valueInt) {
-            case 1:
-                deleteCookie('local_storage');
-                break;
-            case 4:
-                setCookie('local_storage', valueInt, 2147483647);
-                break;
+            if (valueString.match(/[14]/)) {
+                valueInt = parseInt(newValue, 10);
+            } else if (valueString.match(/true|false/i)) {
+                valueInt = valueString === 'true' ? 1 : 4;
+            }
         }
+
+        this._local_storage = (valueInt === 1);
+
+        document.getElementById("allow_local_storage").value = valueInt;
+        this.attemptSave();
     },
     get local_storage() {
+        return this._local_storage;
+    },
+
+    // This setting is for whether the current puzzle should be saved
+    _save_current_puzzle: undefined,
+    set save_current_puzzle(newValue) {
+        this._save_current_puzzle = newValue;
+    },
+    get save_current_puzzle() {
+        // Check if we explicitly set this puzzle to not allow saving to local storage.
+        if (this._save_current_puzzle !== undefined) {
+            return this._save_current_puzzle;
+        }
+
+        // Default to whether saving is turned on in general.
         return this._local_storage;
     },
 
@@ -384,18 +388,19 @@ const UserSettings = {
 
     can_save: [
         'color_theme',
+        'conflict_detection',
         'custom_colors_on',
+        'local_storage',
         'mousemiddle_button',
+        'quick_panel_button',
         'reload_button',
         'responsive_mode',
-        'starbattle_dots',
         'secondcolor',
+        'shorten_links',
+        'starbattle_dots',
         'sudoku_centre_size',
         'sudoku_normal_size',
-        'timerbar_status',
-        'conflict_detection',
-        'shorten_links',
-        'quick_panel_button'
+        'timerbar_status'
     ],
     gridtype_size: [
         'gridtype',
@@ -435,12 +440,10 @@ const UserSettings = {
 
     loadFromCookies: function(load = "others") {
         if (load === "others") {
-            let foundCookie;
             this.can_save.forEach(function(setting) {
                 let cookieQuery = getCookie(setting);
                 if (cookieQuery !== null) {
                     UserSettings[setting] = cookieQuery;
-                    foundCookie = 1;
                 }
             });
 
@@ -452,10 +455,6 @@ const UserSettings = {
                     advancecontrol_onoff("url");
                 }
             }
-
-            // Check for local storage setting
-            let cookieQuery = getCookie('local_storage');
-            UserSettings['local_storage'] = cookieQuery;
 
             this._settingsLoaded = true;
         } else {
