@@ -36,6 +36,7 @@ const penpa_modes_map = {
     'squareframe': 'special',
     'polygon': 'special',
 };
+
 const penpa_modes = {
     'square': {
         //modes
