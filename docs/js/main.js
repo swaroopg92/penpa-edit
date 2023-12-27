@@ -5,6 +5,7 @@ let isShiftKeyHeld = e => e.shiftKey;
 let isShiftKeyPressed = key => key === "Shift";
 let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
+let localStorageAvailable = false;
 
 onload = function() {
 
@@ -14,6 +15,23 @@ onload = function() {
     let is_iPad = (!(ua.toLowerCase().match("iphone")) && ua.maxTouchPoints > 1);
     let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    try {
+        if (window.localStorage) {
+            window.localStorage.setItem('test', 123);
+            localStorageAvailable = (window.localStorage.getItem('test') === "123");
+            window.localStorage.removeItem('test');
+        }
+    } catch (e) {
+        localStorageAvailable = false;
+    }
+
+    if (!localStorageAvailable) {
+        document.getElementById('allow_local_storage').classList.add('is_hidden');
+        document.getElementById('clear_storage_one').classList.add('is_hidden');
+        document.getElementById('clear_storage_all').classList.add('is_hidden');
+        document.getElementById('local_storage_browser_message').classList.remove('is_hidden');
+    }
 
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
@@ -2067,7 +2085,8 @@ onload = function() {
 
     function save_progress() {
         // Save puzzle progress
-        if (pu.url.length !== 0 &&
+        if (localStorageAvailable &&
+            pu.url.length !== 0 &&
             pu.mmode === "solve" &&
             UserSettings.save_current_puzzle &&
             !pu.replay) {
