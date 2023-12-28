@@ -9727,6 +9727,9 @@ class Puzzle {
                 case "yajilin":
                     this.re_combi_yajilin_downright(num);
                     break;
+                case "hashi":
+                    this.re_combi_hashi(num);
+                    break;
                 case "rassisillai":
                     this.re_combi_rassisillai_downright(num);
                     break;
@@ -9818,7 +9821,6 @@ class Puzzle {
                 case "blpo":
                 case "blwh":
                 case "linex":
-                case "hashi":
                 case "star":
                 case "mines":
                 case "doublemines":
@@ -9845,6 +9847,9 @@ class Puzzle {
                     } else {
                         this.re_combi_yajilin_up(num); // on ipad/mobile behave as usual
                     }
+                    break;
+                case "hashi":
+                    this.re_combi_hashi_up(num);
                     break;
                 case "rassisillai":
                     if (this.ondown_key === "mousedown") {
@@ -10739,6 +10744,7 @@ class Puzzle {
 
     re_combi_hashi(num) {
         this.drawing_mode = 100;
+        this.first = num;
         this.last = num;
     }
 
@@ -10761,6 +10767,24 @@ class Puzzle {
             this.last = num;
             this.redraw();
         }
+    }
+
+    re_combi_hashi_up(num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [4, "ox_G", 1];
+                this.record_replay("symbol", num);
+            } else if (this[this.mode.qa].symbol[num][0] === 4) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record_replay("symbol", num);
+            }
+        }
+        this.drawing_mode = -1;
+        this.first = -1;
+        this.last = -1;
+        this.redraw();
     }
 
     re_combi_edgesub(num) {
