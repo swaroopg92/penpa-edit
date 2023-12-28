@@ -1,7 +1,6 @@
 ## History
-* unreleased
-	* Improved the composite modes blpo, blwh, lineox, edgexoi, tents, magnets, hashi.
 * 2023/12/27 ver 3.1.2
+	* Improved the composite modes blpo, blwh, lineox, edgexoi, tents, magnets, hashi.
 	* code clean up and refactoring.
 	* detect if local storage is off or disabled in the browser and accordingly disable this feature in penpa.
 	* Reset Merry Christmas Message.
