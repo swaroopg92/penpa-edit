@@ -1539,24 +1539,45 @@ class Puzzle_square extends Puzzle {
                     break;
                 case "4": //tapa
                     let values = [...this[pu].number[i][0]]; // This is to handle unicode symbols.
-                    if (values.length === 1) {
-                        set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(values[0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
-                    } else if (values.length === 2) {
-                        set_font_style(this.ctx, 0.48 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(values[0], p_x - 0.16 * this.size, p_y - 0.15 * this.size, this.size * 0.8);
-                        this.ctx.text(values[1], p_x + 0.18 * this.size, p_y + 0.19 * this.size, this.size * 0.8);
-                    } else if (values.length === 3) {
-                        set_font_style(this.ctx, 0.45 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(values[0], p_x - 0.22 * this.size, p_y - 0.14 * this.size, this.size * 0.8);
-                        this.ctx.text(values[1], p_x + 0.24 * this.size, p_y - 0.05 * this.size, this.size * 0.8);
-                        this.ctx.text(values[2], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
-                    } else if (values.length === 4) {
-                        set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
-                        this.ctx.text(values[0], p_x - 0.0 * this.size, p_y - 0.22 * this.size, this.size * 0.8);
-                        this.ctx.text(values[1], p_x - 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
-                        this.ctx.text(values[2], p_x + 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
-                        this.ctx.text(values[3], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
+                    let quad = (this.point[i].type === 1) && [5, 6, 7, 11].includes(this[pu].number[i][1]) && this.version_ge(3, 1, 2);
+                    if (quad) {
+                        set_font_style(this.ctx, 0.31 * this.size.toString(10), this[pu].number[i][1]);
+                        if (values.length === 1) {
+                            this.ctx.text(values[0], p_x, p_y + 0.00 * this.size, this.size * 0.6);
+                        } else if (values.length === 2) {
+                            this.ctx.text(values[0], p_x - 0.10 * this.size, p_y - 0.00 * this.size, this.size * 0.6);
+                            this.ctx.text(values[1], p_x + 0.10 * this.size, p_y + 0.00 * this.size, this.size * 0.6);
+                        } else if (values.length === 3) {
+                            this.ctx.text(values[0], p_x - 0.10 * this.size, p_y - 0.10 * this.size, this.size * 0.6);
+                            this.ctx.text(values[1], p_x + 0.10 * this.size, p_y - 0.10 * this.size, this.size * 0.6);
+                            this.ctx.text(values[2], p_x - 0.00 * this.size, p_y + 0.15 * this.size, this.size * 0.6);
+                        } else if (values.length === 4) {
+                            this.ctx.text(values[0], p_x - 0.10 * this.size, p_y - 0.10 * this.size, this.size * 0.6);
+                            this.ctx.text(values[1], p_x + 0.10 * this.size, p_y - 0.10 * this.size, this.size * 0.6);
+                            this.ctx.text(values[2], p_x - 0.10 * this.size, p_y + 0.15 * this.size, this.size * 0.6);
+                            this.ctx.text(values[3], p_x + 0.10 * this.size, p_y + 0.15 * this.size, this.size * 0.6);
+                        }
+                    }
+                    else {
+                        if (values.length === 1) {
+                            set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
+                            this.ctx.text(values[0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
+                        } else if (values.length === 2) {
+                            set_font_style(this.ctx, 0.48 * this.size.toString(10), this[pu].number[i][1]);
+                            this.ctx.text(values[0], p_x - 0.16 * this.size, p_y - 0.15 * this.size, this.size * 0.8);
+                            this.ctx.text(values[1], p_x + 0.18 * this.size, p_y + 0.19 * this.size, this.size * 0.8);
+                        } else if (values.length === 3) {
+                            set_font_style(this.ctx, 0.45 * this.size.toString(10), this[pu].number[i][1]);
+                            this.ctx.text(values[0], p_x - 0.22 * this.size, p_y - 0.14 * this.size, this.size * 0.8);
+                            this.ctx.text(values[1], p_x + 0.24 * this.size, p_y - 0.05 * this.size, this.size * 0.8);
+                            this.ctx.text(values[2], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
+                        } else if (values.length === 4) {
+                            set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
+                            this.ctx.text(values[0], p_x - 0.0 * this.size, p_y - 0.22 * this.size, this.size * 0.8);
+                            this.ctx.text(values[1], p_x - 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
+                            this.ctx.text(values[2], p_x + 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
+                            this.ctx.text(values[3], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
+                        }
                     }
                     break;
                 case "5": //small
@@ -1651,7 +1672,8 @@ class Puzzle_square extends Puzzle {
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.42);
                     break;
                 case "4": //tapa
-                    this.draw_numbercircle(pu, i, p_x, p_y, 0.44);
+                    let quad = (this.point[i].type === 1) && [5, 6, 7, 11].includes(this[pu].number[i][1]) && this.version_ge(3, 1, 2);
+                    this.draw_numbercircle(pu, i, p_x, p_y, quad ? 0.31 : 0.44);
                     break;
                 case "5": //small
                     this.draw_numbercircle(pu, i, p_x, p_y, 0.17);
