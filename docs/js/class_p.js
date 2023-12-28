@@ -60,6 +60,7 @@ class Puzzle {
         // Drawing position
         this.mouse_mode = "";
         this.mouse_click = 0; // 0 for left, 2 for right
+        this.mouse_click_last = 0; // 0 for left, 2 for right
         this.selection = [];
         this.cageselection = [];
         this.last = -1;
@@ -9713,6 +9714,9 @@ class Puzzle {
                 case "linex":
                     this.re_combi_cross_downright(num);
                     break;
+                case "lineox":
+                    this.re_combi_lineox(num);
+                    break;
                 case "edgex":
                 case "edgexoi":
                     this.re_combi_cross_downright(num, "lineE");
@@ -10136,14 +10140,23 @@ class Puzzle {
     }
 
     re_combi_lineox_up(num) {
+        let firstsymbol = [1, "ox_E", 2];
+        let secondsymbol = [4, "ox_E", 2];
+
+        // If its right click up event then reverse the order of symbols
+        if (this.mouse_click_last === 2) {
+            firstsymbol = [4, "ox_E", 2];
+            secondsymbol = [1, "ox_E", 2];
+        }
+
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [1, "ox_E", 2];
+                this[this.mode.qa].symbol[num] = firstsymbol;
                 this.record_replay("symbol", num);
-            } else if (this[this.mode.qa].symbol[num][0] === 1) {
+            } else if (this[this.mode.qa].symbol[num][0] === firstsymbol[0]) {
                 this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [4, "ox_E", 2];
+                this[this.mode.qa].symbol[num] = secondsymbol;
                 this.record_replay("symbol", num);
             } else {
                 this.record("symbol", num);
@@ -10243,14 +10256,23 @@ class Puzzle {
     }
 
     re_combi_edgexoi_up(num) {
+        let firstcolor = 7;
+        let secondcolor = UserSettings.secondcolor;
+
+        // If its right click up event then reverse the order of colors
+        if (this.mouse_click_last === 2) {
+            firstcolor = UserSettings.secondcolor;
+            secondcolor = 7;
+        }
+
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].surface[num]) {
                 this.record("surface", num);
-                this[this.mode.qa].surface[num] = 7;
+                this[this.mode.qa].surface[num] = firstcolor;
                 this.record_replay("surface", num);
-            } else if (this[this.mode.qa].surface[num] === 7) {
+            } else if (this[this.mode.qa].surface[num] === firstcolor) {
                 this.record("surface", num);
-                this[this.mode.qa].surface[num] = UserSettings.secondcolor;
+                this[this.mode.qa].surface[num] = secondcolor;
                 this.record_replay("surface", num);
             } else {
                 this.record("surface", num);
@@ -11355,14 +11377,23 @@ class Puzzle {
     }
 
     re_combi_tents_up(num) {
+        let firstsymbol = [2, "tents", 2];
+        let secondsymbol = [8, "ox_B", 2];
+
+        // If its right click up event then reverse the order of symbols
+        if (this.mouse_click_last === 2) {
+            firstsymbol = [8, "ox_B", 2];
+            secondsymbol = [2, "tents", 2];
+        }
+
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [2, "tents", 2];
+                this[this.mode.qa].symbol[num] = firstsymbol;
                 this.record_replay("symbol", num);
-            } else if (this[this.mode.qa].symbol[num][0] === 2) {
+            } else if (this[this.mode.qa].symbol[num][0] === firstsymbol[0]) {
                 this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 2];
+                this[this.mode.qa].symbol[num] = secondsymbol;
                 this.record_replay("symbol", num);
             } else {
                 this.record("symbol", num);

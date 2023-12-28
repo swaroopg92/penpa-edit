@@ -130,10 +130,12 @@ onload = function() {
                 if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
+                    pu.mouse_click_last = 2;
                     pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
+                    pu.mouse_click_last = 1;
                     pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
                 }
             }
