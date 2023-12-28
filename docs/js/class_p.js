@@ -9704,6 +9704,12 @@ class Puzzle {
             }
         } else if (this.mouse_mode === "down_right") {
             switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+                case "blpo":
+                    this.re_combi_blpo_downright(num);
+                    break;
+                case "blwh":
+                    this.re_combi_blwh_downright(num);
+                    break;
                 case "linex":
                     this.re_combi_cross_downright(num);
                     break;
@@ -9730,6 +9736,9 @@ class Puzzle {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
+                    break;
+                case "magnets":
+                    this.re_combi_magnets_downright(num);
                     break;
                 case "mines":
                 case "doublemines":
@@ -9896,6 +9905,29 @@ class Puzzle {
         this.redraw();
     }
 
+    re_combi_blpo_downright(num) {
+        if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[num] = [8, "ox_B", 2];
+            this.record_replay("symbol", num);
+            this.drawing_mode = 2;
+        } else if (this[this.mode.qa].surface[num] === 1) {
+            this.record("surface", num);
+            delete this[this.mode.qa].surface[num];
+            this.record_replay("surface", num);
+            this.drawing_mode = 0;
+        } else if (this[this.mode.qa].symbol[num][0] === 8) {
+            this.record("symbol", num);
+            delete this[this.mode.qa].symbol[num];
+            this.record_replay("symbol", num);
+            this.record("surface", num);
+            this[this.mode.qa].surface[num] = 1;
+            this.record_replay("surface", num);
+            this.drawing_mode = 1;
+        }
+        this.redraw();
+    }
+
     re_combi_blpo_move(num) {
         if (num != this.last) {
             if (this.drawing_mode === 1) {
@@ -9946,6 +9978,28 @@ class Puzzle {
                 this.record_replay("symbol", num);
                 this.drawing_mode = 2;
             } else if (this[this.mode.qa].symbol[num][0] === 2) {
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record_replay("symbol", num);
+                this.drawing_mode = 0;
+            }
+            this.redraw();
+        }
+    }
+
+    re_combi_blwh_downright(num) {
+        if ((this.mode.qa === "pu_q") || (this.mode.qa === "pu_a" && !this["pu_q"].symbol[num])) {
+            if (!this[this.mode.qa].symbol[num]) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [2, "circle_M", 2];
+                this.record_replay("symbol", num);
+                this.drawing_mode = 2;
+            } else if (this[this.mode.qa].symbol[num][0] === 2) {
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = [1, "circle_M", 2];
+                this.record_replay("symbol", num);
+                this.drawing_mode = 1;
+            } else if (this[this.mode.qa].symbol[num][0] === 1) {
                 this.record("symbol", num);
                 delete this[this.mode.qa].symbol[num];
                 this.record_replay("symbol", num);
@@ -11342,6 +11396,30 @@ class Puzzle {
             this.record("surface", num);
             delete this[this.mode.qa].surface[num];
             this.record_replay("surface", num);
+        }
+        this.redraw();
+    }
+
+    re_combi_magnets_downright(num) {
+        if (!this[this.mode.qa].symbol[num] && this[this.mode.qa].surface[num] != 1) {
+            this.record("surface", num);
+            this[this.mode.qa].surface[num] = 1;
+            this.record_replay("surface", num);
+        } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 2) {
+            this.record("symbol", num);
+            delete this[this.mode.qa].symbol[num];
+            this.record_replay("symbol", num);
+        } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 3) {
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[num] = [2, "math_G", 2];
+            this.record_replay("symbol", num);
+        } else if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] == 1) {
+            this.record("surface", num);
+            delete this[this.mode.qa].surface[num];
+            this.record_replay("surface", num);
+            this.record("symbol", num);
+            this[this.mode.qa].symbol[num] = [3, "math_G", 2];
+            this.record_replay("symbol", num);
         }
         this.redraw();
     }
