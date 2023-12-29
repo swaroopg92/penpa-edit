@@ -253,6 +253,7 @@ class Puzzle_square extends Puzzle {
                 switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
                     case "tents":
                     case "linex":
+                    case "linedir":
                     case "yajilin":
                     case "akari":
                         type = [0, 2, 3];
@@ -639,6 +640,25 @@ class Puzzle_square extends Puzzle {
             a = 3;
         } else if (angle >= 45 && angle <= 135) {
             a = 2;
+        }
+        return a;
+    }
+
+    direction_loop4(x, y, x0, y0) {
+        var angle = Math.atan2(y - y0, x - x0) * 360 / 2 / Math.PI + 180;
+        if (this.reflect[0] === -1) { angle = (180 - angle + 360) % 360; }
+        if (this.reflect[1] === -1) { angle = (360 - angle + 360) % 360; }
+        angle = (angle - this.theta + 360) % 360;
+        angle -= 180;
+        var a;
+        if ((angle >= -225 && angle < -135) || (angle >= 135 && angle < 225)) {
+            a = 2;
+        } else if ((angle >= -135 && angle < -45) || (angle >= 225 && angle < 315)) {
+            a = 0;
+        } else if ((angle >= -45 && angle < 45) || (angle >= 315 && angle < 405)) {
+            a = 3;
+        } else if (angle >= 45 && angle <= 135) {
+            a = 1;
         }
         return a;
     }
@@ -1714,8 +1734,8 @@ class Puzzle_square extends Puzzle {
         }
         this.draw_symbol_select_ccolor(ctx, x, y, num, sym, i, ccolor);
     }
-    
-    draw_symbol_select_ccolor(ctx, x, y, num, sym, i, ccolor) {   
+
+    draw_symbol_select_ccolor(ctx, x, y, num, sym, i, ccolor) {
         switch (sym) {
             /* figure */
             case "circle_L":

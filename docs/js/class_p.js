@@ -9589,6 +9589,7 @@ class Puzzle {
         switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
             case "linex":
             case "edgex":
+            case "linedir":
                 if (this.mouse_click === 2 || this.ondown_key === "touchstart") {
                     num = this.coord_p_edgex(x, y, 0.3);
                 } else {
@@ -9620,6 +9621,13 @@ class Puzzle {
                         this.re_combi_cross_downright(num);
                     } else {
                         this.re_combi_linex(num);
+                    }
+                    break;
+                case "linedir":
+                    if (this.ondown_key === "touchstart") {
+                        this.re_combi_linedir_downright(x, y, num);
+                    } else {
+                        this.re_combi_linedir(num);
                     }
                     break;
                 case "lineox":
@@ -9714,6 +9722,9 @@ class Puzzle {
                 case "linex":
                     this.re_combi_cross_downright(num);
                     break;
+                case "linedir":
+                    this.re_combi_linedir_downright(x, y, num);
+                    break;
                 case "lineox":
                     this.re_combi_lineox(num);
                     break;
@@ -9768,6 +9779,9 @@ class Puzzle {
                     break;
                 case "linex":
                     this.re_combi_linex_move(num);
+                    break;
+                case "linedir":
+                    this.re_combi_linedir_move(x, y, num);
                     break;
                 case "lineox":
                     this.re_combi_lineox_move(num);
@@ -9826,6 +9840,9 @@ class Puzzle {
                 case "doublemines":
                 case "magnets":
                     this.drawing_mode = -1;
+                    break;
+                case "linedir":
+                    this.re_combi_linedir_up(x, y, num);
                     break;
                 case "edgesub":
                     this.drawing_mode = -1;
@@ -10173,6 +10190,205 @@ class Puzzle {
         this.first = -1;
         this.last = -1;
         this.redraw();
+    }
+
+    re_combi_linedir(num) {
+        this.drawing_mode = 100;
+        this.first = num;
+        this.last = num;
+    }
+
+    re_combi_linedir_move(x, y, num) {
+        let leftdir = [5, "inequality", 2];
+        let rightdir = [7, "inequality", 2];
+        let updir = [6, "inequality", 2];
+        let downdir = [8, "inequality", 2];
+        let horizontal = (this.point[num].type === 2);
+        let vertical = (this.point[num].type === 3);
+        let center = (this.point[num].type === 0);
+        let drawing_modes = [50, 52, 53, 54, 55, 56];
+
+        if (this.drawing_mode != -1 &&
+            this.mouse_click !== 2 &&
+            center) {
+            // Left click and drag or touchdown and drag
+            let line_style = 3;
+            let array;
+            if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
+                array = "line";
+                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                this.re_line(array, key, line_style);
+            }
+            this.last = num;
+            this.redraw();
+        } else if ((horizontal || vertical) && (this.ondown_key === "mousedown")) {
+            // Modes
+            // 56 - insert cross
+            // 55 - delete cross and Insert updir
+            // 54 - delete updir and insert downdir
+            // 53 - delete cross and insert leftdir
+            // 52 - delete leftdir and insert rightdir
+            // 50 - delete last symbol
+            if (this.drawing_mode == 56) {
+                if (!this[this.mode.qa].symbol[num]) { // Insert cross
+                    this.record("line", num);
+                    this[this.mode.qa].line[num] = 98;
+                    this.record_replay("line", num);
+                }
+            } else if (this.drawing_mode == 50) {
+                if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                    this.record("line", num);
+                    delete this[this.mode.qa].line[num];
+                    this.record_replay("line", num);
+                } else if (this[this.mode.qa].symbol[num]) { // Remove Symbol
+                    this.record("symbol", num);
+                    delete this[this.mode.qa].symbol[num];
+                    this.record_replay("symbol", num);
+                }
+            }
+            this.redraw();
+        }
+    }
+
+    re_combi_linedir_downright(x, y, num) {
+        let leftdir = [5, "inequality", 2];
+        let rightdir = [7, "inequality", 2];
+        let updir = [6, "inequality", 2];
+        let downdir = [8, "inequality", 2];
+        let horizontal = (this.point[num].type === 2);
+        let vertical = (this.point[num].type === 3);
+
+        if (horizontal) {
+            if (!this[this.mode.qa].line[num] && !this[this.mode.qa].symbol[num]) { // Insert cross
+                this.record("line", num);
+                this[this.mode.qa].line[num] = 98;
+                this.record_replay("line", num);
+                this.drawing_mode = 56;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record("line", num);
+                delete this[this.mode.qa].line[num];
+                this.record_replay("line", num);
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = updir;
+                this.record_replay("symbol", num);
+                this.drawing_mode = 55;
+            } else if (this[this.mode.qa].symbol[num][0] === updir[0]) { // symbol in other direction
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = downdir;
+                this.record_replay("symbol", num);
+                this.drawing_mode = 54;
+            } else { // Remove symbol
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record_replay("symbol", num);
+                this.drawing_mode = 50;
+            }
+        } else if (vertical) {
+            if (!this[this.mode.qa].line[num] && !this[this.mode.qa].symbol[num]) { // Insert cross
+                this.record("line", num);
+                this[this.mode.qa].line[num] = 98;
+                this.record_replay("line", num);
+                this.drawing_mode = 56;
+            } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
+                this.record("line", num);
+                delete this[this.mode.qa].line[num];
+                this.record_replay("line", num);
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = leftdir;
+                this.record_replay("symbol", num);
+                this.drawing_mode = 53;
+            } else if (this[this.mode.qa].symbol[num][0] === leftdir[0]) { // Symbol in other direction
+                this.record("symbol", num);
+                this[this.mode.qa].symbol[num] = rightdir;
+                this.record_replay("symbol", num);
+                this.drawing_mode = 52;
+            } else { // Remove symbol
+                this.record("symbol", num);
+                delete this[this.mode.qa].symbol[num];
+                this.record_replay("symbol", num);
+                this.drawing_mode = 50;
+            }
+        } else {
+            this.drawing_mode = 100;
+            this.first = num;
+            this.last = num;
+            this.lastx = x;
+            this.lasty = y;
+        }
+        this.redraw();
+    }
+
+    re_combi_linedir_up(x, y, num) {
+        // This feature is only for laptop
+        // Right click drag from center of cell in the direction and will put a directed symbol on the edge
+        if (this.drawing_mode == 100 &&
+            this.mouse_click_last == 2 &&
+            this.lastx != -1 &&
+            this.lasty != -1) {
+            let leftdir = [5, "inequality", 2];
+            let rightdir = [7, "inequality", 2];
+            let updir = [6, "inequality", 2];
+            let downdir = [8, "inequality", 2];
+
+            // for mouse right click drag/move
+            let arrowdirection = -1;
+
+            // get direction of the mouse drag/move
+            if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
+                arrowdirection = this.direction_loop4(x, y, this.lastx, this.lasty);
+            }
+
+            // 3 - right
+            // 2 - left
+            // 1 - down
+            // 0 - up
+            if (arrowdirection !== -1) {
+                // neighbor - up down left right
+                let side = this.point[this.last].neighbor[arrowdirection];
+                let arrowdir;
+                switch (arrowdirection) {
+                    case 0:
+                        arrowdir = updir;
+                        break;
+                    case 1:
+                        arrowdir = downdir;
+                        break;
+                    case 2:
+                        arrowdir = leftdir;
+                        break;
+                    case 3:
+                        arrowdir = rightdir;
+                        break;
+                }
+                if (!this[this.mode.qa].line[side] && !this[this.mode.qa].symbol[side]) { // Insert symbol
+                    this.record("symbol", side);
+                    this[this.mode.qa].symbol[side] = arrowdir;
+                    this.record_replay("symbol", side);
+                } else if (this[this.mode.qa].line[side]) { // If cross, delete cross and insert symbol
+                    this.record("line", side);
+                    delete this[this.mode.qa].line[side];
+                    this.record_replay("line", side);
+                    this.record("symbol", side);
+                    this[this.mode.qa].symbol[side] = arrowdir;
+                    this.record_replay("symbol", side);
+                } else if (this[this.mode.qa].symbol[side]) { // If symbol in wrong direction, update symbol
+                    if (this[this.mode.qa].symbol[side][0] !== arrowdir[0]) {
+                        this.record("symbol", side);
+                        this[this.mode.qa].symbol[side] = arrowdir;
+                        this.record_replay("symbol", side);
+                    } else {
+                        this.record("symbol", side);
+                        delete this[this.mode.qa].symbol[side];
+                        this.record_replay("symbol", side);
+                    }
+                }
+                this.redraw();
+            }
+        }
+        this.drawing_mode = -1;
+        this.last = -1;
+        this.lastx = -1;
+        this.lasty = -1;
     }
 
     re_combi_cross_downright(num, symboltype = "line") {
