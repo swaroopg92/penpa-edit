@@ -1,5 +1,5 @@
 ## History
-* unreleased
+* 2023/12/31 ver 3.1.3
 	* Render Tapa as Quad for certain conditions.
 	* New composite mode directed loop.
 	* Improved the composite modes blpo, blwh, lineox, edgexoi, tents, magnets, hashi.
