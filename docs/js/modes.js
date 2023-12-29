@@ -51,7 +51,7 @@ const penpa_modes = {
         ],
         //composite modes
         'combisub': ['blpo', 'blwh', 'shaka',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
+            'linex', 'lineox', 'linedir', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
             'edgesub',
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS', 'doublemines',
             'numfl', 'alfl'
@@ -80,7 +80,7 @@ const penpa_modes = {
             'sudoku1', 'sudoku2', 'sudoku8', 'sudoku3', 'sudoku9', 'sudoku10'
         ],
         'li': ['battleship', 'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
+            'linex', 'lineox', 'linedir', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'circle', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'hexpoint', 'hexflat', 'ox', 'cross', 'line', 'frameline', 'bars', 'tri',
             'circle_L', 'circle_M', 'circle_S', 'circle_SS', 'square_LL', 'square_L', 'square_M', 'square_S', 'square_SS',
             'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP', 'arrow_fouredge', 'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip'
@@ -108,7 +108,7 @@ const penpa_modes = {
         ],
         //composite modes
         'combisub': ['blpo', 'blwh', 'shaka',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
+            'linex', 'lineox', 'linedir', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
             'edgesub',
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS', 'doublemines',
             'numfl', 'alfl'
@@ -137,7 +137,7 @@ const penpa_modes = {
             'sudoku1', 'sudoku2', 'sudoku8', 'sudoku3', 'sudoku9', 'sudoku10'
         ],
         'li': ['battleship', 'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
+            'linex', 'lineox', 'linedir', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'circle', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'hexpoint', 'hexflat', 'ox', 'cross', 'line', 'frameline', 'bars', 'tri',
             'circle_L', 'circle_M', 'circle_S', 'circle_SS', 'square_LL', 'square_L', 'square_M', 'square_S', 'square_SS',
             'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP', 'arrow_fouredge', 'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip'
@@ -165,7 +165,7 @@ const penpa_modes = {
         ],
         //composite modes
         'combisub': ['blpo', 'blwh', 'shaka',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
+            'linex', 'lineox', 'linedir', 'edgex', 'edgexoi', 'yajilin', 'hashi', 'rassisillai',
             'edgesub',
             'battleship', 'star', 'tents', 'magnets', 'mines', 'akari', 'arrowS', 'doublemines',
             'numfl', 'alfl'
@@ -194,7 +194,7 @@ const penpa_modes = {
             'sudoku1', 'sudoku2', 'sudoku8', 'sudoku3', 'sudoku9', 'sudoku10'
         ],
         'li': ['battleship', 'kakuro', 'tents', 'star', 'compass', 'sudokuetc', 'sudokumore', 'polyomino',
-            'linex', 'lineox', 'edgex', 'edgexoi', 'yajilin', 'hashi',
+            'linex', 'lineox', 'linedir', 'edgex', 'edgexoi', 'yajilin', 'hashi',
             'circle', 'square', 'triup', 'tridown', 'triright', 'trileft', 'diamond', 'hexpoint', 'hexflat', 'ox', 'cross', 'line', 'frameline', 'bars', 'tri',
             'circle_L', 'circle_M', 'circle_S', 'circle_SS', 'square_LL', 'square_L', 'square_M', 'square_S', 'square_SS',
             'arrow_B', 'arrow_N', 'arrow_tri', 'arrow_GP', 'arrow_fouredge', 'arrow_Short', 'arrow_S', 'arrow_cross', 'arrow_eight', 'arrow_fourtip'
