@@ -140,7 +140,7 @@ You can now cite this in your research and publications using:
 * Candidates: Candidate numbers for Latin Square such as Sudoku. Compatible with 1-9. onoff input.
 * Corners: Small characters at the four corners. (Kakuro, Hairyrin etc.)
 * Sides: Small characters at the middle of the four sides. (Compass etc.)
-* Tapa: Characters for Tapa. Up to 4 characters.
+* Tapa/Quad: Characters for Tapa. Up to 4 characters. For Sudoku grids it can be used for Quadruple clues (To activate - set the style to any with background circle, draw on edges: ON, and place the clue on the corners of the grid)
 * Arrow: Characters with arrows. Click and hold the mouse and move in the direction of the arrow to draw the arrow. (Yajilin, Castle Wall etc.)
 * Long: Long sentence. It is possible to create a list such as seekers.
 * Killer: Small characters at the top left corner. (Killer Sudou)
