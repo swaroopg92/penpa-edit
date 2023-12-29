@@ -78,6 +78,6 @@ const PenpaUI = {
         for (var i of allPossible.exceptions) {
             document.getElementById(i).classList.toggle('is_hidden', selectedGrid.exceptions.indexOf(i) < 0);
         }
-        document.getElementById("sub_number4_lb").innerText = (gridtype === 'sudoku') ? 'Quad' : 'Tapa';
+        // document.getElementById("sub_number4_lb").innerText = (gridtype === 'sudoku') ? 'Quad' : 'Tapa';
     }
 };
