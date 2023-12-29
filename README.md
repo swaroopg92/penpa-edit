@@ -195,12 +195,13 @@ You can now cite this in your research and publications using:
 #### Composite
 * Ability to use multiple input methods simultaneously.
 * Paint:
-	* Black / dot: Black square drag input and dot
-	* White / circle: White circle drag input and black circle
+	* Black / dot: Left 1 click - Black Square, Left 2 click - dot, Right 1 click - dot, Right 2 click - Black Square, Click and drag for multiple squares or dots
+	* Yin - Yang: Left 1 click - white circle, Left 2 click - black circle, Right 1 click - black circle, Right 2 click - white circle, Click and drag for multiple squares or dots
 	* Shakashaka: Pull the triangle to input, left click for dot
 * Loop:
-	* Line or x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line. Right click and drag for multiple crosses in one go.
-	* Line or OX: Line and 〇× in square (Country road)
+	* Line x: Line and auxiliary x (Castle wall) - Right Click for cross and Left Click for Line. Right click and drag for multiple crosses in one go.
+	* Line OX: Left 1 click - circle, Left click and drag - Line, Left 2 click - X, Right 1 click - X, Right 2 click - Circle.
+	* Line x<>: This is useful for directed loop puzzles. Left click and drag for the loop. Right click on edges for auxiliary marks (x, <, >). Right click and drag for multiple cross in one go. Right click on the center of the cell and drag to place a directed arrow on the edge.
 	* Edge x: Edge and auxiliary cross marks (x) on edges. Right click for x. Right click and drag for multiple crosses in one go.
 	* Edge IO: Edge, auxiliary x, and inside/outside painted yellow and green. ("Surface Second Color" preference can be used to change green.) (Slitherlink, Cave) - Right Click for cross and Left Click for Line
 	* Yajilin: Left mouse click - Black square, Left mouse click drag - green line, Right click - dot in center, cross (x) on edges
