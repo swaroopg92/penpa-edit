@@ -143,7 +143,7 @@ const penpa_constraints = {
         "quadruple": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
-                "mo_number_lb", "sub_number5_lb",
+                "mo_number_lb", "sub_number5_lb", "sub_number4_lb",
                 "mo_symbol_lb", "ms1", "ms1_circle", "li_circle", "li_circle_M"
             ],
             "modeset": ["sudoku", "number", "symbol"],

@@ -1559,6 +1559,9 @@ class Puzzle_square extends Puzzle {
                     break;
                 case "4": //tapa
                     let values = [...this[pu].number[i][0]]; // This is to handle unicode symbols.
+
+                    // If the clue is quad (like in a sudoku) render it differently
+                    // Conditions - Clue is on the corner (type 1), style is with background circle
                     let quad = (this.point[i].type === 1) && [5, 6, 7, 11].includes(this[pu].number[i][1]) && this.version_ge(3, 1, 2);
                     if (quad) {
                         set_font_style(this.ctx, 0.31 * this.size.toString(10), this[pu].number[i][1]);
@@ -1577,8 +1580,7 @@ class Puzzle_square extends Puzzle {
                             this.ctx.text(values[2], p_x - 0.10 * this.size, p_y + 0.15 * this.size, this.size * 0.6);
                             this.ctx.text(values[3], p_x + 0.10 * this.size, p_y + 0.15 * this.size, this.size * 0.6);
                         }
-                    }
-                    else {
+                    } else {
                         if (values.length === 1) {
                             set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
                             this.ctx.text(values[0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
