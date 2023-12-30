@@ -7131,28 +7131,30 @@ class Puzzle {
                 case "1":
                     // If the there are corner or sides present then get rid of them
                     // Only in Answer mode
+                    let old_counter = this.undoredo_counter;
+                    this.undoredo_counter = old_counter + 1;
                     if (this.mode.qa === "pu_a") {
                         var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
                         var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
 
                         for (var j = 0; j < 4; j++) {
                             if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                this.record("numberS", corner_cursor + j);
+                                this.record("numberS", corner_cursor + j, this.undoredo_counter);
                                 delete this[this.mode.qa].numberS[corner_cursor + j];
-                                this.record_replay("numberS", corner_cursor + j);
+                                this.record_replay("numberS", corner_cursor + j, this.undoredo_counter);
                             }
                         }
 
                         for (var j = 0; j < 4; j++) {
                             if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                this.record("numberS", side_cursor + j);
+                                this.record("numberS", side_cursor + j, this.undoredo_counter);
                                 delete this[this.mode.qa].numberS[side_cursor + j];
-                                this.record_replay("numberS", corner_cursor + j);
+                                this.record_replay("numberS", side_cursor + j, this.undoredo_counter);
                             }
                         }
                     }
 
-                    this.record("number", this.cursol);
+                    this.record("number", this.cursol, this.undoredo_counter);
                     if (str_num.indexOf(key) != -1 && this[this.mode.qa].number[this.cursol]) {
                         con = parseInt(this[this.mode.qa].number[this.cursol][0], 10); // Convert to number
                         if (con >= 1 && con <= 9 && this[this.mode.qa].number[this.cursol][2] != "7") { // If already 1-9 exist, go to 2nd digit
@@ -7166,7 +7168,8 @@ class Puzzle {
                         number = key;
                     }
                     this[this.mode.qa].number[this.cursol] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]];
-                    this.record_replay("number", this.cursol);
+                    this.record_replay("number", this.cursol, this.undoredo_counter);
+                    this.undoredo_counter = old_counter;
                     break;
                 case "2": // Arrow
                     this.record("number", this.cursol);
