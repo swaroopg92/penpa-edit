@@ -7729,6 +7729,8 @@ class Puzzle {
                 delete this[this.mode.qa].numberS[this.cursolS];
                 this.record_replay("numberS", this.cursolS);
             } else {
+                let old_counter = this.undoredo_counter;
+                this.undoredo_counter = old_counter + 1;
 
                 // Remove the corner and side numbers
                 var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
@@ -7736,23 +7738,24 @@ class Puzzle {
 
                 for (var j = 0; j < 4; j++) {
                     if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                        this.record("numberS", corner_cursor + j);
+                        this.record("numberS", corner_cursor + j, this.undoredo_counter);
                         delete this[this.mode.qa].numberS[corner_cursor + j];
-                        this.record_replay("numberS", corner_cursor + j);
+                        this.record_replay("numberS", corner_cursor + j, this.undoredo_counter);
                     }
                 }
 
                 for (var j = 0; j < 4; j++) {
                     if (this[this.mode.qa].numberS[side_cursor + j]) {
-                        this.record("numberS", side_cursor + j);
+                        this.record("numberS", side_cursor + j, this.undoredo_counter);
                         delete this[this.mode.qa].numberS[side_cursor + j];
-                        this.record_replay("numberS", side_cursor + j);
+                        this.record_replay("numberS", side_cursor + j, this.undoredo_counter);
                     }
                 }
 
-                this.record("number", this.cursol);
+                this.record("number", this.cursol, this.undoredo_counter);
                 delete this[this.mode.qa].number[this.cursol];
-                this.record_replay("number", this.cursol);
+                this.record_replay("number", this.cursol, this.undoredo_counter);
+                this.undoredo_counter = old_counter;
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
@@ -7792,7 +7795,7 @@ class Puzzle {
                                 if (this[this.mode.qa].numberS[side_cursor + j]) {
                                     this.record("numberS", side_cursor + j, this.undoredo_counter);
                                     delete this[this.mode.qa].numberS[side_cursor + j];
-                                    this.record_replay("numberS", corner_cursor + j, this.undoredo_counter);
+                                    this.record_replay("numberS", side_cursor + j, this.undoredo_counter);
                                 }
                             }
                         }
