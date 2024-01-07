@@ -2158,8 +2158,10 @@ function load(urlParam, type = 'url', origurl = null) {
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {
-            for (var j in mode[i]) {
-                pu.mode[i][j] = mode[i][j];
+            if (typeof mode[i] === 'object') {
+                for (var j in mode[i]) {
+                    pu.mode[i][j] = mode[i][j];
+                }
             }
         }
         pu.pu_q = JSON.parse(rtext[3]);
