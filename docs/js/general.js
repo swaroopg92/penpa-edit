@@ -3204,7 +3204,11 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.decodeNumber16();
 
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
-            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+            if (type === "ripple") {
+                puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+            } else {
+                puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+            }
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");

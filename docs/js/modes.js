@@ -375,7 +375,7 @@ const penpa_modes = {
         'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
-            'lineE1', 'lineE3', 'lineE4', 'lineE5',
+            'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
             'number1', 'number10', 'number6', 'number5', 'number7', 'number4', 'number2', 'number8',
             'specialpolygon',
             'cage2', 'move1', 'move2', 'move3',
