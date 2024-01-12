@@ -403,7 +403,7 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        if (UserSettings.color_theme == 1) {
+        if (UserSettings.color_theme == THEME_LIGHT) {
             pause_ctx.fillStyle = Color.BLUE;
         } else {
             pause_ctx.fillStyle = Color.WHITE;
