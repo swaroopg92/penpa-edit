@@ -2371,7 +2371,7 @@ function load(urlParam, type = 'url', origurl = null) {
     if (rtext[13]) {
         let parsedValue = JSON.parse(rtext[13]);
         if (parsedValue === "true" || parsedValue === 1) {
-            UserSettings.custom_colors_on = 2;
+            UserSettings.custom_colors_on = true;
         }
     }
 
