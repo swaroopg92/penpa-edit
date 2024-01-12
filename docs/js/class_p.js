@@ -10988,7 +10988,7 @@ class Puzzle {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [4, "ox_G", 1];
+                this[this.mode.qa].symbol[num] = [4, "ox_G", 2];
                 this.record_replay("symbol", num);
             } else if (this[this.mode.qa].symbol[num][0] === 4) {
                 this.record("symbol", num);
