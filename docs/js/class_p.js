@@ -8068,7 +8068,7 @@ class Puzzle {
             this[this.mode.qa].surface[num] = rightclick_color;
             if (UserSettings.custom_colors_on) {
                 let cc = this.get_rgbcolor(rightclick_color);
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_color(rightclick_color))) {
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(rightclick_color))) {
                     delete this[this.mode.qa + "_col"].surface[num];
                 } else {
                     this[this.mode.qa + "_col"].surface[num] = cc;
@@ -8085,7 +8085,7 @@ class Puzzle {
             this[this.mode.qa].surface[num] = color;
             if (UserSettings.custom_colors_on) {
                 let cc = this.get_customcolor();
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_color(color))) {
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(color))) {
                     delete this[this.mode.qa + "_col"].surface[num];
                 } else {
                     this[this.mode.qa + "_col"].surface[num] = cc;
@@ -8164,7 +8164,11 @@ class Puzzle {
                 if (UserSettings.custom_colors_on) {
                     // Not right click
                     if (this.mouse_click !== 2) {
-                        cc = this.get_customcolor();
+                        if (this.drawing_mode === 2) {
+                            cc = this.get_rgbcolor(this.drawing_mode);
+                        } else {
+                            cc = this.get_customcolor();
+                        }
                         if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(this.drawing_mode))) {
                             cc = undefined;
                         }
