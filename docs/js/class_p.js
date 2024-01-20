@@ -10229,7 +10229,7 @@ class Puzzle {
             // 52 - delete leftdir and insert rightdir
             // 50 - delete last symbol
             if (this.drawing_mode == 56) {
-                if (!this[this.mode.qa].symbol[num]) { // Insert cross
+                if (!this[this.mode.qa].symbol[num] && !this[this.mode.qa].line[num]) { // Insert cross
                     this.record("line", num);
                     this[this.mode.qa].line[num] = 98;
                     this.record_replay("line", num);
