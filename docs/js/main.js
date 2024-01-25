@@ -952,10 +952,15 @@ onload = function() {
     document.addEventListener("mousedown", window_click, { passive: false });
 
     function window_click(e) {
+        let eventTarget = e.target;
+        if (eventTarget.classList.contains('fa')) {
+            eventTarget = eventTarget.parentElement;
+        }
+
         var orientation;
         //modalwindow
-        if (e.target.className === "modal") {
-            document.getElementById(e.target.id).style.display = 'none';
+        if (eventTarget.className === "modal") {
+            document.getElementById(eventTarget.id).style.display = 'none';
             e.preventDefault();
         }
         if (!pu.ondown_key) {
@@ -963,8 +968,8 @@ onload = function() {
         }
         // This segment of code I added for a purpose but don't recollect the reason.
         // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
-        if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
-            e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
+        if (pu.selection.length > 0 && eventTarget.id.indexOf("sub_sudoku") == -1 && eventTarget.id.indexOf("st_sudoku") == -1 &&
+            eventTarget.id != "float-canvas" && !isCtrlKeyHeld(e)) {
             // clear selection
             pu.selection = [];
             pu.redraw();
@@ -987,7 +992,7 @@ onload = function() {
             }
         }
 
-        switch (e.target.id) {
+        switch (eventTarget.id) {
             //canvas
             case "canvas":
                 document.getElementById("inputtext").blur(); // Remove focus from text box
@@ -1815,32 +1820,32 @@ onload = function() {
                 break;
         }
         // Main mode
-        if (e.target.id.slice(0, 3) === "mo_") {
-            pu.mode_set(e.target.id.slice(3, -3));
+        if (eventTarget.id.slice(0, 3) === "mo_") {
+            pu.mode_set(eventTarget.id.slice(3, -3));
             e.preventDefault();
         }
         // Sub mode
-        if (e.target.id.slice(0, 4) === "sub_") {
-            pu.submode_check(e.target.id.slice(0, -3));
+        if (eventTarget.id.slice(0, 4) === "sub_") {
+            pu.submode_check(eventTarget.id.slice(0, -3));
             e.preventDefault();
         }
         // Style mode
-        if (e.target.id.slice(0, 3) === "st_") {
-            pu.stylemode_check(e.target.id.slice(0, -3));
+        if (eventTarget.id.slice(0, 3) === "st_") {
+            pu.stylemode_check(eventTarget.id.slice(0, -3));
             e.preventDefault();
         }
         // Combination mode
-        if (e.target.id.slice(0, 9) === "combisub_") {
-            pu.subcombimode(e.target.id.slice(9));
+        if (eventTarget.id.slice(0, 9) === "combisub_") {
+            pu.subcombimode(eventTarget.id.slice(9));
             e.preventDefault();
         }
         // symbol
-        if (e.target.id.slice(0, 3) === "ms_") {
+        if (eventTarget.id.slice(0, 3) === "ms_") {
             checkms = 1;
-            pu.subsymbolmode(e.target.id.slice(3));
+            pu.subsymbolmode(eventTarget.id.slice(3));
             e.preventDefault();
             //Symbol hover etc
-        } else if (e.target.id.slice(0, 2) === "ms") {
+        } else if (eventTarget.id.slice(0, 2) === "ms") {
             checkms = 1;
             return;
         } else if (checkms === 1) {
