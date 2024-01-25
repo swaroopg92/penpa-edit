@@ -437,6 +437,7 @@ const PenpaText = {
         'nb_gridtype13_lb',
         'nb_rules_lb',
         'nb_title_lb',
+        'settings_modal_header',
         'lb_settings_app_display',
         'lb_settings_display_theme',
         'lb_settings_display_theme_light',
@@ -587,6 +588,7 @@ const PenpaText = {
         },
 
         // Settings
+        settings_modal_header: { EN: 'General Settings', JP: '一般設定' },
         lb_settings_app_display: { EN: 'App Display', JP: '画面表示' },
         lb_settings_display_theme: { EN: 'Display Theme:', JP: '明るさ' },
         lb_settings_display_theme_light: { EN: 'Light', JP: 'ライト' },
