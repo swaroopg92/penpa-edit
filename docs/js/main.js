@@ -224,37 +224,6 @@ onload = function() {
         e.preventDefault();
     }
 
-    // Variables for Tab selector
-    let tab_modes = {
-        "Surface": "surface",
-        "Line Normal": "sub_line1",
-        "Line Diagonal": "sub_line2",
-        "Line Free": "sub_line3",
-        "Line Middle": "sub_line5",
-        "Line Helper": "sub_line4",
-        "Edge Normal": "sub_lineE1",
-        "Edge Diagonal": "sub_lineE2",
-        "Edge Free": "sub_lineE3",
-        "Edge Helper": "sub_lineE4",
-        "Edge Erase": "sub_lineE5",
-        "Wall": "wall",
-        "Number Normal": "sub_number1",
-        "Number L": "sub_number10",
-        "Number M": "sub_number6",
-        "Number S": "sub_number5",
-        "Candidates": "sub_number7",
-        "Number 1/4": "sub_number3",
-        "Number Side": "sub_number9",
-        "Sudoku Normal": "sub_sudoku1",
-        "Sudoku Corner": "sub_sudoku2",
-        "Sudoku Centre": "sub_sudoku3",
-        "Shape": "symbol",
-        "Special": "special",
-        "Thermo": "sub_specialthermo",
-        "Sudoku Arrow": "sub_specialarrows",
-        "Composite": "combi"
-    };
-
     let previous_length = 2;
     let counter_index = 0;
     let present_submode;
@@ -633,10 +602,11 @@ onload = function() {
                 } else {
                     counter_index++;
                 }
-                counter_index %= user_choices.length;
+                counter_index %= user_choices.length
+                let mode_loc = PenpaText.modes.EN.indexOf(user_choices[counter_index]);
 
                 // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
-                let mode_name = tab_modes[user_choices[counter_index]];
+                let mode_name = PenpaText.modes.mapping[mode_loc];
                 if (mode_name.includes("surface") ||
                     mode_name.includes("wall") ||
                     mode_name.includes("symbol") ||
@@ -723,19 +693,19 @@ onload = function() {
             if (pu.mode.qa != 'pu_q') {
                 if (pu.mmode == 'solve') {
                     Swal.fire({
-                        title: 'Are you sure to switch to Editing Mode?',
-                        html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
+                        title: PenpaText.get('f2_title'),
+                        html: PenpaText.get('f2_body'),
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: Color.BLUE_SKY,
                         cancelButtonColor: Color.RED,
-                        confirmButtonText: 'Yes, Switch'
+                        confirmButtonText: PenpaText.get('f2_confirm')
                     }).then((result) => {
                         if (result.isConfirmed) {
                             pu.mode_qa("pu_q");
                             document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
                             var title = document.getElementById("title");
-                            title.innerHTML = "Setter Mode (while Solving)";
+                            title.textContent = PenpaText.get('setter_mode_while_solving');
                         }
                     })
                 } else {
@@ -751,21 +721,21 @@ onload = function() {
             if (pu.mode.qa != 'pu_a') {
                 if (pu.mmode == 'solve') {
                     Swal.fire({
-                        title: 'Are you sure to switch to Solving Mode?',
+                        title: PenpaText.get('f3_title'),
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: Color.BLUE_SKY,
                         cancelButtonColor: Color.RED,
-                        confirmButtonText: 'Yes, Switch'
+                        confirmButtonText: PenpaText.get('f2_confirm')
                     }).then((result) => {
                         if (result.isConfirmed) {
                             pu.mode_qa("pu_a");
                             document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
                             var title = document.getElementById("title");
                             if (pu.solution) {
-                                title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+                                title.innerHTML = PenpaText.get('solver_mode_answer');
                             } else {
-                                title.innerHTML = "Solver Mode";
+                                title.innerHTML = PenpaText.get('solver_mode');
                             }
                         }
                     })
@@ -1723,10 +1693,10 @@ onload = function() {
                 // if user clicks on Check Solution button
                 if (pu.solution && pu.sol_flag === 0) {
                     Swal.fire({
-                        title: '<h3>Your solution is incorrect.</h3>',
-                        html: '<h2>' + Identity.incorrectMessage + '</h2>',
+                        title: '<h3>' + PenpaText.get('solution_incorrect_title') + '</h3>',
+                        html: '<h2>' + PenpaText.get('solution_incorrect_main') + '</h2>',
                         icon: 'error',
-                        confirmButtonText: Identity.okButtonText,
+                        confirmButtonText: PenpaText.get('ok'),
                     })
                     document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
                 }
@@ -1769,7 +1739,7 @@ onload = function() {
 
                     document.getElementById("replay_download_btn").disabled = true;
                     document.getElementById("replay_message").style.display = "";
-                    document.getElementById("replay_message").innerHTML = "Preparing your download";
+                    document.getElementById("replay_message").innerHTML = PenpaText.get('preparing_download');
 
                     setTimeout(function() {
                         //put the title text on the top
@@ -2031,42 +2001,7 @@ onload = function() {
         }
     }
 
-    let select = document.getElementById("mode_choices");
-    Object.keys(tab_modes).forEach((key, i) => {
-        let option = document.createElement("option");
-        option.value = key;
-        option.text = key;
-        if (UserSettings.tab_settings) {
-
-            // Load the author defined tab settings if any
-            if (UserSettings.tab_settings.indexOf(key) > -1) {
-                option.setAttribute("selected", true);
-            }
-        }
-        select.appendChild(option);
-    });
-
-    selectBox = new vanillaSelectBox("#mode_choices", {
-        "disableSelectAll": false,
-        "maxHeight": 250,
-        "search": true,
-        "translations": { "all": "All", "items": "items", "selectAll": "Check All", "clearAll": "Clear All" }
-    }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
-
-    let selectContainer = document.getElementById('btn-group-#mode_choices').getElementsByClassName('vsb-menu')[0];
-    let liteModeButton = document.createElement('button');
-    liteModeButton.id = "tab-dropdown-lite-btn";
-    liteModeButton.disabled = true;
-    let tab_initial = getValues('mode_choices');
-    if (tab_initial.length > 0) {
-        liteModeButton.innerText = 'Disable Penpa Lite';
-        liteModeButton.disabled = false;
-    } else {
-        liteModeButton.innerText = 'Enable Penpa Lite';
-        liteModeButton.disabled = true;
-    }
-    liteModeButton.addEventListener('click', advancecontrol_toggle);
-    selectContainer.appendChild(liteModeButton);
+    PenpaUI.initPenpaLite();
 
     window.addEventListener('beforeunload', function(e) {
         if (UserSettings.reload_button === 1) {
@@ -2120,6 +2055,10 @@ onload = function() {
     // Save Setting
     document.getElementById("mousemiddle_settings_opt").onchange = function() {
         UserSettings.mousemiddle_button = this.value;
+    }
+
+    document.getElementById("language_opt").onchange = function() {
+        UserSettings.app_language = this.value;
     }
 
     document.getElementById("starbattle_settings_opt").onchange = function() {
@@ -2222,7 +2161,7 @@ onload = function() {
             if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
                 pu.borderwarning = false;
                 Swal.fire({
-                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn "Draw on Edges": ON</h2>',
+                    html: '<h2 class="info">' + PenpaText.get('border_setting_help') + '</h2>',
                     timer: 8000,
                     icon: 'info'
                 })
@@ -2235,19 +2174,20 @@ onload = function() {
         UserSettings.tab_settings = getValues('mode_choices');
 
         if (can_use_lite()) {
-            liteModeButton.disabled = false;
+            PenpaUI.liteModeButton.disabled = false;
 
             // Dynamically updating the display of modes based on tab setting changes
-            if (liteModeButton.innerText === "Disable Penpa Lite") {
+            let currentState = PenpaUI.liteModeButton.getAttribute('data-mode');
+
+            if (currentState === "disable") {
                 advancecontrol_on(); // First display back everything
                 advancecontrol_off("new"); // apply new choices for penpa lite
             }
         } else {
             // Dynamically updating the display of modes based on tab setting changes
-            liteModeButton.innerText = "Enable Penpa Lite";
             advancecontrol_on();
 
-            liteModeButton.disabled = true;
+            PenpaUI.liteModeButton.disabled = true;
         }
     }
 
@@ -2307,7 +2247,7 @@ function clear_storage_one() {
         let hash = "penpa_" + md5(pu.url);
         localStorage.removeItem(hash);
         Swal.fire({
-            html: '<h2 class="info">Local Storage is Cleared</h2>',
+            html: '<h2 class="info">' + PenpaText.get('local_storage_cleared') + '</h2>',
             icon: 'info'
         });
     }
@@ -2331,7 +2271,7 @@ function clear_storage_all() {
     UserSettings.save_current_puzzle = false;
 
     Swal.fire({
-        html: '<h2 class="info">Local Storage is Cleared</h2>',
+        html: '<h2 class="info">' + PenpaText.get('local_storage_cleared') + '</h2>',
         icon: 'info'
     });
 }

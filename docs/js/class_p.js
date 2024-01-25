@@ -2078,7 +2078,7 @@ class Puzzle {
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
         var answercheck_opt = [],
-            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_all') + "</b><ul>";
 
         // loop through and check if any "AND" settings are selected
         let prev_opt = "";
@@ -2088,7 +2088,7 @@ class Puzzle {
                 var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
                 if (opt.length !== 0 && opt != prev_opt) {
                     answercheck_opt.push(opt);
-                    message += "<li>" + answercheck_message[opt] + "</li>";
+                    message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                 }
                 prev_opt = opt;
             }
@@ -2097,7 +2097,7 @@ class Puzzle {
 
         // If answercheck list is 0, it means, no "AND" option was selected
         if (answercheck_opt.length === 0) {
-            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_one') + "</b><ul>";
             // loop through and check if any "OR" settings are selected
             for (var i = 0; i < settingstatus_or.length; i++) {
                 if (settingstatus_or[i].checked) {
@@ -2105,7 +2105,7 @@ class Puzzle {
                     let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
                     if (opt.length !== 0 && opt != prev_opt) {
                         answercheck_opt.push(opt);
-                        message += "<li>" + answercheck_message[opt] + "</li>";
+                        message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                     }
                     prev_opt = opt;
                 }
@@ -6525,13 +6525,10 @@ class Puzzle {
                 console.log(this.pu_a_col);
                 console.log(this);
             } else {
-                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Please see instructions (Help) for supported puzzle types\n' +
-                    'For additional genre support please submit your request to penpaplus@gmail.com';
+                text += PenpaText.get('gmp_unsupported', header);
             }
         } else {
-            text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Please see instructions (Help) for supported puzzle types\n';
+            text += PenpaText.get('gmp_enter_type');
         }
 
         return text;
@@ -9474,7 +9471,7 @@ class Puzzle {
 
     check_last_cell() {
         if (this.centerlist.length == 1) {
-            infoMsg('<h3 class="info">Last cell cannot be removed using the "Box" mode. For a blank grid use the following approach:</h3><ol><li>Click on "New Grid / Update"</li><li>Set "Gridlines" to "None"</li><li>Set "Gridpoints" to "No"</li><li>Set "Outside frame" to "No"</li><li>Click on "Update display"</li></ol>');
+            infoMsg(PenpaText.get('box_mode_warning'));
             return true;
         } else {
             return false;
