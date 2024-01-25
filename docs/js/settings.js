@@ -72,6 +72,19 @@ const UserSettings = {
         return this._mousemiddle_button;
     },
 
+    // Toggle language
+    _language: 'EN',
+    set app_language(newValue) {
+        this._language = newValue;
+
+        document.getElementById("language_opt").value = newValue;
+        trans();
+        this.attemptSave();
+    },
+    get app_language() {
+        return this._language;
+    },
+
     // Conflict detection
     _conflict_detection: 1,
     set conflict_detection(newValue) {
@@ -287,11 +300,11 @@ const UserSettings = {
 
         if (valueInt > 90) {
             valueInt = 90;
-            infoMsg('Display Size must be in the range <h2 class="warn">12-90</h2> It is set to max value.');
+            infoMsg(PenpaText.get('display_size_max'));
         }
         if (valueInt < 12) {
             valueInt = 12;
-            infoMsg('Display Size must be in the range <h2 class="warn">12-90</h2> It is set to min value.');
+            infoMsg(PenpaText.get('display_size_min'));
         }
 
         this._displaysize = valueInt;
@@ -308,7 +321,7 @@ const UserSettings = {
     set draw_edges(newValue) {
         const button = document.getElementById("edge_button");
         this._draw_edges = newValue;
-        button.textContent = newValue ? "ON" : "OFF";
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
 
         if (window.pu) {
             if (!newValue) {
@@ -326,7 +339,7 @@ const UserSettings = {
     set show_solution(newValue) {
         const button = document.getElementById("visibility_button");
         this._show_solution = newValue;
-        button.textContent = newValue ? "ON" : "OFF";
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
 
         if (window.pu) {
             pu.redraw();
@@ -387,6 +400,7 @@ const UserSettings = {
     },
 
     can_save: [
+        'app_language',
         'color_theme',
         'conflict_detection',
         'custom_colors_on',
@@ -417,7 +431,7 @@ const UserSettings = {
         deleteCookie('tab_settings');
         // deleteCookie("different_solution_tab");
 
-        infoMsg('You must reload the page for the default settings to take effect.');
+        infoMsg(PenpaText.get('clear_settings_message'));
     },
 
     _settingsLoaded: false,
