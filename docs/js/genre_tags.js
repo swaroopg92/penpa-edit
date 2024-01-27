@@ -143,7 +143,8 @@ const penpa_tags = {
             "wordpuzzle",
             "puzzlehunt",
             "wordsearch",
-            "noconflict"
+            "noconflict",
+            "non-alphanumeric"
         ]
     }
 }
