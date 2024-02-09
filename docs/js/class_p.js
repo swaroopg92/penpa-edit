@@ -79,6 +79,7 @@ class Puzzle {
         this.rect_select_base = null;
         this.select_remove = false;
         this.panelflag = false;
+        this.custom_colors = {};
         // Drawing mode
         this.mmode = ""; // Problem mode
         this.mode = {
@@ -1318,6 +1319,18 @@ class Puzzle {
         return (edit_mode === "number" && !["2"].includes(submode));
     }
 
+    set_custom_color(name) {
+        if (UserSettings.custom_colors_on) {
+            // set the custom color to default
+            let cc = this.custom_colors[name];
+            if (cc === undefined)
+                cc = CustomColor.default_stylemode_color(name);
+            if (cc) {
+                $("#colorpicker_special").spectrum("set", cc);
+            }
+        }
+    }
+
     submode_check(name) {
         if (document.getElementById(name)) {
             document.getElementById(name).checked = true;
@@ -1332,13 +1345,7 @@ class Puzzle {
             this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
-        if (UserSettings.custom_colors_on) {
-            // set the custom color to default
-            let cc = CustomColor.default_specialmode_color(name);
-            if (cc) {
-                $("#colorpicker_special").spectrum("set", cc);
-            }
-        }
+        this.set_custom_color(name);
     }
 
     // override
@@ -1352,14 +1359,7 @@ class Puzzle {
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1] = parseInt(document.getElementById(name).value);
             panel_pu.draw_panel(); // Panel update
         }
-
-        if (UserSettings.custom_colors_on) {
-            // set the custom color to default
-            let cc = CustomColor.default_stylemode_color(name);
-            if (cc) {
-                $("#colorpicker_special").spectrum("set", cc);
-            }
-        }
+        this.set_custom_color(name);
     }
 
     subsymbolmode(mode) {
@@ -12813,6 +12813,11 @@ class Puzzle {
     update_customcolor(color) {
         const mode = this.mode[this.mode.qa].edit_mode;
         this.mode[this.mode.qa][mode][2] = color;
+
+        // Save custom color for this submode
+        const [submode, style] = this.mode[this.mode.qa][mode];
+        let name = 'st_' + mode + style;
+        this.custom_colors[name] = color;
 
         panel_pu.draw_panel();
     }
