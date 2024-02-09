@@ -128,6 +128,8 @@ onload = function() {
                 y = obj.y,
                 num = obj.num;
 
+            let ctrl = isCtrlKeyHeld(e) || isShiftKeyHeld(e);
+
             // Remember whether this cell was already in the selection so we can
             // remove instead of add cells
             pu.select_remove = ctrl && pu.selection.indexOf(num) !== -1;
@@ -137,17 +139,17 @@ onload = function() {
                 if (e.type === "dblclick") {
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
-                    pu.dblmouseevent(x, y, num, isCtrlKeyHeld(e) || isShiftKeyHeld(e));
+                    pu.dblmouseevent(x, y, num, ctrl);
                 } else if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
                     pu.mouse_click_last = 2;
-                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
+                    pu.mouseevent(x, y, num, ctrl);
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
                     pu.mouse_click_last = 1;
-                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e) || isShiftKeyHeld(e));
+                    pu.mouseevent(x, y, num, ctrl);
                 }
             }
         }

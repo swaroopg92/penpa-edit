@@ -7914,8 +7914,18 @@ class Puzzle {
     mouseevent(x, y, num, ctrl_key = false) {
         if (!pu.replay) {
             num = this.recalculate_num(x, y, num); //for uniform tiling
-            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
-            switch (this.mode[this.mode.qa].edit_mode) {
+            let edit_mode = this.mode[this.mode.qa].edit_mode;
+            let submode = this.mode[this.mode.qa][edit_mode][0];
+
+            // Map shift/ctrl-click to right click in certain modes for convenience
+            if (ctrl_key && this.mouse_mode === "down_left" &&
+                    (edit_mode === "surface" || edit_mode === "combi")) {
+                this.mouse_mode = "down_right";
+                this.mouse_click = 2;
+                this.mouse_click_last = 2;
+            }
+
+            switch (edit_mode) {
                 case "surface":
                     this.mouse_surface(x, y, num);
                     break;
@@ -9572,7 +9582,7 @@ class Puzzle {
                 break;
             case "edgexoi":
             case "tents":
-                if (this.mouse_mode === "down_right" || this.ondown_key === "touchstart") {
+                if (this.mouse_click === 2 || this.ondown_key === "touchstart") {
                     num = this.coord_p_edgex(x, y, 0.3);
                 } else {
                     num = this.coord_p_edgex(x, y, 0.01);
