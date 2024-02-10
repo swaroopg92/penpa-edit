@@ -44,6 +44,8 @@ class Stack {
     }
 }
 
+const COPY_PROPS = ['number', 'symbol', 'surface', 'line', 'lineE'];
+
 class Puzzle {
     constructor(gridtype) {
         this.gridtype = gridtype;
@@ -188,6 +190,10 @@ class Puzzle {
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
+
+        document.addEventListener('copy', (e) => this.copy_handler(e));
+        document.addEventListener('cut', (e) => this.cut_handler(e));
+        document.addEventListener('paste', (e) => this.paste_handler(e));
     }
 
     reset_puzzle(p) {
@@ -6968,6 +6974,252 @@ class Puzzle {
     }
 
     /////////////////////////////
+    // Cut/copy/paste
+    //
+    /////////////////////////////
+
+    copy_handler(ev) {
+        // Skip handling copy if a target is selected (eg a textbox)
+        if (ev.target.id !== "" && ['INPUT', 'TEXTAREA'].includes(ev.target.tagName))
+            return false;
+
+        if (!this.selection.length)
+            return false;
+
+        let puzzle = this[this.mode.qa];
+        let puzzle_col = this[this.mode.qa + '_col'];
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+
+        // Sort the selection both to get the minimum element and so the plain-text clipboard
+        // values are in a sane order
+        this.selection.sort((a,b) => a >= b);
+
+        let base_point = this.point[this.selection[0]];
+        let [base_x, base_y] = base_point.index;
+
+        const rel_coords = (p) => {
+            let [x, y] = this.point[p].index;
+            return {x: x - base_x, y: y - base_y};
+        }
+
+        var plain_clipboard = "";
+        var clipboard = [];
+
+        var seen_lines = {};
+        var seen_edges = {};
+
+        for (var k of this.selection) {
+            let data = rel_coords(k);
+
+            // Put the text from number fields into the plain clipboard. For this, we use data
+            // from both the problem and solution modes
+            let n_a = this.pu_a['number'][k];
+            let n_q = this.pu_q['number'][k];
+            if (n_a && n_a[0] !== "")
+                plain_clipboard += n_a[0];
+            else if (n_q && n_q[0] !== "")
+                plain_clipboard += n_q[0];
+            // Put an "S" in the clipboard for shaded cells without numbers (commonly
+            // used in LMD solution codes)
+            else if ([1, 8, 3, 4].includes(puzzle['surface'][k]))
+                plain_clipboard += 'S';
+
+            // Copy all supported properties into the full clipboard
+            for (let prop of COPY_PROPS) {
+                if (prop === "line") {
+                    let lines = [];
+                    // For lines, look at any lines from this cell to adjacent cells
+                    for (var adj of [...this.point[k].adjacent, ...this.point[k].adjacent_dia]) {
+                        let key = this.line_key(k, adj);
+                        if (seen_lines[key])
+                            continue;
+                        if (puzzle[prop][key]) {
+                            lines.push([rel_coords(adj), puzzle[prop][key], puzzle_col[prop][key]]);
+                            seen_lines[key] = true;
+                        }
+                    }
+                    data[prop] = lines;
+                } else if (prop === "lineE") {
+                    let edges = [];
+                    // For edges, look only at this cell's edges, and number them with the indices
+                    // of the "surround" array
+                    for (let i in this.point[k].surround) {
+                        let adj = this.point[k].surround[i];
+                        let j = 0;
+                        for (let j in this.point[k].surround) {
+                            if (j <= i)
+                                continue;
+                            let adj2 = this.point[k].surround[j];
+                            let key = this.line_key(adj, adj2);
+                            if (seen_edges[key])
+                                continue;
+                            if (puzzle[prop][key]) {
+                                edges.push([[i, j], puzzle[prop][key], puzzle_col[prop][key]]);
+                                seen_edges[key] = true;
+                            }
+                        }
+                    }
+                    data[prop] = edges;
+                } else
+                    data[prop] = puzzle[prop][k];
+            }
+
+            // Also copy corner/side marks
+            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+            for (var i = 0; i < 4; i++) {
+                data['corner' + i] = puzzle['numberS'][corner_cursor + i];
+                data['side' + i] = puzzle['numberS'][side_cursor + i];
+            }
+
+            clipboard.push(data);
+        }
+
+        ev.clipboardData.setData("text/plain", plain_clipboard);
+        ev.clipboardData.setData("application/penpa-data", JSON.stringify(clipboard));
+        ev.preventDefault();
+
+        return true;
+    }
+
+    cut_handler(ev) {
+        // Run the copy handler and exit if necessary (other input focused, no selection, etc)
+        if (!this.copy_handler(ev))
+            return false;
+
+        let puzzle = this[this.mode.qa];
+
+        this.undoredo_counter++;
+
+        // Delete all copied attributes
+        for (var k of this.selection) {
+            for (let prop of COPY_PROPS)
+                if (puzzle[prop][k] !== undefined)
+                    this.remove_value(prop, k);
+
+            // Delete lines from this cell
+            for (var adj of [...this.point[k].adjacent, ...this.point[k].adjacent_dia]) {
+                let key = this.line_key(k, adj);
+                if (puzzle['line'][key] !== undefined)
+                    this.remove_value('line', key);
+            }
+            // Delete edges around this cell
+            let edges = [];
+            for (let i in this.point[k].surround) {
+                let adj = this.point[k].surround[i];
+                let j = 0;
+                for (let j in this.point[k].surround) {
+                    if (j <= i)
+                        continue;
+                    let adj2 = this.point[k].surround[j];
+                    let key = this.line_key(adj, adj2);
+                    if (puzzle['lineE'][key] !== undefined)
+                        this.remove_value('lineE', key);
+                }
+            }
+
+            // Delete corner/side marks
+            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+            let prop = 'numberS';
+            for (var i = 0; i < 4; i++) {
+                if (puzzle[prop][corner_cursor + i] !== undefined)
+                    this.remove_value(prop, corner_cursor + i);
+                if (puzzle[prop][side_cursor + i] !== undefined)
+                    this.remove_value(prop, side_cursor + i);
+            }
+        }
+
+        this.selection = [];
+
+        this.redraw();
+    }
+
+    paste_handler(ev) {
+        // Skip handling paste if a target is selected (eg a textbox)
+        if (ev.target.id !== "")
+            return false;
+
+        if (this.selection.length === 0)
+            return false;
+
+        let puzzle = this[this.mode.qa];
+        let puzzle_col = this[this.mode.qa + '_col'];
+        let [base_x, base_y] = this.point[Math.min(...this.selection)].index;
+
+        const index = (x, y) => this.nx0 * y + x;
+
+        // Pull data from the clipboard
+        // TODO: perhaps handle text sanely from other sources?
+        let clipboard_data = ev.clipboardData.getData("application/penpa-data");
+        if (clipboard_data === "")
+            return;
+        let paste_data = JSON.parse(clipboard_data);
+
+        this.undoredo_counter++;
+
+        const set_color = (prop, key, value) => {
+            this.record(prop, key, this.undoredo_counter);
+            puzzle_col[prop][key] = value;
+            this.record_replay(prop, key, this.undoredo_counter);
+        }
+
+        // Insert all data items into the grid relative to the base cell
+        for (var data of paste_data) {
+            let {x, y} = data;
+
+            x += base_x;
+            y += base_y;
+
+            if (x < 2 || x >= this.nx0 - 2 || y < 2 || y >= this.ny0 - 2)
+                continue;
+
+            let k = index(x, y);
+            for (let prop of COPY_PROPS) {
+                if (data[prop] === undefined)
+                    continue;
+
+                if (prop === "line") {
+                    for (var [adj, line_data, color] of data[prop]) {
+                        let x2 = adj.x + base_x, y2 = adj.y + base_y;
+                        let key = this.line_key(k, index(x2, y2));
+
+                        if (color !== undefined)
+                            set_color(prop, key, color);
+                        this.set_value(prop, key, line_data);
+                    }
+                } else if (prop === "lineE") {
+                    for (var [[i, j], edge_data, color] of data[prop]) {
+                        let c1 = this.point[k].surround[i];
+                        let c2 = this.point[k].surround[j];
+                        let key = this.line_key(c1, c2);
+
+                        if (color !== undefined)
+                            set_color(prop, key, color);
+                        this.set_value(prop, key, edge_data);
+                    }
+                } else
+                    this.set_value(prop, k, data[prop]);
+            }
+
+            // Also copy corner/side marks
+            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+            let prop = 'numberS';
+            for (var i = 0; i < 4; i++) {
+                if (data['corner' + i] !== undefined)
+                    this.set_value(prop, corner_cursor + i, data['corner' + i]);
+                if (data['side' + i] !== undefined)
+                    this.set_value(prop, side_cursor + i, data['side' + i]);
+            }
+        }
+        this.redraw();
+
+        ev.preventDefault();
+    }
+
+
+    /////////////////////////////
     // Key Event
     //
     /////////////////////////////
@@ -8137,6 +8389,10 @@ class Puzzle {
     //////////////////////////
     // line
     //////////////////////////
+
+    line_key(a, b) {
+      return (Math.min(a, b)).toString() + "," + (Math.max(a, b)).toString();
+    }
 
     mouse_line(x, y, num) {
         if (this.mouse_mode === "down_left") {
