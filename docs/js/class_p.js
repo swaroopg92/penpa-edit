@@ -10470,26 +10470,85 @@ class Puzzle {
         this.last = num;
     }
 
+    re_combi_linedir_get_arrow_side(num, dir) {
+        // up down left right
+        const dirs = [
+            [6, "inequality", 2],
+            [8, "inequality", 2],
+            [5, "inequality", 2],
+            [7, "inequality", 2]
+        ];
+
+        // neighbor - up down left right
+        let side = this.point[num].neighbor[dir];
+        let arrowdir = dirs[dir];
+        return [arrowdir, side];
+    }
+
+    re_combi_linedir_make_arrow(num, dir) {
+        let [arrowdir, side] = this.re_combi_linedir_get_arrow_side(num, dir);
+
+        if (this.drawing_mode === 0) { // In delete mode
+            if (this[this.mode.qa].line[side])
+                this.remove_value("line", side);
+            if (this[this.mode.qa].symbol[side])
+                this.remove_value("symbol", side);
+        } else if (!this[this.mode.qa].line[side] && !this[this.mode.qa].symbol[side]) { // Insert symbol
+            this.record("symbol", side);
+            this[this.mode.qa].symbol[side] = arrowdir;
+            this.record_replay("symbol", side);
+        } else if (this[this.mode.qa].line[side]) { // If cross, delete cross and insert symbol
+            this.record("line", side);
+            delete this[this.mode.qa].line[side];
+            this.record_replay("line", side);
+            this.record("symbol", side);
+            this[this.mode.qa].symbol[side] = arrowdir;
+            this.record_replay("symbol", side);
+        } else if (this[this.mode.qa].symbol[side]) { // If symbol in wrong direction, update symbol
+            if (this[this.mode.qa].symbol[side][0] !== arrowdir[0]) {
+                this.record("symbol", side);
+                this[this.mode.qa].symbol[side] = arrowdir;
+                this.record_replay("symbol", side);
+            }
+        }
+    }
+
     re_combi_linedir_move(x, y, num) {
-        let leftdir = [5, "inequality", 2];
-        let rightdir = [7, "inequality", 2];
-        let updir = [6, "inequality", 2];
-        let downdir = [8, "inequality", 2];
         let horizontal = (this.point[num].type === 2);
         let vertical = (this.point[num].type === 3);
         let center = (this.point[num].type === 0);
         let drawing_modes = [50, 52, 53, 54, 55, 56];
 
-        if (this.drawing_mode != -1 &&
-            this.mouse_click !== 2 &&
-            center) {
+        // Remapping array to convert the indices of the pu.point[k].adjacent array to directions
+        const dir_remap = [0, 2, 3, 1];
+
+        if (this.drawing_mode != -1) {
             // Left click and drag or touchdown and drag
             let line_style = 3;
-            let array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
-                array = "line";
-                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
-                this.re_line(array, key, line_style);
+                const array = "line";
+                var key = this.line_key(num, this.last);
+
+                // Only allow line delete if not in right click mode
+                let only_arrow = (this[this.mode.qa][array][key] !== undefined && this.mouse_click_last === 2);
+
+                let dir = this.point[this.last].adjacent.indexOf(parseInt(num));
+                dir = dir_remap[dir];
+
+                // Check if there's already a line and an arrow segment in the same direction at
+                // the beginning of a right-click-drag action. If so, it's delete mode
+                if (only_arrow && this.drawing_mode === 100) {
+                    let [arrowdir, side] = this.re_combi_linedir_get_arrow_side(this.last, dir);
+                    let old = this[this.mode.qa]["symbol"][side];
+                    if (old && JSON.stringify(old) === JSON.stringify(arrowdir))
+                        this.drawing_mode = 0;
+                }
+
+                if (this.drawing_mode === 0 || !only_arrow)
+                    this.re_line(array, key, line_style);
+
+                if (only_arrow || (this.mouse_click_last === 2 && this.drawing_mode === line_style))
+                    this.re_combi_linedir_make_arrow(this.last, dir);
             }
             this.last = num;
             this.redraw();
@@ -10591,72 +10650,6 @@ class Puzzle {
     }
 
     re_combi_linedir_up(x, y, num) {
-        // This feature is only for laptop
-        // Right click drag from center of cell in the direction and will put a directed symbol on the edge
-        if (this.drawing_mode == 100 &&
-            this.mouse_click_last == 2 &&
-            this.lastx != -1 &&
-            this.lasty != -1) {
-            let leftdir = [5, "inequality", 2];
-            let rightdir = [7, "inequality", 2];
-            let updir = [6, "inequality", 2];
-            let downdir = [8, "inequality", 2];
-
-            // for mouse right click drag/move
-            let arrowdirection = -1;
-
-            // get direction of the mouse drag/move
-            if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
-                arrowdirection = this.direction_loop4(x, y, this.lastx, this.lasty);
-            }
-
-            // 3 - right
-            // 2 - left
-            // 1 - down
-            // 0 - up
-            if (arrowdirection !== -1) {
-                // neighbor - up down left right
-                let side = this.point[this.last].neighbor[arrowdirection];
-                let arrowdir;
-                switch (arrowdirection) {
-                    case 0:
-                        arrowdir = updir;
-                        break;
-                    case 1:
-                        arrowdir = downdir;
-                        break;
-                    case 2:
-                        arrowdir = leftdir;
-                        break;
-                    case 3:
-                        arrowdir = rightdir;
-                        break;
-                }
-                if (!this[this.mode.qa].line[side] && !this[this.mode.qa].symbol[side]) { // Insert symbol
-                    this.record("symbol", side);
-                    this[this.mode.qa].symbol[side] = arrowdir;
-                    this.record_replay("symbol", side);
-                } else if (this[this.mode.qa].line[side]) { // If cross, delete cross and insert symbol
-                    this.record("line", side);
-                    delete this[this.mode.qa].line[side];
-                    this.record_replay("line", side);
-                    this.record("symbol", side);
-                    this[this.mode.qa].symbol[side] = arrowdir;
-                    this.record_replay("symbol", side);
-                } else if (this[this.mode.qa].symbol[side]) { // If symbol in wrong direction, update symbol
-                    if (this[this.mode.qa].symbol[side][0] !== arrowdir[0]) {
-                        this.record("symbol", side);
-                        this[this.mode.qa].symbol[side] = arrowdir;
-                        this.record_replay("symbol", side);
-                    } else {
-                        this.record("symbol", side);
-                        delete this[this.mode.qa].symbol[side];
-                        this.record_replay("symbol", side);
-                    }
-                }
-                this.redraw();
-            }
-        }
         this.drawing_mode = -1;
         this.last = -1;
         this.lastx = -1;
