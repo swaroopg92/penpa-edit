@@ -127,6 +127,11 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
+
+            // Remember whether this cell was already in the selection so we can
+            // remove instead of add cells
+            pu.select_remove = ctrl && pu.selection.indexOf(num) !== -1;
+
             let skip_mouseevent = restrict_mouse(num);
             if (pu.point[num].use === 1 && !skip_mouseevent) {
                 if (e.type === "dblclick") {

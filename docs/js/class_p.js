@@ -73,6 +73,7 @@ class Puzzle {
         this.drawing_mode = -1;
         this.cursol = 0;
         this.cursolS = 0;
+        this.select_remove = false;
         this.panelflag = false;
         // Drawing mode
         this.mmode = ""; // Problem mode
@@ -8682,6 +8683,10 @@ class Puzzle {
                 this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
                 this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
                 // do nothing
+            } else if (this.select_remove && this.drawing) {
+                let i = this.selection.indexOf(num);
+                if (i !== -1)
+                    this.selection.splice(i, 1);
             } else if (!this.selection.includes(num) && this.drawing) {
                 this.selection.push(num);
             }
