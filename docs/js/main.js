@@ -2455,6 +2455,25 @@ onload = function() {
         pu.hide_pause_layer();
         sw_timer.start({ precision: 'secondTenths' });
     }
+
+    // Pause/unpause when tab loses focus
+    let autopaused = false;
+    document.addEventListener("visibilitychange", () => {
+        // Only change pause state if we're not already paused
+        let pause_canvas = document.getElementById("pause_canvas");
+        if (pause_canvas.style.display !== "none")
+            return;
+
+        if (document.visibilityState === "visible") {
+            if (autopaused) {
+                sw_timer.start();
+                autopaused = false;
+            }
+        } else if (sw_timer.isRunning()) {
+            sw_timer.pause();
+            autopaused = true;
+        }
+    });
 };
 
 function clear_storage_one() {
