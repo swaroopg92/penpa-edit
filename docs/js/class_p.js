@@ -7118,6 +7118,18 @@ class Puzzle {
         }
     }
 
+    set_value(prop, key, value) {
+        this.record(prop, key, this.undoredo_counter);
+        this[this.mode.qa][prop][key] = value;
+        this.record_replay(prop, key, this.undoredo_counter);
+    }
+
+    remove_value(prop, key) {
+        this.record(prop, key, this.undoredo_counter);
+        delete this[this.mode.qa][prop][key];
+        this.record_replay(prop, key, this.undoredo_counter);
+    }
+
     /////////////////////////////
     // Key Event
     //
