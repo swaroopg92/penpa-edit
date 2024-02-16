@@ -7091,7 +7091,7 @@ class Puzzle {
         if (!UserSettings.shortcuts_enabled || force_no_shortcut) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         } else {
-            var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+            var str_all = "1234567890qwertuioasdfghjklQWERTYUIOPASDFGHJKLZXCVBNM";
         }
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];

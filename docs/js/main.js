@@ -751,13 +751,19 @@ onload = function() {
     }
 
     const shortcutModeMap = {
-        "KeyZ": "sub_sudoku1",
-        "KeyX": "sub_sudoku2",
-        "KeyC": "sub_sudoku3"
+        "KeyZ": ["sudoku", "sub_sudoku1"],
+        "KeyX": ["sudoku", "sub_sudoku2"],
+        "KeyC": ["sudoku", "sub_sudoku3"],
+        "KeyV": ["surface"],
+        "KeyB": ["line"],
+        "KeyN": ["lineE"],
+        "KeyM": ["symbol"],
     };
 
     function checkShortcutKeys(e, code, capslock) {
-        if (pu.mode[pu.mode.qa].edit_mode !== "surface" && pu.mode[pu.mode.qa].edit_mode !== "sudoku") {
+        let mode = pu.mode[pu.mode.qa].edit_mode;
+        if (mode !== "surface" && mode !== "sudoku" && mode !== "line" && mode !== "lineE" &&
+                mode !== "symbol" && mode !== "combi") {
             return false;
         }
 
@@ -767,32 +773,36 @@ onload = function() {
             let mappedCode = shortcutModeMap[code];
 
             if (mappedCode) {
-                let present_mode = document.getElementById("mo_sudoku").checked;
+                // Change to the main mode for this shortcut
+                let m = mappedCode[0];
+                let present_mode = document.getElementById("mo_" + m).checked;
                 if (!present_mode) {
-                    pu.mode_set("sudoku");
+                    pu.mode_set(m);
                     detected = true;
                 }
-                let present_submode = document.getElementById(mappedCode).checked;
-                if (!present_submode) {
-                    pu.submode_check(mappedCode);
-                    detected = true;
-                }
-                e.returnValue = false;
-            }
 
-            if (code === "KeyV") {
-                present_mode = document.getElementById("mo_surface").checked;
-                if (!present_mode) {
-                    pu.mode_set("surface");
-                    detected = true;
+                // Change to the submode if needed
+                if (mappedCode.length > 1) {
+                    let sm = mappedCode[1];
+                    let present_submode = document.getElementById(sm).checked;
+                    if (!present_submode) {
+                        pu.submode_check(sm);
+                        detected = true;
+                    }
                 }
-                e.returnValue = false;
             }
-
-            e.returnValue = false;
+            // Pause shortcut handling
+            else if (code === "KeyP" && !sw_timer.isPaused()) {
+                pauseTimer();
+                detected = true;
+            } else if (code === "Escape" && sw_timer.isPaused()) {
+                startTimer();
+                detected = true;
+            }
         }
 
         if (detected) {
+            e.returnValue = false;
             e.preventDefault();
         }
 
