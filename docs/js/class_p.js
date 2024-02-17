@@ -7404,12 +7404,15 @@ class Puzzle {
                                 j_start = 1;
                             }
 
+                            // First step: go through all cells in the selection that don't have a main single digit, and
+                            // collect the digits that are in the corner of each
+                            let cells = [];
                             for (var k of this.selection) {
                                 if ((this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
                                         pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])) &&
                                         this.selection.length > 1) ||
                                     this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1") { // if single digit is present, dont modify that cell
-                                    var single_digit = true;
+                                    continue;
                                 } else if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7" && this.selection.length > 1) {
                                     // This is for single digit obtained from candidate submode in Problem
                                     var sum = 0;
@@ -7418,79 +7421,81 @@ class Puzzle {
                                             sum += 1;
                                         }
                                     }
-                                    if (sum === 1) {
-                                        var single_digit = true;
-                                    } else {
-                                        var single_digit = false;
-                                    }
+                                    if (sum === 1)
+                                        continue;
                                 } else if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "7") {
                                     // This is for digits obtained from candidate submode in Solution
                                     var sum = 0;
                                     for (var j = 0; j < 10; j++) {
                                         if (this["pu_a"].number[k][0][j] === 1) {
                                             sum += 1;
-                                            con += (j + 1).toString();
                                         }
                                     }
-                                    if (sum === 1) {
-                                        var single_digit = true;
-                                    } else {
-                                        var single_digit = false;
-                                    }
-                                } else {
-                                    var single_digit = false;
+                                    if (sum === 1)
+                                        continue;
                                 }
-                                if (!single_digit) {
-                                    var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-                                    var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-                                    con = "";
 
-                                    // Read all the existing digits from the corner and sides
-                                    for (var j = j_start; j < 4; j++) {
-                                        if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                                            con += this[this.mode.qa].numberS[corner_cursor + j][0];
-                                        }
+                                // Collect all digits on the corners/sides of this cell
+                                con = "";
+                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+
+                                // Read all the existing digits from the corner and sides
+                                for (var j = j_start; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                        con += this[this.mode.qa].numberS[corner_cursor + j][0];
                                     }
-                                    for (var j = j_start; j < 4; j++) {
-                                        if (this[this.mode.qa].numberS[side_cursor + j]) {
-                                            con += this[this.mode.qa].numberS[side_cursor + j][0];
-                                        }
+                                }
+                                for (var j = j_start; j < 4; j++) {
+                                    if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                        con += this[this.mode.qa].numberS[side_cursor + j][0];
                                     }
+                                }
+                                cells.push([k, con]);
+                            }
 
-                                    if (con.indexOf(key) != -1) { // if digit already exists
-                                        con = con.replace(key, '');
+                            // Second step: check if the new digit is present in all the cells. If so, we remove the digit, otherwise
+                            // we add it to all the cells that don't have it yet
+                            let remove = cells.every(([k, con]) => con && con.indexOf(key) !== -1);
 
-                                        // remove the last digit from old location
-                                        if ((con.length + 1) < (5 - j_start)) {
-                                            this.remove_value("numberS", corner_cursor + con.length + j_start);
+                            // Third step: actually add or remove the new digit
+                            for (var [k, con] of cells) {
+                                number = "";
+
+                                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                                if (remove) { // if digit already exists
+                                    con = con.replace(key, '');
+
+                                    // remove the last digit from old location
+                                    if ((con.length + 1) < (5 - j_start)) {
+                                        this.remove_value("numberS", corner_cursor + con.length + j_start);
+                                    } else {
+                                        this.remove_value("numberS", side_cursor + con.length - 4 + 2 * j_start);
+                                    }
+                                    if (con) {
+                                        if (con.length < (5 - j_start)) {
+                                            for (var j = j_start; j < (con.length + j_start); j++) {
+                                                this.set_value("numberS", corner_cursor + j, [con[j - j_start], submode[1]]);
+                                            }
                                         } else {
-                                            this.remove_value("numberS", side_cursor + con.length - 4 + 2 * j_start);
-                                        }
-                                        if (con) {
-                                            if (con.length < (5 - j_start)) {
-                                                for (var j = j_start; j < (con.length + j_start); j++) {
-                                                    this.set_value("numberS", corner_cursor + j, [con[j - j_start], submode[1]]);
-                                                }
-                                            } else {
-                                                for (var j = j_start; j < 4; j++) {
-                                                    this.set_value("numberS", corner_cursor + j, [con[j - j_start], submode[1]]);
-                                                }
-                                                for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
-                                                    this.set_value("numberS", side_cursor + j - 4, [con[j - 2 * j_start], submode[1]]);
-                                                }
+                                            for (var j = j_start; j < 4; j++) {
+                                                this.set_value("numberS", corner_cursor + j, [con[j - j_start], submode[1]]);
+                                            }
+                                            for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
+                                                this.set_value("numberS", side_cursor + j - 4, [con[j - 2 * j_start], submode[1]]);
                                             }
                                         }
-                                    } else if (con.length < length_limit) { // If digit doesnt exist in the cell
-                                        con += key;
-                                        if (con.length < (5 - j_start)) {
-                                            this.set_value("numberS", corner_cursor + con.length - 1 + j_start, [key, submode[1]]);
-                                        } else {
-                                            this.set_value("numberS", side_cursor + con.length - 5 + 2 * j_start, [key, submode[1]]);
-                                        }
+                                    }
+                                } else if (con.indexOf(key) === -1 && con.length < length_limit) { // If digit doesnt exist in the cell
+                                    con += key;
+                                    if (con.length < (5 - j_start)) {
+                                        this.set_value("numberS", corner_cursor + con.length - 1 + j_start, [key, submode[1]]);
+                                    } else {
+                                        this.set_value("numberS", side_cursor + con.length - 5 + 2 * j_start, [key, submode[1]]);
                                     }
                                 }
                             }
-
                         }
                     }
                     break;
@@ -7505,7 +7510,7 @@ class Puzzle {
                         // collect the digits that are in the center of each
                         let cells = [];
                         for (var k of this.selection) {
-                            var con = "";
+                            con = "";
                             // if single digit is present, dont modify that cell
                             if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
                                     pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
@@ -7549,7 +7554,7 @@ class Puzzle {
 
                         // Second step: check if the new digit is present in all the cells. If so, we remove the digit, otherwise
                         // we add it to all the cells that don't have it yet
-                        let remove = cells.map(([k, con]) => con).every(con => con && con.indexOf(key) !== -1);
+                        let remove = cells.every(([k, con]) => con && con.indexOf(key) !== -1);
 
                         // Third step: actually add or remove the new digit
                         for (var [k, con] of cells) {
