@@ -7084,6 +7084,8 @@ class Puzzle {
         var con, conA;
         var arrow, mode;
         var str_num = "1234567890";
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+        let submode = this.mode[this.mode.qa][edit_mode];
 
         // If ZXCV is disabled
         if (!UserSettings.shortcuts_enabled) {
@@ -7094,8 +7096,7 @@ class Puzzle {
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
         // if (str_replace[0].indexOf(key) != -1) { key = str_replace[1][str_replace[0].indexOf(key)]; }
-        if (this.mode[this.mode.qa].edit_mode === "number") {
-            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode];
+        if (edit_mode === "number") {
             if (this.selection.length === 1) {
                 let clean_flag = this.check_neighbors(this.selection[0]);
                 if (!clean_flag) {
@@ -7240,7 +7241,7 @@ class Puzzle {
                         break;
                 }
             }
-        } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
+        } else if (edit_mode === "symbol") {
             if (str_num.indexOf(key) != -1) {
                 const symbolname = this.mode[this.mode.qa].symbol[0];
                 if (this[this.mode.qa].symbol[this.cursol]) {
@@ -7253,14 +7254,14 @@ class Puzzle {
                 } else {
                     con = "";
                 }
-                this.record("symbol", this.cursol);
 
                 if (this.onoff_symbolmode_list[symbolname]) { // List in ON-OFF mode
                     number = this.onofftext(this.onoff_symbolmode_list[symbolname], key, con);
                 } else {
                     number = parseInt(key, 10);
                 }
-                this[this.mode.qa].symbol[this.cursol] = [number, symbolname, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
+                this.record("symbol", this.cursol);
+                this[this.mode.qa].symbol[this.cursol] = [number, symbolname, submode[1]];
                 if (UserSettings.custom_colors_on) {
                     let cc = this.get_customcolor();
                     if (!cc || tinycolor.equals(cc, CustomColor.default_symbol_color(symbolname))) {
@@ -7271,8 +7272,8 @@ class Puzzle {
                 }
                 this.record_replay("symbol", this.cursol);
             }
-        } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
-            switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+        } else if (edit_mode === "sudoku") {
+            switch (submode[0]) {
                 case "1": // Normal mode
                     if (this.selection.length > 0 && str_all.indexOf(key) != -1) {
                         if (this.selection.length === 1) {
@@ -7372,7 +7373,7 @@ class Puzzle {
                                 if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === 1 && this[this.mode.qa].number[k][0] === key) {
                                     delete this[this.mode.qa].number[k];
                                 } else {
-                                    this[this.mode.qa].number[k] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "1"]; // Normal submode is 1
+                                    this[this.mode.qa].number[k] = [key, submode[1], "1"]; // Normal submode is 1
                                 }
                                 this.record_replay("number", k, this.undoredo_counter);
                             }
@@ -7461,44 +7462,30 @@ class Puzzle {
 
                                         // remove the last digit from old location
                                         if ((con.length + 1) < (5 - j_start)) {
-                                            this.record("numberS", corner_cursor + con.length + j_start, this.undoredo_counter);
-                                            delete this[this.mode.qa].numberS[corner_cursor + con.length + j_start];
-                                            this.record_replay("numberS", corner_cursor + con.length + j_start, this.undoredo_counter);
+                                            this.remove_value("numberS", corner_cursor + con.length + j_start);
                                         } else {
-                                            this.record("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
-                                            delete this[this.mode.qa].numberS[side_cursor + con.length - 4 + 2 * j_start];
-                                            this.record_replay("numberS", side_cursor + con.length - 4 + 2 * j_start, this.undoredo_counter);
+                                            this.remove_value("numberS", side_cursor + con.length - 4 + 2 * j_start);
                                         }
                                         if (con) {
                                             if (con.length < (5 - j_start)) {
                                                 for (var j = j_start; j < (con.length + j_start); j++) {
-                                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                                    this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                                    this.record_replay("numberS", corner_cursor + j, this.undoredo_counter);
+                                                    this.set_value("numberS", corner_cursor + j, [con[j - j_start], submode[1]]);
                                                 }
                                             } else {
                                                 for (var j = j_start; j < 4; j++) {
-                                                    this.record("numberS", corner_cursor + j, this.undoredo_counter);
-                                                    this[this.mode.qa].numberS[corner_cursor + j] = [con[j - j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                                    this.record_replay("numberS", corner_cursor + j, this.undoredo_counter);
+                                                    this.set_value("numberS", corner_cursor + j, [con[j - j_start], submode[1]]);
                                                 }
                                                 for (var j = 4 + j_start; j < (con.length + 2 * j_start); j++) {
-                                                    this.record("numberS", side_cursor + j - 4, this.undoredo_counter);
-                                                    this[this.mode.qa].numberS[side_cursor + j - 4] = [con[j - 2 * j_start], this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                                    this.record_replay("numberS", side_cursor + j - 4, this.undoredo_counter);
+                                                    this.set_value("numberS", side_cursor + j - 4, [con[j - 2 * j_start], submode[1]]);
                                                 }
                                             }
                                         }
                                     } else if (con.length < length_limit) { // If digit doesnt exist in the cell
                                         con += key;
                                         if (con.length < (5 - j_start)) {
-                                            this.record("numberS", corner_cursor + con.length - 1 + j_start, this.undoredo_counter);
-                                            this[this.mode.qa].numberS[corner_cursor + con.length - 1 + j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            this.record_replay("numberS", corner_cursor + con.length - 1 + j_start, this.undoredo_counter);
+                                            this.set_value("numberS", corner_cursor + con.length - 1 + j_start, [key, submode[1]]);
                                         } else {
-                                            this.record("numberS", side_cursor + con.length - 5 + 2 * j_start, this.undoredo_counter);
-                                            this[this.mode.qa].numberS[side_cursor + con.length - 5 + 2 * j_start] = [key, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1]];
-                                            this.record_replay("numberS", side_cursor + con.length - 5 + 2 * j_start, this.undoredo_counter);
+                                            this.set_value("numberS", side_cursor + con.length - 5 + 2 * j_start, [key, submode[1]]);
                                         }
                                     }
                                 }
@@ -7567,7 +7554,6 @@ class Puzzle {
                         // Third step: actually add or remove the new digit
                         for (var [k, con] of cells) {
                             number = "";
-                            this.record("number", k, this.undoredo_counter);
 
                             // Check if we're removing, or if not, if the digit isn't already there
                             if (remove)
@@ -7583,22 +7569,16 @@ class Puzzle {
                             if (number !== "") {
                                 // S submode is 5, M submode is 6
                                 // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                if (UserSettings.sudoku_centre_size === 1) {
-                                    if (number.length > 5) {
-                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
-                                    } else {
-                                        this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                    }
-                                } else if (UserSettings.sudoku_centre_size === 2) { // all large
-                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                } else if (UserSettings.sudoku_centre_size === 3) { // all small
-                                    this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
+                                let size = "6";
+                                if ((UserSettings.sudoku_centre_size === 1 && number.length > 5) ||
+                                        UserSettings.sudoku_centre_size === 3) { // all small
+                                    size = "5";
                                 }
-                            } else {
-                                delete this[this.mode.qa].number[k];
-                            }
 
-                            this.record_replay("number", k, this.undoredo_counter);
+                                this.set_value("number", k, [number, submode[1], size]);
+                            } else {
+                                this.remove_value("number", k);
+                            }
                         }
                     }
                     break;
