@@ -6543,9 +6543,9 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
                 }
             }
+            this.redraw();
         } else {
             while (undocounter !== 0) {
                 var a = this.pu_a.command_undo.pop(); /*a[0]:list_name,a[1]:point_number,a[2]:value, a[4]: groupindex (optional)*/
@@ -6665,9 +6665,9 @@ class Puzzle {
                             this.pu_a_col.command_replay.push(a_col_replay);
                         }
                     }
-                    this.redraw();
                 }
             }
+            this.redraw();
         }
     }
 
@@ -6774,9 +6774,9 @@ class Puzzle {
                             }
                         }
                     }
-                    this.redraw();
                 }
             }
+            this.redraw();
         } else {
             while (redocounter !== 0) {
                 var a = this.pu_a.command_redo.pop();
@@ -6885,10 +6885,9 @@ class Puzzle {
                             this.pu_a_col.command_replay.push(a_col);
                         }
                     }
-
-                    this.redraw();
                 }
             }
+            this.redraw();
         }
     }
 
