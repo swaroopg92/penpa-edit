@@ -373,7 +373,8 @@ class Puzzle_tri extends Puzzle {
                 c = b[3];
                 break;
         }
-        if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+        if (edit_mode === "number" || edit_mode === "sudoku" || edit_mode === "symbol") {
             if (parseInt(this.cursol / (this.n0) ** 2) === 1) {
                 switch (c) {
                     case 0:
@@ -410,6 +411,14 @@ class Puzzle_tri extends Puzzle {
                 }
             }
         }
+
+        if (!ctrl_key) {
+            this.selection = [];
+        }
+        if (!this.selection.includes(this.cursol)) {
+            this.selection.push(this.cursol);
+        }
+
         this.redraw();
     }
 
