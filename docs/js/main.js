@@ -530,6 +530,15 @@ onload = function() {
             }
         }
 
+        // Map ctrl-shift-z to ctrl-y
+        if (isCtrlKeyHeld(e) && isShiftKeyHeld(e) && !isAltKeyHeld(e) && key === "z") {
+            if (!pu.undoredo_disable) {
+                pu.redo();
+            }
+            e.returnValue = false;
+            return;
+        }
+
         if (isCtrlKeyHeld(e) && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
             if (!isCtrlKeyPressed(key)) {
                 if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
