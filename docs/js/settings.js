@@ -385,6 +385,9 @@ const UserSettings = {
     _shorten_links: false,
     set shorten_links(newValue) {
         if (newValue === undefined) { newValue = false; }
+        // [ZW] Not sure how this is happening but a value of "false" can get stored in
+        // the settings which is interpreted as true
+        if (newValue === "false") { newValue = false; }
         this._shorten_links = newValue;
 
         document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;
