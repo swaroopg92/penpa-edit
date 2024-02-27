@@ -2087,7 +2087,7 @@ onload = function() {
             }
         } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
             if (0 <= n && n <= 27) {
-                pu.key_number(panel_pu.cont[n].toString());
+                pu.key_number(panel_pu.cont[n].toString(), true);
             } else if (n === 28) {
                 pu.key_number(" ");
             } else if (n >= 29) {
@@ -2095,13 +2095,13 @@ onload = function() {
             }
         } else if (panel_pu.panelmode === "key_symbol") {
             if (panel_pu.cont[n] && panel_pu.cont[n] != " ") {
-                pu.key_number(panel_pu.cont[n]);
+                pu.key_number(panel_pu.cont[n], true);
             } else if (panel_pu.cont[n] === " ") {
                 pu.key_space();
             }
         } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
             if (panel_pu.cont[n] && panel_pu.cont[n] != "　") {
-                pu.key_number(panel_pu.cont[n]);
+                pu.key_number(panel_pu.cont[n], true);
             } else if (panel_pu.cont[n] === "　") {
                 pu.key_space();
             }

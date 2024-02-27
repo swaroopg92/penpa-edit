@@ -7079,7 +7079,7 @@ class Puzzle {
     //
     /////////////////////////////
 
-    key_number(key) {
+    key_number(key, force_no_shortcut = false) {
         var number;
         var con, conA;
         var arrow, mode;
@@ -7088,7 +7088,7 @@ class Puzzle {
         let submode = this.mode[this.mode.qa][edit_mode];
 
         // If ZXCV is disabled
-        if (!UserSettings.shortcuts_enabled) {
+        if (!UserSettings.shortcuts_enabled || force_no_shortcut) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         } else {
             var str_all = "1234567890qwertuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
