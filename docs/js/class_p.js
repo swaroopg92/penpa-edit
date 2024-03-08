@@ -1708,6 +1708,19 @@ class Puzzle {
         return puzzle_data;
     }
 
+    maketext_baseurl() {
+        // Replace base URL with canonical github url if shortening, so links are still valid externally
+        if (UserSettings.shorten_links &&
+                (location.href.startsWith('http://localhost') || location.href.startsWith('file://')))
+            return 'https://swaroopg92.github.io/penpa-edit/';
+
+        // This is to account for old links and new links together
+        else if (location.hash)
+            return location.href.split('#')[0];
+        else
+            return location.href.split('?')[0];
+    }
+
     maketext() {
         var text = this.__export_text_shared(false);
 
@@ -1778,13 +1791,7 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
 
         var ba = this.__export_finalize_shared(text);
 
@@ -1879,13 +1886,7 @@ class Puzzle {
 
         var ba = encrypt_data(text);
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
 
         let solution_clone;
         // if solution exist then copy the solution as well
@@ -1949,13 +1950,8 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
+
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=solve&p=" + ba;
@@ -1998,13 +1994,8 @@ class Puzzle {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
         }
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
+
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=solve&p=" + ba;
