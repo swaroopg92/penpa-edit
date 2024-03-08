@@ -7010,6 +7010,7 @@ class Puzzle {
 
         var seen_lines = {};
         var seen_edges = {};
+        var seen_vertices = {};
 
         for (var k of this.selection) {
             let data = rel_coords(k);
@@ -7065,7 +7066,7 @@ class Puzzle {
                     data[prop] = puzzle[prop][k];
             }
 
-            // Also copy corner/side marks
+            // Also copy corner/side/vertex marks
             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
             var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
             for (var i = 0; i < 4; i++) {
@@ -7073,6 +7074,11 @@ class Puzzle {
                     data['corner' + i] = puzzle['numberS'][corner_cursor + i];
                 if (puzzle['numberS'][side_cursor + i] !== undefined)
                     data['side' + i] = puzzle['numberS'][side_cursor + i];
+                let v = this.point[k].surround[i];
+                if (v !== undefined && !seen_vertices[v] && puzzle['number'][v]) {
+                    data['vertex' + i] = puzzle['number'][v];
+                    seen_vertices[v] = true;
+                }
             }
 
             clipboard.push(data);
@@ -7124,12 +7130,14 @@ class Puzzle {
             // Delete corner/side marks
             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
             var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-            let prop = 'numberS';
             for (var i = 0; i < 4; i++) {
-                if (puzzle[prop][corner_cursor + i] !== undefined)
-                    this.remove_value(prop, corner_cursor + i);
-                if (puzzle[prop][side_cursor + i] !== undefined)
-                    this.remove_value(prop, side_cursor + i);
+                if (puzzle['numberS'][corner_cursor + i] !== undefined)
+                    this.remove_value('numberS', corner_cursor + i);
+                if (puzzle['numberS'][side_cursor + i] !== undefined)
+                    this.remove_value('numberS', side_cursor + i);
+                let v = this.point[k].surround[i];
+                if (puzzle['number'][v] !== undefined)
+                    this.remove_value('number', v);
             }
         }
 
@@ -7197,12 +7205,13 @@ class Puzzle {
             // Also copy corner/side marks
             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
             var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-            let prop = 'numberS';
             for (var i = 0; i < 4; i++) {
                 if (data['corner' + i] !== undefined)
-                    this.set_value(prop, corner_cursor + i, data['corner' + i]);
+                    this.set_value('numberS', corner_cursor + i, data['corner' + i]);
                 if (data['side' + i] !== undefined)
-                    this.set_value(prop, side_cursor + i, data['side' + i]);
+                    this.set_value('numberS', side_cursor + i, data['side' + i]);
+                if (data['vertex' + i] !== undefined)
+                    this.set_value('number', this.point[k].surround[i], data['vertex' + i]);
             }
         }
         this.redraw();
