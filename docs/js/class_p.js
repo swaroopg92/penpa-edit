@@ -7031,14 +7031,13 @@ class Puzzle {
                     // For lines, look at any lines from this cell to adjacent cells
                     for (var adj of [...this.point[k].adjacent, ...this.point[k].adjacent_dia]) {
                         let key = this.line_key(k, adj);
-                        if (seen_lines[key])
-                            continue;
-                        if (puzzle[prop][key]) {
+                        if (!seen_lines[key] && puzzle[prop][key]) {
                             lines.push([rel_coords(adj), puzzle[prop][key], puzzle_col[prop][key]]);
                             seen_lines[key] = true;
                         }
                     }
-                    data[prop] = lines;
+                    if (lines.length > 0)
+                        data[prop] = lines;
                 } else if (prop === "lineE") {
                     let edges = [];
                     // For edges, look only at this cell's edges, and number them with the indices
@@ -7051,16 +7050,15 @@ class Puzzle {
                                 continue;
                             let adj2 = this.point[k].surround[j];
                             let key = this.line_key(adj, adj2);
-                            if (seen_edges[key])
-                                continue;
-                            if (puzzle[prop][key]) {
+                            if (!seen_edges[key] && puzzle[prop][key]) {
                                 edges.push([[i, j], puzzle[prop][key], puzzle_col[prop][key]]);
                                 seen_edges[key] = true;
                             }
                         }
                     }
-                    data[prop] = edges;
-                } else
+                    if (edges.length > 0)
+                        data[prop] = edges;
+                } else if (puzzle[prop][k] !== undefined)
                     data[prop] = puzzle[prop][k];
             }
 
@@ -7068,8 +7066,10 @@ class Puzzle {
             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
             var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
             for (var i = 0; i < 4; i++) {
-                data['corner' + i] = puzzle['numberS'][corner_cursor + i];
-                data['side' + i] = puzzle['numberS'][side_cursor + i];
+                if (puzzle['numberS'][corner_cursor + i] !== undefined)
+                    data['corner' + i] = puzzle['numberS'][corner_cursor + i];
+                if (puzzle['numberS'][side_cursor + i] !== undefined)
+                    data['side' + i] = puzzle['numberS'][side_cursor + i];
             }
 
             clipboard.push(data);
