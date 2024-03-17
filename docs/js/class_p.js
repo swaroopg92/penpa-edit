@@ -99,7 +99,7 @@ class Puzzle {
                 "special": ["thermo", ""],
                 "board": ["", ""],
                 "move": ["1", ""],
-                "combi": ["battleship", ""],
+                "combi": ["battleship", 3],
                 "sudoku": ["1", 1]
             },
             "pu_a": {
@@ -114,7 +114,7 @@ class Puzzle {
                 "special": ["thermo", ""],
                 "board": ["", ""],
                 "move": ["1", ""],
-                "combi": ["battleship", ""],
+                "combi": ["battleship", 3],
                 "sudoku": ["1", 9]
             }
         };
@@ -1379,6 +1379,28 @@ class Puzzle {
     subcombimode(mode) {
         this.mode[this.mode.qa].combi[0] = mode;
         document.getElementById("combimode_content").innerHTML = mode;
+
+        // Display line/edge style selector for appropriate modes
+        let line_style = 'none', edge_style = 'none';
+        if (mode === "linex" || mode === "lineox" || mode === "linedir" || mode === "yajilin" ||
+                mode === "rassisillai" || mode === "tents")
+            line_style = 'inline-block';
+        else if (mode === "edgex" || mode === "edgexoi")
+            edge_style = 'inline-block';
+        document.getElementById('style_line').style.display = line_style;
+        document.getElementById('style_lineE').style.display = edge_style;
+
+        // Set default style for line/edge for older puzzle data
+        if (this.mode[this.mode.qa].combi[1] === "") {
+            if (line_style !== 'none') {
+                this.mode[this.mode.qa].combi[1] = 3;
+                this.stylemode_check('st_line3');
+            } else if (edge_style !== 'none') {
+                this.mode[this.mode.qa].combi[1] = 3;
+                this.stylemode_check('st_edge3');
+            }
+        }
+
         if (UserSettings.custom_colors_on) {
             // set the custom color to default
             let cc = CustomColor.default_combimode_color(mode);
@@ -10386,7 +10408,7 @@ class Puzzle {
         if (this.drawing_mode != -1 &&
             this.mouse_click !== 2 &&
             this.point[num].type === 0) {
-            var line_style = 3;
+            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                 array = "line";
@@ -10421,7 +10443,7 @@ class Puzzle {
 
     re_combi_lineox_move(num) {
         if (this.drawing_mode != -1 && this.point[num].type === 0) {
-            var line_style = 3;
+            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                 array = "line";
@@ -10524,13 +10546,13 @@ class Puzzle {
 
         if (this.drawing_mode != -1) {
             // Left click and drag or touchdown and drag
-            let line_style = 3;
+            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                 const array = "line";
                 var key = this.line_key(num, this.last);
 
                 // Only allow line delete if not in right click mode
-                let only_arrow = (this[this.mode.qa][array][key] !== undefined && this.mouse_click_last === 2);
+                let only_arrow = (this[this.mode.qa][array][key] === line_style && this.mouse_click_last === 2);
 
                 let dir = this.point[this.last].adjacent.indexOf(parseInt(num));
                 dir = dir_remap[dir];
@@ -10729,7 +10751,7 @@ class Puzzle {
 
     re_combi_edgexoi_move(num) {
         if (this.drawing_mode != -1 && this.point[num].type === 1) {
-            var line_style = 3;
+            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                 array = "lineE";
@@ -10783,7 +10805,7 @@ class Puzzle {
         if (this.drawing_mode != -1 &&
             this.mouse_click != 2 &&
             this.point[num].type === 1) {
-            var line_style = 3;
+            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                 array = "lineE";
@@ -10869,7 +10891,7 @@ class Puzzle {
                     this.record_replay("symbol", num);
                 }
             } else {
-                var line_style = 3;
+                let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
                 var array;
                 if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                     array = "line";
@@ -11002,7 +11024,7 @@ class Puzzle {
                     this.record_replay("surface", num);
                 }
             } else {
-                var line_style = 3;
+                let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
                 var array;
                 if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                     array = "line";
@@ -11869,7 +11891,7 @@ class Puzzle {
 
     re_combi_tents_move(num) {
         if (this.drawing_mode != -1 && this.point[num].type === 0) {
-            var line_style = 3;
+            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             var array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
                 array = "line";
