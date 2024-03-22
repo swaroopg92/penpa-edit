@@ -46,7 +46,7 @@
     <!-- End Google Tag Manager -->
     <!-- STYLES -->
     <!-- Online styles -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="./css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
         var ver = "3.1.3"; // Also defined in class_p.js
@@ -88,7 +88,9 @@
             "./js/libs/spectrum.js",
             "./js/libs/canvas2svg.js",
             "./js/libs/select2.full.js",
-            "./js/libs/gif.js"
+            "./js/libs/gif.js",
+            "./js/libs/sweetalert2@11",
+            "./js/libs/md5.min.js",
         ];
         for (let i = 0; i < library_sources.length; i++) {
             let script = document.createElement("script");
@@ -98,9 +100,6 @@
             document.head.appendChild(script);
         }
     </script>
-    <!-- Online libs -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
