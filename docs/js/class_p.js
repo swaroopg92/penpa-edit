@@ -6991,19 +6991,63 @@ class Puzzle {
 
         let puzzle = this[this.mode.qa];
         let puzzle_col = this[this.mode.qa + '_col'];
-        let edit_mode = this.mode[this.mode.qa].edit_mode;
 
         // Sort the selection both to get the minimum element and so the plain-text clipboard
-        // values are in a sane order
-        this.selection.sort((a,b) => a >= b);
+        // values are in a sane order. Also create a specialized function for this grid type
+        // to convert an absolute point index into coordinates relative to the minimum.
 
-        let base_point = this.point[this.selection[0]];
-        let [base_x, base_y] = base_point.index;
+        let base_x, base_y, rel_coords;
 
-        const rel_coords = (p) => {
-            let [x, y] = this.point[p].index;
-            return {x: x - base_x, y: y - base_y};
+        // Triangular grid
+        if (this.gridtype === "tri") {
+            this.selection.sort((a,b) => {
+                a = this.point[a].index;
+                b = this.point[b].index;
+                if (a[1] == b[1]) {
+                    if (a[0] == b[0])
+                        return a[2] >= b[2];
+                    return a[0] > b[0];
+                }
+                return a[1] > b[1];
+            });
+            let base_point = this.point[this.selection[0]];
+            [base_x, base_y, _] = base_point.index;
+
+            rel_coords = (p) => {
+                let [x, y, t] = this.point[p].index;
+                // Compensate for every other row being offset, also store if this triangle
+                // is pointing up or down
+                let offset = (y - base_y) & y & 1;
+                return {x: x - base_x + offset, y: y - base_y, t: t};
+            }
         }
+        // Hexagonal grid
+        else if (this.gridtype === "hex") {
+            this.selection.sort((a,b) => a >= b);
+            let base_point = this.point[this.selection[0]];
+            [base_x, base_y] = base_point.index;
+
+            rel_coords = (p) => {
+                let [x, y] = this.point[p].index;
+                // Compensate for every other row being offset
+                let offset = (y - base_y) & y & 1;
+                return {x: x - base_x + offset, y: y - base_y};
+            }
+        }
+        // Square grid
+        else if (this.grid_is_square()) {
+            this.selection.sort((a,b) => a >= b);
+            let base_point = this.point[this.selection[0]];
+            [base_x, base_y] = base_point.index;
+
+            rel_coords = (p) => {
+                let [x, y] = this.point[p].index;
+                return {x: x - base_x, y: y - base_y};
+            }
+        }
+        // Unsupported grid type
+        else
+            return false;
 
         var plain_clipboard = "";
         var clipboard = [];
@@ -7067,22 +7111,29 @@ class Puzzle {
             }
 
             // Also copy corner/side/vertex marks
-            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-            for (var i = 0; i < 4; i++) {
-                if (puzzle['numberS'][corner_cursor + i] !== undefined)
-                    data['corner' + i] = puzzle['numberS'][corner_cursor + i];
-                if (puzzle['numberS'][side_cursor + i] !== undefined)
-                    data['side' + i] = puzzle['numberS'][side_cursor + i];
-                let v = this.point[k].surround[i];
-                if (v !== undefined && !seen_vertices[v] && puzzle['number'][v]) {
-                    data['vertex' + i] = puzzle['number'][v];
-                    seen_vertices[v] = true;
+            if (this.grid_is_square()) {
+                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                for (var i = 0; i < 4; i++) {
+                    if (puzzle['numberS'][corner_cursor + i] !== undefined)
+                        data['corner' + i] = puzzle['numberS'][corner_cursor + i];
+                    if (puzzle['numberS'][side_cursor + i] !== undefined)
+                        data['side' + i] = puzzle['numberS'][side_cursor + i];
+                    let v = this.point[k].surround[i];
+                    if (v !== undefined && !seen_vertices[v] && puzzle['number'][v]) {
+                        data['vertex' + i] = puzzle['number'][v];
+                        seen_vertices[v] = true;
+                    }
                 }
             }
 
             clipboard.push(data);
         }
+
+        clipboard = {
+            gridtype: this.gridtype,
+            items: clipboard,
+        };
 
         ev.clipboardData.setData("text/plain", plain_clipboard);
         ev.clipboardData.setData("application/penpa-data", JSON.stringify(clipboard));
@@ -7128,16 +7179,18 @@ class Puzzle {
             }
 
             // Delete corner/side marks
-            var corner_cursor = 4 * (k + this.nx0 * this.ny0);
-            var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
-            for (var i = 0; i < 4; i++) {
-                if (puzzle['numberS'][corner_cursor + i] !== undefined)
-                    this.remove_value('numberS', corner_cursor + i);
-                if (puzzle['numberS'][side_cursor + i] !== undefined)
-                    this.remove_value('numberS', side_cursor + i);
-                let v = this.point[k].surround[i];
-                if (puzzle['number'][v] !== undefined)
-                    this.remove_value('number', v);
+            if (this.grid_is_square()) {
+                var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
+                for (var i = 0; i < 4; i++) {
+                    if (puzzle['numberS'][corner_cursor + i] !== undefined)
+                        this.remove_value('numberS', corner_cursor + i);
+                    if (puzzle['numberS'][side_cursor + i] !== undefined)
+                        this.remove_value('numberS', side_cursor + i);
+                    let v = this.point[k].surround[i];
+                    if (puzzle['number'][v] !== undefined)
+                        this.remove_value('number', v);
+                }
             }
         }
 
@@ -7154,31 +7207,58 @@ class Puzzle {
         if (this.selection.length === 0)
             return false;
 
-        let puzzle = this[this.mode.qa];
-        let [base_x, base_y] = this.point[Math.min(...this.selection)].index;
-
-        const index = (x, y) => this.nx0 * y + x;
-
         // Pull data from the clipboard
         // TODO: perhaps handle text sanely from other sources?
         let clipboard_data = ev.clipboardData.getData("application/penpa-data");
         if (clipboard_data === "")
             return;
-        let paste_data = JSON.parse(clipboard_data);
+        clipboard_data = JSON.parse(clipboard_data);
+        // Sanity check that the grid type the data was copied from matches up
+        if (clipboard_data.gridtype !== this.gridtype)
+            return;
+
+        let [base_x, base_y] = this.point[Math.min(...this.selection)].index;
+
+        // Create an indexing function for this specific grid type, to convert relative (x, y)
+        // coordinates into an absolute point index
+        let index = null;
+        if (this.gridtype === "tri")
+            // Compensate both for every other row being offset, and for there being two sets of
+            // indices, one for each of upward- and downward-pointing triangles
+            index = (x, y, data) => ((this.n0 ** 2 * (2 - data.t)) +
+                    (this.n0 * y + x - ((y - base_y) & y & 1)));
+        else if (this.gridtype === "hex")
+            // Compensate for every other row being offset
+            index = (x, y) => (this.nx * 3 + 1) * y + x - ((y - base_y) & y & 1);
+        else if (this.grid_is_square())
+            index = (x, y) => this.nx0 * y + x;
 
         this.undoredo_counter++;
 
         // Insert all data items into the grid relative to the base cell
-        for (var data of paste_data) {
+        for (var data of clipboard_data.items) {
             let {x, y} = data;
 
             x += base_x;
             y += base_y;
 
-            if (x < 2 || x >= this.nx0 - 2 || y < 2 || y >= this.ny0 - 2)
-                continue;
+            // Check for this cell being out of bounds in this particular grid type
+            if (this.gridtype === "tri") {
+                if (x < 2 || x >= this.n0 - 2 || y < 2 || y >= this.n0 - 2)
+                    continue;
+            } else if (this.gridtype === "hex") {
+                let n0 = this.nx * 3 + 1;
+                if (x < 1 || x >= n0 - 1 || y < 1 || y >= n0 - 1)
+                    continue;
+            } else if (this.grid_is_square()) {
+                if (x < 2 || x >= this.nx0 - 2 || y < 2 || y >= this.ny0 - 2)
+                    continue;
+            }
 
-            let k = index(x, y);
+            let k = index(x, y, data);
+            if (!this.point[k].use)
+                continue
+
             for (let prop of COPY_PROPS) {
                 if (data[prop] === undefined)
                     continue;
@@ -7186,7 +7266,7 @@ class Puzzle {
                 if (prop === "line") {
                     for (var [adj, line_data, color] of data[prop]) {
                         let x2 = adj.x + base_x, y2 = adj.y + base_y;
-                        let key = this.line_key(k, index(x2, y2));
+                        let key = this.line_key(k, index(x2, y2, adj));
 
                         this.set_value(prop, key, line_data, color);
                     }

@@ -39,6 +39,7 @@ class Puzzle_hex extends Puzzle {
         var n = this.nx * 3 + 1;
         var adjacent, surround, type, use, neighbor;
         var point = [];
+        const index = (x, y) => [x, y];
         //center
         type = 0;
         for (var j = 0; j < n; j++) {
@@ -47,7 +48,7 @@ class Puzzle_hex extends Puzzle {
                 adjacent = [k - n - 1 + j % 2, k - n + j % 2, k - 1, k + 1, k + n - 1 + j % 2, k + n + j % 2];
                 surround = [k + n ** 2 - n - 1 + j % 2, k + 2 * n ** 2 - n + j % 2, k + n ** 2 - n + j % 2, k + 2 * n ** 2 + 1, k + n ** 2, k + 2 * n ** 2];
                 neighbor = [k + 3 * n ** 2 - n + j % 2, k + 3 * n ** 2, k + 4 * n ** 2 - n - 1 + j % 2, k + 4 * n ** 2, k + 5 * n ** 2 - 1, k + 5 * n ** 2];
-                point[k] = new Point((i + (j % 2) * 0.5 - (1 + 0.5 * ((this.nx + 1) % 2))) * this.size, (j - 1) * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, neighbor);
+                point[k] = new Point((i + (j % 2) * 0.5 - (1 + 0.5 * ((this.nx + 1) % 2))) * this.size, (j - 1) * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
                 k++;
             }
         }

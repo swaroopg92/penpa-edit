@@ -37,6 +37,7 @@ class Puzzle_tri extends Puzzle {
         var n = this.n0;
         var adjacent, surround, type, use, neighbor;
         var point = [];
+        const index = (x, y, t) => [x, y, t];
         //center
         type = 1;
         for (var j = 0; j < n; j++) {
@@ -56,7 +57,7 @@ class Puzzle_tri extends Puzzle {
                 adjacent = [k + n ** 2, k + n ** 2 + 1, k + n ** 2 + n + j % 2];
                 surround = [k - n ** 2, k - n ** 2 + n - 1 + j % 2, k - n ** 2 + n + j % 2];
                 neighbor = [k + 2 * n ** 2, k + 3 * n ** 2, k + 4 * n ** 2 + n - 1 + j % 2];
-                point[k] = new Point(point[i + j * n].x, point[i + j * n].y + 2 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, neighbor);
+                point[k] = new Point(point[i + j * n].x, point[i + j * n].y + 2 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, neighbor, [], 0, index(i, j, 1));
                 k++;
             }
         }
@@ -66,7 +67,7 @@ class Puzzle_tri extends Puzzle {
                 adjacent = [k - n ** 2 - n - (j + 1) % 2, k - n ** 2 - 1, k - n ** 2];
                 surround = [k - 2 * n ** 2 - 1, k - 2 * n ** 2, k - 2 * n ** 2 + n - 1 + j % 2];
                 neighbor = [k + n ** 2, k + 2 * n ** 2 - 1, k + 3 * n ** 2 - 1];
-                point[k] = new Point(point[i + j * n].x - 0.5 * this.size, point[i + j * n].y + 1 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, neighbor);
+                point[k] = new Point(point[i + j * n].x - 0.5 * this.size, point[i + j * n].y + 1 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, neighbor, [], 0, index(i, j, 0));
                 k++;
             }
         }
