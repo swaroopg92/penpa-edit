@@ -167,6 +167,17 @@ const UserSettings = {
         return this._custom_colors_on;
     },
 
+    // Setting to ignore all
+    _ignore_line_style: false,
+    set ignore_line_style(newValue) {
+        this._ignore_line_style = newValue === "1" || newValue === "true" || newValue === true;
+        document.getElementById("ignore_line_style_opt").value = this._ignore_line_style ? "1" : "0";
+        this.attemptSave();
+    },
+    get ignore_line_style() {
+        return this._ignore_line_style;
+    },
+
     // This setting is for whether the user wants local storage to be used at all, ever
     _local_storage: true,
     set local_storage(newValue) {
@@ -390,6 +401,7 @@ const UserSettings = {
         'color_theme',
         'conflict_detection',
         'custom_colors_on',
+        'ignore_line_style',
         'local_storage',
         'mousemiddle_button',
         'quick_panel_button',

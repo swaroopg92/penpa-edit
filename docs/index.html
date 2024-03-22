@@ -1090,6 +1090,17 @@
                     <table id="answersetting">
                         <tr>
                             <td>
+                                <span><label id="sol_surface_exact_lb">Surface - Match exact colors:</label></span>
+                            </td>
+                            <td class="solcheck_show_and">
+                                <input type="checkbox" name="solution" id="sol_surface_exact" class="solcheck">
+                            </td>
+                            <td class="solcheck_show_or">
+                                <input type="checkbox" name="solution" id="sol_or_surface_exact" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <span><label id="sol_surface_lb">Shading - DG (Dark Grey), GR, LG, BL (Black):</label></span>
                             </td>
                             <td class="solcheck_show_and">
@@ -1112,7 +1123,15 @@
                         </tr>
                         <tr class="solcheck_show_and">
                             <td>
-                                <span><label id="sol_loopline_lb">Line - Green, Double:</label></span>
+                                <span><label id="sol_loopline_exact_lb">Line - Match exact styles:</label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_loopline_exact" class="solcheck">
+                            </td>
+                        </tr>
+                        <tr class="solcheck_show_and">
+                            <td>
+                                <span><label id="sol_loopline_lb">Line - Green, Double only:</label></span>
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_loopline" class="solcheck">
@@ -1128,10 +1147,26 @@
                         </tr>
                         <tr class="solcheck_show_or">
                             <td>
+                                <span><label id="sol_loopline_exact_lb">Line - Match exact styles:</label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_or_loopline_exact" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr class="solcheck_show_or">
+                            <td>
                                 <span><label id="sol_or_loopline_lb">Line - Green, Double:</label></span>
                             </td>
                             <td>
                                 <input type="checkbox" name="solution_or" id="sol_or_loopline" class="solcheck_or">
+                            </td>
+                        </tr>
+                        <tr class="solcheck_show_and">
+                            <td>
+                                <span><label id="sol_loopedge_exact_lb">Edge - Match exact styles:</label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_loopedge_exact" class="solcheck">
                             </td>
                         </tr>
                         <tr class="solcheck_show_and">
@@ -1148,6 +1183,14 @@
                             </td>
                             <td>
                                 <input type="checkbox" name="solution" id="sol_ignoreborder" class="solcheck">
+                            </td>
+                        </tr>
+                        <tr class="solcheck_show_or">
+                            <td>
+                                <span><label id="sol_loopedge_exact_lb">Edge - Match exact styles:</label></span>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="solution" id="sol_or_loopedge_exact" class="solcheck_or">
                             </td>
                         </tr>
                         <tr class="solcheck_show_or">
@@ -1576,6 +1619,17 @@
                                     <option value="1" selected="selected">ON</option>
                                     <option value="2">OFF (this puzzle)</option>
                                     <option value="3">OFF (all puzzles)</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Any color can match green line/edge in solution:</label>
+                            </td>
+                            <td>
+                                <select name="ignore_line_style" id="ignore_line_style_opt">
+                                    <option value="1">ON</option>
+                                    <option value="0" selected="selected">OFF</option>
                                 </select>
                             </td>
                         </tr>

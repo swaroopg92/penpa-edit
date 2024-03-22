@@ -2064,12 +2064,190 @@ class Puzzle {
         return obj;
     }
 
-    make_solution() {
+    get_surface_solution(surface_exact) {
+        let solution = [];
+        let pu = this.pu_a;
+        for (var i in pu.surface) {
+            // Exact surface colors
+            if (surface_exact) {
+                // Make the solution slightly smaller by adding multicolor directly into the parent array
+                if (Array.isArray(pu.surface[i]))
+                    solution.push([parseInt(i), ...pu.surface[i]]);
+                else
+                    solution.push([parseInt(i), pu.surface[i]]);
+                continue;
+            }
+            if (this.pu_q.surface[i]) {
+                // ignore the shading if already in problem mode
+            }
+            // 1 is DG, 8 is GR, 3 is LG, 4 is BL
+            else if (pu.surface[i] === 1 || pu.surface[i] === 8 || pu.surface[i] === 3 || pu.surface[i] === 4) {
+                solution.push(i);
+            }
+        }
+        return solution;
+    }
 
+    get_line_solution(line_ignore, line_exact) {
+        let pu = this.pu_a;
+        let solution = [];
+
+        // Make a helper function to add an individual line segment based on the options chosen
+        let check_line = (i, type) => {
+            let l = pu[type][i];
+
+            if (line_exact) {
+                solution.push(i + "," + l);
+                return;
+            }
+            // Ignore "given" line segments (which means ignoring a few specific styles
+            // of line and has nothing to do with given or not). [ZW] I don't understand the
+            // logic of this but it should probably stay for backwards compatibility.
+            if (line_ignore && l && this.ignored_line_types[l])
+                return;
+
+            // Look for green or double lines, or if the user has ignored styles,
+            // double or anything-but-double (making sure that this is an actual
+            // segment and not an X or something)
+            if (l === 3 || (UserSettings.ignore_line_style && l !== 30 && i.includes(',')))
+                solution.push(i + ",1");
+            else if (l === 30)
+                solution.push(i + ",2");
+        };
+
+        for (var i in pu.line) {
+            // Ignoring the half cells standred line marks
+            // [ZW] Not sure about the logic for this either, why is this only
+            // done if "ignore given line segments" is *not* checked?
+            if (!line_ignore) {
+                let cells = i.split(",");
+                if (this.cellsoutsideFrame.includes(parseInt(cells[0])) &&
+                    this.cellsoutsideFrame.includes(parseInt(cells[1]))) {
+                    continue;
+                }
+            }
+            check_line(i, 'line');
+        }
+
+        for (var i in pu.freeline)
+            check_line(i, 'freeline');
+
+        return solution;
+    }
+
+    get_edge_solution(edge_ignore, edge_exact) {
+        let pu = this.pu_a;
+        let solution = [];
+        // Make a helper function to add an individual line segment based on the options chosen
+        let check_edge = (i, type) => {
+            let l = pu[type][i];
+
+            if (edge_exact) {
+                solution.push(i + "," + l);
+                return;
+            }
+
+            if (edge_ignore) {
+                // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
+                if ((this.frame[i] && this.frame[i] === 2) ||
+                        (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
+                    return;
+            }
+
+            // Look for green or double edges, or if the user has ignored styles,
+            // double or anything-but-double (making sure that this is an actual
+            // segment and not an X or something)
+            if (l === 3 || (UserSettings.ignore_line_style && l !== 30 && i.includes(',')))
+                solution.push(i + ",1");
+            else if (l === 30)
+                solution.push(i + ",2");
+        };
+
+        for (var i in pu.lineE)
+            check_edge(i, 'lineE');
+
+        for (var i in pu.freelineE)
+            check_edge(i, 'freelineE');
+
+        let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
+        if (found && this.gridtype === 'square') {
+            // find out the grid position using the frame data
+            // Note this section of code will work only if thick border frame exists
+            if (typeof this.row_start == "undefined") {
+                // Find top left corner and bottom right corner
+                let topleft = 9999,
+                    bottomright = 0,
+                    numbers;
+                for (var i in this.frame) {
+                    if (i in this.pu_q.deletelineE) {
+                        continue;
+                    }
+                    numbers = i.split(",");
+                    if (topleft >= parseInt(numbers[0])) {
+                        topleft = parseInt(numbers[0]);
+                    }
+                    if (bottomright <= parseInt(numbers[1])) {
+                        bottomright = parseInt(numbers[1]);
+                    }
+                }
+                // finding row and column indices
+                let pointA, pointB;
+                pointA = topleft - (this.nx0 * this.ny0);
+                this.col_start = (pointA % this.nx0) - 1; //column
+                this.row_start = parseInt(pointA / this.nx0) - 1; //row
+                pointB = bottomright - (this.nx0 * this.ny0);
+                this.col_end = (pointB % this.nx0) - 1; //column
+                this.row_end = parseInt(pointB / this.nx0) - 1; //row
+            }
+
+            let present_cell, right_cell, down_cell;
+            for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
+                for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
+                    present_cell = i + j * (this.nx0);
+                    right_cell = present_cell + 1;
+                    down_cell = Math.max(...this.point[present_cell].adjacent);
+                    if (i != this.col_end + 1) {
+                        if (pu.surface[present_cell] &&
+                            pu.surface[right_cell] &&
+                            (pu.surface[present_cell] !== pu.surface[right_cell])) {
+                            let imp_edge = this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2];
+                            if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
+                                // ignore given edges
+                            } else {
+                                solution.push(imp_edge + ',1');
+                            }
+                        }
+                    }
+                    if (j != this.row_end + 1) {
+                        if (pu.surface[present_cell] &&
+                            pu.surface[down_cell] &&
+                            (pu.surface[present_cell] !== pu.surface[down_cell])) {
+                            let imp_edge = this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2];
+                            if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
+                                // ignore given edges
+                            } else {
+                                solution.push(imp_edge + ',1');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Remove duplicates
+        return [...new Set(solution)];
+    }
+
+    make_solution() {
         let checkall = this.checkall_status();
-        let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
 
         if (!this.multisolution) {
+            let surface_exact = document.getElementById("sol_surface_exact").checked;
+            let line_exact = document.getElementById("sol_loopline_exact").checked;
+            let edge_exact = document.getElementById("sol_loopedge_exact").checked;
+
+            let line_ignore = document.getElementById("sol_ignoreloopline").checked;
+            let edge_ignore = document.getElementById("sol_ignoreborder").checked;
+
             // 0 - shading
             // 1 - Line / FreeLine
             // 2 - Edge / FreeEdge
@@ -2087,20 +2265,11 @@ class Puzzle {
 
             var pu = "pu_a";
 
-            if (document.getElementById("sol_surface").checked === true || checkall) {
-                for (var i in this[pu].surface) {
-                    let pu_q = "pu_q";
-                    if (this[pu_q].surface[i] && (this[pu_q].surface[i] === 1 || this[pu_q].surface[i] === 8 || this[pu_q].surface[i] === 3 || this[pu_q].surface[i] === 4)) {
-                        // ignore the shading if already in problem mode
-                    } else {
-                        // 1 is DG, 8 is GR, 3 is LG, 4 is BL
-                        if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
-                            sol[0].push(i);
-                        }
-                    }
-                }
+            if (document.getElementById("sol_surface").checked === true || surface_exact || checkall) {
+                sol[0] = this.get_surface_solution(surface_exact);
             }
 
+            // Why on earth is this put in the same list as the surface information?
             if (document.getElementById("sol_square").checked === true || checkall) {
                 for (var i in this[pu].symbol) {
                     if (this[pu].symbol[i][0] === 2 && this[pu].symbol[i][1] === "square_LL") {
@@ -2112,181 +2281,20 @@ class Puzzle {
             }
 
             if (document.getElementById("sol_loopline").checked === true ||
-                document.getElementById("sol_ignoreloopline").checked === true ||
-                checkall) {
-                if (document.getElementById("sol_ignoreloopline").checked === true) {
-                    for (var i in this[pu].line) {
-                        if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
-                            // Ignore the line
-                        } else {
-                            if (this[pu].line[i] === 3) {
-                                sol[1].push(i + ",1");
-                            } else if (this[pu].line[i] === 30) {
-                                sol[1].push(i + ",2");
-                            }
-                        }
-                    }
-                } else {
-                    for (var i in this[pu].line) {
-                        // Ignoring the half cells standred line marks
-                        let cells = i.split(",");
-                        if (this.cellsoutsideFrame.includes(parseInt(cells[0])) &&
-                            this.cellsoutsideFrame.includes(parseInt(cells[1]))) {
-                            continue;
-                        }
-                        if (this[pu].line[i] === 3) {
-                            sol[1].push(i + ",1");
-                        } else if (this[pu].line[i] === 30) {
-                            sol[1].push(i + ",2");
-                        }
-                    }
-                }
-
-                if (document.getElementById("sol_ignoreloopline").checked === true) {
-                    for (var i in this[pu].freeline) {
-                        if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
-                            // Ignore the line
-                        } else {
-                            if (this[pu].freeline[i] === 3) {
-                                sol[1].push(i + ",1");
-                            } else if (this[pu].freeline[i] === 30) {
-                                sol[1].push(i + ",2");
-                            }
-                        }
-                    }
-                } else {
-                    for (var i in this[pu].freeline) {
-                        if (this[pu].freeline[i] === 3) {
-                            sol[1].push(i + ",1");
-                        } else if (this[pu].freeline[i] === 30) {
-                            sol[1].push(i + ",2");
-                        }
-                    }
-                }
+                    line_exact || line_ignore || checkall) {
+                sol[1] = this.get_line_solution(line_ignore, line_exact);
             }
 
             if (document.getElementById("sol_loopedge").checked === true ||
-                document.getElementById("sol_ignoreborder").checked === true ||
-                checkall) {
-
+                    edge_exact || edge_ignore || checkall) {
                 // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
                 if (this.version_gt(2, 26, 20)) {
-                    if (!document.getElementById("sol_ignoreborder").checked && !checkall) {
-                        document.getElementById("sol_ignoreborder").checked = true;
-                    }
-                }
-                if (document.getElementById("sol_ignoreborder").checked === true) {
-                    for (var i in this[pu].lineE) {
-                        if ((this.frame[i] && this.frame[i] === 2) ||
-                            (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
-                            // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
-                        } else {
-                            if (this[pu].lineE[i] === 3) {
-                                sol[2].push(i + ",1");
-                            } else if (this[pu].lineE[i] === 30) {
-                                sol[2].push(i + ",2");
-                            }
-                        }
-                    }
-                } else {
-                    for (var i in this[pu].lineE) {
-                        if (this[pu].lineE[i] === 3) {
-                            sol[2].push(i + ",1");
-                        } else if (this[pu].lineE[i] === 30) {
-                            sol[2].push(i + ",2");
-                        }
+                    if (!edge_ignore && !checkall) {
+                        edge_ignore = true;
                     }
                 }
 
-                if (document.getElementById("sol_ignoreborder").checked === true) {
-                    for (var i in this[pu].freelineE) {
-                        if ((this.frame[i] && this.frame[i] === 2) ||
-                            (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
-                            // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
-                        } else {
-                            if (this[pu].freelineE[i] === 3) {
-                                sol[2].push(i + ",1");
-                            } else if (this[pu].freelineE[i] === 30) {
-                                sol[2].push(i + ",2");
-                            }
-                        }
-                    }
-                } else {
-                    for (var i in this[pu].freelineE) {
-                        if (this[pu].freelineE[i] === 3) {
-                            sol[2].push(i + ",1");
-                        } else if (this[pu].freelineE[i] === 30) {
-                            sol[2].push(i + ",2");
-                        }
-                    }
-                }
-
-                let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
-                if (found && this.gridtype === 'square') {
-                    // find out the grid position using the frame data
-                    // Note this section of code will work only if thick border frame exists
-                    if (typeof this.row_start == "undefined") {
-                        // Find top left corner and bottom right corner
-                        let topleft = 9999,
-                            bottomright = 0,
-                            numbers;
-                        for (var i in this.frame) {
-                            if (i in this.pu_q.deletelineE) {
-                                continue;
-                            }
-                            numbers = i.split(",");
-                            if (topleft >= parseInt(numbers[0])) {
-                                topleft = parseInt(numbers[0]);
-                            }
-                            if (bottomright <= parseInt(numbers[1])) {
-                                bottomright = parseInt(numbers[1]);
-                            }
-                        }
-                        // finding row and column indices
-                        let pointA, pointB;
-                        pointA = topleft - (this.nx0 * this.ny0);
-                        this.col_start = (pointA % this.nx0) - 1; //column
-                        this.row_start = parseInt(pointA / this.nx0) - 1; //row
-                        pointB = bottomright - (this.nx0 * this.ny0);
-                        this.col_end = (pointB % this.nx0) - 1; //column
-                        this.row_end = parseInt(pointB / this.nx0) - 1; //row
-                    }
-
-                    let present_cell, right_cell, down_cell;
-                    for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
-                        for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
-                            present_cell = i + j * (this.nx0);
-                            right_cell = present_cell + 1;
-                            down_cell = Math.max(...this.point[present_cell].adjacent);
-                            if (i != this.col_end + 1) {
-                                if (this[pu].surface[present_cell] &&
-                                    this[pu].surface[right_cell] &&
-                                    (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
-                                    let imp_edge = this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2];
-                                    if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
-                                        // ignore given edges
-                                    } else {
-                                        sol[2].push(imp_edge + ',1');
-                                    }
-                                }
-                            }
-                            if (j != this.row_end + 1) {
-                                if (this[pu].surface[present_cell] &&
-                                    this[pu].surface[down_cell] &&
-                                    (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
-                                    let imp_edge = this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2];
-                                    if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
-                                        // ignore given edges
-                                    } else {
-                                        sol[2].push(imp_edge + ',1');
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                let unique_sol2 = [...new Set(sol[2])];
-                sol[2] = unique_sol2;
+                sol[2] = this.get_edge_solution(edge_ignore, edge_exact);
             }
 
             if (document.getElementById("sol_wall").checked === true || checkall) {
@@ -2438,330 +2446,200 @@ class Puzzle {
             var pu = "pu_a";
             var sol_count = -1; // as list indexing starts at 0
 
+            // Find all checkboxes in the OR mode that are checked, and get the modes for each
+            // by slicing out the first 7 characters ("sol_or_")
+            let settingstatus_or = [...document.getElementById("answersetting").getElementsByClassName("solcheck_or")];
+            settingstatus_or = settingstatus_or.filter(c => c.checked).map(c => c.id.slice(7));
+
             // loop through and check which "OR" settings are selected
-            for (var m = 0; m < settingstatus_or.length; m++) {
-                if (settingstatus_or[m].checked) {
+            for (let sol_id of settingstatus_or) {
+                // incrementing solution count by 1
+                sol_count++;
 
-                    // incrementing solution count by 1
-                    sol_count++;
+                let temp_sol = [];
 
-                    // Extracting the checkbox id. First 7 chracters "sol_or_" are sliced.
-                    let sol_id = settingstatus_or[m].id.slice(7);
-
-                    let temp_sol = [];
-
-                    switch (sol_id) {
-                        case "surface":
-                            for (var i in this[pu].surface) {
-                                if (this["pu_q"].surface[i]) {
-                                    // ignore the shading if already in problem mode
-                                } else {
-                                    // 1 is DG, 8 is GR, 3 is LG, 4 is BL
-                                    if (this[pu].surface[i] === 1 || this[pu].surface[i] === 8 || this[pu].surface[i] === 3 || this[pu].surface[i] === 4) {
-                                        temp_sol.push(i);
+                switch (sol_id) {
+                    case "surface":
+                        temp_sol = this.get_surface_solution(false);
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "surface_exact":
+                        temp_sol = this.get_surface_solution(true);
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "number":
+                        for (var i in this[pu].number) {
+                            if (this["pu_q"].number[i] && this["pu_q"].number[i][1] === 1 && (this["pu_q"].number[i][2] === "1" || this["pu_q"].number[i][2] === "10")) {
+                                // (Black) and (Normal or L) in Problem mode then ignore
+                            } else {
+                                // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
+                                if (this[pu].number[i][2] === "7") {
+                                    // (Green or light blue or dark blue or red)
+                                    if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
+                                        var sum = 0,
+                                            a;
+                                        for (var j = 0; j < 10; j++) {
+                                            if (this[pu].number[i][0][j] === 1) {
+                                                sum += 1;
+                                                a = j + 1;
+                                            }
+                                        }
+                                        if (sum === 1) {
+                                            temp_sol.push(i + "," + a);
+                                        }
                                     }
-                                }
-                            }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "number":
-                            for (var i in this[pu].number) {
-                                if (this["pu_q"].number[i] && this["pu_q"].number[i][1] === 1 && (this["pu_q"].number[i][2] === "1" || this["pu_q"].number[i][2] === "10")) {
-                                    // (Black) and (Normal or L) in Problem mode then ignore
-                                } else {
-                                    // Sudoku only one number and multiple digits in same cell should not be considered, this is for single digit obtained from candidate submode
-                                    if (this[pu].number[i][2] === "7") {
-                                        // (Green or light blue or dark blue or red)
-                                        if (this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) {
-                                            var sum = 0,
-                                                a;
-                                            for (var j = 0; j < 10; j++) {
-                                                if (this[pu].number[i][0][j] === 1) {
-                                                    sum += 1;
-                                                    a = j + 1;
-                                                }
+                                } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
+                                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                        (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                        if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
+                                            let alphabet = this[pu].number[i][0];
+                                            if (alphabet.match(/[a-zA-Z]/g)) {
+                                                temp_sol.push(i + "," + alphabet.toLowerCase());
                                             }
-                                            if (sum === 1) {
-                                                temp_sol.push(i + "," + a);
-                                            }
-                                        }
-                                    } else if (!isNaN(this[pu].number[i][0]) || !this[pu].number[i][0].match(/[^A-Za-z]+/)) {
-                                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
-                                            (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
-                                            if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
-                                                let alphabet = this[pu].number[i][0];
-                                                if (alphabet.match(/[a-zA-Z]/g)) {
-                                                    temp_sol.push(i + "," + alphabet.toLowerCase());
-                                                }
-                                            } else {
-                                                temp_sol.push(i + "," + this[pu].number[i][0]);
-                                            }
-                                        }
-                                    } else if ($('#genre_tags_opt').select2("val").includes("non-alphanumeric")) {
-                                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
-                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
-                                            (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                        } else {
                                             temp_sol.push(i + "," + this[pu].number[i][0]);
                                         }
                                     }
+                                } else if ($('#genre_tags_opt').select2("val").includes("non-alphanumeric")) {
+                                    // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                    if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                        (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                        temp_sol.push(i + "," + this[pu].number[i][0]);
+                                    }
                                 }
                             }
+                        }
 
-                            // Tight Fit Sudoku
-                            if ($('#genre_tags_opt').select2("val").includes("tightfit")) {
-                                for (var i in this[pu].numberS) {
-                                    if (!isNaN(this[pu].numberS[i][0]) || !this[pu].numberS[i][0].match(/[^A-Za-z]+/)) {
-                                        // (Green or light blue or dark blue or red)
-                                        if ((this[pu].numberS[i][1] === 2 || this[pu].numberS[i][1] === 8 || this[pu].numberS[i][1] === 9 || this[pu].numberS[i][1] === 10)) {
-                                            temp_sol.push(i + "," + this[pu].numberS[i][0]);
-                                        }
+                        // Tight Fit Sudoku
+                        if ($('#genre_tags_opt').select2("val").includes("tightfit")) {
+                            for (var i in this[pu].numberS) {
+                                if (!isNaN(this[pu].numberS[i][0]) || !this[pu].numberS[i][0].match(/[^A-Za-z]+/)) {
+                                    // (Green or light blue or dark blue or red)
+                                    if ((this[pu].numberS[i][1] === 2 || this[pu].numberS[i][1] === 8 || this[pu].numberS[i][1] === 9 || this[pu].numberS[i][1] === 10)) {
+                                        temp_sol.push(i + "," + this[pu].numberS[i][0]);
                                     }
                                 }
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "loopline":
-                            for (var i in this[pu].line) {
-                                // Ignoring the half cells standred line marks
-                                let cells = i.split(",");
-                                if (this.cellsoutsideFrame.includes(parseInt(cells[0])) &&
-                                    this.cellsoutsideFrame.includes(parseInt(cells[1]))) {
-                                    continue;
-                                }
-                                if (this["pu_q"].line[i] && this.ignored_line_types[this["pu_q"].line[i]]) {
-                                    // Ignore the line
-                                } else {
-                                    if (this[pu].line[i] === 3) {
-                                        temp_sol.push(i + ",1");
-                                    } else if (this[pu].line[i] === 30) {
-                                        temp_sol.push(i + ",2");
-                                    }
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "loopline_exact":
+                        sol[sol_count] = this.get_line_solution(true, true);
+                        break;
+                    case "loopline":
+                        sol[sol_count] = this.get_line_solution(true, false);
+                        break;
+                    case "loopedge_exact":
+                        sol[sol_count] = this.get_edge_solution(true, true);
+                        break;
+                    case "loopedge":
+                        sol[sol_count] = this.get_edge_solution(true, false);
+                        break;
+                    case "wall":
+                        for (var i in this[pu].wall) {
+                            if (this[pu].wall[i] === 3) {
+                                temp_sol.push(i);
                             }
-
-                            for (var i in this[pu].freeline) {
-                                if (this["pu_q"].freeline[i] && this.ignored_line_types[this["pu_q"].freeline[i]]) {
-                                    // Ignore the line
-                                } else {
-                                    if (this[pu].freeline[i] === 3) {
-                                        temp_sol.push(i + ",1");
-                                    } else if (this[pu].freeline[i] === 30) {
-                                        temp_sol.push(i + ",2");
-                                    }
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "square":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "square_LL" && this[pu].symbol[i][0] === 2) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "loopedge":
-                            for (var i in this[pu].lineE) {
-                                if ((this.frame[i] && this.frame[i] === 2) ||
-                                    (this["pu_q"].lineE[i] && this["pu_q"].lineE[i] === 2)) {
-                                    // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
-                                } else {
-                                    if (this[pu].lineE[i] === 3) {
-                                        temp_sol.push(i + ",1");
-                                    } else if (this[pu].lineE[i] === 30) {
-                                        temp_sol.push(i + ",2");
-                                    }
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "circle":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "circle_M" &&
+                                this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
+                                temp_sol.push(i);
                             }
-                            for (var i in this[pu].freelineE) {
-                                if ((this.frame[i] && this.frame[i] === 2) ||
-                                    (this["pu_q"].freelineE[i] && this["pu_q"].freelineE[i] === 2)) {
-                                    // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
-                                } else {
-                                    if (this[pu].freelineE[i] === 3) {
-                                        temp_sol.push(i + ",1");
-                                    } else if (this[pu].freelineE[i] === 30) {
-                                        temp_sol.push(i + ",2");
-                                    }
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "tri":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "tri" &&
+                                this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
+                                temp_sol.push(i);
                             }
-
-                            let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
-                            if (found && this.gridtype === 'square') {
-                                // find out the grid position using the frame data
-                                // Note this section of code will work only if thick border frame exists
-                                if (typeof this.row_start == "undefined") {
-                                    // Find top left corner and bottom right corner
-                                    let topleft = 9999,
-                                        bottomright = 0,
-                                        numbers;
-                                    for (var i in this.frame) {
-                                        if (i in this.pu_q.deletelineE) {
-                                            continue;
-                                        }
-                                        numbers = i.split(",");
-                                        if (topleft >= parseInt(numbers[0])) {
-                                            topleft = parseInt(numbers[0]);
-                                        }
-                                        if (bottomright <= parseInt(numbers[1])) {
-                                            bottomright = parseInt(numbers[1]);
-                                        }
-                                    }
-                                    // finding row and column indices
-                                    let pointA, pointB;
-                                    pointA = topleft - (this.nx0 * this.ny0);
-                                    this.col_start = (pointA % this.nx0) - 1; //column
-                                    this.row_start = parseInt(pointA / this.nx0) - 1; //row
-                                    pointB = bottomright - (this.nx0 * this.ny0);
-                                    this.col_end = (pointB % this.nx0) - 1; //column
-                                    this.row_end = parseInt(pointB / this.nx0) - 1; //row
-                                }
-
-                                let present_cell, right_cell, down_cell;
-                                for (var j = 2 + this.row_start; j < this.row_end + 2; j++) {
-                                    for (var i = 2 + this.col_start; i < this.col_end + 2; i++) {
-                                        present_cell = i + j * (this.nx0);
-                                        right_cell = present_cell + 1;
-                                        down_cell = Math.max(...this.point[present_cell].adjacent);
-                                        if (i != this.col_end + 1) {
-                                            if (this[pu].surface[present_cell] &&
-                                                this[pu].surface[right_cell] &&
-                                                (this[pu].surface[present_cell] !== this[pu].surface[right_cell])) {
-                                                let imp_edge = this.point[present_cell].surround[1] + ',' + this.point[present_cell].surround[2];
-                                                if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
-                                                    // ignore given edges
-                                                } else {
-                                                    temp_sol.push(imp_edge + ',1');
-                                                }
-                                            }
-                                        }
-                                        if (j != this.row_end + 1) {
-                                            if (this[pu].surface[present_cell] &&
-                                                this[pu].surface[down_cell] &&
-                                                (this[pu].surface[present_cell] !== this[pu].surface[down_cell])) {
-                                                let imp_edge = this.point[present_cell].surround[3] + ',' + this.point[present_cell].surround[2];
-                                                if (this["pu_q"].lineE[imp_edge] && this["pu_q"].lineE[imp_edge] === 2) {
-                                                    // ignore given edges
-                                                } else {
-                                                    temp_sol.push(imp_edge + ',1');
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "arrow":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "arrow_S" &&
+                                this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            let unique_temp_sol = [...new Set(temp_sol)];
-                            sol[sol_count] = unique_temp_sol;
-                            break;
-                        case "wall":
-                            for (var i in this[pu].wall) {
-                                if (this[pu].wall[i] === 3) {
-                                    temp_sol.push(i);
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "math":
+                        for (var i in this[pu].symbol) {
+                            if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
+                                (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3)) {
+                                temp_sol.push(i + "," + this[pu].symbol[i][0]);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "square":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "square_LL" && this[pu].symbol[i][0] === 2) {
-                                    temp_sol.push(i);
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "battleship":
+                        for (var i in this[pu].symbol) {
+                            if ((this[pu].symbol[i][1] === "battleship_B" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) ||
+                                (this[pu].symbol[i][1] === "battleship_B+" &&
+                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4)) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "circle":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "circle_M" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 2) {
-                                    temp_sol.push(i);
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "tent":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "tents" &&
+                                this[pu].symbol[i][0] === 2) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "tri":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "tri" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4) {
-                                    temp_sol.push(i);
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "star":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "star" &&
+                                this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "arrow":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "arrow_S" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 8) {
-                                    temp_sol.push(i);
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "akari":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "sun_moon" &&
+                                this[pu].symbol[i][0] === 3) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "math":
-                            for (var i in this[pu].symbol) {
-                                if ((this[pu].symbol[i][1] === "math" || this[pu].symbol[i][1] === "math_G") &&
-                                    (this[pu].symbol[i][0] === 2 || this[pu].symbol[i][0] === 3)) {
-                                    temp_sol.push(i + "," + this[pu].symbol[i][0]);
-                                }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
+                    case "mine":
+                        for (var i in this[pu].symbol) {
+                            if (this[pu].symbol[i][1] === "sun_moon" &&
+                                (this[pu].symbol[i][0] === 4 || this[pu].symbol[i][0] === 5)) {
+                                temp_sol.push(i);
                             }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "battleship":
-                            for (var i in this[pu].symbol) {
-                                if ((this[pu].symbol[i][1] === "battleship_B" &&
-                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 6) ||
-                                    (this[pu].symbol[i][1] === "battleship_B+" &&
-                                        this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 4)) {
-                                    temp_sol.push(i);
-                                }
-                            }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "tent":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "tents" &&
-                                    this[pu].symbol[i][0] === 2) {
-                                    temp_sol.push(i);
-                                }
-                            }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "star":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "star" &&
-                                    this[pu].symbol[i][0] >= 1 && this[pu].symbol[i][0] <= 3) {
-                                    temp_sol.push(i);
-                                }
-                            }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "akari":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "sun_moon" &&
-                                    this[pu].symbol[i][0] === 3) {
-                                    temp_sol.push(i);
-                                }
-                            }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                        case "mine":
-                            for (var i in this[pu].symbol) {
-                                if (this[pu].symbol[i][1] === "sun_moon" &&
-                                    (this[pu].symbol[i][0] === 4 || this[pu].symbol[i][0] === 5)) {
-                                    temp_sol.push(i);
-                                }
-                            }
-                            temp_sol.sort();
-                            sol[sol_count] = temp_sol;
-                            break;
-                    }
+                        }
+                        sol[sol_count] = temp_sol;
+                        break;
                 }
+            }
+
+            for (var i = 0; i < sol.length; i++) {
+                sol[i] = sol[i].sort();
             }
         }
         return sol;

@@ -2354,6 +2354,11 @@ onload = function() {
         pu.redraw();
     }
 
+    // Let other colors match "green" for line/edge solution check
+    document.getElementById("ignore_line_style_opt").onchange = function() {
+        UserSettings.ignore_line_style = this.value;
+    }
+
     // Enable or Disable Shortcuts
     document.getElementById("enable_shortcuts_opt").onchange = function() {
         UserSettings.shortcuts_enabled = String(this.value) === '1';
