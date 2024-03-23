@@ -104,6 +104,7 @@ class Puzzle {
             "pu_q": {
                 "edit_mode": "surface",
                 "surface": ["", 1],
+                "multicolor": ["", 1],
                 "line": ["1", 2],
                 "lineE": ["1", 2],
                 "wall": ["", 2],
@@ -119,6 +120,7 @@ class Puzzle {
             "pu_a": {
                 "edit_mode": "surface",
                 "surface": ["", 1],
+                "multicolor": ["", 1],
                 "line": ["1", 3],
                 "lineE": ["1", 3],
                 "wall": ["", 3],
@@ -258,6 +260,7 @@ class Puzzle {
     reset_arr() {
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
                 this[this.mode.qa].surface = {};
                 this[this.mode.qa + "_col"].surface = {};
                 break;
@@ -344,6 +347,16 @@ class Puzzle {
             this.point_reflect_UD();
         }
         this.make_frameline();
+    }
+
+    // Make various backwards compatibility patches to puzzle data after loading a puzzle in case
+    // it uses outdated formats etc.
+    load_compat_fixes() {
+        for (let mode of ['pu_q', 'pu_a']) {
+            // Add multicolor data
+            if (this.mode[mode].multicolor === undefined)
+                this.mode[mode].multicolor = ["", 1];
+        }
     }
 
     reset_pause_layer() {
@@ -1281,8 +1294,9 @@ class Puzzle {
         if (document.getElementById('mode_' + mode)) {
             document.getElementById('mode_' + mode).style.display = 'inline-block';
         }
-        if (document.getElementById('style_' + mode)) {
-            document.getElementById('style_' + mode).style.display = 'inline-block';
+        let m = mode === 'multicolor' ? 'surface' : mode;
+        if (document.getElementById('style_' + m)) {
+            document.getElementById('style_' + m).style.display = 'inline-block';
         }
         document.getElementById('mo_' + mode).checked = true;
         this.submode_check('sub_' + mode + this.mode[this.mode.qa][mode][0]);
@@ -1468,6 +1482,7 @@ class Puzzle {
     reset_selectedmode() {
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
                 this[this.mode.qa].surface = {};
                 if (UserSettings.custom_colors_on) {
                     this[this.mode.qa + "_col"].surface = {};
@@ -7010,7 +7025,22 @@ class Puzzle {
     }
 
     set_surface(key, value, cc) {
-        this.set_value("surface", key, value, cc);
+        // Handle arrays of values for multicolor, treating empty arrays as a removal and
+        // single element arrays into a single number for compatibility with the old single-color system
+        if (Array.isArray(value)) {
+            if (value.length === 1) {
+                cc = (cc && cc[0] !== undefined) ? cc[0] : null;
+                this.set_value("surface", key, value[0], cc);
+            } else if (value.length === 0)
+                this.remove_surface(key);
+            else {
+                // Save space by removing custom color arrays with no entries
+                if (cc && cc.every(x => x === null || x === undefined))
+                    cc = null;
+                this.set_value("surface", key, value, cc);
+            }
+        } else
+            this.set_value("surface", key, value, cc);
     }
 
     remove_surface(key) {
@@ -7812,6 +7842,63 @@ class Puzzle {
                     }
                     break;
             }
+        } else if (edit_mode === "multicolor") {
+            key = parseInt(key);
+            if (key === 0)
+                key = 10;
+            if (isNaN(key) || key < 1 || key > 12)
+                return;
+
+            this.undoredo_counter++;
+
+            this.mode[this.mode.qa].multicolor[1] = key;
+
+            let cc = this.get_surface_color(key);
+
+            // Read all current colors for selected cells
+            let pu = this[this.mode.qa];
+            let pu_col = this[this.mode.qa + "_col"];
+            let colors = {}, ccs = {};
+            for (var k of this.selection) {
+                if (Array.isArray(pu.surface[k])) {
+                    colors[k] = pu.surface[k];
+                    ccs[k] = pu_col.surface[k];
+                } else if (pu.surface[k]) {
+                    colors[k] = [pu.surface[k]];
+                    ccs[k] = [pu_col.surface[k]];
+                } else {
+                    colors[k] = [];
+                    ccs[k] = [];
+                }
+            }
+
+            // First check if all selected cells have the given color
+            let remove = true;
+            for (var k of this.selection) {
+                if (!colors[k].includes(key)) {
+                    remove = false;
+                    break;
+                }
+            }
+
+            // Add or remove, and write the new value to either surface or multicolor
+            for (var k of this.selection) {
+                if (ccs[k] === undefined)
+                    ccs[k] = [];
+                // Transform list of surface numbers/custom colors into lists of [number, color]
+                // pairs for easier handling
+                let c = colors[k].map((a, i) => [a, ccs[k][i]]);
+
+                // Add or remove the given color
+                c = c.filter(x => x[0] != key);
+                if (!remove)
+                    c.push([key, cc]);
+                c.sort((a, b) => a[0] >= b[0]);
+
+                let a = c.map(ab => ab[0]);
+                let b = c.map(ab => ab[1]);
+                this.set_surface(k, a, b);
+            }
         }
         this.redraw();
     }
@@ -8116,6 +8203,12 @@ class Puzzle {
                     }
                 }
             }
+        } else if (this.mode[this.mode.qa].edit_mode === "multicolor") {
+            this.undoredo_counter++;
+            for (var k of this.selection) {
+                if (this[this.mode.qa].surface[k])
+                    this.remove_value("surface", k);
+            }
         }
         this.redraw();
     }
@@ -8133,7 +8226,7 @@ class Puzzle {
 
         let edit_mode = this.mode[this.mode.qa].edit_mode;
 
-        const modes = ['sudoku', 'number', 'surface'];
+        const modes = ['sudoku', 'number', 'surface', 'multicolor'];
 
         // Check if this is the start of an alt-drag rectangular selection event
         if (isAltKeyHeld(e) && this.grid_is_square() && modes.includes(edit_mode)) {
@@ -8189,6 +8282,9 @@ class Puzzle {
             switch (edit_mode) {
                 case "surface":
                     this.mouse_surface(x, y, num);
+                    break;
+                case "multicolor":
+                    this.mouse_sudoku(x, y, num, ctrl_key);
                     break;
                 case "line":
                     if (submode === "3") {
@@ -12199,17 +12295,93 @@ class Puzzle {
             this.ctx.stroke();
         }
 
+        const draw_cell_multi = (i, colors, cc) => {
+            // XXX [ZW] Not sure why this was happening (grid resizing...?) but if this gets
+            // called with a cell with no surrounding vertices, bail out to continue rendering
+            if (this.point[i].surround.length == 0) {
+                return;
+            }
+            if (!colors.length)
+                return;
+
+            // Use an empty array if none was provided. Empty array is like an array with undefined in each slot
+            if (!cc)
+                cc = [];
+
+            // Kinda weird hack: if there's too few colors, duplicate each of them. This
+            // is because the basic drawing technique we use for multi-color where each color
+            // gets a triangle. If there's too few colors, the outer edges of the triangles 
+            // might be inside the cell, leaving some blank area.
+            while (colors.length < 3) {
+                let new_colors = [], new_cc = []
+                for (let c in colors) {
+                    new_colors.push(colors[c]); new_colors.push(colors[c]);
+                    new_cc.push(cc[c]); new_cc.push(cc[c]);
+                }
+                colors = new_colors;
+                cc = new_cc;
+            }
+
+            // Create a clipping path using the boundaries of this cell
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
+            for (var j = 1; j < this.point[i].surround.length; j++) {
+                this.ctx.lineTo(this.point[this.point[i].surround[j]].x, this.point[this.point[i].surround[j]].y);
+            }
+            this.ctx.clip();
+
+            // Helper to get a point far away at a given angle from the center point of a cell
+            const get_ray = (point, n) => {
+                let angle = n * 2 * Math.PI / colors.length - 1.2;
+                let dist = 2 * this.size;
+                return [point.x + Math.cos(angle) * dist, point.y + Math.sin(angle) * dist];
+            };
+
+            // Draw wedges for each color
+            let n = 0;
+            for (let c in colors) {
+                set_surface_style(this.ctx, colors[c]);
+                if (cc) {
+                    this.ctx.fillStyle = cc[c];
+                    this.ctx.strokeStyle = cc[c];
+                }
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.point[i].x, this.point[i].y);
+                this.ctx.lineTo(...get_ray(this.point[i], n));
+                this.ctx.lineTo(...get_ray(this.point[i], n+1));
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                this.ctx.stroke();
+
+                n++;
+            }
+
+            // Take away the clipping path
+            this.ctx.restore();
+        }
+
+        // Draw normal surface colors
         for (var k = 0; k < keys.length; k++) {
             var i = keys[k];
             if (this.rect_surface_draw && this.surface_remove && this.selection.includes(parseInt(i)))
                 continue;
-            set_surface_style(this.ctx, this[pu].surface[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
-                this.ctx.fillStyle = this[pu + "_col"].surface[i];
-                this.ctx.strokeStyle = this.ctx.fillStyle;
+            // Draw multi-color cell if there's more than one value
+            if (Array.isArray(this[pu].surface[i]))
+                draw_cell_multi(i, this[pu].surface[i], this[pu + "_col"].surface[i]);
+            else {
+                set_surface_style(this.ctx, this[pu].surface[i]);
+                if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
+                    this.ctx.fillStyle = this[pu + "_col"].surface[i];
+                    this.ctx.strokeStyle = this.ctx.fillStyle;
+                }
+                draw_cell(i);
             }
-            draw_cell(i);
         }
+
+        // Draw rectangular surface add/remove if currently active
         if (this.rect_surface_draw && !this.surface_remove) {
             let color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
             if (this.rect_surface_secondary)
@@ -12304,7 +12476,7 @@ class Puzzle {
 
     draw_selection() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
-        if (edit_mode === "sudoku" || this.number_multi_enabled() ||
+        if (edit_mode === "sudoku" || this.number_multi_enabled() || edit_mode === "multicolor" ||
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
             // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
             // since we dont want single cell highlighed while in killer submode
@@ -12834,11 +13006,13 @@ class Puzzle {
     }
 
     update_customcolor(color) {
-        const mode = this.mode[this.mode.qa].edit_mode;
+        let mode = this.mode[this.mode.qa].edit_mode;
         this.mode[this.mode.qa][mode][2] = color;
 
         // Save custom color for this submode
         const [submode, style] = this.mode[this.mode.qa][mode];
+        if (mode === 'multicolor')
+            mode = 'surface';
         let name = 'st_' + mode + style;
         if (color === null)
             delete this.custom_colors[name];

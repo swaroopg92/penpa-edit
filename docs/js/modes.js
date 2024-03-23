@@ -3,6 +3,7 @@ const penpa_types = ['mode', 'sub', 'combisub', 'ms', 'ms1', 'ms3', 'ms4', 'st',
 
 const mode_names = {
     'surface': 'Surface',
+    'multicolor': 'Multicolor',
     'line': 'Line',
     'lineE': 'Edge',
     'wall': 'Wall',
@@ -18,6 +19,7 @@ const mode_names = {
 
 const penpa_modes_map = {
     'surface': 'surface',
+    'multicolor': 'multicolor',
     'number': 'number',
     'numberS': 'numberS',
     'symbol': 'symbol',
@@ -40,7 +42,7 @@ const penpa_modes_map = {
 const penpa_modes = {
     'square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
             'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
@@ -87,7 +89,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'wall', 'surface', 'cage', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'wall', 'surface', 'multicolor', 'cage', 'special', 'symbol'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb', 'msli_degital',
@@ -97,7 +99,7 @@ const penpa_modes = {
     },
     'sudoku': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
             'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
@@ -144,7 +146,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'wall', 'surface', 'cage', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'wall', 'surface', 'multicolor', 'cage', 'special', 'symbol'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb', 'msli_degital',
@@ -154,7 +156,7 @@ const penpa_modes = {
     },
     'kakuro': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line2', 'line3', 'line5', 'line4',
             'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
@@ -201,7 +203,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'wall', 'surface', 'cage', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'wall', 'surface', 'multicolor', 'cage', 'special', 'symbol'],
         'top_buttons': ['input_sudoku', 'rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb', 'msli_degital',
@@ -211,7 +213,7 @@ const penpa_modes = {
     },
     'hex': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line5', 'line4',
             'lineE1', 'lineE3', 'lineE4', 'lineE5',
@@ -258,14 +260,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'wall', 'surface', 'cage', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'wall', 'surface', 'multicolor', 'cage', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb', 'msli_degital', 'ul_degital']
     },
     'tri': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line5', 'line4',
             'lineE1', 'lineE3', 'lineE4', 'lineE5',
@@ -311,14 +313,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'pyramid': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'lineE3', 'lineE4', 'lineE5',
@@ -365,14 +367,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'wall', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'wall', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'iso': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'lineE2', 'lineE3', 'lineE4', 'lineE5',
@@ -418,14 +420,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'tetrakis_square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'lineE3', 'lineE4', 'lineE5',
@@ -471,14 +473,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'truncated_square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
@@ -524,14 +526,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'snub_square': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
@@ -577,14 +579,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'cairo_pentagonal': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
@@ -630,14 +632,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'rhombitrihexagonal': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
@@ -683,14 +685,14 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']
     },
     'deltoidal_trihexagonal': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
+        'mode': ['surface', 'multicolor', 'line', 'lineE', 'number', 'symbol', 'special', 'combi', 'sudoku', 'board'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'number10', 'lineE3', 'lineE4', 'lineE5',
@@ -736,7 +738,7 @@ const penpa_modes = {
         ],
         'symmode': ['content'],
         'combimode': ['content'],
-        'customcolor': ['line', 'lineE', 'surface', 'special', 'symbol'],
+        'customcolor': ['line', 'lineE', 'surface', 'multicolor', 'special', 'symbol'],
         'top_buttons': ['rotation'],
         // unique IDs that doesn't follow regular id naming
         'exceptions': ['custom_color_lb']

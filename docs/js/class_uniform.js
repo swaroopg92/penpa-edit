@@ -218,6 +218,7 @@ class Puzzle_truncated_square extends Puzzle {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -2845,6 +2846,7 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -3491,6 +3493,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -4118,6 +4121,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -4680,6 +4684,7 @@ class Puzzle_iso extends Puzzle_truncated_square {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -5845,6 +5850,7 @@ class Puzzle_rhombitrihexagonal extends Puzzle_truncated_square {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -6484,6 +6490,7 @@ class Puzzle_deltoidal_trihexagonal extends Puzzle_truncated_square {
         var type
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;

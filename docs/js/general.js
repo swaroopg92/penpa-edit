@@ -1205,6 +1205,9 @@ function advancecontrol_off(loadtype) {
     if (user_choices.indexOf("Surface") === -1) {
         document.getElementById("mo_surface_lb").classList.add('is_hidden');
     }
+    if (user_choices.indexOf("Multicolor") === -1) {
+        document.getElementById("mo_multicolor_lb").classList.add('is_hidden');
+    }
     if (user_choices.indexOf("Line Normal") === -1 &&
         user_choices.indexOf("Line Diagonal") === -1 &&
         user_choices.indexOf("Line Free") === -1 &&
@@ -2609,6 +2612,9 @@ function load(urlParam, type = 'url', origurl = null) {
 
     // Make sure we start a new group
     pu.undoredo_counter++;
+
+    // Make any backwards compatibility updates to the data we need for format changes
+    pu.load_compat_fixes();
 }
 
 function loadver1(paramArray, rtext) {

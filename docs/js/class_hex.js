@@ -190,6 +190,7 @@ class Puzzle_hex extends Puzzle {
         var type;
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;

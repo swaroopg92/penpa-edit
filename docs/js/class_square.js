@@ -185,6 +185,7 @@ class Puzzle_square extends Puzzle {
         let submode = this.mode[this.mode.qa][edit_mode][0];
         switch (edit_mode) {
             case "surface":
+            case "multicolor":
             case "board":
                 type = [0];
                 break;
@@ -393,7 +394,7 @@ class Puzzle_square extends Puzzle {
         }
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         let submode = this.mode[this.mode.qa][edit_mode][0];
-        if (edit_mode === "number" || edit_mode === "symbol" || edit_mode === "sudoku") {
+        if (edit_mode === "number" || edit_mode === "symbol" || edit_mode === "sudoku" || edit_mode === "multicolor") {
             if (edit_mode === "number" && submode === "3") {
                 switch (c) {
                     case 0:
@@ -444,7 +445,8 @@ class Puzzle_square extends Puzzle {
                 if (!this.selection.includes(this.cursol)) {
                     this.selection.push(this.cursol);
                 }
-            } else if (edit_mode === "sudoku" || (edit_mode === "number" && this.number_multi_enabled())) {
+            } else if (edit_mode === "sudoku" || edit_mode === "multicolor" ||
+                  (edit_mode === "number" && this.number_multi_enabled())) {
                 if (this.selection.length >= 1) {
                     var current_cursor = this.cursol;
                     switch (c) {

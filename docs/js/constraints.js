@@ -44,7 +44,7 @@ const penpa_constraints = {
     "border": ["difference", "kropki", "quadruple", "xv", "battenberg"], // puzzle types that involves placing clues on edges and corners
     "setting": {
         "all": {
-            "modeset": ["surface", "line", "lineE", "wall", "cage", "number", "symbol", "special", "combi", "sudoku"],
+            "modeset": ["surface", "multicolor", "line", "lineE", "wall", "cage", "number", "symbol", "special", "combi", "sudoku"],
             "submodeset": ["", "1", "1", "", "1", "1", "circle_L", "thermo", "battleship", "1"],
             "styleset": [1, 2, 2, 2, 10, 1, 2, "", "", 1]
         },

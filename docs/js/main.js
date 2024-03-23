@@ -7,6 +7,8 @@ let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
 let localStorageAvailable = false;
 
+const MULTICOLOR_REMAP = [0, 1, 8, 3, 4, 2, 5, 6, 7, 9, 10, 11, 12];
+
 onload = function() {
 
     // Detect mobile or Ipad beforing booting
@@ -272,6 +274,7 @@ onload = function() {
     // Variables for Tab selector
     let tab_modes = {
         "Surface": "surface",
+        "Multicolor": "multicolor",
         "Line Normal": "sub_line1",
         "Line Diagonal": "sub_line2",
         "Line Free": "sub_line3",
@@ -346,6 +349,7 @@ onload = function() {
         var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
         var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤\\{}";
+        var str_shift_num = ")!@#$%^&*(";
 
         // check for caps lock
         var capslock = false;
@@ -488,6 +492,13 @@ onload = function() {
                 } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                     pu.key_number(key);
                     shift_numkey = false;
+                } else if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "multicolor") {
+                    key = str_shift_num.indexOf(key);
+                    key += 10;
+                    // Remap color numbers to match the weird out-of-order colors of surface
+                    key = MULTICOLOR_REMAP[key];
+                    pu.stylemode_check('st_surface' + key);
+                    pu.key_number(key);
                 } else {
                     if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         switch (code) {
@@ -522,6 +533,11 @@ onload = function() {
                                 key = "9";
                                 break;
                         }
+                    }
+                    // Remap color numbers to match the weird out-of-order colors of surface
+                    if (pu.mode[pu.mode.qa].edit_mode === "multicolor") {
+                        key = MULTICOLOR_REMAP[key];
+                        pu.stylemode_check('st_surface' + key);
                     }
                     pu.key_number(key);
                 }
@@ -725,6 +741,7 @@ onload = function() {
                 // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
                 let mode_name = tab_modes[user_choices[counter_index]];
                 if (mode_name.includes("surface") ||
+                    mode_name.includes("multicolor") ||
                     mode_name.includes("wall") ||
                     mode_name.includes("symbol") ||
                     mode_name.includes("combi") ||
@@ -768,10 +785,11 @@ onload = function() {
 
     function checkShortcutKeys(e, code, capslock) {
         let mode = pu.mode[pu.mode.qa].edit_mode;
-        if (mode !== "surface" && mode !== "sudoku" && mode !== "line" && mode !== "lineE" &&
-                mode !== "symbol" && mode !== "combi") {
+        const allowed_modes = ["surface", "multicolor", "sudoku", "line", "lineE", "board",
+                "symbol", "special", "combi"];
+
+        if (!allowed_modes.includes(mode))
             return false;
-        }
 
         let detected = false;
 
@@ -1940,8 +1958,15 @@ onload = function() {
             pu.submode_check(e.target.id.slice(0, -3));
             e.preventDefault();
         }
+        // Special check for surface radio buttons in multicolor mode
+        if (e.target.id.slice(0, 3) === "st_" && pu.mode[pu.mode.qa].edit_mode === "multicolor") {
+            let key = e.target.id.slice(10, -3);
+            pu.stylemode_check('st_surface' + key);
+            pu.key_number(key);
+            e.preventDefault();
+        }
         // Style mode
-        if (e.target.id.slice(0, 3) === "st_") {
+        else if (e.target.id.slice(0, 3) === "st_") {
             pu.stylemode_check(e.target.id.slice(0, -3));
             e.preventDefault();
         }
