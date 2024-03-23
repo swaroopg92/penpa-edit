@@ -2606,6 +2606,9 @@ function load(urlParam, type = 'url', origurl = null) {
             pu.puzzleinfo.totalMS = ((+solvetime[0]) * 24 * 60 * 60 + (+solvetime[1]) * 60 * 60 + (+solvetime[2]) * 60 + (+solvetime[3]) + (+solvetime[4]) * 0.1) * 1000;
         }
     }
+
+    // Make sure we start a new group
+    pu.undoredo_counter++;
 }
 
 function loadver1(paramArray, rtext) {

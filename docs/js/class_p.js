@@ -6993,16 +6993,28 @@ class Puzzle {
     set_value(prop, key, value, color_value = undefined) {
         this.record(prop, key, this.undoredo_counter);
         this[this.mode.qa][prop][key] = value;
-        if (color_value !== undefined) {
+        // Set or delete the color value if given
+        if (color_value === null)
+            delete this[this.mode.qa + "_col"][prop][key];
+        else if (color_value !== undefined)
             this[this.mode.qa + "_col"][prop][key] = color_value;
-        }
         this.record_replay(prop, key, this.undoredo_counter);
     }
 
-    remove_value(prop, key) {
+    remove_value(prop, key, remove_color = false) {
         this.record(prop, key, this.undoredo_counter);
         delete this[this.mode.qa][prop][key];
+        if (remove_color)
+            delete this[this.mode.qa + "_col"][prop][key];
         this.record_replay(prop, key, this.undoredo_counter);
+    }
+
+    set_surface(key, value, cc) {
+        this.set_value("surface", key, value, cc);
+    }
+
+    remove_surface(key) {
+        this.remove_value("surface", key, true);
     }
 
     /////////////////////////////
@@ -8166,6 +8178,10 @@ class Puzzle {
                 this.mouse_click_last = 2;
             }
 
+            // Make sure to start a new undo step for places that use set_value()/remove_value()
+            if (this.mouse_mode === "down_left" || this.mouse_mode === "down_right")
+                this.undoredo_counter++;
+
             // Deal with starting a rectangular selection
             if (e !== null && (this.mouse_mode === "down_left" || this.mouse_mode === "down_right"))
                 this.handle_rect_mousedown(e, ctrl_key, num, obj);
@@ -8331,20 +8347,16 @@ class Puzzle {
             // If rectangular area is being selected, add all the cells now
             if (this.rect_surface_draw) {
                 var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
-                let cc;
-                if (this.rect_surface_secondary) {
+                if (this.rect_surface_secondary)
                     color = UserSettings.secondcolor;
-                    if (UserSettings.custom_colors_on)
-                        cc = this.get_rgbcolor(color);
-                } else if (UserSettings.custom_colors_on)
-                    cc = this.get_customcolor();
+                let cc = this.get_surface_color(color);
 
                 this.undoredo_counter++;
                 for (var k of this.selection) {
                     if (this.surface_remove)
-                        this.remove_value("surface", k);
+                        this.remove_surface(k);
                     else
-                        this.set_value("surface", k, color, cc);
+                        this.set_surface(k, color, cc);
                 }
 
                 // Reset all rectangle-drawing attributes
@@ -8370,88 +8382,45 @@ class Puzzle {
     re_surface(num) {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
         var allowed_styles = [1, 8, 3, 4]; // Dark Grey, Grey, Light Grey, Black
-        this.record("surface", num);
         let rightclick_color = UserSettings.secondcolor;
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color && allowed_styles.includes(color)) {
-            this[this.mode.qa].surface[num] = rightclick_color;
-            if (UserSettings.custom_colors_on) {
-                let cc = this.get_rgbcolor(rightclick_color);
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(rightclick_color))) {
-                    delete this[this.mode.qa + "_col"].surface[num];
-                } else {
-                    this[this.mode.qa + "_col"].surface[num] = cc;
-                }
-            }
+            let cc = this.get_surface_color(rightclick_color);
+            this.set_surface(num, rightclick_color, cc);
             this.drawing_mode = rightclick_color;
         } else if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color || (this[this.mode.qa].surface[num] === rightclick_color && allowed_styles.includes(color)))) {
-            delete this[this.mode.qa].surface[num];
-            if (UserSettings.custom_colors_on) {
-                delete this[this.mode.qa + "_col"].surface[num];
-            }
+            this.remove_surface(num);
             this.drawing_mode = 0;
         } else {
-            this[this.mode.qa].surface[num] = color;
-            if (UserSettings.custom_colors_on) {
-                let cc = this.get_customcolor();
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(color))) {
-                    delete this[this.mode.qa + "_col"].surface[num];
-                } else {
-                    this[this.mode.qa + "_col"].surface[num] = cc;
-                }
-            }
+            let cc = this.get_surface_color(color);
+            this.set_surface(num, color, cc);
             this.drawing_mode = color;
         }
-        this.record_replay("surface", num);
         this.redraw();
     }
 
     re_surface_twobutton(num) {
         var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
-        this.record("surface", num);
         if (this[this.mode.qa].surface[num] && (this[this.mode.qa].surface[num] === color)) {
-            delete this[this.mode.qa].surface[num];
-            if (UserSettings.custom_colors_on) {
-                delete this[this.mode.qa + "_col"].surface[num];
-            }
+            this.remove_surface(num);
             this.drawing_mode = 0;
         } else {
-            this[this.mode.qa].surface[num] = color;
-            if (UserSettings.custom_colors_on) {
-                let cc = this.get_customcolor();
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(color))) {
-                    delete this[this.mode.qa + "_col"].surface[num];
-                } else {
-                    this[this.mode.qa + "_col"].surface[num] = cc;
-                }
-            }
+            let cc = this.get_surface_color(color);
+            this.set_surface(num, color, cc);
             this.drawing_mode = color;
         }
-        this.record_replay("surface", num);
         this.redraw();
     }
 
     re_surfaceR(num) {
-        this.record("surface", num);
         let rightclick_color = UserSettings.secondcolor;
         if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === rightclick_color) {
-            delete this[this.mode.qa].surface[num];
-            if (UserSettings.custom_colors_on) {
-                delete this[this.mode.qa + "_col"].surface[num];
-            }
+            this.remove_surface(num);
             this.drawing_mode = 0;
         } else {
-            this[this.mode.qa].surface[num] = rightclick_color;
-            if (UserSettings.custom_colors_on) {
-                let cc = this.get_rgbcolor(rightclick_color);
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(rightclick_color))) {
-                    delete this[this.mode.qa + "_col"].surface[num];
-                } else {
-                    this[this.mode.qa + "_col"].surface[num] = cc;
-                }
-            }
+            let cc = this.get_surface_color(rightclick_color);
+            this.set_surface(num, rightclick_color, cc);
             this.drawing_mode = rightclick_color;
         }
-        this.record_replay("surface", num);
         this.redraw();
     }
 
@@ -8459,40 +8428,16 @@ class Puzzle {
         if (this.drawing) {
             if (this.drawing_mode === 0) {
                 if (this[this.mode.qa].surface[num]) {
-                    this.record("surface", num);
-                    delete this[this.mode.qa].surface[num];
-                    if (UserSettings.custom_colors_on) {
-                        delete this[this.mode.qa + "_col"].surface[num];
-                    }
-                    this.record_replay("surface", num);
+                    this.undoredo_counter++;
+                    this.remove_surface(num);
                     this.redraw();
                 }
             } else {
-                let cc = undefined;
-                if (UserSettings.custom_colors_on) {
-                    // Not right click
-                    if (this.mouse_click !== 2) {
-                        if (this.drawing_mode === 2) {
-                            cc = this.get_rgbcolor(this.drawing_mode);
-                        } else {
-                            cc = this.get_customcolor();
-                        }
-                        if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(this.drawing_mode))) {
-                            cc = undefined;
-                        }
-                    }
-                }
-                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] != this.drawing_mode || this[this.mode.qa + "_col"].surface[num] != cc) {
-                    this.record("surface", num);
-                    this[this.mode.qa].surface[num] = this.drawing_mode;
-                    if (UserSettings.custom_colors_on) {
-                        if (!cc) {
-                            delete this[this.mode.qa + "_col"].surface[num];
-                        } else {
-                            this[this.mode.qa + "_col"].surface[num] = cc;
-                        }
-                    }
-                    this.record_replay("surface", num);
+                let cc = this.get_surface_color(this.drawing_mode);
+                if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] !== this.drawing_mode ||
+                        (this[this.mode.qa + "_col"].surface[num] && this[this.mode.qa + "_col"].surface[num] !== cc)) {
+                    this.undoredo_counter++;
+                    this.set_surface(num, this.drawing_mode, cc);
                     this.redraw();
                 }
             }
@@ -10209,22 +10154,14 @@ class Puzzle {
 
     re_combi_blpo(num) {
         if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-            this.record("surface", num);
-            this[this.mode.qa].surface[num] = 1;
-            this.record_replay("surface", num);
+            this.set_surface(num, 1, undefined);
             this.drawing_mode = 1;
         } else if (this[this.mode.qa].surface[num] === 1) {
-            this.record("surface", num);
-            delete this[this.mode.qa].surface[num];
-            this.record_replay("surface", num);
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [8, "ox_B", 2];
-            this.record_replay("symbol", num);
+            this.remove_surface(num);
+            this.set_value("symbol", num, [8, "ox_B", 2]);
             this.drawing_mode = 2;
         } else if (this[this.mode.qa].symbol[num][0] === 8) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.record_replay("symbol", num);
+            this.remove_value("symbol", num);
             this.drawing_mode = 0;
         }
         this.redraw();
@@ -10232,22 +10169,14 @@ class Puzzle {
 
     re_combi_blpo_downright(num) {
         if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [8, "ox_B", 2];
-            this.record_replay("symbol", num);
+            this.set_value("symbol", num, [8, "ox_B", 2]);
             this.drawing_mode = 2;
         } else if (this[this.mode.qa].surface[num] === 1) {
-            this.record("surface", num);
-            delete this[this.mode.qa].surface[num];
-            this.record_replay("surface", num);
+            this.remove_surface(num);
             this.drawing_mode = 0;
-        } else if (this[this.mode.qa].symbol[num][0] === 8) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.record_replay("symbol", num);
-            this.record("surface", num);
-            this[this.mode.qa].surface[num] = 1;
-            this.record_replay("surface", num);
+        } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 8) {
+            this.remove_value("symbol", num);
+            this.set_surface(num, 1, undefined);
             this.drawing_mode = 1;
         }
         this.redraw();
@@ -10256,34 +10185,18 @@ class Puzzle {
     re_combi_blpo_move(num) {
         if (num != this.last) {
             if (this.drawing_mode === 1) {
-                if (this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
-                    delete this[this.mode.qa].symbol[num];
-                    this.record_replay("symbol", num);
-                }
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 1;
-                this.record_replay("surface", num);
+                if (this[this.mode.qa].symbol[num])
+                    this.remove_value("symbol", num);
+                this.set_surface(num, 1, undefined);
             } else if (this.drawing_mode === 2) {
-                if (this[this.mode.qa].surface[num]) {
-                    this.record("surface", num);
-                    delete this[this.mode.qa].surface[num];
-                    this.record_replay("surface", num);
-                }
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 2];
-                this.record_replay("symbol", num);
+                if (this[this.mode.qa].surface[num])
+                    this.remove_surface(num);
+                this.set_value("symbol", num, [8, "ox_B", 2]);
             } else if (this.drawing_mode === 0) {
-                if (this[this.mode.qa].surface[num]) {
-                    this.record("surface", num);
-                    delete this[this.mode.qa].surface[num];
-                    this.record_replay("surface", num);
-                }
-                if (this[this.mode.qa].symbol[num]) {
-                    this.record("symbol", num);
-                    delete this[this.mode.qa].symbol[num];
-                    this.record_replay("symbol", num);
-                }
+                if (this[this.mode.qa].surface[num])
+                    this.remove_surface(num);
+                if (this[this.mode.qa].symbol[num])
+                    this.remove_value("symbol", num);
             }
             this.last = num;
         }
@@ -10780,17 +10693,11 @@ class Puzzle {
 
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].surface[num]) {
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = firstcolor;
-                this.record_replay("surface", num);
+                this.set_surface(num, firstcolor, undefined);
             } else if (this[this.mode.qa].surface[num] === firstcolor) {
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = secondcolor;
-                this.record_replay("surface", num);
+                this.set_surface(num, secondcolor, undefined);
             } else {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
+                this.remove_surface(num);
             }
         }
         this.drawing_mode = -1;
@@ -10913,31 +10820,19 @@ class Puzzle {
     re_combi_yajilin_up(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 1;
-                this.record_replay("surface", num);
+                this.set_surface(num, 1, undefined);
             } else if (this[this.mode.qa].surface[num] === 1) {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.record_replay("symbol", num);
+                this.remove_surface(num);
+                this.set_value("symbol", num, [8, "ox_B", 1]);
             } else {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
-                this.record_replay("symbol", num);
+                this.remove_value("symbol", num);
             }
         } else if (!this.loop_counter &&
             (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4)) {
             if (!this[this.mode.qa].line[num]) { // Insert cross
-                this.record('line', num);
-                this[this.mode.qa].line[num] = 98;
-                this.record_replay('line', num);
+                this.set_value("line", num, 98);
             } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
-                this.record('line', num);
-                delete this[this.mode.qa].line[num];
-                this.record_replay('line', num);
+                this.remove_value("line", num);
             }
         }
         this.drawing_mode = -1;
@@ -10950,20 +10845,12 @@ class Puzzle {
     re_combi_yajilin_up_reduced(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 1;
-                this.record_replay("surface", num);
+                this.set_surface(num, 1, undefined);
             } else if (this[this.mode.qa].surface[num] === 1) {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
+                this.remove_surface(num);
             } else {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
-                this.record_replay("symbol", num);
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 1;
-                this.record_replay("surface", num);
+                this.remove_value("symbol", num);
+                this.set_surface(num, 1, undefined);
             }
         }
         this.drawing_mode = -1;
@@ -10975,33 +10862,21 @@ class Puzzle {
     re_combi_yajilin_downright(num) {
         if (this.point[num].type === 0) {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.record_replay("symbol", num);
+                this.set_value("symbol", num, [8, "ox_B", 1]);
                 this.drawing_mode = 5; // placing dots
             } else if (this[this.mode.qa].surface[num] === 1) {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [8, "ox_B", 1];
-                this.record_replay("symbol", num);
+                this.remove_surface(num);
+                this.set_value("symbol", num, [8, "ox_B", 1]);
                 this.drawing_mode = 5; // placing dots
             } else {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
-                this.record_replay("symbol", num);
+                this.remove_value("symbol", num);
                 this.drawing_mode = 6; // removing dots
             }
         } else if (this.point[num].type === 2 || this.point[num].type === 3 || this.point[num].type === 4) {
             if (!this[this.mode.qa].line[num]) { // Insert cross
-                this.record('line', num);
-                this[this.mode.qa].line[num] = 98;
-                this.record_replay('line', num);
+                this.set_value("line", num, 98);
             } else if (this[this.mode.qa].line[num] === 98) { // Remove Cross
-                this.record('line', num);
-                delete this[this.mode.qa].line[num];
-                this.record_replay('line', num);
+                this.remove_value("line", num);
             }
         }
         this.last = num;
@@ -11018,15 +10893,11 @@ class Puzzle {
         if (this.drawing_mode != -1 && this.point[num].type === 0) {
             if (this.drawing_mode === 5 && num != this.last) {
                 if (!this[this.mode.qa].surface[num]) {
-                    this.record("surface", num);
-                    this[this.mode.qa].surface[num] = 7;
-                    this.record_replay("surface", num);
+                    this.set_surface(num, 7, undefined);
                 }
             } else if (this.drawing_mode === 6 && num != this.last) {
                 if (this[this.mode.qa].surface[num]) {
-                    this.record("surface", num);
-                    delete this[this.mode.qa].surface[num];
-                    this.record_replay("surface", num);
+                    this.remove_surface(num);
                 }
             } else {
                 let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
@@ -11045,20 +10916,12 @@ class Puzzle {
     re_combi_rassisillai_up(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-                this.record_replay("symbol", num);
+                this.set_value("symbol", num, [1, "ox_G", 1]);
             } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 1) {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
-                this.record_replay("symbol", num);
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 7;
-                this.record_replay("surface", num);
+                this.remove_value("symbol", num);
+                this.set_surface(num, 7, undefined);
             } else {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
+                this.remove_surface(num);
             }
         }
         this.drawing_mode = -1;
@@ -11070,20 +10933,12 @@ class Puzzle {
     re_combi_rassisillai_up_reduced(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-                this.record_replay("symbol", num);
+                this.set_value("symbol", num, [1, "ox_G", 1]);
             } else if (this[this.mode.qa].surface[num] === 7) {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
-                this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [1, "ox_G", 1];
-                this.record_replay("symbol", num);
+                this.remove_surface(num);
+                this.set_value("symbol", num, [1, "ox_G", 1]);
             } else {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
-                this.record_replay("symbol", num);
+                this.remove_value("symbol", num);
             }
         }
         this.drawing_mode = -1;
@@ -11095,22 +10950,14 @@ class Puzzle {
     re_combi_rassisillai_downright(num) {
         if (this.point[num].type === 0) {
             if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 7;
-                this.record_replay("surface", num);
+                this.set_surface(num, 7, undefined);
                 this.drawing_mode = 5; // placing shaded yellow
             } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 1) {
-                this.record("symbol", num);
-                delete this[this.mode.qa].symbol[num];
-                this.record_replay("symbol", num);
-                this.record("surface", num);
-                this[this.mode.qa].surface[num] = 7;
-                this.record_replay("surface", num);
+                this.remove_value("symbol", num);
+                this.set_surface(num, 7, undefined);
                 this.drawing_mode = 5; // placing shaded yellow
             } else {
-                this.record("surface", num);
-                delete this[this.mode.qa].surface[num];
-                this.record_replay("surface", num);
+                this.remove_surface(num);
                 this.drawing_mode = 6; // removing shaded yellow
             }
         }
@@ -11941,48 +11788,28 @@ class Puzzle {
 
     re_combi_magnets(num) {
         if (!this[this.mode.qa].symbol[num] && this[this.mode.qa].surface[num] != 1) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "math_G", 2];
-            this.record_replay("symbol", num);
+            this.set_value("symbol", num, [2, "math_G", 2]);
         } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 2) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [3, "math_G", 2];
-            this.record_replay("symbol", num);
+            this.set_value("symbol", num, [3, "math_G", 2]);
         } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 3) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.record_replay("symbol", num);
-            this.record("surface", num);
-            this[this.mode.qa].surface[num] = 1;
-            this.record_replay("surface", num);
+            this.remove_value("symbol", num);
+            this.set_surface(num, 1, undefined);
         } else if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] == 1) {
-            this.record("surface", num);
-            delete this[this.mode.qa].surface[num];
-            this.record_replay("surface", num);
+            this.remove_surface(num);
         }
         this.redraw();
     }
 
     re_combi_magnets_downright(num) {
         if (!this[this.mode.qa].symbol[num] && this[this.mode.qa].surface[num] != 1) {
-            this.record("surface", num);
-            this[this.mode.qa].surface[num] = 1;
-            this.record_replay("surface", num);
+            this.set_surface(num, 1, undefined);
         } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 2) {
-            this.record("symbol", num);
-            delete this[this.mode.qa].symbol[num];
-            this.record_replay("symbol", num);
+            this.remove_value("symbol", num);
         } else if (this[this.mode.qa].symbol[num] && this[this.mode.qa].symbol[num][0] === 3) {
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [2, "math_G", 2];
-            this.record_replay("symbol", num);
+            this.set_value("symbol", num, [2, "math_G", 2]);
         } else if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] == 1) {
-            this.record("surface", num);
-            delete this[this.mode.qa].surface[num];
-            this.record_replay("surface", num);
-            this.record("symbol", num);
-            this[this.mode.qa].symbol[num] = [3, "math_G", 2];
-            this.record_replay("symbol", num);
+            this.remove_surface(num);
+            this.set_value("symbol", num, [3, "math_G", 2]);
         }
         this.redraw();
     }
@@ -12391,11 +12218,7 @@ class Puzzle {
             set_surface_style(this.ctx, color);
 
             if (UserSettings.custom_colors_on) {
-                let cc;
-                if (this.rect_surface_secondary)
-                    cc = this.get_rgbcolor(color);
-                else
-                    cc = this.get_customcolor()
+                let cc = this.get_surface_color(color);
                 this.ctx.fillStyle = cc;
                 this.ctx.strokeStyle = this.ctx.fillStyle;
             }
@@ -13017,9 +12840,22 @@ class Puzzle {
         // Save custom color for this submode
         const [submode, style] = this.mode[this.mode.qa][mode];
         let name = 'st_' + mode + style;
-        this.custom_colors[name] = color;
+        if (color === null)
+            delete this.custom_colors[name];
+        else
+            this.custom_colors[name] = color;
+
+        if (mode === 'surface')
+            document.getElementById('st_surface' + style + '_lb').style = 'background-color: ' + color;
 
         panel_pu.draw_panel();
+    }
+
+    get_surface_color(c) {
+        let cc = this.custom_colors['st_surface' + c];
+        if (cc === undefined)
+            return null;
+        return cc;
     }
 
     version_lt(major, minor, revision) {
