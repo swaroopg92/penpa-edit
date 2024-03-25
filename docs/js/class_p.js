@@ -7397,13 +7397,6 @@ class Puzzle {
                             var j_start = 0;
                             var length_limit = 8;
 
-                            // if any element present in numberS mode then
-                            // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
-                            if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
-                                length_limit = 6;
-                                j_start = 1;
-                            }
-
                             // First step: go through all cells in the selection that don't have a main single digit, and
                             // collect the digits that are in the corner of each
                             let cells = [];
