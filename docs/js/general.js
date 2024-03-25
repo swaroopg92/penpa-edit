@@ -3058,10 +3058,6 @@ function set_solvemode(type = "url") {
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
 
-    // custom color
-    document.getElementById('colorpicker_special').style.display = 'none';
-    document.getElementById('custom_color_lb').style.display = 'none';
-
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
 
