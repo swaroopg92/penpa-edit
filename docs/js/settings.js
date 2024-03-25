@@ -155,6 +155,18 @@ const UserSettings = {
         return this._sudoku_centre_size;
     },
 
+    _outline_text: false,
+    set outline_text(newValue) {
+        this._outline_text = newValue === "1" || newValue === "true" || newValue === true;
+        document.getElementById("outline_text_opt").value = this._outline_text ? "1" : "0";
+        if (window.pu)
+            pu.redraw();
+        this.attemptSave();
+    },
+    get outline_text() {
+        return this._outline_text;
+    },
+
     _custom_colors_on: false,
     set custom_colors_on(newValue) {
         if (typeof newValue === 'string') {
@@ -418,6 +430,7 @@ const UserSettings = {
         'ignore_line_style',
         'local_storage',
         'mousemiddle_button',
+        'outline_text',
         'quick_panel_button',
         'reload_button',
         'responsive_mode',

@@ -2229,6 +2229,10 @@ onload = function() {
         UserSettings.sudoku_centre_size = this.value;
     }
 
+    document.getElementById("outline_text_opt").onchange = function() {
+        UserSettings.outline_text = this.value;
+    }
+
     document.getElementById("reload_button").onchange = function() {
         UserSettings.reload_button = this.value;
     }

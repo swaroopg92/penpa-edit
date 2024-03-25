@@ -354,6 +354,9 @@ function set_font_style(ctx, size, type, ccolor = "none") {
             ctx.strokeStyle = Color.TRANSPARENTWHITE;
             break;
     }
+
+    if (UserSettings.outline_text)
+        ctx.strokeStyle = Color.WHITE;
 }
 
 function set_circle_style(ctx, num, ccolor = "none") {
