@@ -7331,42 +7331,6 @@ class Puzzle {
                                             this.record_replay("numberS", side_cursor + j, this.undoredo_counter);
                                         }
                                     }
-
-                                    if (this.grid_is_square()) {
-                                        // not reliable, every access, the order is changing and hence sorting
-                                        var adjacent_cursor = this.get_neighbors(k, 'adjacent').sort();
-
-                                        // Edge cursor order = [top edge, bottom edge, left edge, right edge]
-                                        // adjacent_cursor order = [top cell, left cell, right cell, bottom cell]
-                                        // Match the edge_cursor and adjacent_cursor order
-                                        adjacent_cursor.splice(1, 0, adjacent_cursor.pop());
-
-                                        if (adjacent_cursor.length == 4) {
-                                            for (var j = 0; j < 4; j++) {
-                                                let filled = false;
-                                                if (this.point[adjacent_cursor[j]].use == 1 &&
-                                                    this[this.mode.qa].number[adjacent_cursor[j]]) {
-                                                    filled = true;
-                                                } else if (this.point[adjacent_cursor[j]].use != 1) {
-                                                    filled = true;
-                                                }
-                                                if (filled && this[this.mode.qa].number[edge_cursor[j]]) {
-                                                    this.record("number", edge_cursor[j], this.undoredo_counter);
-                                                    delete this[this.mode.qa].number[edge_cursor[j]];
-                                                    this.record_replay("number", edge_cursor[j], this.undoredo_counter);
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        for (var j = 0; j < 4; j++) {
-                                            if (this[this.mode.qa].number[edge_cursor[j]]) {
-                                                this.record("number", edge_cursor[j], this.undoredo_counter);
-                                                delete this[this.mode.qa].number[edge_cursor[j]];
-                                                this.record_replay("number", edge_cursor[j], this.undoredo_counter);
-                                            }
-                                        }
-                                    }
-
                                 }
 
                                 this.record("number", k, this.undoredo_counter);
