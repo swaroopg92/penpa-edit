@@ -98,7 +98,7 @@ function set_line_style(ctx, type, ccolor = "none") {
     //Initialization
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
-    ctx.lineCap = "square";
+    ctx.lineCap = "round";
     ctx.strokeStyle = Color.BLACK;
     ctx.lineWidth = 2;
     switch (type) {
@@ -118,7 +118,7 @@ function set_line_style(ctx, type, ccolor = "none") {
         case 21:
             ctx.lineCap = "round";
             ctx.strokeStyle = Color.BLACK;
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 1.5 + (pu.size * 0.12) | 0;
             break;
         case 3:
             ctx.lineCap = "round";
@@ -286,6 +286,9 @@ function set_line_style(ctx, type, ccolor = "none") {
             ctx.lineWidth = 2;
             break;
     }
+    const can_thicken = [2, 3, 4, 5, 8, 9];
+    if (can_thicken.includes(type))
+      ctx.lineWidth = 0.7 + (pu.size * 0.10) | 0;
 }
 
 function set_font_style(ctx, size, type, ccolor = "none") {
