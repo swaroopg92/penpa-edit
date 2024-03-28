@@ -7969,22 +7969,58 @@ class Puzzle {
     // XXX: support other cell types
     dblmouseevent(x, y, num, ctrl_key = false) {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
-        if (edit_mode === "number" || edit_mode === "sudoku") {
+        let priority = ["number", "multicolor"];
+
+        // Treat sudoku mode like number mode here
+        if (edit_mode === "sudoku")
+            edit_mode = "number";
+
+        if (priority.includes(edit_mode)) {
+            // Put the current mode as first priority
+            priority.sort((a, b) => (b === edit_mode));
+
             if (!ctrl_key)
                 this.selection = [];
 
-            let value = this.pu_q.number[num] || this.pu_a.number[num];
             let remove = this.selection.indexOf(num) !== -1;
+
+            let value;
+            // Go through the available modes in priority order to search for a value
+            // we can select other cells by
+            for (let mode of priority) {
+                if (mode === "multicolor") {
+                    value = this.pu_q.surface[num] || this.pu_a.surface[num];
+                    value = JSON.stringify(value);
+                } else if (mode === "number") {
+                      value = this.pu_q.number[num] || this.pu_a.number[num];
+                }
+
+                if (value) {
+                    edit_mode = mode;
+                    break;
+                }
+            }
+
+            if (!value)
+                return;
 
             // Normal sudoku values
             if (value) {
-                let n = value[0];
-
                 for (let qa of ["pu_q", "pu_a"]) {
                     let puzzle = this[qa];
 
                     for (let c of this.centerlist) {
-                        if (puzzle.number[c] && puzzle.number[c][0] == n) {
+                        let match;
+                        if (edit_mode === "multicolor") {
+                            if (JSON.stringify(puzzle.surface[c]) === value)
+                                match = true;
+                        }
+                        else {
+                            if (puzzle.number[c] && puzzle.number[c][0] === value[0])
+                                match = true;
+                        }
+
+                        if (match) {
                             if (remove) {
                                 var index = this.selection.indexOf(c);
                                 if (index !== -1)
