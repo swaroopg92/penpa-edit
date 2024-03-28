@@ -36,41 +36,38 @@ class Conflicts {
     // For an NxN grid, mark any duplicates between 1 and N as conflicts.
     check_latin_square() {
         const data = this.get_data('number_grid');
-        const n = data.length;
-        if (!n || data[0].length !== n) {
-            // Empty or not square
+        const r = data.length
+        if (!r)
             return;
-        }
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < n; j++) {
-                const row_el = data[i][j];
-                if (row_el >= 1 && row_el <= n) {
-                    // Add this value to conflict values
-                    for (let k = 0; k < n; k++) {
+        const c = data[0].length;
+        const n = Math.max(r, c);
+        for (let i = 0; i < r; i++) {
+            for (let j = 0; j < c; j++) {
+                const value = data[i][j];
+                if (value !== undefined) {
+                    // Check row conflicts
+                    for (let k = 0; k < c; k++) {
                         if (k === j)
                             continue;
-                        this.add_conflict_value(k, i, row_el);
+                        this.add_conflict_value(k, i, value);
 
                         const el2 = data[i][k];
-                        if (k > j && row_el === el2) {
+                        if (k > j && value === el2) {
                             this.add_conflict(j, i);
                             this.add_conflict(k, i);
                         }
                     }
-                }
 
-                const col_el = data[j][i];
-                if (col_el >= 1 && col_el <= n) {
-                    // Add this value to conflict values
-                    for (let k = 0; k < n; k++) {
-                        if (k === j)
+                    // Check column conflicts
+                    for (let k = 0; k < r; k++) {
+                        if (k === i)
                             continue;
-                        this.add_conflict_value(i, k, col_el);
+                        this.add_conflict_value(j, k, value);
 
-                        const el2 = data[k][i];
-                        if (k > j && col_el === el2) {
-                            this.add_conflict(i, j);
-                            this.add_conflict(i, k);
+                        const el2 = data[k][j];
+                        if (k > i && value === el2) {
+                            this.add_conflict(j, i);
+                            this.add_conflict(j, k);
                         }
                     }
                 }
