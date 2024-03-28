@@ -305,12 +305,12 @@ onload = function() {
 
     let previous_length = 2;
     let counter_index = 0;
-    let present_submode;
-    let shift_counter = 0;
+    let present_submode = null;
+    let present_mode = null;
+    let mode_override_key = null;
     let shift_numkey = false;
     let shift_release_time = -1e5;
     let shift_time_limit = 15; // milliseconds
-    let ctrl_counter = 0;
     let number_release_time = -1e5;
     let number_release_limit = 300; // milliseconds
     let previousdigit1 = false;
@@ -349,7 +349,6 @@ onload = function() {
         var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
         var str_alph_up = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var str_sym = "!\"#$%&\'()-=^~|@[];+:*,.<>/?_£§¤\\{}";
-        var str_shift_num = ")!@#$%^&*(";
 
         // check for caps lock
         var capslock = false;
@@ -419,9 +418,10 @@ onload = function() {
             return false;
         }
 
-        // All of this is specific to sudoku
-        if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-
+        // In sudoku and multicolor modes, allow "mini" shortcuts of holding ctrl or shift
+        // to temporarily switch to center or corner marks. Only do this if we're not already
+        // in a temporary mode.
+        if ((pu.mode[pu.mode.qa].edit_mode === "sudoku" || pu.mode[pu.mode.qa].edit_mode === "multicolor") && mode_override_key === null) {
             // For shift shortcut in Sudoku mode, modify the numpad keys
             if (keylocation === 3 && !isShiftKeyPressed(key) && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
                 const numpadMap = {
@@ -442,28 +442,26 @@ onload = function() {
                 }
             }
 
-            if (isShiftKeyPressed(key)) {
-                shift_counter = shift_counter + 1;
+            // Remember the mode/submode before we overrode it
+            present_mode = pu.mode[pu.mode.qa].edit_mode;
+            present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
 
-                if (shift_counter === 1 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
-                    present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
-                    if (present_submode !== 2) {
-                        pu.submode_check("sub_sudoku2");
-                    }
-                    e.returnValue = false;
-                }
+            if (isShiftKeyPressed(key)) {
+                mode_override_key = key;
+                if (present_mode !== "sudoku")
+                    pu.mode_set("sudoku");
+                if (present_submode !== 2)
+                    pu.submode_check("sub_sudoku2");
+                e.returnValue = false;
             }
 
             if (isCtrlKeyPressed(key)) {
-                ctrl_counter = ctrl_counter + 1;
-
-                if (ctrl_counter === 1 && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
-                    present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
-                    if (present_submode !== 3) {
-                        pu.submode_check("sub_sudoku3");
-                    }
-                    e.returnValue = false;
-                }
+                mode_override_key = key;
+                if (present_mode !== "sudoku")
+                    pu.mode_set("sudoku");
+                if (present_submode !== 3)
+                    pu.submode_check("sub_sudoku3");
+                e.returnValue = false;
             }
 
             if (isCtrlKeyHeld(e) && (keycode === 46 || (keycode === 8))) {
@@ -492,13 +490,6 @@ onload = function() {
                 } else if (shift_numkey && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                     pu.key_number(key);
                     shift_numkey = false;
-                } else if (isShiftKeyHeld(e) && pu.mode[pu.mode.qa].edit_mode === "multicolor") {
-                    key = str_shift_num.indexOf(key);
-                    key += 10;
-                    // Remap color numbers to match the weird out-of-order colors of surface
-                    key = MULTICOLOR_REMAP[key];
-                    pu.stylemode_check('st_surface' + key);
-                    pu.key_number(key);
                 } else {
                     if (pu.mode[pu.mode.qa].edit_mode === "sudoku") {
                         switch (code) {
@@ -535,7 +526,8 @@ onload = function() {
                         }
                     }
                     // Remap color numbers to match the weird out-of-order colors of surface
-                    if (pu.mode[pu.mode.qa].edit_mode === "multicolor") {
+                    if (pu.mode[pu.mode.qa].edit_mode === "multicolor" &&
+                            key >= 0 && key <= MULTICOLOR_REMAP.length) {
                         key = MULTICOLOR_REMAP[key];
                         pu.stylemode_check('st_surface' + key);
                     }
@@ -549,6 +541,19 @@ onload = function() {
             } else if (key === "Backspace") {
                 pu.key_backspace();
                 e.returnValue = false;
+            }
+        }
+
+        // Alt-number in multicolor mode goes to secondary colors (10 + n)
+        if (isAltKeyHeld(e) && !isCtrlKeyHeld(e) && !isShiftKeyHeld(e) &&
+                pu.mode[pu.mode.qa].edit_mode === "multicolor" && keycode >= 48 && keycode <= 57) {
+            // Subtract ASCII 0 and add in the 10 offset
+            key = keycode - 48 + 10;
+            if (key >= 0 && key <= MULTICOLOR_REMAP.length) {
+                // Remap color numbers to match the weird out-of-order colors of surface
+                key = MULTICOLOR_REMAP[key];
+                pu.stylemode_check('st_surface' + key);
+                pu.key_number(key);
             }
         }
 
@@ -919,7 +924,11 @@ onload = function() {
         var key = e.key;
 
         const keylocation = e.location;
-        if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+        // See if we're releasing the key that started a temporary mode override
+        if (key === mode_override_key && keylocation !== 3) {
+            mode_override_key = null;
+            // Return to the previous mode/submode
+            pu.mode_set(present_mode);
             if (present_submode === "1") {
                 pu.submode_check("sub_sudoku1");
             } else if (present_submode === "2") {
@@ -927,19 +936,11 @@ onload = function() {
             } else if (present_submode === "3") {
                 pu.submode_check("sub_sudoku3");
             }
-            shift_counter = 0;
-            shift_release_time = Date.now();
-            e.returnValue = false;
-        } else if (isCtrlKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
-            if (present_submode === "1") {
-                pu.submode_check("sub_sudoku1");
-            } else if (present_submode === "2") {
-                pu.submode_check("sub_sudoku2");
-            } else if (present_submode === "3") {
-                pu.submode_check("sub_sudoku3");
-            }
-            ctrl_counter = 0;
-            ctrl_release_time = Date.now();
+
+            if (isShiftKeyPressed(key))
+                shift_release_time = Date.now();
+            else if (isCtrlKeyPressed(key))
+                ctrl_release_time = Date.now();
             e.returnValue = false;
         } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
             if (key === "1") {
