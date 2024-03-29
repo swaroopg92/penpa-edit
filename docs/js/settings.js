@@ -179,7 +179,11 @@ const UserSettings = {
 
     _custom_colors_on: false,
     set custom_colors_on(newValue) {
-        if (typeof newValue === 'string') {
+        if (newValue === "true")
+            this._custom_colors_on = true;
+        else if (newValue === "false")
+            this._custom_colors_on = false;
+        else if (typeof newValue === 'string') {
             const valueInt = newValue ? parseInt(newValue, 10) : 1;
             this._custom_colors_on = (valueInt === 2);
         } else {
@@ -195,8 +199,8 @@ const UserSettings = {
             document.getElementById('style_special').style.display = 'none';
         }
         document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
-
         pu.redraw();
+        this.attemptSave();
     },
     get custom_colors_on() {
         return this._custom_colors_on;
