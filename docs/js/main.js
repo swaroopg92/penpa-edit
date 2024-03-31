@@ -915,6 +915,22 @@ onload = function() {
         return false;
     }
 
+    // After shift/ctrl temporary mode overrides, return to previous mode
+    function end_mode_override() {
+        if (mode_override_key !== null) {
+            mode_override_key = null;
+            // Return to the previous mode/submode
+            pu.mode_set(present_mode);
+            if (present_submode === "1") {
+                pu.submode_check("sub_sudoku1");
+            } else if (present_submode === "2") {
+                pu.submode_check("sub_sudoku2");
+            } else if (present_submode === "3") {
+                pu.submode_check("sub_sudoku3");
+            }
+        }
+    }
+
     function onKeyUp(e) {
         // Allow normal typing in these cases and bail on special handling.
         if (targetTypes[e.target.type] || targetIDs[e.target.id]) {
@@ -926,16 +942,7 @@ onload = function() {
         const keylocation = e.location;
         // See if we're releasing the key that started a temporary mode override
         if (key === mode_override_key && keylocation !== 3) {
-            mode_override_key = null;
-            // Return to the previous mode/submode
-            pu.mode_set(present_mode);
-            if (present_submode === "1") {
-                pu.submode_check("sub_sudoku1");
-            } else if (present_submode === "2") {
-                pu.submode_check("sub_sudoku2");
-            } else if (present_submode === "3") {
-                pu.submode_check("sub_sudoku3");
-            }
+            end_mode_override();
 
             if (isShiftKeyPressed(key))
                 shift_release_time = Date.now();
@@ -2163,6 +2170,9 @@ onload = function() {
     document.getElementById("bg_image_url").addEventListener('change', () => pu.update_bg_image_url());
     for (let v of ['x', 'y', 'width', 'height', 'opacity', 'foreground', 'mask_white', 'threshold'])
         document.getElementById("bg_image_" + v).addEventListener('change', () => pu.update_bg_image_attrs());
+
+    // End the temporary mode override when changing tabs
+    document.addEventListener("visibilitychange", end_mode_override);
 
     let select = document.getElementById("mode_choices");
     Object.keys(tab_modes).forEach((key, i) => {
