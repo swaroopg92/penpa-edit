@@ -1651,6 +1651,7 @@ class Puzzle_square extends Puzzle {
                         for (var j in this[pu].number[i][0]) {
                             var text = this[pu].number[i][0].charAt(j);
                             var n = parseInt(text);
+                            n = Number.isNaN(n) ? text : n;
                             var style = this.ctx.fillStyle;
                             if (this.conflict_cell_values[i] && this.conflict_cell_values[i].includes(n))
                                 this.ctx.fillStyle = Color.RED;

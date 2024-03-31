@@ -629,27 +629,27 @@ class Conflicts {
     }
     read_number_cell(index) {
         // For the question entry we check that it is black and large
-        let entry = this.pu.pu_q.number[index];
         if (!this.pu.centerlist.includes(index))
             return undefined;
 
+        let entry = this.pu.pu_q.number[index];
         if (Array.isArray(entry) && entry.length === 3 &&
-            entry[2] === "1" // Large
-            &&
-            entry[1] === 1 // black
-            &&
-            Number.isFinite(parseInt(entry[0]))) {
-            return parseInt(entry[0]);
+                entry[2] === "1" // Large
+                &&
+                entry[1] === 1) { // black
+            if (Number.isFinite(parseInt(entry[0])))
+                return parseInt(entry[0]);
+            return entry[0];
         }
         // For the answer entry we allow more colors/sizes
         entry = this.pu.pu_a.number[index];
         if (Array.isArray(entry) && entry.length === 3 &&
-            this.permit_number_size.has(entry[2]) // Large
-            &&
-            this.permit_number_colors.has(entry[1]) // black
-            &&
-            Number.isFinite(parseInt(entry[0]))) {
-            return parseInt(entry[0]);
+                this.permit_number_size.has(entry[2]) // Large
+                &&
+                this.permit_number_colors.has(entry[1])) { // black
+            if (Number.isFinite(parseInt(entry[0])))
+                return parseInt(entry[0]);
+            return entry[0];
         }
         return undefined;
     }
