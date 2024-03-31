@@ -155,6 +155,55 @@ class Conflicts {
         }
     }
 
+    // Check an irregular sudoku puzzle.
+    check_irregular() {
+        const data = this.get_data('number_grid');
+        const r = data.length
+        if (!r)
+            return;
+        const c = data[0].length;
+        const n = Math.max(r, c);
+
+        this.check_latin_square();
+
+        // Determine regions from edges. We use "full" mode that takes edges from problem or solution
+        // mode and accepts all normal edge styles
+        let regions_matrix = this.pu.getregiondata(r, c, "full");
+        // Make a list of cells in each region
+        let regions = {};
+        for (let i = 0; i < r; i++) {
+            for (let j = 0; j < c; j++) {
+                let region = regions_matrix[i][j];
+                if (!regions[region])
+                    regions[region] = []
+                regions[region].push([i, j]);
+            }
+        }
+
+        // Check each region
+        for (let region in regions) {
+            // Skip regions with more cells than there are rows or columns (in something like a
+            // chaos construction this could indicate the large area of as-yet-undetermined regions)
+            if (regions[region].length > n)
+                continue;
+            for (let [i, j] of regions[region]) {
+                const el = data[i][j];
+                if (el === undefined)
+                    continue;
+                for (let [k, l] of regions[region]) {
+                    if (k === i && l === j)
+                        continue;
+                    const el2 = data[k][l];
+
+                    this.add_conflict_value(l, k, el);
+
+                    if (el2 === el)
+                        this.add_conflict(l, k);
+                }
+            }
+        }
+    }
+
     // Check that consecutive values are only present exactly where bars are
     // between cells.
     check_consecutive() {

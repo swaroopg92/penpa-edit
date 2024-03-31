@@ -3,6 +3,8 @@ const penpa_tags = {
     "options": {
         "Sudoku": [
             "classic",
+            "latin",
+            "irregular",
             "alphabet",
             "arrow",
             "thermo",

@@ -3949,27 +3949,34 @@ class Puzzle {
         }
 
         if (mode === "pu_q") {
-            var edge_elements = this.pu_q.lineE;
+            var edge_elements = [this.pu_q.lineE];
             var supportstyles = [2, 21];
         } else if (mode === "pu_a") {
-            var edge_elements = this.pu_a.lineE;
+            var edge_elements = [this.pu_a.lineE];
             var supportstyles = [3];
+        }
+        // Full mode: accept edges of any normal style and from both problem/solution mode
+        else if (mode === "full") {
+            var edge_elements = [this.pu_q.lineE, this.pu_a.lineE];
+            var supportstyles = [2, 3, 4, 5, 8, 9, 21];
         }
 
         // Setup Edge Matrices
         var pointA, pointA_x, pointA_y, edge, points;
-        for (edge in edge_elements) {
-            // If black edge or thicker edge in problem, green edge in solution
-            if (supportstyles.includes(edge_elements[edge])) {
-                points = edge.split(',');
-                pointA = Number(points[0]) - (this.nx0 * this.ny0);
-                pointA_x = (pointA % this.nx0); //column
-                pointA_y = parseInt(pointA / this.nx0); //row
-                if ((Number(points[1]) - Number(points[0])) === 1) {
-                    // data for up matrix
-                    up_matrix[pointA_y - 1][pointA_x - 1] = 1;
-                } else {
-                    right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+        for (let edge_map of edge_elements) {
+            for (edge in edge_map) {
+                // If black edge or thicker edge in problem, green edge in solution
+                if (supportstyles.includes(edge_map[edge])) {
+                    points = edge.split(',');
+                    pointA = Number(points[0]) - (this.nx0 * this.ny0);
+                    pointA_x = (pointA % this.nx0); //column
+                    pointA_y = parseInt(pointA / this.nx0); //row
+                    if ((Number(points[1]) - Number(points[0])) === 1) {
+                        // data for up matrix
+                        up_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                    } else {
+                        right_matrix[pointA_y - 1][pointA_x - 1] = 1;
+                    }
                 }
             }
         }
@@ -12439,12 +12446,16 @@ class Puzzle {
                 if (this.conflict_cells.length === 0) {
                     this.conflicts.check_consecutive();
                 }
+            } else if (tags.has('irregular')) {
+                this.conflicts.check_irregular();
             } else if (tags.has('classic')) {
                 this.conflicts.check_sudoku();
             } else if (tags.has('starbattle')) {
                 this.conflicts.check_star_battle();
             } else if (tags.has('tomtom')) {
                 this.conflicts.check_tomtom();
+            } else if (tags.has('latin')) {
+                this.conflicts.check_latin_square();
             }
             this.previous_sol = current_sol;
             if (this.conflict_cells.length !== 0) {
