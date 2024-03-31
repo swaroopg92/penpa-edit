@@ -2000,6 +2000,8 @@ class Puzzle {
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
         let checkall = true;
 
+        this.multisolution = false;
+
         // loop through and check if any "AND" settings are selected
         for (var i = 0; i < settingstatus_and.length; i++) {
             if (settingstatus_and[i].checked) {
