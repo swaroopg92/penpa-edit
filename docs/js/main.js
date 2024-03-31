@@ -42,6 +42,9 @@ onload = function() {
     }
     this.ondown_key = ondown_key;
 
+    // Update genre tags
+    $('#genre_tags_opt').on('change', () => pu.update_genre_tags());
+
     // Declare custom color picker
     $(colorpicker_special).spectrum({
         type: "color",
@@ -1248,6 +1251,7 @@ onload = function() {
                 break;
                 //savetext
             case "saveinfogenre":
+            case "saveinfogenre2":
                 show_genretags();
                 e.preventDefault();
                 break;

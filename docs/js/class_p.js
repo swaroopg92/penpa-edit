@@ -1537,6 +1537,11 @@ class Puzzle {
         this.redraw();
     }
 
+    update_genre_tags() {
+        this.user_tags = $('#genre_tags_opt').select2("val");
+        pu.redraw();
+    }
+
     ///////SAVE/////////
 
     __export_text_shared() {
