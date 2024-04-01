@@ -916,6 +916,7 @@ body textarea {
 
 .modal,
 #modal-image,
+#modal-bg-image,
 #modal-save,
 #modal-newsize,
 #modal-input,
@@ -929,6 +930,10 @@ body textarea {
     width: 100%;
     overflow: auto;
     background-color: var(--transparent70);
+}
+
+#modal-bg-image input[type=text] {
+    width: 100%
 }
 
 #modal-keys,

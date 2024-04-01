@@ -60,6 +60,20 @@ class Puzzle {
         this.ctx = this.canvas.getContext("2d");
         this.obj = document.getElementById("dvique");
 
+        // Background image properties
+        this.bg_image = null;
+        this.bg_image_data = {
+            url: null,
+            x: 0,
+            y: 0,
+            width: undefined,
+            height: undefined,
+            opacity: 100,
+            foreground: true,
+            mask_white: true,
+        };
+        this.bg_image_canvas = null;
+
         // Drawing position
         this.mouse_mode = "";
         this.mouse_click = 0; // 0 for left, 2 for right
@@ -1601,6 +1615,9 @@ class Puzzle {
 
         // Multi Solution status, it will be true only when generating solution checking
         text += "," + multisolution;
+
+        // Background image
+        text += "," + encrypt_data(JSON.stringify(this.bg_image_data));
 
         return text + "\n";
     }
@@ -12131,16 +12148,118 @@ class Puzzle {
     //   draw
     /////////////////////////////////
 
+    update_bg_image_url() {
+        this.bg_image_data.url = document.getElementById("bg_image_url").value;
+
+        this.bg_image_canvas = null;
+
+        this.bg_image = new Image();
+        this.bg_image.crossOrigin = "anonymous";
+        this.bg_image.src = this.bg_image_data.url;
+        this.bg_image.onload = () => this.extract_bg_image_pixels();
+    }
+
+    extract_bg_image_pixels() {
+        if (this.bg_image) {
+            let data = this.bg_image_data;
+
+            // Create a temporary canvas and write the image to it
+            let canvas = document.createElement('canvas');
+            let ctx = canvas.getContext('2d');
+            canvas.width = this.bg_image.width;
+            canvas.height = this.bg_image.height;
+            ctx.drawImage(this.bg_image, 0, 0);
+
+            // Extract the canvas data
+            let raw_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            // Set alpha channel if given an opacity parameter
+            if (data.opacity >= 0 && data.opacity < 100) {
+                let opacity = 255 * data.opacity / 100;
+                opacity = Math.max(0, Math.min(opacity, 255));
+
+                for (let i = 0; i < raw_data.data.length; i += 4)
+                    raw_data.data[i + 3] = opacity;
+            }
+
+            // Mask out white pixels if requested
+            if (data.mask_white) {
+                const t = data.threshold;
+                for (let i = 0; i < raw_data.data.length; i += 4) {
+                    let [r, g, b] = raw_data.data.slice(i, i+3);
+                    if (r > t && g > t && b > t)
+                        raw_data.data[i+3] = 0;
+                }
+            }
+
+            // Write the data back to the canvas for drawing
+            ctx.putImageData(raw_data, 0, 0);
+
+            this.bg_image_canvas = canvas;
+
+            this.redraw();
+        }
+    }
+
+    update_bg_image_attrs() {
+        for (let v of ['x', 'y', 'width', 'height', 'opacity', 'threshold']) {
+            let value = parseInt(document.getElementById("bg_image_" + v).value);
+
+            if (!Number.isNaN(value))
+                this.bg_image_data[v] = value;
+            else
+                delete this.bg_image_data[v];
+        }
+        this.bg_image_data.foreground = document.getElementById("bg_image_foreground").checked;
+        this.bg_image_data.mask_white = document.getElementById("bg_image_mask_white").checked;
+        this.extract_bg_image_pixels();
+    }
+
+    load_bg_image_attrs() {
+        for (let v of ['url', 'x', 'y', 'width', 'height', 'opacity', 'threshold']) {
+            if (this.bg_image_data[v] !== undefined)
+                document.getElementById("bg_image_" + v).value = this.bg_image_data[v];
+        }
+        if (this.bg_image_data.foreground !== undefined)
+            document.getElementById("bg_image_foreground").value = this.bg_image_data.foreground;
+        if (this.bg_image_data.mask_white !== undefined)
+            document.getElementById("bg_image_mask_white").value = this.bg_image_data.mask_white;
+        // Trigger a reload of the image
+        this.update_bg_image_url();
+    }
+
+    draw_bg_image() {
+        if (this.bg_image && this.bg_image_canvas) {
+            let data = this.bg_image_data;
+
+            // Take the width/height from the given parameters or from the given image if not
+            let width = data.width, height = data.height;
+            if (!width) {
+                if (!height) {
+                    width = this.bg_image.width;
+                    height = this.bg_image.height;
+                } else
+                    width = (this.bg_image.width / this.bg_image.height) * height;
+            } else if (!height)
+                height = (this.bg_image.height / this.bg_image.width) * width;
+
+            this.ctx.drawImage(this.bg_image_canvas, data.x, data.y, width, height);
+        }
+    }
 
     redraw(svgcall = false, check_sol = true) {
         try {
             this.flushcanvas(svgcall);
+            if (!this.bg_image_data.foreground)
+                this.draw_bg_image();
             if (check_sol) {
                 this.check_solution();
             }
             panel_pu.draw_panel();
             this.draw();
             this.set_redoundocolor();
+            if (this.bg_image_data.foreground)
+                this.draw_bg_image();
         }
         // don't crash the UI
         catch (err) {

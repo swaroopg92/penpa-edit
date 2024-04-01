@@ -153,6 +153,7 @@
                     <button id="savetext">Share</button>
                     <a id="download_link"></a>
                     <button id="duplicate" onclick="duplicate();">Clone</button>
+                    <button id="edit_bg_image">Edit Background</button>
                     <button id="input_sudoku">I/O Sudoku</button>
                     <button id="input_url">Load</button>
                     <button id="page_settings">Settings</button>
@@ -924,6 +925,61 @@
                     <button class="addbottom" id="rt_addbottom_r">+ &#9660;</button>
                     <button class="subbottom" id="rt_subbottom_r">&ndash; &#9650;</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-bg-image" class="modal">
+        <div id="modal-bg-image-content" class="modal-content">
+            <h3 class="modal-header">Set Background Image</h3>
+            <div>
+                <table style="width: 100%">
+                    <colgroup>
+                        <col width="50%" />
+                        <col width="50%" />
+                    </colgroup>
+                    <tr>
+                        <td colspan="2">Image URL:</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="text" id="bg_image_url"/> </td>
+                    </tr>
+                    <tr>
+                        <td>X position:</td>
+                        <td><input type="text" value="0" id="bg_image_x"/></td>
+                    </tr>
+                    <tr>
+                        <td>Y position:</td>
+                        <td><input type="text" value="0" id="bg_image_y"/></td>
+                    </tr>
+                    <tr>
+                        <td>Width:</td>
+                        <td><input type="text" id="bg_image_width"/></td>
+                    </tr>
+                    <tr>
+                        <td>Height:</td>
+                        <td><input type="text" id="bg_image_height"/></td>
+                    </tr>
+                    <tr>
+                        <td>Opacity:</td>
+                        <td><input type="text" value="100" id="bg_image_opacity"/></td>
+                    </tr>
+                    <tr>
+                        <td>Draw in foreground:</td>
+                        <td><input type="checkbox" id="bg_image_foreground"/></td>
+                    </tr>
+                    <tr>
+                        <td>Mask out white from image:</td>
+                        <td><input type="checkbox" id="bg_image_mask_white"/></td>
+                    </tr>
+                    <tr>
+                        <td>White mask threshold:</td>
+                        <td><input type="text" value="240" id="bg_image_threshold"/></td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <div class="nb_button">
+                <input type="button" id="closeBtn_bg_image" value="Close" />
             </div>
         </div>
     </div>

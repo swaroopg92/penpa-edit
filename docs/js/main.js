@@ -1719,6 +1719,10 @@ onload = function() {
                 document.getElementById('modal-image').style.display = 'none';
                 e.preventDefault();
                 break;
+            case "closeBtn_bg_image":
+                document.getElementById('modal-bg-image').style.display = 'none';
+                e.preventDefault();
+                break;
                 //newboard
             case "nb_size1":
             case "nb_size2":
@@ -2124,6 +2128,15 @@ onload = function() {
             }
         }
     }
+
+    // Background image handling
+    document.getElementById("edit_bg_image").addEventListener('click', () => {
+        document.getElementById('modal-bg-image').style.display = 'block';
+    });
+
+    document.getElementById("bg_image_url").addEventListener('change', () => pu.update_bg_image_url());
+    for (let v of ['x', 'y', 'width', 'height', 'opacity', 'foreground', 'mask_white', 'threshold'])
+        document.getElementById("bg_image_" + v).addEventListener('change', () => pu.update_bg_image_attrs());
 
     let select = document.getElementById("mode_choices");
     Object.keys(tab_modes).forEach((key, i) => {
