@@ -91,6 +91,19 @@ const UserSettings = {
         return this._conflict_detection;
     },
 
+    // Check conflicts on pencil marks
+    _check_pencil_marks: true,
+    set check_pencil_marks(newValue) {
+        this._check_pencil_marks = newValue === "1" || newValue === "true" || newValue === true;
+        document.getElementById("check_pencil_marks_opt").value = this._check_pencil_marks ? "1" : "0";
+        if (window.pu)
+            pu.redraw();
+        this.attemptSave();
+    },
+    get check_pencil_marks() {
+        return this._check_pencil_marks;
+    },
+
     // Star Battle Dot handling
     _starbattle_dots: 1,
     set starbattle_dots(newValue) {
@@ -398,6 +411,7 @@ const UserSettings = {
     },
 
     can_save: [
+        'check_pencil_marks',
         'color_theme',
         'conflict_detection',
         'custom_colors_on',

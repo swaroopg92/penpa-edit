@@ -2358,6 +2358,11 @@ onload = function() {
         pu.redraw();
     }
 
+    // Conflict check on pencil marks
+    document.getElementById("check_pencil_marks_opt").onchange = function() {
+        UserSettings.check_pencil_marks = this.value;
+    }
+
     // Let other colors match "green" for line/edge solution check
     document.getElementById("ignore_line_style_opt").onchange = function() {
         UserSettings.ignore_line_style = this.value;

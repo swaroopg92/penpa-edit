@@ -1633,36 +1633,45 @@ class Puzzle_square extends Puzzle {
                         else
                             maxWidth *= 0.9;
 
-                        // Calculate text width to see if the font needs to be shrunk
-                        set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
-                        var width = this.ctx.measureText(this[pu].number[i][0]).width;
-                        if (width > maxWidth) {
-                            fontSize = maxWidth / width * fontSize;
-                            width = maxWidth;
+                        // Fast path, no conflict checking, just draw it all at once
+                        if (!UserSettings.check_pencil_marks) {
                             set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                            this.ctx.text(this[pu].number[i][0], p_x, p_y + dy * factor * this.size, maxWidth);
                         }
+                        // Slow path: have to draw the digits one by one so we can change
+                        // colors on them individually
+                        else {
+                            // Calculate text width to see if the font needs to be shrunk
+                            set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                            var width = this.ctx.measureText(this[pu].number[i][0]).width;
+                            if (width > maxWidth) {
+                                fontSize = maxWidth / width * fontSize;
+                                width = maxWidth;
+                                set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                            }
 
-                        // Left align since we're drawing each digit separately
-                        var align = this.ctx.textAlign;
-                        this.ctx.textAlign = "left";
+                            // Left align since we're drawing each digit separately
+                            var align = this.ctx.textAlign;
+                            this.ctx.textAlign = "left";
 
-                        var dx = -width / 2;
-                        // Draw each individual digit
-                        for (var j in this[pu].number[i][0]) {
-                            var text = this[pu].number[i][0].charAt(j);
-                            var n = parseInt(text);
-                            n = Number.isNaN(n) ? text : n;
-                            var style = this.ctx.fillStyle;
-                            if (this.conflict_cell_values[i] && this.conflict_cell_values[i].includes(n))
-                                this.ctx.fillStyle = Color.RED;
+                            var dx = -width / 2;
+                            // Draw each individual digit
+                            for (var j in this[pu].number[i][0]) {
+                                var text = this[pu].number[i][0].charAt(j);
+                                var n = parseInt(text);
+                                n = Number.isNaN(n) ? text : n;
+                                var style = this.ctx.fillStyle;
+                                if (this.conflict_cell_values[i] && this.conflict_cell_values[i].includes(n))
+                                    this.ctx.fillStyle = Color.RED;
 
-                            // Draw the digit and add its width to the horizontal offset
-                            this.ctx.text(text, p_x + dx, p_y + dy * factor * this.size, maxWidth);
-                            dx += this.ctx.measureText(text).width;
+                                // Draw the digit and add its width to the horizontal offset
+                                this.ctx.text(text, p_x + dx, p_y + dy * factor * this.size, maxWidth);
+                                dx += this.ctx.measureText(text).width;
 
-                            this.ctx.fillStyle = style;
+                                this.ctx.fillStyle = style;
+                            }
+                            this.ctx.textAlign = align;
                         }
-                        this.ctx.textAlign = align;
                     }
                     break;
                 case "7": //sudoku
@@ -1723,7 +1732,8 @@ class Puzzle_square extends Puzzle {
                     set_font_style(this.ctx, 0.32 * this.size.toString(10), this[pu].numberS[i][1]);
                     var n = parseInt(this[pu].numberS[i][0]);
                     var style = this.ctx.fillStyle;
-                    if (this.conflict_cell_values[j] && this.conflict_cell_values[j].includes(n))
+                    if (UserSettings.check_pencil_marks && this.conflict_cell_values[j] &&
+                            this.conflict_cell_values[j].includes(n))
                         this.ctx.fillStyle = Color.RED;
                     this.ctx.textAlign = "center";
                     this.ctx.text(this[pu].numberS[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size, this.size * 0.48);
