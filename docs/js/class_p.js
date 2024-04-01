@@ -1574,7 +1574,7 @@ class Puzzle {
 
     ///////SAVE/////////
 
-    __export_text_shared() {
+    __export_text_shared(multisolution) {
         var text = "";
         text = this.gridtype + "," + this.nx.toString() + "," + this.ny.toString() + "," + this.size.toString() + "," +
             this.theta.toString() + "," + this.reflect.toString() + "," + this.canvasx + "," + this.canvasy + "," + this.center_n + "," + this.center_n0 + "," +
@@ -1599,7 +1599,10 @@ class Puzzle {
         let border_status = UserSettings.draw_edges ? 'ON' : 'OFF';
         text += "," + border_status;
 
-        return text;
+        // Multi Solution status, it will be true only when generating solution checking
+        text += "," + multisolution;
+
+        return text + "\n";
     }
 
     __export_list_tab_shared() {
@@ -1674,10 +1677,7 @@ class Puzzle {
     }
 
     maketext() {
-        var text = this.__export_text_shared();
-
-        // Multi Solution status, it will be true only when generating solution checking
-        text += "," + false + "\n";
+        var text = this.__export_text_shared(false);
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -1760,16 +1760,10 @@ class Puzzle {
     }
 
     maketext_duplicate() {
-        var text = this.__export_text_shared();
-
         // if solution check exists, then read multisolution variable or else set to false
-        if (this.solution) {
-            // Multi Solution status, it will be true only when generating solution checking
-            text += "," + this.multisolution + "\n";
-        } else {
-            // Multi Solution status, it will be true only when generating solution checking
-            text += "," + false + "\n";
-        }
+        let multi = this.solution ? this.multisolution : false;
+
+        var text = this.__export_text_shared(multi);
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode) + "\n";
@@ -1877,17 +1871,14 @@ class Puzzle {
     }
 
     maketext_solve(type = "none") {
-        var text = this.__export_text_shared();
-
         // if solution check exists, then read multisolution variable or else set to false
+        let multi = false;
         if (type === "answercheck") {
             this.checkall_status(); // this will update the multisolution status
-            // Multi Solution status, it will be true only when generating solution checking
-            text += "," + this.multisolution + "\n";
-        } else {
-            // Multi Solution status, it will be true only when generating solution checking
-            text += "," + false + "\n";
+            multi = this.multisolution;
         }
+
+        var text = this.__export_text_shared(multi);
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
@@ -1939,10 +1930,7 @@ class Puzzle {
     }
 
     maketext_compsolve() {
-        var text = this.__export_text_shared();
-
-        // Multi Solution status, it will be true only when generating solution checking
-        text += "," + false + "\n";
+        var text = this.__export_text_shared(false);
 
         text += JSON.stringify(this.space) + "\n";
         text += JSON.stringify(this.mode.grid) + "~" + JSON.stringify(this.mode["pu_a"]["edit_mode"]) + "~" + JSON.stringify(this.mode["pu_a"][this.mode["pu_a"]["edit_mode"]]) + "\n";
