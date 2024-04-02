@@ -77,7 +77,9 @@ class Puzzle {
         this.cursolS = 0;
         this.old_selection = null;
         this.rect_select_base = null;
+        this.rect_surface_draw = false;
         this.select_remove = false;
+        this.surface_remove = false;
         this.panelflag = false;
         this.custom_colors = {};
         // Drawing mode
@@ -8092,7 +8094,7 @@ class Puzzle {
 
         let edit_mode = this.mode[this.mode.qa].edit_mode;
 
-        const modes = ['sudoku', 'number'];
+        const modes = ['sudoku', 'number', 'surface'];
 
         // Check if this is the start of an alt-drag rectangular selection event
         if (isAltKeyHeld(e) && this.grid_is_square() && modes.includes(edit_mode)) {
@@ -8103,6 +8105,20 @@ class Puzzle {
             // old selection so we can easily combine them
             this.rect_select_base = obj.index;
             this.old_selection = this.selection;
+
+            if (edit_mode === "surface") {
+                this.rect_surface_draw = true;
+                this.rect_surface_secondary = (this.mouse_mode === "down_right");
+
+                // Check here if the start cell already has the given color (primary or secondary).
+                // If so, we remove the selected cells instead.
+                let color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+                if (this.rect_surface_secondary)
+                    color = UserSettings.secondcolor;
+                this.surface_remove = false;
+                if (this[this.mode.qa].surface[num] && this[this.mode.qa].surface[num] === color)
+                    this.surface_remove = true;
+            }
         } else {
             this.rect_select_base = null;
             this.old_selection = [];
@@ -8266,21 +8282,51 @@ class Puzzle {
 
     mouse_surface(x, y, num) {
         if (this.mouse_mode === "down_left") {
-            this.drawing = true;
-            if (this.ondown_key === "touchstart") {
-                this.re_surface(num);
-            } else {
-                this.re_surface_twobutton(num);
+            if (!this.rect_surface_draw) {
+                this.drawing = true;
+                if (this.ondown_key === "touchstart") {
+                    this.re_surface(num);
+                } else {
+                    this.re_surface_twobutton(num);
+                }
+                this.last = num;
             }
-            this.last = num;
         } else if (this.mouse_mode === "down_right") {
-            this.drawing = true;
-            this.re_surfaceR(num);
-            this.last = num;
+            if (!this.rect_surface_draw) {
+                this.drawing = true;
+                this.re_surfaceR(num);
+                this.last = num;
+            }
         } else if (this.mouse_mode === "move") {
             this.re_surfacemove(num);
             this.last = num;
         } else if (this.mouse_mode === "up") {
+            // If rectangular area is being selected, add all the cells now
+            if (this.rect_surface_draw) {
+                var color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+                let cc;
+                if (this.rect_surface_secondary) {
+                    color = UserSettings.secondcolor;
+                    if (UserSettings.custom_colors_on)
+                        cc = this.get_rgbcolor(color);
+                } else if (UserSettings.custom_colors_on)
+                    cc = this.get_customcolor();
+
+                this.undoredo_counter++;
+                for (var k of this.selection) {
+                    if (this.surface_remove)
+                        this.remove_value("surface", k);
+                    else
+                        this.set_value("surface", k, color, cc);
+                }
+
+                // Reset all rectangle-drawing attributes
+                this.rect_surface_draw = false;
+                this.rect_surface_secondary = false;
+                this.selection = [];
+                this.redraw();
+            }
+
             if (this.last > 0) {
                 this.cursol = this.last;
             }
@@ -12187,13 +12233,13 @@ class Puzzle {
         } else {
             var keys = Object.keys(this[pu].surface);
         }
-        for (var k = 0; k < keys.length; k++) {
-            var i = keys[k];
-            set_surface_style(this.ctx, this[pu].surface[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
-                this.ctx.fillStyle = this[pu + "_col"].surface[i];
-                this.ctx.strokeStyle = this.ctx.fillStyle;
+        const draw_cell = (i) => {
+            // XXX [ZW] Not sure why this was happening (grid resizing...?) but if this gets
+            // called with a cell with no surrounding vertices, bail out to continue rendering
+            if (this.point[i].surround.length == 0) {
+                return;
             }
+
             this.ctx.beginPath();
             this.ctx.moveTo(this.point[this.point[i].surround[0]].x, this.point[this.point[i].surround[0]].y);
             for (var j = 1; j < this.point[i].surround.length; j++) {
@@ -12202,6 +12248,38 @@ class Puzzle {
             this.ctx.closePath();
             this.ctx.fill();
             this.ctx.stroke();
+        }
+
+        for (var k = 0; k < keys.length; k++) {
+            var i = keys[k];
+            if (this.rect_surface_draw && this.surface_remove && this.selection.includes(parseInt(i)))
+                continue;
+            set_surface_style(this.ctx, this[pu].surface[i]);
+            if (UserSettings.custom_colors_on && this[pu + "_col"].surface[i]) {
+                this.ctx.fillStyle = this[pu + "_col"].surface[i];
+                this.ctx.strokeStyle = this.ctx.fillStyle;
+            }
+            draw_cell(i);
+        }
+        if (this.rect_surface_draw && !this.surface_remove) {
+            let color = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+            if (this.rect_surface_secondary)
+                color = UserSettings.secondcolor;
+
+            set_surface_style(this.ctx, color);
+
+            if (UserSettings.custom_colors_on) {
+                let cc;
+                if (this.rect_surface_secondary)
+                    cc = this.get_rgbcolor(color);
+                else
+                    cc = this.get_customcolor()
+                this.ctx.fillStyle = cc;
+                this.ctx.strokeStyle = this.ctx.fillStyle;
+            }
+
+            for (var i of this.selection)
+                draw_cell(i);
         }
     }
 
