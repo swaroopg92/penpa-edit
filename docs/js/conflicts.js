@@ -16,6 +16,7 @@ class Conflicts {
     reset() {
         this.data_cache = [];
         this.pu.conflict_cells = [];
+        this.pu.conflict_cell_values = [];
     }
 
     get_data(item) {
@@ -44,9 +45,14 @@ class Conflicts {
             for (let j = 0; j < n; j++) {
                 const row_el = data[i][j];
                 if (row_el >= 1 && row_el <= n) {
-                    for (let k = j+1; k < n; k++) {
+                    // Add this value to conflict values
+                    for (let k = 0; k < n; k++) {
+                        if (k === j)
+                            continue;
+                        this.add_conflict_value(k, i, row_el);
+
                         const el2 = data[i][k];
-                        if (row_el === el2) {
+                        if (k > j && row_el === el2) {
                             this.add_conflict(j, i);
                             this.add_conflict(k, i);
                         }
@@ -55,9 +61,14 @@ class Conflicts {
 
                 const col_el = data[j][i];
                 if (col_el >= 1 && col_el <= n) {
-                    for (let k = j+1; k < n; k++) {
+                    // Add this value to conflict values
+                    for (let k = 0; k < n; k++) {
+                        if (k === j)
+                            continue;
+                        this.add_conflict_value(i, k, col_el);
+
                         const el2 = data[k][i];
-                        if (col_el === el2) {
+                        if (k > j && col_el === el2) {
                             this.add_conflict(i, j);
                             this.add_conflict(i, k);
                         }
@@ -135,6 +146,9 @@ class Conflicts {
                         let ll = bj + l;
                         if (kk === i && ll === j)
                             continue;
+
+                        this.add_conflict_value(ll, kk, el);
+
                         const el2 = data[kk][ll];
                         if (el2 === el)
                             this.add_conflict(ll, kk);
@@ -570,6 +584,9 @@ class Conflicts {
     read_number_cell(index) {
         // For the question entry we check that it is black and large
         let entry = this.pu.pu_q.number[index];
+        if (!this.pu.centerlist.includes(index))
+            return undefined;
+
         if (Array.isArray(entry) && entry.length === 3 &&
             entry[2] === "1" // Large
             &&
@@ -601,6 +618,15 @@ class Conflicts {
     add_conflict_cell(index) {
         if (this.pu.conflict_cells.includes(index)) return;
         this.pu.conflict_cells.push(index);
+    }
+
+    add_conflict_value(x, y, v) {
+        var i = this.xy_to_index(x, y);
+        if (this.pu.conflict_cell_values[i] === undefined)
+            this.pu.conflict_cell_values[i] = [];
+        if (this.pu.conflict_cell_values[i].includes(v))
+            return;
+        this.pu.conflict_cell_values[i].push(v);
     }
 
     // Add conflicts for a region using the region grid and index.

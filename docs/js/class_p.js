@@ -176,6 +176,7 @@ class Puzzle {
         this.conflicts = new Conflicts(this);
         this.previous_sol = [];
         this.conflict_cells = [];
+        this.conflict_cell_values = [];
         this.url = [];
         this.ignored_line_types = {
             2: 1, // Black color
@@ -12503,6 +12504,7 @@ class Puzzle {
         if (UserSettings.conflict_detection > 1) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
+            this.conflict_cell_values = [];
             return;
         }
         if (this.user_tags) {

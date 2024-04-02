@@ -1610,16 +1610,59 @@ class Puzzle_square extends Puzzle {
                     }
                     break;
                 case "5": //small
-                    set_font_style(this.ctx, 0.25 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.02 * factor * this.size, this.size * 0.9);
-                    break;
                 case "6": //medium
-                    set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.9);
-                    break;
                 case "10": //big
-                    set_font_style(this.ctx, 0.6 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.03 * factor * this.size, this.size * 0.8);
+                    if (this[pu].number[i][0]) {
+                        // Calculate layout parameters based on size
+
+                        var fontSize = this.size;
+                        if (this[pu].number[i][2] == "5")
+                            fontSize *= 0.25;
+                        else if (this[pu].number[i][2] == "6")
+                            fontSize *= 0.4;
+                        else
+                            fontSize *= 0.6;
+
+                        var dy = 0.03;
+                        if (this[pu].number[i][2] == "5")
+                            dy = 0.02;
+
+                        var maxWidth = this.size;
+                        if (this[pu].number[i][2] == "10")
+                            maxWidth *= 0.8;
+                        else
+                            maxWidth *= 0.9;
+
+                        // Calculate text width to see if the font needs to be shrunk
+                        set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                        var width = this.ctx.measureText(this[pu].number[i][0]).width;
+                        if (width > maxWidth) {
+                            fontSize = maxWidth / width * fontSize;
+                            width = maxWidth;
+                            set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                        }
+
+                        // Left align since we're drawing each digit separately
+                        var align = this.ctx.textAlign;
+                        this.ctx.textAlign = "left";
+
+                        var dx = -width / 2;
+                        // Draw each individual digit
+                        for (var j in this[pu].number[i][0]) {
+                            var text = this[pu].number[i][0].charAt(j);
+                            var n = parseInt(text);
+                            var style = this.ctx.fillStyle;
+                            if (this.conflict_cell_values[i] && this.conflict_cell_values[i].includes(n))
+                                this.ctx.fillStyle = Color.RED;
+
+                            // Draw the digit and add its width to the horizontal offset
+                            this.ctx.text(text, p_x + dx, p_y + dy * factor * this.size, maxWidth);
+                            dx += this.ctx.measureText(text).width;
+
+                            this.ctx.fillStyle = style;
+                        }
+                        this.ctx.textAlign = align;
+                    }
                     break;
                 case "7": //sudoku
                     var sum = 0,
@@ -1637,7 +1680,11 @@ class Puzzle_square extends Puzzle {
                         set_font_style(this.ctx, 0.3 * this.size.toString(10), this[pu].number[i][1]);
                         for (var j = 0; j < 9; j++) {
                             if (this[pu].number[i][0][j] === 1) {
+                                var style = this.ctx.fillStyle;
+                                if (this.conflict_cell_values[i] && this.conflict_cell_values[i].includes(j + 1))
+                                    this.ctx.fillStyle = Color.RED;
                                 this.ctx.text((j + 1).toString(), p_x + ((j % 3 - 1) * 0.28) * this.size, p_y + (((j / 3 | 0) - 1) * 0.28 + 0.02) * this.size);
+                                this.ctx.fillStyle = style;
                             }
                         }
                     }
@@ -1671,9 +1718,15 @@ class Puzzle_square extends Puzzle {
             }
             if (true) { //(this[pu].numberS[i][0].length <= 2 ){
                 if (this.point[i]) {
+                    var [_, _, j] = this.point[i].index;
                     set_font_style(this.ctx, 0.32 * this.size.toString(10), this[pu].numberS[i][1]);
+                    var n = parseInt(this[pu].numberS[i][0]);
+                    var style = this.ctx.fillStyle;
+                    if (this.conflict_cell_values[j] && this.conflict_cell_values[j].includes(n))
+                        this.ctx.fillStyle = Color.RED;
                     this.ctx.textAlign = "center";
                     this.ctx.text(this[pu].numberS[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size, this.size * 0.48);
+                    this.ctx.fillStyle = style;
                 }
                 //}else{
                 //  set_font_style(this.ctx,0.28*this.size.toString(10),this[pu].numberS[i][1]);
