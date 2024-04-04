@@ -111,13 +111,15 @@ onload = function() {
 
     function onDown(e) {
         if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
-            if (e.type === "mousedown") {
+            if (e.type === "mousedown" || e.type === "dblclick") {
                 var event = e;
             } else {
                 var event = e.changedTouches[0];
                 e.preventDefault(); // When both mouse and touch start, only touch
             }
-            if (ondown_key === "mousedown" && event.button !== 2 && pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
+            if (ondown_key === "mousedown" && event.button !== 2 &&
+                pu.mode[pu.mode.qa].edit_mode !== "number" &&
+                pu.mode[pu.mode.qa].edit_mode !== "sudoku") { // not right click and so improve the coordinate system for certain modes
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -125,24 +127,36 @@ onload = function() {
             var x = obj.x,
                 y = obj.y,
                 num = obj.num;
+
+            let ctrl = isCtrlKeyHeld(e) || isShiftKeyHeld(e);
+
+            // Remember whether this cell was already in the selection so we can
+            // remove instead of add cells
+            pu.select_remove = ctrl && pu.selection.indexOf(num) !== -1;
+
             let skip_mouseevent = restrict_mouse(num);
             if (pu.point[num].use === 1 && !skip_mouseevent) {
-                if (event.button === 2) { // right click
+                if (e.type === "dblclick") {
+                    pu.mouse_mode = "down_left";
+                    pu.mouse_click = 0;
+                    pu.dblmouseevent(x, y, num, ctrl);
+                } else if (event.button === 2) { // right click
                     pu.mouse_mode = "down_right";
                     pu.mouse_click = 2;
                     pu.mouse_click_last = 2;
-                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
+                    pu.mouseevent(x, y, num, ctrl);
                 } else { // Left click or tap
                     pu.mouse_mode = "down_left";
                     pu.mouse_click = 0;
                     pu.mouse_click_last = 1;
-                    pu.mouseevent(x, y, num, isCtrlKeyHeld(e));
+                    pu.mouseevent(x, y, num, ctrl);
                 }
             }
         }
     }
 
     function onUp(e) {
+        let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.button !== 1) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mouseup") {
                 var event = e;
@@ -150,9 +164,10 @@ onload = function() {
                 var event = e.changedTouches[0];
                 e.preventDefault(); // When both mouse and touch start, only touch
             }
-            if (ondown_key === "mousedown" && (pu.mode[pu.mode.qa].edit_mode === "combi") && // to handle mobile/ipad users for up events for certain modes
-                (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                    pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari")) {
+            // to handle mobile/ipad users for up events for certain modes
+            if (ondown_key === "mousedown" && (edit_mode === "sudoku" || edit_mode === "number" ||
+                (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                    pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -173,6 +188,7 @@ onload = function() {
     }
 
     function onMove(e) {
+        let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.buttons !== 4) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousemove") {
                 var event = e;
@@ -183,12 +199,13 @@ onload = function() {
             if (event.buttons === 2) { // Right click and moving
                 pu.mouse_click = 2;
                 var obj = coord_point(event, 'flex');
-            } else if ((ondown_key === "touchstart" || event.buttons === 1) && pu.mode[pu.mode.qa].edit_mode === "sudoku") { // Left click/Ipad and moving in Sudoku Mode
+            } else if ((ondown_key === "touchstart" || event.buttons === 1) && 
+                (edit_mode === "sudoku" || edit_mode === "number")) { // Left click/Ipad and moving in Sudoku Mode
                 pu.mouse_click = 0;
                 var obj = coord_point(event, 'flex');
             } else {
-                if (((pu.mode[pu.mode.qa].edit_mode === "combi") && (pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "yajilin" ||
-                        pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0] === "akari"))) {
+                if (((edit_mode === "combi") && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                        pu.mode[pu.mode.qa][edit_mode][0] === "akari"))) {
                     var obj = coord_point(event, 'flex');
                 } else {
                     var obj = coord_point(event);
@@ -339,12 +356,34 @@ onload = function() {
             if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && keylocation === 3) {
                 // Skip arrow behavior deliberately for sudoku numpad usage.
             } else {
-                pu.key_arrow(key, isCtrlKeyHeld(e));
+                pu.key_arrow(key, isCtrlKeyHeld(e) || isShiftKeyHeld(e));
                 e.returnValue = false;
             }
         }
 
         if (!isCtrlKeyHeld(e) && checkShortcutKeys(e, code, capslock)) {
+            return false;
+        }
+
+        if (key === 'Escape') {
+            // Escape out of any modal dialogs if they're open
+
+            // Weird hack to make sure any sub-dialogs are exited first
+            const sub_modals = ["modal-save-tag", "modal-save2"];
+            let modals = [...document.getElementsByClassName('modal')];
+            modals.sort((a, b) => !sub_modals.includes(a.id) && sub_modals.includes(b.id));
+
+            for (var m of modals) {
+                if (m.style.display && m.style.display !== 'none') {
+                    e.preventDefault();
+                    m.style.display = 'none';
+                    return false;
+                }
+            }
+
+            pu.selection = [];
+            pu.redraw();
+            e.returnValue = false;
             return false;
         }
 
@@ -802,6 +841,7 @@ onload = function() {
         }
 
         var key = e.key;
+
         const keylocation = e.location;
         if (isShiftKeyPressed(key) && keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
             if (present_submode === "1") {
@@ -843,35 +883,25 @@ onload = function() {
         var y = e.pageY - canvas.offsetTop;
         var min0, min = 10e6;
         var num = 0;
-        let type;
         var improve_modes = ["star", "yajilin", "mines", "doublemines", "akari"];
+        let edit_mode = pu.mode[pu.mode.qa].edit_mode;
+
+        let type = pu.type;
 
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
-                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
-                type = pu.type;
-                pu.type = [0];
-            }
+            if ((edit_mode === "combi" && improve_modes.includes(pu.mode[pu.mode.qa][edit_mode][0])) ||
+                    edit_mode === "sudoku" || edit_mode === "number")
+                type = [0];
         }
 
         for (var i = 0; i < pu.point.length; i++) {
-            if (pu.point[i] && pu.type.indexOf(pu.point[i].type) != -1) {
+            if (pu.point[i] && type.indexOf(pu.point[i].type) != -1) {
                 min0 = (x - pu.point[i].x) ** 2 + (y - pu.point[i].y) ** 2;
                 if (min0 < min) {
                     min = min0;
                     num = i;
                 }
-            }
-        }
-
-        // resetting the type for starbattle composite mode
-        if (fittype === 'flex') {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
-                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
-                pu.type = type;
             }
         }
 
@@ -990,14 +1020,6 @@ onload = function() {
         }
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
-        }
-        // This segment of code I added for a purpose but don't recollect the reason.
-        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
-        if (pu.selection.length > 0 && e.target.id.indexOf("sub_sudoku") == -1 && e.target.id.indexOf("st_sudoku") == -1 &&
-            e.target.id != "float-canvas" && !isCtrlKeyHeld(e)) {
-            // clear selection
-            pu.selection = [];
-            pu.redraw();
         }
         // Middle click for switching problem and solution
         // Applicable only in setter mode
@@ -1896,6 +1918,18 @@ onload = function() {
         }
         lines.push(currentLine);
         return lines;
+    }
+
+    // Double click to select all of a certain element
+    document.addEventListener("dblclick", window_dblclick, { passive: false });
+    function window_dblclick(e) {
+        if (e.target.id === "canvas") {
+            document.getElementById("inputtext").blur(); // Remove focus from text box
+            onDown(e);
+            if (checkms === 0) {
+                e.preventDefault();
+            }
+        }
     }
 
     //panel(drag_window)

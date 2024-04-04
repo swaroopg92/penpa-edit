@@ -50,6 +50,7 @@ class Puzzle_square extends Puzzle {
         var ny = this.ny0;
         var adjacent, surround, type, use, neighbor, adjacent_dia;
         var point = [];
+        const index = (x, y) => [x, y, this.nx0 * y + x];
         //center
         type = 0;
         for (var j = 0; j < ny; j++) {
@@ -59,7 +60,7 @@ class Puzzle_square extends Puzzle {
                 adjacent_dia = [k - nx - 1, k - nx + 1, k + nx - 1, k + nx + 1];
                 surround = [k + nx * ny - nx - 1, k + nx * ny - nx, k + nx * ny, k + nx * ny - 1];
                 neighbor = [k + 2 * nx * ny - nx, k + 2 * nx * ny, k + 3 * nx * ny - 1, k + 3 * nx * ny];
-                point[k] = new Point((i + 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use, neighbor, adjacent_dia);
+                point[k] = new Point((i + 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use, neighbor, adjacent_dia, 0, index(i, j));
                 k++;
             }
         }
@@ -71,7 +72,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k - nx, k - 1, k + 1, k + nx];
                 adjacent_dia = [k - nx - 1, k - nx + 1, k + nx - 1, k + nx + 1];
                 surround = [];
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia);
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia, 0, index(i, j));
                 k++;
             }
         }
@@ -85,7 +86,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k + nx, k - nx];
                 surround = [];
                 neighbor = [k - 2 * nx * ny, k - 2 * nx * ny + nx];
-                point[k] = new Point(point[i + j * nx].x, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, neighbor);
+                point[k] = new Point(point[i + j * nx].x, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
                 k++;
             }
         }
@@ -96,7 +97,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k + 1, k - 1];
                 surround = [];
                 neighbor = [k - 3 * nx * ny, k - 3 * nx * ny + 1];
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use, neighbor);
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
                 k++;
             }
         }
@@ -109,16 +110,16 @@ class Puzzle_square extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 surround = [];
                 adjacent = [k - 4 * nx + 2, k - 3, k + 1, k + 2];
-                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
                 adjacent = [k - 4 * nx + 2, k - 1, k + 3, k + 2];
-                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
                 adjacent = [k - 2, k - 3, k + 1, k + 4 * nx - 2];
-                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
                 adjacent = [k - 2, k - 1, k + 3, k + 4 * nx - 2];
-                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
             }
         }
@@ -131,13 +132,13 @@ class Puzzle_square extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 adjacent = [];
                 surround = [];
-                point[k] = new Point(point[i + j * nx].x - 0 * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - 0 * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
-                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - 0 * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + r * this.size, point[i + j * nx].y - 0 * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
-                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + 0 * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y + 0 * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
-                point[k] = new Point(point[i + j * nx].x + 0 * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + 0 * this.size, point[i + j * nx].y + r * this.size, type, adjacent, surround, use, [], [], 0, index(i, j));
                 k++;
             }
         }
@@ -180,7 +181,9 @@ class Puzzle_square extends Puzzle {
 
     type_set() {
         var type
-        switch (this.mode[this.mode.qa].edit_mode) {
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+        let submode = this.mode[this.mode.qa][edit_mode][0];
+        switch (edit_mode) {
             case "surface":
             case "board":
                 type = [0];
@@ -194,11 +197,11 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "number":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                if (submode === "2") {
                     type = [0];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+                } else if (submode === "3") {
                     type = [4];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
+                } else if (submode === "9") {
                     type = [5];
                 } else {
                     if (!UserSettings.draw_edges) {
@@ -209,20 +212,20 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "line":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
+                if (submode === "4") {
                     type = [2, 3];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                } else if (submode === "2") {
                     type = [0, 1];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") {
+                } else if (submode === "5") {
                     type = [0, 2, 3];
                 } else {
                     type = [0];
                 }
                 break;
             case "lineE":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
+                if (submode === "4") {
                     type = [2, 3];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                } else if (submode === "2") {
                     type = [0, 1];
                 } else {
                     type = [1];
@@ -236,21 +239,21 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "cage":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "1") {
+                if (submode === "1") {
                     type = [0];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                } else if (submode === "2") {
                     type = [4];
                 }
                 break;
             case "special":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
+                if (submode === "polygon") {
                     type = [1];
                 } else {
                     type = [0, 1];
                 }
                 break;
             case "combi":
-                switch (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0]) {
+                switch (submode) {
                     case "tents":
                     case "linex":
                     case "linedir":
@@ -347,11 +350,13 @@ class Puzzle_square extends Puzzle {
     }
 
     cursolcheck() {
-        if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+        let submode = this.mode[this.mode.qa][edit_mode][0];
+        if (edit_mode === "number" && submode === "3") {
             if (this.cursolS > 8 * (this.nx0) * (this.ny0)) {
                 this.cursolS -= 4 * (this.nx0) * (this.ny0);
             }
-        } else if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
+        } else if (edit_mode === "number" && submode === "9") {
             if (this.cursolS < 8 * (this.nx0) * (this.ny0)) {
                 this.cursolS += 4 * (this.nx0) * (this.ny0);
             }
@@ -386,8 +391,10 @@ class Puzzle_square extends Puzzle {
                 c = b[3];
                 break;
         }
-        if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol" || this.mode[this.mode.qa].edit_mode === "sudoku") {
-            if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
+        let edit_mode = this.mode[this.mode.qa].edit_mode;
+        let submode = this.mode[this.mode.qa][edit_mode][0];
+        if (edit_mode === "number" || edit_mode === "symbol" || edit_mode === "sudoku") {
+            if (edit_mode === "number" && submode === "3") {
                 switch (c) {
                     case 0:
                         a = this.cursolS % 2 === 0 ? this.cursolS - 3 : this.cursolS - 1;
@@ -412,7 +419,7 @@ class Puzzle_square extends Puzzle {
                 if (!this.selection.includes(this.cursol)) {
                     this.selection.push(this.cursol);
                 }
-            } else if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
+            } else if (edit_mode === "number" && submode === "9") {
                 switch (c) {
                     case 0:
                         a = this.cursolS % 4 === 2 ? this.cursolS - 4 : this.cursolS - this.cursolS % 4 + 2;
@@ -437,7 +444,7 @@ class Puzzle_square extends Puzzle {
                 if (!this.selection.includes(this.cursol)) {
                     this.selection.push(this.cursol);
                 }
-            } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
+            } else if (edit_mode === "sudoku" || (edit_mode === "number" && this.number_multi_enabled())) {
                 if (this.selection.length >= 1) {
                     var current_cursor = this.cursol;
                     switch (c) {
