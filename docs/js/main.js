@@ -166,8 +166,8 @@ onload = function() {
             }
             // to handle mobile/ipad users for up events for certain modes
             if (ondown_key === "mousedown" && (edit_mode === "sudoku" || edit_mode === "number" ||
-                (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
-                    pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
+                    (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                        pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -199,7 +199,7 @@ onload = function() {
             if (event.buttons === 2) { // Right click and moving
                 pu.mouse_click = 2;
                 var obj = coord_point(event, 'flex');
-            } else if ((ondown_key === "touchstart" || event.buttons === 1) && 
+            } else if ((ondown_key === "touchstart" || event.buttons === 1) &&
                 (edit_mode === "sudoku" || edit_mode === "number")) { // Left click/Ipad and moving in Sudoku Mode
                 pu.mouse_click = 0;
                 var obj = coord_point(event, 'flex');
@@ -861,7 +861,7 @@ onload = function() {
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
             if ((edit_mode === "combi" && improve_modes.includes(pu.mode[pu.mode.qa][edit_mode][0])) ||
-                    edit_mode === "sudoku" || edit_mode === "number")
+                edit_mode === "sudoku" || edit_mode === "number")
                 type = [0];
         }
 
@@ -996,17 +996,7 @@ onload = function() {
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
         }
-<<<<<<< HEAD
-=======
-        // This segment of code I added for a purpose but don't recollect the reason.
-        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
-        if (pu.selection.length > 0 && eventTarget.id.indexOf("sub_sudoku") == -1 && eventTarget.id.indexOf("st_sudoku") == -1 &&
-            eventTarget.id != "float-canvas" && !isCtrlKeyHeld(e)) {
-            // clear selection
-            pu.selection = [];
-            pu.redraw();
-        }
->>>>>>> dev
+
         // Middle click for switching problem and solution
         // Applicable only in setter mode
         if (document.getElementById("title").textContent.toLowerCase().includes("setter")) {
@@ -1908,6 +1898,7 @@ onload = function() {
 
     // Double click to select all of a certain element
     document.addEventListener("dblclick", window_dblclick, { passive: false });
+
     function window_dblclick(e) {
         if (e.target.id === "canvas") {
             document.getElementById("inputtext").blur(); // Remove focus from text box

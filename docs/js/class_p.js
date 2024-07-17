@@ -7103,7 +7103,7 @@ class Puzzle {
             }
             let cells = null;
             if (this.number_multi_enabled())
-                cells = this.selection; 
+                cells = this.selection;
             else
                 cells = [this.cursol];
             for (var k of cells) {
@@ -7840,7 +7840,7 @@ class Puzzle {
                 }
                 let cells = null;
                 if (this.number_multi_enabled())
-                    cells = this.selection; 
+                    cells = this.selection;
                 else
                     cells = [this.cursol];
 
@@ -7916,7 +7916,7 @@ class Puzzle {
 
             // Map shift/ctrl-click to right click in certain modes for convenience
             if (ctrl_key && this.mouse_mode === "down_left" &&
-                    (edit_mode === "surface" || edit_mode === "combi")) {
+                (edit_mode === "surface" || edit_mode === "combi")) {
                 this.mouse_mode = "down_right";
                 this.mouse_click = 2;
                 this.mouse_click_last = 2;
