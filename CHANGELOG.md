@@ -1,4 +1,8 @@
 ## History
+* 2024/07/16 ver 3.1.4
+	* Code refactoring.
+	* Added non-alphanumeric genre tag to allow answer check on non-alphanumeric characters.
+	* Language Support added for Japanese.
 * 2023/12/31 ver 3.1.3
 	* Render Tapa as Quad for certain conditions.
 	* New composite mode directed loop.

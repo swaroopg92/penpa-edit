@@ -92,7 +92,7 @@ onload = function() {
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
     let restrict_grids = ["square", "sudoku", "kakuro"];
-    let restrict_modes = ["line", "linex", "linedir","lineox", "yajilin", "rassisillai"];
+    let restrict_modes = ["line", "linex", "linedir", "lineox", "yajilin", "rassisillai"];
 
     function restrict_mouse(num) {
         let current_mode = pu.mode[pu.mode.qa].edit_mode;
@@ -240,37 +240,6 @@ onload = function() {
     function onContextmenu(e) { //右クリック
         e.preventDefault();
     }
-
-    // Variables for Tab selector
-    let tab_modes = {
-        "Surface": "surface",
-        "Line Normal": "sub_line1",
-        "Line Diagonal": "sub_line2",
-        "Line Free": "sub_line3",
-        "Line Middle": "sub_line5",
-        "Line Helper": "sub_line4",
-        "Edge Normal": "sub_lineE1",
-        "Edge Diagonal": "sub_lineE2",
-        "Edge Free": "sub_lineE3",
-        "Edge Helper": "sub_lineE4",
-        "Edge Erase": "sub_lineE5",
-        "Wall": "wall",
-        "Number Normal": "sub_number1",
-        "Number L": "sub_number10",
-        "Number M": "sub_number6",
-        "Number S": "sub_number5",
-        "Candidates": "sub_number7",
-        "Number 1/4": "sub_number3",
-        "Number Side": "sub_number9",
-        "Sudoku Normal": "sub_sudoku1",
-        "Sudoku Corner": "sub_sudoku2",
-        "Sudoku Centre": "sub_sudoku3",
-        "Shape": "symbol",
-        "Special": "special",
-        "Thermo": "sub_specialthermo",
-        "Sudoku Arrow": "sub_specialarrows",
-        "Composite": "combi"
-    };
 
     let previous_length = 2;
     let counter_index = 0;
@@ -673,9 +642,10 @@ onload = function() {
                     counter_index++;
                 }
                 counter_index %= user_choices.length;
+                let mode_loc = PenpaText.modes.EN.indexOf(user_choices[counter_index]);
 
                 // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes
-                let mode_name = tab_modes[user_choices[counter_index]];
+                let mode_name = PenpaText.modes.mapping[mode_loc];
                 if (mode_name.includes("surface") ||
                     mode_name.includes("wall") ||
                     mode_name.includes("symbol") ||
@@ -762,19 +732,19 @@ onload = function() {
             if (pu.mode.qa != 'pu_q') {
                 if (pu.mmode == 'solve') {
                     Swal.fire({
-                        title: 'Are you sure to switch to Editing Mode?',
-                        html: 'You have pressed F2. You can either Cancel or later press F3 to switch back to Solving Mode.',
+                        title: PenpaText.get('f2_title'),
+                        html: PenpaText.get('f2_body'),
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: Color.BLUE_SKY,
                         cancelButtonColor: Color.RED,
-                        confirmButtonText: 'Yes, Switch'
+                        confirmButtonText: PenpaText.get('f2_confirm')
                     }).then((result) => {
                         if (result.isConfirmed) {
                             pu.mode_qa("pu_q");
                             document.getElementById('dvique').style.borderColor = Color.BLACK_LIGHT;
                             var title = document.getElementById("title");
-                            title.innerHTML = "Setter Mode (while Solving)";
+                            title.textContent = PenpaText.get('setter_mode_while_solving');
                         }
                     })
                 } else {
@@ -790,21 +760,21 @@ onload = function() {
             if (pu.mode.qa != 'pu_a') {
                 if (pu.mmode == 'solve') {
                     Swal.fire({
-                        title: 'Are you sure to switch to Solving Mode?',
+                        title: PenpaText.get('f3_title'),
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: Color.BLUE_SKY,
                         cancelButtonColor: Color.RED,
-                        confirmButtonText: 'Yes, Switch'
+                        confirmButtonText: PenpaText.get('f2_confirm')
                     }).then((result) => {
                         if (result.isConfirmed) {
                             pu.mode_qa("pu_a");
                             document.getElementById('dvique').style.borderColor = Color.GREEN_LIGHT;
                             var title = document.getElementById("title");
                             if (pu.solution) {
-                                title.innerHTML = "Solver Mode (Answer Checking Enabled)";
+                                title.innerHTML = PenpaText.get('solver_mode_answer');
                             } else {
-                                title.innerHTML = "Solver Mode";
+                                title.innerHTML = PenpaText.get('solver_mode');
                             }
                         }
                     })
@@ -1012,15 +982,31 @@ onload = function() {
     document.addEventListener("mousedown", window_click, { passive: false });
 
     function window_click(e) {
+        let eventTarget = e.target;
+        if (eventTarget.classList.contains('fa')) {
+            eventTarget = eventTarget.parentElement;
+        }
+
         var orientation;
         //modalwindow
-        if (e.target.className === "modal") {
-            document.getElementById(e.target.id).style.display = 'none';
+        if (eventTarget.className === "modal") {
+            document.getElementById(eventTarget.id).style.display = 'none';
             e.preventDefault();
         }
         if (!pu.ondown_key) {
             pu.ondown_key = ondown_key;
         }
+<<<<<<< HEAD
+=======
+        // This segment of code I added for a purpose but don't recollect the reason.
+        // After the new improvements maybe this is not needed but for now retaining it as it doesn't impact anything.
+        if (pu.selection.length > 0 && eventTarget.id.indexOf("sub_sudoku") == -1 && eventTarget.id.indexOf("st_sudoku") == -1 &&
+            eventTarget.id != "float-canvas" && !isCtrlKeyHeld(e)) {
+            // clear selection
+            pu.selection = [];
+            pu.redraw();
+        }
+>>>>>>> dev
         // Middle click for switching problem and solution
         // Applicable only in setter mode
         if (document.getElementById("title").textContent.toLowerCase().includes("setter")) {
@@ -1039,7 +1025,7 @@ onload = function() {
             }
         }
 
-        switch (e.target.id) {
+        switch (eventTarget.id) {
             //canvas
             case "canvas":
                 document.getElementById("inputtext").blur(); // Remove focus from text box
@@ -1745,10 +1731,10 @@ onload = function() {
                 // if user clicks on Check Solution button
                 if (pu.solution && pu.sol_flag === 0) {
                     Swal.fire({
-                        title: '<h3>Your solution is incorrect.</h3>',
-                        html: '<h2>' + Identity.incorrectMessage + '</h2>',
+                        title: '<h3>' + PenpaText.get('solution_incorrect_title') + '</h3>',
+                        html: '<h2>' + PenpaText.get('solution_incorrect_main') + '</h2>',
                         icon: 'error',
-                        confirmButtonText: Identity.okButtonText,
+                        confirmButtonText: PenpaText.get('ok'),
                     })
                     document.getElementById("pu_a_label").style.backgroundColor = Color.RED_LIGHT;
                 }
@@ -1791,7 +1777,7 @@ onload = function() {
 
                     document.getElementById("replay_download_btn").disabled = true;
                     document.getElementById("replay_message").style.display = "";
-                    document.getElementById("replay_message").innerHTML = "Preparing your download";
+                    document.getElementById("replay_message").innerHTML = PenpaText.get('preparing_download');
 
                     setTimeout(function() {
                         //put the title text on the top
@@ -1867,32 +1853,32 @@ onload = function() {
                 break;
         }
         // Main mode
-        if (e.target.id.slice(0, 3) === "mo_") {
-            pu.mode_set(e.target.id.slice(3, -3));
+        if (eventTarget.id.slice(0, 3) === "mo_") {
+            pu.mode_set(eventTarget.id.slice(3, -3));
             e.preventDefault();
         }
         // Sub mode
-        if (e.target.id.slice(0, 4) === "sub_") {
-            pu.submode_check(e.target.id.slice(0, -3));
+        if (eventTarget.id.slice(0, 4) === "sub_") {
+            pu.submode_check(eventTarget.id.slice(0, -3));
             e.preventDefault();
         }
         // Style mode
-        if (e.target.id.slice(0, 3) === "st_") {
-            pu.stylemode_check(e.target.id.slice(0, -3));
+        if (eventTarget.id.slice(0, 3) === "st_") {
+            pu.stylemode_check(eventTarget.id.slice(0, -3));
             e.preventDefault();
         }
         // Combination mode
-        if (e.target.id.slice(0, 9) === "combisub_") {
-            pu.subcombimode(e.target.id.slice(9));
+        if (eventTarget.id.slice(0, 9) === "combisub_") {
+            pu.subcombimode(eventTarget.id.slice(9));
             e.preventDefault();
         }
         // symbol
-        if (e.target.id.slice(0, 3) === "ms_") {
+        if (eventTarget.id.slice(0, 3) === "ms_") {
             checkms = 1;
-            pu.subsymbolmode(e.target.id.slice(3));
+            pu.subsymbolmode(eventTarget.id.slice(3));
             e.preventDefault();
             //Symbol hover etc
-        } else if (e.target.id.slice(0, 2) === "ms") {
+        } else if (eventTarget.id.slice(0, 2) === "ms") {
             checkms = 1;
             return;
         } else if (checkms === 1) {
@@ -2065,45 +2051,10 @@ onload = function() {
         }
     }
 
-    let select = document.getElementById("mode_choices");
-    Object.keys(tab_modes).forEach((key, i) => {
-        let option = document.createElement("option");
-        option.value = key;
-        option.text = key;
-        if (UserSettings.tab_settings) {
-
-            // Load the author defined tab settings if any
-            if (UserSettings.tab_settings.indexOf(key) > -1) {
-                option.setAttribute("selected", true);
-            }
-        }
-        select.appendChild(option);
-    });
-
-    selectBox = new vanillaSelectBox("#mode_choices", {
-        "disableSelectAll": false,
-        "maxHeight": 250,
-        "search": true,
-        "translations": { "all": "All", "items": "items", "selectAll": "Check All", "clearAll": "Clear All" }
-    }); //"placeHolder": "Surface" translations: { "items": "tab" } "maxWidth": 140
-
-    let selectContainer = document.getElementById('btn-group-#mode_choices').getElementsByClassName('vsb-menu')[0];
-    let liteModeButton = document.createElement('button');
-    liteModeButton.id = "tab-dropdown-lite-btn";
-    liteModeButton.disabled = true;
-    let tab_initial = getValues('mode_choices');
-    if (tab_initial.length > 0) {
-        liteModeButton.innerText = 'Disable Penpa Lite';
-        liteModeButton.disabled = false;
-    } else {
-        liteModeButton.innerText = 'Enable Penpa Lite';
-        liteModeButton.disabled = true;
-    }
-    liteModeButton.addEventListener('click', advancecontrol_toggle);
-    selectContainer.appendChild(liteModeButton);
+    PenpaUI.initPenpaLite();
 
     window.addEventListener('beforeunload', function(e) {
-        if (UserSettings.reload_button === 1) {
+        if (UserSettings.reload_button) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
             // Chrome requires returnValue to be set
@@ -2156,6 +2107,10 @@ onload = function() {
         UserSettings.mousemiddle_button = this.value;
     }
 
+    document.getElementById("language_opt").onchange = function() {
+        UserSettings.app_language = this.value;
+    }
+
     document.getElementById("starbattle_settings_opt").onchange = function() {
         UserSettings.starbattle_dots = this.value;
     }
@@ -2173,7 +2128,7 @@ onload = function() {
     }
 
     document.getElementById("reload_button").onchange = function() {
-        UserSettings.reload_button = this.value;
+        UserSettings.reload_button = parseInt(this.value, 10) === 1;
     }
 
     document.getElementById("allow_local_storage").onchange = function() {
@@ -2256,7 +2211,7 @@ onload = function() {
             if (penpa_constraints["border"].includes(current_constraint) && pu.borderwarning) {
                 pu.borderwarning = false;
                 Swal.fire({
-                    html: '<h2 class="info">To place clues on grid border/edges and corners:<br> Turn "Draw on Edges": ON</h2>',
+                    html: '<h2 class="info">' + PenpaText.get('border_setting_help') + '</h2>',
                     timer: 8000,
                     icon: 'info'
                 })
@@ -2269,19 +2224,20 @@ onload = function() {
         UserSettings.tab_settings = getValues('mode_choices');
 
         if (can_use_lite()) {
-            liteModeButton.disabled = false;
+            PenpaUI.liteModeButton.disabled = false;
 
             // Dynamically updating the display of modes based on tab setting changes
-            if (liteModeButton.innerText === "Disable Penpa Lite") {
+            let currentState = PenpaUI.liteModeButton.getAttribute('data-mode');
+
+            if (currentState === "disable") {
                 advancecontrol_on(); // First display back everything
                 advancecontrol_off("new"); // apply new choices for penpa lite
             }
         } else {
             // Dynamically updating the display of modes based on tab setting changes
-            liteModeButton.innerText = "Enable Penpa Lite";
             advancecontrol_on();
 
-            liteModeButton.disabled = true;
+            PenpaUI.liteModeButton.disabled = true;
         }
     }
 
@@ -2298,7 +2254,6 @@ onload = function() {
     // Conflict detection
     document.getElementById("conflict_detection_opt").onchange = function() {
         UserSettings.conflict_detection = this.value;
-        pu.redraw();
     }
 
     // Enable or Disable Shortcuts
@@ -2341,7 +2296,7 @@ function clear_storage_one() {
         let hash = "penpa_" + md5(pu.url);
         localStorage.removeItem(hash);
         Swal.fire({
-            html: '<h2 class="info">Local Storage is Cleared</h2>',
+            html: '<h2 class="info">' + PenpaText.get('local_storage_cleared') + '</h2>',
             icon: 'info'
         });
     }
@@ -2365,7 +2320,7 @@ function clear_storage_all() {
     UserSettings.save_current_puzzle = false;
 
     Swal.fire({
-        html: '<h2 class="info">Local Storage is Cleared</h2>',
+        html: '<h2 class="info">' + PenpaText.get('local_storage_cleared') + '</h2>',
         icon: 'info'
     });
 }

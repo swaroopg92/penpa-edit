@@ -165,7 +165,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 1, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 1, 4]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -337,7 +337,7 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        if (UserSettings.color_theme == 1) {
+        if (UserSettings.color_theme == THEME_LIGHT) {
             pause_ctx.fillStyle = Color.BLUE;
         } else {
             pause_ctx.fillStyle = Color.WHITE;
@@ -2020,7 +2020,7 @@ class Puzzle {
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
         var answercheck_opt = [],
-            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_all') + "</b><ul>";
 
         // loop through and check if any "AND" settings are selected
         let prev_opt = "";
@@ -2030,7 +2030,7 @@ class Puzzle {
                 var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
                 if (opt.length !== 0 && opt != prev_opt) {
                     answercheck_opt.push(opt);
-                    message += "<li>" + answercheck_message[opt] + "</li>";
+                    message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                 }
                 prev_opt = opt;
             }
@@ -2039,7 +2039,7 @@ class Puzzle {
 
         // If answercheck list is 0, it means, no "AND" option was selected
         if (answercheck_opt.length === 0) {
-            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_one') + "</b><ul>";
             // loop through and check if any "OR" settings are selected
             for (var i = 0; i < settingstatus_or.length; i++) {
                 if (settingstatus_or[i].checked) {
@@ -2047,7 +2047,7 @@ class Puzzle {
                     let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
                     if (opt.length !== 0 && opt != prev_opt) {
                         answercheck_opt.push(opt);
-                        message += "<li>" + answercheck_message[opt] + "</li>";
+                        message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                     }
                     prev_opt = opt;
                 }
@@ -6479,13 +6479,10 @@ class Puzzle {
                 console.log(this.pu_a_col);
                 console.log(this);
             } else {
-                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Please see instructions (Help) for supported puzzle types\n' +
-                    'For additional genre support please submit your request to penpaplus@gmail.com';
+                text += PenpaText.get('gmp_unsupported', header);
             }
         } else {
-            text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Please see instructions (Help) for supported puzzle types\n';
+            text += PenpaText.get('gmp_enter_type');
         }
 
         return text;
@@ -7574,15 +7571,15 @@ class Puzzle {
                                 if (number !== "") {
                                     // S submode is 5, M submode is 6
                                     // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                    if (UserSettings.sudoku_centre_size === 1) {
+                                    if (UserSettings.sudoku_centre_size === SUDOKU_CENTRE_AUTO) {
                                         if (number.length > 5) {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                         } else {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
                                         }
-                                    } else if (UserSettings.sudoku_centre_size === 2) { // all large
+                                    } else if (UserSettings.sudoku_centre_size === SUDOKU_CENTRE_LARGE) { // all large
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                    } else if (UserSettings.sudoku_centre_size === 3) { // all small
+                                    } else if (UserSettings.sudoku_centre_size === SUDOKU_CENTRE_SMALL) { // all small
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                     }
                                 } else {
@@ -9455,7 +9452,7 @@ class Puzzle {
 
     check_last_cell() {
         if (this.centerlist.length == 1) {
-            infoMsg('<h3 class="info">Last cell cannot be removed using the "Box" mode. For a blank grid use the following approach:</h3><ol><li>Click on "New Grid / Update"</li><li>Set "Gridlines" to "None"</li><li>Set "Gridpoints" to "No"</li><li>Set "Outside frame" to "No"</li><li>Click on "Update display"</li></ol>');
+            infoMsg(PenpaText.get('box_mode_warning'));
             return true;
         } else {
             return false;
@@ -9650,9 +9647,9 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
-                        if (UserSettings.starbattle_dots === 3) {
+                        if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                             num = this.coord_p_edgex_star(x, y, 0);
-                        } else if (UserSettings.starbattle_dots === 2) {
+                        } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                             num = this.coord_p_edgex_star(x, y, 0.2);
                         }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
@@ -9732,9 +9729,9 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
-                    if (UserSettings.starbattle_dots === 3) {
+                    if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                         num = this.coord_p_edgex_star(x, y, 0);
-                    } else if (UserSettings.starbattle_dots === 2) {
+                    } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
@@ -12524,7 +12521,7 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection > 1) {
+        if (UserSettings.show_conflicts) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             return;
