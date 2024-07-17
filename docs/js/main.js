@@ -92,7 +92,7 @@ onload = function() {
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
     let restrict_grids = ["square", "sudoku", "kakuro"];
-    let restrict_modes = ["line", "linex", "linedir","lineox", "yajilin", "rassisillai"];
+    let restrict_modes = ["line", "linex", "linedir", "lineox", "yajilin", "rassisillai"];
 
     function restrict_mouse(num) {
         let current_mode = pu.mode[pu.mode.qa].edit_mode;

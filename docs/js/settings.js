@@ -166,7 +166,7 @@ const UserSettings = {
         if (this._custom_colors_on) {
             // On
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            pu.mode_set(mode);  // Update mode UI, including custom color selector
+            pu.mode_set(mode); // Update mode UI, including custom color selector
         } else {
             // Off
             document.getElementById('style_special').style.display = 'none';
