@@ -668,6 +668,7 @@ Wall Logic :x: ;
 	* Flex Tools Left
 	* Flex Tools Right
 	* Streaming Layout (beta version)
+* Language: It currently offers only two options (English and Japanese)
 * Timer: User can prefer to hide the entire timer area by selecting "hide" option.
 
 #### Puzzle Display
