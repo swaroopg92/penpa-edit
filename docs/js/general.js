@@ -2158,8 +2158,10 @@ function load(urlParam, type = 'url', origurl = null) {
     if (paramArray.m === "edit") { //edit_mode
         var mode = JSON.parse(rtext[2]);
         for (var i in mode) {
-            for (var j in mode[i]) {
-                pu.mode[i][j] = mode[i][j];
+            if (typeof mode[i] === 'object') {
+                for (var j in mode[i]) {
+                    pu.mode[i][j] = mode[i][j];
+                }
             }
         }
         pu.pu_q = JSON.parse(rtext[3]);
@@ -3158,8 +3160,8 @@ function decode_puzzlink(url) {
     cols = parseInt(urldata[1]);
     rows = parseInt(urldata[2]);
 
-    if ((cols > 65) || (rows > 65)) {
-        errorMsg('Penpa+ does not support grid size greater than 65 rows or columns');
+    if ((cols > pu.gridmax['square']) || (rows > pu.gridmax['square'])) {
+        errorMsg('Penpa+ does not support grid size greater than ' + pu.gridmax['square'].toString() + ' rows or columns');
         return;
     }
 

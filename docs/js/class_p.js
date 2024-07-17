@@ -2386,6 +2386,12 @@ class Puzzle {
                                     sol[4].push(i + "," + this[pu].number[i][0]);
                                 }
                             }
+                        } else if ($('#genre_tags_opt').select2("val").includes("non-alphanumeric")) {
+                            // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                sol[4].push(i + "," + this[pu].number[i][0]);
+                            }
                         }
                     }
                 }
@@ -2547,6 +2553,12 @@ class Puzzle {
                                             } else {
                                                 temp_sol.push(i + "," + this[pu].number[i][0]);
                                             }
+                                        }
+                                    } else if ($('#genre_tags_opt').select2("val").includes("non-alphanumeric")) {
+                                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                            (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                            temp_sol.push(i + "," + this[pu].number[i][0]);
                                         }
                                     }
                                 }
@@ -8068,7 +8080,7 @@ class Puzzle {
             this[this.mode.qa].surface[num] = rightclick_color;
             if (UserSettings.custom_colors_on) {
                 let cc = this.get_rgbcolor(rightclick_color);
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_color(rightclick_color))) {
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(rightclick_color))) {
                     delete this[this.mode.qa + "_col"].surface[num];
                 } else {
                     this[this.mode.qa + "_col"].surface[num] = cc;
@@ -8085,7 +8097,7 @@ class Puzzle {
             this[this.mode.qa].surface[num] = color;
             if (UserSettings.custom_colors_on) {
                 let cc = this.get_customcolor();
-                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_color(color))) {
+                if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(color))) {
                     delete this[this.mode.qa + "_col"].surface[num];
                 } else {
                     this[this.mode.qa + "_col"].surface[num] = cc;
@@ -8164,7 +8176,11 @@ class Puzzle {
                 if (UserSettings.custom_colors_on) {
                     // Not right click
                     if (this.mouse_click !== 2) {
-                        cc = this.get_customcolor();
+                        if (this.drawing_mode === 2) {
+                            cc = this.get_rgbcolor(this.drawing_mode);
+                        } else {
+                            cc = this.get_customcolor();
+                        }
                         if (!cc || tinycolor.equals(cc, CustomColor.default_surface_style_color(this.drawing_mode))) {
                             cc = undefined;
                         }
@@ -10229,7 +10245,7 @@ class Puzzle {
             // 52 - delete leftdir and insert rightdir
             // 50 - delete last symbol
             if (this.drawing_mode == 56) {
-                if (!this[this.mode.qa].symbol[num]) { // Insert cross
+                if (!this[this.mode.qa].symbol[num] && !this[this.mode.qa].line[num]) { // Insert cross
                     this.record("line", num);
                     this[this.mode.qa].line[num] = 98;
                     this.record_replay("line", num);
@@ -10988,7 +11004,7 @@ class Puzzle {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
-                this[this.mode.qa].symbol[num] = [4, "ox_G", 1];
+                this[this.mode.qa].symbol[num] = [4, "ox_G", 2];
                 this.record_replay("symbol", num);
             } else if (this[this.mode.qa].symbol[num][0] === 4) {
                 this.record("symbol", num);
