@@ -663,12 +663,12 @@ Wall Logic :x: ;
 ### Settings
 
 #### App Display
-* Display Theme: It currently offers only two options (light and dark).
+* Display Theme: It currently offers two options (light and dark).
 * Display Layout: It currently offers three options.
 	* Flex Tools Left
 	* Flex Tools Right
 	* Streaming Layout (beta version)
-* Language: It currently offers only two options (English and Japanese)
+* Language: It currently offers two options (English and Japanese).
 * Timer: User can prefer to hide the entire timer area by selecting "hide" option.
 
 #### Puzzle Display
