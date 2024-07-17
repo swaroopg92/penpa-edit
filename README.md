@@ -153,7 +153,7 @@ You can now cite this in your research and publications using:
 * Then select "Long" or "L" or "M" submode. (Preferrable is Long submode, although it should also work in some other Number submodes (i.e. corner, side, arrow, S)).
 * Panel: ON.
 * Select "Text" tab in the Panel.
-* One can copy unicode symbol (supports most (not all) of them although rendering might be different based on browser) from the websites https://unicode-table.com/en/ or https://www.alt-codes.net/ and paste in the textbox available. (You can click on the symbol/shape in the website, it will allow copying). Based on experience, unicode from https://charbase.com/block has a better chance of getting rendered on different devices as compared to other unicode websites.
+* One can copy unicode symbol (supports most (not all) of them although rendering might be different based on browser) from the websites https://symbl.cc/en/ or https://www.alt-codes.net/ and paste in the textbox available. (You can click on the symbol/shape in the website, it will allow copying). Based on experience, unicode from https://charbase.com/block has a better chance of getting rendered on different devices as compared to other unicode websites.
 * Then click "Insert".
 * One can also type in the sentence of words and "Insert".
 * Clear button to clear the text area.
