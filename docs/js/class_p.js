@@ -403,7 +403,7 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        if (UserSettings.color_theme == 1) {
+        if (UserSettings.color_theme == THEME_LIGHT) {
             pause_ctx.fillStyle = Color.BLUE;
         } else {
             pause_ctx.fillStyle = Color.WHITE;
@@ -2386,6 +2386,12 @@ class Puzzle {
                                     sol[4].push(i + "," + this[pu].number[i][0]);
                                 }
                             }
+                        } else if ($('#genre_tags_opt').select2("val").includes("non-alphanumeric")) {
+                            // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                            if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                sol[4].push(i + "," + this[pu].number[i][0]);
+                            }
                         }
                     }
                 }
@@ -2547,6 +2553,12 @@ class Puzzle {
                                             } else {
                                                 temp_sol.push(i + "," + this[pu].number[i][0]);
                                             }
+                                        }
+                                    } else if ($('#genre_tags_opt').select2("val").includes("non-alphanumeric")) {
+                                        // ((Green or light blue or dark blue or red) and (Normal, M, S, L))
+                                        if ((this[pu].number[i][1] === 2 || this[pu].number[i][1] === 8 || this[pu].number[i][1] === 9 || this[pu].number[i][1] === 10) &&
+                                            (this[pu].number[i][2] === "1" || this[pu].number[i][2] === "5" || this[pu].number[i][2] === "6" || this[pu].number[i][2] === "10")) {
+                                            temp_sol.push(i + "," + this[pu].number[i][0]);
                                         }
                                     }
                                 }
@@ -7640,15 +7652,15 @@ class Puzzle {
                                 if (number !== "") {
                                     // S submode is 5, M submode is 6
                                     // dynamic (i.e. upto 5 digits larger size and then smaller size)
-                                    if (UserSettings.sudoku_centre_size === 1) {
+                                    if (UserSettings.sudoku_centre_size === SUDOKU_CENTRE_AUTO) {
                                         if (number.length > 5) {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                         } else {
                                             this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
                                         }
-                                    } else if (UserSettings.sudoku_centre_size === 2) { // all large
+                                    } else if (UserSettings.sudoku_centre_size === SUDOKU_CENTRE_LARGE) { // all large
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "6"];
-                                    } else if (UserSettings.sudoku_centre_size === 3) { // all small
+                                    } else if (UserSettings.sudoku_centre_size === SUDOKU_CENTRE_SMALL) { // all small
                                         this[this.mode.qa].number[k] = [number, this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1], "5"];
                                     }
                                 } else {
@@ -9666,9 +9678,9 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
-                        if (UserSettings.starbattle_dots === 3) {
+                        if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                             num = this.coord_p_edgex_star(x, y, 0);
-                        } else if (UserSettings.starbattle_dots === 2) {
+                        } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                             num = this.coord_p_edgex_star(x, y, 0.2);
                         }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
@@ -9748,9 +9760,9 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
-                    if (UserSettings.starbattle_dots === 3) {
+                    if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                         num = this.coord_p_edgex_star(x, y, 0);
-                    } else if (UserSettings.starbattle_dots === 2) {
+                    } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
@@ -12542,7 +12554,7 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection > 1) {
+        if (UserSettings.show_conflicts) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             return;

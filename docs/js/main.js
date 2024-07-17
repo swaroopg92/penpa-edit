@@ -92,7 +92,7 @@ onload = function() {
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
     let restrict_grids = ["square", "sudoku", "kakuro"];
-    let restrict_modes = ["line", "linex", "linedir","lineox", "yajilin", "rassisillai"];
+    let restrict_modes = ["line", "linex", "linedir", "lineox", "yajilin", "rassisillai"];
 
     function restrict_mouse(num) {
         let current_mode = pu.mode[pu.mode.qa].edit_mode;
@@ -2009,7 +2009,7 @@ onload = function() {
     PenpaUI.initPenpaLite();
 
     window.addEventListener('beforeunload', function(e) {
-        if (UserSettings.reload_button === 1) {
+        if (UserSettings.reload_button) {
             // Cancel the event
             e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
             // Chrome requires returnValue to be set
@@ -2083,7 +2083,7 @@ onload = function() {
     }
 
     document.getElementById("reload_button").onchange = function() {
-        UserSettings.reload_button = this.value;
+        UserSettings.reload_button = parseInt(this.value, 10) === 1;
     }
 
     document.getElementById("allow_local_storage").onchange = function() {
@@ -2209,7 +2209,6 @@ onload = function() {
     // Conflict detection
     document.getElementById("conflict_detection_opt").onchange = function() {
         UserSettings.conflict_detection = this.value;
-        pu.redraw();
     }
 
     // Enable or Disable Shortcuts
