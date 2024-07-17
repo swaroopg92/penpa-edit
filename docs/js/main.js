@@ -602,7 +602,7 @@ onload = function() {
                 } else {
                     counter_index++;
                 }
-                counter_index %= user_choices.length
+                counter_index %= user_choices.length;
                 let mode_loc = PenpaText.modes.EN.indexOf(user_choices[counter_index]);
 
                 // Surface, Shape, Wall, Composite Modes, remaining choices are related to submodes

@@ -3087,7 +3087,7 @@ function decode_puzzlink(url) {
     rows = parseInt(urldata[2]);
 
     if ((cols > pu.gridmax['square']) || (rows > pu.gridmax['square'])) {
-        errorMsg('Penpa+ does not support grid size greater than ' + pu.gridmax['square'].toString() + ' rows or columns');
+        errorMsg(PenpaText.get('puzzlink_row_column', pu.gridmax['square'].toString()));
         return;
     }
 

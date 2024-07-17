@@ -90,7 +90,7 @@ function trans() {
         "address_edit": ["編集URL", "URL for editing"],
         "address_solve": ["出題用URL", "URL for solving"],
         "address_comp": ["コンテスト用URL", "Contest-Mode URL"],
-        "expansion": ["拡張出力", "Extra options"],
+        "expansion": ["拡張出力", "URL with Answer Check / Advanced Options"],
         "closeBtn_save1": ["コピー", "Copy"],
         "closeBtn_save2": ["ダウンロード", "Download"],
         "closeBtn_save3": ["開く", "Open"],
@@ -579,8 +579,8 @@ const PenpaText = {
         },
 
         puzzlink_row_column: {
-            EN: 'Penpa+ does not support grid size greater than 65 rows or columns',
-            JP: 'Penpa+は65行を超えるサイズに対応していません。'
+            EN: 'Penpa+ does not support grid size greater than $v rows or columns',
+            JP: 'Penpa+は $v 行を超えるサイズに対応していません。'
         },
         puzzlink_not_supported: {
             EN: 'It currently does not support puzzle type: $v',
