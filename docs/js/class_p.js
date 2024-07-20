@@ -183,6 +183,7 @@ class Puzzle {
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
+        this.linedrawing = false; // Used for lineox composite mode
     }
 
     reset() {
@@ -10167,6 +10168,9 @@ class Puzzle {
                 array = "line";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
+
+                // To track if user is drawing line or just placing symbols
+                this.linedrawing = true;
             }
             this.last = num;
             this.redraw();
@@ -10183,7 +10187,7 @@ class Puzzle {
             secondsymbol = [1, "ox_E", 2];
         }
 
-        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num && !this.linedrawing) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = firstsymbol;
@@ -10199,6 +10203,7 @@ class Puzzle {
             }
         }
         this.drawing_mode = -1;
+        this.linedrawing = false;
         this.first = -1;
         this.last = -1;
         this.redraw();
