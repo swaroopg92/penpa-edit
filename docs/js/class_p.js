@@ -7109,7 +7109,7 @@ class Puzzle {
             for (var k of cells) {
                 switch (submode[0]) {
                     case "1":
-                        // If the there are corner or sides present then get rid of them
+                        // If there are corner or sides present then get rid of them
                         // Only in Answer mode
                         if (this.mode.qa === "pu_a") {
                             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
@@ -7303,7 +7303,7 @@ class Puzzle {
                                 var single_digit = false;
                             }
                             if (!single_digit) {
-                                // If the there are corner or sides present then get rid of them
+                                // If there are corner or sides present then get rid of them
                                 // Only in Answer mode
                                 if (this.mode.qa === "pu_a") {
                                     var corner_cursor = 4 * (k + this.nx0 * this.ny0);
