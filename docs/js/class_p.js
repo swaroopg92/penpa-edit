@@ -1861,12 +1861,8 @@ class Puzzle {
         text += this.__export_checker_shared();
 
         // Custom Answer Message
-        if (this.solution) {
-            let custom_message = document.getElementById("custom_message").value;
-            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-        } else {
-            text += "\n" + false;
-        }
+        let custom_message = document.getElementById("custom_message").value;
+        text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
