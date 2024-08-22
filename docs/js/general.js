@@ -251,7 +251,8 @@ function make_class(gridtype, loadtype = 'new') {
         'snub': 20,
         'cairo': 20,
         'rhombitrihex': 20,
-        'deltoidal': 20
+        'deltoidal': 20,
+        'penrose': 20
     }; // also defined in class_p.js
     switch (gridtype) {
         case "square":
@@ -542,6 +543,19 @@ function make_class(gridtype, loadtype = 'new') {
                 errorMsg(PenpaText.get('size_warning_generic', gridmax['deltoidal']));
             }
             break;
+        case "penrose_P3":
+            var n0 = parseInt(document.getElementById("nb_size1").value, 10);
+            var order = parseInt(document.getElementById("nb_size2").value, 10);
+            if (n0 <= gridmax['penrose'] && n0 > 0) {
+                if (order >= 4 && order <= 30) {
+                  pu = new Puzzle_penrose_P3(n0, order, size);
+                } else {
+                  errorMsg(PenpaText.get('order_warning_generic', 30));
+		}
+            } else {
+                errorMsg(PenpaText.get('size_warning_generic', gridmax['penrose']));
+            }
+            break;
     }
     return pu;
 }
@@ -577,6 +591,7 @@ function changetype() {
                 document.getElementById(i).style.display = "none";
             }
             document.getElementById("name_size1").innerHTML = PenpaText.get('columns');
+            document.getElementById("name_size2").innerHTML = PenpaText.get('rows');
             document.getElementById("name_space1").innerHTML = PenpaText.get('over');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_sqaure');
@@ -709,6 +724,7 @@ function changetype() {
                 document.getElementById(i).style.display = "inline";
             }
             document.getElementById("name_size1").innerHTML = PenpaText.get('columns');
+            document.getElementById("name_size2").innerHTML = PenpaText.get('rows');
             document.getElementById("nb_size1").value = 10;
             document.getElementById("nb_size2").value = 10;
             break;
@@ -770,6 +786,7 @@ function changetype() {
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
         case "cairo_pentagonal":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -789,6 +806,7 @@ function changetype() {
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
         case "rhombitrihexagonal":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -808,6 +826,7 @@ function changetype() {
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
         case "deltoidal_trihexagonal":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -827,6 +846,33 @@ function changetype() {
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
+        case "penrose_P3":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type5) {
+                document.getElementById(i).style.display = "inline";
+            }
+            document.getElementById("name_size1").innerHTML = PenpaText.get('side');
+            document.getElementById("name_size2").innerHTML = PenpaText.get('order');
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size2").value = 5;
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size3").value = 38;
+            break;
     }
 }
 

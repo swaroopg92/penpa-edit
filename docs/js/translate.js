@@ -435,6 +435,7 @@ const PenpaText = {
         'nb_gridtype11_lb',
         'nb_gridtype12_lb',
         'nb_gridtype13_lb',
+        'nb_gridtype14_lb',
         'nb_rules_lb',
         'nb_title_lb',
         'settings_modal_header',
@@ -517,6 +518,7 @@ const PenpaText = {
         sides: { EN: "Sides:", JP: '横：' },
         over: { EN: "Over:", JP: '上：' },
         border: { EN: "Border:", JP: '境界：' },
+        order: { EN: "Order:" },
 
         nb_gridtype8_lb: { EN: 'Tetrakis square' },
         nb_gridtype9_lb: { EN: 'Truncated square' },
@@ -524,6 +526,7 @@ const PenpaText = {
         nb_gridtype11_lb: { EN: 'Cairo pentagonal' },
         nb_gridtype12_lb: { EN: 'Rhombitrihexagonal' },
         nb_gridtype13_lb: { EN: 'Deltoidal trihexagonal' },
+        nb_gridtype14_lb: { EN: 'Penrose P3' },
 
         // Generic Terms
         on: { EN: "ON" },
@@ -827,6 +830,9 @@ const PenpaText = {
         size_warning_generic: {
             EN: 'Side Size must be in the range <h2 class="warn">1-$v</h2>',
             JP: '一辺の大きさは以下の範囲です <h2 class="warn">1-$v</h2>'
+        },
+        order_warning_generic: {
+            EN: 'Order must be in the range <h2 class="warn">4-$v</h2>',
         },
 
         alpha_warning: {
