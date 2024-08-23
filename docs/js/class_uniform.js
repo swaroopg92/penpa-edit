@@ -7326,202 +7326,32 @@ class Puzzle_penrose_P3 extends Puzzle {
                 c = b[3];
                 break;
         }
-        var quotient = parseInt(this.cursol / 27);
+
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
-            if (this.cursol % 27 === 0) { // top side
-                switch (c) {
-                    case 0: //left
-                        // if cursor already on the left border
-                        if (quotient % this.nx0 === 0) {
-                            a = this.cursol + 1;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        } else {
-                            a = this.cursol - 27;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        }
-                        break;
-                    case 1: //up
-                        a = this.cursol + 27 * this.nx0;
-                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        break;
-                    case 2: //right
-                        a = this.cursol + 27;
-                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        break;
-                    case 3: //down
-                        // if cursor already on the bottom border
-                        if (quotient < this.nx0) {
-                            a = this.cursol * this.nx0 + 2;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        } else {
-                            a = this.cursol - 27 * this.nx0;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        }
-                        break;
-                }
-            } else if (this.cursol % 27 === 1) { // left side
-                switch (c) {
-                    case 0: //left
-                        a = this.cursol + 27 * this.nx0;
-                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        break;
-                    case 1: //up
-                        // if cursor already on the up border
-                        if (quotient % this.nx0 === 0) {
-                            a = this.cursol - 1;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        } else {
-                            a = this.cursol - 27;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        }
-                        break;
-                    case 2: //right
-                        // if cursor already on the right border
-                        if (quotient < this.nx0) {
-                            a = this.cursol + 1;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        } else {
-                            a = this.cursol - 27 * this.nx0;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        }
-                        break;
-                    case 3: //down
-                        a = this.cursol + 27;
-                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        break;
-                }
-            } else if (this.cursol % 27 === 2) { // right side
-                switch (c) {
-                    case 0: //left
-                        // if cursor already on the left border
-                        if (quotient < this.nx0) {
-                            a = this.cursol - 1;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        } else {
-                            a = this.cursol - 27 * this.nx0;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        }
-                        break;
-                    case 1: //up
-                        // if cursor already on the up border
-                        if (quotient % this.nx0 === 0) {
-                            a = parseInt((this.cursol - 2) / this.nx0);
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        } else {
-                            a = this.cursol - 27;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        }
-                        break;
-                    case 2: //right
-                        a = this.cursol + 27 * this.nx0;
-                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        break;
-                    case 3: //down
-                        a = this.cursol + 27;
-                        if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                        break;
-                }
-            }
+            let q = this.point[this.cursol].surround;
+	    let q0 = this.point[q[0]], q1 = this.point[q[1]], q2 = this.point[q[2]];
+	    // sin(A+B) ≥ 0 iff (A+B)/2 is in first or third quadrant.
+	    // Applying this to lattice generators tells us which should
+	    // be assigned as horizontal and which as vertical.
+	    let sin_iplusj = (q1.x-q0.x)*(q1.y-q2.y) + (q0.y-q1.y)*(q2.x-q1.x);
+	    let cc = (c + ((sin_iplusj < 0)?1:0) + ((q0.y<q2.y)?2:0)) % 4;
+	    a = this.point[this.cursol].adjacent[cc]
+            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
             this.selection = [];
             if (!this.selection.includes(this.cursol)) {
                 this.selection.push(this.cursol);
             }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             if (this.selection.length >= 1) {
-                if (this.cursol % 27 === 0) { // top side
-                    switch (c) {
-                        case 0: //left
-                            // if cursor already on the left border
-                            if (quotient % this.nx0 === 0) {
-                                a = this.cursol + 1;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            } else {
-                                a = this.cursol - 27;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            }
-                            break;
-                        case 1: //up
-                            a = this.cursol + 27 * this.nx0;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            break;
-                        case 2: //right
-                            a = this.cursol + 27;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            break;
-                        case 3: //down
-                            // if cursor already on the bottom border
-                            if (quotient < this.nx0) {
-                                a = this.cursol * this.nx0 + 2;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            } else {
-                                a = this.cursol - 27 * this.nx0;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            }
-                            break;
-                    }
-                } else if (this.cursol % 27 === 1) { // left side
-                    switch (c) {
-                        case 0: //left
-                            a = this.cursol + 27 * this.nx0;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            break;
-                        case 1: //up
-                            // if cursor already on the up border
-                            if (quotient % this.nx0 === 0) {
-                                a = this.cursol - 1;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            } else {
-                                a = this.cursol - 27;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            }
-                            break;
-                        case 2: //right
-                            // if cursor already on the right border
-                            if (quotient < this.nx0) {
-                                a = this.cursol + 1;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            } else {
-                                a = this.cursol - 27 * this.nx0;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            }
-                            break;
-                        case 3: //down
-                            a = this.cursol + 27;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            break;
-                    }
-                } else if (this.cursol % 27 === 2) { // right side
-                    switch (c) {
-                        case 0: //left
-                            // if cursor already on the left border
-                            if (quotient < this.nx0) {
-                                a = this.cursol - 1;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            } else {
-                                a = this.cursol - 27 * this.nx0;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            }
-                            break;
-                        case 1: //up
-                            // if cursor already on the up border
-                            if (quotient % this.nx0 === 0) {
-                                a = parseInt((this.cursol - 2) / this.nx0);
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            } else {
-                                a = this.cursol - 27;
-                                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            }
-                            break;
-                        case 2: //right
-                            a = this.cursol + 27 * this.nx0;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            break;
-                        case 3: //down
-                            a = this.cursol + 27;
-                            if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
-                            break;
-                    }
-                }
+		let q = this.point[this.cursol].surround;
+		let q0 = this.point[q[0]], q1 = this.point[q[1]], q2 = this.point[q[2]];
+		// sin(A+B) ≥ 0 iff (A+B)/2 is in first or third quadrant.
+		// Applying this to lattice generators tells us which should
+		// be assigned as horizontal and which as vertical.
+		let sin_iplusj = (q1.x-q0.x)*(q1.y-q2.y) + (q0.y-q1.y)*(q2.x-q1.x);
+		let cc = (c + ((sin_iplusj < 0)?1:0) + ((q0.y<q2.y)?2:0)) % 4;
+		a = this.point[this.cursol].adjacent[cc]
+                if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
                 if (this.point[a] && this.point[a].use === 1) {
                     if (!ctrl_key) {
                         this.selection = [];
