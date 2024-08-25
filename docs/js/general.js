@@ -1268,7 +1268,9 @@ function advancecontrol_off(loadtype) {
     if (user_choices.indexOf("Box") === -1) {
         document.getElementById("mo_board_lb").classList.add('is_hidden');
     }
-    if (user_choices.indexOf("Move") === -1) {
+    if (user_choices.indexOf("Move All") === -1 &&
+        user_choices.indexOf("Move Numbers") === -1 &&
+        user_choices.indexOf("Move Shapes") === -1) {
         document.getElementById("mo_move_lb").classList.add('is_hidden');
     }
 }

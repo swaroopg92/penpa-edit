@@ -627,6 +627,9 @@ onload = function() {
                     } else if (mode_name.includes("special")) {
                         pu.mode_set('special');
                         e.preventDefault();
+                    } else if (mode_name.includes("move")) {
+                        pu.mode_set('move');
+                        e.preventDefault();
                     } else {
                         pu.mode_set('line');
                         e.preventDefault();
