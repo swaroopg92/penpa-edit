@@ -6784,7 +6784,7 @@ class Puzzle_penrose_P3 extends Puzzle {
         //盤面情報
         super('penrose_P3');
         this.nx = side;
-        this.ny = side;
+        this.ny = order;
         this.nx0 = this.nx + 2;
         this.ny0 = this.ny + 2;
         this.margin = -1; //for arrow of number pointing outside of the grid
@@ -6796,7 +6796,7 @@ class Puzzle_penrose_P3 extends Puzzle {
         // aperiodic tiling, the sum of all values should be an integer.
         this.grid_offset = Array(this.ngrids).fill(1/this.ngrids);
         this.width0 = this.nx;
-        this.height0 = this.ny;
+        this.height0 = this.nx;
         this.width_c = this.width0;
         this.height_c = this.height0;
         this.width = this.width_c;
@@ -6824,8 +6824,8 @@ class Puzzle_penrose_P3 extends Puzzle {
 
     create_point() {
 	const PI = Math.PI;
-	const pixel_sqradius = (this.nx*this.ny*this.size*this.size)
-	const pixel_sqradius0 = (this.nx0*this.ny0*this.size*this.size)
+	const pixel_sqradius = (this.nx*this.nx*this.size*this.size)
+	const pixel_sqradius0 = (this.nx0*this.nx0*this.size*this.size)
 
 	// Compute the identity of the next tile in the tiling,
 	// using a de Bruijn grid.
@@ -7074,7 +7074,7 @@ class Puzzle_penrose_P3 extends Puzzle {
 
         this.make_frameline();
         this.cursol = this.centerlist[0];
-        this.cursolS = 4 * (this.nx0) * (this.ny0) + 4 + 4 * (this.nx0);
+        this.cursolS = 4 * (this.nx0) * (this.nx0) + 4 + 4 * (this.nx0);
     }
 
     search_center() {
@@ -7289,12 +7289,12 @@ class Puzzle_penrose_P3 extends Puzzle {
 
     cursolcheck() {
         if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") {
-            if (this.cursolS > 8 * (this.nx0) * (this.ny0)) {
-                this.cursolS -= 4 * (this.nx0) * (this.ny0);
+            if (this.cursolS > 8 * (this.nx0) * (this.nx0)) {
+                this.cursolS -= 4 * (this.nx0) * (this.nx0);
             }
         } else if (this.mode[this.mode.qa].edit_mode === "number" && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-            if (this.cursolS < 8 * (this.nx0) * (this.ny0)) {
-                this.cursolS += 4 * (this.nx0) * (this.ny0);
+            if (this.cursolS < 8 * (this.nx0) * (this.nx0)) {
+                this.cursolS += 4 * (this.nx0) * (this.nx0);
             }
         }
     }
