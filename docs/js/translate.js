@@ -832,7 +832,10 @@ const PenpaText = {
             JP: '一辺の大きさは以下の範囲です <h2 class="warn">1-$v</h2>'
         },
         order_warning_generic: {
-            EN: 'Order must be in the range <h2 class="warn">4-$v</h2>',
+            EN: 'Order must be in the range <h2 class="warn">3-$v</h2>',
+        },
+        rotational_asymmetry_warning_generic: {
+            EN: 'Rotational asymmetry must be in the range <h2 class="warn">0-$v</h2> for this order',
         },
 
         alpha_warning: {

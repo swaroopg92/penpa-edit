@@ -546,15 +546,21 @@ function make_class(gridtype, loadtype = 'new') {
         case "penrose_P3":
             var n0 = parseInt(document.getElementById("nb_size1").value, 10);
             var order = parseInt(document.getElementById("nb_size2").value, 10);
-            if (n0 <= gridmax['penrose'] && n0 > 0) {
-                if (order >= 4 && order <= 30) {
-                  pu = new Puzzle_penrose_P3(n0, order, size);
-                } else {
-                  errorMsg(PenpaText.get('order_warning_generic', 30));
-		}
-            } else {
+            var rotational = parseInt(document.getElementById("nb_penrose1").value, 10);
+            var variation = parseFloat(document.getElementById("nb_penrose2").value, 10);
+            if (!(n0 <= gridmax['penrose'] && n0 > 0)) {
                 errorMsg(PenpaText.get('size_warning_generic', gridmax['penrose']));
-            }
+		break;
+	    }
+	    if ((order < 3) || (order > 30)) {
+		errorMsg(PenpaText.get('order_warning_generic', 30));
+		break;
+	    }
+	    if ((rotational < 0) || (rotational >= order)) {
+		errorMsg(PenpaText.get('rotational_asymmetry_warning_generic', order-1));
+		break;
+	    }
+            pu = new Puzzle_penrose_P3(n0, order, size);
             break;
     }
     return pu;
@@ -576,6 +582,10 @@ function changetype() {
         "nb_sudoku8_lb", "nb_sudoku8"
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
+    var type6 = ["nb_penrose1_lb", "nb_penrose1", "nb_penrose2_lb", "nb_penrose2", "nb_penrose2_sl"]; // on - penrose
+    for (var i of type6) {
+        document.getElementById(i).style.display = "none";
+    }
     switch (UserSettings.gridtype) {
         case "square":
             for (var i of type) {
@@ -863,14 +873,19 @@ function changetype() {
             for (var i of type5) {
                 document.getElementById(i).style.display = "inline";
             }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "inline";
+            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("name_size2").innerHTML = PenpaText.get('order');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size2").value = 5;
+            document.getElementById("nb_penrose1").value = 0;
+            document.getElementById("nb_penrose2").value = 0.1;
+            document.getElementById("nb_penrose2_sl").value = 0.1;
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
-            document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
             break;
     }
@@ -1914,6 +1929,11 @@ function load(urlParam, type = 'url', origurl = null) {
     if (rtext_para[12] && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
     if (rtext_para[13] && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
     if (rtext_para[14] && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
+    if (rtext_para[11]) { document.getElementById("nb_penrose1").value = rtext_para[11]; }
+    if (rtext_para[12]) {
+	document.getElementById("nb_penrose2").value = rtext_para[12];
+	document.getElementById("nb_penrose2_sl").value = rtext_para[12];
+    }
     if (rtext_para[15]) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
         ptitle = ptitle.replace(/^Title\:\s/, '');

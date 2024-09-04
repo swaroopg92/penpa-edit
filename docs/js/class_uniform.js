@@ -6788,13 +6788,22 @@ class Puzzle_penrose_P3 extends Puzzle {
         this.nx0 = this.nx + 2;
         this.ny0 = this.ny + 2;
         this.margin = -1; //for arrow of number pointing outside of the grid
-        this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
+        // Extra grid settings
+        this.sudoku = [parseInt(document.getElementById("nb_penrose1").value, 10),
+            parseFloat(document.getElementById("nb_penrose2").value, 10), 0, 0 ];  
         this.ngrids = order;
         // The grid_offset coefficients determine which part of the infinite
-        // Penrose tiling you get. Ideally we would make them configurable,
-        // but it's a bit fiddly. They must not be integer. To ensure a valid
-        // aperiodic tiling, the sum of all values should be an integer.
-        this.grid_offset = Array(this.ngrids).fill(1/this.ngrids);
+        // Penrose tiling you get. Ideally we would make them fully configurable,
+        // but it's a bit fiddly. They should not be integer, in order to avoid
+        // singular cases (more than two grid lines meeting at a point).
+        // We currently just allow you to configure two parameters.
+        this.rotational = this.sudoku[0];
+        this.variation = this.sudoku[1];
+        let gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
+        // i = 0 always has the smallest offset. This ensures that initial_gridpoint
+        // always finds a tile that's adjacent to the origin.
+        this.grid_offset = Array.from({ length: this.ngrids }, (_, i) =>
+            1e-8+((((gcd(this.ngrids,this.rotational)*this.variation/2)+(i*this.rotational))/this.ngrids)%1.0));
         this.width0 = this.nx;
         this.height0 = this.nx;
         this.width_c = this.width0;
@@ -6866,7 +6875,44 @@ class Puzzle_penrose_P3 extends Puzzle {
 	    }
 	    const bestj = (this.ngrids + i + bestp) % this.ngrids;
 	    return { xnum: x, ynum: besty, i: i, j: bestj }
-	}
+	};
+	// Version of next_gridpoint that starts from the point on grid i that's
+	// nearest the origin, instead of from a known tile. This is to make sure
+	// that we start with a tile adjacent to the centre of symmetry, so that
+	// we can align it to (0,0).
+	var initial_gridpoint = (i, dir) => {
+	    let yco = 0;
+	    let nextyco = yco + dir*1000;
+	    let bestp = null;
+	    let besty = null;
+	    for (let p = 1; p < this.ngrids; p++) {
+	        const costh = Math.cos(p * 2 * PI / this.ngrids);
+	        const sinth = Math.sin(p * 2 * PI / this.ngrids);
+	        const base = -(this.grid_offset[i]) * (costh / sinth);
+	        const off = Math.abs(1 / sinth);
+	        const go = this.grid_offset[(i+p)%this.ngrids];
+		if (dir > 0) {
+	            const thisy = Math.ceil(((yco - base) / off) - go*Math.sign(sinth));
+	            const higher = base + off * (thisy + go*Math.sign(sinth));
+
+	            if (higher < nextyco) {
+	                nextyco = higher;
+	                bestp = p;
+	                besty = 0+thisy * Math.sign(sinth);
+	            }
+	        } else {
+	            const thisy = Math.floor(((yco - base) / off) - go*Math.sign(sinth));
+	            const lower = base + off * (thisy + go*Math.sign(sinth));
+	            if (lower > nextyco) {
+	                nextyco = lower;
+	                bestp = p;
+	                besty = 0+thisy * Math.sign(sinth);
+	            }
+	        }
+	    }
+	    const bestj = (this.ngrids + i + bestp) % this.ngrids;
+	    return { xnum: 0, ynum: besty, i: i, j: bestj }
+	};
 
         var k = 0;
         var point = [];
@@ -7041,7 +7087,8 @@ class Puzzle_penrose_P3 extends Puzzle {
 	}
 
 	// Initial tile
-	add_tile({ xnum: 0, ynum: 0, i: 0, j: 1 }, {xco: 0.0, yco: 0.0, dir: 1 })
+	let init_spec = initial_gridpoint(0, 1)
+	add_tile(init_spec, {xco: 0.0, yco: 0.0, dir: 1 })
 	for (var iter = 0; (queue.length > 0) && (iter < 100); iter++) {
 	    oldqueue = queue;
 	    queue = [];

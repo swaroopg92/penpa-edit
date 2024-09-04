@@ -837,6 +837,8 @@
                 <span><label class="label_nb" id="nb_sudoku3_lb">Outside clues (top/left)</label></span>
                 <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
                 <br>
+                <span><label class="label_nb" id="nb_penrose1_lb">Rotational asymmetry</label></span>
+                <input type="number" pattern="\d*" name="nb_penrose1" id="nb_penrose1" value="0" min="0" max="30" step="1">
                 <span><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
                 <input type="checkbox" name="nb_sudoku8" id="nb_sudoku8">
                 <span><label class="label_nb" id="nb_sudoku5_lb">Size 6x6</label></span>
@@ -844,6 +846,9 @@
                 <span><label class="label_nb" id="nb_sudoku6_lb">Size 8x8</label></span>
                 <input type="checkbox" name="nb_sudoku6" id="nb_sudoku6">
                 <br>
+                <span><label class="label_nb" id="nb_penrose2_lb">Tiling seed</label></span>
+                <input type="number" pattern="\d*" name="nb_penrose2" id="nb_penrose2" value="0.1" min="0.001" max="0.999" step="0.001" oninput="nb_penrose2_sl.value = nb_penrose2.value">
+                <input type="range" id="nb_penrose2_sl" value="0.1" min="0.001" max="0.999" step="0.001" oninput="nb_penrose2.value = nb_penrose2_sl.value">
                 <span><label class="label_nb" id="nb_sudoku7_lb"></label></span>
             </span>
             <br>
