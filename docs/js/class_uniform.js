@@ -6799,11 +6799,8 @@ class Puzzle_penrose_P3 extends Puzzle {
         // We currently just allow you to configure two parameters.
         this.rotational = this.sudoku[0];
         this.variation = this.sudoku[1];
-        let gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
-        // i = 0 always has the smallest offset. This ensures that initial_gridpoint
-        // always finds a tile that's adjacent to the origin.
         this.grid_offset = Array.from({ length: this.ngrids }, (_, i) =>
-            1e-8+((((gcd(this.ngrids,this.rotational)*this.variation/2)+(i*this.rotational))/this.ngrids)%1.0));
+            1e-8 + (this.variation/2 + i*this.rotational/this.ngrids) % 1.0);
         this.width0 = this.nx;
         this.height0 = this.nx;
         this.width_c = this.width0;
@@ -6833,8 +6830,14 @@ class Puzzle_penrose_P3 extends Puzzle {
 
     create_point() {
 	const PI = Math.PI;
-	const pixel_sqradius = (this.nx*this.nx*this.size*this.size)
-	const pixel_sqradius0 = (this.nx0*this.nx0*this.size*this.size)
+	// Express the size of tiling required as a region of the dual graph.
+	// The dual graph contains O(ngrids^2) tiles per grid period,
+	// so we scale down the area of the region as O(ngrids^2) to get
+	// an approximately equal number of tiles independent of ngrids.
+	// Because the disc-shaped region is convex, the tiling generated
+	// will be ribbon-convex.
+	const sqradius = (this.nx*this.nx*4)/(this.ngrids*this.ngrids)
+	const sqradius0 = (this.nx0*this.nx0*4)/(this.ngrids*this.ngrids)
 
 	// Compute the identity of the next tile in the tiling,
 	// using a de Bruijn grid.
@@ -6874,7 +6877,8 @@ class Puzzle_penrose_P3 extends Puzzle {
 	        }
 	    }
 	    const bestj = (this.ngrids + i + bestp) % this.ngrids;
-	    return { xnum: x, ynum: besty, i: i, j: bestj }
+	    const rsq = nextyco*nextyco + (x+this.grid_offset[i])*(x+this.grid_offset[i]);
+	    return { xnum: x, ynum: besty, i: i, j: bestj, rsq: rsq }
 	};
 	// Version of next_gridpoint that starts from the point on grid i that's
 	// nearest the origin, instead of from a known tile. This is to make sure
@@ -6911,7 +6915,8 @@ class Puzzle_penrose_P3 extends Puzzle {
 	        }
 	    }
 	    const bestj = (this.ngrids + i + bestp) % this.ngrids;
-	    return { xnum: 0, ynum: besty, i: i, j: bestj }
+	    const rsq = nextyco*nextyco + this.grid_offset[i]*this.grid_offset[i];
+	    return { xnum: 0, ynum: besty, i: i, j: bestj, rsq: rsq }
 	};
 
         var k = 0;
@@ -6930,7 +6935,7 @@ class Puzzle_penrose_P3 extends Puzzle {
 	    }
 	}
 	// closure modifies 'queue' and 'existing_tiles'
-	var add_tile = (tile_spec, loc_spec) => {
+	var add_tile = (tile_spec, loc_spec, use) => {
 	    var name = get_tile_name(tile_spec);
 	    if (existing_tiles.has(name)) {
 	      return;
@@ -6961,14 +6966,6 @@ class Puzzle_penrose_P3 extends Puzzle {
 		yco = yco - yoffi - yoffj;
 	    }
 	    var xcen = xco + 0.5*xoffi + 0.5*xoffj, ycen = yco + 0.5*yoffi + 0.5*yoffj;
-	    var sqdist = xcen*xcen + ycen*ycen;
-            if (sqdist > pixel_sqradius0) {
-		// far from origin: abort
-		return
-	    }
-	    var use = (sqdist <= pixel_sqradius) ? 1 : 0;
-
-
 	    var xco = [xco, xco + xoffi, xco + xoffi + xoffj, xco + xoffj];
 	    var yco = [yco, yco + yoffi, yco + yoffi + yoffj, yco + yoffj];
 
@@ -7088,12 +7085,15 @@ class Puzzle_penrose_P3 extends Puzzle {
 
 	// Initial tile
 	let init_spec = initial_gridpoint(0, 1)
-	add_tile(init_spec, {xco: 0.0, yco: 0.0, dir: 1 })
+	add_tile(init_spec, {xco: 0.0, yco: 0.0, dir: 1 }, 1)
 	for (var iter = 0; (queue.length > 0) && (iter < 100); iter++) {
 	    oldqueue = queue;
 	    queue = [];
 	    for (var n = 0; n < oldqueue.length; n++) {
-	        add_tile(oldqueue[n].tile_spec, oldqueue[n].loc_spec);
+		if (oldqueue[n].tile_spec.rsq <= sqradius0) {
+		    var use = (oldqueue[n].tile_spec.rsq <= sqradius + 1e-4) ? 1 : 0;
+		    add_tile(oldqueue[n].tile_spec, oldqueue[n].loc_spec, use);
+		}
 	    }
 	    if (queue.length == 0) { break; }
 	}
