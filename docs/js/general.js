@@ -1601,7 +1601,7 @@ function savetext_copy() {
     }
 
     // This needs to go after the copy takes place or else some browsers will not allow the copy.
-    infoMsg('<h2 class="info">' + PenpaText('copied_success') + '</h2>');
+    infoMsg('<h2 class="info">' + PenpaText.get('copied_success') + '</h2>');
 }
 
 function savetext_download() {
