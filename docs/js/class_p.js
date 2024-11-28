@@ -12112,7 +12112,7 @@ class Puzzle {
                 } else if (this.gridtype === "iso") {
                     factor = 0;
                     offset = 0;
-                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal" || this.gridtype === "rhombitrihexagonal" || this.gridtype === "deltoidal_trihexagonal" || this.gridtype === "penrose_P3") {
                     factor = 0;
                     offset = 0;
                 } else {
