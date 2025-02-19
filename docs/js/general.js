@@ -196,6 +196,9 @@ function create_newboard() {
         pu = make_class(gridtype);
         pu.mode = mode;
 
+        // reset the penpa lite states
+        advancecontrol_toggle("off");
+
         // update mode defaults for special grids
         if (!(gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro")) {
             pu.mode["pu_q"]["combi"] = ["linex", ""];
