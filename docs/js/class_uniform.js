@@ -3293,7 +3293,7 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                         point[k - 17].neighbor = point[k - 17].neighbor.concat([k]);
                         point[k - 20].neighbor = point[k - 20].neighbor.concat([k]);
                     } else {
-                        point[k - 11].neighbor = point[k - 11].neighbor.concat([k]);
+                        point[k - 21].neighbor = point[k - 21].neighbor.concat([k]);
                         point[k - 20].neighbor = point[k - 20].neighbor.concat([k]);
                     }
                     k++;
@@ -3905,7 +3905,7 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                         point[k - 17].neighbor = point[k - 17].neighbor.concat([k]);
                         point[k - 20].neighbor = point[k - 20].neighbor.concat([k]);
                     } else {
-                        point[k - 11].neighbor = point[k - 11].neighbor.concat([k]);
+                        point[k - 21].neighbor = point[k - 21].neighbor.concat([k]);
                         point[k - 20].neighbor = point[k - 20].neighbor.concat([k]);
                     }
                     k++;
