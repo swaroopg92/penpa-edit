@@ -1,4 +1,6 @@
 ## History
+* unreleased
+	* Fix for right edge of Cairo pentagonal grids.
 * 2024/07/16 ver 3.1.4
 	* Code refactoring.
 	* Added non-alphanumeric genre tag to allow answer check on non-alphanumeric characters.
