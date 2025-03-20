@@ -1,4 +1,6 @@
 ## History
+* unreleased
+    * Faster grid generation for tetrakis square, truncated square, snub square, Cairo pentagonal, rhombitrihexagonal and deltoidal trihexagonal grids.
 * 2024/07/16 ver 3.1.4
 	* Code refactoring.
 	* Added non-alphanumeric genre tag to allow answer check on non-alphanumeric characters.
