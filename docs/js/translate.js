@@ -335,9 +335,11 @@ function trans() {
         "nb_sudoku4_lb": ["対角線 &#x27CB;", "Diagonal &#x27CB;"],
         "nb_sudoku2_lb": ["外周ヒント", "Outside clues"],
         "nb_sudoku3_lb": ["外周ヒント(上左)", "Outside clues (top/left)"],
+        "nb_penrose1_lb": ["回転非対称性", "Rotational asymmetry"],
         "nb_sudoku8_lb": ["サイズ 4x4", "Size 4x4"],
         "nb_sudoku5_lb": ["サイズ 6x6", "Size 6x6"],
         "nb_sudoku6_lb": ["サイズ 8x8", "Size 8x8"],
+        "nb_penrose2_lb": ["タイリングシード", "Tiling Seed"],
         "name_space1": ["上：", "Over:"],
         "name_space2": ["下：", "Under:"],
         "name_space3": ["左：", "Left:"],
@@ -435,6 +437,7 @@ const PenpaText = {
         'nb_gridtype11_lb',
         'nb_gridtype12_lb',
         'nb_gridtype13_lb',
+        'nb_gridtype14_lb',
         'nb_rules_lb',
         'nb_title_lb',
         'settings_modal_header',
@@ -517,6 +520,7 @@ const PenpaText = {
         sides: { EN: "Sides:", JP: '横：' },
         over: { EN: "Over:", JP: '上：' },
         border: { EN: "Border:", JP: '境界：' },
+        order: { EN: "Order:" },
 
         nb_gridtype8_lb: { EN: 'Tetrakis square' },
         nb_gridtype9_lb: { EN: 'Truncated square' },
@@ -524,6 +528,7 @@ const PenpaText = {
         nb_gridtype11_lb: { EN: 'Cairo pentagonal' },
         nb_gridtype12_lb: { EN: 'Rhombitrihexagonal' },
         nb_gridtype13_lb: { EN: 'Deltoidal trihexagonal' },
+        nb_gridtype14_lb: { EN: 'Penrose P3' },
 
         // Generic Terms
         on: { EN: "ON" },
@@ -827,6 +832,14 @@ const PenpaText = {
         size_warning_generic: {
             EN: 'Side Size must be in the range <h2 class="warn">1-$v</h2>',
             JP: '一辺の大きさは以下の範囲です <h2 class="warn">1-$v</h2>'
+        },
+        order_warning_generic: {
+            EN: 'Order must be in the range <h2 class="warn">3-$v</h2>',
+            JP: '注文は範囲内でなければなりません <h2 class="warn">3-$v</h2>'
+        },
+        rotational_asymmetry_warning_generic: {
+            EN: 'Rotational asymmetry must be in the range <h2 class="warn">0-$v</h2> for this order',
+            JP: '回転非対称性は範囲内でなければならない <h2 class="warn">0-$v</h2> この注文について'
         },
 
         alpha_warning: {

@@ -129,7 +129,8 @@ class Puzzle {
             'snub': 20,
             'cairo': 20,
             'rhombitrihex': 20,
-            'deltoidal': 20
+            'deltoidal': 20,
+            'penrose': 20
         }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
@@ -8720,7 +8721,8 @@ class Puzzle {
             if (this.selection.length === 1 && parseInt(this.selection[0] / (this.nx0 * this.ny0)) > 0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
                 this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
-                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
+                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal" &&
+                this.gridtype !== "penrose_P3") {
                 // do nothing
             } else if (!this.selection.includes(num) & this.drawing) {
                 this.selection.push(num);
@@ -12110,7 +12112,7 @@ class Puzzle {
                 } else if (this.gridtype === "iso") {
                     factor = 0;
                     offset = 0;
-                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal" || this.gridtype === "rhombitrihexagonal" || this.gridtype === "deltoidal_trihexagonal" || this.gridtype === "penrose_P3") {
                     factor = 0;
                     offset = 0;
                 } else {
