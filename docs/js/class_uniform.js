@@ -113,28 +113,28 @@ class Puzzle_truncated_square extends Puzzle {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
@@ -2740,28 +2740,28 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
@@ -3400,28 +3400,28 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
@@ -4026,28 +4026,28 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
@@ -4617,33 +4617,33 @@ class Puzzle_iso extends Puzzle_truncated_square {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                        for (var n = 0; n < point[k].adjacent_dia.length; n++) {
-                            if (point[k].adjacent_dia[n] === j) {
-                                point[k].adjacent_dia.splice(n, 1, i);
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+            for (var n = 0; n < point[k].adjacent_dia.length; n++) {
+                if (point[k].adjacent_dia[n] === j) {
+                    point[k].adjacent_dia.splice(n, 1, i);
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
@@ -5795,28 +5795,28 @@ class Puzzle_rhombitrihexagonal extends Puzzle_truncated_square {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
@@ -6438,28 +6438,28 @@ class Puzzle_deltoidal_trihexagonal extends Puzzle_truncated_square {
                 }
             }
         }
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            let j = point[k].surround[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            let j = point[k].neighbor[n];
-                            let i = renumber[j];
-                            if (i != j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
                     }
+                }
+            }
+        }
         for (var j = 0; j < point.length; j++) {
             if (!point[j]) { continue; };
             let i = renumber[j];
