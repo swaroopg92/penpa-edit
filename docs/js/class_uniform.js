@@ -101,39 +101,53 @@ class Puzzle_truncated_square extends Puzzle {
             }
         }
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    if (point[i].use === -1 && point[j].use === 1) { point[i].use = 1; };
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            if (point[i].use === -1 && point[j].use === 1) { point[i].use = 1; };
+            delete point[j];
+            //置換ここまで
         }
         // adjacent作成
         for (var i = 0; i < point.length; i++) {
@@ -2714,43 +2728,57 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
             }
         }
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
-                        if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
-                            point[i].surround = point[i].surround.concat([point[j].surround[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
+                if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
+                    point[i].surround = point[i].surround.concat([point[j].surround[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            delete point[j];
+            //置換ここまで
         }
         // adjacent作成
         for (var i = 0; i < point.length; i++) {
@@ -3360,43 +3388,57 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
             }
         }
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
-                        if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
-                            point[i].surround = point[i].surround.concat([point[j].surround[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
+                if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
+                    point[i].surround = point[i].surround.concat([point[j].surround[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            delete point[j];
+            //置換ここまで
         }
         // adjacent作成
         for (var i = 0; i < point.length; i++) {
@@ -3972,43 +4014,57 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
             }
         }
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
-                        if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
-                            point[i].surround = point[i].surround.concat([point[j].surround[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
+                if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
+                    point[i].surround = point[i].surround.concat([point[j].surround[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            delete point[j];
+            //置換ここまで
         }
         // adjacent作成
         for (var i = 0; i < point.length; i++) {
@@ -4549,53 +4605,67 @@ class Puzzle_iso extends Puzzle_truncated_square {
         }
 
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                        for (var n = 0; n < point[k].adjacent_dia.length; n++) {
-                            if (point[k].adjacent_dia[n] === j) {
-                                point[k].adjacent_dia.splice(n, 1, i);
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
-                        if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
-                            point[i].surround = point[i].surround.concat([point[j].surround[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].adjacent_dia.length; n++) { //削除された点のadjacent_diaを移し替え
-                        if (point[i].adjacent_dia.indexOf(point[j].adjacent_dia[n]) === -1) {
-                            point[i].adjacent_dia = point[i].adjacent_dia.concat([point[j].adjacent_dia[n]]);
-                        }
-                    }
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+            for (var n = 0; n < point[k].adjacent_dia.length; n++) {
+                if (point[k].adjacent_dia[n] === j) {
+                    point[k].adjacent_dia.splice(n, 1, i);
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
+                if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
+                    point[i].surround = point[i].surround.concat([point[j].surround[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].adjacent_dia.length; n++) { //削除された点のadjacent_diaを移し替え
+                if (point[i].adjacent_dia.indexOf(point[j].adjacent_dia[n]) === -1) {
+                    point[i].adjacent_dia = point[i].adjacent_dia.concat([point[j].adjacent_dia[n]]);
+                }
+            }
+            delete point[j];
+            //置換ここまで
         }
         // adjacent作成
         for (var i = 0; i < point.length; i++) {
@@ -5713,43 +5783,57 @@ class Puzzle_rhombitrihexagonal extends Puzzle_truncated_square {
 
 
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
-                        if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
-                            point[i].surround = point[i].surround.concat([point[j].surround[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
+                if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
+                    point[i].surround = point[i].surround.concat([point[j].surround[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            delete point[j];
+            //置換ここまで
         }
 
         // adjacent作成
@@ -6342,43 +6426,57 @@ class Puzzle_deltoidal_trihexagonal extends Puzzle_truncated_square {
 
 
         // 重複判定
+        var renumber = new Array(point.length);
         for (var i = 0; i < point.length; i++) {
             if (!point[i]) { continue; };
+            if (typeof renumber[i] !== "undefined") { continue; };
+            renumber[i] = i;
             for (var j = i + 1; j < point.length; j++) {
                 if (!point[j]) { continue; };
                 if ((point[i].x - point[j].x) ** 2 + (point[i].y - point[j].y) ** 2 < 0.01) {
-                    //surround,neighbor置換
-                    for (var k = 0; k < point.length; k++) {
-                        if (!point[k]) { continue; };
-                        for (var n = 0; n < point[k].surround.length; n++) {
-                            if (point[k].surround[n] === j) {
-                                point[k].surround.splice(n, 1, i);
-                            }
-                        }
-                        for (var n = 0; n < point[k].neighbor.length; n++) {
-                            if (point[k].neighbor[n] === j) {
-                                if (point[k].neighbor.indexOf(i) === -1) {
-                                    point[k].neighbor.splice(n, 1, i); //無ければ置き換え
-                                } else {
-                                    point[k].neighbor.splice(n, 1); //あったら削除
-                                }
-                            }
-                        }
-                    }
-                    for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
-                        if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
-                            point[i].surround = point[i].surround.concat([point[j].surround[n]]);
-                        }
-                    }
-                    for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
-                        if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
-                            point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
-                        }
-                    }
-                    delete point[j];
-                    //置換ここまで
+                    renumber[j] = i;
                 }
             }
+        }
+        //surround,neighbor置換
+        for (var k = 0; k < point.length; k++) {
+            if (!point[k]) { continue; };
+            for (var n = 0; n < point[k].surround.length; n++) {
+                let j = point[k].surround[n];
+                let i = renumber[j];
+                if (i != j) {
+                    point[k].surround.splice(n, 1, i);
+                }
+            }
+            for (var n = 0; n < point[k].neighbor.length; n++) {
+                let j = point[k].neighbor[n];
+                let i = renumber[j];
+                if (i != j) {
+                    if (point[k].neighbor.indexOf(i) === -1) {
+                        point[k].neighbor.splice(n, 1, i); //無ければ置き換え
+                    } else {
+                        point[k].neighbor.splice(n, 1); //あったら削除
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < point.length; j++) {
+            if (!point[j]) { continue; };
+            let i = renumber[j];
+            if (i == j) { continue; };
+            if (typeof i === "undefined") { continue; };
+            for (var n = 0; n < point[j].surround.length; n++) { //削除された点のsurroundを移し替え
+                if (point[i].surround.indexOf(point[j].surround[n]) === -1) {
+                    point[i].surround = point[i].surround.concat([point[j].surround[n]]);
+                }
+            }
+            for (var n = 0; n < point[j].neighbor.length; n++) { //削除された点のneighborを移し替え
+                if (point[i].neighbor.indexOf(point[j].neighbor[n]) === -1) {
+                    point[i].neighbor = point[i].neighbor.concat([point[j].neighbor[n]]);
+                }
+            }
+            delete point[j];
+            //置換ここまで
         }
 
         // adjacent作成
