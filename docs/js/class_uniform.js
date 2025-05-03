@@ -6790,7 +6790,8 @@ class Puzzle_penrose_P3 extends Puzzle {
         this.margin = -1; //for arrow of number pointing outside of the grid
         // Extra grid settings
         this.sudoku = [parseInt(document.getElementById("nb_penrose1").value, 10),
-            parseFloat(document.getElementById("nb_penrose2").value, 10), 0, 0 ];  
+            parseFloat(document.getElementById("nb_penrose2").value, 10), 0, 0
+        ];
         this.ngrids = order;
         // The grid_offset coefficients determine which part of the infinite
         // Penrose tiling you get. Ideally we would make them fully configurable,
@@ -6800,7 +6801,7 @@ class Puzzle_penrose_P3 extends Puzzle {
         this.rotational = this.sudoku[0];
         this.variation = this.sudoku[1];
         this.grid_offset = Array.from({ length: this.ngrids }, (_, i) =>
-            1e-8 + (this.variation/2 + i*this.rotational/this.ngrids) % 1.0);
+            1e-8 + (this.variation / 2 + i * this.rotational / this.ngrids) % 1.0);
         this.width0 = this.nx;
         this.height0 = this.nx;
         this.width_c = this.width0;
@@ -6829,150 +6830,158 @@ class Puzzle_penrose_P3 extends Puzzle {
     }
 
     create_point() {
-	const PI = Math.PI;
-	// Express the size of tiling required as a region of the dual graph.
-	// The dual graph contains O(ngrids^2) tiles per grid period,
-	// so we scale down the area of the region as O(ngrids^2) to get
-	// an approximately equal number of tiles independent of ngrids.
-	// Because the disc-shaped region is convex, the tiling generated
-	// will be ribbon-convex.
-	const sqradius = (this.nx*this.nx*4)/(this.ngrids*this.ngrids)
-	const sqradius0 = (this.nx0*this.nx0*4)/(this.ngrids*this.ngrids)
+        const PI = Math.PI;
+        // Express the size of tiling required as a region of the dual graph.
+        // The dual graph contains O(ngrids^2) tiles per grid period,
+        // so we scale down the area of the region as O(ngrids^2) to get
+        // an approximately equal number of tiles independent of ngrids.
+        // Because the disc-shaped region is convex, the tiling generated
+        // will be ribbon-convex.
+        const sqradius = (this.nx * this.nx * 4) / (this.ngrids * this.ngrids)
+        const sqradius0 = (this.nx0 * this.nx0 * 4) / (this.ngrids * this.ngrids)
 
-	// Compute the identity of the next tile in the tiling,
-	// using a de Bruijn grid.
-	// Ref.: https://www.mathpages.com/home/kmath621/kmath621.htm
-	var next_gridpoint = (x, y, i, j, dir) => {
-	    const rel = (this.ngrids + j - i) % this.ngrids;
-	    const costh = Math.cos(rel * 2 * PI / this.ngrids);
-	    const sinth = Math.sin(rel * 2 * PI / this.ngrids);
-	    let yco = -(x+this.grid_offset[i]) * (costh / sinth) + (y+this.grid_offset[j]) / sinth;
-	    let nextyco = yco + dir*1000;
-	    let bestp = null;
-	    let besty = null;
-	    for (let p = 1; p < this.ngrids; p++) {
+        // Compute the identity of the next tile in the tiling,
+        // using a de Bruijn grid.
+        // Ref.: https://www.mathpages.com/home/kmath621/kmath621.htm
+        var next_gridpoint = (x, y, i, j, dir) => {
+            const rel = (this.ngrids + j - i) % this.ngrids;
+            const costh = Math.cos(rel * 2 * PI / this.ngrids);
+            const sinth = Math.sin(rel * 2 * PI / this.ngrids);
+            let yco = -(x + this.grid_offset[i]) * (costh / sinth) + (y + this.grid_offset[j]) / sinth;
+            let nextyco = yco + dir * 1000;
+            let bestp = null;
+            let besty = null;
+            for (let p = 1; p < this.ngrids; p++) {
                 if (p == rel) { continue; }
-	        const costh = Math.cos(p * 2 * PI / this.ngrids);
-	        const sinth = Math.sin(p * 2 * PI / this.ngrids);
-	        const base = -(x+this.grid_offset[i]) * (costh / sinth);
-	        const off = Math.abs(1 / sinth);
-	        const go = this.grid_offset[(i+p)%this.ngrids];
-		if (dir > 0) {
-	            const thisy = Math.ceil(((yco - base) / off) - go*Math.sign(sinth));
-	            const higher = base + off * (thisy + go*Math.sign(sinth));
+                const costh = Math.cos(p * 2 * PI / this.ngrids);
+                const sinth = Math.sin(p * 2 * PI / this.ngrids);
+                const base = -(x + this.grid_offset[i]) * (costh / sinth);
+                const off = Math.abs(1 / sinth);
+                const go = this.grid_offset[(i + p) % this.ngrids];
+                if (dir > 0) {
+                    const thisy = Math.ceil(((yco - base) / off) - go * Math.sign(sinth));
+                    const higher = base + off * (thisy + go * Math.sign(sinth));
 
-	            if (higher < nextyco) {
-	                nextyco = higher;
-	                bestp = p;
-	                besty = 0+thisy * Math.sign(sinth);
-	            }
-	        } else {
-	            const thisy = Math.floor(((yco - base) / off) - go*Math.sign(sinth));
-	            const lower = base + off * (thisy + go*Math.sign(sinth));
-	            if (lower > nextyco) {
-	                nextyco = lower;
-	                bestp = p;
-	                besty = 0+thisy * Math.sign(sinth);
-	            }
-	        }
-	    }
-	    const bestj = (this.ngrids + i + bestp) % this.ngrids;
-	    const rsq = nextyco*nextyco + (x+this.grid_offset[i])*(x+this.grid_offset[i]);
-	    return { xnum: x, ynum: besty, i: i, j: bestj, rsq: rsq }
-	};
-	// Version of next_gridpoint that starts from the point on grid i that's
-	// nearest the origin, instead of from a known tile. This is to make sure
-	// that we start with a tile adjacent to the centre of symmetry, so that
-	// we can align it to (0,0).
-	var initial_gridpoint = (i, dir) => {
-	    let yco = 0;
-	    let nextyco = yco + dir*1000;
-	    let bestp = null;
-	    let besty = null;
-	    for (let p = 1; p < this.ngrids; p++) {
-	        const costh = Math.cos(p * 2 * PI / this.ngrids);
-	        const sinth = Math.sin(p * 2 * PI / this.ngrids);
-	        const base = -(this.grid_offset[i]) * (costh / sinth);
-	        const off = Math.abs(1 / sinth);
-	        const go = this.grid_offset[(i+p)%this.ngrids];
-		if (dir > 0) {
-	            const thisy = Math.ceil(((yco - base) / off) - go*Math.sign(sinth));
-	            const higher = base + off * (thisy + go*Math.sign(sinth));
+                    if (higher < nextyco) {
+                        nextyco = higher;
+                        bestp = p;
+                        besty = 0 + thisy * Math.sign(sinth);
+                    }
+                } else {
+                    const thisy = Math.floor(((yco - base) / off) - go * Math.sign(sinth));
+                    const lower = base + off * (thisy + go * Math.sign(sinth));
+                    if (lower > nextyco) {
+                        nextyco = lower;
+                        bestp = p;
+                        besty = 0 + thisy * Math.sign(sinth);
+                    }
+                }
+            }
+            const bestj = (this.ngrids + i + bestp) % this.ngrids;
+            const rsq = nextyco * nextyco + (x + this.grid_offset[i]) * (x + this.grid_offset[i]);
+            return { xnum: x, ynum: besty, i: i, j: bestj, rsq: rsq }
+        };
+        // Version of next_gridpoint that starts from the point on grid i that's
+        // nearest the origin, instead of from a known tile. This is to make sure
+        // that we start with a tile adjacent to the centre of symmetry, so that
+        // we can align it to (0,0).
+        var initial_gridpoint = (i, dir) => {
+            let yco = 0;
+            let nextyco = yco + dir * 1000;
+            let bestp = null;
+            let besty = null;
+            for (let p = 1; p < this.ngrids; p++) {
+                const costh = Math.cos(p * 2 * PI / this.ngrids);
+                const sinth = Math.sin(p * 2 * PI / this.ngrids);
+                const base = -(this.grid_offset[i]) * (costh / sinth);
+                const off = Math.abs(1 / sinth);
+                const go = this.grid_offset[(i + p) % this.ngrids];
+                if (dir > 0) {
+                    const thisy = Math.ceil(((yco - base) / off) - go * Math.sign(sinth));
+                    const higher = base + off * (thisy + go * Math.sign(sinth));
 
-	            if (higher < nextyco) {
-	                nextyco = higher;
-	                bestp = p;
-	                besty = 0+thisy * Math.sign(sinth);
-	            }
-	        } else {
-	            const thisy = Math.floor(((yco - base) / off) - go*Math.sign(sinth));
-	            const lower = base + off * (thisy + go*Math.sign(sinth));
-	            if (lower > nextyco) {
-	                nextyco = lower;
-	                bestp = p;
-	                besty = 0+thisy * Math.sign(sinth);
-	            }
-	        }
-	    }
-	    const bestj = (this.ngrids + i + bestp) % this.ngrids;
-	    const rsq = nextyco*nextyco + this.grid_offset[i]*this.grid_offset[i];
-	    return { xnum: 0, ynum: besty, i: i, j: bestj, rsq: rsq }
-	};
+                    if (higher < nextyco) {
+                        nextyco = higher;
+                        bestp = p;
+                        besty = 0 + thisy * Math.sign(sinth);
+                    }
+                } else {
+                    const thisy = Math.floor(((yco - base) / off) - go * Math.sign(sinth));
+                    const lower = base + off * (thisy + go * Math.sign(sinth));
+                    if (lower > nextyco) {
+                        nextyco = lower;
+                        bestp = p;
+                        besty = 0 + thisy * Math.sign(sinth);
+                    }
+                }
+            }
+            const bestj = (this.ngrids + i + bestp) % this.ngrids;
+            const rsq = nextyco * nextyco + this.grid_offset[i] * this.grid_offset[i];
+            return { xnum: 0, ynum: besty, i: i, j: bestj, rsq: rsq }
+        };
 
         var k = 0;
         var point = [];
-	// List of tile-specs to add in next phase
-	var queue = [], oldqueue;
+        // List of tile-specs to add in next phase
+        var queue = [],
+            oldqueue;
         // Map of tile-specs to their index in point[]
-	var existing_tiles = new Map();
+        var existing_tiles = new Map();
 
-	var get_tile_name = (spec) => {
-	    var rel = (this.ngrids+spec.j-spec.i)%this.ngrids;
-	    if (rel>this.ngrids/2) {  // swap i,j
-	       return "<" + spec.j + "|" + spec.i + ">(" + spec.ynum + "," + spec.xnum + ")";
-	    } else {
-	       return "<" + spec.i + "|" + spec.j + ">(" + spec.xnum + "," + spec.ynum + ")";
-	    }
-	}
-	// closure modifies 'queue' and 'existing_tiles'
-	var add_tile = (tile_spec, loc_spec, use) => {
-	    var name = get_tile_name(tile_spec);
-	    if (existing_tiles.has(name)) {
-	      return;
-	    }
-            console.log("Adding new tile", name)
-	    var rel = (this.ngrids+tile_spec.j-tile_spec.i)%this.ngrids;
-	    var i,j,xnum,ynum;
-	    if (rel>this.ngrids/2) {  // swap i,j
-              i = tile_spec.j; j = tile_spec.i;
-	      xnum = tile_spec.ynum; ynum = tile_spec.xnum;
-	    } else {
-              i = tile_spec.i; j = tile_spec.j;
-	      xnum = tile_spec.xnum; ynum = tile_spec.ynum;
-	    }
-	    var xoffi = Math.sin(2*i*PI/this.ngrids)*this.size, yoffi = -Math.cos(2*i*PI/this.ngrids)*this.size;
-	    var xoffj = Math.sin(2*j*PI/this.ngrids)*this.size, yoffj = -Math.cos(2*j*PI/this.ngrids)*this.size;
-	    var xco = loc_spec.xco, yco = loc_spec.yco;
-	    if (rel>this.ngrids/2) {
-	        if (loc_spec.dir>0) {
-		    xco = xco - xoffi;
-		    yco = yco - yoffi;
-		} else {
-		    xco = xco - xoffj;
-		    yco = yco - yoffj;
-		}
-            } else if (loc_spec.dir<0) {
-	        xco = xco - xoffi - xoffj;
-		yco = yco - yoffi - yoffj;
-	    }
-	    var xcen = xco + 0.5*xoffi + 0.5*xoffj, ycen = yco + 0.5*yoffi + 0.5*yoffj;
-	    var xco = [xco, xco + xoffi, xco + xoffi + xoffj, xco + xoffj];
-	    var yco = [yco, yco + yoffi, yco + yoffi + yoffj, yco + yoffj];
+        var get_tile_name = (spec) => {
+            var rel = (this.ngrids + spec.j - spec.i) % this.ngrids;
+            if (rel > this.ngrids / 2) { // swap i,j
+                return "<" + spec.j + "|" + spec.i + ">(" + spec.ynum + "," + spec.xnum + ")";
+            } else {
+                return "<" + spec.i + "|" + spec.j + ">(" + spec.xnum + "," + spec.ynum + ")";
+            }
+        }
+        // closure modifies 'queue' and 'existing_tiles'
+        var add_tile = (tile_spec, loc_spec, use) => {
+            var name = get_tile_name(tile_spec);
+            if (existing_tiles.has(name)) {
+                return;
+            }
+            var rel = (this.ngrids + tile_spec.j - tile_spec.i) % this.ngrids;
+            var i, j, xnum, ynum;
+            if (rel > this.ngrids / 2) { // swap i,j
+                i = tile_spec.j;
+                j = tile_spec.i;
+                xnum = tile_spec.ynum;
+                ynum = tile_spec.xnum;
+            } else {
+                i = tile_spec.i;
+                j = tile_spec.j;
+                xnum = tile_spec.xnum;
+                ynum = tile_spec.ynum;
+            }
+            var xoffi = Math.sin(2 * i * PI / this.ngrids) * this.size,
+                yoffi = -Math.cos(2 * i * PI / this.ngrids) * this.size;
+            var xoffj = Math.sin(2 * j * PI / this.ngrids) * this.size,
+                yoffj = -Math.cos(2 * j * PI / this.ngrids) * this.size;
+            var xco = loc_spec.xco,
+                yco = loc_spec.yco;
+            if (rel > this.ngrids / 2) {
+                if (loc_spec.dir > 0) {
+                    xco = xco - xoffi;
+                    yco = yco - yoffi;
+                } else {
+                    xco = xco - xoffj;
+                    yco = yco - yoffj;
+                }
+            } else if (loc_spec.dir < 0) {
+                xco = xco - xoffi - xoffj;
+                yco = yco - yoffi - yoffj;
+            }
+            var xcen = xco + 0.5 * xoffi + 0.5 * xoffj,
+                ycen = yco + 0.5 * yoffi + 0.5 * yoffj;
+            var xco = [xco, xco + xoffi, xco + xoffi + xoffj, xco + xoffj];
+            var yco = [yco, yco + yoffi, yco + yoffi + yoffj, yco + yoffj];
 
             var loc_spec, nbr_spec, s, nbr;
-	    var surround = [null, null, null, null];
-	    var edge = [null, null, null, null];
-	    var adja = [null, null, null, null];
+            var surround = [null, null, null, null];
+            var edge = [null, null, null, null];
+            var adja = [null, null, null, null];
 
             // For each of the four directions, compute the name of
             // the tile that should be adjacent, and look up whether
@@ -6981,122 +6990,124 @@ class Puzzle_penrose_P3 extends Puzzle {
             // queue to be created in the next pass.
 
             nbr_spec = next_gridpoint(xnum, ynum, i, j, 1) // next along xline
-	    nbr = existing_tiles.get(get_tile_name(nbr_spec))
-	    if (nbr) {
-	       adja[2] = nbr
-	       nbr = point[nbr]
-	       s = ((this.ngrids+nbr_spec.j-nbr_spec.i)%this.ngrids)>this.ngrids/2
-	       surround[3] = s ? nbr.surround[1] : nbr.surround[0]
-	       surround[2] = s ? nbr.surround[2] : nbr.surround[1]
-	       edge[2] = s ? nbr.neighbor[1] : nbr.neighbor[0]
-	    } else {
-	       loc_spec = { xco: xco[3], yco: yco[3], dir: 1 }
-	       queue.push({tile_spec: nbr_spec, loc_spec: loc_spec})
-	    }
+            nbr = existing_tiles.get(get_tile_name(nbr_spec))
+            if (nbr) {
+                adja[2] = nbr
+                nbr = point[nbr]
+                s = ((this.ngrids + nbr_spec.j - nbr_spec.i) % this.ngrids) > this.ngrids / 2
+                surround[3] = s ? nbr.surround[1] : nbr.surround[0]
+                surround[2] = s ? nbr.surround[2] : nbr.surround[1]
+                edge[2] = s ? nbr.neighbor[1] : nbr.neighbor[0]
+            } else {
+                loc_spec = { xco: xco[3], yco: yco[3], dir: 1 }
+                queue.push({ tile_spec: nbr_spec, loc_spec: loc_spec })
+            }
             nbr_spec = next_gridpoint(xnum, ynum, i, j, -1) // prev along xline
-	    nbr = existing_tiles.get(get_tile_name(nbr_spec))
-	    if (nbr) {
-	       adja[0] = nbr
-	       nbr = point[nbr]
-	       s = ((this.ngrids+nbr_spec.j-nbr_spec.i)%this.ngrids)>this.ngrids/2
-	       surround[1] = s ? nbr.surround[3] : nbr.surround[2]
-	       surround[0] = s ? nbr.surround[0] : nbr.surround[3]
-	       edge[0] = s ? nbr.neighbor[3] : nbr.neighbor[2]
-	    } else {
-	       loc_spec = { xco: xco[1], yco: yco[1], dir: -1 }
-	       queue.push({tile_spec: nbr_spec, loc_spec: loc_spec})
-	    }
+            nbr = existing_tiles.get(get_tile_name(nbr_spec))
+            if (nbr) {
+                adja[0] = nbr
+                nbr = point[nbr]
+                s = ((this.ngrids + nbr_spec.j - nbr_spec.i) % this.ngrids) > this.ngrids / 2
+                surround[1] = s ? nbr.surround[3] : nbr.surround[2]
+                surround[0] = s ? nbr.surround[0] : nbr.surround[3]
+                edge[0] = s ? nbr.neighbor[3] : nbr.neighbor[2]
+            } else {
+                loc_spec = { xco: xco[1], yco: yco[1], dir: -1 }
+                queue.push({ tile_spec: nbr_spec, loc_spec: loc_spec })
+            }
             nbr_spec = next_gridpoint(ynum, xnum, j, i, 1) // next along yline
-	    nbr = existing_tiles.get(get_tile_name(nbr_spec))
-	    if (nbr) {
-	       adja[3] = nbr
-	       nbr = point[nbr]
-	       s = ((this.ngrids+nbr_spec.j-nbr_spec.i)%this.ngrids)>this.ngrids/2
-	       surround[0] = s ? nbr.surround[1] : nbr.surround[0]
-	       surround[3] = s ? nbr.surround[2] : nbr.surround[1]
-	       edge[3] = s ? nbr.neighbor[1] : nbr.neighbor[0]
-	    } else {
-	       loc_spec = { xco: xco[0], yco: yco[0], dir: 1 }
-	       queue.push({tile_spec: nbr_spec, loc_spec: loc_spec})
-	    }
+            nbr = existing_tiles.get(get_tile_name(nbr_spec))
+            if (nbr) {
+                adja[3] = nbr
+                nbr = point[nbr]
+                s = ((this.ngrids + nbr_spec.j - nbr_spec.i) % this.ngrids) > this.ngrids / 2
+                surround[0] = s ? nbr.surround[1] : nbr.surround[0]
+                surround[3] = s ? nbr.surround[2] : nbr.surround[1]
+                edge[3] = s ? nbr.neighbor[1] : nbr.neighbor[0]
+            } else {
+                loc_spec = { xco: xco[0], yco: yco[0], dir: 1 }
+                queue.push({ tile_spec: nbr_spec, loc_spec: loc_spec })
+            }
             nbr_spec = next_gridpoint(ynum, xnum, j, i, -1) // prev along yline
-	    nbr = existing_tiles.get(get_tile_name(nbr_spec))
-	    if (nbr) {
-	       adja[1] = nbr
-	       nbr = point[nbr]
-	       s = ((this.ngrids+nbr_spec.j-nbr_spec.i)%this.ngrids)>this.ngrids/2
-	       surround[2] = s ? nbr.surround[3] : nbr.surround[2]
-	       surround[1] = s ? nbr.surround[0] : nbr.surround[3]
-	       edge[1] = s ? nbr.neighbor[3] : nbr.neighbor[2]
-	    } else {
-	       loc_spec = { xco: xco[2], yco: yco[2], dir: -1 }
-	       queue.push({tile_spec: nbr_spec, loc_spec: loc_spec})
-	    }
+            nbr = existing_tiles.get(get_tile_name(nbr_spec))
+            if (nbr) {
+                adja[1] = nbr
+                nbr = point[nbr]
+                s = ((this.ngrids + nbr_spec.j - nbr_spec.i) % this.ngrids) > this.ngrids / 2
+                surround[2] = s ? nbr.surround[3] : nbr.surround[2]
+                surround[1] = s ? nbr.surround[0] : nbr.surround[3]
+                edge[1] = s ? nbr.neighbor[3] : nbr.neighbor[2]
+            } else {
+                loc_spec = { xco: xco[2], yco: yco[2], dir: -1 }
+                queue.push({ tile_spec: nbr_spec, loc_spec: loc_spec })
+            }
 
             // Create vertices if they don't already exist
             var type = 1;
-	    for (let e = 0; e < 4; e++) {
-	      if (surround[e] == null) {
-	        point[k] = new Point(xco[e], yco[e], type, [], [], use, []);
-		surround[e] = k;
-	        k++;
-	      } else if (use == 1) {
-		point[surround[e]].use = 1;
-	      }
-	    }
-	    for (let e = 0; e < 4; e++) {
-	      // Update mapping vertex -> adjacent vertex
-	      let se = surround[e], sf = surround[(e+1)%4];
-	      if (point[se].adjacent.indexOf(sf) == -1) {
-	        point[se].adjacent = point[se].adjacent.concat([sf])
-	      }
-	      if (point[sf].adjacent.indexOf(se) == -1) {
-	        point[sf].adjacent = point[sf].adjacent.concat([se])
-	      }
-	    }
+            for (let e = 0; e < 4; e++) {
+                if (surround[e] == null) {
+                    point[k] = new Point(xco[e], yco[e], type, [], [], use, []);
+                    surround[e] = k;
+                    k++;
+                } else if (use == 1) {
+                    point[surround[e]].use = 1;
+                }
+            }
+            for (let e = 0; e < 4; e++) {
+                // Update mapping vertex -> adjacent vertex
+                let se = surround[e],
+                    sf = surround[(e + 1) % 4];
+                if (point[se].adjacent.indexOf(sf) == -1) {
+                    point[se].adjacent = point[se].adjacent.concat([sf])
+                }
+                if (point[sf].adjacent.indexOf(se) == -1) {
+                    point[sf].adjacent = point[sf].adjacent.concat([se])
+                }
+            }
             // Create edges if they don't already exist
             type = 2;
-	    for (let e = 0; e < 4; e++) {
-	      if (edge[e] == null) {
-	        point[k] = new Point((point[surround[e]].x + point[surround[(e+1)%4]].x)/2,
-		                     (point[surround[e]].y + point[surround[(e+1)%4]].y)/2, 
-		                     type, [], [], use, []);
-		edge[e] = k;
-	        k++;
-	      } else if (use == 1) {
-		point[edge[e]].use = 1;
-	      }
-	    }
+            for (let e = 0; e < 4; e++) {
+                if (edge[e] == null) {
+                    point[k] = new Point((point[surround[e]].x + point[surround[(e + 1) % 4]].x) / 2,
+                        (point[surround[e]].y + point[surround[(e + 1) % 4]].y) / 2,
+                        type, [], [], use, []);
+                    edge[e] = k;
+                    k++;
+                } else if (use == 1) {
+                    point[edge[e]].use = 1;
+                }
+            }
 
-	    // Create face
-	    type = 0;
-	    point[k] = new Point(xcen, ycen, type, adja, surround, use, edge);
-	    for (let e = 0; e < 4; e++) {
-	      // Update mapping edge -> face
-	      point[edge[e]].neighbor = point[edge[e]].neighbor.concat([k])
-	      if (adja[e] != null) {
-	        // Update mapping face -> adjacent face
-	        point[adja[e]].adjacent[ point[adja[e]].neighbor.indexOf(edge[e]) ] = k
-	      }
-	    }
-	    existing_tiles.set(name, k);
-	    k++;
-	}
+            // Create face
+            type = 0;
+            point[k] = new Point(xcen, ycen, type, adja, surround, use, edge);
+            for (let e = 0; e < 4; e++) {
+                // Update mapping edge -> face
+                point[edge[e]].neighbor = point[edge[e]].neighbor.concat([k])
+                if (adja[e] != null) {
+                    // Update mapping face -> adjacent face
+                    point[adja[e]].adjacent[point[adja[e]].neighbor.indexOf(edge[e])] = k
+                }
+            }
+            existing_tiles.set(name, k);
+            k++;
+        }
 
-	// Initial tile
-	let init_spec = initial_gridpoint(0, 1)
-	add_tile(init_spec, {xco: 0.0, yco: 0.0, dir: 1 }, 1)
-	for (var iter = 0; (queue.length > 0) && (iter < 100); iter++) {
-	    oldqueue = queue;
-	    queue = [];
-	    for (var n = 0; n < oldqueue.length; n++) {
-		if (oldqueue[n].tile_spec.rsq <= sqradius0) {
-		    var use = (oldqueue[n].tile_spec.rsq <= sqradius + 1e-4) ? 1 : 0;
-		    add_tile(oldqueue[n].tile_spec, oldqueue[n].loc_spec, use);
-		}
-	    }
-	    if (queue.length == 0) { break; }
-	}
+        // Initial tile
+        let init_spec = initial_gridpoint(0, 1)
+        add_tile(init_spec, { xco: 0.0, yco: 0.0, dir: 1 }, 1)
+        for (var iter = 0;
+            (queue.length > 0) && (iter < 100); iter++) {
+            oldqueue = queue;
+            queue = [];
+            for (var n = 0; n < oldqueue.length; n++) {
+                if (oldqueue[n].tile_spec.rsq <= sqradius0) {
+                    var use = (oldqueue[n].tile_spec.rsq <= sqradius + 1e-4) ? 1 : 0;
+                    add_tile(oldqueue[n].tile_spec, oldqueue[n].loc_spec, use);
+                }
+            }
+            if (queue.length == 0) { break; }
+        }
 
         this.point = point;
     }
@@ -7376,13 +7387,15 @@ class Puzzle_penrose_P3 extends Puzzle {
 
         if (this.mode[this.mode.qa].edit_mode === "number" || this.mode[this.mode.qa].edit_mode === "symbol") {
             let q = this.point[this.cursol].surround;
-	    let q0 = this.point[q[0]], q1 = this.point[q[1]], q2 = this.point[q[2]];
-	    // sin(A+B) ≥ 0 iff (A+B)/2 is in first or third quadrant.
-	    // Applying this to lattice generators tells us which should
-	    // be assigned as horizontal and which as vertical.
-	    let sin_iplusj = (q1.x-q0.x)*(q1.y-q2.y) + (q0.y-q1.y)*(q2.x-q1.x);
-	    let cc = (c + ((sin_iplusj < 0)?1:0) + ((q0.y<q2.y)?2:0)) % 4;
-	    a = this.point[this.cursol].adjacent[cc]
+            let q0 = this.point[q[0]],
+                q1 = this.point[q[1]],
+                q2 = this.point[q[2]];
+            // sin(A+B) ≥ 0 iff (A+B)/2 is in first or third quadrant.
+            // Applying this to lattice generators tells us which should
+            // be assigned as horizontal and which as vertical.
+            let sin_iplusj = (q1.x - q0.x) * (q1.y - q2.y) + (q0.y - q1.y) * (q2.x - q1.x);
+            let cc = (c + ((sin_iplusj < 0) ? 1 : 0) + ((q0.y < q2.y) ? 2 : 0)) % 4;
+            a = this.point[this.cursol].adjacent[cc]
             if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
             this.selection = [];
             if (!this.selection.includes(this.cursol)) {
@@ -7390,14 +7403,16 @@ class Puzzle_penrose_P3 extends Puzzle {
             }
         } else if (this.mode[this.mode.qa].edit_mode === "sudoku") {
             if (this.selection.length >= 1) {
-		let q = this.point[this.cursol].surround;
-		let q0 = this.point[q[0]], q1 = this.point[q[1]], q2 = this.point[q[2]];
-		// sin(A+B) ≥ 0 iff (A+B)/2 is in first or third quadrant.
-		// Applying this to lattice generators tells us which should
-		// be assigned as horizontal and which as vertical.
-		let sin_iplusj = (q1.x-q0.x)*(q1.y-q2.y) + (q0.y-q1.y)*(q2.x-q1.x);
-		let cc = (c + ((sin_iplusj < 0)?1:0) + ((q0.y<q2.y)?2:0)) % 4;
-		a = this.point[this.cursol].adjacent[cc]
+                let q = this.point[this.cursol].surround;
+                let q0 = this.point[q[0]],
+                    q1 = this.point[q[1]],
+                    q2 = this.point[q[2]];
+                // sin(A+B) ≥ 0 iff (A+B)/2 is in first or third quadrant.
+                // Applying this to lattice generators tells us which should
+                // be assigned as horizontal and which as vertical.
+                let sin_iplusj = (q1.x - q0.x) * (q1.y - q2.y) + (q0.y - q1.y) * (q2.x - q1.x);
+                let cc = (c + ((sin_iplusj < 0) ? 1 : 0) + ((q0.y < q2.y) ? 2 : 0)) % 4;
+                a = this.point[this.cursol].adjacent[cc]
                 if (this.point[a] && this.point[a].use === 1) { this.cursol = a; }
                 if (this.point[a] && this.point[a].use === 1) {
                     if (!ctrl_key) {

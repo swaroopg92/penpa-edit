@@ -6,6 +6,9 @@ tmp/
 .DS_Store
 notes/
 
+# Pycharm IDE
+.idea/
+
 *.log
 
 launch_sync.bat
