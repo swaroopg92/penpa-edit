@@ -2,6 +2,7 @@
 * 2025/05/03 ver 3.1.5
 	* LineDashoffset to SVG export
 	* Support for Penrose rhombus ("P3") tilings (alpha version).
+	* Fix for right edge of Cairo pentagonal grids.
 * 2024/07/16 ver 3.1.4
 	* Code refactoring.
 	* Added non-alphanumeric genre tag to allow answer check on non-alphanumeric characters.
