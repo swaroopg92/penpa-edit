@@ -8702,11 +8702,13 @@ class Puzzle {
             this.cursolS = num;
 
             // Remember cursol
-            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+            if (this.grid_is_square()) {
                 if (submode === "3") {
                     this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                    this.selection = [this.cursol]; // update selection
                 } else if (submode === "9") {
                     this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                    this.selection = [this.cursol]; // update selection
                 }
             }
             this.redraw();
