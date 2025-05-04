@@ -1306,7 +1306,7 @@ class Puzzle {
     number_multi_enabled() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         let submode = this.mode[this.mode.qa][edit_mode][0];
-        return (edit_mode === "number" && !["2"].includes(submode)); // ignore arrow submode
+        return (edit_mode === "number" && !["2", "3", "9"].includes(submode)); // ignore arrow submode
     }
 
     submode_check(name) {
@@ -7104,8 +7104,13 @@ class Puzzle {
             let cells = null;
             if (this.number_multi_enabled())
                 cells = this.selection;
-            else
-                cells = [this.cursol];
+            else {
+                if (submode[0] === "3" || submode[0] === "9") {
+                    cells = [this.cursolS];
+                } else {
+                    cells = [this.cursol];
+                }
+            }
             for (var k of cells) {
                 switch (submode[0]) {
                     case "1":
@@ -7867,10 +7872,15 @@ class Puzzle {
                     this.undoredo_counter = this.undoredo_counter + 1;
                 }
                 let cells = null;
-                if (this.number_multi_enabled())
+                if (this.number_multi_enabled()) {
                     cells = this.selection;
-                else
-                    cells = [this.cursol];
+                } else {
+                    if (submode === "3" || submode === "9") {
+                        cells = [this.cursolS];
+                    } else {
+                        cells = [this.cursol];
+                    }
+                }
 
                 for (var k of cells) {
                     if (submode === "3" || submode === "9") { // 1/4 and side
@@ -7978,7 +7988,9 @@ class Puzzle {
                 case "number":
                     // Multi-selection mode: treat this just like sudoku mode if we're in
                     // a submode that can work with multiple cells
-                    if (this.number_multi_enabled())
+                    if (submode === "3" || submode === "9") {
+                        this.mouse_numberS(x, y, num, submode);
+                    } else if (this.number_multi_enabled())
                         this.mouse_sudoku(x, y, num, ctrl_key);
                     else
                         this.mouse_number(x, y, num);
@@ -8014,7 +8026,7 @@ class Puzzle {
     }
 
     // Double click: select all cells with the same value as the clicked cell
-    // XXX: support other cell types
+    // Todo: support other cell types
     dblmouseevent(x, y, num, ctrl_key = false) {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         if (edit_mode === "number" || edit_mode === "sudoku") {
@@ -12046,7 +12058,13 @@ class Puzzle {
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             let submode = this.mode[this.mode.qa][edit_mode][0];
-            if (UserSettings.draw_edges) {
+            if (edit_mode === "number" && (submode === "3" || submode === "9")) {
+                if (this.cursolS) {
+                    this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
+                } else {
+                    this.default_cursol();
+                }
+            } else if (UserSettings.draw_edges) {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.default_cursol();
@@ -12087,13 +12105,13 @@ class Puzzle {
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
             // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
             // since we dont want single cell highlighed while in killer submode
-            //if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
+            // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
             //    // check if cursor is in centerlist, to avoid border/edge case
             //    let cursorexist = this.centerlist.indexOf(this.cursol);
             //    if (cursorexist !== -1) {
             //        this.selection.push(this.cursol);
             //    }
-            //}
+            // }
 
             // Handling rotation and reflection of the grid
             var a = [0, 1, 2, 3],
