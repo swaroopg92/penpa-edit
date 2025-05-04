@@ -1306,7 +1306,7 @@ class Puzzle {
     number_multi_enabled() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         let submode = this.mode[this.mode.qa][edit_mode][0];
-        return (edit_mode === "number" && !["2"].includes(submode));
+        return (edit_mode === "number" && !["2"].includes(submode)); // ignore arrow submode
     }
 
     submode_check(name) {
@@ -7210,19 +7210,23 @@ class Puzzle {
                             this.set_value("number", k, [number, submode[1], submode[0]]);
                         }
                         break;
-
                     case "7": // Candidates
+                        // This does not use set_value function.
+                        // For some reason, calling set_value, first sets the new number and then records, messing with the undo
                         if (str_num_no0.indexOf(key) != -1) {
+                            let prop = "number";
+                            this.record(prop, k, this.undoredo_counter);
                             if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === "7") {
                                 con = this[this.mode.qa].number[k][0];
                             } else {
                                 con = "";
                             }
                             number = this.onofftext(9, key, con);
-                            this.set_value("number", k, [number, submode[1], submode[0]]);
+                            let value = [number, submode[1], submode[0]];
+                            this[this.mode.qa][prop][k] = value;
+                            this.record_replay(prop, k, this.undoredo_counter);
                         }
                         break;
-
                     case "11": // Killer Sum
                         var corner_cursor = 4 * (k + this.nx0 * this.ny0);
                         if (this[this.mode.qa].numberS[corner_cursor]) {
@@ -7649,34 +7653,58 @@ class Puzzle {
 
     key_space(keypressed = 0, shift_key = false, ctrl_key = false) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
-            if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-                this.record("numberS", this.cursolS);
-                delete this[this.mode.qa].numberS[this.cursolS];
-                this.record_replay("numberS", this.cursolS);
-            } else {
-                // Remove the corner and side numbers
-                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
-
-                for (var j = 0; j < 4; j++) {
-                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                        this.record("numberS", corner_cursor + j);
-                        delete this[this.mode.qa].numberS[corner_cursor + j];
-                        this.record_replay("numberS", corner_cursor + j);
+            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
+            if (this.selection.length > 0) {
+                if (this.selection.length === 1) {
+                    let clean_flag = this.check_neighbors(this.selection[0]);
+                    if (!clean_flag) {
+                        this.undoredo_counter = 0;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let cells = null;
+                if (this.number_multi_enabled())
+                    cells = this.selection;
+                else {
+                    if (submode === "3" || submode === "9") {
+                        cells = [this.cursolS];
+                    } else {
+                        cells = [this.cursol];
                     }
                 }
+                for (var k of cells) {
+                    if (submode === "3" || submode === "9") {
+                        this.record("numberS", k, this.undoredo_counter);
+                        delete this[this.mode.qa].numberS[k];
+                        this.record_replay("numberS", k, this.undoredo_counter);
+                    } else {
+                        // Remove the corner and side numbers
+                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                for (var j = 0; j < 4; j++) {
-                    if (this[this.mode.qa].numberS[side_cursor + j]) {
-                        this.record("numberS", side_cursor + j);
-                        delete this[this.mode.qa].numberS[side_cursor + j];
-                        this.record_replay("numberS", side_cursor + j);
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                this.record("numberS", corner_cursor + j);
+                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                                this.record_replay("numberS", corner_cursor + j);
+                            }
+                        }
+
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                this.record("numberS", side_cursor + j);
+                                delete this[this.mode.qa].numberS[side_cursor + j];
+                                this.record_replay("numberS", side_cursor + j);
+                            }
+                        }
+                        this.record("number", k, this.undoredo_counter);
+                        delete this[this.mode.qa].number[k];
+                        this.record_replay("number", k, this.undoredo_counter);
                     }
                 }
-
-                this.record("number", this.cursol);
-                delete this[this.mode.qa].number[this.cursol];
-                this.record_replay("number", this.cursol);
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
@@ -7953,7 +7981,7 @@ class Puzzle {
                     if (this.number_multi_enabled())
                         this.mouse_sudoku(x, y, num, ctrl_key);
                     else
-                        this.mouse_number(x, y, num, ctrl_key);
+                        this.mouse_number(x, y, num);
                     if (pu.mouse_mode === "down_left") {
                         let isNumberS = ["3", "9", "11"].includes(submode)
                         let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
@@ -8656,6 +8684,25 @@ class Puzzle {
         } else if (this.mouse_mode === "out") {
             this.drawing = false;
             this.last = -1;
+        }
+    }
+
+    mouse_numberS(x, y, num, submode) {
+        if (this.mouse_mode === "down_left") {
+            this.cursolS = num;
+
+            // Remember cursol
+            if (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku") {
+                if (submode === "3") {
+                    this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                } else if (submode === "9") {
+                    this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                }
+            }
+            this.redraw();
+        } else if (this.mouse_mode === "down_right") {
+            this.cursolS = num;
+            this.redraw();
         }
     }
 

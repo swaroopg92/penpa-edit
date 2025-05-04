@@ -875,6 +875,15 @@ onload = function() {
             }
         }
 
+        // resetting the type for starbattle composite mode
+        if (fittype === 'flex') {
+            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
+                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
+                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
+                pu.type = type;
+            }
+        }
+
         //const endTime = performance.now();
         //console.log(endTime - startTime);
         num = parseInt(num);
