@@ -138,9 +138,9 @@ function trans() {
         "sub_number1_lb": ["通常", "Normal"],
         "sub_number2_lb": ["矢印", "Arrow"],
         "sub_number9_lb": ["", ""],
-        "sub_number10_lb": ["大", "Big"],
-        "sub_number6_lb": ["中", "Middle"],
-        "sub_number5_lb": ["小", "Small"],
+        "sub_number10_lb": ["大", "L"],
+        "sub_number6_lb": ["中", "M"],
+        "sub_number5_lb": ["小", "S"],
         "sub_number8_lb": ["長文", "Long"],
         "sub_number7_lb": ["候補", "Candidates"],
         "sub_cage2_lb": ["自由", "Free"],
@@ -335,9 +335,11 @@ function trans() {
         "nb_sudoku4_lb": ["対角線 &#x27CB;", "Diagonal &#x27CB;"],
         "nb_sudoku2_lb": ["外周ヒント", "Outside clues"],
         "nb_sudoku3_lb": ["外周ヒント(上左)", "Outside clues (top/left)"],
+        "nb_penrose1_lb": ["回転非対称性", "Rotational asymmetry"],
         "nb_sudoku8_lb": ["サイズ 4x4", "Size 4x4"],
         "nb_sudoku5_lb": ["サイズ 6x6", "Size 6x6"],
         "nb_sudoku6_lb": ["サイズ 8x8", "Size 8x8"],
+        "nb_penrose2_lb": ["タイリングシード", "Tiling Seed"],
         "name_space1": ["上：", "Over:"],
         "name_space2": ["下：", "Under:"],
         "name_space3": ["左：", "Left:"],
@@ -435,6 +437,7 @@ const PenpaText = {
         'nb_gridtype11_lb',
         'nb_gridtype12_lb',
         'nb_gridtype13_lb',
+        'nb_gridtype14_lb',
         'nb_rules_lb',
         'nb_title_lb',
         'settings_modal_header',
@@ -517,6 +520,7 @@ const PenpaText = {
         sides: { EN: "Sides:", JP: '横：' },
         over: { EN: "Over:", JP: '上：' },
         border: { EN: "Border:", JP: '境界：' },
+        order: { EN: "Order:" },
 
         nb_gridtype8_lb: { EN: 'Tetrakis square' },
         nb_gridtype9_lb: { EN: 'Truncated square' },
@@ -524,6 +528,7 @@ const PenpaText = {
         nb_gridtype11_lb: { EN: 'Cairo pentagonal' },
         nb_gridtype12_lb: { EN: 'Rhombitrihexagonal' },
         nb_gridtype13_lb: { EN: 'Deltoidal trihexagonal' },
+        nb_gridtype14_lb: { EN: 'Penrose P3' },
 
         // Generic Terms
         on: { EN: "ON" },
@@ -828,6 +833,14 @@ const PenpaText = {
             EN: 'Side Size must be in the range <h2 class="warn">1-$v</h2>',
             JP: '一辺の大きさは以下の範囲です <h2 class="warn">1-$v</h2>'
         },
+        order_warning_generic: {
+            EN: 'Order must be in the range <h2 class="warn">3-$v</h2>',
+            JP: '注文は範囲内でなければなりません <h2 class="warn">3-$v</h2>'
+        },
+        rotational_asymmetry_warning_generic: {
+            EN: 'Rotational asymmetry must be in the range <h2 class="warn">0-$v</h2> for this order',
+            JP: '回転非対称性は範囲内でなければならない <h2 class="warn">0-$v</h2> この注文について'
+        },
 
         alpha_warning: {
             EN: "**Alpha Version - It's under development and currently has limited functionality",
@@ -887,6 +900,7 @@ const PenpaText = {
             "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
             "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper", "Edge Erase",
             "Wall",
+            "Move All",
             "Number Normal", "Number L", "Number M", "Number S", "Candidates", "Number 1/4", "Number Side",
             "Sudoku Normal", "Sudoku Corner", "Sudoku Centre",
             "Shape",
@@ -897,6 +911,7 @@ const PenpaText = {
             "線 通常", "線 対角線", "線 自由線", "線 中線", "線 補助x",
             "辺 通常", "辺 対角線", "辺 自由線", "辺 補助x", "辺 枠消",
             "壁",
+            "移動 全",
             "数字 通常", "数字 大", "数字 中", "数字 小", "数字 候補", "数字 1/4", "数字 辺",
             "数独 通常", "数独 角", "数独 中央",
             "記号",
@@ -907,6 +922,7 @@ const PenpaText = {
             "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
             "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4", "sub_lineE5",
             "wall",
+            "sub_move1",
             "sub_number1", "sub_number10", "sub_number6", "sub_number5", "sub_number7", "sub_number3", "sub_number9",
             "sub_sudoku1", "sub_sudoku2", "sub_sudoku3",
             "symbol",

@@ -224,7 +224,7 @@ const penpa_constraints = {
             "show": ["mo_surface_lb",
                 "mo_number_lb", "sub_number1_lb",
                 "mo_combi_lb", "subc4", "combisub_mines", "combili_mines",
-                "mo_symbol_lb", "ms5", "li_sun_moon", "ms_sun_moon"
+                "mo_symbol_lb", "ms5", "ms_sun_moon"
             ],
             "modeset": ["number", "symbol", "combi"],
             "submodeset": ["1", "sun_moon", "mines"],
@@ -234,7 +234,7 @@ const penpa_constraints = {
             "show": ["mo_surface_lb",
                 "mo_lineE_lb", "sub_lineE1_lb", "sub_lineE2_lb", "sub_lineE5_lb",
                 "mo_combi_lb", "subc4", "combisub_akari", "combili_akari",
-                "mo_symbol_lb", "ms5", "li_sun_moon", "ms_sun_moon"
+                "mo_symbol_lb", "ms5", "ms_sun_moon"
             ],
             "modeset": ["symbol", "combi"],
             "submodeset": ["sun_moon", "akari"],

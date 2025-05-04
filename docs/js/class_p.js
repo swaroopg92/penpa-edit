@@ -131,7 +131,8 @@ class Puzzle {
             'snub': 20,
             'cairo': 20,
             'rhombitrihex': 20,
-            'deltoidal': 20
+            'deltoidal': 20,
+            'penrose': 20
         }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
@@ -165,7 +166,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 1, 4]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 1, 5]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -185,6 +186,7 @@ class Puzzle {
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
+        this.linedrawing = false; // Used for lineox composite mode
     }
 
     reset_puzzle(p) {
@@ -1802,12 +1804,8 @@ class Puzzle {
         text += this.__export_checker_shared();
 
         // Custom Answer Message
-        if (this.solution) {
-            let custom_message = document.getElementById("custom_message").value;
-            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-        } else {
-            text += "\n" + false;
-        }
+        let custom_message = document.getElementById("custom_message").value;
+        text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -8747,7 +8745,8 @@ class Puzzle {
             if (this.cursol && this.cursol >= this.nx0 * this.ny0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
                 this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
-                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
+                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal" &&
+                this.gridtype !== "penrose_P3") {
                 // do nothing
             } else if (this.select_remove && this.drawing) {
                 let i = this.selection.indexOf(num);
@@ -10195,6 +10194,9 @@ class Puzzle {
                 array = "line";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
+
+                // To track if user is drawing line or just placing symbols
+                this.linedrawing = true;
             }
             this.last = num;
             this.redraw();
@@ -10211,7 +10213,7 @@ class Puzzle {
             secondsymbol = [1, "ox_E", 2];
         }
 
-        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num && !this.linedrawing) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = firstsymbol;
@@ -10227,6 +10229,7 @@ class Puzzle {
             }
         }
         this.drawing_mode = -1;
+        this.linedrawing = false;
         this.first = -1;
         this.last = -1;
         this.redraw();
@@ -12141,7 +12144,7 @@ class Puzzle {
                 } else if (this.gridtype === "iso") {
                     factor = 0;
                     offset = 0;
-                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal" || this.gridtype === "rhombitrihexagonal" || this.gridtype === "deltoidal_trihexagonal" || this.gridtype === "penrose_P3") {
                     factor = 0;
                     offset = 0;
                 } else {

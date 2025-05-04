@@ -45,12 +45,11 @@
     </script>
     <!-- End Google Tag Manager -->
     <!-- STYLES -->
-    <!-- Online styles -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Local styles -->
     <script>
-        var ver = "3.1.4"; // Also defined in class_p.js
+        var ver = "3.1.5"; // Also defined in class_p.js
         let style_sources = [
+            "./css/font-awesome.min.css",
             "./css/light_theme.css",
             "./css/base-structure.css",
             "./css/vanillaSelectBox.css",
@@ -58,6 +57,7 @@
             "./css/select2.css"
         ];
         let style_sources_ids = [
+            "font_awesome_css",
             "color_theme",
             "base_structure",
             "tab_setting_css",
@@ -79,7 +79,10 @@
     <!-- SCRIPTS -->
     <!-- local libs -->
     <script type="text/javascript">
-        let library_sources = ["./js/libs/jquery-3.7.0.min.js",
+        let library_sources = [
+            "./js/libs/md5.min.js",
+            "./js/libs/sweetalert2@11.js",
+            "./js/libs/jquery-3.7.0.min.js",
             "./js/libs/purify.min.js",
             "./js/libs/CanvasRenderingContext2D.ext.js",
             "./js/libs/encoding.js",
@@ -98,9 +101,6 @@
             document.head.appendChild(script);
         }
     </script>
-    <!-- Online libs -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
     <!--  rest -->
     <script type="text/javascript">
         let script_sources = [
@@ -141,7 +141,7 @@
     <!-- End Google Tag Manager (noscript) -->
     <header id="header">
         <span id="title">Setter Mode</span>
-        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2024 <button id="page_help">Help</button></span>
+        <span id="version-info">Penpa+ v<span id="version-number"></span> &copy; 2020-2025 <button id="page_help">Help</button></span>
     </header>
     <div id="app-container">
         <div id="tool-container">
@@ -818,6 +818,7 @@
                     <option value="cairo_pentagonal" id="nb_gridtype11_lb"> Cairo pentagonal </option>
                     <option value="rhombitrihexagonal" id="nb_gridtype12_lb"> Rhombitrihexagonal </option>
                     <option value="deltoidal_trihexagonal" id="nb_gridtype13_lb"> Deltoidal trihexagonal </option>
+                    <option value="penrose_P3" id="nb_gridtype14_lb"> Penrose P3 </option>
                 </select>
             </span><br>
             <h4><label class="label_nb" id="nb_size_lb">Size:</label></h4>
@@ -836,6 +837,8 @@
                 <span><label class="label_nb" id="nb_sudoku3_lb">Outside clues (top/left)</label></span>
                 <input type="checkbox" name="nb_sudoku3" id="nb_sudoku3">
                 <br>
+                <span><label class="label_nb" id="nb_penrose1_lb">Rotational asymmetry</label></span>
+                <input type="number" pattern="\d*" name="nb_penrose1" id="nb_penrose1" value="0" min="0" max="30" step="1">
                 <span><label class="label_nb" id="nb_sudoku8_lb">Size 4x4</label></span>
                 <input type="checkbox" name="nb_sudoku8" id="nb_sudoku8">
                 <span><label class="label_nb" id="nb_sudoku5_lb">Size 6x6</label></span>
@@ -843,6 +846,9 @@
                 <span><label class="label_nb" id="nb_sudoku6_lb">Size 8x8</label></span>
                 <input type="checkbox" name="nb_sudoku6" id="nb_sudoku6">
                 <br>
+                <span><label class="label_nb" id="nb_penrose2_lb">Tiling seed</label></span>
+                <input type="number" pattern="\d*" name="nb_penrose2" id="nb_penrose2" value="0.1" min="0.001" max="0.999" step="0.001" oninput="nb_penrose2_sl.value = nb_penrose2.value">
+                <input type="range" id="nb_penrose2_sl" value="0.1" min="0.001" max="0.999" step="0.001" oninput="nb_penrose2.value = nb_penrose2_sl.value">
                 <span><label class="label_nb" id="nb_sudoku7_lb"></label></span>
             </span>
             <br>

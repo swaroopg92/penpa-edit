@@ -196,6 +196,9 @@ function create_newboard() {
         pu = make_class(gridtype);
         pu.mode = mode;
 
+        // reset the penpa lite states
+        advancecontrol_toggle("off");
+
         // update mode defaults for special grids
         if (!(gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro")) {
             pu.mode["pu_q"]["combi"] = ["linex", ""];
@@ -237,6 +240,158 @@ function create_newboard() {
     }
 }
 
+function set_display_labels(gridtype) {
+    var type = ["name_size2", "nb_size2", "name_space2", "name_space3", "name_space4", "nb_space2", "nb_space3", "nb_space4"];
+    var type2 = ["name_space1", "nb_space1"];
+    var type3 = ["nb_size_lb", "nb_space_lb", "name_size1", "nb_size1"]; // off - for sudoku
+    var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
+        "nb_sudoku2_lb", "nb_sudoku2",
+        "nb_sudoku3_lb", "nb_sudoku3",
+        "nb_sudoku4_lb", "nb_sudoku4",
+        "nb_sudoku5_lb", "nb_sudoku5",
+        "nb_sudoku6_lb", "nb_sudoku6",
+        "nb_sudoku7_lb",
+        "nb_sudoku8_lb", "nb_sudoku8"
+    ]; // on - for sudoku
+    var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
+    var type6 = ["nb_penrose1_lb", "nb_penrose1", "nb_penrose2_lb", "nb_penrose2", "nb_penrose2_sl"]; // on - penrose
+
+    switch (gridtype) {
+        case "square":
+            for (var i of type) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            break;
+        case "hex":
+        case "tri":
+        case "pyramid":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            break;
+        case "iso":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            break;
+        case "sudoku":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            break;
+        case "kakuro":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type5) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            break;
+        case "tetrakis_square":
+        case "truncated_square":
+        case "snub_square":
+        case "cairo_pentagonal":
+        case "rhombitrihexagonal":
+        case "deltoidal_trihexagonal":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            break;
+        case "penrose_P3":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type5) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "inline";
+            }
+            break;
+    }
+}
+
 function make_class(gridtype, loadtype = 'new') {
     var size = UserSettings.displaysize;
     var gridmax = {
@@ -251,8 +406,10 @@ function make_class(gridtype, loadtype = 'new') {
         'snub': 20,
         'cairo': 20,
         'rhombitrihex': 20,
-        'deltoidal': 20
+        'deltoidal': 20,
+        'penrose': 20
     }; // also defined in class_p.js
+    set_display_labels(gridtype)
     switch (gridtype) {
         case "square":
             var nx = parseInt(document.getElementById("nb_size1").value, 10);
@@ -261,18 +418,6 @@ function make_class(gridtype, loadtype = 'new') {
             var space2 = parseInt(document.getElementById("nb_space2").value, 10);
             var space3 = parseInt(document.getElementById("nb_space3").value, 10);
             var space4 = parseInt(document.getElementById("nb_space4").value, 10);
-            var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
-                "nb_sudoku2_lb", "nb_sudoku2",
-                "nb_sudoku3_lb", "nb_sudoku3",
-                "nb_sudoku4_lb", "nb_sudoku4",
-                "nb_sudoku5_lb", "nb_sudoku5",
-                "nb_sudoku6_lb", "nb_sudoku6",
-                "nb_sudoku7_lb",
-                "nb_sudoku8_lb", "nb_sudoku8"
-            ]; // of sudoku
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku_lb_square');
             if (nx <= gridmax['square'] && nx > 0 && ny <= gridmax['square'] && ny > 0 && space1 + space2 < ny && space3 + space4 < nx) {
@@ -542,41 +687,36 @@ function make_class(gridtype, loadtype = 'new') {
                 errorMsg(PenpaText.get('size_warning_generic', gridmax['deltoidal']));
             }
             break;
+        case "penrose_P3":
+            var n0 = parseInt(document.getElementById("nb_size1").value, 10);
+            var order = parseInt(document.getElementById("nb_size2").value, 10);
+            var rotational = parseInt(document.getElementById("nb_penrose1").value, 10);
+            var variation = parseFloat(document.getElementById("nb_penrose2").value, 10);
+            if (!(n0 <= gridmax['penrose'] && n0 > 0)) {
+                errorMsg(PenpaText.get('size_warning_generic', gridmax['penrose']));
+                break;
+            }
+            if ((order < 3) || (order > 30)) {
+                errorMsg(PenpaText.get('order_warning_generic', 30));
+                break;
+            }
+            if ((rotational < 0) || (rotational >= order)) {
+                errorMsg(PenpaText.get('rotational_asymmetry_warning_generic', order - 1));
+                break;
+            }
+            pu = new Puzzle_penrose_P3(n0, order, size);
+            break;
     }
     return pu;
 }
 
 function changetype() {
     UserSettings.gridtype = document.getElementById("gridtype").value;
-
-    var type = ["name_size2", "nb_size2", "name_space2", "name_space3", "name_space4", "nb_space2", "nb_space3", "nb_space4"];
-    var type2 = ["name_space1", "nb_space1"];
-    var type3 = ["nb_size_lb", "nb_space_lb", "name_size1", "nb_size1"]; // off - for sudoku
-    var type4 = ["nb_sudoku1_lb", "nb_sudoku1",
-        "nb_sudoku2_lb", "nb_sudoku2",
-        "nb_sudoku3_lb", "nb_sudoku3",
-        "nb_sudoku4_lb", "nb_sudoku4",
-        "nb_sudoku5_lb", "nb_sudoku5",
-        "nb_sudoku6_lb", "nb_sudoku6",
-        "nb_sudoku7_lb",
-        "nb_sudoku8_lb", "nb_sudoku8"
-    ]; // on - for sudoku
-    var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
+    set_display_labels(UserSettings.gridtype)
     switch (UserSettings.gridtype) {
         case "square":
-            for (var i of type) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('columns');
+            document.getElementById("name_size2").innerHTML = PenpaText.get('rows');
             document.getElementById("name_space1").innerHTML = PenpaText.get('over');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_sqaure');
@@ -589,18 +729,6 @@ function changetype() {
             document.getElementById("nb_space4").value = 0;
             break;
         case "hex":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("name_space1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
@@ -610,18 +738,6 @@ function changetype() {
             document.getElementById("nb_space1").value = 0;
             break;
         case "tri":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("name_space1").innerHTML = PenpaText.get('border');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
@@ -631,18 +747,6 @@ function changetype() {
             document.getElementById("nb_space1").value = 0;
             break;
         case "pyramid":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("name_space1").innerHTML = PenpaText.get('border');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
@@ -652,36 +756,12 @@ function changetype() {
             document.getElementById("nb_space1").value = 0;
             break;
         case "iso":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_size1").value = 5;
             document.getElementById("nb_size3").value = 34;
             break;
         case "sudoku":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "inline";
-            }
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_sudoku');
             document.getElementById("nb_sudoku7_lb").innerHTML = PenpaText.get('nb_sudoku7_lb_sudoku');
             document.getElementById("nb_sudoku1").checked = false;
@@ -693,38 +773,12 @@ function changetype() {
             document.getElementById("nb_sudoku8").checked = false;
             break;
         case "kakuro":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type5) {
-                document.getElementById(i).style.display = "inline";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('columns');
+            document.getElementById("name_size2").innerHTML = PenpaText.get('rows');
             document.getElementById("nb_size1").value = 10;
             document.getElementById("nb_size2").value = 10;
             break;
         case "truncated_square":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
@@ -732,18 +786,6 @@ function changetype() {
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
         case "tetrakis_square":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
@@ -752,81 +794,50 @@ function changetype() {
             document.getElementById("nb_size3").value = 38;
             break;
         case "snub_square":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
         case "cairo_pentagonal":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
         case "rhombitrihexagonal":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
         case "deltoidal_trihexagonal":
-            for (var i of type) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type2) {
-                document.getElementById(i).style.display = "none";
-            }
-            for (var i of type3) {
-                document.getElementById(i).style.display = "inline";
-            }
-            for (var i of type4) {
-                document.getElementById(i).style.display = "none";
-            }
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("nb_space_lb").style.display = "none";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
             document.getElementById("nb_size1").value = 4;
             document.getElementById("nb_size3").value = 38;
+            break;
+        case "penrose_P3":
+            document.getElementById("name_size1").innerHTML = PenpaText.get('side');
+            document.getElementById("name_size2").innerHTML = PenpaText.get('order');
+            document.getElementById("nb_space_lb").style.display = "none";
+            document.getElementById("nb_size1").value = 4;
+            document.getElementById("nb_size2").value = 5;
+            document.getElementById("nb_penrose1").value = 0;
+            document.getElementById("nb_penrose2").value = 0.1;
+            document.getElementById("nb_penrose2_sl").value = 0.1;
+            document.getElementById("nb_sudoku3_lb").style.display = "inline";
+            document.getElementById("nb_sudoku3_lb").innerHTML = "<span style='color: red;'>" + PenpaText.get('alpha_warning') + "</span>";
+            document.getElementById("nb_size3").value = 38;
+            break;
     }
 }
 
@@ -1268,7 +1279,9 @@ function advancecontrol_off(loadtype) {
     if (user_choices.indexOf("Box") === -1) {
         document.getElementById("mo_board_lb").classList.add('is_hidden');
     }
-    if (user_choices.indexOf("Move") === -1) {
+    if (user_choices.indexOf("Move All") === -1 &&
+        user_choices.indexOf("Move Numbers") === -1 &&
+        user_choices.indexOf("Move Shapes") === -1) {
         document.getElementById("mo_move_lb").classList.add('is_hidden');
     }
 }
@@ -1599,7 +1612,7 @@ function savetext_copy() {
     }
 
     // This needs to go after the copy takes place or else some browsers will not allow the copy.
-    infoMsg('<h2 class="info">' + PenpaText('copied_success') + '</h2>');
+    infoMsg('<h2 class="info">' + PenpaText.get('copied_success') + '</h2>');
 }
 
 function savetext_download() {
@@ -1866,6 +1879,13 @@ function load(urlParam, type = 'url', origurl = null) {
     if (rtext_para[12] && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
     if (rtext_para[13] && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
     if (rtext_para[14] && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
+    if (UserSettings.gridtype == "penrose_P3") {
+        if (rtext_para[11]) { document.getElementById("nb_penrose1").value = rtext_para[11]; }
+        if (rtext_para[12]) {
+            document.getElementById("nb_penrose2").value = rtext_para[12];
+            document.getElementById("nb_penrose2_sl").value = rtext_para[12];
+        }
+    }
     if (rtext_para[15]) {
         let ptitle = rtext_para[15].replace(/%2C/g, ',');
         ptitle = ptitle.replace(/^Title\:\s/, '');
