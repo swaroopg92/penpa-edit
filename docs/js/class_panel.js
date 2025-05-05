@@ -19,7 +19,11 @@ class Panel {
     }
 
     mode_set(mode) {
-        this.panelmode = mode;
+        if (pu.mode[pu.mode.qa].edit_mode === "sudoku" && !["number", "alphabet", "alphabet_s"].includes(mode)) {
+            // Don't change the mode as Sudoku mode does not support other submodes in the Panel
+        } else {
+            this.panelmode = mode;
+        }
         this.draw_panel();
     }
 

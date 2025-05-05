@@ -25,9 +25,10 @@ class Stack {
     }
 
     push(o) {
-        if (this.__a.length > 5000) {
-            this.__a.shift();
-        }
+        // [SG] Removing the limit condition by commenting this
+        // if (this.__a.length > 5000) {
+        //     this.__a.shift();
+        // }
         this.__a.push(o);
     }
     pop() {
@@ -133,7 +134,8 @@ class Puzzle {
             'snub': 20,
             'cairo': 20,
             'rhombitrihex': 20,
-            'deltoidal': 20
+            'deltoidal': 20,
+            'penrose': 20
         }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
@@ -167,7 +169,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 1, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 1, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -187,6 +189,7 @@ class Puzzle {
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
+        this.linedrawing = false; // Used for lineox composite mode
     }
 
     reset_puzzle(p) {
@@ -339,7 +342,7 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        if (UserSettings.color_theme == 1) {
+        if (UserSettings.color_theme == THEME_LIGHT) {
             pause_ctx.fillStyle = Color.BLUE;
         } else {
             pause_ctx.fillStyle = Color.WHITE;
@@ -1308,7 +1311,7 @@ class Puzzle {
     number_multi_enabled() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         let submode = this.mode[this.mode.qa][edit_mode][0];
-        return (edit_mode === "number" && !["2"].includes(submode));
+        return (edit_mode === "number" && !["2", "3", "9"].includes(submode)); // ignore arrow submode
     }
 
     submode_check(name) {
@@ -1804,12 +1807,8 @@ class Puzzle {
         text += this.__export_checker_shared();
 
         // Custom Answer Message
-        if (this.solution) {
-            let custom_message = document.getElementById("custom_message").value;
-            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-        } else {
-            text += "\n" + false;
-        }
+        let custom_message = document.getElementById("custom_message").value;
+        text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2022,7 +2021,7 @@ class Puzzle {
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
         var answercheck_opt = [],
-            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_all') + "</b><ul>";
 
         // loop through and check if any "AND" settings are selected
         let prev_opt = "";
@@ -2032,7 +2031,7 @@ class Puzzle {
                 var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
                 if (opt.length !== 0 && opt != prev_opt) {
                     answercheck_opt.push(opt);
-                    message += "<li>" + answercheck_message[opt] + "</li>";
+                    message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                 }
                 prev_opt = opt;
             }
@@ -2041,7 +2040,7 @@ class Puzzle {
 
         // If answercheck list is 0, it means, no "AND" option was selected
         if (answercheck_opt.length === 0) {
-            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_one') + "</b><ul>";
             // loop through and check if any "OR" settings are selected
             for (var i = 0; i < settingstatus_or.length; i++) {
                 if (settingstatus_or[i].checked) {
@@ -2049,7 +2048,7 @@ class Puzzle {
                     let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
                     if (opt.length !== 0 && opt != prev_opt) {
                         answercheck_opt.push(opt);
-                        message += "<li>" + answercheck_message[opt] + "</li>";
+                        message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                     }
                     prev_opt = opt;
                 }
@@ -6481,13 +6480,10 @@ class Puzzle {
                 console.log(this.pu_a_col);
                 console.log(this);
             } else {
-                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Please see instructions (Help) for supported puzzle types\n' +
-                    'For additional genre support please submit your request to penpaplus@gmail.com';
+                text += PenpaText.get('gmp_unsupported', header);
             }
         } else {
-            text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Please see instructions (Help) for supported puzzle types\n';
+            text += PenpaText.get('gmp_enter_type');
         }
 
         return text;
@@ -7110,12 +7106,17 @@ class Puzzle {
             let cells = null;
             if (this.number_multi_enabled())
                 cells = this.selection;
-            else
-                cells = [this.cursol];
+            else {
+                if (submode[0] === "3" || submode[0] === "9") {
+                    cells = [this.cursolS];
+                } else {
+                    cells = [this.cursol];
+                }
+            }
             for (var k of cells) {
                 switch (submode[0]) {
                     case "1":
-                        // If the there are corner or sides present then get rid of them
+                        // If there are corner or sides present then get rid of them
                         // Only in Answer mode
                         if (this.mode.qa === "pu_a") {
                             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
@@ -7216,19 +7217,23 @@ class Puzzle {
                             this.set_value("number", k, [number, submode[1], submode[0]]);
                         }
                         break;
-
                     case "7": // Candidates
+                        // This does not use set_value function.
+                        // For some reason, calling set_value, first sets the new number and then records, messing with the undo
                         if (str_num_no0.indexOf(key) != -1) {
+                            let prop = "number";
+                            this.record(prop, k, this.undoredo_counter);
                             if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === "7") {
                                 con = this[this.mode.qa].number[k][0];
                             } else {
                                 con = "";
                             }
                             number = this.onofftext(9, key, con);
-                            this.set_value("number", k, [number, submode[1], submode[0]]);
+                            let value = [number, submode[1], submode[0]];
+                            this[this.mode.qa][prop][k] = value;
+                            this.record_replay(prop, k, this.undoredo_counter);
                         }
                         break;
-
                     case "11": // Killer Sum
                         var corner_cursor = 4 * (k + this.nx0 * this.ny0);
                         if (this[this.mode.qa].numberS[corner_cursor]) {
@@ -7309,7 +7314,7 @@ class Puzzle {
                                 var single_digit = false;
                             }
                             if (!single_digit) {
-                                // If the there are corner or sides present then get rid of them
+                                // If there are corner or sides present then get rid of them
                                 // Only in Answer mode
                                 if (this.mode.qa === "pu_a") {
                                     var corner_cursor = 4 * (k + this.nx0 * this.ny0);
@@ -7578,11 +7583,10 @@ class Puzzle {
                                 // S submode is 5, M submode is 6
                                 // dynamic (i.e. upto 5 digits larger size and then smaller size)
                                 let size = "6";
-                                if ((UserSettings.sudoku_centre_size === 1 && number.length > 5) ||
-                                    UserSettings.sudoku_centre_size === 3) { // all small
+                                if ((UserSettings.sudoku_centre_size === SUDOKU_CENTRE_AUTO && number.length > 5) ||
+                                    UserSettings.sudoku_centre_size === SUDOKU_CENTRE_SMALL) { // all small
                                     size = "5";
                                 }
-
                                 this.set_value("number", k, [number, submode[1], size]);
                             } else {
                                 this.remove_value("number", k);
@@ -7648,34 +7652,58 @@ class Puzzle {
 
     key_space(keypressed = 0, shift_key = false, ctrl_key = false) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
-            if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-                this.record("numberS", this.cursolS);
-                delete this[this.mode.qa].numberS[this.cursolS];
-                this.record_replay("numberS", this.cursolS);
-            } else {
-                // Remove the corner and side numbers
-                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
-
-                for (var j = 0; j < 4; j++) {
-                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                        this.record("numberS", corner_cursor + j);
-                        delete this[this.mode.qa].numberS[corner_cursor + j];
-                        this.record_replay("numberS", corner_cursor + j);
+            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
+            if (this.selection.length > 0) {
+                if (this.selection.length === 1) {
+                    let clean_flag = this.check_neighbors(this.selection[0]);
+                    if (!clean_flag) {
+                        this.undoredo_counter = 0;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let cells = null;
+                if (this.number_multi_enabled())
+                    cells = this.selection;
+                else {
+                    if (submode === "3" || submode === "9") {
+                        cells = [this.cursolS];
+                    } else {
+                        cells = [this.cursol];
                     }
                 }
+                for (var k of cells) {
+                    if (submode === "3" || submode === "9") {
+                        this.record("numberS", k, this.undoredo_counter);
+                        delete this[this.mode.qa].numberS[k];
+                        this.record_replay("numberS", k, this.undoredo_counter);
+                    } else {
+                        // Remove the corner and side numbers
+                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                for (var j = 0; j < 4; j++) {
-                    if (this[this.mode.qa].numberS[side_cursor + j]) {
-                        this.record("numberS", side_cursor + j);
-                        delete this[this.mode.qa].numberS[side_cursor + j];
-                        this.record_replay("numberS", side_cursor + j);
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                this.record("numberS", corner_cursor + j);
+                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                                this.record_replay("numberS", corner_cursor + j);
+                            }
+                        }
+
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                this.record("numberS", side_cursor + j);
+                                delete this[this.mode.qa].numberS[side_cursor + j];
+                                this.record_replay("numberS", side_cursor + j);
+                            }
+                        }
+                        this.record("number", k, this.undoredo_counter);
+                        delete this[this.mode.qa].number[k];
+                        this.record_replay("number", k, this.undoredo_counter);
                     }
                 }
-
-                this.record("number", this.cursol);
-                delete this[this.mode.qa].number[this.cursol];
-                this.record_replay("number", this.cursol);
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
@@ -7838,10 +7866,15 @@ class Puzzle {
                     this.undoredo_counter = this.undoredo_counter + 1;
                 }
                 let cells = null;
-                if (this.number_multi_enabled())
+                if (this.number_multi_enabled()) {
                     cells = this.selection;
-                else
-                    cells = [this.cursol];
+                } else {
+                    if (submode === "3" || submode === "9") {
+                        cells = [this.cursolS];
+                    } else {
+                        cells = [this.cursol];
+                    }
+                }
 
                 for (var k of cells) {
                     if (submode === "3" || submode === "9") { // 1/4 and side
@@ -7975,10 +8008,12 @@ class Puzzle {
                 case "number":
                     // Multi-selection mode: treat this just like sudoku mode if we're in
                     // a submode that can work with multiple cells
-                    if (this.number_multi_enabled())
+                    if (submode === "3" || submode === "9") {
+                        this.mouse_numberS(x, y, num, submode);
+                    } else if (this.number_multi_enabled())
                         this.mouse_sudoku(x, y, num, ctrl_key);
                     else
-                        this.mouse_number(x, y, num, ctrl_key);
+                        this.mouse_number(x, y, num);
                     if (pu.mouse_mode === "down_left") {
                         let isNumberS = ["3", "9", "11"].includes(submode)
                         let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
@@ -8011,7 +8046,7 @@ class Puzzle {
     }
 
     // Double click: select all cells with the same value as the clicked cell
-    // XXX: support other cell types
+    // Todo: support other cell types
     dblmouseevent(x, y, num, ctrl_key = false) {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         if (edit_mode === "number" || edit_mode === "sudoku") {
@@ -8684,6 +8719,27 @@ class Puzzle {
         }
     }
 
+    mouse_numberS(x, y, num, submode) {
+        if (this.mouse_mode === "down_left") {
+            this.cursolS = num;
+
+            // Remember cursol
+            if (this.grid_is_square()) {
+                if (submode === "3") {
+                    this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                    this.selection = [this.cursol]; // update selection
+                } else if (submode === "9") {
+                    this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                    this.selection = [this.cursol]; // update selection
+                }
+            }
+            this.redraw();
+        } else if (this.mouse_mode === "down_right") {
+            this.cursolS = num;
+            this.redraw();
+        }
+    }
+
     mouse_sudoku(x, y, num, ctrl_key = false) {
         // if (this.point[num].type === 0) {}  // Add this line, to ignore corners and allow diagonal selection, and set type = [0, 1]
         if (this.mouse_mode === "down_left") {
@@ -8713,7 +8769,8 @@ class Puzzle {
             if (this.cursol && this.cursol >= this.nx0 * this.ny0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
                 this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
-                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
+                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal" &&
+                this.gridtype !== "penrose_P3") {
                 // do nothing
             } else if (this.select_remove && this.drawing) {
                 let i = this.selection.indexOf(num);
@@ -9477,7 +9534,7 @@ class Puzzle {
 
     check_last_cell() {
         if (this.centerlist.length == 1) {
-            infoMsg('<h3 class="info">Last cell cannot be removed using the "Box" mode. For a blank grid use the following approach:</h3><ol><li>Click on "New Grid / Update"</li><li>Set "Gridlines" to "None"</li><li>Set "Gridpoints" to "No"</li><li>Set "Outside frame" to "No"</li><li>Click on "Update display"</li></ol>');
+            infoMsg(PenpaText.get('box_mode_warning'));
             return true;
         } else {
             return false;
@@ -9672,9 +9729,9 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
-                        if (UserSettings.starbattle_dots === 3) {
+                        if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                             num = this.coord_p_edgex_star(x, y, 0);
-                        } else if (UserSettings.starbattle_dots === 2) {
+                        } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                             num = this.coord_p_edgex_star(x, y, 0.2);
                         }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
@@ -9754,9 +9811,9 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
-                    if (UserSettings.starbattle_dots === 3) {
+                    if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                         num = this.coord_p_edgex_star(x, y, 0);
-                    } else if (UserSettings.starbattle_dots === 2) {
+                    } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
@@ -10161,6 +10218,9 @@ class Puzzle {
                 array = "line";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
+
+                // To track if user is drawing line or just placing symbols
+                this.linedrawing = true;
             }
             this.last = num;
             this.redraw();
@@ -10177,7 +10237,7 @@ class Puzzle {
             secondsymbol = [1, "ox_E", 2];
         }
 
-        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num && !this.linedrawing) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = firstsymbol;
@@ -10193,6 +10253,7 @@ class Puzzle {
             }
         }
         this.drawing_mode = -1;
+        this.linedrawing = false;
         this.first = -1;
         this.last = -1;
         this.redraw();
@@ -12024,7 +12085,13 @@ class Puzzle {
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             let submode = this.mode[this.mode.qa][edit_mode][0];
-            if (UserSettings.draw_edges) {
+            if (edit_mode === "number" && (submode === "3" || submode === "9")) {
+                if (this.cursolS) {
+                    this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
+                } else {
+                    this.default_cursol();
+                }
+            } else if (UserSettings.draw_edges) {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.default_cursol();
@@ -12065,13 +12132,13 @@ class Puzzle {
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
             // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
             // since we dont want single cell highlighed while in killer submode
-            //if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
+            // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
             //    // check if cursor is in centerlist, to avoid border/edge case
             //    let cursorexist = this.centerlist.indexOf(this.cursol);
             //    if (cursorexist !== -1) {
             //        this.selection.push(this.cursol);
             //    }
-            //}
+            // }
 
             // Handling rotation and reflection of the grid
             var a = [0, 1, 2, 3],
@@ -12101,7 +12168,7 @@ class Puzzle {
                 } else if (this.gridtype === "iso") {
                     factor = 0;
                     offset = 0;
-                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal" || this.gridtype === "rhombitrihexagonal" || this.gridtype === "deltoidal_trihexagonal" || this.gridtype === "penrose_P3") {
                     factor = 0;
                     offset = 0;
                 } else {
@@ -12546,7 +12613,7 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection > 1) {
+        if (UserSettings.show_conflicts) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             return;
