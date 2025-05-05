@@ -555,7 +555,7 @@ onload = function() {
                                 }
                             } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
                                 if (0 <= panel_select && panel_select <= 27) {
-                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                    pu.key_number(panel_pu.cont[panel_select].toString(), true);
                                 } else if (panel_select === 28) {
                                     pu.key_number(" ");
                                 } else if (panel_select >= 29) {
@@ -2033,7 +2033,7 @@ onload = function() {
             }
         } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
             if (0 <= n && n <= 27) {
-                pu.key_number(panel_pu.cont[n].toString());
+                pu.key_number(panel_pu.cont[n].toString(), true);
             } else if (n === 28) {
                 pu.key_number(" ");
             } else if (n >= 29) {
