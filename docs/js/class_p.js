@@ -7091,7 +7091,7 @@ class Puzzle {
         if (!UserSettings.shortcuts_enabled || force_no_shortcut) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         } else {
-            var str_all = "1234567890qwertuioasdfghjklQWERTYUIOPASDFGHJKLZXCVBNM";
+            var str_all = "1234567890qwertyuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         }
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
@@ -7109,7 +7109,7 @@ class Puzzle {
             }
             let cells = null;
             if (this.number_multi_enabled())
-                cells = this.selection; 
+                cells = this.selection;
             else
                 cells = [this.cursol];
             for (var k of cells) {
@@ -7331,6 +7331,44 @@ class Puzzle {
                                             this.record_replay("numberS", side_cursor + j, this.undoredo_counter);
                                         }
                                     }
+
+                                    // Edge marking clean up, but not working correctly
+                                    // in 10x10 square grid, rows 5 and 6 not working, columns 4 and 5 not working
+                                    // commenting for now, need to revisit later and hence not deleting this section
+                                    // if (this.grid_is_square()) {
+                                    //     // not reliable, every access, the order is changing and hence sorting
+                                    //     var adjacent_cursor = this.get_neighbors(k, 'adjacent').sort();
+
+                                    //     // Edge cursor order = [top edge, bottom edge, left edge, right edge]
+                                    //     // adjacent_cursor order = [top cell, left cell, right cell, bottom cell]
+                                    //     // Match the edge_cursor and adjacent_cursor order
+                                    //     adjacent_cursor.splice(1, 0, adjacent_cursor.pop());
+
+                                    //     if (adjacent_cursor.length == 4) {
+                                    //         for (var j = 0; j < 4; j++) {
+                                    //             let filled = false;
+                                    //             if (this.point[adjacent_cursor[j]].use == 1 &&
+                                    //                 this[this.mode.qa].number[adjacent_cursor[j]]) {
+                                    //                 filled = true;
+                                    //             } else if (this.point[adjacent_cursor[j]].use != 1) {
+                                    //                 filled = true;
+                                    //             }
+                                    //             if (filled && this[this.mode.qa].number[edge_cursor[j]]) {
+                                    //                 this.record("number", edge_cursor[j], this.undoredo_counter);
+                                    //                 delete this[this.mode.qa].number[edge_cursor[j]];
+                                    //                 this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // } else {
+                                    //     for (var j = 0; j < 4; j++) {
+                                    //         if (this[this.mode.qa].number[edge_cursor[j]]) {
+                                    //             this.record("number", edge_cursor[j], this.undoredo_counter);
+                                    //             delete this[this.mode.qa].number[edge_cursor[j]];
+                                    //             this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                    //         }
+                                    //     }
+                                    // }
                                 }
 
                                 this.record("number", k, this.undoredo_counter);
@@ -7360,6 +7398,14 @@ class Puzzle {
                             }
                             var j_start = 0;
                             var length_limit = 8;
+
+                            // if any element present in numberS mode then skip top left corner
+                            // use case -> killer sudoku and more
+                            // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
+                            if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
+                                length_limit = 6;
+                                j_start = 1;
+                            }
 
                             // First step: go through all cells in the selection that don't have a main single digit, and
                             // collect the digits that are in the corner of each
@@ -7470,7 +7516,7 @@ class Puzzle {
                             con = "";
                             // if single digit is present, dont modify that cell
                             if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
+                                pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
                                 continue;
                             if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1")
                                 continue;
@@ -7533,7 +7579,7 @@ class Puzzle {
                                 // dynamic (i.e. upto 5 digits larger size and then smaller size)
                                 let size = "6";
                                 if ((UserSettings.sudoku_centre_size === 1 && number.length > 5) ||
-                                        UserSettings.sudoku_centre_size === 3) { // all small
+                                    UserSettings.sudoku_centre_size === 3) { // all small
                                     size = "5";
                                 }
 
@@ -7793,7 +7839,7 @@ class Puzzle {
                 }
                 let cells = null;
                 if (this.number_multi_enabled())
-                    cells = this.selection; 
+                    cells = this.selection;
                 else
                     cells = [this.cursol];
 
@@ -7891,7 +7937,7 @@ class Puzzle {
 
             // Map shift/ctrl-click to right click in certain modes for convenience
             if (ctrl_key && this.mouse_mode === "down_left" &&
-                    (edit_mode === "surface" || edit_mode === "combi")) {
+                (edit_mode === "surface" || edit_mode === "combi")) {
                 this.mouse_mode = "down_right";
                 this.mouse_click = 2;
                 this.mouse_click_last = 2;

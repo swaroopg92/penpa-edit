@@ -92,7 +92,7 @@ onload = function() {
     document.addEventListener("keyup", onKeyUp, { passive: false });
 
     let restrict_grids = ["square", "sudoku", "kakuro"];
-    let restrict_modes = ["line", "linex", "linedir","lineox", "yajilin", "rassisillai"];
+    let restrict_modes = ["line", "linex", "linedir", "lineox", "yajilin", "rassisillai"];
 
     function restrict_mouse(num) {
         let current_mode = pu.mode[pu.mode.qa].edit_mode;
@@ -166,8 +166,8 @@ onload = function() {
             }
             // to handle mobile/ipad users for up events for certain modes
             if (ondown_key === "mousedown" && (edit_mode === "sudoku" || edit_mode === "number" ||
-                (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
-                    pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
+                    (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                        pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -199,7 +199,7 @@ onload = function() {
             if (event.buttons === 2) { // Right click and moving
                 pu.mouse_click = 2;
                 var obj = coord_point(event, 'flex');
-            } else if ((ondown_key === "touchstart" || event.buttons === 1) && 
+            } else if ((ondown_key === "touchstart" || event.buttons === 1) &&
                 (edit_mode === "sudoku" || edit_mode === "number")) { // Left click/Ipad and moving in Sudoku Mode
                 pu.mouse_click = 0;
                 var obj = coord_point(event, 'flex');
@@ -531,7 +531,7 @@ onload = function() {
         }
 
         // Map ctrl-shift-z to ctrl-y
-        if (isCtrlKeyHeld(e) && isShiftKeyHeld(e) && !isAltKeyHeld(e) && key === "z") {
+        if (isCtrlKeyHeld(e) && isShiftKeyHeld(e) && !isAltKeyHeld(e) && (key === "z" || key === "Z")) {
             if (!pu.undoredo_disable) {
                 pu.redo();
             }
@@ -628,7 +628,7 @@ onload = function() {
                                 }
                             } else if (panel_pu.panelmode === "alphabet" || panel_pu.panelmode === "alphabet_s") {
                                 if (0 <= panel_select && panel_select <= 27) {
-                                    pu.key_number(panel_pu.cont[panel_select].toString());
+                                    pu.key_number(panel_pu.cont[panel_select].toString(), true);
                                 } else if (panel_select === 28) {
                                     pu.key_number(" ");
                                 } else if (panel_select >= 29) {
@@ -754,16 +754,12 @@ onload = function() {
         "KeyZ": ["sudoku", "sub_sudoku1"],
         "KeyX": ["sudoku", "sub_sudoku2"],
         "KeyC": ["sudoku", "sub_sudoku3"],
-        "KeyV": ["surface"],
-        "KeyB": ["line"],
-        "KeyN": ["lineE"],
-        "KeyM": ["symbol"],
+        "KeyV": ["surface"]
     };
 
     function checkShortcutKeys(e, code, capslock) {
         let mode = pu.mode[pu.mode.qa].edit_mode;
-        if (mode !== "surface" && mode !== "sudoku" && mode !== "line" && mode !== "lineE" &&
-                mode !== "symbol" && mode !== "combi") {
+        if (mode !== "surface" && mode !== "sudoku") {
             return false;
         }
 
@@ -790,19 +786,11 @@ onload = function() {
                         detected = true;
                     }
                 }
-            }
-            // Pause shortcut handling
-            else if (code === "KeyP" && !sw_timer.isPaused()) {
-                pauseTimer();
-                detected = true;
-            } else if (code === "Escape" && sw_timer.isPaused()) {
-                startTimer();
-                detected = true;
+                e.returnValue = false;
             }
         }
 
         if (detected) {
-            e.returnValue = false;
             e.preventDefault();
         }
 
@@ -943,7 +931,7 @@ onload = function() {
         // Improving starbattle composite mode, left click
         if (fittype === 'flex') {
             if ((edit_mode === "combi" && improve_modes.includes(pu.mode[pu.mode.qa][edit_mode][0])) ||
-                    edit_mode === "sudoku" || edit_mode === "number")
+                edit_mode === "sudoku" || edit_mode === "number")
                 type = [0];
         }
 
@@ -1975,6 +1963,7 @@ onload = function() {
 
     // Double click to select all of a certain element
     document.addEventListener("dblclick", window_dblclick, { passive: false });
+
     function window_dblclick(e) {
         if (e.target.id === "canvas") {
             document.getElementById("inputtext").blur(); // Remove focus from text box
@@ -2105,13 +2094,13 @@ onload = function() {
             }
         } else if (panel_pu.panelmode === "key_symbol") {
             if (panel_pu.cont[n] && panel_pu.cont[n] != " ") {
-                pu.key_number(panel_pu.cont[n], true);
+                pu.key_number(panel_pu.cont[n]);
             } else if (panel_pu.cont[n] === " ") {
                 pu.key_space();
             }
         } else if (paneletc.indexOf(panel_pu.panelmode) != -1) {
             if (panel_pu.cont[n] && panel_pu.cont[n] != "　") {
-                pu.key_number(panel_pu.cont[n], true);
+                pu.key_number(panel_pu.cont[n]);
             } else if (panel_pu.cont[n] === "　") {
                 pu.key_space();
             }
