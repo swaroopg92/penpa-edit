@@ -7,6 +7,9 @@
 	* Escape key to clear selection and exit modal dialogs.
 	* Code refactoring.
 	* Allow sudoku mode shortcut letters zxcv to be inputted using the panel.
+	* ctrl+A to select all cells.
+	* alt+mouse drag for rectangular selection in number/sudoku mode.
+	* improved sudoku center and corner mode - adding/removing digits.
 * 2025/05/03 ver 3.1.5
 	* LineDashoffset to SVG export
 	* Support for Penrose rhombus ("P3") tilings (alpha version).
