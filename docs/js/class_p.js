@@ -25,9 +25,10 @@ class Stack {
     }
 
     push(o) {
-        if (this.__a.length > 5000) {
-            this.__a.shift();
-        }
+        // [SG] Removing the limit condition by commenting this
+        // if (this.__a.length > 5000) {
+        //     this.__a.shift();
+        // }
         this.__a.push(o);
     }
     pop() {
