@@ -2163,7 +2163,7 @@ class Puzzle {
             if (edge_ignore) {
                 // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
                 if ((this.frame[i] && this.frame[i] === 2) ||
-                        (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
+                    (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
                     return;
             }
 
@@ -2294,12 +2294,12 @@ class Puzzle {
             }
 
             if (document.getElementById("sol_loopline").checked === true ||
-                    line_exact || line_ignore || checkall) {
+                line_exact || line_ignore || checkall) {
                 sol[1] = this.get_line_solution(line_ignore, line_exact);
             }
 
             if (document.getElementById("sol_loopedge").checked === true ||
-                    edge_exact || edge_ignore || checkall) {
+                edge_exact || edge_ignore || checkall) {
                 // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
                 if (this.version_gt(2, 26, 20)) {
                     if (!edge_ignore && !checkall) {
@@ -7000,7 +7000,7 @@ class Puzzle {
 
         // Triangular grid
         if (this.gridtype === "tri") {
-            this.selection.sort((a,b) => {
+            this.selection.sort((a, b) => {
                 a = this.point[a].index;
                 b = this.point[b].index;
                 if (a[1] == b[1]) {
@@ -7018,12 +7018,12 @@ class Puzzle {
                 // Compensate for every other row being offset, also store if this triangle
                 // is pointing up or down
                 let offset = (y - base_y) & y & 1;
-                return {x: x - base_x + offset, y: y - base_y, t: t};
+                return { x: x - base_x + offset, y: y - base_y, t: t };
             }
         }
         // Hexagonal grid
         else if (this.gridtype === "hex") {
-            this.selection.sort((a,b) => a >= b);
+            this.selection.sort((a, b) => a >= b);
             let base_point = this.point[this.selection[0]];
             [base_x, base_y] = base_point.index;
 
@@ -7031,18 +7031,18 @@ class Puzzle {
                 let [x, y] = this.point[p].index;
                 // Compensate for every other row being offset
                 let offset = (y - base_y) & y & 1;
-                return {x: x - base_x + offset, y: y - base_y};
+                return { x: x - base_x + offset, y: y - base_y };
             }
         }
         // Square grid
         else if (this.grid_is_square()) {
-            this.selection.sort((a,b) => a >= b);
+            this.selection.sort((a, b) => a >= b);
             let base_point = this.point[this.selection[0]];
             [base_x, base_y] = base_point.index;
 
             rel_coords = (p) => {
                 let [x, y] = this.point[p].index;
-                return {x: x - base_x, y: y - base_y};
+                return { x: x - base_x, y: y - base_y };
             }
         }
         // Unsupported grid type
@@ -7099,7 +7099,9 @@ class Puzzle {
                             let adj2 = this.point[k].surround[j];
                             let key = this.line_key(adj, adj2);
                             if (!seen_edges[key] && puzzle[prop][key]) {
-                                edges.push([[i, j], puzzle[prop][key], puzzle_col[prop][key]]);
+                                edges.push([
+                                    [i, j], puzzle[prop][key], puzzle_col[prop][key]
+                                ]);
                                 seen_edges[key] = true;
                             }
                         }
@@ -7226,7 +7228,7 @@ class Puzzle {
             // Compensate both for every other row being offset, and for there being two sets of
             // indices, one for each of upward- and downward-pointing triangles
             index = (x, y, data) => ((this.n0 ** 2 * (2 - data.t)) +
-                    (this.n0 * y + x - ((y - base_y) & y & 1)));
+                (this.n0 * y + x - ((y - base_y) & y & 1)));
         else if (this.gridtype === "hex")
             // Compensate for every other row being offset
             index = (x, y) => (this.nx * 3 + 1) * y + x - ((y - base_y) & y & 1);
@@ -7237,7 +7239,7 @@ class Puzzle {
 
         // Insert all data items into the grid relative to the base cell
         for (var data of clipboard_data.items) {
-            let {x, y} = data;
+            let { x, y } = data;
 
             x += base_x;
             y += base_y;
@@ -7265,13 +7267,16 @@ class Puzzle {
 
                 if (prop === "line") {
                     for (var [adj, line_data, color] of data[prop]) {
-                        let x2 = adj.x + base_x, y2 = adj.y + base_y;
+                        let x2 = adj.x + base_x,
+                            y2 = adj.y + base_y;
                         let key = this.line_key(k, index(x2, y2, adj));
 
                         this.set_value(prop, key, line_data, color);
                     }
                 } else if (prop === "lineE") {
-                    for (var [[i, j], edge_data, color] of data[prop]) {
+                    for (var [
+                            [i, j], edge_data, color
+                        ] of data[prop]) {
                         let c1 = this.point[k].surround[i];
                         let c2 = this.point[k].surround[j];
                         let key = this.line_key(c1, c2);
@@ -7335,7 +7340,7 @@ class Puzzle {
             }
             let cells = null;
             if (this.number_multi_enabled())
-                cells = this.selection; 
+                cells = this.selection;
             else
                 cells = [this.cursol];
             for (var k of cells) {
@@ -7696,7 +7701,7 @@ class Puzzle {
                             con = "";
                             // if single digit is present, dont modify that cell
                             if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
+                                pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
                                 continue;
                             if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1")
                                 continue;
@@ -7759,7 +7764,7 @@ class Puzzle {
                                 // dynamic (i.e. upto 5 digits larger size and then smaller size)
                                 let size = "6";
                                 if ((UserSettings.sudoku_centre_size === 1 && number.length > 5) ||
-                                        UserSettings.sudoku_centre_size === 3) { // all small
+                                    UserSettings.sudoku_centre_size === 3) { // all small
                                     size = "5";
                                 }
 
@@ -8019,7 +8024,7 @@ class Puzzle {
                 }
                 let cells = null;
                 if (this.number_multi_enabled())
-                    cells = this.selection; 
+                    cells = this.selection;
                 else
                     cells = [this.cursol];
 
@@ -8117,7 +8122,7 @@ class Puzzle {
 
             // Map shift/ctrl-click to right click in certain modes for convenience
             if (ctrl_key && this.mouse_mode === "down_left" &&
-                    (edit_mode === "surface" || edit_mode === "combi")) {
+                (edit_mode === "surface" || edit_mode === "combi")) {
                 this.mouse_mode = "down_right";
                 this.mouse_click = 2;
                 this.mouse_click_last = 2;
@@ -8217,7 +8222,7 @@ class Puzzle {
                     value = this.pu_q.surface[num] || this.pu_a.surface[num];
                     value = JSON.stringify(value);
                 } else if (mode === "number") {
-                      value = this.pu_q.number[num] || this.pu_a.number[num];
+                    value = this.pu_q.number[num] || this.pu_a.number[num];
                 }
 
                 if (value) {
@@ -8239,8 +8244,7 @@ class Puzzle {
                         if (edit_mode === "multicolor") {
                             if (JSON.stringify(puzzle.surface[c]) === value)
                                 match = true;
-                        }
-                        else {
+                        } else {
                             if (puzzle.number[c] && puzzle.number[c][0] === value[0])
                                 match = true;
                         }
@@ -8472,7 +8476,7 @@ class Puzzle {
     //////////////////////////
 
     line_key(a, b) {
-      return (Math.min(a, b)).toString() + "," + (Math.max(a, b)).toString();
+        return (Math.min(a, b)).toString() + "," + (Math.max(a, b)).toString();
     }
 
     mouse_line(x, y, num) {
