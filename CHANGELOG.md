@@ -1,5 +1,6 @@
 ## History
-* 2025/05/04 ver 3.1.6
+* unreleased ver 3.2.0
+	* copy/cut/paste feature for number/symbol/surface/line/edge for square/hex/tri grid types.
 	* Added Shift click features. In Sudoku/Number mode, Shift + clicking and Shift + keyboard arrow would work similar to ctrl.
 	* Double click feature to select same value in number mode. may need some more work.
 	* Enabled multi-selection in number mode.
@@ -15,6 +16,7 @@
 	* option to enable pencil marks conflict checking.
 	* added conflict checking for letters.
 	* added button to edit genre tags directly from settings for conflict checking.
+	* all dependencies have local copies. downloaded penpa+ version would not require internet to run.
 * 2025/05/03 ver 3.1.5
 	* LineDashoffset to SVG export
 	* Support for Penrose rhombus ("P3") tilings (alpha version).
