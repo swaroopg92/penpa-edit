@@ -2157,7 +2157,7 @@ class Puzzle {
             if (edge_ignore) {
                 // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
                 if ((this.frame[i] && this.frame[i] === 2) ||
-                        (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
+                    (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
                     return;
             }
 
@@ -2288,12 +2288,12 @@ class Puzzle {
             }
 
             if (document.getElementById("sol_loopline").checked === true ||
-                    line_exact || line_ignore || checkall) {
+                line_exact || line_ignore || checkall) {
                 sol[1] = this.get_line_solution(line_ignore, line_exact);
             }
 
             if (document.getElementById("sol_loopedge").checked === true ||
-                    edge_exact || edge_ignore || checkall) {
+                edge_exact || edge_ignore || checkall) {
                 // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
                 if (this.version_gt(2, 26, 20)) {
                     if (!edge_ignore && !checkall) {
@@ -7002,7 +7002,7 @@ class Puzzle {
             }
             let cells = null;
             if (this.number_multi_enabled())
-                cells = this.selection; 
+                cells = this.selection;
             else
                 cells = [this.cursol];
             for (var k of cells) {
@@ -7363,7 +7363,7 @@ class Puzzle {
                             con = "";
                             // if single digit is present, dont modify that cell
                             if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
+                                pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
                                 continue;
                             if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1")
                                 continue;
@@ -7426,7 +7426,7 @@ class Puzzle {
                                 // dynamic (i.e. upto 5 digits larger size and then smaller size)
                                 let size = "6";
                                 if ((UserSettings.sudoku_centre_size === 1 && number.length > 5) ||
-                                        UserSettings.sudoku_centre_size === 3) { // all small
+                                    UserSettings.sudoku_centre_size === 3) { // all small
                                     size = "5";
                                 }
 
@@ -7686,7 +7686,7 @@ class Puzzle {
                 }
                 let cells = null;
                 if (this.number_multi_enabled())
-                    cells = this.selection; 
+                    cells = this.selection;
                 else
                     cells = [this.cursol];
 
@@ -7784,7 +7784,7 @@ class Puzzle {
 
             // Map shift/ctrl-click to right click in certain modes for convenience
             if (ctrl_key && this.mouse_mode === "down_left" &&
-                    (edit_mode === "surface" || edit_mode === "combi")) {
+                (edit_mode === "surface" || edit_mode === "combi")) {
                 this.mouse_mode = "down_right";
                 this.mouse_click = 2;
                 this.mouse_click_last = 2;
@@ -7884,7 +7884,7 @@ class Puzzle {
                     value = this.pu_q.surface[num] || this.pu_a.surface[num];
                     value = JSON.stringify(value);
                 } else if (mode === "number") {
-                      value = this.pu_q.number[num] || this.pu_a.number[num];
+                    value = this.pu_q.number[num] || this.pu_a.number[num];
                 }
 
                 if (value) {
@@ -7906,8 +7906,7 @@ class Puzzle {
                         if (edit_mode === "multicolor") {
                             if (JSON.stringify(puzzle.surface[c]) === value)
                                 match = true;
-                        }
-                        else {
+                        } else {
                             if (puzzle.number[c] && puzzle.number[c][0] === value[0])
                                 match = true;
                         }
@@ -12108,10 +12107,10 @@ class Puzzle {
     }
 
     check_solution() {
-        var text = JSON.stringify(this.make_solution());
-        let conflict = this.check_conflict(text);
         if (!this.multisolution) {
             if (this.solution) {
+                var text = JSON.stringify(this.make_solution());
+                let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;

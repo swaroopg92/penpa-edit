@@ -92,7 +92,7 @@ const UserSettings = {
     },
 
     // Check conflicts on pencil marks
-    _check_pencil_marks: true,
+    _check_pencil_marks: false,
     set check_pencil_marks(newValue) {
         this._check_pencil_marks = newValue === "1" || newValue === "true" || newValue === true;
         document.getElementById("check_pencil_marks_opt").value = this._check_pencil_marks ? "1" : "0";
@@ -167,7 +167,7 @@ const UserSettings = {
         if (this._custom_colors_on) {
             // On
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            pu.mode_set(mode);  // Update mode UI, including custom color selector
+            pu.mode_set(mode); // Update mode UI, including custom color selector
         } else {
             // Off
             document.getElementById('style_special').style.display = 'none';

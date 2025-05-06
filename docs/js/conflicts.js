@@ -76,26 +76,26 @@ class Conflicts {
     }
 
     // Check for duplicate numbers on any of the 3 axes.
-    check_latin_square_hex(){
-        let hex_seen_cells = this.stable_lookup("hex_seen_cells","");
+    check_latin_square_hex() {
+        let hex_seen_cells = this.stable_lookup("hex_seen_cells", "");
         // Calculate all pairs of cells which see each other along any of the 
         // three axes on a hex grid, and store pairs of cells as 
         // Map of [Smaller index number] = [List of larger index numbers]
-        if (!hex_seen_cells){
+        if (!hex_seen_cells) {
             hex_seen_cells = new Map();
             //for each cell in centerlist
-            for (let sourceIdx of this.pu.centerlist){
+            for (let sourceIdx of this.pu.centerlist) {
                 //for each of the six directions:
-                for (let dir = 0; dir < 6; dir++){
+                for (let dir = 0; dir < 6; dir++) {
                     let targetIdx = this.pu.point[sourceIdx].adjacent[dir];
                     //until we find no more adjacencies:
-                    while (this.pu.centerlist.indexOf(targetIdx) > -1){
+                    while (this.pu.centerlist.indexOf(targetIdx) > -1) {
                         //if this pair is not yet recorded, record it.
                         let lowIdx = Math.min(sourceIdx, targetIdx);
                         let highIdx = Math.max(sourceIdx, targetIdx);
-                        if (!hex_seen_cells.has(lowIdx)){
-                            hex_seen_cells.set(lowIdx,[highIdx]);
-                        }else if (hex_seen_cells.get(lowIdx).indexOf(highIdx) == -1){
+                        if (!hex_seen_cells.has(lowIdx)) {
+                            hex_seen_cells.set(lowIdx, [highIdx]);
+                        } else if (hex_seen_cells.get(lowIdx).indexOf(highIdx) == -1) {
                             hex_seen_cells.get(lowIdx).push(highIdx);
                         }
                         targetIdx = this.pu.point[targetIdx].adjacent[dir];
@@ -106,10 +106,10 @@ class Conflicts {
         }
 
         //do comparison between cells that see each other
-        for (let cellIdx_list of hex_seen_cells){
+        for (let cellIdx_list of hex_seen_cells) {
             let sourceNum = this.read_number_cell(cellIdx_list[0]);
-            for (let seen_cell of cellIdx_list[1]){
-                if (sourceNum !== undefined && sourceNum === this.read_number_cell(seen_cell)){
+            for (let seen_cell of cellIdx_list[1]) {
+                if (sourceNum !== undefined && sourceNum === this.read_number_cell(seen_cell)) {
                     //record conflict
                     this.add_conflict_cell(cellIdx_list[0]);
                     this.add_conflict_cell(seen_cell);
@@ -131,11 +131,12 @@ class Conflicts {
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 const el = data[i][j];
-                if (!(el >= 1 && el <= n)) continue;
+                // if (!(el >= 1 && el <= n)) continue;
+                if (el == undefined) continue;
 
                 // Get coordinates of this box's top-left corner
-                let bi = 3*((i/3)|0);
-                let bj = 3*((j/3)|0);
+                let bi = 3 * ((i / 3) | 0);
+                let bj = 3 * ((j / 3) | 0);
 
                 for (let k = 0; k < 3; k++) {
                     for (let l = 0; l < 3; l++) {
@@ -634,9 +635,9 @@ class Conflicts {
 
         let entry = this.pu.pu_q.number[index];
         if (Array.isArray(entry) && entry.length === 3 &&
-                entry[2] === "1" // Large
-                &&
-                entry[1] === 1) { // black
+            entry[2] === "1" // Large
+            &&
+            entry[1] === 1) { // black
             if (Number.isFinite(parseInt(entry[0])))
                 return parseInt(entry[0]);
             return entry[0];
@@ -644,9 +645,9 @@ class Conflicts {
         // For the answer entry we allow more colors/sizes
         entry = this.pu.pu_a.number[index];
         if (Array.isArray(entry) && entry.length === 3 &&
-                this.permit_number_size.has(entry[2]) // Large
-                &&
-                this.permit_number_colors.has(entry[1])) { // black
+            this.permit_number_size.has(entry[2]) // Large
+            &&
+            this.permit_number_colors.has(entry[1])) { // black
             if (Number.isFinite(parseInt(entry[0])))
                 return parseInt(entry[0]);
             return entry[0];

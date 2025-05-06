@@ -1733,7 +1733,7 @@ class Puzzle_square extends Puzzle {
                     var n = parseInt(this[pu].numberS[i][0]);
                     var style = this.ctx.fillStyle;
                     if (UserSettings.check_pencil_marks && this.conflict_cell_values[j] &&
-                            this.conflict_cell_values[j].includes(n))
+                        this.conflict_cell_values[j].includes(n))
                         this.ctx.fillStyle = Color.RED;
                     this.ctx.textAlign = "center";
                     this.ctx.text(this[pu].numberS[i][0], this.point[i].x, this.point[i].y + 0.03 * this.size, this.size * 0.48);

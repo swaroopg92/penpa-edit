@@ -1,7 +1,7 @@
 // Data Conversion and Constants for Portal Display
 
 const answercheck_opt_conversion = {
-    "surface_exact": "surface exact color",
+    "surface_exact": "shading exact color",
     "surface": "shading",
     "number": "number",
     "loopline_exact": "cell loop exact",
@@ -24,7 +24,7 @@ const answercheck_opt_conversion = {
 }
 
 const answercheck_message = {
-    "surface exact color": "Match exact surface colors",
+    "surface exact color": "Match exact shading colors",
     "shading": "Shade cells in Dark Grey (DG) or Grey (GR) or Light Grey (LG) or Black (BL)",
     "number": "Numbers must be in Green, Blue or Red color",
     "cell loop exact": "Lines in matching color/style",
