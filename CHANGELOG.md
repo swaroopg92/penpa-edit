@@ -1,4 +1,24 @@
 ## History
+* 2025/05/04 ver 3.1.6
+	* Added Shift click features. In Sudoku/Number mode, Shift + clicking and Shift + keyboard arrow would work similar to ctrl.
+	* Double click feature to select same value in number mode. may need some more work.
+	* Enabled multi-selection in number mode.
+	* Fixed arrow key movement in triangle grid shapes.
+	* Escape key to clear selection and exit modal dialogs.
+	* Code refactoring.
+	* Allow sudoku mode shortcut letters zxcv to be inputted using the panel.
+	* ctrl+A to select all cells.
+	* alt+mouse drag for rectangular selection in number/sudoku mode.
+	* improved sudoku center and corner mode - adding/removing digits.
+* 2025/05/03 ver 3.1.5
+	* LineDashoffset to SVG export
+	* Support for Penrose rhombus ("P3") tilings (alpha version).
+	* Fix for right edge of Cairo pentagonal grids.
+	* Faster grid generation for tetrakis square, truncated square, snub square, Cairo pentagonal, rhombitrihexagonal and deltoidal trihexagonal grids.
+* 2024/07/16 ver 3.1.4
+	* Code refactoring.
+	* Added non-alphanumeric genre tag to allow answer check on non-alphanumeric characters.
+	* Language Support added for Japanese.
 * 2023/12/31 ver 3.1.3
 	* Render Tapa as Quad for certain conditions.
 	* New composite mode directed loop.

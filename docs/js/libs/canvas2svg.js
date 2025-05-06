@@ -176,6 +176,12 @@
             canvas: [],
             svg: null,
             apply: "stroke"
+        },
+        "lineDashOffset": {
+            svgAttr: "stroke-dashoffset",
+            canvas: 0,
+            svg: 0,
+            apply: "stroke"
         }
     };
 

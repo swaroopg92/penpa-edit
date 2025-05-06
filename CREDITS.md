@@ -8,7 +8,8 @@
 * Help icon made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 * Thanks to <a href="https://github.com/william42"> William42 </a> for SVG Screenshot code.
 * Thanks to <a href="https://github.com/nmay231"> nmay231 </a> for contributions to puzz.link parser in Penpa+.
-* Thanks to <a href="https://thegriddle.net"> davmillar </a> for contributions to redesign the GUI and refactoring the code.
+* Thanks to <a href="https://thegriddle.net"> davmillar </a> for contributions to redesign the GUI, language support and refactoring the code.
 * Thanks to <a href="https://github.com/kieranclancy"> Kieran Clancy </a> for contributions to smart checking in Penpa+.
 * Thanks to <a href="https://github.com/BenceJoful"> BenceJoful </a> for contributions to hexgrid and replay improvements in Penpa+.
 * Thanks to <a href="https://github.com/marknn3"> Mark Langezaal </a> for contributions to improve Penpa+.
+* Thanks to Nishinanntoka for contributions to language support.

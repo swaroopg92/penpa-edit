@@ -1464,7 +1464,7 @@ class Puzzle_square extends Puzzle {
                     set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
 
                     // if some numbers present in the corner (like Killer sudoku etc) then displace the numbers slightly lower to avoid overlap
-                    let offset = (UserSettings.sudoku_normal_size === 2) ? 0.16 : 0.06;
+                    let offset = UserSettings.sudoku_normal_bottom ? 0.16 : 0.06;
                     this.ctx.text(this[pu].number[i][0], p_x, p_y + offset * factor * this.size, this.size * 0.8);
 
                     break;

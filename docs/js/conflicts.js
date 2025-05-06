@@ -34,7 +34,7 @@ class Conflicts {
     //========================================================================
 
     // For an NxN grid, mark any duplicates between 1 and N as conflicts.
-    check_latin_square() {
+    check_latin_square(alphabet = false) {
         const data = this.get_data('number_grid');
         const r = data.length
         if (!r)
@@ -52,7 +52,15 @@ class Conflicts {
                         this.add_conflict_value(k, i, value);
 
                         const el2 = data[i][k];
-                        if (k > j && value === el2) {
+                        if (el2 == undefined) continue;
+                        let match;
+                        if (alphabet) {
+                            match = value.toLowerCase() === el2.toLowerCase();
+                        } else {
+                            match = value === el2;
+                        }
+
+                        if (k > j && match) {
                             this.add_conflict(j, i);
                             this.add_conflict(k, i);
                         }
@@ -65,7 +73,15 @@ class Conflicts {
                         this.add_conflict_value(j, k, value);
 
                         const el2 = data[k][j];
-                        if (k > i && value === el2) {
+                        if (el2 == undefined) continue;
+                        let match;
+                        if (alphabet) {
+                            match = value.toLowerCase() === el2.toLowerCase();
+                        } else {
+                            match = value === el2;
+                        }
+
+                        if (k > i && match) {
                             this.add_conflict(j, i);
                             this.add_conflict(j, k);
                         }
@@ -119,20 +135,23 @@ class Conflicts {
     }
 
     // Check a classic sudoku puzzle.
-    check_sudoku() {
+    check_sudoku(alphabet = false) {
         const data = this.get_data('number_grid');
         const n = data.length;
         if (n !== 9 || data[0].length !== 9) {
             // Not a 9x9 grid
             return;
         }
-        this.check_latin_square();
+        this.check_latin_square(alphabet);
         // Check 3x3 cells
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 const el = data[i][j];
-                // if (!(el >= 1 && el <= n)) continue;
-                if (el == undefined) continue;
+                if (alphabet) {
+                    if (el == undefined) continue;
+                } else {
+                    if (!(el >= 1 && el <= n)) continue;
+                }
 
                 // Get coordinates of this box's top-left corner
                 let bi = 3 * ((i / 3) | 0);
@@ -148,8 +167,15 @@ class Conflicts {
                         this.add_conflict_value(ll, kk, el);
 
                         const el2 = data[kk][ll];
-                        if (el2 === el)
-                            this.add_conflict(ll, kk);
+                        if (el2 == undefined) continue;
+
+                        if (alphabet) {
+                            if (el2.toLowerCase() === el.toLowerCase())
+                                this.add_conflict(ll, kk);
+                        } else {
+                            if (el2 === el)
+                                this.add_conflict(ll, kk);
+                        }
                     }
                 }
             }
