@@ -10,6 +10,11 @@
 	* ctrl+A to select all cells.
 	* alt+mouse drag for rectangular selection in number/sudoku mode.
 	* improved sudoku center and corner mode - adding/removing digits.
+	* improved conflict detection for sudoku, latin squares.
+	* added more answer check options and corresponding settings.
+	* option to enable pencil marks conflict checking.
+	* added conflict checking for letters.
+	* added button to edit genre tags directly from settings for conflict checking.
 * 2025/05/03 ver 3.1.5
 	* LineDashoffset to SVG export
 	* Support for Penrose rhombus ("P3") tilings (alpha version).
