@@ -3062,7 +3062,7 @@ class Puzzle_hex extends Puzzle {
         return th;
     }
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection > 1) {
+        if (UserSettings.show_conflicts) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             return;

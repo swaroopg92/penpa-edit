@@ -1,5 +1,11 @@
 const THEME_LIGHT = 1;
 const THEME_DARK = 2;
+const SUDOKU_CENTRE_AUTO = 1;
+const SUDOKU_CENTRE_LARGE = 2;
+const SUDOKU_CENTRE_SMALL = 3;
+const STAR_DOTS_HIGH = 1;
+const STAR_DOTS_LOW = 2;
+const STAR_DOTS_DISABLED = 3;
 
 function getCookie(name) {
     var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -72,6 +78,19 @@ const UserSettings = {
         return this._mousemiddle_button;
     },
 
+    // Toggle language
+    _language: 'EN',
+    set app_language(newValue) {
+        this._language = newValue;
+
+        document.getElementById("language_opt").value = newValue;
+        trans();
+        this.attemptSave();
+    },
+    get app_language() {
+        return this._language;
+    },
+
     // Conflict detection
     _conflict_detection: 1,
     set conflict_detection(newValue) {
@@ -86,13 +105,18 @@ const UserSettings = {
         } else {
             deleteCookie('conflict_detection');
         }
+
+        pu.redraw();
     },
     get conflict_detection() {
         return this._conflict_detection;
     },
+    get show_conflicts() {
+        return this._conflict_detection > 1
+    },
 
     // Check conflicts on pencil marks
-    _check_pencil_marks: true,
+    _check_pencil_marks: false,
     set check_pencil_marks(newValue) {
         this._check_pencil_marks = newValue === "1" || newValue === "true" || newValue === true;
         document.getElementById("check_pencil_marks_opt").value = this._check_pencil_marks ? "1" : "0";
@@ -142,6 +166,9 @@ const UserSettings = {
     get sudoku_normal_size() {
         return this._sudoku_normal_size;
     },
+    get sudoku_normal_bottom() {
+        return this._sudoku_normal_size === 2;
+    },
 
     _sudoku_centre_size: 1,
     set sudoku_centre_size(newValue) {
@@ -157,22 +184,20 @@ const UserSettings = {
 
     _custom_colors_on: false,
     set custom_colors_on(newValue) {
-        if (typeof newValue === 'string') {
-            const valueInt = newValue ? parseInt(newValue, 10) : 1;
-            this._custom_colors_on = (valueInt === 2);
-        } else {
-            this._custom_colors_on = !!newValue;
-        }
+        const stringValue = String(newValue);
+        const valueInt = (stringValue === 'true' || stringValue === '2') ? 2 : 1;
+
+        this._custom_colors_on = (valueInt === 2);
 
         if (this._custom_colors_on) {
             // On
             let mode = pu.mode[pu.mode.qa].edit_mode;
-            pu.mode_set(mode);  // Update mode UI, including custom color selector
+            pu.mode_set(mode); // Update mode UI, including custom color selector
         } else {
             // Off
             document.getElementById('style_special').style.display = 'none';
         }
-        document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
+        document.getElementById("custom_color_opt").value = valueInt;
 
         pu.redraw();
     },
@@ -194,18 +219,8 @@ const UserSettings = {
     // This setting is for whether the user wants local storage to be used at all, ever
     _local_storage: true,
     set local_storage(newValue) {
-        let valueInt;
-        if (typeof newValue === 'boolean') {
-            valueInt = newValue ? 1 : 4;
-        } else {
-            valueString = String(newValue);
-
-            if (valueString.match(/[14]/)) {
-                valueInt = parseInt(newValue, 10);
-            } else if (valueString.match(/true|false/i)) {
-                valueInt = valueString === 'true' ? 1 : 4;
-            }
-        }
+        const valueString = String(newValue);
+        const valueInt = (valueString === 'true' || valueString === '1') ? 1 : 4;
 
         this._local_storage = (valueInt === 1);
 
@@ -233,17 +248,18 @@ const UserSettings = {
 
     _reload_button: 2,
     set reload_button(newValue) {
-        if (newValue === "ON") { newValue = 1; }
-        if (newValue === "OFF") { newValue = 2; }
+        const valueString = String(newValue);
+        let valueInt = 2;
 
-        const valueInt = newValue ? parseInt(newValue, 10) : 2;
+        if (valueString === "ON" || valueString === 'true' || valueString === '1') { valueInt = 1; }
+
         this._reload_button = valueInt;
 
         document.getElementById("reload_button").value = valueInt;
         this.attemptSave();
     },
     get reload_button() {
-        return this._reload_button;
+        return this._reload_button === 1;
     },
 
     _shortcuts_enabled: 1,
@@ -311,11 +327,11 @@ const UserSettings = {
 
         if (valueInt > 90) {
             valueInt = 90;
-            infoMsg('Display Size must be in the range <h2 class="warn">12-90</h2> It is set to max value.');
+            infoMsg(PenpaText.get('display_size_max'));
         }
         if (valueInt < 12) {
             valueInt = 12;
-            infoMsg('Display Size must be in the range <h2 class="warn">12-90</h2> It is set to min value.');
+            infoMsg(PenpaText.get('display_size_min'));
         }
 
         this._displaysize = valueInt;
@@ -332,7 +348,7 @@ const UserSettings = {
     set draw_edges(newValue) {
         const button = document.getElementById("edge_button");
         this._draw_edges = newValue;
-        button.textContent = newValue ? "ON" : "OFF";
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
 
         if (window.pu) {
             if (!newValue) {
@@ -350,7 +366,7 @@ const UserSettings = {
     set show_solution(newValue) {
         const button = document.getElementById("visibility_button");
         this._show_solution = newValue;
-        button.textContent = newValue ? "ON" : "OFF";
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
 
         if (window.pu) {
             pu.redraw();
@@ -412,6 +428,7 @@ const UserSettings = {
 
     can_save: [
         'check_pencil_marks',
+        'app_language',
         'color_theme',
         'conflict_detection',
         'custom_colors_on',
@@ -443,7 +460,7 @@ const UserSettings = {
         deleteCookie('tab_settings');
         // deleteCookie("different_solution_tab");
 
-        infoMsg('You must reload the page for the default settings to take effect.');
+        infoMsg(PenpaText.get('clear_settings_message'));
     },
 
     _settingsLoaded: false,
