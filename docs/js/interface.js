@@ -79,5 +79,56 @@ const PenpaUI = {
             document.getElementById(i).classList.toggle('is_hidden', selectedGrid.exceptions.indexOf(i) < 0);
         }
         // document.getElementById("sub_number4_lb").innerText = (gridtype === 'sudoku') ? 'Quad' : 'Tapa';
+    },
+
+    _liteSelectInstance: undefined,
+    initPenpaLite() {
+        let select = document.getElementById("mode_choices");
+
+        select.innerHTML = '';
+
+        for (var i = 0; i < PenpaText.modes.EN.length; i++) {
+            var option = document.createElement("option");
+            option.value = PenpaText.modes.EN[i];
+            option.text = PenpaText.modes[UserSettings.app_language][i];
+
+            if (UserSettings.tab_settings) {
+                // Load the author defined tab settings if any
+                if (UserSettings.tab_settings.indexOf(PenpaText.modes.EN[i]) > -1) {
+                    option.setAttribute("selected", true);
+                }
+            }
+            select.appendChild(option);
+        }
+
+        if (this._liteSelectInstance) {
+            this._liteSelectInstance.destroy();
+        }
+
+        this._liteSelectInstance = new vanillaSelectBox("#mode_choices", {
+            "disableSelectAll": false,
+            "maxHeight": 250,
+            "search": true,
+            "translations": PenpaText.vanillaSelect[UserSettings.app_language]
+        });
+
+        let selectContainer = document.getElementById('btn-group-#mode_choices').getElementsByClassName('vsb-menu')[0];
+        let liteModeButton = document.createElement('button');
+        liteModeButton.id = "tab-dropdown-lite-btn";
+        liteModeButton.disabled = true;
+        let tab_initial = getValues('mode_choices');
+        if (tab_initial.length > 0) {
+            liteModeButton.innerText = PenpaText.get('disable_penpa_lite');
+            liteModeButton.setAttribute('data-mode', 'disable');
+            liteModeButton.disabled = false;
+        } else {
+            liteModeButton.innerText = PenpaText.get('enable_penpa_lite');
+            liteModeButton.setAttribute('data-mode', 'enable');
+            liteModeButton.disabled = true;
+        }
+        liteModeButton.addEventListener('click', advancecontrol_toggle);
+        selectContainer.appendChild(liteModeButton);
+
+        PenpaUI.liteModeButton = liteModeButton;
     }
 };
