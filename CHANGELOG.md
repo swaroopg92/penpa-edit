@@ -1,6 +1,7 @@
 ## History
 * unreleased ver 3.2.0
 	* copy/cut/paste feature for number/symbol/surface/line/edge for square/hex/tri grid types.
+	* feature to add background image.
 	* Added Shift click features. In Sudoku/Number mode, Shift + clicking and Shift + keyboard arrow would work similar to ctrl.
 	* Double click feature to select same value in number mode. may need some more work.
 	* Enabled multi-selection in number mode.
@@ -9,7 +10,7 @@
 	* Code refactoring.
 	* Allow sudoku mode shortcut letters zxcv to be inputted using the panel.
 	* ctrl+A to select all cells.
-	* alt+mouse drag for rectangular selection in number/sudoku mode.
+	* alt+mouse drag for rectangular selection in number/sudoku/surface mode.
 	* improved sudoku center and corner mode - adding/removing digits.
 	* improved conflict detection for sudoku, latin squares.
 	* added more answer check options and corresponding settings.

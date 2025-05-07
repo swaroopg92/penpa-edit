@@ -63,11 +63,12 @@ function trans() {
 
     var button_text = {
         "newboard": ["新規 / 更新", "New Grid / Update"],
-        "rotation": ["回転 / 移動", "Rotate / Move"],
-        "newsize": ["サイズ変更", "Sizechange"],
+        "rotation": ["変身", "Transform"],
+        "newsize": ["サイズ変更", "Resize"],
         "saveimage": ["画像保存", "Screenshot"],
         "savetext": ["出力", "Share"],
         "duplicate": ["複製", "Clone"],
+        "edit_bg_image": ["背景を編集", "Edit Background"],
         "input_sudoku": ["数独入出力", "I/O Sudoku"],
         "input_url": ["入力", "Load"],
         "tb_undo": ["戻", "Undo"],
@@ -407,7 +408,16 @@ function trans() {
         "save5texttitle": ["ヘッダー", "header"],
         "custom_lb": ["カスタムメッセージ", "Custom Message"],
         "save6texttitle": ["URL入力", "Load URL"],
-        "quick_panel_toggle_label": ["パネル：", "Panel:"]
+        "quick_panel_toggle_label": ["パネル：", "Panel:"],
+        "bg_image_url_lb": ["画像URL：", "Image URL:"],
+        "bg_image_x_lb": ["X位置：", "X position:"],
+        "bg_image_y_lb": ["Y位置：", "Y position:"],
+        "bg_image_width_lb": ["幅：", "Width:"],
+        "bg_image_height_lb": ["高さ：", "Height:"],
+        "bg_image_opacity_lb": ["不透明度：", "Opacity:"],
+        "bg_image_foreground_lb": ["前景に描画：", "Draw in foreground:"],
+        "bg_image_mask_white_lb": ["画像から白をマスク：", "Mask out white from image:"],
+        "bg_image_threshold_lb": ["白マスクのしきい値：", "White mask threshold:"]
     }
 
     var placeholder = {
