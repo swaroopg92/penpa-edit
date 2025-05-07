@@ -200,9 +200,7 @@ onload = function() {
             }
             e.preventDefault();
 
-            // Right click and moving uses "flex" point detection, except in linedir mode,
-            // where we use normal detection
-            if (event.buttons === 2 && !(edit_mode === "combi" && pu.mode[pu.mode.qa][edit_mode][0] === "linedir")) {
+            if (event.buttons === 2) { // Right click and moving
                 pu.mouse_click = 2;
                 var obj = coord_point(event, 'flex');
             } else if ((ondown_key === "touchstart" || event.buttons === 1) &&

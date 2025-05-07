@@ -3010,6 +3010,12 @@ function set_solvemode(type = "url") {
     // Hide Load button
     document.getElementById("input_url").style.display = "none";
 
+    // [SG] This was added to disable custom colors in solver mode as it may mess with answer checking colors.
+    // But with recent developments of answer match with any color, this restriction may not be needed and hence commenting it.
+    // // custom color disabled
+    // document.getElementById('colorpicker_special').style.display = 'none';
+    // document.getElementById('custom_color_lb').style.display = 'none';
+
     // Save settings
     document.getElementById('save_settings_lb').style.display = 'none';
 

@@ -1397,9 +1397,10 @@ class Puzzle {
         document.getElementById("combimode_content").innerHTML = mode;
 
         // Display line/edge style selector for appropriate modes
-        let line_style = 'none', edge_style = 'none';
+        let line_style = 'none',
+            edge_style = 'none';
         if (mode === "linex" || mode === "lineox" || mode === "linedir" || mode === "yajilin" ||
-                mode === "rassisillai" || mode === "tents")
+            mode === "rassisillai" || mode === "tents")
             line_style = 'inline-block';
         else if (mode === "edgex" || mode === "edgexoi")
             edge_style = 'inline-block';
@@ -10651,41 +10652,25 @@ class Puzzle {
     }
 
     re_combi_linedir_move(x, y, num) {
+        let leftdir = [5, "inequality", 2];
+        let rightdir = [7, "inequality", 2];
+        let updir = [6, "inequality", 2];
+        let downdir = [8, "inequality", 2];
         let horizontal = (this.point[num].type === 2);
         let vertical = (this.point[num].type === 3);
         let center = (this.point[num].type === 0);
         let drawing_modes = [50, 52, 53, 54, 55, 56];
 
-        // Remapping array to convert the indices of the pu.point[k].adjacent array to directions
-        const dir_remap = [0, 2, 3, 1];
-
-        if (this.drawing_mode != -1) {
+        if (this.drawing_mode != -1 &&
+            this.mouse_click !== 2 &&
+            center) {
             // Left click and drag or touchdown and drag
-            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+            let line_style = 3;
+            let array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
-                const array = "line";
-                var key = this.line_key(num, this.last);
-
-                // Only allow line delete if not in right click mode
-                let only_arrow = (this[this.mode.qa][array][key] === line_style && this.mouse_click_last === 2);
-
-                let dir = this.point[this.last].adjacent.indexOf(parseInt(num));
-                dir = dir_remap[dir];
-
-                // Check if there's already a line and an arrow segment in the same direction at
-                // the beginning of a right-click-drag action. If so, it's delete mode
-                if (only_arrow && this.drawing_mode === 100) {
-                    let [arrowdir, side] = this.re_combi_linedir_get_arrow_side(this.last, dir);
-                    let old = this[this.mode.qa]["symbol"][side];
-                    if (old && JSON.stringify(old) === JSON.stringify(arrowdir))
-                        this.drawing_mode = 0;
-                }
-
-                if (this.drawing_mode === 0 || !only_arrow)
-                    this.re_line(array, key, line_style);
-
-                if (only_arrow || (this.mouse_click_last === 2 && this.drawing_mode === line_style))
-                    this.re_combi_linedir_make_arrow(this.last, dir);
+                array = "line";
+                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                this.re_line(array, key, line_style);
             }
             this.last = num;
             this.redraw();
@@ -10787,6 +10772,72 @@ class Puzzle {
     }
 
     re_combi_linedir_up(x, y, num) {
+        // This feature is only for laptop
+        // Right click drag from center of cell in the direction and will put a directed symbol on the edge
+        if (this.drawing_mode == 100 &&
+            this.mouse_click_last == 2 &&
+            this.lastx != -1 &&
+            this.lasty != -1) {
+            let leftdir = [5, "inequality", 2];
+            let rightdir = [7, "inequality", 2];
+            let updir = [6, "inequality", 2];
+            let downdir = [8, "inequality", 2];
+
+            // for mouse right click drag/move
+            let arrowdirection = -1;
+
+            // get direction of the mouse drag/move
+            if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
+                arrowdirection = this.direction_loop4(x, y, this.lastx, this.lasty);
+            }
+
+            // 3 - right
+            // 2 - left
+            // 1 - down
+            // 0 - up
+            if (arrowdirection !== -1) {
+                // neighbor - up down left right
+                let side = this.point[this.last].neighbor[arrowdirection];
+                let arrowdir;
+                switch (arrowdirection) {
+                    case 0:
+                        arrowdir = updir;
+                        break;
+                    case 1:
+                        arrowdir = downdir;
+                        break;
+                    case 2:
+                        arrowdir = leftdir;
+                        break;
+                    case 3:
+                        arrowdir = rightdir;
+                        break;
+                }
+                if (!this[this.mode.qa].line[side] && !this[this.mode.qa].symbol[side]) { // Insert symbol
+                    this.record("symbol", side);
+                    this[this.mode.qa].symbol[side] = arrowdir;
+                    this.record_replay("symbol", side);
+                } else if (this[this.mode.qa].line[side]) { // If cross, delete cross and insert symbol
+                    this.record("line", side);
+                    delete this[this.mode.qa].line[side];
+                    this.record_replay("line", side);
+                    this.record("symbol", side);
+                    this[this.mode.qa].symbol[side] = arrowdir;
+                    this.record_replay("symbol", side);
+                } else if (this[this.mode.qa].symbol[side]) { // If symbol in wrong direction, update symbol
+                    if (this[this.mode.qa].symbol[side][0] !== arrowdir[0]) {
+                        this.record("symbol", side);
+                        this[this.mode.qa].symbol[side] = arrowdir;
+                        this.record_replay("symbol", side);
+                    } else {
+                        this.record("symbol", side);
+                        delete this[this.mode.qa].symbol[side];
+                        this.record_replay("symbol", side);
+                    }
+                }
+                this.redraw();
+            }
+        }
         this.drawing_mode = -1;
         this.last = -1;
         this.lastx = -1;
@@ -12296,9 +12347,9 @@ class Puzzle {
             if (data.mask_white) {
                 const t = data.threshold;
                 for (let i = 0; i < raw_data.data.length; i += 4) {
-                    let [r, g, b] = raw_data.data.slice(i, i+3);
+                    let [r, g, b] = raw_data.data.slice(i, i + 3);
                     if (r > t && g > t && b > t)
-                        raw_data.data[i+3] = 0;
+                        raw_data.data[i + 3] = 0;
                 }
             }
 
@@ -12343,7 +12394,8 @@ class Puzzle {
             let data = this.bg_image_data;
 
             // Take the width/height from the given parameters or from the given image if not
-            let width = data.width, height = data.height;
+            let width = data.width,
+                height = data.height;
             if (!width) {
                 if (!height) {
                     width = this.bg_image.width;
@@ -12647,8 +12699,8 @@ class Puzzle {
                 // set_surface_style(this.ctx, 13);
 
                 // Shadow for the selected cell
-                this.ctx.shadowBlur = 5;
-                this.ctx.shadowColor = Color.BLUE_DARK_VERY;
+                this.ctx.shadowBlur = 10;
+                this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 if (factor < 1) {
