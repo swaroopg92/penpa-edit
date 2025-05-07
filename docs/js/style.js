@@ -282,13 +282,13 @@ function set_line_style(ctx, type, ccolor = "none") {
             ctx.lineWidth = 2.5;
             break;
         case 101: // Sudoku cursor
-            ctx.strokeStyle = Color.BLUE_TRANSPARENT;
+            ctx.strokeStyle = Color.RED_TRANSPARENT;
             ctx.lineWidth = 2;
             break;
     }
     const can_thicken = [2, 3, 4, 5, 8, 9];
     if (can_thicken.includes(type))
-      ctx.lineWidth = 0.7 + (pu.size * 0.10) | 0;
+        ctx.lineWidth = 0.7 + (pu.size * 0.10) | 0;
 }
 
 function set_font_style(ctx, size, type, ccolor = "none") {
