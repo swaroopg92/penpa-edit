@@ -25,9 +25,10 @@ class Stack {
     }
 
     push(o) {
-        if (this.__a.length > 5000) {
-            this.__a.shift();
-        }
+        // [SG] Removing the limit condition by commenting this
+        // if (this.__a.length > 5000) {
+        //     this.__a.shift();
+        // }
         this.__a.push(o);
     }
     pop() {
@@ -154,7 +155,8 @@ class Puzzle {
             'snub': 20,
             'cairo': 20,
             'rhombitrihex': 20,
-            'deltoidal': 20
+            'deltoidal': 20,
+            'penrose': 20
         }; // also defined in general.js
         this.replace = [
             ["\"qa\"", "z9"],
@@ -188,7 +190,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 1, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 1, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -209,7 +211,7 @@ class Puzzle {
         this.replaycutoff = 60 * 60 * 1000; // 60 minutes
         this.surface_2_edge_types = ['pentominous', 'araf', 'spiralgalaxies', 'fillomino', 'compass'];
         this.isReplay = false;
-
+        this.linedrawing = false; // Used for lineox composite mode
         document.addEventListener('copy', (e) => this.copy_handler(e));
         document.addEventListener('cut', (e) => this.cut_handler(e));
         document.addEventListener('paste', (e) => this.paste_handler(e));
@@ -376,7 +378,7 @@ class Puzzle {
         this.reset_pause_layer();
 
         // set the style and font
-        if (UserSettings.color_theme == 1) {
+        if (UserSettings.color_theme == THEME_LIGHT) {
             pause_ctx.fillStyle = Color.BLUE;
         } else {
             pause_ctx.fillStyle = Color.WHITE;
@@ -1346,7 +1348,7 @@ class Puzzle {
     number_multi_enabled() {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         let submode = this.mode[this.mode.qa][edit_mode][0];
-        return (edit_mode === "number" && !["2"].includes(submode));
+        return (edit_mode === "number" && !["2", "3", "9"].includes(submode)); // ignore arrow submode
     }
 
     set_custom_color(name) {
@@ -1409,9 +1411,10 @@ class Puzzle {
         document.getElementById("combimode_content").innerHTML = mode;
 
         // Display line/edge style selector for appropriate modes
-        let line_style = 'none', edge_style = 'none';
+        let line_style = 'none',
+            edge_style = 'none';
         if (mode === "linex" || mode === "lineox" || mode === "linedir" || mode === "yajilin" ||
-                mode === "rassisillai" || mode === "tents")
+            mode === "rassisillai" || mode === "tents")
             line_style = 'inline-block';
         else if (mode === "edgex" || mode === "edgexoi")
             edge_style = 'inline-block';
@@ -1866,12 +1869,8 @@ class Puzzle {
         text += this.__export_checker_shared();
 
         // Custom Answer Message
-        if (this.solution) {
-            let custom_message = document.getElementById("custom_message").value;
-            text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
-        } else {
-            text += "\n" + false;
-        }
+        let custom_message = document.getElementById("custom_message").value;
+        text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
         for (var i = 0; i < this.replace.length; i++) {
             text = text.split(this.replace[i][0]).join(this.replace[i][1]);
@@ -2080,7 +2079,7 @@ class Puzzle {
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
         var answercheck_opt = [],
-            message = "<b style=\"color:blue\">Solution checker looks for ALL of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_all') + "</b><ul>";
 
         // loop through and check if any "AND" settings are selected
         let prev_opt = "";
@@ -2090,7 +2089,7 @@ class Puzzle {
                 var opt = answercheck_opt_conversion[settingstatus_and[i].id.substring(4)];
                 if (opt.length !== 0 && opt != prev_opt) {
                     answercheck_opt.push(opt);
-                    message += "<li>" + answercheck_message[opt] + "</li>";
+                    message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                 }
                 prev_opt = opt;
             }
@@ -2099,7 +2098,7 @@ class Puzzle {
 
         // If answercheck list is 0, it means, no "AND" option was selected
         if (answercheck_opt.length === 0) {
-            message = "<b style=\"color:blue\">Solution checker looks for ONE of the following:</b><ul>";
+            message = "<b style=\"color:blue\">" + PenpaText.get('solution_checker_one') + "</b><ul>";
             // loop through and check if any "OR" settings are selected
             for (var i = 0; i < settingstatus_or.length; i++) {
                 if (settingstatus_or[i].checked) {
@@ -2107,7 +2106,7 @@ class Puzzle {
                     let opt = answercheck_opt_conversion[settingstatus_or[i].id.substring(7)];
                     if (opt.length !== 0 && opt != prev_opt) {
                         answercheck_opt.push(opt);
-                        message += "<li>" + answercheck_message[opt] + "</li>";
+                        message += "<li>" + PenpaText.get(`answer_check_${opt}`) + "</li>";
                     }
                     prev_opt = opt;
                 }
@@ -2207,7 +2206,7 @@ class Puzzle {
             if (edge_ignore) {
                 // ignore the edge if its on the border (suitable for araf, pentominous type of puzzles)
                 if ((this.frame[i] && this.frame[i] === 2) ||
-                        (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
+                    (this["pu_q"][type][i] && this["pu_q"][type][i] === 2))
                     return;
             }
 
@@ -2338,12 +2337,12 @@ class Puzzle {
             }
 
             if (document.getElementById("sol_loopline").checked === true ||
-                    line_exact || line_ignore || checkall) {
+                line_exact || line_ignore || checkall) {
                 sol[1] = this.get_line_solution(line_ignore, line_exact);
             }
 
             if (document.getElementById("sol_loopedge").checked === true ||
-                    edge_exact || edge_ignore || checkall) {
+                edge_exact || edge_ignore || checkall) {
                 // for newer links, if loop edge is selected, automatically ignore the given border/edge elements
                 if (this.version_gt(2, 26, 20)) {
                     if (!edge_ignore && !checkall) {
@@ -6424,13 +6423,10 @@ class Puzzle {
                 console.log(this.pu_a_col);
                 console.log(this);
             } else {
-                text += 'Error - It doesnt support puzzle type ' + header + '\n' +
-                    'Please see instructions (Help) for supported puzzle types\n' +
-                    'For additional genre support please submit your request to penpaplus@gmail.com';
+                text += PenpaText.get('gmp_unsupported', header);
             }
         } else {
-            text += 'Error - Enter the Puzzle type in Header area\n' +
-                'Please see instructions (Help) for supported puzzle types\n';
+            text += PenpaText.get('gmp_enter_type');
         }
 
         return text;
@@ -7071,7 +7067,7 @@ class Puzzle {
 
         // Triangular grid
         if (this.gridtype === "tri") {
-            this.selection.sort((a,b) => {
+            this.selection.sort((a, b) => {
                 a = this.point[a].index;
                 b = this.point[b].index;
                 if (a[1] == b[1]) {
@@ -7089,12 +7085,12 @@ class Puzzle {
                 // Compensate for every other row being offset, also store if this triangle
                 // is pointing up or down
                 let offset = (y - base_y) & y & 1;
-                return {x: x - base_x + offset, y: y - base_y, t: t};
+                return { x: x - base_x + offset, y: y - base_y, t: t };
             }
         }
         // Hexagonal grid
         else if (this.gridtype === "hex") {
-            this.selection.sort((a,b) => a >= b);
+            this.selection.sort((a, b) => a >= b);
             let base_point = this.point[this.selection[0]];
             [base_x, base_y] = base_point.index;
 
@@ -7102,18 +7098,18 @@ class Puzzle {
                 let [x, y] = this.point[p].index;
                 // Compensate for every other row being offset
                 let offset = (y - base_y) & y & 1;
-                return {x: x - base_x + offset, y: y - base_y};
+                return { x: x - base_x + offset, y: y - base_y };
             }
         }
         // Square grid
         else if (this.grid_is_square()) {
-            this.selection.sort((a,b) => a >= b);
+            this.selection.sort((a, b) => a >= b);
             let base_point = this.point[this.selection[0]];
             [base_x, base_y] = base_point.index;
 
             rel_coords = (p) => {
                 let [x, y] = this.point[p].index;
-                return {x: x - base_x, y: y - base_y};
+                return { x: x - base_x, y: y - base_y };
             }
         }
         // Unsupported grid type
@@ -7170,7 +7166,9 @@ class Puzzle {
                             let adj2 = this.point[k].surround[j];
                             let key = this.line_key(adj, adj2);
                             if (!seen_edges[key] && puzzle[prop][key]) {
-                                edges.push([[i, j], puzzle[prop][key], puzzle_col[prop][key]]);
+                                edges.push([
+                                    [i, j], puzzle[prop][key], puzzle_col[prop][key]
+                                ]);
                                 seen_edges[key] = true;
                             }
                         }
@@ -7297,7 +7295,7 @@ class Puzzle {
             // Compensate both for every other row being offset, and for there being two sets of
             // indices, one for each of upward- and downward-pointing triangles
             index = (x, y, data) => ((this.n0 ** 2 * (2 - data.t)) +
-                    (this.n0 * y + x - ((y - base_y) & y & 1)));
+                (this.n0 * y + x - ((y - base_y) & y & 1)));
         else if (this.gridtype === "hex")
             // Compensate for every other row being offset
             index = (x, y) => (this.nx * 3 + 1) * y + x - ((y - base_y) & y & 1);
@@ -7308,7 +7306,7 @@ class Puzzle {
 
         // Insert all data items into the grid relative to the base cell
         for (var data of clipboard_data.items) {
-            let {x, y} = data;
+            let { x, y } = data;
 
             x += base_x;
             y += base_y;
@@ -7336,13 +7334,16 @@ class Puzzle {
 
                 if (prop === "line") {
                     for (var [adj, line_data, color] of data[prop]) {
-                        let x2 = adj.x + base_x, y2 = adj.y + base_y;
+                        let x2 = adj.x + base_x,
+                            y2 = adj.y + base_y;
                         let key = this.line_key(k, index(x2, y2, adj));
 
                         this.set_value(prop, key, line_data, color);
                     }
                 } else if (prop === "lineE") {
-                    for (var [[i, j], edge_data, color] of data[prop]) {
+                    for (var [
+                            [i, j], edge_data, color
+                        ] of data[prop]) {
                         let c1 = this.point[k].surround[i];
                         let c2 = this.point[k].surround[j];
                         let key = this.line_key(c1, c2);
@@ -7388,7 +7389,7 @@ class Puzzle {
         if (!UserSettings.shortcuts_enabled || force_no_shortcut) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         } else {
-            var str_all = "1234567890qwertuioasdfghjklQWERTYUIOPASDFGHJKLZXCVBNM";
+            var str_all = "1234567890qwertyuiopasdfghjklbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         }
         var str_num_no0 = "123456789";
         // var str_replace = ["+-=*", "＋－＝＊"];
@@ -7406,13 +7407,18 @@ class Puzzle {
             }
             let cells = null;
             if (this.number_multi_enabled())
-                cells = this.selection; 
-            else
-                cells = [this.cursol];
+                cells = this.selection;
+            else {
+                if (submode[0] === "3" || submode[0] === "9") {
+                    cells = [this.cursolS];
+                } else {
+                    cells = [this.cursol];
+                }
+            }
             for (var k of cells) {
                 switch (submode[0]) {
                     case "1":
-                        // If the there are corner or sides present then get rid of them
+                        // If there are corner or sides present then get rid of them
                         // Only in Answer mode
                         if (this.mode.qa === "pu_a") {
                             var corner_cursor = 4 * (k + this.nx0 * this.ny0);
@@ -7513,19 +7519,23 @@ class Puzzle {
                             this.set_value("number", k, [number, submode[1], submode[0]]);
                         }
                         break;
-
                     case "7": // Candidates
+                        // This does not use set_value function.
+                        // For some reason, calling set_value, first sets the new number and then records, messing with the undo
                         if (str_num_no0.indexOf(key) != -1) {
+                            let prop = "number";
+                            this.record(prop, k, this.undoredo_counter);
                             if (this[this.mode.qa].number[k] && this[this.mode.qa].number[k][2] === "7") {
                                 con = this[this.mode.qa].number[k][0];
                             } else {
                                 con = "";
                             }
                             number = this.onofftext(9, key, con);
-                            this.set_value("number", k, [number, submode[1], submode[0]]);
+                            let value = [number, submode[1], submode[0]];
+                            this[this.mode.qa][prop][k] = value;
+                            this.record_replay(prop, k, this.undoredo_counter);
                         }
                         break;
-
                     case "11": // Killer Sum
                         var corner_cursor = 4 * (k + this.nx0 * this.ny0);
                         if (this[this.mode.qa].numberS[corner_cursor]) {
@@ -7606,7 +7616,7 @@ class Puzzle {
                                 var single_digit = false;
                             }
                             if (!single_digit) {
-                                // If the there are corner or sides present then get rid of them
+                                // If there are corner or sides present then get rid of them
                                 // Only in Answer mode
                                 if (this.mode.qa === "pu_a") {
                                     var corner_cursor = 4 * (k + this.nx0 * this.ny0);
@@ -7628,6 +7638,44 @@ class Puzzle {
                                             this.record_replay("numberS", side_cursor + j, this.undoredo_counter);
                                         }
                                     }
+
+                                    // Edge marking clean up, but not working correctly
+                                    // in 10x10 square grid, rows 5 and 6 not working, columns 4 and 5 not working
+                                    // commenting for now, need to revisit later and hence not deleting this section
+                                    // if (this.grid_is_square()) {
+                                    //     // not reliable, every access, the order is changing and hence sorting
+                                    //     var adjacent_cursor = this.get_neighbors(k, 'adjacent').sort();
+
+                                    //     // Edge cursor order = [top edge, bottom edge, left edge, right edge]
+                                    //     // adjacent_cursor order = [top cell, left cell, right cell, bottom cell]
+                                    //     // Match the edge_cursor and adjacent_cursor order
+                                    //     adjacent_cursor.splice(1, 0, adjacent_cursor.pop());
+
+                                    //     if (adjacent_cursor.length == 4) {
+                                    //         for (var j = 0; j < 4; j++) {
+                                    //             let filled = false;
+                                    //             if (this.point[adjacent_cursor[j]].use == 1 &&
+                                    //                 this[this.mode.qa].number[adjacent_cursor[j]]) {
+                                    //                 filled = true;
+                                    //             } else if (this.point[adjacent_cursor[j]].use != 1) {
+                                    //                 filled = true;
+                                    //             }
+                                    //             if (filled && this[this.mode.qa].number[edge_cursor[j]]) {
+                                    //                 this.record("number", edge_cursor[j], this.undoredo_counter);
+                                    //                 delete this[this.mode.qa].number[edge_cursor[j]];
+                                    //                 this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // } else {
+                                    //     for (var j = 0; j < 4; j++) {
+                                    //         if (this[this.mode.qa].number[edge_cursor[j]]) {
+                                    //             this.record("number", edge_cursor[j], this.undoredo_counter);
+                                    //             delete this[this.mode.qa].number[edge_cursor[j]];
+                                    //             this.record_replay("number", edge_cursor[j], this.undoredo_counter);
+                                    //         }
+                                    //     }
+                                    // }
                                 }
 
                                 this.record("number", k, this.undoredo_counter);
@@ -7657,6 +7705,14 @@ class Puzzle {
                             }
                             var j_start = 0;
                             var length_limit = 8;
+
+                            // if any element present in numberS mode then skip top left corner
+                            // use case -> killer sudoku and more
+                            // can be made more efficient if this is detected when the puzzle is loaded, for now its ok
+                            if (this.mode.qa === "pu_a" && (Object.keys(this["pu_q"].numberS).length != 0)) {
+                                length_limit = 6;
+                                j_start = 1;
+                            }
 
                             // First step: go through all cells in the selection that don't have a main single digit, and
                             // collect the digits that are in the corner of each
@@ -7767,7 +7823,7 @@ class Puzzle {
                             con = "";
                             // if single digit is present, dont modify that cell
                             if (this["pu_q"].number[k] && this["pu_q"].number[k][2] === "1" &&
-                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
+                                pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))
                                 continue;
                             if (this["pu_a"].number[k] && this["pu_a"].number[k][2] === "1")
                                 continue;
@@ -7829,11 +7885,10 @@ class Puzzle {
                                 // S submode is 5, M submode is 6
                                 // dynamic (i.e. upto 5 digits larger size and then smaller size)
                                 let size = "6";
-                                if ((UserSettings.sudoku_centre_size === 1 && number.length > 5) ||
-                                        UserSettings.sudoku_centre_size === 3) { // all small
+                                if ((UserSettings.sudoku_centre_size === SUDOKU_CENTRE_AUTO && number.length > 5) ||
+                                    UserSettings.sudoku_centre_size === SUDOKU_CENTRE_SMALL) { // all small
                                     size = "5";
                                 }
-
                                 this.set_value("number", k, [number, submode[1], size]);
                             } else {
                                 this.remove_value("number", k);
@@ -7956,34 +8011,58 @@ class Puzzle {
 
     key_space(keypressed = 0, shift_key = false, ctrl_key = false) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
-            if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3" || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "9") {
-                this.record("numberS", this.cursolS);
-                delete this[this.mode.qa].numberS[this.cursolS];
-                this.record_replay("numberS", this.cursolS);
-            } else {
-                // Remove the corner and side numbers
-                var corner_cursor = 4 * (this.cursol + this.nx0 * this.ny0);
-                var side_cursor = 4 * (this.cursol + 2 * this.nx0 * this.ny0);
-
-                for (var j = 0; j < 4; j++) {
-                    if (this[this.mode.qa].numberS[corner_cursor + j]) {
-                        this.record("numberS", corner_cursor + j);
-                        delete this[this.mode.qa].numberS[corner_cursor + j];
-                        this.record_replay("numberS", corner_cursor + j);
+            let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
+            if (this.selection.length > 0) {
+                if (this.selection.length === 1) {
+                    let clean_flag = this.check_neighbors(this.selection[0]);
+                    if (!clean_flag) {
+                        this.undoredo_counter = 0;
+                    } else {
+                        this.undoredo_counter = this.undoredo_counter + 1;
+                    }
+                } else {
+                    this.undoredo_counter = this.undoredo_counter + 1;
+                }
+                let cells = null;
+                if (this.number_multi_enabled())
+                    cells = this.selection;
+                else {
+                    if (submode === "3" || submode === "9") {
+                        cells = [this.cursolS];
+                    } else {
+                        cells = [this.cursol];
                     }
                 }
+                for (var k of cells) {
+                    if (submode === "3" || submode === "9") {
+                        this.record("numberS", k, this.undoredo_counter);
+                        delete this[this.mode.qa].numberS[k];
+                        this.record_replay("numberS", k, this.undoredo_counter);
+                    } else {
+                        // Remove the corner and side numbers
+                        var corner_cursor = 4 * (k + this.nx0 * this.ny0);
+                        var side_cursor = 4 * (k + 2 * this.nx0 * this.ny0);
 
-                for (var j = 0; j < 4; j++) {
-                    if (this[this.mode.qa].numberS[side_cursor + j]) {
-                        this.record("numberS", side_cursor + j);
-                        delete this[this.mode.qa].numberS[side_cursor + j];
-                        this.record_replay("numberS", side_cursor + j);
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[corner_cursor + j]) {
+                                this.record("numberS", corner_cursor + j);
+                                delete this[this.mode.qa].numberS[corner_cursor + j];
+                                this.record_replay("numberS", corner_cursor + j);
+                            }
+                        }
+
+                        for (var j = 0; j < 4; j++) {
+                            if (this[this.mode.qa].numberS[side_cursor + j]) {
+                                this.record("numberS", side_cursor + j);
+                                delete this[this.mode.qa].numberS[side_cursor + j];
+                                this.record_replay("numberS", side_cursor + j);
+                            }
+                        }
+                        this.record("number", k, this.undoredo_counter);
+                        delete this[this.mode.qa].number[k];
+                        this.record_replay("number", k, this.undoredo_counter);
                     }
                 }
-
-                this.record("number", this.cursol);
-                delete this[this.mode.qa].number[this.cursol];
-                this.record_replay("number", this.cursol);
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
@@ -8146,10 +8225,15 @@ class Puzzle {
                     this.undoredo_counter = this.undoredo_counter + 1;
                 }
                 let cells = null;
-                if (this.number_multi_enabled())
-                    cells = this.selection; 
-                else
-                    cells = [this.cursol];
+                if (this.number_multi_enabled()) {
+                    cells = this.selection;
+                } else {
+                    if (submode === "3" || submode === "9") {
+                        cells = [this.cursolS];
+                    } else {
+                        cells = [this.cursol];
+                    }
+                }
 
                 for (var k of cells) {
                     if (submode === "3" || submode === "9") { // 1/4 and side
@@ -8265,7 +8349,7 @@ class Puzzle {
 
             // Map shift/ctrl-click to right click in certain modes for convenience
             if (ctrl_key && this.mouse_mode === "down_left" &&
-                    (edit_mode === "surface" || edit_mode === "combi")) {
+                (edit_mode === "surface" || edit_mode === "combi")) {
                 this.mouse_mode = "down_right";
                 this.mouse_click = 2;
                 this.mouse_click_last = 2;
@@ -8310,10 +8394,12 @@ class Puzzle {
                 case "number":
                     // Multi-selection mode: treat this just like sudoku mode if we're in
                     // a submode that can work with multiple cells
-                    if (this.number_multi_enabled())
+                    if (submode === "3" || submode === "9") {
+                        this.mouse_numberS(x, y, num, submode);
+                    } else if (this.number_multi_enabled())
                         this.mouse_sudoku(x, y, num, ctrl_key);
                     else
-                        this.mouse_number(x, y, num, ctrl_key);
+                        this.mouse_number(x, y, num);
                     if (pu.mouse_mode === "down_left") {
                         let isNumberS = ["3", "9", "11"].includes(submode)
                         let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
@@ -8346,7 +8432,7 @@ class Puzzle {
     }
 
     // Double click: select all cells with the same value as the clicked cell
-    // XXX: support other cell types
+    // Todo: support other cell types
     dblmouseevent(x, y, num, ctrl_key = false) {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         let priority = ["number", "multicolor"];
@@ -8372,7 +8458,7 @@ class Puzzle {
                     value = this.pu_q.surface[num] || this.pu_a.surface[num];
                     value = JSON.stringify(value);
                 } else if (mode === "number") {
-                      value = this.pu_q.number[num] || this.pu_a.number[num];
+                    value = this.pu_q.number[num] || this.pu_a.number[num];
                 }
 
                 if (value) {
@@ -8394,8 +8480,7 @@ class Puzzle {
                         if (edit_mode === "multicolor") {
                             if (JSON.stringify(puzzle.surface[c]) === value)
                                 match = true;
-                        }
-                        else {
+                        } else {
                             if (puzzle.number[c] && puzzle.number[c][0] === value[0])
                                 match = true;
                         }
@@ -8586,7 +8671,7 @@ class Puzzle {
     //////////////////////////
 
     line_key(a, b) {
-      return (Math.min(a, b)).toString() + "," + (Math.max(a, b)).toString();
+        return (Math.min(a, b)).toString() + "," + (Math.max(a, b)).toString();
     }
 
     mouse_line(x, y, num) {
@@ -9018,6 +9103,27 @@ class Puzzle {
         }
     }
 
+    mouse_numberS(x, y, num, submode) {
+        if (this.mouse_mode === "down_left") {
+            this.cursolS = num;
+
+            // Remember cursol
+            if (this.grid_is_square()) {
+                if (submode === "3") {
+                    this.cursol = parseInt(this.cursolS / 4) - this.nx0 * this.ny0;
+                    this.selection = [this.cursol]; // update selection
+                } else if (submode === "9") {
+                    this.cursol = parseInt(this.cursolS / 4) - 2 * this.nx0 * this.ny0;
+                    this.selection = [this.cursol]; // update selection
+                }
+            }
+            this.redraw();
+        } else if (this.mouse_mode === "down_right") {
+            this.cursolS = num;
+            this.redraw();
+        }
+    }
+
     mouse_sudoku(x, y, num, ctrl_key = false) {
         // if (this.point[num].type === 0) {}  // Add this line, to ignore corners and allow diagonal selection, and set type = [0, 1]
         if (this.mouse_mode === "down_left") {
@@ -9047,7 +9153,8 @@ class Puzzle {
             if (this.cursol && this.cursol >= this.nx0 * this.ny0 &&
                 this.gridtype !== "iso" && this.gridtype !== "tetrakis_square" && this.gridtype !== "truncated_square" &&
                 this.gridtype !== "snub_square" && this.gridtype !== "cairo_pentagonal" &&
-                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal") {
+                this.gridtype !== "rhombitrihexagonal" && this.gridtype !== "deltoidal_trihexagonal" &&
+                this.gridtype !== "penrose_P3") {
                 // do nothing
             } else if (this.select_remove && this.drawing) {
                 let i = this.selection.indexOf(num);
@@ -9811,7 +9918,7 @@ class Puzzle {
 
     check_last_cell() {
         if (this.centerlist.length == 1) {
-            infoMsg('<h3 class="info">Last cell cannot be removed using the "Box" mode. For a blank grid use the following approach:</h3><ol><li>Click on "New Grid / Update"</li><li>Set "Gridlines" to "None"</li><li>Set "Gridpoints" to "No"</li><li>Set "Outside frame" to "No"</li><li>Click on "Update display"</li></ol>');
+            infoMsg(PenpaText.get('box_mode_warning'));
             return true;
         } else {
             return false;
@@ -10006,9 +10113,9 @@ class Puzzle {
                     if (this.ondown_key === "mousedown") { // do only star when on laptop
                         this.re_combi_star_reduced(num);
                     } else {
-                        if (UserSettings.starbattle_dots === 3) {
+                        if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                             num = this.coord_p_edgex_star(x, y, 0);
-                        } else if (UserSettings.starbattle_dots === 2) {
+                        } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                             num = this.coord_p_edgex_star(x, y, 0.2);
                         }
                         this.re_combi_star(num); // Behave as normal when ipad and phone
@@ -10088,9 +10195,9 @@ class Puzzle {
                     this.re_combi_akari_downright(num);
                     break;
                 case "star":
-                    if (UserSettings.starbattle_dots === 3) {
+                    if (UserSettings.starbattle_dots === STAR_DOTS_DISABLED) {
                         num = this.coord_p_edgex_star(x, y, 0);
-                    } else if (UserSettings.starbattle_dots === 2) {
+                    } else if (UserSettings.starbattle_dots === STAR_DOTS_LOW) {
                         num = this.coord_p_edgex_star(x, y, 0.2);
                     }
                     this.re_combi_star_downright(num);
@@ -10463,6 +10570,9 @@ class Puzzle {
                 array = "line";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
+
+                // To track if user is drawing line or just placing symbols
+                this.linedrawing = true;
             }
             this.last = num;
             this.redraw();
@@ -10479,7 +10589,7 @@ class Puzzle {
             secondsymbol = [1, "ox_E", 2];
         }
 
-        if (this.point[num].type === 0 && this.last === num && this.first === num) {
+        if (this.point[num].type === 0 && this.last === num && this.first === num && !this.linedrawing) {
             if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = firstsymbol;
@@ -10495,6 +10605,7 @@ class Puzzle {
             }
         }
         this.drawing_mode = -1;
+        this.linedrawing = false;
         this.first = -1;
         this.last = -1;
         this.redraw();
@@ -10550,41 +10661,25 @@ class Puzzle {
     }
 
     re_combi_linedir_move(x, y, num) {
+        let leftdir = [5, "inequality", 2];
+        let rightdir = [7, "inequality", 2];
+        let updir = [6, "inequality", 2];
+        let downdir = [8, "inequality", 2];
         let horizontal = (this.point[num].type === 2);
         let vertical = (this.point[num].type === 3);
         let center = (this.point[num].type === 0);
         let drawing_modes = [50, 52, 53, 54, 55, 56];
 
-        // Remapping array to convert the indices of the pu.point[k].adjacent array to directions
-        const dir_remap = [0, 2, 3, 1];
-
-        if (this.drawing_mode != -1) {
+        if (this.drawing_mode != -1 &&
+            this.mouse_click !== 2 &&
+            center) {
             // Left click and drag or touchdown and drag
-            let line_style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+            let line_style = 3;
+            let array;
             if (this.point[num].adjacent.indexOf(parseInt(this.last)) != -1) {
-                const array = "line";
-                var key = this.line_key(num, this.last);
-
-                // Only allow line delete if not in right click mode
-                let only_arrow = (this[this.mode.qa][array][key] === line_style && this.mouse_click_last === 2);
-
-                let dir = this.point[this.last].adjacent.indexOf(parseInt(num));
-                dir = dir_remap[dir];
-
-                // Check if there's already a line and an arrow segment in the same direction at
-                // the beginning of a right-click-drag action. If so, it's delete mode
-                if (only_arrow && this.drawing_mode === 100) {
-                    let [arrowdir, side] = this.re_combi_linedir_get_arrow_side(this.last, dir);
-                    let old = this[this.mode.qa]["symbol"][side];
-                    if (old && JSON.stringify(old) === JSON.stringify(arrowdir))
-                        this.drawing_mode = 0;
-                }
-
-                if (this.drawing_mode === 0 || !only_arrow)
-                    this.re_line(array, key, line_style);
-
-                if (only_arrow || (this.mouse_click_last === 2 && this.drawing_mode === line_style))
-                    this.re_combi_linedir_make_arrow(this.last, dir);
+                array = "line";
+                var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                this.re_line(array, key, line_style);
             }
             this.last = num;
             this.redraw();
@@ -10686,6 +10781,72 @@ class Puzzle {
     }
 
     re_combi_linedir_up(x, y, num) {
+        // This feature is only for laptop
+        // Right click drag from center of cell in the direction and will put a directed symbol on the edge
+        if (this.drawing_mode == 100 &&
+            this.mouse_click_last == 2 &&
+            this.lastx != -1 &&
+            this.lasty != -1) {
+            let leftdir = [5, "inequality", 2];
+            let rightdir = [7, "inequality", 2];
+            let updir = [6, "inequality", 2];
+            let downdir = [8, "inequality", 2];
+
+            // for mouse right click drag/move
+            let arrowdirection = -1;
+
+            // get direction of the mouse drag/move
+            if ((x - this.lastx) ** 2 + (y - this.lasty) ** 2 > (0.3 * this.size) ** 2) {
+                arrowdirection = this.direction_loop4(x, y, this.lastx, this.lasty);
+            }
+
+            // 3 - right
+            // 2 - left
+            // 1 - down
+            // 0 - up
+            if (arrowdirection !== -1) {
+                // neighbor - up down left right
+                let side = this.point[this.last].neighbor[arrowdirection];
+                let arrowdir;
+                switch (arrowdirection) {
+                    case 0:
+                        arrowdir = updir;
+                        break;
+                    case 1:
+                        arrowdir = downdir;
+                        break;
+                    case 2:
+                        arrowdir = leftdir;
+                        break;
+                    case 3:
+                        arrowdir = rightdir;
+                        break;
+                }
+                if (!this[this.mode.qa].line[side] && !this[this.mode.qa].symbol[side]) { // Insert symbol
+                    this.record("symbol", side);
+                    this[this.mode.qa].symbol[side] = arrowdir;
+                    this.record_replay("symbol", side);
+                } else if (this[this.mode.qa].line[side]) { // If cross, delete cross and insert symbol
+                    this.record("line", side);
+                    delete this[this.mode.qa].line[side];
+                    this.record_replay("line", side);
+                    this.record("symbol", side);
+                    this[this.mode.qa].symbol[side] = arrowdir;
+                    this.record_replay("symbol", side);
+                } else if (this[this.mode.qa].symbol[side]) { // If symbol in wrong direction, update symbol
+                    if (this[this.mode.qa].symbol[side][0] !== arrowdir[0]) {
+                        this.record("symbol", side);
+                        this[this.mode.qa].symbol[side] = arrowdir;
+                        this.record_replay("symbol", side);
+                    } else {
+                        this.record("symbol", side);
+                        delete this[this.mode.qa].symbol[side];
+                        this.record_replay("symbol", side);
+                    }
+                }
+                this.redraw();
+            }
+        }
         this.drawing_mode = -1;
         this.last = -1;
         this.lastx = -1;
@@ -12109,9 +12270,9 @@ class Puzzle {
             if (data.mask_white) {
                 const t = data.threshold;
                 for (let i = 0; i < raw_data.data.length; i += 4) {
-                    let [r, g, b] = raw_data.data.slice(i, i+3);
+                    let [r, g, b] = raw_data.data.slice(i, i + 3);
                     if (r > t && g > t && b > t)
-                        raw_data.data[i+3] = 0;
+                        raw_data.data[i + 3] = 0;
                 }
             }
 
@@ -12156,7 +12317,8 @@ class Puzzle {
             let data = this.bg_image_data;
 
             // Take the width/height from the given parameters or from the given image if not
-            let width = data.width, height = data.height;
+            let width = data.width,
+                height = data.height;
             if (!width) {
                 if (!height) {
                     width = this.bg_image.width;
@@ -12439,7 +12601,13 @@ class Puzzle {
             }
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
             let submode = this.mode[this.mode.qa][edit_mode][0];
-            if (UserSettings.draw_edges) {
+            if (edit_mode === "number" && (submode === "3" || submode === "9")) {
+                if (this.cursolS) {
+                    this.draw_polygon(this.ctx, this.point[this.cursolS].x, this.point[this.cursolS].y, 0.2, 4, 45);
+                } else {
+                    this.default_cursol();
+                }
+            } else if (UserSettings.draw_edges) {
                 this.draw_polygon(this.ctx, this.point[this.cursol].x, this.point[this.cursol].y, 0.2, 4, 45);
             } else {
                 this.default_cursol();
@@ -12480,13 +12648,13 @@ class Puzzle {
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
             // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
             // since we dont want single cell highlighed while in killer submode
-            //if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
+            // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
             //    // check if cursor is in centerlist, to avoid border/edge case
             //    let cursorexist = this.centerlist.indexOf(this.cursol);
             //    if (cursorexist !== -1) {
             //        this.selection.push(this.cursol);
             //    }
-            //}
+            // }
 
             // Handling rotation and reflection of the grid
             var a = [0, 1, 2, 3],
@@ -12516,7 +12684,7 @@ class Puzzle {
                 } else if (this.gridtype === "iso") {
                     factor = 0;
                     offset = 0;
-                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal") {
+                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal" || this.gridtype === "rhombitrihexagonal" || this.gridtype === "deltoidal_trihexagonal" || this.gridtype === "penrose_P3") {
                     factor = 0;
                     offset = 0;
                 } else {
@@ -12526,8 +12694,8 @@ class Puzzle {
                 // set_surface_style(this.ctx, 13);
 
                 // Shadow for the selected cell
-                this.ctx.shadowBlur = 5;
-                this.ctx.shadowColor = Color.BLUE_DARK_VERY;
+                this.ctx.shadowBlur = 10;
+                this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
                 // Border outline for the selected cell
                 set_line_style(this.ctx, 101);
                 if (factor < 1) {
@@ -12640,10 +12808,10 @@ class Puzzle {
     }
 
     check_solution() {
-        var text = JSON.stringify(this.make_solution());
-        let conflict = this.check_conflict(text);
         if (!this.multisolution) {
             if (this.solution) {
+                var text = JSON.stringify(this.make_solution());
+                let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
                         let message = document.getElementById("custom_message").value;
@@ -12961,7 +13129,7 @@ class Puzzle {
     }
 
     check_conflict(current_sol) {
-        if (UserSettings.conflict_detection > 1) {
+        if (UserSettings.show_conflicts) {
             // User has disabled conflict detection.
             this.conflict_cells = [];
             this.conflict_cell_values = [];
@@ -12987,6 +13155,8 @@ class Puzzle {
                 }
             } else if (tags.has('irregular')) {
                 this.conflicts.check_irregular();
+            } else if (tags.has('alphabet') && tags.has('classic')) {
+                this.conflicts.check_sudoku(true);
             } else if (tags.has('classic')) {
                 this.conflicts.check_sudoku();
             } else if (tags.has('starbattle')) {
