@@ -47,6 +47,47 @@ class Stack {
 
 const COPY_PROPS = ['number', 'symbol', 'surface', 'line', 'lineE'];
 
+// List of substitutions to make in the puzzle JSON data structure to compress/decompress
+// it. Strings like "grid" get substituted with a string like zG (no quotes). The
+// first entry is to escape every 'z' character in the puzzle data structure, so that
+// e.g. a puzzle with zG written in a cell doesn't have that text replaced with "grid",
+// which completely breaks the decompression by adding quotes and making the JSON invalid.
+// Instead zG gets replaced by zZG when compressing, so any text entered into a puzzle
+// can't spuriously trigger one of the other substitutions.
+COMPRESS_SUB = [
+    ["z", "zZ"],
+    ["\"qa\"", "z9"],
+    ["\"pu_q\"", "zQ"],
+    ["\"pu_a\"", "zA"],
+    ["\"grid\"", "zG"],
+    ["\"edit_mode\"", "zM"],
+    ["\"surface\"", "zS"],
+    ["\"line\"", "zL"],
+    ["\"lineE\"", "zE"],
+    ["\"wall\"", "zW"],
+    ["\"cage\"", "zC"],
+    ["\"number\"", "zN"],
+    ["\"symbol\"", "zY"],
+    ["\"special\"", "zP"],
+    ["\"board\"", "zB"],
+    ["\"command_redo\"", "zR"],
+    ["\"command_undo\"", "zU"],
+    ["\"command_replay\"", "z8"],
+    ["\"numberS\"", "z1"],
+    ["\"freeline\"", "zF"],
+    ["\"freelineE\"", "z2"],
+    ["\"thermo\"", "zT"],
+    ["\"arrows\"", "z3"],
+    ["\"direction\"", "zD"],
+    ["\"squareframe\"", "z0"],
+    ["\"polygon\"", "z5"],
+    ["\"deletelineE\"", "z4"],
+    ["\"killercages\"", "z6"],
+    ["\"nobulbthermo\"", "z7"],
+    ["\"__a\"", "z_"],
+    ["null", "zO"],
+];
+
 class Puzzle {
     constructor(gridtype) {
         this.gridtype = gridtype;
@@ -158,38 +199,6 @@ class Puzzle {
             'deltoidal': 20,
             'penrose': 20
         }; // also defined in general.js
-        this.replace = [
-            ["\"qa\"", "z9"],
-            ["\"pu_q\"", "zQ"],
-            ["\"pu_a\"", "zA"],
-            ["\"grid\"", "zG"],
-            ["\"edit_mode\"", "zM"],
-            ["\"surface\"", "zS"],
-            ["\"line\"", "zL"],
-            ["\"lineE\"", "zE"],
-            ["\"wall\"", "zW"],
-            ["\"cage\"", "zC"],
-            ["\"number\"", "zN"],
-            ["\"symbol\"", "zY"],
-            ["\"special\"", "zP"],
-            ["\"board\"", "zB"],
-            ["\"command_redo\"", "zR"],
-            ["\"command_undo\"", "zU"],
-            ["\"command_replay\"", "z8"],
-            ["\"numberS\"", "z1"],
-            ["\"freeline\"", "zF"],
-            ["\"freelineE\"", "z2"],
-            ["\"thermo\"", "zT"],
-            ["\"arrows\"", "z3"],
-            ["\"direction\"", "zD"],
-            ["\"squareframe\"", "z0"],
-            ["\"polygon\"", "z5"],
-            ["\"deletelineE\"", "z4"],
-            ["\"killercages\"", "z6"],
-            ["\"nobulbthermo\"", "z7"],
-            ["\"__a\"", "z_"],
-            ["null", "zO"],
-        ];
         this.version = [3, 1, 6]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
@@ -1711,6 +1720,19 @@ class Puzzle {
         return puzzle_data;
     }
 
+    maketext_baseurl() {
+        // Replace base URL with canonical github url if shortening, so links are still valid externally
+        if (UserSettings.shorten_links &&
+            (location.href.startsWith('http://localhost') || location.href.startsWith('file://')))
+            return 'https://swaroopg92.github.io/penpa-edit/';
+
+        // This is to account for old links and new links together
+        else if (location.hash)
+            return location.href.split('#')[0];
+        else
+            return location.href.split('?')[0];
+    }
+
     maketext() {
         var text = this.__export_text_shared(false);
 
@@ -1777,18 +1799,11 @@ class Puzzle {
             text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
         }
 
-        for (var i = 0; i < this.replace.length; i++) {
-            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        for (var i = 0; i < COMPRESS_SUB.length; i++) {
+            text = text.split(COMPRESS_SUB[i][0]).join(COMPRESS_SUB[i][1]);
         }
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
-
+        var url = this.maketext_baseurl();
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=edit&p=" + ba;
@@ -1872,19 +1887,12 @@ class Puzzle {
         let custom_message = document.getElementById("custom_message").value;
         text += "\n" + custom_message.replace(/\n/g, '%2D').replace(/,/g, '%2C').replace(/&/g, '%2E').replace(/=/g, '%2F');
 
-        for (var i = 0; i < this.replace.length; i++) {
-            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        for (var i = 0; i < COMPRESS_SUB.length; i++) {
+            text = text.split(COMPRESS_SUB[i][0]).join(COMPRESS_SUB[i][1]);
         }
 
         var ba = encrypt_data(text);
-
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
 
         let solution_clone;
         // if solution exist then copy the solution as well
@@ -1944,17 +1952,11 @@ class Puzzle {
             text += "\n" + false;
         }
 
-        for (var i = 0; i < this.replace.length; i++) {
-            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        for (var i = 0; i < COMPRESS_SUB.length; i++) {
+            text = text.split(COMPRESS_SUB[i][0]).join(COMPRESS_SUB[i][1]);
         }
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=solve&p=" + ba;
@@ -1993,17 +1995,11 @@ class Puzzle {
         // Custom Answer Message
         text += "\n" + false;
 
-        for (var i = 0; i < this.replace.length; i++) {
-            text = text.split(this.replace[i][0]).join(this.replace[i][1]);
+        for (var i = 0; i < COMPRESS_SUB.length; i++) {
+            text = text.split(COMPRESS_SUB[i][0]).join(COMPRESS_SUB[i][1]);
         }
 
-        // This is to account for old links and new links together
-        var url;
-        if (location.hash) {
-            url = location.href.split('#')[0];
-        } else {
-            url = location.href.split('?')[0];
-        }
+        var url = this.maketext_baseurl();
         var ba = this.__export_finalize_shared(text);
 
         return url + "#m=solve&p=" + ba;
