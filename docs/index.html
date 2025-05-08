@@ -1086,9 +1086,9 @@
             <h3 class="modal-header" id="savetitle">Share Puzzle</h3>
             <h5 class="modal-subheader" id="saveinfo_lb">Puzzle Information</h5>
             <div id="modal-save-info">
-                <span class="DM"><span id="save1_lb">Title:</span><input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right"></span>
+                <span class="DM"><span id="save1_lb">Title:</span><input type="text" placeholder="e.g. Thermo Sudoku or Yajilin" value="" id="saveinfotitle" class="right" onchange="update_title()"></span>
                 <br>
-                <span class="DM"><span id="save2_lb">Author:</span><input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor"></span>
+                <span class="DM"><span id="save2_lb">Author:</span><input type="text" placeholder="Puzzle creator name" value="" id="saveinfoauthor" onchange="update_title()"></span>
                 <br>
                 <span class="DM"><span id="save3_lb">Rules:</span><textarea class="text_area" rows="1" cols="10" placeholder="e.g. Classic sudoku rules." value="" id="saveinforules"></textarea></span>
                 <br>

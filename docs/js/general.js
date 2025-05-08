@@ -1377,6 +1377,15 @@ function DeleteCheck() {
     })
 }
 
+// Use the puzzle title/author to make a default filename relevant to this puzzle
+function get_filename_base() {
+    let title = document.getElementById("saveinfotitle").value;
+    let author = document.getElementById("saveinfoauthor").value;
+    let name = 'penpa-' + author + '-' + title;
+    // Clean the filename by removing spaces and disallowed characters
+    return name.replace(/[-\s\\/:*?"<>|]+/gu, '-');
+}
+
 function saveimage() {
     document.getElementById("modal-image").style.display = 'block';
 }
@@ -1385,7 +1394,7 @@ function saveimage_download() {
     var downloadLink = document.getElementById('download_link');
     var filename = document.getElementById('saveimagename').value;
     if (!filename) {
-        filename = "my_puzzle";
+        filename = get_filename_base();
     }
     if (document.getElementById("nb_type1").checked) {
         if (filename.slice(-4) != ".png") {
@@ -1621,7 +1630,8 @@ function savetext_copy() {
 function savetext_download() {
     var text = document.getElementById("savetextarea").value;
     var blob = new Blob([text], { type: "text/plain" });
-    saveblob_download(blob, "my_puzzle.txt");
+    let name = get_filename_base() + '.txt';
+    saveblob_download(blob, name);
 }
 
 function saveblob_download(blob, defaultFilename) {
@@ -1894,7 +1904,6 @@ function load(urlParam, type = 'url', origurl = null) {
         ptitle = ptitle.replace(/^Title\:\s/, '');
         if (ptitle !== "Title: ") {
             ptitle = DOMPurify.sanitize(ptitle);
-            document.getElementById("puzzletitle").innerHTML = ptitle;
             document.getElementById("saveinfotitle").value = ptitle;
         }
     }
@@ -1903,7 +1912,6 @@ function load(urlParam, type = 'url', origurl = null) {
         pauthor = pauthor.replace(/^Author\:\s/, '');
         if (pauthor != "") {
             pauthor = DOMPurify.sanitize(pauthor);
-            document.getElementById("puzzleauthor").innerHTML = pauthor;
             document.getElementById("saveinfoauthor").value = pauthor;
         }
     }
@@ -1913,6 +1921,8 @@ function load(urlParam, type = 'url', origurl = null) {
         document.getElementById("puzzlesource").innerHTML = "Source";
         document.getElementById("saveinfosource").value = psource;
     }
+
+    update_title();
 
     make_class(rtext_para[0], 'url');
     panel_pu = new Panel();
@@ -4896,6 +4906,16 @@ function decrypt_data(puzdata) {
 function hide_element_by_id(s) {
     let element = document.getElementById(s);
     element.parentElement.style.contentVisibility = 'hidden';
+}
+
+function update_title() {
+    let title = document.getElementById("saveinfotitle").value;
+    let author = document.getElementById("saveinfoauthor").value;
+
+    document.getElementById("puzzletitle").innerHTML = title;
+    document.getElementById("puzzleauthor").innerHTML = author;
+
+    document.title = title + (author ? ' by ' + author : '') + ' - Penpa+';
 }
 
 // Polyfills
