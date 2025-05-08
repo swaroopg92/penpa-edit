@@ -65,7 +65,17 @@ const UserSettings = {
         return this._timerbar_status;
     },
 
-    // Toggle timer bar visibility
+    _auto_save_history: false,
+    set auto_save_history(newValue) {
+        this._auto_save_history = newValue === "1" || newValue === "true" || newValue === true;
+        document.getElementById("auto_save_history_opt").value = this._auto_save_history ? "1" : "0";
+        this.attemptSave();
+    },
+    get auto_save_history() {
+        return this._auto_save_history;
+    },
+
+    // Toggle mouse middle button settings
     _mousemiddle_button: 1,
     set mousemiddle_button(newValue) {
         const valueInt = newValue ? parseInt(newValue, 10) : 1;
@@ -442,6 +452,7 @@ const UserSettings = {
     },
 
     can_save: [
+        'auto_save_history',
         'check_pencil_marks',
         'app_language',
         'color_theme',

@@ -2165,6 +2165,11 @@ onload = function() {
     });
 
     function save_progress() {
+        // Auto-save tab state in browser history if requested
+        if (UserSettings.auto_save_history) {
+            duplicate(true);
+        }
+
         // Save puzzle progress
         if (localStorageAvailable &&
             pu.url.length !== 0 &&
@@ -2232,6 +2237,10 @@ onload = function() {
 
     document.getElementById("allow_local_storage").onchange = function() {
         UserSettings.local_storage = (parseInt(this.value, 10) === 1);
+    }
+
+    document.getElementById("auto_save_history_opt").onchange = function() {
+        UserSettings.auto_save_history = this.value;
     }
 
     $(document).ready(function() {

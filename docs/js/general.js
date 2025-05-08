@@ -1710,12 +1710,15 @@ function getValues(id) {
     return result;
 }
 
-function duplicate() {
+function duplicate(in_place = false) {
     var address = pu.maketext_duplicate();
     if (pu.mmode === "solve") {
         address = address + "&l=solvedup";
     }
-    window.open(address);
+    if (in_place)
+        history.pushState('', '', address);
+    else
+        window.open(address);
 }
 
 function import_sudoku() {
