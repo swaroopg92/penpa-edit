@@ -28,16 +28,20 @@ You can now cite this in your research and publications using:
 * Ctrl + i: To copy the previous number/alphabet/symbol from Number mode with PANEL: ON
 * Ctrl + space: Delete numbers and symbols at the same time
 * Shift + space: Enter a space (Works in "Number" Mode => "L", "M", "S" and Long" SubMode options only)
+* Ctrl + a: Select all cells
+* Alt + drag: Press alt key and then drag mouse to draw rectangular regions. This feature is enabled in Surface, Multicolor, Number and Sudoku modes.
 * F2: Problem mode
 * F3: Solution mode
 * F4: Hide/Show Timer
 * TAB/ENTER: checkout the TAB section below in "Current functions". Tab settings are now retained in the shared URL.
+* ESC: To clear selection or exit open dialogues.
 * ?: To display keyboard shortcuts. You may need to press SHIFT + "/?" to access "?" in some keyboards.
+* Double click: In number or sudoku mode, double clicking the number in a cell will select all instances of that number.
 * In Sudoku Mode
 	* Z : Normal Submode
 	* X : Corner Submode
 	* C : Centre Submode
-	* V : Shading (Surface Mode)
+	* V : Shading (Multicolor Mode)
 	* SHIFT : For Temporary Corner Submode
 	* SHIFT + DEL : Deletes only corner pencil marks from the selected cells
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
@@ -48,6 +52,8 @@ You can now cite this in your research and publications using:
 	* Border: ON - will allow you to write digits on the edges
 * In Surface Mode
 	* Use number keys to quickly switch between styles. For styles 11 and 12, press 1 and the second digit in quick succession.
+* In Multicolor Mode
+	* Use number keys to fill colors in the selected cells. For styles 11 and 12, press ALT+1 or ALT+2, respectively.
 
 ## Tips
 * Numbers: Back Space can be entered on the panel "1" tab and half-width space can be entered on the "A" tab.
@@ -105,6 +111,11 @@ You can now cite this in your research and publications using:
 	* Side
 * Deltoidal Trihexagonal
 	* Side
+* Penrose P3
+	* Order
+	* Side
+	* Rotational asymmetry
+	* Tiling seed
 
 ### Modes
 
@@ -113,6 +124,11 @@ You can now cite this in your research and publications using:
 * In Dark grey mode only, click twice to get a green square.
 * Light grey is used when hiding grey letters and symbols.
 * Irrespective of any Style selected, Right click to enter the green square. This feature is to provide a quick access to secondary color (default is green). For more options on the secondary color, go to Settings -> Surface Second Color.
+
+#### Multicolor
+* This mode allows multiple colors in the same cell.
+* Select the empty cells and then color to add it.
+* Select the filled cells. If new color, then it will add on top of existing color. If same color, it will remove it.
 
 #### Line
 * Normal: A line connecting the center of the square to the horizontal and vertical. (Masyu, Hashi, Palindrome Sudoku, etc.)
@@ -134,7 +150,13 @@ You can now cite this in your research and publications using:
 * A vertical or horizontal line drawn inside the square. (Slalom etc.)
 * Select the color and thickness of the line by style.
 
-#### Number		  
+#### Number
+* You can select multiple cells at the same time.
+	* Drag the mouse on the cells by holding Left Click
+	* Drag the finger on mobile/ipad
+	* You can also use keyboard Arrow Keys to move around
+	* CTRL/SHIFT key to do multiple selection of cells (Useful if you need to select distinct/far apart cells)
+	* ALT + drag for rectangular selection
 * Normal: Enter numbers, alphabets, and some symbol characters from the keyboard. Some other special symbols are allowed through Panel: ON mode. It also allows custom symbols in the "text" tab (checkout next section for more details)
 * L, M, S: Large, medium or small size numbers.
 * Candidates: Candidate numbers for Latin Square such as Sudoku. Compatible with 1-9. onoff input.
@@ -228,18 +250,20 @@ You can now cite this in your research and publications using:
 	* Drag the mouse on the cells by holding Left Click
 	* Drag the finger on mobile/ipad
 	* You can also use keyboard Arrow Keys to move around
-	* CTRL key to do multiple selection of cells (Useful if you need to select distinct/far apart cells)
+	* CTRL/SHIFT key to do multiple selection of cells (Useful if you need to select distinct/far apart cells)
+	* ALT + drag for rectangular selection
 * Shortcuts to switch between sub-modes
 	* Z : Normal Submode - Normal sized numbers
 	* X : Corner Submode - Small digits placed on corners or sides of the cell
 	* C : Centre Submode - Small digits placed in the centre of the cell
-	* V : Shading (Surface Mode) - For coloring the cells (12 color choices)
+	* V : Shading (Multicolor Mode) - For coloring the cells (12 color choices)
 	* SHIFT : For Temporary Corner Submode
 	* SHIFT + DEL : Deletes only corner pencil marks from the selected cells
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
 	* CTRL + DEL : Deletes only centre pencil marks from the selected cells
 	* DEL : To delete all the contents of the cell
 	* SPACEBAR : To delete only the selected submode contents. (E.g. If the cell contains both centre and corner pencil marks, and if the current submode selection is "Corner submode", the pressing Spacebar would delete only the corner pencil marks)
+	* Double click: IDouble clicking the number in a cell will select all instances of that number.
 * Draw on Edges: ON
 	* IF Draw on Edges is ON then you can write digits on the edges of the cells.
 * 6 Color choices for User Solving
@@ -465,6 +489,11 @@ You can now cite this in your research and publications using:
 ### Clone
 * Opens the puzzle in new link in new tab. Its like making a copy/duplicate of the Puzzle.
 
+### Edit Background
+* User can set custom background to the puzzle.
+* Image URL: Provide source link of the image.
+* Customize various settings (X and Y position, Width and Height, Opacity (transperency), etc) to rightly fit the background image.
+
 ### I/O Sudoku
 * This function is to allow the flexibility of Importing and Exporting a Sudoku. It supports Import and Export to https://www.sudokuwiki.org/sudoku.htm solver.
 	* Import Sudoku
@@ -679,6 +708,8 @@ Wall Logic :x: ;
 * Sudoku Normal: User preference for "Normal" digits in "Sudoku" mode.
 	* Centered - All digits are centered to the cell.
 	* Bottom - All digits are shifted downward and close to the bottom of the cell. (Useful to avoid overlap with Killer clues)
+* Outline on Text: User preference to outline text in the puzzle grid. Default is OFF.
+	* Useful if dark background.
 * Starbattle Dots: User preference for Right Click dots in Star battle composite mode.
 	* High Range - Default.
 	* Low Range - User needs to click much closer to corners and edges for dots.
@@ -697,11 +728,16 @@ Wall Logic :x: ;
 * Mouse Middle Button: Shortcut to switch between Problem/Solution mode while in "setter mode". To activate, select YES.
 * Reload Protection: Reload Button. Users can now choose if they want the webpage to ask for confirmation for reloading or closing the page. This is to avoid accidental closing of tab or refreshing. Default is "OFF".
 * Conflict Detection: It is upcoming feature. Some of the puzzle genres have smart checking ability. Default is ON. User can turn it OFF for the ongoing puzzle or for all the future puzzles.
+* Check pencil marks: User option to enable conflict checker to look for conflicts in pencil marks as well.
+* Button "Edit tags for conflict checker": User option to dynamically change conflict checker settings by modifying these tags.
+* Any color can match green line/edge in solution: User option to enable multi colored solution for lines. Somewhat similar to puzz-link different loop colors option. Although in puzz.link, when two different colored lines touch, they would unite to single color. This does not happen here.
 * Sudoku Z/Y & XCV Keys: User can turn off Sudoku Shortcut Keys. Useful in puzzles involving alphabets.
 
 #### Saving/Storage
 Note - Settings are saved locally for the best user experience.
 * Saved Settings: Clear cookies -> To reset the settings.
+* Auto-save puzzle in browser history -> This could be additional layer of protection on top of "Reload Protection". When the tab becomes invisible (tab change or other reason) then the current state of penpa would be pushed and saved in the browser history. This would enable easy recovery of the progress in case of accidental refresh or tab close.
+[Cautious] If frequently changing tabs, browser history may get populated with these links.
 * Local Storage: Default is ON. It stores the local progress of the solution in the solver mode. User can clear the storage of ongoing puzzle using "Clear this puzzle" button or entire storage using "clear all" button.
 
 ### Stop Watch
