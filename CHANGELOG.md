@@ -1,7 +1,10 @@
 ## History
 * unreleased ver 3.2.0
 	* copy/cut/paste feature for number/symbol/surface/line/edge for square/hex/tri grid types.
-	* feature to add background image.
+	* Feature to add background image.
+	* Multicolor mode added.
+	* option to auto save puzzle state in browser history.
+	* Encryption bug fix with "z" character in the puzzle text.
 	* Added Shift click features. In Sudoku/Number mode, Shift + clicking and Shift + keyboard arrow would work similar to ctrl.
 	* Double click feature to select same value in number mode. may need some more work.
 	* Enabled multi-selection in number mode.
