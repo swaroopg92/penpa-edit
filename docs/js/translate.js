@@ -906,7 +906,7 @@ const PenpaText = {
     },
 
     modes: {
-        EN: ["Surface",
+        EN: ["Surface", "Multicolor",
             "Line Normal", "Line Diagonal", "Line Free", "Line Middle", "Line Helper",
             "Edge Normal", "Edge Diagonal", "Edge Free", "Edge Helper", "Edge Erase",
             "Wall",
@@ -917,7 +917,7 @@ const PenpaText = {
             "Special", "Thermo", "Sudoku Arrow",
             "Composite"
         ],
-        JP: ["黒マス",
+        JP: ["黒マス", "多色",
             "線 通常", "線 対角線", "線 自由線", "線 中線", "線 補助x",
             "辺 通常", "辺 対角線", "辺 自由線", "辺 補助x", "辺 枠消",
             "壁",
@@ -928,7 +928,7 @@ const PenpaText = {
             "特殊", "サーモ", "数独 アロー",
             "複合"
         ],
-        mapping: ["surface",
+        mapping: ["surface", "multicolor",
             "sub_line1", "sub_line2", "sub_line3", "sub_line5", "sub_line4",
             "sub_lineE1", "sub_lineE2", "sub_lineE3", "sub_lineE4", "sub_lineE5",
             "wall",

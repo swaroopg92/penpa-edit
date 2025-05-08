@@ -7,7 +7,7 @@ let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
 let localStorageAvailable = false;
 
-const MULTICOLOR_REMAP = [0, 1, 8, 3, 4, 2, 5, 6, 7, 9, 10, 11, 12];
+const MULTICOLOR_REMAP = [10, 1, 8, 3, 4, 2, 5, 6, 7, 9, 0, 11, 12];
 
 onload = function() {
 
@@ -387,7 +387,7 @@ onload = function() {
         // In sudoku and multicolor modes, allow "mini" shortcuts of holding ctrl or shift
         // to temporarily switch to center or corner marks. Only do this if we're not already
         // in a temporary mode.
-        if ((pu.mode[pu.mode.qa].edit_mode === "sudoku" || pu.mode[pu.mode.qa].edit_mode === "multicolor") && mode_override_key === null) {
+        if ((pu.mode[pu.mode.qa].edit_mode === "sudoku") && mode_override_key === null) {
             // For shift shortcut in Sudoku mode, modify the numpad keys
             if (keylocation === 3 && !isShiftKeyPressed(key) && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
                 const numpadMap = {
@@ -752,12 +752,12 @@ onload = function() {
         "KeyZ": ["sudoku", "sub_sudoku1"],
         "KeyX": ["sudoku", "sub_sudoku2"],
         "KeyC": ["sudoku", "sub_sudoku3"],
-        "KeyV": ["surface"]
+        "KeyV": ["multicolor"]
     };
 
     function checkShortcutKeys(e, code, capslock) {
         let mode = pu.mode[pu.mode.qa].edit_mode;
-        const allowed_modes = ["surface", "sudoku"];
+        const allowed_modes = ["multicolor", "sudoku"];
 
         if (!allowed_modes.includes(mode))
             return false;

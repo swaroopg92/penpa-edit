@@ -7913,7 +7913,8 @@ class Puzzle {
             // Read all current colors for selected cells
             let pu = this[this.mode.qa];
             let pu_col = this[this.mode.qa + "_col"];
-            let colors = {}, ccs = {};
+            let colors = {},
+                ccs = {};
             for (var k of this.selection) {
                 if (Array.isArray(pu.surface[k])) {
                     colors[k] = pu.surface[k];
@@ -8063,6 +8064,12 @@ class Puzzle {
                         this.record_replay("number", k, this.undoredo_counter);
                     }
                 }
+            }
+        } else if (this.mode[this.mode.qa].edit_mode === "multicolor") {
+            this.undoredo_counter++;
+            for (var k of this.selection) {
+                if (this[this.mode.qa].surface[k])
+                    this.remove_value("surface", k);
             }
         } else if (this.mode[this.mode.qa].edit_mode === "symbol") {
             this.record("symbol", this.cursol);
@@ -8616,7 +8623,7 @@ class Puzzle {
             } else {
                 let cc = this.get_surface_color(this.drawing_mode);
                 if (!this[this.mode.qa].surface[num] || this[this.mode.qa].surface[num] !== this.drawing_mode ||
-                        (this[this.mode.qa + "_col"].surface[num] && this[this.mode.qa + "_col"].surface[num] !== cc)) {
+                    (this[this.mode.qa + "_col"].surface[num] && this[this.mode.qa + "_col"].surface[num] !== cc)) {
                     this.undoredo_counter++;
                     this.set_surface(num, this.drawing_mode, cc);
                     this.redraw();
@@ -12475,10 +12482,13 @@ class Puzzle {
             // gets a triangle. If there's too few colors, the outer edges of the triangles 
             // might be inside the cell, leaving some blank area.
             while (colors.length < 3) {
-                let new_colors = [], new_cc = []
+                let new_colors = [],
+                    new_cc = []
                 for (let c in colors) {
-                    new_colors.push(colors[c]); new_colors.push(colors[c]);
-                    new_cc.push(cc[c]); new_cc.push(cc[c]);
+                    new_colors.push(colors[c]);
+                    new_colors.push(colors[c]);
+                    new_cc.push(cc[c]);
+                    new_cc.push(cc[c]);
                 }
                 colors = new_colors;
                 cc = new_cc;
@@ -12512,7 +12522,7 @@ class Puzzle {
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[i].x, this.point[i].y);
                 this.ctx.lineTo(...get_ray(this.point[i], n));
-                this.ctx.lineTo(...get_ray(this.point[i], n+1));
+                this.ctx.lineTo(...get_ray(this.point[i], n + 1));
                 this.ctx.closePath();
                 this.ctx.fill();
 
