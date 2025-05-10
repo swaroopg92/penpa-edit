@@ -1,5 +1,5 @@
 ## History
-* unreleased ver 3.2.0
+* 2025/05/09 ver 3.2.0
 	* copy/cut/paste feature for number/symbol/surface/line/edge for square/hex/tri grid types.
 	* Feature to add background image.
 	* Multicolor mode added.
