@@ -934,7 +934,7 @@ onload = function() {
         if (fittype === 'flex') {
             if ((edit_mode === "combi" && improve_modes.includes(pu.mode[pu.mode.qa][edit_mode][0])) ||
                 edit_mode === "sudoku" || edit_mode === "number")
-                type = [0];
+                pu.type = [0];
         }
 
         for (var i = 0; i < pu.point.length; i++) {
