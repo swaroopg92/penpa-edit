@@ -9163,7 +9163,9 @@ class Puzzle {
                 if (i !== -1)
                     this.selection.splice(i, 1);
             } else if (!this.selection.includes(num) && this.drawing) {
-                this.selection.push(num);
+                // Add to selection only if the num is type 0
+                if (this.point[num].type === 0)
+                    this.selection.push(num);
             }
             this.redraw();
         } else if (this.mouse_mode === "up") {

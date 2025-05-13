@@ -206,9 +206,9 @@ onload = function() {
                 pu.mouse_click = 2;
                 var obj = coord_point(event, 'flex');
             } else if ((ondown_key === "touchstart" || event.buttons === 1) &&
-                (edit_mode === "sudoku" || edit_mode === "number")) { // Left click/Ipad and moving in Sudoku Mode
+                (edit_mode === "sudoku" || (edit_mode === "number" && pu.number_multi_enabled()))) { // Left click/Ipad and moving in Sudoku Mode
                 pu.mouse_click = 0;
-                var obj = coord_point(event, 'flex');
+                var obj = coord_point(event, 'flex', 'move');
             } else {
                 if (((edit_mode === "combi") && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
                         pu.mode[pu.mode.qa][edit_mode][0] === "akari"))) {
@@ -920,7 +920,7 @@ onload = function() {
         }
     }
 
-    function coord_point(e, fittype = 'none') {
+    function coord_point(e, fittype = 'none', eventmode = 'none') {
         var x = e.pageX - canvas.offsetLeft;
         var y = e.pageY - canvas.offsetTop;
         var min0, min = 10e6;
@@ -949,11 +949,9 @@ onload = function() {
 
         // resetting the type for starbattle composite mode
         if (fittype === 'flex') {
-            if (((pu.mode[pu.mode.qa].edit_mode === "combi") &&
-                    (improve_modes.includes(pu.mode[pu.mode.qa][pu.mode[pu.mode.qa].edit_mode][0]))) ||
-                (pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
+            if ((edit_mode === "combi" && improve_modes.includes(pu.mode[pu.mode.qa][edit_mode][0])) ||
+                edit_mode === "sudoku" || edit_mode === "number")
                 pu.type = type;
-            }
         }
 
         //const endTime = performance.now();
