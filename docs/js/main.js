@@ -752,12 +752,12 @@ onload = function() {
         "KeyZ": ["sudoku", "sub_sudoku1"],
         "KeyX": ["sudoku", "sub_sudoku2"],
         "KeyC": ["sudoku", "sub_sudoku3"],
-        "KeyV": ["multicolor"]
+        "KeyV": ["surface"]
     };
 
     function checkShortcutKeys(e, code, capslock) {
         let mode = pu.mode[pu.mode.qa].edit_mode;
-        const allowed_modes = ["multicolor", "sudoku"];
+        const allowed_modes = ["surface", "sudoku"];
 
         if (!allowed_modes.includes(mode))
             return false;
