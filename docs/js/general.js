@@ -155,7 +155,7 @@ function init_genre_tags() {
     // });
 }
 
-function set_genre_tags(user_tags) {
+function set_genre_tags(user_tags, callid = 'none') {
     $('#genre_tags_opt').val(user_tags);
     $('#genre_tags_opt').trigger("change", [callid]); // Update selection
 }
