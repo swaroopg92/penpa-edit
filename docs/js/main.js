@@ -45,7 +45,9 @@ onload = function() {
     this.ondown_key = ondown_key;
 
     // Update genre tags
-    $('#genre_tags_opt').on('change', () => pu.update_genre_tags());
+    $('#genre_tags_opt').on('change', function(event, callid) {
+        pu.update_genre_tags(callid);
+    });
 
     // Declare custom color picker
     $(colorpicker_special).spectrum({

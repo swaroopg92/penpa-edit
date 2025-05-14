@@ -157,7 +157,7 @@ function init_genre_tags() {
 
 function set_genre_tags(user_tags) {
     $('#genre_tags_opt').val(user_tags);
-    $('#genre_tags_opt').trigger("change"); // Update selection
+    $('#genre_tags_opt').trigger("change", [callid]); // Update selection
 }
 
 function set_answer_setting_table_to(and_or) {
@@ -2098,7 +2098,7 @@ function load(urlParam, type = 'url', origurl = null) {
         }
     }
 
-    set_genre_tags(pu.user_tags);
+    set_genre_tags(pu.user_tags, callid = 'load');
 
     // Set some genre specific settings
     if ($('#genre_tags_opt').select2("val").includes("alphabet")) {
@@ -2244,7 +2244,7 @@ function load(urlParam, type = 'url', origurl = null) {
         // mode initialization
         var rtext_mode = rtext[2].split('~');
         pu.mode.grid = JSON.parse(rtext_mode[0]);
-        pu.mode_set("surface");
+        pu.mode_set("surface", 'new', true);
         pu.pu_q = JSON.parse(rtext[3]);
         if (!pu.pu_q.polygon) {
             pu.pu_q.polygon = [];
@@ -2299,6 +2299,20 @@ function load(urlParam, type = 'url', origurl = null) {
         sw_timer.start({
             precision: 'secondTenths'
         });
+    }
+
+    // answerchecking settings for "OR"
+    if (rtext[16] && rtext[16] !== "") { // for some reason old links had 16th entry as empty
+        // set the answer check settings
+        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
+        var answersetting = JSON.parse(rtext[16]);
+        for (var i = 0; i < settingstatus.length; i++) {
+            settingstatus[i].checked = answersetting[settingstatus[i].id];
+        }
+        if (pu.multisolution) {
+            set_answer_setting_table_to('or');
+            document.getElementById('or_tmp').checked = true;
+        }
     }
 
     document.getElementById("nb_grid" + pu.mode.grid[0]).checked = true;
@@ -2358,20 +2372,6 @@ function load(urlParam, type = 'url', origurl = null) {
 
         if (view_settings[0] === 'dark') {
             UserSettings.color_theme = THEME_DARK;
-        }
-    }
-
-    // answerchecking settings for "OR"
-    if (rtext[16] && rtext[16] !== "") { // for some reason old links had 16th entry as empty
-        // set the answer check settings
-        var settingstatus = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
-        var answersetting = JSON.parse(rtext[16]);
-        for (var i = 0; i < settingstatus.length; i++) {
-            settingstatus[i].checked = answersetting[settingstatus[i].id];
-        }
-        if (pu.multisolution) {
-            set_answer_setting_table_to('or');
-            document.getElementById('or_tmp').checked = true;
         }
     }
 

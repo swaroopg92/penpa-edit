@@ -1299,7 +1299,7 @@ class Puzzle {
         return (this.gridtype == "square" || this.gridtype == "kakuro" || this.gridtype == "sudoku");
     }
 
-    mode_set(mode, loadtype = 'new') {
+    mode_set(mode, loadtype = 'new', skipredraw = false) {
         this.mode[this.mode.qa].edit_mode = mode;
         this.submode_reset();
         if (document.getElementById('mode_' + mode)) {
@@ -1310,7 +1310,7 @@ class Puzzle {
             document.getElementById('style_' + m).style.display = 'inline-block';
         }
         document.getElementById('mo_' + mode).checked = true;
-        this.submode_check('sub_' + mode + this.mode[this.mode.qa][mode][0]);
+        this.submode_check('sub_' + mode + this.mode[this.mode.qa][mode][0], skipredraw);
         if (mode === "symbol" && !this.panelflag) {
             // Show the panel on the first time landing and then respect user's choice
             UserSettings.panel_shown = true;
@@ -1327,9 +1327,9 @@ class Puzzle {
         const style = this.mode[this.mode.qa][mode][1];
         this.stylemode_check('st_' + mode + style);
         if (mode === "symbol") {
-            this.subsymbolmode(submode);
+            this.subsymbolmode(submode, skipredraw);
         } else if (mode === "combi") {
-            this.subcombimode(submode);
+            this.subcombimode(submode, skipredraw);
         }
         if (UserSettings.custom_colors_on && penpa_modes[this.gridtype].customcolor.includes(mode)) {
             let cc = this.mode[this.mode.qa][mode][2];
@@ -1351,7 +1351,9 @@ class Puzzle {
             let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
             document.getElementById("closeBtn_input3").disabled = !enableLoadButton;
         }
-        this.redraw();
+
+        if (!skipredraw)
+            this.redraw();
     }
 
     number_multi_enabled() {
@@ -1372,7 +1374,7 @@ class Puzzle {
         }
     }
 
-    submode_check(name) {
+    submode_check(name, skipredraw = false) {
         if (document.getElementById(name)) {
             document.getElementById(name).checked = true;
             this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] = document.getElementById(name).value;
@@ -1383,7 +1385,8 @@ class Puzzle {
                 let enableLoadButton = (!isNumberS && pu[pu.mode.qa].number[pu.cursol]) || (isNumberS && pu[pu.mode.qa].numberS[pu.cursolS]);
                 document.getElementById("closeBtn_input3").disabled = !enableLoadButton;
             }
-            this.redraw(); // Board cursor update
+            if (!skipredraw)
+                this.redraw(); // Board cursor update
         }
         this.type = this.type_set(); // Coordinate type to select
         this.set_custom_color(name);
@@ -1403,7 +1406,7 @@ class Puzzle {
         this.set_custom_color(name);
     }
 
-    subsymbolmode(mode) {
+    subsymbolmode(mode, skipredraw = false) {
         this.mode[this.mode.qa].symbol[0] = mode;
         document.getElementById("symmode_content").innerHTML = mode;
         if (UserSettings.custom_colors_on) {
@@ -1412,10 +1415,11 @@ class Puzzle {
             $("#colorpicker_special").spectrum("set", cc);
         }
         panel_pu.draw_panel();
-        this.redraw();
+        if (!skipredraw)
+            this.redraw();
     }
 
-    subcombimode(mode) {
+    subcombimode(mode, skipredraw = false) {
         this.mode[this.mode.qa].combi[0] = mode;
         document.getElementById("combimode_content").innerHTML = mode;
 
@@ -1447,14 +1451,15 @@ class Puzzle {
             $("#colorpicker_special").spectrum("set", cc);
         }
         this.type = this.type_set();
-        this.redraw();
+        if (!skipredraw)
+            this.redraw();
     }
 
     mode_qa(mode) {
         document.getElementById(mode).checked = true;
         this.mode.qa = mode;
         this.mode_set(this.mode[this.mode.qa].edit_mode); // includes redraw
-        this.redraw(); //cursol更新用
+        this.redraw(); //cursol
     }
 
     mode_grid(mode) {
@@ -1608,9 +1613,10 @@ class Puzzle {
         this.redraw();
     }
 
-    update_genre_tags() {
+    update_genre_tags(callid = 'none') {
         this.user_tags = $('#genre_tags_opt').select2("val");
-        pu.redraw();
+        if (callid === 'none')
+            this.redraw();
     }
 
     ///////SAVE/////////
@@ -2044,7 +2050,6 @@ class Puzzle {
         let settingstatus_and = answersetting.getElementsByClassName("solcheck");
         let settingstatus_or = answersetting.getElementsByClassName("solcheck_or");
         let checkall = true;
-
         this.multisolution = false;
 
         // loop through and check if any "AND" settings are selected
