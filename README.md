@@ -41,7 +41,7 @@ You can now cite this in your research and publications using:
 	* Z : Normal Submode
 	* X : Corner Submode
 	* C : Centre Submode
-	* V : Shading (Multicolor Mode)
+	* V : Shading
 	* SHIFT : For Temporary Corner Submode
 	* SHIFT + DEL : Deletes only corner pencil marks from the selected cells
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
@@ -256,7 +256,7 @@ You can now cite this in your research and publications using:
 	* Z : Normal Submode - Normal sized numbers
 	* X : Corner Submode - Small digits placed on corners or sides of the cell
 	* C : Centre Submode - Small digits placed in the centre of the cell
-	* V : Shading (Multicolor Mode) - For coloring the cells (12 color choices)
+	* V : Shading - For coloring the cells (12 color choices)
 	* SHIFT : For Temporary Corner Submode
 	* SHIFT + DEL : Deletes only corner pencil marks from the selected cells
 	* CTRL - For Temporary Centre Submode / Selecting Multiple Cells/ Deselecting selected cells
