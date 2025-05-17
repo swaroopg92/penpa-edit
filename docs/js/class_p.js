@@ -2154,9 +2154,12 @@ class Puzzle {
             let l = pu[type][i];
 
             if (line_exact) {
-                solution.push(i + "," + l);
+                if (i.includes(',')) {
+                    solution.push(i + "," + l);
+                }
                 return;
             }
+
             // Ignore "given" line segments (which means ignoring a few specific styles
             // of line and has nothing to do with given or not). [ZW] I don't understand the
             // logic of this but it should probably stay for backwards compatibility.
@@ -2200,7 +2203,9 @@ class Puzzle {
             let l = pu[type][i];
 
             if (edge_exact) {
-                solution.push(i + "," + l);
+                if (i.includes(',')) {
+                    solution.push(i + "," + l);
+                }
                 return;
             }
 

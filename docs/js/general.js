@@ -4900,7 +4900,9 @@ function update_title() {
     document.getElementById("puzzletitle").innerHTML = title;
     document.getElementById("puzzleauthor").innerHTML = author;
 
-    document.title = title + (author ? ' by ' + author : '') + ' - Penpa+';
+    let auth_str = (author ? (title ? ' by ' + author : author) : '');
+    let auth_tit_str = (title ? title : (auth_str ? '' : 'Puzzle')) + auth_str;
+    document.title = (auth_tit_str ? auth_tit_str + ' - Penpa+' : 'Penpa+');
 }
 
 // Polyfills
