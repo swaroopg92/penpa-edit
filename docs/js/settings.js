@@ -321,6 +321,9 @@ const UserSettings = {
     },
     set color_theme(newValue) {
         const valueInt = newValue ? parseInt(newValue, 10) : THEME_LIGHT;
+        if (this._color_theme === valueInt)
+            return;  // avoid loading the theme css repeatedly
+
         this._color_theme = valueInt;
 
         let themeStylesheet = this._theme_urls[valueInt];
