@@ -10,7 +10,7 @@ Depending on the browser you can update the page without using the cache with <k
 
 ## Referencing and citing content
 You can now cite this in your research and publications using:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8374111.svg)](https://doi.org/10.5281/zenodo.8374111)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6615242.svg)](https://doi.org/10.5281/zenodo.6615242)
 
 ## Sample Preview of the possibilities of this tool
 ![Sample of Objects](./images/sample1.png "Sample of Options")
