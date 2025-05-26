@@ -2134,11 +2134,12 @@ class Puzzle {
                     solution.push([parseInt(i), pu.surface[i]]);
                 continue;
             }
-            if (this.pu_q.surface[i]) {
-                // ignore the shading if already in problem mode
-            }
             // 1 is DG, 8 is GR, 3 is LG, 4 is BL
-            else if (pu.surface[i] === 1 || pu.surface[i] === 8 || pu.surface[i] === 3 || pu.surface[i] === 4) {
+            let accepted_shades = [1, 3, 4, 8];
+
+            if (this.pu_q.surface[i] && (accepted_shades.includes(this.pu_q.surface[i]))) {
+                // ignore the shading if already in problem mode
+            } else if (accepted_shades.includes(pu.surface[i])) {
                 solution.push(i);
             }
         }
