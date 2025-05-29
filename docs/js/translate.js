@@ -867,9 +867,12 @@ const PenpaText = {
             JP: "URLが長すぎるエラーの時はここに入力。puzz.linkの一部のリンクにも対応。"
         },
 
+        "answer_check_shading exact color": { EN: "Match exact shading colors", JP: 'シェーディングカラーを正確に一致させる' },
         "answer_check_shading": { EN: "Shade cells in Dark Grey (DG) or Grey (GR) or Light Grey (LG) or Black (BL)", JP: '黒マスは濃灰（DG）、灰（GR）、薄灰（LG）、黒（BL）' },
         "answer_check_number": { EN: "Numbers must be in Green, Blue or Red color", JP: '数字は緑か青か赤' },
+        "answer_check_cell loop exact": { EN: "Line must be in Green Color", JP: '色とスタイルが一致する線' },
         "answer_check_cell loop": { EN: "Line must be in Green Color", JP: '線は緑' },
+        "answer_check_edge loop exact": { EN: "Edges in matching color/style", JP: '色とスタイルがマッチしたエッジ' },
         "answer_check_edge loop": { EN: "Edge must be in Green Color", JP: '辺は緑' },
         "answer_check_wall": { EN: "Walls must be in Green Color", JP: '壁は緑' },
         "answer_check_square": { EN: "Black Squares", JP: '黒正方形' },
