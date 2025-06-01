@@ -1,4 +1,14 @@
 ## History
+* 2025/05/31 ver 3.2.1
+	* reverted line thickness old way.
+	* Fixed yajilin composite mode.
+	* V shortcut reverted back to surface.
+	* Fixed draw on edges bug for number and sudoku mode.
+	* Fixed multisolution answer check.
+	* Updated Zenodo DOI link.
+	* Fixed surface answer check bug.
+	* Fixed missing japanese language for some answer check options.
+	* Fixed Sudoku Mode Shift + Numberpad bug.
 * 2025/05/09 ver 3.2.0
 	* copy/cut/paste feature for number/symbol/surface/line/edge for square/hex/tri grid types.
 	* Feature to add background image.
