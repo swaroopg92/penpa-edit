@@ -275,7 +275,8 @@ onload = function() {
     let counter_index = 0;
     let present_submode = null;
     let present_mode = null;
-    let mode_override_key = null;
+    let ctrl_counter = 0;
+    let shift_counter = 0;
     let shift_numkey = false;
     let shift_release_time = -1e5;
     let shift_time_limit = 15; // milliseconds
@@ -389,7 +390,7 @@ onload = function() {
         // In sudoku and multicolor modes, allow "mini" shortcuts of holding ctrl or shift
         // to temporarily switch to center or corner marks. Only do this if we're not already
         // in a temporary mode.
-        if ((pu.mode[pu.mode.qa].edit_mode === "sudoku") && mode_override_key === null) {
+        if ((pu.mode[pu.mode.qa].edit_mode === "sudoku")) {
             // For shift shortcut in Sudoku mode, modify the numpad keys
             if (keylocation === 3 && !isShiftKeyPressed(key) && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
                 const numpadMap = {
@@ -410,26 +411,28 @@ onload = function() {
                 }
             }
 
-            // Remember the mode/submode before we overrode it
-            present_mode = pu.mode[pu.mode.qa].edit_mode;
-            present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
-
             if (isShiftKeyPressed(key)) {
-                mode_override_key = key;
-                if (present_mode !== "sudoku")
-                    pu.mode_set("sudoku");
-                if (present_submode !== 2)
-                    pu.submode_check("sub_sudoku2");
-                e.returnValue = false;
+                shift_counter = shift_counter + 1;
+
+                if (shift_counter === 1 && !isCtrlKeyHeld(e) && !isAltKeyHeld(e)) {
+                    present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
+                    if (present_submode !== 2) {
+                        pu.submode_check("sub_sudoku2");
+                    }
+                    e.returnValue = false;
+                }
             }
 
             if (isCtrlKeyPressed(key)) {
-                mode_override_key = key;
-                if (present_mode !== "sudoku")
-                    pu.mode_set("sudoku");
-                if (present_submode !== 3)
-                    pu.submode_check("sub_sudoku3");
-                e.returnValue = false;
+                ctrl_counter = ctrl_counter + 1;
+
+                if (ctrl_counter === 1 && !isShiftKeyHeld(e) && !isAltKeyHeld(e)) {
+                    present_submode = pu.mode[pu.mode.qa]["sudoku"][0];
+                    if (present_submode !== 3) {
+                        pu.submode_check("sub_sudoku3");
+                    }
+                    e.returnValue = false;
+                }
             }
 
             if (isCtrlKeyHeld(e) && (keycode === 46 || (keycode === 8))) {
@@ -875,22 +878,6 @@ onload = function() {
         return false;
     }
 
-    // After shift/ctrl temporary mode overrides, return to previous mode
-    function end_mode_override() {
-        if (mode_override_key !== null) {
-            mode_override_key = null;
-            // Return to the previous mode/submode
-            pu.mode_set(present_mode);
-            if (present_submode === "1") {
-                pu.submode_check("sub_sudoku1");
-            } else if (present_submode === "2") {
-                pu.submode_check("sub_sudoku2");
-            } else if (present_submode === "3") {
-                pu.submode_check("sub_sudoku3");
-            }
-        }
-    }
-
     function onKeyUp(e) {
         // Allow normal typing in these cases and bail on special handling.
         if (targetTypes[e.target.type] || targetIDs[e.target.id]) {
@@ -900,15 +887,31 @@ onload = function() {
         var key = e.key;
 
         const keylocation = e.location;
-        // See if we're releasing the key that started a temporary mode override
-        if (key === mode_override_key && keylocation !== 3) {
-            end_mode_override();
 
-            if (isShiftKeyPressed(key))
+        // See if we're releasing the key that started a temporary mode override
+        if (keylocation !== 3 && pu.mode[pu.mode.qa].edit_mode === "sudoku") {
+            if (isShiftKeyPressed(key)) {
+                if (present_submode === "1") {
+                    pu.submode_check("sub_sudoku1");
+                } else if (present_submode === "2") {
+                    pu.submode_check("sub_sudoku2");
+                } else if (present_submode === "3") {
+                    pu.submode_check("sub_sudoku3");
+                }
+                shift_counter = 0;
                 shift_release_time = Date.now();
-            else if (isCtrlKeyPressed(key))
-                ctrl_release_time = Date.now();
-            e.returnValue = false;
+                e.returnValue = false;
+            } else if (isCtrlKeyPressed(key)) {
+                if (present_submode === "1") {
+                    pu.submode_check("sub_sudoku1");
+                } else if (present_submode === "2") {
+                    pu.submode_check("sub_sudoku2");
+                } else if (present_submode === "3") {
+                    pu.submode_check("sub_sudoku3");
+                }
+                ctrl_counter = 0;
+                e.returnValue = false;
+            }
         } else if (pu.mode[pu.mode.qa].edit_mode === "surface") { // shortcut for styles in surface mode
             if (key === "1") {
                 number_release_time = Date.now();
@@ -2142,9 +2145,6 @@ onload = function() {
     document.getElementById("bg_image_url").addEventListener('change', () => pu.update_bg_image_url());
     for (let v of ['x', 'y', 'width', 'height', 'opacity', 'foreground', 'mask_white', 'threshold'])
         document.getElementById("bg_image_" + v).addEventListener('change', () => pu.update_bg_image_attrs());
-
-    // End the temporary mode override when changing tabs
-    document.addEventListener("visibilitychange", end_mode_override);
 
     PenpaUI.initPenpaLite();
 
