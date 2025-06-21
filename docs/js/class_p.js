@@ -1244,12 +1244,13 @@ class Puzzle {
         var textHeight = 0;
         var currentRow = -1
 
+        let iswhite = function(r,g,b) { return (r>250)&&(g>250)&&(b>250); }
         for (var i = 0, len = data.length; i < len; i += 4) {
             var r = data[i],
                 g = data[i + 1],
                 b = data[i + 2],
                 alpha = data[i + 3];
-            if (r != 255 || g != 255 || b != 255) {
+            if (!iswhite(r,g,b)) {
                 var yu = (Math.floor((i / 4) / this.canvas.width)) / this.resol;
                 break;
             }
@@ -1259,7 +1260,7 @@ class Puzzle {
                 g = data[i + 1],
                 b = data[i + 2],
                 alpha = data[i + 3];
-            if (r != 255 || g != 255 || b != 255) {
+            if (!iswhite(r,g,b)) {
                 var yd = (Math.floor((i / 4) / this.canvas.width) + 1) / this.resol;
                 break;
             }
@@ -1270,7 +1271,7 @@ class Puzzle {
                 g = data[j + 1],
                 b = data[j + 2],
                 alpha = data[j + 3];
-            if (r != 255 || g != 255 || b != 255) {
+            if (!iswhite(r,g,b)) {
                 var xl = (((j / 4) % this.canvas.width)) / this.resol;
                 break;
             }
@@ -1281,7 +1282,7 @@ class Puzzle {
                 g = data[j + 1],
                 b = data[j + 2],
                 alpha = data[j + 3];
-            if (r != 255 || g != 255 || b != 255) {
+            if (!iswhite(r,g,b)) {
                 var xr = (((j / 4) % this.canvas.width) + 1) / this.resol;
                 break;
             }
