@@ -2161,11 +2161,12 @@ class Puzzle {
                 return;
             }
 
-            // Ignore "given" line segments (which means ignoring a few specific styles
-            // of line and has nothing to do with given or not). [ZW] I don't understand the
-            // logic of this but it should probably stay for backwards compatibility.
-            if (line_ignore && l && this.ignored_line_types[l])
+            // Ignore "given" line segments (those which were present in the
+            // original puzzle in any of a few specific styles)
+            let lq = this.pu_q[type][i];
+            if (line_ignore && lq && this.ignored_line_types[lq]) {
                 return;
+            }
 
             // Look for green or double lines, or if the user has ignored styles,
             // double or anything-but-double (making sure that this is an actual
