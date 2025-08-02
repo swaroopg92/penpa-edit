@@ -11311,7 +11311,7 @@ class Puzzle {
 
     re_combi_akari_up_reduced(num) {
         if (this.point[num].type === 0 && this.last === num && this.first === num) {
-            if (!this[this.mode.qa].surface[num] && !this[this.mode.qa].symbol[num]) {
+            if (!this[this.mode.qa].symbol[num]) {
                 this.record("symbol", num);
                 this[this.mode.qa].symbol[num] = [3, "sun_moon", 2];
                 this.record_replay("symbol", num);
