@@ -1786,7 +1786,7 @@ function export_sudoku() {
 function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/") !== -1) {
+        if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
 
             let param = urlstring.split('&');
             let paramArray = [];
