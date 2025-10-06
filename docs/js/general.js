@@ -3812,6 +3812,7 @@ function decode_puzzlink(url) {
             break;
         case "fillomino":
         case "fillomino01": // fillomino alias
+        case "squarejam":
         case "symmarea":
         case "view":
             pu = new Puzzle_square(cols, rows, size);
