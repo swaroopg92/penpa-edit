@@ -124,6 +124,7 @@ License: MIT
 .sp-container, .sp-replacer, .sp-preview, .sp-dragger, .sp-slider, .sp-alpha, .sp-clear, .sp-alpha-handle, .sp-container.sp-dragging .sp-input, .sp-container button  {
     -webkit-user-select:none;
     -moz-user-select: -moz-none;
+    -ms-user-select:none;
     -o-user-select:none;
     user-select: none;
 }
