@@ -74,8 +74,6 @@ COMPRESS_SUB = [
     ["\"command_undo\"", "zU"],
     ["\"command_replay\"", "z8"],
     ["\"numberS\"", "z1"],
-    ["\"freeline\"", "zF"],
-    ["\"freelineE\"", "z2"],
     ["\"thermo\"", "zT"],
     ["\"arrows\"", "z3"],
     ["\"direction\"", "zD"],
@@ -235,8 +233,6 @@ class Puzzle {
         this[p].number = {};
         this[p].numberS = {};
         this[p].symbol = {};
-        this[p].freeline = {};
-        this[p].freelineE = {};
         this[p].thermo = [];
         this[p].arrows = [];
         this[p].direction = [];
@@ -278,9 +274,7 @@ class Puzzle {
             case "line":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] != "4") {
                     this[this.mode.qa].line = {};
-                    this[this.mode.qa].freeline = {};
                     this[this.mode.qa + "_col"].line = {};
-                    this[this.mode.qa + "_col"].freeline = {};
                 } else {
                     for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] === 98) {
@@ -311,9 +305,7 @@ class Puzzle {
                     this[this.mode.qa + "_col"].deletelineE = {};
                 } else {
                     this[this.mode.qa].lineE = {};
-                    this[this.mode.qa].freelineE = {};
                     this[this.mode.qa + "_col"].lineE = {};
-                    this[this.mode.qa + "_col"].freelineE = {};
                 }
                 break;
             case "wall":
@@ -892,7 +884,7 @@ class Puzzle {
             }
 
             // Translate point-pair features
-            for (let feature of ['line', 'lineE', 'deletelineE', 'freeline', 'freelineE', 'wall', 'cage']) {
+            for (let feature of ['line', 'lineE', 'deletelineE', 'wall', 'cage']) {
                 if (this[i][feature]) {
                     let temp = this[i][feature];
                     this[i][feature] = {};
@@ -1515,10 +1507,6 @@ class Puzzle {
                             }
                         }
                     }
-                    this[this.mode.qa].freeline = {};
-                    if (UserSettings.custom_colors_on) {
-                        this[this.mode.qa + "_col"].freeline = {};
-                    }
                 } else {
                     for (var i in this[this.mode.qa].line) {
                         if (this[this.mode.qa].line[i] === 98) {
@@ -1553,10 +1541,6 @@ class Puzzle {
                                 delete this[this.mode.qa + "_col"].lineE[i];
                             }
                         }
-                    }
-                    this[this.mode.qa].freelineE = {};
-                    if (UserSettings.custom_colors_on) {
-                        this[this.mode.qa + "_col"].freelineE = {};
                     }
                 }
                 break;
@@ -2190,9 +2174,6 @@ class Puzzle {
             check_line(i, 'line');
         }
 
-        for (var i in pu.freeline)
-            check_line(i, 'freeline');
-
         return solution;
     }
 
@@ -2228,9 +2209,6 @@ class Puzzle {
 
         for (var i in pu.lineE)
             check_edge(i, 'lineE');
-
-        for (var i in pu.freelineE)
-            check_edge(i, 'freelineE');
 
         let found = $('#genre_tags_opt').select2("val").some(r => this.surface_2_edge_types.includes(r));
         if (found && this.gridtype === 'square') {
@@ -8851,24 +8829,24 @@ class Puzzle {
     re_lineup_free(num) {
         if (num != this.last && this.last != -1) {
             var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
-            this.record("freeline", key);
-            if (this[this.mode.qa].freeline[key]) {
-                delete this[this.mode.qa].freeline[key];
+            this.record("line", key);
+            if (this[this.mode.qa].line[key]) {
+                delete this[this.mode.qa].line[key];
                 if (UserSettings.custom_colors_on) {
-                    delete this[this.mode.qa + "_col"].freeline[key];
+                    delete this[this.mode.qa + "_col"].line[key];
                 }
             } else {
-                this[this.mode.qa].freeline[key] = this.drawing_mode;
+                this[this.mode.qa].line[key] = this.drawing_mode;
                 if (UserSettings.custom_colors_on) {
                     let cc = this.get_customcolor();
                     if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(this.drawing_mode))) {
-                        delete this[this.mode.qa + "_col"].freeline[key];
+                        delete this[this.mode.qa + "_col"].line[key];
                     } else {
-                        this[this.mode.qa + "_col"].freeline[key] = cc;
+                        this[this.mode.qa + "_col"].line[key] = cc;
                     }
                 }
             }
-            this.record_replay("freeline", key);
+            this.record_replay("line", key);
         }
     }
 
@@ -8985,25 +8963,25 @@ class Puzzle {
     re_lineEup_free(num) {
         if (num != this.last && this.last != -1) {
             var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
-            this.record("freelineE", key);
-            if (this[this.mode.qa].freelineE[key]) {
-                delete this[this.mode.qa].freelineE[key];
+            this.record("lineE", key);
+            if (this[this.mode.qa].lineE[key]) {
+                delete this[this.mode.qa].lineE[key];
                 if (UserSettings.custom_colors_on) {
-                    delete this[this.mode.qa + "_col"].freelineE[key];
+                    delete this[this.mode.qa + "_col"].lineE[key];
                 }
             } else {
-                this[this.mode.qa].freelineE[key] = this.drawing_mode;
+                this[this.mode.qa].lineE[key] = this.drawing_mode;
                 if (UserSettings.custom_colors_on) {
                     let cc = this.get_customcolor();
                     if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(this.drawing_mode))) {
-                        delete this[this.mode.qa + "_col"].freelineE[key];
+                        delete this[this.mode.qa + "_col"].lineE[key];
                     } else {
-                        this[this.mode.qa + "_col"].freelineE[key] = cc;
+                        this[this.mode.qa + "_col"].lineE[key] = cc;
                     }
 
                 }
             }
-            this.record_replay("freelineE", key);
+            this.record_replay("lineE", key);
         }
     }
 
