@@ -2910,7 +2910,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
             pu[qa].symbol[i1][0] = dif_symbol[pu[qa].symbol[i1][0]];
         }
     }
-    for (var i in rtext_qa[qa][18]) { //freeline
+    /*for (var i in rtext_qa[qa][18]) { //freeline
         i1 = i.split(",")[0];
         i2 = i.split(",")[1];
         key = pu.centerlist[i1] + "," + pu.centerlist[i2];
@@ -2938,7 +2938,7 @@ function loadqa_arrayver1(qa, rtext_qa) {
         }
         key = pu.point[i1].surround[0] + "," + pu.point[i2].surround[0];
         pu[qa].lineE[key] = rtext_qa[qa][19][i];
-    }
+    }*/
     for (var i of rtext_qa[qa][20]) { //thermo
         pu[qa].thermo.push([]);
         for (j of i) {

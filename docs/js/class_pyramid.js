@@ -465,8 +465,6 @@ class Puzzle_pyramid extends Puzzle {
             this.draw_frame();
             this.draw_polygonsp("pu_q");
             this.draw_polygonsp("pu_a");
-            this.draw_freeline("pu_q");
-            this.draw_freeline("pu_a");
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_direction("pu_q");
@@ -490,7 +488,6 @@ class Puzzle_pyramid extends Puzzle {
             this.draw_wall("pu_q");
             this.draw_frame();
             this.draw_polygonsp("pu_q");
-            this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_direction("pu_q");
             this.draw_lattice();
@@ -782,57 +779,6 @@ class Puzzle_pyramid extends Puzzle {
         }
     }
 
-    draw_freeline(pu) {
-        /*freeline*/
-        for (var i in this[pu].freeline) {
-            set_line_style(this.ctx, this[pu].freeline[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].freeline[i]) {
-                this.ctx.strokeStyle = this[pu + "_col"].freeline[i];
-            }
-            var i1 = i.split(",")[0];
-            var i2 = i.split(",")[1];
-            this.ctx.beginPath();
-            if (this[pu].freeline[i] === 30) {
-                var r = 0.15 * this.size;
-                var dx = this.point[i1].x - this.point[i2].x;
-                var dy = this.point[i1].y - this.point[i2].y;
-                var d = Math.sqrt(dx ** 2 + dy ** 2);
-                this.ctx.moveTo(this.point[i1].x - r / d * dy, this.point[i1].y + r / d * dx);
-                this.ctx.lineTo(this.point[i2].x - r / d * dy, this.point[i2].y + r / d * dx);
-                this.ctx.stroke();
-                this.ctx.moveTo(this.point[i1].x + r / d * dy, this.point[i1].y - r / d * dx);
-                this.ctx.lineTo(this.point[i2].x + r / d * dy, this.point[i2].y - r / d * dx);
-            } else {
-                this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
-                this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
-            }
-            this.ctx.stroke();
-        }
-        for (var i in this[pu].freelineE) {
-            set_line_style(this.ctx, this[pu].freelineE[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].freelineE[i]) {
-                this.ctx.strokeStyle = this[pu + "_col"].freelineE[i];
-            }
-            var i1 = i.split(",")[0];
-            var i2 = i.split(",")[1];
-            this.ctx.beginPath();
-            if (this[pu].freelineE[i] === 30) {
-                var r = 0.15 * this.size;
-                var dx = this.point[i1].x - this.point[i2].x;
-                var dy = this.point[i1].y - this.point[i2].y;
-                var d = Math.sqrt(dx ** 2 + dy ** 2);
-                this.ctx.moveTo(this.point[i1].x - r / d * dy, this.point[i1].y + r / d * dx);
-                this.ctx.lineTo(this.point[i2].x - r / d * dy, this.point[i2].y + r / d * dx);
-                this.ctx.stroke();
-                this.ctx.moveTo(this.point[i1].x + r / d * dy, this.point[i1].y - r / d * dx);
-                this.ctx.lineTo(this.point[i2].x + r / d * dy, this.point[i2].y - r / d * dx);
-            } else {
-                this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
-                this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
-            }
-            this.ctx.stroke();
-        }
-    }
 
     draw_wall(pu) {
         for (var i in this[pu].wall) {

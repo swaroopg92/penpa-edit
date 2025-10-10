@@ -74,6 +74,8 @@ COMPRESS_SUB = [
     ["\"command_undo\"", "zU"],
     ["\"command_replay\"", "z8"],
     ["\"numberS\"", "z1"],
+    ["\"freeline\"", "zF"],
+    ["\"freelineE\"", "z2"],
     ["\"thermo\"", "zT"],
     ["\"arrows\"", "z3"],
     ["\"direction\"", "zD"],
@@ -359,6 +361,37 @@ class Puzzle {
             // Add multicolor data
             if (this.mode[mode].multicolor === undefined)
                 this.mode[mode].multicolor = ["", 1];
+        }
+        
+        for (let mode of ['pu_q', 'pu_q_col', 'pu_a', 'pu_a_col']) {
+            // Put freeline with the regular array since they are now using the same one
+            if (this[mode].freeline !== undefined){    
+                if (this[mode].freeline.constructor.length !== 0) {
+                    for (var line in this[mode].freeline) {
+                        let split = this.split_line("line", line);
+                        for (var subline of split) {
+                            if (this[mode]["line"][subline] === undefined) {
+                                this[mode]["line"][subline] = this[mode].freeline[line];
+                            }
+                        }
+                    }
+                    this[mode].freeline = {};
+                }
+            }
+
+            if (this[mode].freelineE !== undefined){    
+                if (this[mode].freelineE.constructor.length !== 0) {
+                    for (var line in this[mode].freelineE) {
+                        let split = this.split_line("lineE", line);
+                        for (var subline of split) {
+                            if (this[mode]["lineE"][subline] === undefined) {
+                                this[mode]["lineE"][subline] = this[mode].freelineE[line];
+                            }
+                        }
+                    }
+                    this[mode].freelineE = {};
+                }
+            }
         }
     }
 
@@ -8665,6 +8698,24 @@ class Puzzle {
         return (Math.min(a, b)).toString() + "," + (Math.max(a, b)).toString();
     }
 
+    // For freelines, split into smaller pieces. Intended to be overriden by the specific class
+    split_line(array, num) { 
+        var ret = [num];
+        return  ret;
+    }
+
+    // For freelines, check how many sublines will need updated so that lines are completed instead of being inverted
+    line_change(array, lines, line_style){ 
+        var ret = [];
+        for (let i = 0; i < lines.length; i++){
+            if (this[this.mode.qa][array][lines[i]] === line_style) {
+                continue;
+            }
+            ret.push(lines[i])
+        }
+        return ret;
+    }
+
     mouse_line(x, y, num) {
         if (this.mouse_mode === "down_left") {
             this.drawing = true;
@@ -8721,7 +8772,11 @@ class Puzzle {
                         delete this[this.mode.qa + "_col"][array][num];
                     }
                 }
-                this.record_replay(array, num);
+                if (group_counter > 0) {
+                    this.record_replay(array, num, group_counter);
+                } else {
+                    this.record_replay(array, num);
+                }
             }
         } else {
             if (this.drawing_mode === 100) { // single line, edge
@@ -8752,7 +8807,11 @@ class Puzzle {
                     this.drawing_mode = line_style;
                 }
             } else if (this.drawing_mode === line_style) { // to draw in a stretch
-                this.record(array, num);
+                if (group_counter > 0) {
+                    this.record(array, num, group_counter);
+                } else {
+                    this.record(array, num);
+                }
                 if (array === "deletelineE") {
                     this["pu_q"][array][num] = line_style;
                 } else {
@@ -8766,7 +8825,11 @@ class Puzzle {
                         }
                     }
                 }
-                this.record_replay(array, num);
+                if (group_counter > 0) {
+                    this.record_replay(array, num, group_counter);
+                } else {
+                    this.record_replay(array, num);
+                }
             }
         }
     }
@@ -8829,25 +8892,24 @@ class Puzzle {
     re_lineup_free(num) {
         if (num != this.last && this.last != -1) {
             var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
-            this.record("line", key);
-            if (this[this.mode.qa].line[key]) {
-                delete this[this.mode.qa].line[key];
-                if (UserSettings.custom_colors_on) {
-                    delete this[this.mode.qa + "_col"].line[key];
-                }
-            } else {
-                this[this.mode.qa].line[key] = this.drawing_mode;
-                if (UserSettings.custom_colors_on) {
-                    let cc = this.get_customcolor();
-                    if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(this.drawing_mode))) {
-                        delete this[this.mode.qa + "_col"].line[key];
-                    } else {
-                        this[this.mode.qa + "_col"].line[key] = cc;
-                    }
-                }
+            var lines = this.split_line("line", key);
+            var update = this.line_change("line", lines, this.drawing_mode);
+            var style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+
+            if (!((update.length === 0 && lines.length === 1) || update.length === 1)) {
+                this.undoredo_counter = this.undoredo_counter + 1;
             }
-            this.record_replay("line", key);
+
+            if (update.length === 0) {
+                this.drawing_mode = 0;
+                update = lines;
+            }
+
+            for (let i = 0; i < update.length; i++){
+                this.re_line("line", update[i], style, this.undoredo_counter);
+            }
         }
+
     }
 
     mouse_lineX(x, y, num) {
@@ -8963,25 +9025,20 @@ class Puzzle {
     re_lineEup_free(num) {
         if (num != this.last && this.last != -1) {
             var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
-            this.record("lineE", key);
-            if (this[this.mode.qa].lineE[key]) {
-                delete this[this.mode.qa].lineE[key];
-                if (UserSettings.custom_colors_on) {
-                    delete this[this.mode.qa + "_col"].lineE[key];
-                }
-            } else {
-                this[this.mode.qa].lineE[key] = this.drawing_mode;
-                if (UserSettings.custom_colors_on) {
-                    let cc = this.get_customcolor();
-                    if (!cc || tinycolor.equals(cc, CustomColor.default_line_style_color(this.drawing_mode))) {
-                        delete this[this.mode.qa + "_col"].lineE[key];
-                    } else {
-                        this[this.mode.qa + "_col"].lineE[key] = cc;
-                    }
-
-                }
+            var lines = this.split_line("lineE", key);
+            var update = this.line_change("lineE", lines, this.drawing_mode);
+            var style = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][1];
+            if (!((update.length === 0 && lines.length === 1) || update.length === 1)) {
+                this.undoredo_counter = this.undoredo_counter + 1;
             }
-            this.record_replay("lineE", key);
+
+            if (update.length === 0) {
+                this.drawing_mode = 0;
+                update = lines;
+            }
+            for (let i = 0; i < update.length; i++){
+                this.re_line("lineE", update[i], style, this.undoredo_counter);
+            }
         }
     }
 
