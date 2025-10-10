@@ -393,6 +393,8 @@ class Puzzle {
                 }
             }
         }
+
+        this.redraw(); // We updated the line and lineE arrays, so we need to display them again. Otherwise it starts blank
     }
 
     reset_pause_layer() {
