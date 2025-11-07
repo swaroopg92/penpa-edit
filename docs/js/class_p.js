@@ -7945,7 +7945,7 @@ class Puzzle {
 
             // Add or remove, and write the new value to either surface or multicolor
             for (var k of this.selection) {
-                if (ccs[k] === undefined)
+                if (!ccs[k])
                     ccs[k] = [];
                 // Transform list of surface numbers/custom colors into lists of [number, color]
                 // pairs for easier handling
