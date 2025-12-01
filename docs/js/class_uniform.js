@@ -400,15 +400,11 @@ class Puzzle_truncated_square extends Puzzle {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 45 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -45);
-        this.redraw();
+        this.rotate_grid(-45, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 45 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +45);
-        this.redraw();
+        this.rotate_grid(45, false);
     }
 
     cursolcheck() {
@@ -3012,15 +3008,11 @@ class Puzzle_tetrakis_square extends Puzzle_truncated_square {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 45 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -45);
-        this.redraw();
+        this.rotate_grid(-45, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 45 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +45);
-        this.redraw();
+        this.rotate_grid(45, false);
     }
 
 
@@ -3673,15 +3665,11 @@ class Puzzle_snub_square extends Puzzle_truncated_square {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +30);
-        this.redraw();
+        this.rotate_grid(30, false);
     }
 
 
@@ -4315,15 +4303,11 @@ class Puzzle_cairo_pentagonal extends Puzzle_truncated_square {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +30);
-        this.redraw();
+        this.rotate_grid(30, false);
     }
 
 
@@ -4892,15 +4876,11 @@ class Puzzle_iso extends Puzzle_truncated_square {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +30);
-        this.redraw();
+        this.rotate_grid(30, false);
     }
 
     direction_arrow8(x, y, x0, y0) {
@@ -6072,15 +6052,11 @@ class Puzzle_rhombitrihexagonal extends Puzzle_truncated_square {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +30);
-        this.redraw();
+        this.rotate_grid(30, false);
     }
 
 
@@ -6726,15 +6702,11 @@ class Puzzle_deltoidal_trihexagonal extends Puzzle_truncated_square {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +30);
-        this.redraw();
+        this.rotate_grid(30, false);
     }
 
 
@@ -7439,15 +7411,11 @@ class Puzzle_penrose_P3 extends Puzzle {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 45 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -45);
-        this.redraw();
+        this.rotate_grid(-45, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 45 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +45);
-        this.redraw();
+        this.rotate_grid(45, false);
     }
 
     cursolcheck() {
@@ -9477,13 +9445,5 @@ class Puzzle_penrose_P3 extends Puzzle {
                 this.draw_polygon(ctx, x + (i % 3 - 1) * r * pu.size, y + ((i / 3 | 0) - 1) * r * pu.size, r * 0.5 * Math.sqrt(2), 4, 45);
             }
         }
-    }
-
-    rotate_theta(th) {
-        th = (th + this.theta);
-        if (this.reflect[0] === -1) { th = (180 - th + 360) % 360; }
-        if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
-        th = th / 180 * Math.PI;
-        return th;
     }
 }

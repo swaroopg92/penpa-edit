@@ -333,19 +333,11 @@ class Puzzle_tri extends Puzzle {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.canvasxy_update();
-        this.canvas_size_setting();
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.canvasxy_update();
-        this.canvas_size_setting();
-        this.point_move(0, 0, 30);
-        this.redraw();
+        this.rotate_grid(30);
     }
 
     key_arrow(key_code, ctrl_key = false) {
@@ -2731,13 +2723,5 @@ class Puzzle_tri extends Puzzle {
                 this.draw_polygon(ctx, x + (i % 3 - 1) * r * pu.size, y + ((i / 3 | 0) - 1) * r * pu.size, r * 0.5 * Math.sqrt(2), 4, 45);
             }
         }
-    }
-
-    rotate_theta(th) {
-        th = (th + this.theta);
-        if (this.reflect[0] === -1) { th = (180 - th + 360) % 360; }
-        if (this.reflect[1] === -1) { th = (360 - th + 360) % 360; }
-        th = th / 180 * Math.PI;
-        return th;
     }
 }
