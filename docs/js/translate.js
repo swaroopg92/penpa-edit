@@ -57,6 +57,7 @@ function trans_text(button_text, label_text, placeholder) {
     }
 
     PenpaUI.initPenpaLite();
+    set_input_patterns();
 }
 
 function trans() {
@@ -785,8 +786,17 @@ const PenpaText = {
             JP: 'あなたのブラウザはSVGに対応していません。' // JP text needs update
         },
         unsupported_filename: {
-            EN: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename',
+            EN: 'The characters <h2 class="warn">\\ / : * ? \" < > |</h2> cannot be used in filename.',
             JP: '<h2 class="warn">\\ / : * ? \" < > |</h2>は使用できません。'
+        },
+
+        file_save_no_contents: {
+            EN: 'There is nothing to save to the file.',
+            JP: 'ファイルに保存するものがありません。'
+        },
+        file_save_filename_title: {
+            EN: 'The characters \\ / : * ? \" < > | cannot be used in filename.',
+            JP: '\\ / : * ? \" < > |は使用できません。'
         },
 
         sudoku_input_minmax_error: {

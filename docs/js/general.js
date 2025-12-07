@@ -24,6 +24,7 @@ function boot() {
     boot_parameters();
     init_genre_tags();
     set_answer_setting_table_to("and");
+    set_input_patterns();
 
     var urlParam = location.search.substring(1);
     if (!urlParam && location.hash) {
@@ -1377,13 +1378,36 @@ function DeleteCheck() {
     })
 }
 
-// Use the puzzle title/author to make a default filename relevant to this puzzle
+var filename_bad_chars = /[\\/:*?"<>|]+/gu;
+var filename_input_pattern = /[^\\\/:\*\?"\<\>\|]+/v;
+
+/**
+ * Update the input patterns for filename text boxes and add a title (tooltip) with
+ * explanatory text to them. Called once from boot() and again in trans_text().
+ */
+function set_input_patterns() {
+    [
+        'saveimagename',
+        'savetextname'
+    ].forEach(inputID => {
+        var inputBox = document.getElementById(inputID);
+        inputBox.setAttribute('pattern', filename_input_pattern);
+        inputBox.setAttribute('title', PenpaText.get('file_save_filename_title'))
+    });
+}
+
+
+/**
+ * Use the puzzle title/author to make a default filename relevant to this puzzle
+ * 
+ * @returns {string} Filename composed from title and author.
+ */
 function get_filename_base() {
     let title = document.getElementById("saveinfotitle").value;
     let author = document.getElementById("saveinfoauthor").value;
     let name = 'penpa-' + author + '-' + title;
     // Clean the filename by removing spaces and disallowed characters
-    return name.replace(/[-\s\\/:*?"<>|]+/gu, '-');
+    return name.replace(filename_bad_chars, '-').replace(/\s+/g,'-').replace(/-{2,}/gu, '-');
 }
 
 function saveimage() {
@@ -1392,43 +1416,31 @@ function saveimage() {
 
 function saveimage_download() {
     var downloadLink = document.getElementById('download_link');
-    var filename = document.getElementById('saveimagename').value;
-    if (!filename) {
-        filename = get_filename_base();
-    }
+    var filename = get_download_filename('saveimagename');
+
+    var fileExt;
     if (document.getElementById("nb_type1").checked) {
-        if (filename.slice(-4) != ".png") {
-            filename += ".png";
-        }
+        fileExt = "png";
     } else if (document.getElementById("nb_type2").checked) {
-        if (filename.slice(-4) != ".jpg") {
-            filename += ".jpg";
-        }
+        fileExt = "jpg";
     } else if (document.getElementById("nb_type3").checked) {
-        if (filename.slice(-4) != ".svg") {
-            filename += ".svg";
-        }
-    }
-    var str_sym = "\\/:*?\"<>|";
-    var valid_name = 1;
-    for (var i = 0; i < filename.length; i++) {
-        if (str_sym.indexOf(filename[i]) != -1) {
-            valid_name = 0;
-        }
+        fileExt = "svg";
     }
 
-    if (valid_name) {
-        if (document.getElementById("nb_type3").checked) {
+    var cleanFilename = validate_filename(filename, fileExt);
+
+    if (cleanFilename) {
+        if (fileExt === "svg") {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
             var blob = new Blob([text], { type: "image/svg+xml" });
             if (window.navigator.msSaveBlob) {
                 // for IE
-                window.navigator.msSaveBlob(blob, filename);
+                window.navigator.msSaveBlob(blob, cleanFilename);
             } else if (URL && URL.createObjectURL) {
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.target = "_blank";
-                downloadLink.download = filename;
+                downloadLink.download = cleanFilename;
                 downloadLink.click();
             } else {
                 Swal.fire({
@@ -1441,15 +1453,13 @@ function saveimage_download() {
         } else {
             if (pu.canvas.msToBlob) { // For IE
                 var blob = pu.canvas.msToBlob();
-                window.navigator.msSaveBlob(blob, filename);
+                window.navigator.msSaveBlob(blob, cleanFilename);
             } else { // Other browsers
                 downloadLink.href = pu.resizecanvas();
-                downloadLink.download = filename;
+                downloadLink.download = cleanFilename;
                 downloadLink.click();
             }
         }
-    } else {
-        errorMsg(PenpaText.get('unsupported_filename'));
     }
 }
 
@@ -1627,38 +1637,120 @@ function savetext_copy() {
     infoMsg('<h2 class="info">' + PenpaText.get('copied_success') + '</h2>');
 }
 
-function savetext_download() {
-    var text = document.getElementById("savetextarea").value;
-    var blob = new Blob([text], { type: "text/plain" });
-    let name = get_filename_base() + '.txt';
-    saveblob_download(blob, name);
+/**
+ * Gets the preferred download filename.
+ * 
+ * @param {string} filenameInputID ID of the input field to use for the filename.
+ * 
+ * @returns {string} Preferred filename for download
+ */
+function get_download_filename(filenameInputID) {
+    // Get filename textbox contents to use as the download filename.
+    var filename = document.getElementById(filenameInputID).value;
+    
+    // If filename textbox empty, generate a name from the title/author.
+    if (!filename) {
+        filename = get_filename_base();
+    }
+
+    return filename;    
 }
 
-function saveblob_download(blob, defaultFilename) {
-    var downloadLink = document.getElementById('download_link');
-    var filename = document.getElementById("savetextname").value;
-    if (!filename) {
-        filename = defaultFilename;
-    }
-    if (filename.indexOf(".") === -1) {
-        filename += ".txt";
-    }
-    var str_sym = "\\/:*?\"<>|";
-    var valid_name = 1;
-    for (var i = 0; i < filename.length; i++) {
-        if (str_sym.indexOf(filename[i]) != -1) {
-            valid_name = 0;
-        }
+/**
+ * Invokes a file download of the puzzle URL as a text file.
+ * 
+ * If the user's filename ends in .url, it will prepend the generated
+ * puzzle URL with the appropriate content to make a proper shortcut file.
+ * 
+ * Similar with .desktop for Linux.
+ * 
+ * @TODO Learn the xml format used on Apple?
+ * 
+ * h/t the author of the page https://www.cyanwerks.com/formats/file-format-url.html
+ * for info that helped with the .url format.
+ */
+function savetext_download() {
+    // Get filename and check ext.
+    var downloadFilename = get_download_filename("savetextname");
+    var isURL = (downloadFilename.match(/\.url$/i));
+    var isDesktop = (downloadFilename.match(/\.desktop$/i));
+    
+    // Get generated URL.
+    var urlText = document.getElementById("savetextarea").value;
+    if (!urlText) {
+        errorMsg(PenpaText.get('file_save_no_contents'));
+        return;
     }
 
-    if (valid_name) {
+    // Format blob.
+    var fileContents = urlText;
+    var fileExt = "txt";
+    var mimeType = "text/plain";
+
+    if (isURL) {
+        fileContents = "[InternetShortcut]\nURL=" + urlText;
+        fileExt = "url";
+        mimeType = "application/internet-shortcut";
+    } else if (isDesktop) {
+        var puzTitle = document.getElementById("saveinfotitle").value;
+        // NB: There's a Link type in the spec for .desktop files but I guess most Linux distros don't support it, so I have this file
+        // writing those options as comments that can be changed by the user if they want.
+        fileContents = "#!/usr/bin/env xdg-open\n# To make this shortcut work, you may need to set the file as executable and then right-click and \"Allow Launching\"\n[Desktop Entry]\nVersion=1.0\nTerminal=false\nName=" + puzTitle + "\nIcon=text-html\n# If your distribution supports Link type, use these:\n#Type=Link\n#URL=" + urlText + "\nType=Application\nExec=xdg-open " + urlText;
+        fileExt = "desktop";
+        mimeType = "application/x-desktop";
+    }
+
+    // Perform save.
+    var blob = new Blob([fileContents], { type: mimeType });
+    saveblob_download(blob, downloadFilename, fileExt);
+}
+
+/**
+ * Validates a filename prior to using it for a download.
+ * 
+ * @param {string} filename Filename to be used for download
+ * @param {string} fileExt File extension to be used for download
+ * @returns {string|null} Will return valid/fixed filename unless the name is invalid.
+ */
+function validate_filename(filename, fileExt) {
+    var filenamePieces = filename.split(".");
+
+    // Ensure there's a file extension, otherwise add it.
+    if (filenamePieces[filenamePieces.length - 1] !== fileExt) {
+        filename += "." + fileExt;
+    }
+
+    var filenameBad = filename_bad_chars.exec(filename);
+
+    // Check for unwanted symbols.
+    if (filenameBad) {
+        errorMsg(PenpaText.get('unsupported_filename'));
+        return null;
+    }
+
+    return filename;
+}
+
+/**
+ * Saves a Blob data object as a file, assuming the filename is
+ * valid and the browser supports it.
+ * 
+ * @param {Blob} blob A blob to be saved to a file. 
+ * @param {string} filename Filename to use. 
+ * @param {string} fileext File extension to use if missing from filename. 
+ */
+function saveblob_download(blob, filename, fileext) {
+    var downloadLink = document.getElementById('download_link');
+    var cleanFilename = validate_filename(filename, fileext || 'txt');
+
+    if (cleanFilename) {
         if (window.navigator.msSaveBlob) {
             // for IE
-            window.navigator.msSaveBlob(blob, filename);
+            window.navigator.msSaveBlob(blob, cleanFilename);
         } else if (URL && URL.createObjectURL) {
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.target = "_blank";
-            downloadLink.download = filename;
+            downloadLink.download = cleanFilename;
             downloadLink.click();
         } else {
             Swal.fire({
@@ -1668,8 +1760,6 @@ function saveblob_download(blob, defaultFilename) {
                 confirmButtonText: PenpaText.get('close'),
             });
         }
-    } else {
-        errorMsg(PenpaText.get('unsupported_filename'));
     }
 }
 
