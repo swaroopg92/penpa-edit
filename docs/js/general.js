@@ -740,11 +740,15 @@ function changetype() {
         case "tri":
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("name_space1").innerHTML = PenpaText.get('border');
+            document.getElementById("name_space2").innerHTML = PenpaText.get('cut_corners');
+            document.getElementById("name_space2").style.display = "inline";
+            document.getElementById("nb_space2").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_tri');
             document.getElementById("nb_size1").value = 6;
             document.getElementById("nb_size3").value = 60;
             document.getElementById("nb_space1").value = 0;
+            document.getElementById("nb_space2").value = 0;
             break;
         case "pyramid":
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');

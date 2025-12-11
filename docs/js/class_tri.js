@@ -7,7 +7,9 @@ class Puzzle_tri extends Puzzle {
         this.n0 = parseInt(this.nx * 4 / 3 + 4);
         this.margin = 10;
         this.size = size;
-        this.space = [parseInt(document.getElementById("nb_space1").value, 10)];
+        this.space = [parseInt(document.getElementById("nb_space1").value, 10),
+                      parseInt(document.getElementById("nb_space2").value, 10),
+        ];
         this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.top_n = parseInt(this.n0 ** 2 + this.n0 * 2.5) - 1;
         this.width0 = this.nx + 1;
@@ -154,34 +156,46 @@ class Puzzle_tri extends Puzzle {
     }
 
 
-    listappend(centerlist) {
+    nextline(centerlist) {
         var n = centerlist.length;
+        var newlist = [];
         for (var j = 0; j < n; j++) {
-            if (centerlist[j] < 2 * (this.n0) ** 2 && centerlist.indexOf(this.point[centerlist[j]].adjacent[2]) === -1) {
-                centerlist.push(this.point[centerlist[j]].adjacent[2]);
+            if (centerlist[j] < 2 * (this.n0) ** 2 && newlist.indexOf(this.point[centerlist[j]].adjacent[2]) === -1) {
+                newlist.push(this.point[centerlist[j]].adjacent[2]);
             } else if (centerlist[j] > 2 * (this.n0) ** 2) {
-                if (centerlist.indexOf(this.point[centerlist[j]].adjacent[1]) === -1) {
-                    centerlist.push(this.point[centerlist[j]].adjacent[1]);
+                if (newlist.indexOf(this.point[centerlist[j]].adjacent[1]) === -1) {
+                    newlist.push(this.point[centerlist[j]].adjacent[1]);
                 }
-                if (centerlist.indexOf(this.point[centerlist[j]].adjacent[2]) === -1) {
-                    centerlist.push(this.point[centerlist[j]].adjacent[2]);
+                if (newlist.indexOf(this.point[centerlist[j]].adjacent[2]) === -1) {
+                    newlist.push(this.point[centerlist[j]].adjacent[2]);
                 }
             }
         }
-        return centerlist;
+        return newlist;
     }
 
     reset_frame() {
 
+        var cut_corners = this.space[1];
         this.create_point();
         this.space = [parseInt(document.getElementById("nb_space1").value, 10)];
-        this.centerlist = [this.top_n + 2 * this.n0 * this.space[0]];
+        var centerlists = [[this.top_n + 2 * this.n0 * this.space[0]]];
         this.cursol = this.centerlist[0];
         this.cursolS = 0;
         for (var j = 0; j < (this.nx - 1 - 3 * this.space[0]) * 2; j++) {
-            this.centerlist = this.listappend(this.centerlist);
+            var newcl = this.nextline(centerlists[centerlists.length - 1]);
+            var linesleft = (this.nx - 1 - 3 * this.space[0]) * 2 - j;
+            if ((j%2==1) && (linesleft < 2*cut_corners)) {
+                newcl.shift();
+                newcl.pop();
+            }
+            centerlists.push(newcl);
+        }
+        for (var j = 0; j < 2*cut_corners - 1; j++) {
+            centerlists.shift();
         }
 
+        this.centerlist = centerlists.reduce((acc,x) => acc.concat(x), []);
         this.search_center();
         this.center_n0 = this.center_n;
         this.canvasxy_update();

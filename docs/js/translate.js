@@ -532,6 +532,7 @@ const PenpaText = {
         over: { EN: "Over:", JP: '上：' },
         border: { EN: "Border:", JP: '境界：' },
         order: { EN: "Order:" },
+        cut_corners: { EN: "Cut corners:" },
 
         nb_gridtype8_lb: { EN: 'Tetrakis square' },
         nb_gridtype9_lb: { EN: 'Truncated square' },
