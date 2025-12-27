@@ -2378,19 +2378,6 @@ function load(urlParam, type = 'url', origurl = null) {
                 pu.mode[pu.mode.qa][amode] = JSON.parse(rtext_mode[2]);
             }
         }
-
-        // Fall back to default answer area covering entire grid
-        // TODO: replace this with simply loading all of pu.point into the list of nodes to check when expanding the solution_area
-        if (!pu.solution_area || pu.solution_area.length === 0) {
-            pu.solution_area = [];
-            for (let i = 0; i < pu.point.length; ++i) {
-                let point = pu.point[i];
-                if (point.type === 0) {
-                    pu.solution_area.push(i);
-                }
-            }
-            pu.inclusive_solution_area = true;
-        }
     }
     pu.solution_area_dirty = true;
     pu.recompute_solution_area_outline();

@@ -424,7 +424,19 @@ class Puzzle {
         if (!this.solution_area_dirty || !this.point || this.point.length === 0) {
             return;
         }
+
         this.solution_checked_points = {};
+
+        // If there is no solution area (on legacy links or if the author doesn't want
+        // to use this feature), check all points.
+        if (!this.solution_area || this.solution_area.length === 0) {
+            for (let i in this.point) {
+                this.solution_checked_points[i] = true;
+            }
+            this.solution_area_dirty = false;
+            return;
+        }
+
         let vertices = {};
         let edges = {};
 
