@@ -39,7 +39,7 @@ class Puzzle_pyramid extends Puzzle {
         var k = 0;
         var nx = this.nx0;
         var ny = this.ny0;
-        var adjacent, surround, type, use;
+        var adjacent, surround, neighbor, type, use;
         var point = [];
         //center
         type = 0;
@@ -48,7 +48,8 @@ class Puzzle_pyramid extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 adjacent = [k - nx - 1 + j % 2, k - nx + j % 2, k - 1, k + 1, k + nx - 1 + j % 2, k + nx + j % 2];
                 surround = [k + nx * ny - 1, k + 2 * nx * ny - nx - 1 + j % 2, k + nx * ny, k + 2 * nx * ny, k + nx * ny + nx - 1 + j % 2, k + 2 * nx * ny - 1];
-                point[k] = new Point((i + 0.5 + (j % 2) * 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use);
+                neighbor = [k + 3 * nx * ny - 1, k + 3 * nx * ny, 2 * k + 4 * nx * ny - 2 * nx - 1 + 2 * (j % 2), 2 * k + 4 * nx * ny - 2 * nx + 2 * (j % 2), 2 * k + 4 * nx * ny, 2 * k + 4 * nx * ny + 1];
+                point[k] = new Point((i + 0.5 + (j % 2) * 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use, neighbor);
                 k++;
             }
         }
@@ -59,7 +60,7 @@ class Puzzle_pyramid extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 adjacent = [k + nx * ny - nx - 1 + j % 2, k + nx * ny - nx + j % 2, k + nx * ny];
                 surround = [k + nx * ny - 2 * nx]; //for wall
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y - 0.5 * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y - 0.5 * this.size, type, adjacent, surround, use, [], [], 0, null, 3);
                 k++;
             }
         }
@@ -68,7 +69,7 @@ class Puzzle_pyramid extends Puzzle {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
                 adjacent = [k - nx * ny, k - nx * ny + nx - 1 + j % 2, k - nx * ny + nx + j % 2];
                 surround = [k - nx * ny + 2 * nx]; //for wall
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], [], 0, null, 3);
                 k++;
             }
         }
@@ -174,12 +175,22 @@ class Puzzle_pyramid extends Puzzle {
         this.cursolS = 6 * (this.nx0) * (this.ny0) + 10 * (this.nx0) - 4;
     }
 
+    cell_to_subnodes(cell) {
+        if (!this.point[cell] || this.point[cell].type !== 0) {
+            return [];
+        }
+
+        let first_corner = 6 * this.nx0 * this.ny0 + 4 * cell;
+        return [first_corner, first_corner+1, first_corner+2, first_corner+3];
+    }
+
     type_set() {
         var type;
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
             case "multicolor":
             case "board":
+            case "solution_area":
                 type = [0];
                 break;
             case "symbol":
@@ -499,6 +510,9 @@ class Puzzle_pyramid extends Puzzle {
             this.draw_number("pu_q");
             this.draw_cursol();
             this.draw_freecircle();
+        }
+        if (this.mode[present_mode].edit_mode === "solution_area" || UserSettings.show_solution_area) {
+            this.draw_solution_area();
         }
     }
 

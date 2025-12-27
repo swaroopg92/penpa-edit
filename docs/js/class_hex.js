@@ -59,7 +59,7 @@ class Puzzle_hex extends Puzzle {
                 if (i === 0 || i === n - 1 || j === 0 || j === n - 1) { use = -1; } else { use = 1; }
                 adjacent = [k + n ** 2, k + n ** 2 + 1, k + n ** 2 + n + j % 2];
                 surround = [k - n ** 2, k - n ** 2 + n - 1 + j % 2, k - n ** 2 + n + j % 2];
-                point[k] = new Point(point[i + j * n].x, point[i + j * n].y + 2 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * n].x, point[i + j * n].y + 2 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, [], [], 0, null, 3);
                 k++;
             }
         }
@@ -68,7 +68,7 @@ class Puzzle_hex extends Puzzle {
                 if (i === 0 || i === n - 1 || j === 0 || j === n - 1) { use = -1; } else { use = 1; }
                 adjacent = [k - n ** 2 - n - (j + 1) % 2, k - n ** 2 - 1, k - n ** 2];
                 surround = [k - 2 * n ** 2 - 1, k - 2 * n ** 2, k - 2 * n ** 2 + n - 1 + j % 2];
-                point[k] = new Point(point[i + j * n].x - 0.5 * this.size, point[i + j * n].y + 1 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use);
+                point[k] = new Point(point[i + j * n].x - 0.5 * this.size, point[i + j * n].y + 1 / 3 * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, [], [], 0, null, 3);
                 k++;
             }
         }
@@ -186,12 +186,23 @@ class Puzzle_hex extends Puzzle {
         this.make_frameline();
     }
 
+    cell_to_subnodes(cell) {
+        if (!this.point[cell] || this.point[cell].type !== 0) {
+            return [];
+        }
+
+        let first_side = 6 * (this.nx * 3 + 1) * (this.nx * 3 + 1) + 6 * cell;
+        let first_corner = 12 * (this.nx * 3 + 1) * (this.nx * 3 + 1) + 6 * cell;
+        return [first_side, first_side+1, first_side+2, first_side+3, first_side+4, first_side+5, first_corner, first_corner+1, first_corner+2, first_corner+3, first_corner+4, first_corner+5];
+    }
+
     type_set() {
         var type;
         switch (this.mode[this.mode.qa].edit_mode) {
             case "surface":
             case "multicolor":
             case "board":
+            case "solution_area":
                 type = [0];
                 break;
             case "symbol":
@@ -657,6 +668,9 @@ class Puzzle_hex extends Puzzle {
             this.draw_number("pu_q");
             this.draw_cursol();
             this.draw_freecircle();
+        }
+        if (this.mode[present_mode].edit_mode === "solution_area" || UserSettings.show_solution_area) {
+            this.draw_solution_area();
         }
     }
 

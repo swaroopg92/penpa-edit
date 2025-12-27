@@ -401,6 +401,20 @@ const UserSettings = {
         return this._show_solution;
     },
 
+    _show_solution_area: false,
+    set show_solution_area(newValue) {
+        const button = document.getElementById("view_solution_area_button");
+        this._show_solution_area = newValue;
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
+
+        if (window.pu) {
+            pu.redraw();
+        }
+    },
+    get show_solution_area() {
+        return this._show_solution_area;
+    },
+
     _shorten_links: false,
     set shorten_links(newValue) {
         if (newValue === undefined) { newValue = false; }

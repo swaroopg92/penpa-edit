@@ -232,6 +232,8 @@ header,
     border-color: var(--greyDarkVery) transparent transparent transparent;
 }
 
-#visibility_button {
+#visibility_button,
+#view_solution_area_button,
+#inclusive_solution_area_button {
     border: 1px solid var(--blueDark);
 }

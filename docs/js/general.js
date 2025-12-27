@@ -83,11 +83,13 @@ function create() {
 
     pu = make_class(gridtype);
     pu.reset_frame();
-
+    
     // Drawing Panel
     panel_pu = new Panel();
     panel_pu.draw_panel();
     pu.mode_set("surface"); //include redraw
+
+    pu.reset_solution_area_to_centerlist();
 
     UserSettings.loadFromCookies("others");
 
@@ -227,6 +229,8 @@ function create_newboard() {
         document.getElementById('modal').style.display = 'none';
         pu.mode_set(pu.mode[pu.mode.qa].edit_mode); //include redraw
 
+        pu.reset_solution_area_to_centerlist();
+        
         // constraints
         if (gridtype === "square" || gridtype === "sudoku" || gridtype === "kakuro" || gridtype === "hex") {
             document.getElementById('constraints').style.display = 'inline';
@@ -2006,6 +2010,19 @@ function load(urlParam, type = 'url', origurl = null) {
     for (var i = 1; i < rtext[5].length; i++) {
         rtext[5][i] = (rtext[5][i - 1] + rtext[5][i]);
     }
+    
+    if (rtext[19] !== undefined && rtext[20] !== undefined) {
+        rtext[19] = JSON.parse(rtext[19]);
+
+        for (var i = 1; i < rtext[19].length; i++) {
+            rtext[19][i] = (rtext[19][i - 1] + rtext[19][i]);
+        }
+
+        pu.solution_area = rtext[19];
+
+        let parsedValue = JSON.parse(rtext[20]);
+        pu.inclusive_solution_area = parsedValue === 1;
+    }
 
     // Tab settings
     if (rtext[6]) {
@@ -2362,6 +2379,8 @@ function load(urlParam, type = 'url', origurl = null) {
             }
         }
     }
+    pu.solution_area_dirty = true;
+    pu.recompute_solution_area_outline();
 
     pu.mode_set(pu.mode[pu.mode.qa].edit_mode, 'url'); //includes redraw
 
@@ -2641,6 +2660,20 @@ function loadver1(paramArray, rtext) {
     pu.point_move((pu.canvasx * 0.5 - pu.point[pu.center_n].x + 0.5), (pu.canvasy * 0.5 - pu.point[pu.center_n].y + 0.5), pu.theta);
     pu.canvas_size_setting();
     pu.cursol = pu.centerlist[0];
+
+    if (paramArray.m === "solve") { //solve_mode
+        // Fall back to default answer area covering entire grid
+        pu.solution_area = [];
+        for (let i = 0; i < pu.point.length; ++i) {
+            let point = pu.point[i];
+            if (point.type === 0) {
+                pu.solution_area.push(i);
+            }
+        }
+        pu.inclusive_solution_area = true;
+    }
+    pu.solution_area_dirty = true;
+    pu.recompute_solution_area_outline();
 
     pu.centerlist = pre_centerlist;
     pu.make_frameline(); // Board drawing
@@ -3003,6 +3036,7 @@ function set_solvemode(type = "url") {
     document.getElementById("newboard").style.display = "none";
     document.getElementById("rotation").style.display = "none";
     document.getElementById("mo_board_lb").classList.add('is_hidden');
+    document.getElementById("mo_solution_area_lb").classList.add('is_hidden');
     document.getElementById("sub_number2_lb").style.display = "none";
     document.getElementById("sub_number4_lb").style.display = "none";
     document.getElementById("sub_number11_lb").style.display = "none";
@@ -3140,6 +3174,7 @@ function decode_puzzlink(url) {
         panel_pu.draw_panel();
         document.getElementById('modal').style.display = 'none';
         puzzle.mode_set(mode); //include redraw
+        puzzle.reset_solution_area_to_centerlist();
     }
 
     var info_edge, info_number, info_obj, size, puzzlink_pu,

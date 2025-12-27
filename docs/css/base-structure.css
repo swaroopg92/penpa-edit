@@ -256,8 +256,13 @@ hr.newgridhrline {
     font-weight: bold;
 }
 
+#style_solution_area {
+    font-size: 12px;
+}
+
 #sub_txt,
-#style_txt {
+#style_txt,
+#inclusive_solution_area_button0 {
     font-size: 12px;
 }
 
@@ -629,6 +634,8 @@ body textarea {
 }
 
 #visibility_button0,
+#view_solution_area_button0,
+#inclusive_solution_area_button0,
 #panel_buttons0,
 #panel_buttonc0,
 #edge_button0,
