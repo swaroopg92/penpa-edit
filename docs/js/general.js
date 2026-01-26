@@ -16,7 +16,7 @@ function infoMsg(html) {
     })
 }
 
-function boot() {
+async function boot() {
     var obj = document.getElementById("dvique");
     var canvas = document.createElement("canvas");
     canvas.id = "canvas";
@@ -40,10 +40,10 @@ function boot() {
             paramArray[paramItem[0]] = paramItem[1];
         }
 
-        
+
         // Decrypt puzzle data
         const hash = PenpaProgress.getHash(paramArray.p);
-        let local_data = PenpaProgress.tryLoad(hash);
+        let local_data = await PenpaProgress.tryLoad(hash);
 
         if (local_data && local_data.includes('&p=')) {
             // This is to account for old links and new links together
@@ -1780,7 +1780,7 @@ function export_sudoku() {
     }
 }
 
-function import_url(urlstring) {
+async function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
         if (urlstring.indexOf("/penpa-edit/") !== -1) {
@@ -1797,7 +1797,7 @@ function import_url(urlstring) {
             const hash = PenpaProgress.getHash(paramArray.p);
 
             // Decrypt puzzle data
-            let local_data = PenpaProgress.tryLoad(hash);
+            let local_data = await PenpaProgress.tryLoad(hash);
 
             if (local_data && local_data.includes('&p=')) {
                 // This is to account for old links and new links together
@@ -1846,7 +1846,7 @@ function show_shortcuts() {
     document.getElementById("modal-keys").style.display = 'block';
 }
 
-function load(urlParam, type = 'url', origurl = null) {
+async function load(urlParam, type = 'url', origurl = null) {
     var param = urlParam.split('&');
     var paramArray = [];
 
@@ -2379,7 +2379,7 @@ function load(urlParam, type = 'url', origurl = null) {
     if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup") && (type != "localstorage")) {
         // check for local progress
         const hash = PenpaProgress.getHash(pu.url);
-        let local_data = PenpaProgress.tryLoad(hash);
+        let local_data = await PenpaProgress.tryLoad(hash);
 
         if (local_data) {
             var local_copy = JSON.parse(decrypt_data(local_data));

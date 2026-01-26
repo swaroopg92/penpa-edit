@@ -179,6 +179,7 @@ onload = function() {
     }
 
     function onMove(e) {
+        if (!window.pu) { return; }
         let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.buttons !== 4) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousemove") {
@@ -245,9 +246,11 @@ onload = function() {
     }
 
     function onOut() {
-        pu.mouse_mode = "out";
-        pu.mouse_click = 0;
-        pu.mouseevent(0, 0, 0);
+        if (window.pu) {
+            pu.mouse_mode = "out";
+            pu.mouse_click = 0;
+            pu.mouseevent(0, 0, 0);
+        }
         return;
     }
 
@@ -2207,7 +2210,7 @@ onload = function() {
     }
 
     $(document).ready(function() {
-        if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
+        if (window.pu && pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
                 'width': "resolve" // 25% was used before
             });
@@ -2391,7 +2394,6 @@ onload = function() {
 
 function clear_storage_one() {
     // check for local progress
-    // get md5 hash for unique id
     if (typeof pu.url === 'string') {
         const hash = PenpaProgress.getHash(pu.url);
         PenpaProgress.clearPuzzle(hash);

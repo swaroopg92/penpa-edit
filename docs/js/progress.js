@@ -1,46 +1,45 @@
 /**
  * @class PenpaProgress
- * 
- * Abstracted logic for saving and loading progress from browser local storage.
- * 
- * In future updates, this can be used to simplify migrating progress
- * saving to indexeddb or something similar.
+ *
+ * Abstracted logic for saving and loading progress from browser local storage and/or
+ * IndexedDb or WebSQL using LocalForage.
  */
 const PenpaProgress = {
     _localStorageAvailable: undefined,
 
     /**
      * Helper that returns whether progress can be saved locally.
-     * 
-     * Essentially just a fancy wrapper for the original localstorage check but will
-     * eventually also check indexeddb. 
-     * 
+     *
      * @returns {boolean} Returns true if progress can be saved.
      */
-    canSaveProgress: function () {
-        if (this._localStorageAvailable === undefined) {
+    canSaveProgress: async function () {
+        const me = this;
+
+        if (me._localStorageAvailable === undefined) {
             try {
-                if (window.localStorage) {
-                    window.localStorage.setItem('test', 123);
-                    this._localStorageAvailable = (window.localStorage.getItem('test') === "123");
-                    window.localStorage.removeItem('test');
+                if (window.localforage) {
+                    await window.localforage.setItem('test', 123);
+                    let testValue = await window.localforage.getItem('test');
+                    me._localStorageAvailable = (String(testValue) === "123");
+                    window.localforage.removeItem('test');
                 } else {
-                    this._localStorageAvailable = false;
+                    me._localStorageAvailable = false;
                     console.warn("PenpaProgress.canSaveProgress(): Local storage is not available.");
                 }
             } catch (e) {
-                this._localStorageAvailable = false;
+                me._localStorageAvailable = false;
                 console.warn("PenpaProgress.canSaveProgress(): Local storage seems to not be available.");
             }
         }
-        return this._localStorageAvailable;
+        return me._localStorageAvailable;
     },
 
     /**
      * Helper that checks if local storage is supported and updates the UI if it isn't.
      */
-    updateLocalSaveUI: function () {
-        if (!this.canSaveProgress()) {
+    updateLocalSaveUI: async function () {
+        const canSave = await this.canSaveProgress();
+        if (!canSave) {
             document.getElementById('allow_local_storage').classList.add('is_hidden');
             document.getElementById('clear_storage_one').classList.add('is_hidden');
             document.getElementById('clear_storage_all').classList.add('is_hidden');
@@ -50,7 +49,7 @@ const PenpaProgress = {
 
     /**
      * Helper that returns the current puzzle's hash.
-     * 
+     *
      * @param {string} urlToHash URL to use in the hash.
      * @returns {string} Puzzle URL hash.
      */
@@ -60,25 +59,27 @@ const PenpaProgress = {
             return null;
         }
 
-        return "penpa_" + md5(urlToHash);
+        const hash = "penpa_" + md5(urlToHash);
+        return hash;
     },
 
     /**
      * Attempts to save the current puzzle progress to local storage.
-     */    
-    save: function () {
+     */
+    save: async function () {
         // Auto-save tab state in browser history if requested
         if (UserSettings.auto_save_history) {
             duplicate(true);
         }
 
         // Save puzzle progress
-        if (this._localStorageAvailable &&
+        const canSave = await this.canSaveProgress();
+        if (canSave &&
             pu.url.length !== 0 &&
             pu.mmode === "solve" &&
             UserSettings.save_current_puzzle &&
             !pu.replay) {
-                
+
             // get md5 hash for unique id
             const hash = this.getHash(pu.url);
 
@@ -90,42 +91,60 @@ const PenpaProgress = {
             // improved UI around this happening to let the user know, plus some
             // guidance for users to prevent it from filling up in the first place.
             try {
-                localStorage.setItem(hash, rstr);
+                localforage.setItem(hash, rstr);
             } catch (err) {
                 console.error("PenpaProgress.save(): Could not save to local storage:", err);
             }
-
         }
     },
 
     /**
      * Checks if local storage is available. If it is, attempts to load the puzzle progress.
-     * 
+     *
      * @param {string} puzzleHash Hash of the puzzle we would like to load.
      * @returns {string|undefined} Puzzle data if available.
      */
-    tryLoad: function (puzzleHash) {
-        if (this._localStorageAvailable) {
+    tryLoad: async function (puzzleHash) {
+        let result;
+        const canSave = await this.canSaveProgress();
+        if (canSave) {
+            // Check if newer storage method contains save.
+            result = await localforage.getItem(puzzleHash);
+            if (result) {
+                return result;
+            }
+            // As a fallback, check localStorage
             return localStorage.getItem(puzzleHash);
         }
     },
 
     /**
      * Clears a puzzle's local progress if saved.
-     * 
+     *
      * @param {string} puzzleHash Hash of the puzzle we would like to load.
      */
-    clearPuzzle: function (puzzleHash) {
-        if (this._localStorageAvailable) {
+    clearPuzzle: async function (puzzleHash) {
+        const canSave = await this.canSaveProgress();
+        if (canSave) {
             localStorage.removeItem(puzzleHash);
+            localforage.removeItem(puzzleHash);
         }
     },
 
     /**
      * Clears all local progress for puzzles.
      */
-    clearAllPuzzles: function () {
-        if (this._localStorageAvailable) {
+    clearAllPuzzles: async function () {
+        const canSave = await this.canSaveProgress();
+        if (canSave) {
+            // LocalForage keys
+            const lfKeys = await localforage.keys();
+            lfKeys.forEach(key => {
+                if (key.includes("penpa")) {
+                    localforage.removeItem(key);
+                }
+            });
+            // LocalStorage backup keys
             Object.keys(localStorage).forEach(key => {
                 if (key.includes("penpa")) {
                     localStorage.removeItem(key);
