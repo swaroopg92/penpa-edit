@@ -5,7 +5,6 @@ let isShiftKeyHeld = e => e.shiftKey;
 let isShiftKeyPressed = key => key === "Shift";
 let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
-let localStorageAvailable = false;
 
 const MULTICOLOR_REMAP = [10, 1, 8, 3, 4, 2, 5, 6, 7, 9, 0, 11, 12];
 
@@ -18,22 +17,7 @@ onload = function() {
     let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    try {
-        if (window.localStorage) {
-            window.localStorage.setItem('test', 123);
-            localStorageAvailable = (window.localStorage.getItem('test') === "123");
-            window.localStorage.removeItem('test');
-        }
-    } catch (e) {
-        localStorageAvailable = false;
-    }
-
-    if (!localStorageAvailable) {
-        document.getElementById('allow_local_storage').classList.add('is_hidden');
-        document.getElementById('clear_storage_one').classList.add('is_hidden');
-        document.getElementById('clear_storage_all').classList.add('is_hidden');
-        document.getElementById('local_storage_browser_message').classList.remove('is_hidden');
-    }
+    PenpaProgress.updateLocalSaveUI();
 
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
@@ -2155,36 +2139,15 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
-        save_progress();
+        PenpaProgress.save();
     });
 
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === "hidden") {
-            save_progress();
+            PenpaProgress.save();
         }
     });
 
-    function save_progress() {
-        // Auto-save tab state in browser history if requested
-        if (UserSettings.auto_save_history) {
-            duplicate(true);
-        }
-
-        // Save puzzle progress
-        if (localStorageAvailable &&
-            pu.url.length !== 0 &&
-            pu.mmode === "solve" &&
-            UserSettings.save_current_puzzle &&
-            !pu.replay) {
-            // get md5 hash for unique id
-            let hash = "penpa_" + md5(pu.url);
-
-            // generate duplicate link
-            let rstr = pu.maketext_duplicate() + "&l=solvedup";
-
-            localStorage.setItem(hash, rstr);
-        }
-    }
 
     // Adding on change events for general settings
     // Theme Setting
@@ -2430,30 +2393,22 @@ function clear_storage_one() {
     // check for local progress
     // get md5 hash for unique id
     if (typeof pu.url === 'string') {
-        let hash = "penpa_" + md5(pu.url);
-        localStorage.removeItem(hash);
+        const hash = PenpaProgress.getHash(pu.url);
+        PenpaProgress.clearPuzzle(hash);
         Swal.fire({
             html: '<h2 class="info">' + PenpaText.get('local_storage_cleared') + '</h2>',
             icon: 'info'
         });
     }
 
-    // turn off localstorage for this puzzle
+    // turn off local progress save for this puzzle
     UserSettings.save_current_puzzle = false;
 }
 
 function clear_storage_all() {
-    var keys = Object.keys(localStorage),
-        i = keys.length;
+    PenpaProgress.clearAllPuzzles();
 
-    while (i--) {
-        if (keys[i].includes("penpa")) {
-            localStorage.removeItem(keys[i]);
-        }
-    }
-    // localStorage.clear(); for all clear
-
-    // turn off localstorage for current puzzle
+    // turn off local progress save for current puzzle
     UserSettings.save_current_puzzle = false;
 
     Swal.fire({
