@@ -1956,6 +1956,10 @@ function load(urlParam, type = 'url', origurl = null) {
         if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
             UserSettings.draw_edges = true;
         }
+        
+        if (rtext_para[19] === "OFF" || rtext_para[19] === "2") {
+            UserSettings.draw_edges = false;
+        }
     }
 
     // multisolution status
