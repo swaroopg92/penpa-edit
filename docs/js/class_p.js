@@ -12734,9 +12734,12 @@ class Puzzle {
                                     this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
                                     break;
                                 case 4:
-                                    // only useful and hard coded for cairo_pentagonal
+                                    // only useful and hard coded for cairo_pentagonal and rhombitrihexagonal
                                     this.ctx.lineTo(this.point[this.point[k].surround[4]].x + offset, this.point[this.point[k].surround[4]].y - offset);
                                     break;
+                                case 5:
+                                    // only useful and hard coded for rhombitrihexagonal
+                                    this.ctx.lineTo(this.point[this.point[k].surround[5]].x + offset, this.point[this.point[k].surround[5]].y - offset);
                             }
                         }
                     } else {
