@@ -12718,28 +12718,43 @@ class Puzzle {
                 set_line_style(this.ctx, 101);
                 if (factor < 1) {
                     this.ctx.beginPath();
-                    for (var j = 0; j < this.point[k].surround.length; j++) {
-                        switch (j) {
-                            case 0:
-                                this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
-                                break;
-                            case 1:
-                                this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
-                                break;
-                            case 2:
-                                this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
-                                break;
-                            case 3:
-                                this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
-                                break;
-                            case 4:
-                                // only useful and hard coded for cairo_pentagonal
-                                this.ctx.lineTo(this.point[this.point[k].surround[4]].x + offset, this.point[this.point[k].surround[4]].y - offset);
-                                break;
+                    if (this.point[k].type === 0 && this.point[k].surround.length > 0) {
+                        for (var j = 0; j < this.point[k].surround.length; j++) {
+                            switch (j) {
+                                case 0:
+                                    this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
+                                    break;
+                                case 1:
+                                    this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
+                                    break;
+                                case 2:
+                                    this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
+                                    break;
+                                case 3:
+                                    this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
+                                    break;
+                                case 4:
+                                    // only useful and hard coded for cairo_pentagonal
+                                    this.ctx.lineTo(this.point[this.point[k].surround[4]].x + offset, this.point[this.point[k].surround[4]].y - offset);
+                                    break;
+                            }
+                        }
+                    } else {
+                        // default: render rectangles on edges
+                        let r = 0.2;
+                        let n = 4;
+                        let th = 45;
+
+                        let x = this.point[k].x;
+                        let y = this.point[k].y
+
+                        this.ctx.moveTo(x - r * Math.cos(th * (Math.PI / 180)) * this.size, y - r * Math.sin(th * (Math.PI / 180)) * this.size);
+                        for (var i = 0; i < n - 1; i++) {
+                            th += 360 / n;
+                            this.ctx.lineTo(x - r * Math.cos(th * (Math.PI / 180)) * this.size, y - r * Math.sin(th * (Math.PI / 180)) * this.size);
                         }
                     }
                     this.ctx.closePath();
-                    // this.ctx.fill();
                     this.ctx.stroke();
                 } else {
                     let r, n, th;
@@ -12749,7 +12764,7 @@ class Puzzle {
                         n = 4;
                         th = 45;
                     } else if (this.gridtype === "hex") {
-                        r = 0.45;
+                        r = (this.point[k].surround.length === 6) ? 0.45 : 0.2;
                         n = 6;
                         th = 30 + this.theta;
                     } else if (this.gridtype === "tri") {
@@ -12759,18 +12774,22 @@ class Puzzle {
                             th = 90;
                         } else if (parseInt(k / (this.n0) ** 2) === 2) {
                             th = 150;
+                        } else {
+                            r = 0.2;
+                            n = 6;
+                            th = 30 + this.theta;
                         }
                     } else if (this.gridtype === "pyramid") {
-                        r = 0.6;
+                        r = (this.point[k].surround.length === 6) ? 0.6 : 0.2;
                         n = 4;
                         th = 45;
                     } else if (this.gridtype === "truncated_square") {
-                        if (parseInt(k % 2) === 0) { // Even numbers are octa shape, odd numbers are square shape
+                        if (this.point[k].surround.length === 8) { // Even numbers are octa shape, odd numbers are square shape
                             r = 0.65;
                             n = 8;
                             th = 22.5;
                         } else {
-                            r = 0.3;
+                            r = (this.point[k].surround.length === 4) ? 0.3 : 0.2;
                             n = 4;
                             th = 45;
                         }
@@ -12803,6 +12822,10 @@ class Puzzle {
                                 n = 4;
                                 th = 105;
                             }
+                        } else {
+                            r = 0.2;
+                            n = 4;
+                            th = 45;
                         }
                     }
                     let x = this.point[k].x;
