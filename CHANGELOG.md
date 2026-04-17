@@ -1,4 +1,6 @@
 ## History
+* 2026/04/18 ver 3.2.2
+	* New middle submode to Edge mode in Square, Hex and Triangle grids.
 * 2025/05/31 ver 3.2.1
 	* reverted line thickness old way.
 	* Fixed yajilin composite mode.
