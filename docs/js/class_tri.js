@@ -35,21 +35,22 @@ class Puzzle_tri extends Puzzle {
     create_point() {
         var k = 0;
         var n = this.n0;
-        var adjacent, surround, type, use, neighbor;
+        var adjacent, surround, type, use, neighbor, edge_to_vertex;
         var point = [];
         const index = (x, y, t) => [x, y, t];
-        //center
+        //vertex
         type = 1;
         for (var j = 0; j < n; j++) {
             for (var i = 0; i < n; i++) {
                 if (i === 0 || i === n - 1 || j === 0 || j === n - 1) { use = -1; } else { use = 1; }
                 adjacent = [k - n - 1 + j % 2, k - n + j % 2, k - 1, k + 1, k + n - 1 + j % 2, k + n + j % 2];
                 surround = [k + n ** 2 - n - 1 + j % 2, k + 2 * n ** 2 - n + j % 2, k + n ** 2 - n + j % 2, k + 2 * n ** 2 + 1, k + n ** 2, k + 2 * n ** 2];
-                point[k] = new Point((i + (j % 2) * 0.5 - (1 + 0.5 * ((this.nx + 1) % 2))) * this.size, (j - 1) * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use);
+                edge_to_vertex = [k + 3 * n ** 2 - n + j % 2, k + 3 * n ** 2, k + 4 * n ** 2 - n - 1 + j % 2, k + 4 * n ** 2, k + 5 * n ** 2 - 1, k + 5 * n ** 2];
+                point[k] = new Point((i + (j % 2) * 0.5 - (1 + 0.5 * ((this.nx + 1) % 2))) * this.size, (j - 1) * this.size * Math.sqrt(3) * 0.5, type, adjacent, surround, use, [], [], 0, null, edge_to_vertex);
                 k++;
             }
         }
-        //vertex
+        //center
         type = 0;
         for (var j = 0; j < n; j++) {
             for (var i = 0; i < n; i++) {
@@ -79,7 +80,8 @@ class Puzzle_tri extends Puzzle {
                 adjacent = [k + n - 1 + j % 2, k - n + j % 2];
                 surround = [];
                 neighbor = [k - 2 * n ** 2, k - n ** 2];
-                point[k] = new Point(point[i + j * n].x - 0.25 * this.size, point[i + j * n].y + this.size * Math.sqrt(3) * 0.25, type, adjacent, surround, use, neighbor);
+                edge_to_vertex = [k - 3 * n ** 2, k - 3 * n ** 2 + n - 1 + j % 2];
+                point[k] = new Point(point[i + j * n].x - 0.25 * this.size, point[i + j * n].y + this.size * Math.sqrt(3) * 0.25, type, adjacent, surround, use, neighbor, [], 0, null, edge_to_vertex);
                 k++;
             }
         }
@@ -90,7 +92,8 @@ class Puzzle_tri extends Puzzle {
                 adjacent = [k + n + j % 2, k - n - 1 + j % 2];
                 surround = [];
                 neighbor = [k - 3 * n ** 2, k - 2 * n ** 2 + 1];
-                point[k] = new Point(point[i + j * n].x + 0.25 * this.size, point[i + j * n].y + this.size * Math.sqrt(3) * 0.25, type, adjacent, surround, use, neighbor);
+                edge_to_vertex = [k - 4 * n ** 2, k - 4 * n ** 2 + n + j % 2];
+                point[k] = new Point(point[i + j * n].x + 0.25 * this.size, point[i + j * n].y + this.size * Math.sqrt(3) * 0.25, type, adjacent, surround, use, neighbor, [], 0, null, edge_to_vertex);
                 k++;
             }
         }
@@ -101,7 +104,8 @@ class Puzzle_tri extends Puzzle {
                 adjacent = [k - 1, k + 1];
                 surround = [];
                 neighbor = [k - 4 * n ** 2 - n + j % 2, k - 3 * n ** 2 + 1];
-                point[k] = new Point(point[i + j * n].x + 0.5 * this.size, point[i + j * n].y, type, adjacent, surround, use, neighbor);
+                edge_to_vertex = [k - 5 * n ** 2, k - 5 * n ** 2 + 1];
+                point[k] = new Point(point[i + j * n].x + 0.5 * this.size, point[i + j * n].y, type, adjacent, surround, use, neighbor, [], 0, null, edge_to_vertex);
                 k++;
             }
         }
@@ -229,6 +233,8 @@ class Puzzle_tri extends Puzzle {
             case "lineE":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
                     type = [2, 3, 4];
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "6") {
+                    type = [1, 2, 3, 4];
                 } else {
                     type = [1];
                 }

@@ -1,7 +1,7 @@
 const MAX_EXPORT_LENGTH = 7360;
 
 class Point {
-    constructor(x, y, type, adjacent, surround, use, neighbor = [], adjacent_dia = [], type2 = 0, index = null) {
+    constructor(x, y, type, adjacent, surround, use, neighbor = [], adjacent_dia = [], type2 = 0, index = null, edge_to_vertex = []) {
         this.x = x;
         this.y = y;
         this.type = type;
@@ -10,6 +10,7 @@ class Point {
         this.adjacent_dia = adjacent_dia;
         this.surround = surround;
         this.neighbor = neighbor;
+        this.edge_to_vertex = edge_to_vertex;
         this.use = use;
         this.index = index;
     }
@@ -8948,6 +8949,12 @@ class Puzzle {
                     array = "deletelineE";
                     var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                     this.re_line(array, key, 1);
+                }
+            } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "6") { // half edge
+                if (this.point[num].edge_to_vertex.indexOf(parseInt(this.last)) != -1) {
+                    array = "lineE";
+                    var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
+                    this.re_line(array, key, line_style);
                 }
             }
             this.redraw();

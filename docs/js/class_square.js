@@ -48,7 +48,7 @@ class Puzzle_square extends Puzzle {
         var k = 0;
         var nx = this.nx0;
         var ny = this.ny0;
-        var adjacent, surround, type, use, neighbor, adjacent_dia;
+        var adjacent, surround, type, use, neighbor, adjacent_dia, edge_to_vertex;
         var point = [];
         const index = (x, y) => [x, y, this.nx0 * y + x];
         //center
@@ -72,7 +72,8 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k - nx, k - 1, k + 1, k + nx];
                 adjacent_dia = [k - nx - 1, k - nx + 1, k + nx - 1, k + nx + 1];
                 surround = [];
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia, 0, index(i, j));
+                edge_to_vertex = [k + nx * ny, k + nx * ny + 1, k + 2 *nx * ny, k + 2 * nx * ny + nx];
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia, 0, index(i, j), edge_to_vertex);
                 k++;
             }
         }
@@ -86,7 +87,8 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k + nx, k - nx];
                 surround = [];
                 neighbor = [k - 2 * nx * ny, k - 2 * nx * ny + nx];
-                point[k] = new Point(point[i + j * nx].x, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
+                edge_to_vertex = [k - nx * ny - 1, k - nx * ny];
+                point[k] = new Point(point[i + j * nx].x, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, neighbor, [], 0, index(i, j), edge_to_vertex);
                 k++;
             }
         }
@@ -97,7 +99,8 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k + 1, k - 1];
                 surround = [];
                 neighbor = [k - 3 * nx * ny, k - 3 * nx * ny + 1];
-                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use, neighbor, [], 0, index(i, j));
+                edge_to_vertex = [k - 2 * nx * ny - nx, k - 2 * nx * ny];
+                point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use, neighbor, [], 0, index(i, j), edge_to_vertex);
                 k++;
             }
         }
@@ -228,6 +231,8 @@ class Puzzle_square extends Puzzle {
                     type = [2, 3];
                 } else if (submode === "2") {
                     type = [0, 1];
+                } else if (submode === "6") {
+                    type = [1, 2, 3];
                 } else {
                     type = [1];
                 }
