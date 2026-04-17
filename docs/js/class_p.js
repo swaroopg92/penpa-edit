@@ -12426,7 +12426,7 @@ class Puzzle {
 
     draw_polygonsp(pu) {
         for (var i = 0; i < this[pu].polygon.length; i++) {
-            if (this[pu].polygon[i][0]) {
+            if (this[pu].polygon[i][0] != null) {
                 this.ctx.setLineDash([]);
                 this.ctx.lineCap = "square";
                 if (UserSettings.custom_colors_on && this[pu + "_col"].polygon[i]) {
