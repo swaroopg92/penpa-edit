@@ -31,15 +31,18 @@ class Stack {
         // }
         this.__a.push(o);
     }
+
     pop() {
         if (this.__a.length > 0) {
             return this.__a.pop();
         }
         return null;
     }
+
     size() {
         return this.__a.length;
     }
+
     toString() {
         return '[' + this.__a.join(',') + ']';
     }
@@ -362,10 +365,10 @@ class Puzzle {
             if (this.mode[mode].multicolor === undefined)
                 this.mode[mode].multicolor = ["", 1];
         }
-        
+
         for (let mode of ['pu_q', 'pu_q_col', 'pu_a', 'pu_a_col']) {
             // Put freeline with the regular array since they are now using the same one
-            if (this[mode].freeline !== undefined){    
+            if (this[mode].freeline !== undefined) {
                 if (this[mode].freeline.constructor.length !== 0) {
                     for (var line in this[mode].freeline) {
                         let split = this.split_line("line", line);
@@ -379,7 +382,7 @@ class Puzzle {
                 }
             }
 
-            if (this[mode].freelineE !== undefined){    
+            if (this[mode].freelineE !== undefined) {
                 if (this[mode].freelineE.constructor.length !== 0) {
                     for (var line in this[mode].freelineE) {
                         let split = this.split_line("lineE", line);
@@ -540,10 +543,18 @@ class Puzzle {
         var ymax = 0,
             ymin = 1e5;
         for (var i of this.centerlist) {
-            if (this.point[i].x > xmax) { xmax = this.point[i].x; }
-            if (this.point[i].x < xmin) { xmin = this.point[i].x; }
-            if (this.point[i].y > ymax) { ymax = this.point[i].y; }
-            if (this.point[i].y < ymin) { ymin = this.point[i].y; }
+            if (this.point[i].x > xmax) {
+                xmax = this.point[i].x;
+            }
+            if (this.point[i].x < xmin) {
+                xmin = this.point[i].x;
+            }
+            if (this.point[i].y > ymax) {
+                ymax = this.point[i].y;
+            }
+            if (this.point[i].y < ymin) {
+                ymin = this.point[i].y;
+            }
         }
         var x = (xmax + xmin) / 2;
         var y = (ymax + ymin) / 2;
@@ -1280,7 +1291,8 @@ class Puzzle {
                 var yu = (Math.floor((i / 4) / this.canvas.width)) / this.resol;
                 break;
             }
-        };
+        }
+        ;
         for (var i = data.length - 4; i > 0; i -= 4) {
             var r = data[i],
                 g = data[i + 1],
@@ -1301,7 +1313,8 @@ class Puzzle {
                 var xl = (((j / 4) % this.canvas.width)) / this.resol;
                 break;
             }
-        };
+        }
+        ;
         for (var i = data.length - 4; i > 0; i -= 4) {
             var j = ((i / 4) % this.canvas.height) * this.canvas.width * 4 + Math.floor((i / 4) / this.canvas.height) * 4;
             var r = data[j],
@@ -6245,7 +6258,7 @@ class Puzzle {
                             } else if (this.pu_q.symbol[i + j * (this.nx0)] && this.pu_q.symbol[i + j * (this.nx0)][0] === 2) {
                                 text += '.';
                             } else if (this.pu_a.number[i + j * (this.nx0)] && this.pu_a.number[i + j * (this.nx0)][2] !== "7" && (this.pu_q.surface[i + j * (this.nx0)] === 1 ||
-                                    this.pu_q.surface[i + j * (this.nx0)] === 8 || this.pu_q.surface[i + j * (this.nx0)] === 3)) { //Dark Grey, Grey and Light grey
+                                this.pu_q.surface[i + j * (this.nx0)] === 8 || this.pu_q.surface[i + j * (this.nx0)] === 3)) { //Dark Grey, Grey and Light grey
                                 switch (parseInt(this.pu_a.number[i + j * (this.nx0)][0])) {
                                     case 1:
                                         text += 'a';
@@ -6484,11 +6497,11 @@ class Puzzle {
                 }
                 if (a) {
                     if ((a[0] === "thermo" ||
-                            a[0] === "nobulbthermo" ||
-                            a[0] === "arrows" ||
-                            a[0] === "direction" ||
-                            a[0] === "squareframe" ||
-                            a[0] === "polygon") && a[1] === -1) {
+                        a[0] === "nobulbthermo" ||
+                        a[0] === "arrows" ||
+                        a[0] === "direction" ||
+                        a[0] === "squareframe" ||
+                        a[0] === "polygon") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_q.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode]);
                             if (a_col) {
@@ -6604,12 +6617,12 @@ class Puzzle {
                         a_4 = [a[4]];
                     }
                     if ((a[0] === "thermo" ||
-                            a[0] === "nobulbthermo" ||
-                            a[0] === "arrows" ||
-                            a[0] === "direction" ||
-                            a[0] === "squareframe" ||
-                            a[0] === "polygon" ||
-                            a[0] === "killercages") && a[1] === -1) {
+                        a[0] === "nobulbthermo" ||
+                        a[0] === "arrows" ||
+                        a[0] === "direction" ||
+                        a[0] === "squareframe" ||
+                        a[0] === "polygon" ||
+                        a[0] === "killercages") && a[1] === -1) {
                         if (this[pu_mode][a[0]].length > 0) {
                             this.pu_a.command_redo.push([a[0], a[1], this[pu_mode][a[0]].pop(), pu_mode].concat(a_45));
                             if (a_col) {
@@ -6719,11 +6732,11 @@ class Puzzle {
                 }
                 if (a) {
                     if ((a[0] === "thermo" ||
-                            a[0] === "nobulbthermo" ||
-                            a[0] === "arrows" ||
-                            a[0] === "direction" ||
-                            a[0] === "squareframe" ||
-                            a[0] === "polygon") && a[1] === -1) {
+                        a[0] === "nobulbthermo" ||
+                        a[0] === "arrows" ||
+                        a[0] === "direction" ||
+                        a[0] === "squareframe" ||
+                        a[0] === "polygon") && a[1] === -1) {
                         this.pu_q.command_undo.push([a[0], a[1], null, pu_mode]);
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
@@ -6831,12 +6844,12 @@ class Puzzle {
                         a_4 = [a[4]];
                     }
                     if ((a[0] === "thermo" ||
-                            a[0] === "nobulbthermo" ||
-                            a[0] === "arrows" ||
-                            a[0] === "direction" ||
-                            a[0] === "squareframe" ||
-                            a[0] === "polygon" ||
-                            a[0] === "killercages") && a[1] === -1) {
+                        a[0] === "nobulbthermo" ||
+                        a[0] === "arrows" ||
+                        a[0] === "direction" ||
+                        a[0] === "squareframe" ||
+                        a[0] === "polygon" ||
+                        a[0] === "killercages") && a[1] === -1) {
                         this.pu_a.command_undo.push([a[0], a[1], null, pu_mode].concat(a_45));
                         this[pu_mode][a[0]].push(a[2]);
                         if (a_col) {
@@ -7104,7 +7117,7 @@ class Puzzle {
                 // Compensate for every other row being offset, also store if this triangle
                 // is pointing up or down
                 let offset = (y - base_y) & y & 1;
-                return { x: x - base_x + offset, y: y - base_y, t: t };
+                return {x: x - base_x + offset, y: y - base_y, t: t};
             }
         }
         // Hexagonal grid
@@ -7117,7 +7130,7 @@ class Puzzle {
                 let [x, y] = this.point[p].index;
                 // Compensate for every other row being offset
                 let offset = (y - base_y) & y & 1;
-                return { x: x - base_x + offset, y: y - base_y };
+                return {x: x - base_x + offset, y: y - base_y};
             }
         }
         // Square grid
@@ -7128,7 +7141,7 @@ class Puzzle {
 
             rel_coords = (p) => {
                 let [x, y] = this.point[p].index;
-                return { x: x - base_x, y: y - base_y };
+                return {x: x - base_x, y: y - base_y};
             }
         }
         // Unsupported grid type
@@ -7153,7 +7166,7 @@ class Puzzle {
                 plain_clipboard += n_a[0];
             else if (n_q && n_q[0] !== "")
                 plain_clipboard += n_q[0];
-            // Put an "S" in the clipboard for shaded cells without numbers (commonly
+                // Put an "S" in the clipboard for shaded cells without numbers (commonly
             // used in LMD solution codes)
             else if ([1, 8, 3, 4].includes(puzzle['surface'][k]))
                 plain_clipboard += 'S';
@@ -7325,7 +7338,7 @@ class Puzzle {
 
         // Insert all data items into the grid relative to the base cell
         for (var data of clipboard_data.items) {
-            let { x, y } = data;
+            let {x, y} = data;
 
             x += base_x;
             y += base_y;
@@ -7361,8 +7374,8 @@ class Puzzle {
                     }
                 } else if (prop === "lineE") {
                     for (var [
-                            [i, j], edge_data, color
-                        ] of data[prop]) {
+                        [i, j], edge_data, color
+                    ] of data[prop]) {
                         let c1 = this.point[k].surround[i];
                         let c2 = this.point[k].surround[j];
                         let key = this.line_key(c1, c2);
@@ -7502,7 +7515,9 @@ class Puzzle {
                         this.set_value("numberS", k, [number, submode[1]]);
                         break;
                     case "4": //tapa
-                        if (key === ".") { key = " "; }
+                        if (key === ".") {
+                            key = " ";
+                        }
                         if (this[this.mode.qa].number[k]) {
                             con = this[this.mode.qa].number[k][0];
                             mode = this[this.mode.qa].number[k][2];
@@ -7614,9 +7629,9 @@ class Puzzle {
                         }
                         for (var k of this.selection) {
                             if (((this.mode.qa === "pu_a") &&
-                                    this["pu_q"].number[k] &&
-                                    this["pu_q"].number[k][2] === "1" &&
-                                    pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))) { // if single digit is present, dont modify that cell
+                                this["pu_q"].number[k] &&
+                                this["pu_q"].number[k][2] === "1" &&
+                                pu.only_alphanumeric(parseInt(this["pu_q"].number[k][0])))) { // if single digit is present, dont modify that cell
                                 var single_digit = true;
                             } else if ((this.mode.qa === "pu_a") && this["pu_q"].number[k] && this["pu_q"].number[k][2] === "7") {
                                 // This is for single digit obtained from candidate submode
@@ -8701,15 +8716,15 @@ class Puzzle {
     }
 
     // For freelines, split into smaller pieces. Intended to be overriden by the specific class
-    split_line(array, num) { 
+    split_line(array, num) {
         var ret = [num];
-        return  ret;
+        return ret;
     }
 
     // For freelines, check how many sublines will need updated so that lines are completed instead of being inverted
-    line_change(array, lines, line_style){ 
+    line_change(array, lines, line_style) {
         var ret = [];
-        for (let i = 0; i < lines.length; i++){
+        for (let i = 0; i < lines.length; i++) {
             if (this[this.mode.qa][array][lines[i]] === line_style) {
                 continue;
             }
@@ -8907,7 +8922,7 @@ class Puzzle {
                 update = lines;
             }
 
-            for (let i = 0; i < update.length; i++){
+            for (let i = 0; i < update.length; i++) {
                 this.re_line("line", update[i], style, this.undoredo_counter);
             }
         }
@@ -9038,7 +9053,7 @@ class Puzzle {
                 this.drawing_mode = 0;
                 update = lines;
             }
-            for (let i = 0; i < update.length; i++){
+            for (let i = 0; i < update.length; i++) {
                 this.re_line("lineE", update[i], style, this.undoredo_counter);
             }
         }
@@ -9259,8 +9274,10 @@ class Puzzle {
         }
     }
 
-    direction_arrow8(x, y) {} //override
-    direction_arrow4(x, y) {} //override
+    direction_arrow8(x, y) {
+    } //override
+    direction_arrow4(x, y) {
+    } //override
 
     //////////////////////////
     // symbol
@@ -12398,7 +12415,7 @@ class Puzzle {
             if (this.bg_image_data.foreground)
                 this.draw_bg_image();
         }
-        // don't crash the UI
+            // don't crash the UI
         catch (err) {
             console.error(err);
         }
@@ -12714,7 +12731,13 @@ class Puzzle {
             // Handling rotation and reflection of the grid
             var a = [0, 1, 2, 3],
                 c;
-            if (this.theta === 90) { a = [3, 0, 1, 2]; } else if (this.theta === 180) { a = [2, 3, 0, 1]; } else if (this.theta === 270) { a = [1, 2, 3, 0]; }
+            if (this.theta === 90) {
+                a = [3, 0, 1, 2];
+            } else if (this.theta === 180) {
+                a = [2, 3, 0, 1];
+            } else if (this.theta === 270) {
+                a = [1, 2, 3, 0];
+            }
             if (this.reflect[0] === -1) {
                 c = a[0];
                 a[0] = a[1];
