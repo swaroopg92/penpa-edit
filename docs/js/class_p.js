@@ -203,7 +203,7 @@ class Puzzle {
             'deltoidal': 20,
             'penrose': 20
         }; // also defined in general.js
-        this.version = [3, 2, 2]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 2, 3]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;

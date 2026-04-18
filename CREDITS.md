@@ -15,4 +15,8 @@
 * Thanks to <a href="https://github.com/blotwell"> Hugh </a> for contributions to Penrose P3 tilings and code improvements in Penpa+.
 * Thanks to <a href="https://github.com/zwegner"> Zach Wegner </a> for contributions to multi selection in number mode, multi color, background image support, code refactoring and improvements in Penpa+.
 * Thanks to Nishinanntoka for contributions to language support.
-* Thanks to <a href="https://github.com/m-ender"> m-ender </a> for contributions to Edge Half submode in Penpa+.
+* Thanks to <a href="https://github.com/m-ender"> m-ender </a> for contributions to Edge Half submode and other improvements in Penpa+.
+* Thanks to <a href="https://github.com/ReverM"> ReverM </a> for contributions to improvements in Penpa+.
+* Thanks to <a href="https://github.com/dodomos"> dodomos </a> for contributions to improvements in Penpa+.
+* Thanks to <a href="https://github.com/ZerolAcqua"> ZerolAcqua </a> for contributions to improvements in Penpa+.
+* Thanks to <a href="https://github.com/T0nyX1ang"> T0nyX1ang </a> for contributions to improvements in Penpa+.
