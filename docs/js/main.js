@@ -5,7 +5,6 @@ let isShiftKeyHeld = e => e.shiftKey;
 let isShiftKeyPressed = key => key === "Shift";
 let isAltKeyHeld = e => e.altKey;
 let isAltKeyPressed = key => key === "Alt";
-let localStorageAvailable = false;
 
 const MULTICOLOR_REMAP = [10, 1, 8, 3, 4, 2, 5, 6, 7, 9, 0, 11, 12];
 
@@ -18,22 +17,7 @@ onload = function() {
     let is_iPad2 = (navigator.platform === "MacIntel" && typeof navigator.standalone !== "undefined");
     let is_iPad3 = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    try {
-        if (window.localStorage) {
-            window.localStorage.setItem('test', 123);
-            localStorageAvailable = (window.localStorage.getItem('test') === "123");
-            window.localStorage.removeItem('test');
-        }
-    } catch (e) {
-        localStorageAvailable = false;
-    }
-
-    if (!localStorageAvailable) {
-        document.getElementById('allow_local_storage').classList.add('is_hidden');
-        document.getElementById('clear_storage_one').classList.add('is_hidden');
-        document.getElementById('clear_storage_all').classList.add('is_hidden');
-        document.getElementById('local_storage_browser_message').classList.remove('is_hidden');
-    }
+    PenpaProgress.updateLocalSaveUI();
 
     if (ua.indexOf('iPhone') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
         ondown_key = "touchstart";
@@ -78,25 +62,27 @@ onload = function() {
         ],
         localStorageKey: "spectrum.homepage", // Any Spectrum with the same string will share selection, data stored locally in the browser
     });
-    $(colorpicker_special).on('change', function(e, color) { pu.update_customcolor(color ? color.toRgbString() : color); });
+    $(colorpicker_special).on('change', function(e, color) {
+        pu.update_customcolor(color ? color.toRgbString() : color);
+    });
 
     boot();
 
     document.addEventListener("beforeunload", function(eve) {
         eve.returnValue = "Move page.";
-    }, { passive: false });
+    }, {passive: false});
 
     var checkms = 0; // Temporary variable for hover event
 
     //canvas
-    canvas.addEventListener("touchend", onUp, { passive: false });
-    canvas.addEventListener("mouseup", onUp, { passive: false });
-    canvas.addEventListener("touchmove", onMove, { passive: false });
-    canvas.addEventListener("mousemove", onMove, { passive: false });
-    canvas.addEventListener("mouseout", onOut, { passive: false });
-    canvas.addEventListener("contextmenu", onContextmenu, { passive: false });
-    document.addEventListener("keydown", onKeyDown, { passive: false });
-    document.addEventListener("keyup", onKeyUp, { passive: false });
+    canvas.addEventListener("touchend", onUp, {passive: false});
+    canvas.addEventListener("mouseup", onUp, {passive: false});
+    canvas.addEventListener("touchmove", onMove, {passive: false});
+    canvas.addEventListener("mousemove", onMove, {passive: false});
+    canvas.addEventListener("mouseout", onOut, {passive: false});
+    canvas.addEventListener("contextmenu", onContextmenu, {passive: false});
+    document.addEventListener("keydown", onKeyDown, {passive: false});
+    document.addEventListener("keyup", onKeyUp, {passive: false});
 
     let restrict_grids = ["square", "sudoku", "kakuro"];
     let restrict_modes = ["line", "linex", "linedir", "lineox", "yajilin", "rassisillai"];
@@ -173,8 +159,8 @@ onload = function() {
             }
             // to handle mobile/ipad users for up events for certain modes
             if (ondown_key === "mousedown" && (edit_mode === "sudoku" || edit_mode === "number" ||
-                    (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
-                        pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
+                (edit_mode === "combi" && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
+                    pu.mode[pu.mode.qa][edit_mode][0] === "akari")))) {
                 var obj = coord_point(event, 'flex');
             } else {
                 var obj = coord_point(event);
@@ -195,6 +181,7 @@ onload = function() {
     }
 
     function onMove(e) {
+        if (!window.pu) { return; }
         let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.buttons !== 4) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousemove") {
@@ -213,7 +200,7 @@ onload = function() {
                 var obj = coord_point(event, 'flex', 'move');
             } else {
                 if (((edit_mode === "combi") && (pu.mode[pu.mode.qa][edit_mode][0] === "yajilin" ||
-                        pu.mode[pu.mode.qa][edit_mode][0] === "akari"))) {
+                    pu.mode[pu.mode.qa][edit_mode][0] === "akari"))) {
                     var obj = coord_point(event, 'flex');
                 } else {
                     var obj = coord_point(event);
@@ -261,9 +248,11 @@ onload = function() {
     }
 
     function onOut() {
-        pu.mouse_mode = "out";
-        pu.mouse_click = 0;
-        pu.mouseevent(0, 0, 0);
+        if (window.pu) {
+            pu.mouse_mode = "out";
+            pu.mouse_click = 0;
+            pu.mouseevent(0, 0, 0);
+        }
         return;
     }
 
@@ -943,7 +932,7 @@ onload = function() {
         }
 
         for (var i = 0; i < pu.point.length; i++) {
-            if (pu.point[i] && type.indexOf(pu.point[i].type) != -1) {
+            if (pu.point[i] && pu.type.indexOf(pu.point[i].type) != -1) {
                 min0 = (x - pu.point[i].x) ** 2 + (y - pu.point[i].y) ** 2;
                 if (min0 < min) {
                     min = min0;
@@ -976,21 +965,21 @@ onload = function() {
     var undo_button = document.getElementById("tb_undo");
     var redo_button = document.getElementById("tb_redo");
 
-    undo_button.addEventListener("touchstart", undoDown, { passive: false });
-    undo_button.addEventListener("mousedown", undoDown, { passive: false });
-    undo_button.addEventListener("touchend", undoUp, { passive: false });
-    undo_button.addEventListener("mouseup", undoUp, { passive: false });
-    undo_button.addEventListener("touchend", undoLeave, { passive: false });
-    undo_button.addEventListener("mouseleave", undoLeave, { passive: false });
-    undo_button.addEventListener("contextmenu", offcontext, { passive: false });
+    undo_button.addEventListener("touchstart", undoDown, {passive: false});
+    undo_button.addEventListener("mousedown", undoDown, {passive: false});
+    undo_button.addEventListener("touchend", undoUp, {passive: false});
+    undo_button.addEventListener("mouseup", undoUp, {passive: false});
+    undo_button.addEventListener("touchend", undoLeave, {passive: false});
+    undo_button.addEventListener("mouseleave", undoLeave, {passive: false});
+    undo_button.addEventListener("contextmenu", offcontext, {passive: false});
 
-    redo_button.addEventListener("touchstart", redoDown, { passive: false });
-    redo_button.addEventListener("mousedown", redoDown, { passive: false });
-    redo_button.addEventListener("touchend", redoUp, { passive: false });
-    redo_button.addEventListener("mouseup", redoUp, { passive: false });
-    redo_button.addEventListener("touchend", redoLeave, { passive: false });
-    redo_button.addEventListener("mouseleave", redoLeave, { passive: false });
-    redo_button.addEventListener("contextmenu", offcontext, { passive: false });
+    redo_button.addEventListener("touchstart", redoDown, {passive: false});
+    redo_button.addEventListener("mousedown", redoDown, {passive: false});
+    redo_button.addEventListener("touchend", redoUp, {passive: false});
+    redo_button.addEventListener("mouseup", redoUp, {passive: false});
+    redo_button.addEventListener("touchend", redoLeave, {passive: false});
+    redo_button.addEventListener("mouseleave", redoLeave, {passive: false});
+    redo_button.addEventListener("contextmenu", offcontext, {passive: false});
 
     function offcontext(e) {
         e.preventDefault();
@@ -1063,8 +1052,8 @@ onload = function() {
     }
 
     // Click event
-    document.addEventListener("touchstart", window_click, { passive: false });
-    document.addEventListener("mousedown", window_click, { passive: false });
+    document.addEventListener("touchstart", window_click, {passive: false});
+    document.addEventListener("mousedown", window_click, {passive: false});
 
     function window_click(e) {
         let eventTarget = e.target;
@@ -1109,7 +1098,7 @@ onload = function() {
                     e.preventDefault();
                 }
                 break;
-                //top/bottom button
+            //top/bottom button
             case "newboard":
                 newboard();
                 e.preventDefault();
@@ -1161,7 +1150,7 @@ onload = function() {
                 e.preventDefault();
                 break;
 
-                //panel_menu
+            //panel_menu
             case "panel_1_lbmenu":
                 panel_pu.mode_set('number');
                 panel_pu.select_close();
@@ -1254,7 +1243,7 @@ onload = function() {
                     e.preventDefault();
                 }
                 break;
-                //savetext
+            //savetext
             case "saveinfogenre":
             case "saveinfogenre2":
                 show_genretags();
@@ -1373,34 +1362,21 @@ onload = function() {
             case "rt_addtop":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('t');
-                if (pu.gridtype === "square") {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_bottom(1); // rotated by 180
+                            pu.resize_bottom(1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_left(1); // rotated by 90
+                            pu.resize_left(1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_top(1); // original
+                            pu.resize_top(1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_right(1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_bottom(1, 'white');
-                            break;
-                        case 1:
-                            pu.resize_left(1, 'white');
-                            break;
-                        case 2:
-                            pu.resize_top(1, 'white');
-                            break;
-                        case 3:
-                            pu.resize_right(1, 'white');
+                            pu.resize_right(1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1410,34 +1386,21 @@ onload = function() {
             case "rt_addbottom":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('b');
-                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_top(1); // rotated by 180
+                            pu.resize_top(1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_right(1); // rotated by 90
+                            pu.resize_right(1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(1); // original
+                            pu.resize_bottom(1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_left(1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku") {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_top(1, 'white'); // rotated by 180
-                            break;
-                        case 1:
-                            pu.resize_right(1, 'white'); // rotated by 90
-                            break;
-                        case 2:
-                            pu.resize_bottom(1, 'white'); // original
-                            break;
-                        case 3:
-                            pu.resize_left(1, 'white'); // rotated by 270
+                            pu.resize_left(1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1447,34 +1410,21 @@ onload = function() {
             case "rt_addleft":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('l');
-                if (pu.gridtype === "square") {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_right(1); // rotated by 180
+                            pu.resize_right(1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_bottom(1); // rotated by 90
+                            pu.resize_bottom(1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_left(1); // original
+                            pu.resize_left(1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_top(1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_right(1, 'white');
-                            break;
-                        case 1:
-                            pu.resize_bottom(1, 'white');
-                            break;
-                        case 2:
-                            pu.resize_left(1, 'white');
-                            break;
-                        case 3:
-                            pu.resize_top(1, 'white');
+                            pu.resize_top(1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1484,34 +1434,21 @@ onload = function() {
             case "rt_addright":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('r');
-                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_left(1); // rotated by 180
+                            pu.resize_left(1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_top(1); // rotated by 90
+                            pu.resize_top(1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(1); // original
+                            pu.resize_right(1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_bottom(1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku") {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_left(1, 'white'); // rotated by 180
-                            break;
-                        case 1:
-                            pu.resize_top(1, 'white'); // rotated by 90
-                            break;
-                        case 2:
-                            pu.resize_right(1, 'white'); // original
-                            break;
-                        case 3:
-                            pu.resize_bottom(1, 'white'); // rotated by 270
+                            pu.resize_bottom(1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1521,34 +1458,21 @@ onload = function() {
             case "rt_subtop":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('t');
-                if (pu.gridtype === "square") {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_bottom(-1); // rotated by 180
+                            pu.resize_bottom(-1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_left(-1); // rotated by 90
+                            pu.resize_left(-1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_top(-1); // original
+                            pu.resize_top(-1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_right(-1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_bottom(-1, 'white');
-                            break;
-                        case 1:
-                            pu.resize_left(-1, 'white');
-                            break;
-                        case 2:
-                            pu.resize_top(-1, 'white');
-                            break;
-                        case 3:
-                            pu.resize_right(-1, 'white');
+                            pu.resize_right(-1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1558,34 +1482,21 @@ onload = function() {
             case "rt_subbottom":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('b');
-                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_top(-1); // rotated by 180
+                            pu.resize_top(-1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_right(-1); // rotated by 90
+                            pu.resize_right(-1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_bottom(-1); // original
+                            pu.resize_bottom(-1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_left(-1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku") {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_top(-1, 'white'); // rotated by 180
-                            break;
-                        case 1:
-                            pu.resize_right(-1, 'white'); // rotated by 90
-                            break;
-                        case 2:
-                            pu.resize_bottom(-1, 'white'); // original
-                            break;
-                        case 3:
-                            pu.resize_left(-1, 'white'); // rotated by 270
+                            pu.resize_left(-1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1595,34 +1506,21 @@ onload = function() {
             case "rt_subleft":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('l');
-                if (pu.gridtype === "square") {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" || pu.gridtype === "kakuro" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_right(-1); // rotated by 180
+                            pu.resize_right(-1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_bottom(-1); // rotated by 90
+                            pu.resize_bottom(-1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_left(-1); // original
+                            pu.resize_left(-1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_top(-1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku" || (pu.gridtype === "kakuro")) {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_right(-1, 'white');
-                            break;
-                        case 1:
-                            pu.resize_bottom(-1, 'white');
-                            break;
-                        case 2:
-                            pu.resize_left(-1, 'white');
-                            break;
-                        case 3:
-                            pu.resize_top(-1, 'white');
+                            pu.resize_top(-1, celltype); // rotated by 270
                             break;
                     }
                 }
@@ -1632,77 +1530,68 @@ onload = function() {
             case "rt_subright":
                 // To handle Rotation and Reflection
                 orientation = pu.get_orientation('r');
-                if (pu.gridtype === "square" || (pu.gridtype === "kakuro")) {
+                if (pu.grid_is_square()) {
+                    let celltype = UserSettings.resize_whitespace || pu.gridtype === "sudoku" ? 'white' : 'black';
+
                     switch (orientation) {
                         case 0:
-                            pu.resize_left(-1); // rotated by 180
+                            pu.resize_left(-1, celltype); // rotated by 180
                             break;
                         case 1:
-                            pu.resize_top(-1); // rotated by 90
+                            pu.resize_top(-1, celltype); // rotated by 90
                             break;
                         case 2:
-                            pu.resize_right(-1); // original
+                            pu.resize_right(-1, celltype); // original
                             break;
                         case 3:
-                            pu.resize_bottom(-1); // rotated by 270
-                            break;
-                    }
-                } else if (pu.gridtype === "sudoku") {
-                    switch (orientation) {
-                        case 0:
-                            pu.resize_left(-1, 'white'); // rotated by 180
-                            break;
-                        case 1:
-                            pu.resize_top(-1, 'white'); // rotated by 90
-                            break;
-                        case 2:
-                            pu.resize_right(-1, 'white'); // original
-                            break;
-                        case 3:
-                            pu.resize_bottom(-1, 'white'); // rotated by 270
+                            pu.resize_bottom(-1, celltype); // rotated by 270
                             break;
                     }
                 }
                 // pu.rotate_size(); // fit board to window
                 e.preventDefault();
                 break;
+            case "resize_whitespace_button":
+                UserSettings.resize_whitespace = !UserSettings.resize_whitespace;
+                e.preventDefault();
+                break;
             case "rt_addtop_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_top(1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_top(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_addbottom_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_bottom(1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_bottom(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_addleft_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_left(1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_left(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_addright_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_right(1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_right(1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subtop_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_top(-1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_top(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subbottom_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_bottom(-1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_bottom(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subleft_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_left(-1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_left(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "rt_subright_r":
-                if ((pu.gridtype === "square") || (pu.gridtype === "sudoku") || (pu.gridtype === "kakuro")) { pu.resize_right(-1, 'white'); }
+                if (pu.grid_is_square()) { pu.resize_right(-1, 'white'); }
                 e.preventDefault();
                 break;
             case "closeBtn_rotate1":
                 document.getElementById('modal-rotate').style.display = 'none';
                 e.preventDefault();
                 break;
-                //saveimage
+            //saveimage
             case "nb_margin1_lb":
                 document.getElementById("nb_margin1").checked = true;
                 e.preventDefault();
@@ -1725,7 +1614,7 @@ onload = function() {
                 document.getElementById('modal-bg-image').style.display = 'none';
                 e.preventDefault();
                 break;
-                //newboard
+            //newboard
             case "nb_size1":
             case "nb_size2":
             case "nb_size3":
@@ -1764,7 +1653,7 @@ onload = function() {
                 document.getElementById('modal').style.display = 'none';
                 e.preventDefault();
                 break;
-                //newsize
+            //newsize
             case "nb_size3_r":
                 return;
             case "closeBtn_size1":
@@ -1907,13 +1796,13 @@ onload = function() {
                         //advance and capture one frame at a time
                         while (pu[pu.mode.qa]["command_redo"].__a.length !== 0) {
                             gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
-                            gif.addFrame(gif_ctx, { delay: frame_ms, copy: true });
+                            gif.addFrame(gif_ctx, {delay: frame_ms, copy: true});
 
                             pu.redo(replay = true);
                         }
                         //capture final frame with longer delay
                         gif_ctx.drawImage(main_c, 0, 0, main_c.width, main_c.height, 0, gif_vertical_offset, gif_c.width, gif_c.height - gif_vertical_offset);
-                        gif.addFrame(gif_ctx, { delay: 2000, copy: true });
+                        gif.addFrame(gif_ctx, {delay: 2000, copy: true});
 
                         gif.on('finished', function(blob) {
                             saveblob_download(blob, "my_solve.gif");
@@ -1992,7 +1881,7 @@ onload = function() {
     }
 
     // Double click to select all of a certain element
-    document.addEventListener("dblclick", window_dblclick, { passive: false });
+    document.addEventListener("dblclick", window_dblclick, {passive: false});
 
     function window_dblclick(e) {
         if (e.target.id === "canvas") {
@@ -2021,8 +1910,8 @@ onload = function() {
         x_window = event.pageX - elements.offsetLeft;
         y_window = event.pageY - elements.offsetTop;
         var drag = document.getElementsByClassName("drag")[0];
-        document.body.addEventListener("touchmove", mmove, { passive: false });
-        document.body.addEventListener("mousemove", mmove, { passive: false });
+        document.body.addEventListener("touchmove", mmove, {passive: false});
+        document.body.addEventListener("mousemove", mmove, {passive: false});
     }
 
     function mmove(e) {
@@ -2054,20 +1943,20 @@ onload = function() {
             drag.style.left = body.style.left;
         }
 
-        drag.addEventListener("touchend", mup, { passive: false });
-        drag.addEventListener("mouseup", mup, { passive: false });
-        document.body.addEventListener("touchleave", mup, { passive: false });
-        document.body.addEventListener("mouseleave", mup, { passive: false });
+        drag.addEventListener("touchend", mup, {passive: false});
+        drag.addEventListener("mouseup", mup, {passive: false});
+        document.body.addEventListener("touchleave", mup, {passive: false});
+        document.body.addEventListener("mouseleave", mup, {passive: false});
 
     }
 
     function mup(e) {
         var drag = document.getElementsByClassName("drag")[0];
         if (drag) {
-            document.body.removeEventListener("touchmove", mmove, { passive: false });
-            document.body.removeEventListener("mousemove", mmove, { passive: false });
-            drag.removeEventListener("touchend", mup, { passive: false });
-            drag.removeEventListener("mouseup", mup, { passive: false });
+            document.body.removeEventListener("touchmove", mmove, {passive: false});
+            document.body.removeEventListener("mousemove", mmove, {passive: false});
+            drag.removeEventListener("touchend", mup, {passive: false});
+            drag.removeEventListener("mouseup", mup, {passive: false});
             drag.classList.remove("drag");
         }
     }
@@ -2155,36 +2044,15 @@ onload = function() {
             // Chrome requires returnValue to be set
             e.returnValue = '';
         }
-        save_progress();
+        PenpaProgress.save();
     });
 
     document.addEventListener("visibilitychange", function() {
         if (document.visibilityState === "hidden") {
-            save_progress();
+            PenpaProgress.save();
         }
     });
 
-    function save_progress() {
-        // Auto-save tab state in browser history if requested
-        if (UserSettings.auto_save_history) {
-            duplicate(true);
-        }
-
-        // Save puzzle progress
-        if (localStorageAvailable &&
-            pu.url.length !== 0 &&
-            pu.mmode === "solve" &&
-            UserSettings.save_current_puzzle &&
-            !pu.replay) {
-            // get md5 hash for unique id
-            let hash = "penpa_" + md5(pu.url);
-
-            // generate duplicate link
-            let rstr = pu.maketext_duplicate() + "&l=solvedup";
-
-            localStorage.setItem(hash, rstr);
-        }
-    }
 
     // Adding on change events for general settings
     // Theme Setting
@@ -2244,7 +2112,7 @@ onload = function() {
     }
 
     $(document).ready(function() {
-        if (pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
+        if (window.pu && pu.mmode !== "solve" && (pu.gridtype === "square" || pu.gridtype === "sudoku" || pu.gridtype === "kakuro")) {
             $('#constraints_settings_opt').select2({
                 'width': "resolve" // 25% was used before
             });
@@ -2403,7 +2271,7 @@ onload = function() {
 
     function startTimer() {
         pu.hide_pause_layer();
-        sw_timer.start({ precision: 'secondTenths' });
+        sw_timer.start({precision: 'secondTenths'});
     }
 
     // Pause/unpause when tab loses focus
@@ -2428,32 +2296,23 @@ onload = function() {
 
 function clear_storage_one() {
     // check for local progress
-    // get md5 hash for unique id
     if (typeof pu.url === 'string') {
-        let hash = "penpa_" + md5(pu.url);
-        localStorage.removeItem(hash);
+        const hash = PenpaProgress.getHash(pu.url);
+        PenpaProgress.clearPuzzle(hash);
         Swal.fire({
             html: '<h2 class="info">' + PenpaText.get('local_storage_cleared') + '</h2>',
             icon: 'info'
         });
     }
 
-    // turn off localstorage for this puzzle
+    // turn off local progress save for this puzzle
     UserSettings.save_current_puzzle = false;
 }
 
 function clear_storage_all() {
-    var keys = Object.keys(localStorage),
-        i = keys.length;
+    PenpaProgress.clearAllPuzzles();
 
-    while (i--) {
-        if (keys[i].includes("penpa")) {
-            localStorage.removeItem(keys[i]);
-        }
-    }
-    // localStorage.clear(); for all clear
-
-    // turn off localstorage for current puzzle
+    // turn off local progress save for current puzzle
     UserSettings.save_current_puzzle = false;
 
     Swal.fire({
