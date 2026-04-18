@@ -783,7 +783,7 @@ class Puzzle {
             } else {
                 if (this.space[spaceSide] > 0) {
                     this.space[spaceSide] = this.space[spaceSide] - 1;
-                } else if (pu.mode.qa === 'pu_a') {
+                } else {
                     return; // Protect board content
                 }
             }
@@ -821,7 +821,7 @@ class Puzzle {
             }
         }
 
-        // Find the missing boxes
+        // Find the missing and added boxes
         let old_centerlist = this.centerlist;
         let old_idealcenterlist = []; // If no box was missing
         for (let j = 2 + originalspace[0]; j < originalny0 - 2 - originalspace[1]; j++) {
@@ -830,6 +830,7 @@ class Puzzle {
             }
         }
         let boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
+        let boxadd = old_centerlist.filter(x => old_idealcenterlist.indexOf(x) === -1);
 
         this.create_point();
         this.centerlist = [];
@@ -862,6 +863,7 @@ class Puzzle {
                 this.centerlist.push(i + j * (this.nx0));
             }
         }
+
         // Remove Box elements
         for (let n = 0; n < boxremove.length; n++) {
             let num = boxremove[n];
@@ -871,6 +873,17 @@ class Puzzle {
                 this.centerlist.splice(index, 1);
             }
         }
+
+        // Add Box elements
+        for (let n = 0; n < boxadd.length; n++) {
+            let num = boxadd[n];
+            let m = translate_fn(num);
+            let index = this.centerlist.indexOf(m);
+            if (index === -1) {
+                this.centerlist.push(m);
+            }
+        }
+
         this.make_frameline();
         this.translate_puzzle_elements(translate_fn);
     }

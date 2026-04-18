@@ -453,6 +453,16 @@ const UserSettings = {
     get quick_panel_button() {
         return this._quick_panel_btn;
     },
+    
+    _resize_whitespace: false,
+    set resize_whitespace(newValue) {
+        const button = document.getElementById("resize_whitespace_button");
+        this._resize_whitespace = newValue;
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
+    },
+    get resize_whitespace() {
+        return this._resize_whitespace;
+    },
 
     can_save: [
         'auto_save_history',
