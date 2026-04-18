@@ -12740,172 +12740,62 @@ class Puzzle {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         if (edit_mode === "sudoku" || this.number_multi_enabled() || edit_mode === "multicolor" ||
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
-            // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
-            // since we dont want single cell highlighed while in killer submode
-            // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
-            //    // check if cursor is in centerlist, to avoid border/edge case
-            //    let cursorexist = this.centerlist.indexOf(this.cursol);
-            //    if (cursorexist !== -1) {
-            //        this.selection.push(this.cursol);
-            //    }
-            // }
-
-            // Handling rotation and reflection of the grid
-            var a = [0, 1, 2, 3],
-                c;
-            if (this.theta === 90) {
-                a = [3, 0, 1, 2];
-            } else if (this.theta === 180) {
-                a = [2, 3, 0, 1];
-            } else if (this.theta === 270) {
-                a = [1, 2, 3, 0];
-            }
-            if (this.reflect[0] === -1) {
-                c = a[0];
-                a[0] = a[1];
-                a[1] = c;
-                c = a[2];
-                a[2] = a[3];
-                a[3] = c;
-            }
-            if (this.reflect[1] === -1) {
-                c = a[0];
-                a[0] = a[3];
-                a[3] = c;
-                c = a[1];
-                a[1] = a[2];
-                a[2] = c;
-            }
-            for (var k of this.selection) {
-                let factor, offset;
-                if (this.grid_is_square()) {
-                    factor = parseInt(k / (this.nx0 * this.ny0));
-                    offset = 3;
-                } else if (this.gridtype === "iso") {
-                    factor = 0;
-                    offset = 0;
-                } else if (this.gridtype === "tetrakis_square" || this.gridtype === "cairo_pentagonal" || this.gridtype === "rhombitrihexagonal" || this.gridtype === "deltoidal_trihexagonal" || this.gridtype === "penrose_P3") {
-                    factor = 0;
-                    offset = 0;
-                } else {
-                    factor = 2;
-                }
-                // Color of selected cell
-                // set_surface_style(this.ctx, 13);
-
-                // Shadow for the selected cell
+                // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
+                // since we dont want single cell highlighed while in killer submode
+                // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
+                //    // check if cursor is in centerlist, to avoid border/edge case
+                //    let cursorexist = this.centerlist.indexOf(this.cursol);
+                //    if (cursorexist !== -1) {
+                //        this.selection.push(this.cursol);
+                //    }
+                // }
                 this.ctx.shadowBlur = 10;
                 this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
-                // Border outline for the selected cell
-                set_line_style(this.ctx, 101);
-                if (factor < 1) {
-                    this.ctx.beginPath();
-                    for (var j = 0; j < this.point[k].surround.length; j++) {
-                        switch (j) {
-                            case 0:
-                                this.ctx.moveTo(this.point[this.point[k].surround[a[0]]].x + offset, this.point[this.point[k].surround[a[0]]].y + offset);
-                                break;
-                            case 1:
-                                this.ctx.lineTo(this.point[this.point[k].surround[a[1]]].x - offset, this.point[this.point[k].surround[a[1]]].y + offset);
-                                break;
-                            case 2:
-                                this.ctx.lineTo(this.point[this.point[k].surround[a[2]]].x - offset, this.point[this.point[k].surround[a[2]]].y - offset);
-                                break;
-                            case 3:
-                                this.ctx.lineTo(this.point[this.point[k].surround[a[3]]].x + offset, this.point[this.point[k].surround[a[3]]].y - offset);
-                                break;
-                            case 4:
-                                // only useful and hard coded for cairo_pentagonal
-                                this.ctx.lineTo(this.point[this.point[k].surround[4]].x + offset, this.point[this.point[k].surround[4]].y - offset);
-                                break;
-                        }
-                    }
-                    this.ctx.closePath();
-                    // this.ctx.fill();
-                    this.ctx.stroke();
-                } else {
-                    let r, n, th;
-                    let tol = 0.01; // error tolerance
-                    if (this.grid_is_square()) {
-                        r = 0.2;
-                        n = 4;
-                        th = 45;
-                    } else if (this.gridtype === "hex") {
-                        r = 0.45;
-                        n = 6;
-                        th = 30 + this.theta;
-                    } else if (this.gridtype === "tri") {
-                        r = 0.5;
-                        n = 3;
-                        if (parseInt(k / (this.n0) ** 2) === 1) {
-                            th = 90;
-                        } else if (parseInt(k / (this.n0) ** 2) === 2) {
-                            th = 150;
-                        }
-                    } else if (this.gridtype === "pyramid") {
-                        r = 0.6;
-                        n = 4;
-                        th = 45;
-                    } else if (this.gridtype === "truncated_square") {
-                        if (parseInt(k % 2) === 0) { // Even numbers are octa shape, odd numbers are square shape
-                            r = 0.65;
-                            n = 8;
-                            th = 22.5;
-                        } else {
-                            r = 0.3;
-                            n = 4;
-                            th = 45;
-                        }
-                    } else if (this.gridtype === "snub_square") {
-                        if (this.point[k].surround.length === 3) { // Even numbers are octa shape, odd numbers are square shape
-                            if (Math.abs(this.point[this.point[k].surround[a[0]]].y - this.point[this.point[k].surround[a[1]]].y) <= tol) {
-                                r = 0.4;
-                                n = 3;
-                                th = 90;
-                            } else if (Math.abs(this.point[this.point[k].surround[a[0]]].x - this.point[this.point[k].surround[a[2]]].x) <= tol) {
-                                r = 0.4;
-                                n = 3;
-                                th = 0;
-                            } else if (Math.abs(this.point[this.point[k].surround[a[1]]].y - this.point[this.point[k].surround[a[2]]].y) <= tol) {
-                                r = 0.4;
-                                n = 3;
-                                th = 30;
-                            } else {
-                                r = 0.4;
-                                n = 3;
-                                th = 60;
-                            }
-                        } else if (this.point[k].surround.length === 4) {
-                            if (Math.abs(this.point[this.point[k].surround[a[0]]].y - this.point[this.point[k].surround[a[1]]].y) <= tol) {
-                                r = 0.6;
-                                n = 4;
-                                th = 45;
-                            } else {
-                                r = 0.6;
-                                n = 4;
-                                th = 105;
-                            }
-                        }
-                    }
-                    let x = this.point[k].x;
-                    let y = this.point[k].y
+                let irregular = false;
+                let total_radius, radius;
+                let offset = 3.7;
 
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(x - r * Math.cos(th * (Math.PI / 180)) * this.size, y - r * Math.sin(th * (Math.PI / 180)) * this.size);
-                    for (var i = 0; i < n - 1; i++) {
-                        th += 360 / n;
-                        this.ctx.lineTo(x - r * Math.cos(th * (Math.PI / 180)) * this.size, y - r * Math.sin(th * (Math.PI / 180)) * this.size);
+                let regulars = ["square", "hex", "tri", "pyramid", "cube", "cairo_pentagonal", "sudoku", "kakuro", "tetrakis_square", "deltaoidal_trihexagonal"];
+                set_line_style(this.ctx, 101);
+
+                if (this.gridtype in regulars && !!this.selection[0]) { // If all cells are the same shape, no need to recompute
+                    total_radius = Math.sqrt((this.point[this.selection[0]].x - ((this.point[this.point[this.selection[0]].surround[0]].x)+(this.point[this.point[this.selection[0]].surround[1]].x))*0.5)**2 +
+                                             (this.point[this.selection[0]].y - ((this.point[this.point[this.selection[0]].surround[0]].y)+(this.point[this.point[this.selection[0]].surround[1]].y))*0.5)**2);
+                    radius = (total_radius - offset) / total_radius;
+                }
+                else {irregular = true;}
+
+                for (var k of this.selection) {
+                    if (this.point[k].type !== 0) { // Edge or Vertex
+                        this.ctx.fillStyle = Color.TRANSPARENTBLACK;
+                        this.ctx.lineWidth = 2;
+
+                        this.draw_circle(this.ctx, this.point[k].x, this.point[k].y, 0.15);
                     }
-                    this.ctx.closePath();
-                    this.ctx.stroke();
+                    else { // Standard Cell
+                        if (irregular) {
+                            total_radius = Math.sqrt((this.point[k].x - ((this.point[this.point[k].surround[0]].x)+(this.point[this.point[k].surround[1]].x))*0.5)**2 +
+                                                     (this.point[k].y - ((this.point[this.point[k].surround[0]].y)+(this.point[this.point[k].surround[1]].y))*0.5)**2);
+                            radius = (total_radius - offset) / total_radius;
+                        }
+
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(this.point[k].x * (1 - radius) + this.point[this.point[k].surround[0]].x * radius,
+                                        this.point[k].y * (1 - radius) + this.point[this.point[k].surround[0]].y * radius);
+
+                        for (var j = 0; j < this.point[k].surround.length - 1; j++) {
+                            this.ctx.lineTo(this.point[k].x * (1 - radius) + this.point[this.point[k].surround[j + 1]].x * radius,
+                                            this.point[k].y * (1 - radius) + this.point[this.point[k].surround[j + 1]].y * radius);
+                        }
+                        this.ctx.closePath();
+                        this.ctx.stroke();
+                    }
                 }
 
-                // Reset Bluring
                 this.ctx.shadowBlur = 0;
                 this.ctx.shadowColor = Color.TRANSPARENTBLACK;
             }
         }
-    }
 
     check_solution() {
         if (!this.multisolution) {
