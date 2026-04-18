@@ -1296,13 +1296,15 @@ class Puzzle {
         var textHeight = 0;
         var currentRow = -1
 
-        let iswhite = function(r,g,b) { return (r>250)&&(g>250)&&(b>250); }
+        let iswhite = function(r, g, b) {
+            return (r > 250) && (g > 250) && (b > 250);
+        }
         for (var i = 0, len = data.length; i < len; i += 4) {
             var r = data[i],
                 g = data[i + 1],
                 b = data[i + 2],
                 alpha = data[i + 3];
-            if (!iswhite(r,g,b)) {
+            if (!iswhite(r, g, b)) {
                 var yu = (Math.floor((i / 4) / this.canvas.width)) / this.resol;
                 break;
             }
@@ -1313,7 +1315,7 @@ class Puzzle {
                 g = data[i + 1],
                 b = data[i + 2],
                 alpha = data[i + 3];
-            if (!iswhite(r,g,b)) {
+            if (!iswhite(r, g, b)) {
                 var yd = (Math.floor((i / 4) / this.canvas.width) + 1) / this.resol;
                 break;
             }
@@ -1324,7 +1326,7 @@ class Puzzle {
                 g = data[j + 1],
                 b = data[j + 2],
                 alpha = data[j + 3];
-            if (!iswhite(r,g,b)) {
+            if (!iswhite(r, g, b)) {
                 var xl = (((j / 4) % this.canvas.width)) / this.resol;
                 break;
             }
@@ -1336,7 +1338,7 @@ class Puzzle {
                 g = data[j + 1],
                 b = data[j + 2],
                 alpha = data[j + 3];
-            if (!iswhite(r,g,b)) {
+            if (!iswhite(r, g, b)) {
                 var xr = (((j / 4) % this.canvas.width) + 1) / this.resol;
                 break;
             }
@@ -12740,62 +12742,62 @@ class Puzzle {
         let edit_mode = this.mode[this.mode.qa].edit_mode;
         if (edit_mode === "sudoku" || this.number_multi_enabled() || edit_mode === "multicolor" ||
             (edit_mode === "cage" && document.getElementById("sub_cage1").checked)) {
-                // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
-                // since we dont want single cell highlighed while in killer submode
-                // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
-                //    // check if cursor is in centerlist, to avoid border/edge case
-                //    let cursorexist = this.centerlist.indexOf(this.cursol);
-                //    if (cursorexist !== -1) {
-                //        this.selection.push(this.cursol);
-                //    }
-                // }
-                this.ctx.shadowBlur = 10;
-                this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
-                let irregular = false;
-                let total_radius, radius;
-                let offset = 3.7;
+            // [ZW] removing this for now, preventing escape to clear selection, not sure what the purpose is
+            // since we dont want single cell highlighed while in killer submode
+            // if (this.selection.length === 0 && this.mode[this.mode.qa].edit_mode === "sudoku") {
+            //    // check if cursor is in centerlist, to avoid border/edge case
+            //    let cursorexist = this.centerlist.indexOf(this.cursol);
+            //    if (cursorexist !== -1) {
+            //        this.selection.push(this.cursol);
+            //    }
+            // }
+            this.ctx.shadowBlur = 10;
+            this.ctx.shadowColor = Color.ORANGE_TRANSPARENT;
+            let irregular = false;
+            let total_radius, radius;
+            let offset = 3.7;
 
-                let regulars = ["square", "hex", "tri", "pyramid", "cube", "cairo_pentagonal", "sudoku", "kakuro", "tetrakis_square", "deltaoidal_trihexagonal"];
-                set_line_style(this.ctx, 101);
+            let regulars = ["square", "hex", "tri", "pyramid", "cube", "cairo_pentagonal", "sudoku", "kakuro", "tetrakis_square", "deltaoidal_trihexagonal"];
+            set_line_style(this.ctx, 101);
 
-                if (this.gridtype in regulars && !!this.selection[0]) { // If all cells are the same shape, no need to recompute
-                    total_radius = Math.sqrt((this.point[this.selection[0]].x - ((this.point[this.point[this.selection[0]].surround[0]].x)+(this.point[this.point[this.selection[0]].surround[1]].x))*0.5)**2 +
-                                             (this.point[this.selection[0]].y - ((this.point[this.point[this.selection[0]].surround[0]].y)+(this.point[this.point[this.selection[0]].surround[1]].y))*0.5)**2);
-                    radius = (total_radius - offset) / total_radius;
-                }
-                else {irregular = true;}
-
-                for (var k of this.selection) {
-                    if (this.point[k].type !== 0) { // Edge or Vertex
-                        this.ctx.fillStyle = Color.TRANSPARENTBLACK;
-                        this.ctx.lineWidth = 2;
-
-                        this.draw_circle(this.ctx, this.point[k].x, this.point[k].y, 0.15);
-                    }
-                    else { // Standard Cell
-                        if (irregular) {
-                            total_radius = Math.sqrt((this.point[k].x - ((this.point[this.point[k].surround[0]].x)+(this.point[this.point[k].surround[1]].x))*0.5)**2 +
-                                                     (this.point[k].y - ((this.point[this.point[k].surround[0]].y)+(this.point[this.point[k].surround[1]].y))*0.5)**2);
-                            radius = (total_radius - offset) / total_radius;
-                        }
-
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(this.point[k].x * (1 - radius) + this.point[this.point[k].surround[0]].x * radius,
-                                        this.point[k].y * (1 - radius) + this.point[this.point[k].surround[0]].y * radius);
-
-                        for (var j = 0; j < this.point[k].surround.length - 1; j++) {
-                            this.ctx.lineTo(this.point[k].x * (1 - radius) + this.point[this.point[k].surround[j + 1]].x * radius,
-                                            this.point[k].y * (1 - radius) + this.point[this.point[k].surround[j + 1]].y * radius);
-                        }
-                        this.ctx.closePath();
-                        this.ctx.stroke();
-                    }
-                }
-
-                this.ctx.shadowBlur = 0;
-                this.ctx.shadowColor = Color.TRANSPARENTBLACK;
+            if (this.gridtype in regulars && !!this.selection[0]) { // If all cells are the same shape, no need to recompute
+                total_radius = Math.sqrt((this.point[this.selection[0]].x - ((this.point[this.point[this.selection[0]].surround[0]].x) + (this.point[this.point[this.selection[0]].surround[1]].x)) * 0.5) ** 2 +
+                    (this.point[this.selection[0]].y - ((this.point[this.point[this.selection[0]].surround[0]].y) + (this.point[this.point[this.selection[0]].surround[1]].y)) * 0.5) ** 2);
+                radius = (total_radius - offset) / total_radius;
+            } else {
+                irregular = true;
             }
+
+            for (var k of this.selection) {
+                if (this.point[k].type !== 0) { // Edge or Vertex
+                    this.ctx.fillStyle = Color.TRANSPARENTBLACK;
+                    this.ctx.lineWidth = 2;
+
+                    this.draw_circle(this.ctx, this.point[k].x, this.point[k].y, 0.15);
+                } else { // Standard Cell
+                    if (irregular) {
+                        total_radius = Math.sqrt((this.point[k].x - ((this.point[this.point[k].surround[0]].x) + (this.point[this.point[k].surround[1]].x)) * 0.5) ** 2 +
+                            (this.point[k].y - ((this.point[this.point[k].surround[0]].y) + (this.point[this.point[k].surround[1]].y)) * 0.5) ** 2);
+                        radius = (total_radius - offset) / total_radius;
+                    }
+
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.point[k].x * (1 - radius) + this.point[this.point[k].surround[0]].x * radius,
+                        this.point[k].y * (1 - radius) + this.point[this.point[k].surround[0]].y * radius);
+
+                    for (var j = 0; j < this.point[k].surround.length - 1; j++) {
+                        this.ctx.lineTo(this.point[k].x * (1 - radius) + this.point[this.point[k].surround[j + 1]].x * radius,
+                            this.point[k].y * (1 - radius) + this.point[this.point[k].surround[j + 1]].y * radius);
+                    }
+                    this.ctx.closePath();
+                    this.ctx.stroke();
+                }
+            }
+
+            this.ctx.shadowBlur = 0;
+            this.ctx.shadowColor = Color.TRANSPARENTBLACK;
         }
+    }
 
     check_solution() {
         if (!this.multisolution) {
