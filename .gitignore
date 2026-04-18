@@ -9,10 +9,13 @@ notes/
 # Pycharm IDE
 .idea/
 
+# Logs
 *.log
 
+# launch script
 launch_sync.bat
 
+# images
 docs/css/images/corky.psd
 docs/css/images/parch.psd
 
@@ -20,3 +23,6 @@ docs/css/images/parch.psd
 .vscode/
 jsconfig.json
 node_modules/
+
+# AI
+agents.md

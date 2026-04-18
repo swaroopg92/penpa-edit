@@ -179,7 +179,9 @@ function set_answer_setting_table_to(and_or) {
     }
 
     // Ensure there are no invisible checked boxes
-    invisible.forEach((elem) => { elem.checked = false });
+    invisible.forEach((elem) => {
+        elem.checked = false
+    });
 
     // Show only the options relevant to All/Any constraints
     const ands = table.getElementsByClassName("solcheck_show_and");
@@ -858,7 +860,8 @@ function CreateCheck() {
         showCancelButton: true,
         confirmButtonColor: Color.BLUE_SKY,
         cancelButtonColor: Color.RED,
-        confirmButtonText: PenpaText.get('create_check_warning_confirm')
+        confirmButtonText: PenpaText.get('create_check_warning_confirm'),
+        cancelButtonText: PenpaText.get('cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             // Save grid size setting
@@ -911,7 +914,7 @@ function replay_choice() {
 
         // Live replay only if within time limit and there is timestamp data
         if ((pu.puzzleinfo.totalMS <= pu.replaycutoff) && ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
-                (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
+            (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
 
             // hide forward, backward and speed buttons
             document.getElementById("replay_forward").style.display = "none";
@@ -954,7 +957,7 @@ function replay_choice() {
                     } else {
                         // Fast forward the timer
                         sw_timer.reset();
-                        sw_timer.start({ startValues: { seconds: next_ts / 1000 } });
+                        sw_timer.start({startValues: {seconds: next_ts / 1000}});
 
                         // No waiting
                         setTimeout(pu.live_replay, 0);
@@ -981,7 +984,7 @@ function replay_choice() {
                         if (sw_timer.isRunning()) {
                             // Fast forward the timer
                             sw_timer.reset();
-                            sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                            sw_timer.start({startValues: {seconds: prev_ts / 1000}});
                         }
 
                         // get time-stamp (ts) of next action
@@ -1001,7 +1004,7 @@ function replay_choice() {
                         if (sw_timer.isRunning()) {
                             // Fast forward the timer
                             sw_timer.reset();
-                            sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                            sw_timer.start({startValues: {seconds: prev_ts / 1000}});
                         }
 
                         // replay has ended and stop the timer
@@ -1128,7 +1131,7 @@ function replay_reset() {
         pu.undo(replay = true);
     }
     pu.first_click = true;
-    sw_timer.start({ startValues: { seconds: 0 } });
+    sw_timer.start({startValues: {seconds: 0}});
     sw_timer.reset();
 }
 
@@ -1347,7 +1350,8 @@ function ResetCheck() {
         showCancelButton: true,
         confirmButtonColor: Color.BLUE_SKY,
         cancelButtonColor: Color.RED,
-        confirmButtonText: PenpaText.get('reset_check_confirm')
+        confirmButtonText: PenpaText.get('reset_check_confirm'),
+        cancelButtonText: PenpaText.get('cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             pu.reset_selectedmode();
@@ -1369,7 +1373,8 @@ function DeleteCheck() {
         showCancelButton: true,
         confirmButtonColor: Color.BLUE_SKY,
         cancelButtonColor: Color.RED,
-        confirmButtonText: PenpaText.get('delete_check_confirm')
+        confirmButtonText: PenpaText.get('delete_check_confirm'),
+        cancelButtonText: PenpaText.get('cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             pu.reset_board(); // contains reset of undo/redo
@@ -1399,7 +1404,7 @@ function set_input_patterns() {
 
 /**
  * Use the puzzle title/author to make a default filename relevant to this puzzle
- * 
+ *
  * @returns {string} Filename composed from title and author.
  */
 function get_filename_base() {
@@ -1407,7 +1412,7 @@ function get_filename_base() {
     let author = document.getElementById("saveinfoauthor").value;
     let name = 'penpa-' + author + '-' + title;
     // Clean the filename by removing spaces and disallowed characters
-    return name.replace(filename_bad_chars, '-').replace(/\s+/g,'-').replace(/-{2,}/gu, '-');
+    return name.replace(filename_bad_chars, '-').replace(/\s+/g, '-').replace(/-{2,}/gu, '-');
 }
 
 function saveimage() {
@@ -1433,7 +1438,7 @@ function saveimage_download() {
         if (fileExt === "svg") {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
-            var blob = new Blob([text], { type: "image/svg+xml" });
+            var blob = new Blob([text], {type: "image/svg+xml"});
             if (window.navigator.msSaveBlob) {
                 // for IE
                 window.navigator.msSaveBlob(blob, cleanFilename);
@@ -1469,7 +1474,7 @@ function saveimage_window() {
     var address = pu.resizecanvas();
     if (document.getElementById("nb_type3").checked) { //svg
         // store in a Blob
-        let blob = new Blob([address], { type: "image/svg+xml" });
+        let blob = new Blob([address], {type: "image/svg+xml"});
         if (URL && URL.createObjectURL) {
             // create an URI pointing to that blob
             url = URL.createObjectURL(blob);
@@ -1639,33 +1644,33 @@ function savetext_copy() {
 
 /**
  * Gets the preferred download filename.
- * 
+ *
  * @param {string} filenameInputID ID of the input field to use for the filename.
- * 
+ *
  * @returns {string} Preferred filename for download
  */
 function get_download_filename(filenameInputID) {
     // Get filename textbox contents to use as the download filename.
     var filename = document.getElementById(filenameInputID).value;
-    
+
     // If filename textbox empty, generate a name from the title/author.
     if (!filename) {
         filename = get_filename_base();
     }
 
-    return filename;    
+    return filename;
 }
 
 /**
  * Invokes a file download of the puzzle URL as a text file.
- * 
+ *
  * If the user's filename ends in .url, it will prepend the generated
  * puzzle URL with the appropriate content to make a proper shortcut file.
- * 
+ *
  * Similar with .desktop for Linux.
- * 
+ *
  * @TODO Learn the xml format used on Apple?
- * 
+ *
  * h/t the author of the page https://www.cyanwerks.com/formats/file-format-url.html
  * for info that helped with the .url format.
  */
@@ -1674,7 +1679,7 @@ function savetext_download() {
     var downloadFilename = get_download_filename("savetextname");
     var isURL = (downloadFilename.match(/\.url$/i));
     var isDesktop = (downloadFilename.match(/\.desktop$/i));
-    
+
     // Get generated URL.
     var urlText = document.getElementById("savetextarea").value;
     if (!urlText) {
@@ -1701,13 +1706,13 @@ function savetext_download() {
     }
 
     // Perform save.
-    var blob = new Blob([fileContents], { type: mimeType });
+    var blob = new Blob([fileContents], {type: mimeType});
     saveblob_download(blob, downloadFilename, fileExt);
 }
 
 /**
  * Validates a filename prior to using it for a download.
- * 
+ *
  * @param {string} filename Filename to be used for download
  * @param {string} fileExt File extension to be used for download
  * @returns {string|null} Will return valid/fixed filename unless the name is invalid.
@@ -1734,10 +1739,10 @@ function validate_filename(filename, fileExt) {
 /**
  * Saves a Blob data object as a file, assuming the filename is
  * valid and the browser supports it.
- * 
- * @param {Blob} blob A blob to be saved to a file. 
- * @param {string} filename Filename to use. 
- * @param {string} fileext File extension to use if missing from filename. 
+ *
+ * @param {Blob} blob A blob to be saved to a file.
+ * @param {string} filename Filename to use.
+ * @param {string} fileext File extension to use if missing from filename.
  */
 function saveblob_download(blob, filename, fileext) {
     var downloadLink = document.getElementById('download_link');
@@ -1876,7 +1881,7 @@ function export_sudoku() {
 function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/") !== -1) {
+        if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
 
             let param = urlstring.split('&');
             let paramArray = [];
@@ -1985,12 +1990,22 @@ function load(urlParam, type = 'url', origurl = null) {
     document.getElementById("nb_space2").value = parsedSpaces[1];
     document.getElementById("nb_space3").value = parsedSpaces[2];
     document.getElementById("nb_space4").value = parsedSpaces[3];
-    if (rtext_para[11] && rtext_para[11] == "1") { document.getElementById("nb_sudoku1").checked = true; }
-    if (rtext_para[12] && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
-    if (rtext_para[13] && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
-    if (rtext_para[14] && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
+    if (rtext_para[11] && rtext_para[11] == "1") {
+        document.getElementById("nb_sudoku1").checked = true;
+    }
+    if (rtext_para[12] && rtext_para[12] == "1") {
+        document.getElementById("nb_sudoku2").checked = true;
+    }
+    if (rtext_para[13] && rtext_para[13] == "1") {
+        document.getElementById("nb_sudoku3").checked = true;
+    }
+    if (rtext_para[14] && rtext_para[14] == "1") {
+        document.getElementById("nb_sudoku4").checked = true;
+    }
     if (UserSettings.gridtype == "penrose_P3") {
-        if (rtext_para[11]) { document.getElementById("nb_penrose1").value = rtext_para[11]; }
+        if (rtext_para[11]) {
+            document.getElementById("nb_penrose1").value = rtext_para[11];
+        }
         if (rtext_para[12]) {
             document.getElementById("nb_penrose2").value = rtext_para[12];
             document.getElementById("nb_penrose2_sl").value = rtext_para[12];
@@ -3902,6 +3917,7 @@ function decode_puzzlink(url) {
             break;
         case "fillomino":
         case "fillomino01": // fillomino alias
+        case "squarejam":
         case "symmarea":
         case "view":
             pu = new Puzzle_square(cols, rows, size);
@@ -4794,7 +4810,7 @@ function decode_puzzlink(url) {
 
             pu.user_tags = ["tatebo-yokobo"]; // Set tags
             break;
-            // ============ https://pzprxs.vercel.app/p ============
+        // ============ https://pzprxs.vercel.app/p ============
         case "canal":
         case "cbanana":
         case "tontti":
