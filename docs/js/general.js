@@ -1789,7 +1789,7 @@ function export_sudoku() {
 function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/") !== -1) {
+        if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
 
             let param = urlstring.split('&');
             let paramArray = [];
@@ -3815,6 +3815,7 @@ function decode_puzzlink(url) {
             break;
         case "fillomino":
         case "fillomino01": // fillomino alias
+        case "squarejam":
         case "symmarea":
         case "view":
             pu = new Puzzle_square(cols, rows, size);
