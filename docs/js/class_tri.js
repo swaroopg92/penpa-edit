@@ -8,7 +8,7 @@ class Puzzle_tri extends Puzzle {
         this.margin = 10;
         this.size = size;
         this.space = [parseInt(document.getElementById("nb_space1").value, 10),
-                      parseInt(document.getElementById("nb_space2").value, 10),
+            parseInt(document.getElementById("nb_space2").value, 10),
         ];
         this.sudoku = [0, 0, 0, 0]; // This is for sudoku settings
         this.top_n = parseInt(this.n0 ** 2 + this.n0 * 2.5) - 1;
@@ -221,17 +221,17 @@ class Puzzle_tri extends Puzzle {
         for (var j = 0; j < (this.nx - 1 - 3 * this.space[0]) * 2; j++) {
             var newcl = this.nextline(centerlists[centerlists.length - 1]);
             var linesleft = (this.nx - 1 - 3 * this.space[0]) * 2 - j;
-            if ((j%2==1) && (linesleft < 2*cut_corners)) {
+            if ((j % 2 == 1) && (linesleft < 2 * cut_corners)) {
                 newcl.shift();
                 newcl.pop();
             }
             centerlists.push(newcl);
         }
-        for (var j = 0; j < 2*cut_corners - 1; j++) {
+        for (var j = 0; j < 2 * cut_corners - 1; j++) {
             centerlists.shift();
         }
 
-        this.centerlist = centerlists.reduce((acc,x) => acc.concat(x), []);
+        this.centerlist = centerlists.reduce((acc, x) => acc.concat(x), []);
         this.search_center();
         this.center_n0 = this.center_n;
         this.canvasxy_update();
