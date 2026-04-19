@@ -57,6 +57,10 @@
 }
 
 .vsb-menu ul {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select:none;
     user-select: none;
     list-style: none;
     white-space: nowrap;
@@ -102,6 +106,10 @@ li.disabled {
 
 .vsb-main .title {
     margin-right: 6px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select:none;
     user-select: none;
 }
 

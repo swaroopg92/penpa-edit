@@ -426,7 +426,7 @@ const UserSettings = {
         dropdown.value = newValue ? 1 : 2;
 
         const button = document.getElementById("quick_panel_toggle");
-        button.textContent = newValue ? "ON" : "OFF";
+        button.textContent = newValue ? PenpaText.get('on') : PenpaText.get('off');
 
         panel_onoff();
     },
@@ -452,6 +452,16 @@ const UserSettings = {
     },
     get quick_panel_button() {
         return this._quick_panel_btn;
+    },
+    
+    _resize_whitespace: false,
+    set resize_whitespace(newValue) {
+        const button = document.getElementById("resize_whitespace_button");
+        this._resize_whitespace = newValue;
+        button.textContent = PenpaText.get(newValue ? "on" : "off");
+    },
+    get resize_whitespace() {
+        return this._resize_whitespace;
     },
 
     can_save: [
