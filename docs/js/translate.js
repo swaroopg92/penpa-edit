@@ -321,6 +321,7 @@ function trans() {
         "combisub_numfl": {JP: "数字フリック", EN: "Number flick", ZH: "数字滑动输入"},
         "combisub_alfl": {JP: "英字フリック", EN: "Alphabet flick", ZH: "字母滑动输入"},
         "style_txt": {JP: "スタイル", EN: "Style:", ZH: "样式"},
+        "style_txt_rot": {JP: "スタイル", EN: "Style:", ZH: "样式"},
         "st_surface1_lb": {JP: "濃灰", EN: "DG", ZH: "深灰"},
         "st_surface8_lb": {JP: "隠灰", EN: "GR", ZH: "浅灰"},
         "st_surface3_lb": {JP: "薄灰", EN: "LG", ZH: "亮灰"},

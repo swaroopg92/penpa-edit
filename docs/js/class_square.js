@@ -80,7 +80,7 @@ class Puzzle_square extends Puzzle {
                 adjacent = [k - nx, k - 1, k + 1, k + nx];
                 adjacent_dia = [k - nx - 1, k - nx + 1, k + nx - 1, k + nx + 1];
                 surround = [];
-                edge_to_vertex = [k + nx * ny, k + nx * ny + 1, k + 2 *nx * ny, k + 2 * nx * ny + nx];
+                edge_to_vertex = [k + nx * ny, k + nx * ny + 1, k + 2 * nx * ny, k + 2 * nx * ny + nx];
                 point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use, [], adjacent_dia, 0, index(i, j), edge_to_vertex);
                 k++;
             }
@@ -1576,9 +1576,27 @@ class Puzzle_square extends Puzzle {
                 let dir = this[pu].number[i][3];
                 let angle = 0;
                 switch (dir) {
-                case 'U': angle = -Math.PI/2; break;
-                case 'D': angle = Math.PI/2; break;
-                case 'L': angle = Math.PI; break;
+                    case 'UR':
+                        angle = -Math.PI / 4;
+                        break;
+                    case 'U':
+                        angle = -Math.PI / 2;
+                        break;
+                    case 'UL':
+                        angle = -Math.PI * 3 / 4;
+                        break;
+                    case 'L':
+                        angle = Math.PI;
+                        break;
+                    case 'DL':
+                        angle = Math.PI * 3 / 4;
+                        break;
+                    case 'D':
+                        angle = Math.PI / 2;
+                        break;
+                    case 'DR':
+                        angle = Math.PI / 4;
+                        break;
                 }
                 this.ctx.save();
                 this.ctx.translate(p_x, p_y);
@@ -1834,21 +1852,21 @@ class Puzzle_square extends Puzzle {
                     }
                     break;
                 case "8": //long
-                    {
-                        let number_data = this[pu].number[i];
-                        let lines = number_data[0].split('\n');
-                        for (let line of lines) {
-                            if (number_data[1] === 5) {
-                                set_font_style(this.ctx, 0.5 * this.size.toString(10), number_data[1]);
-                                set_circle_style(this.ctx, 7);
-                                this.ctx.fillRect(p_x - 0.2 * this.size, p_y - 0.25 * this.size, this.ctx.measureText(line).width, 0.5 * this.size);
-                            }
+                {
+                    let number_data = this[pu].number[i];
+                    let lines = number_data[0].split('\n');
+                    for (let line of lines) {
+                        if (number_data[1] === 5) {
                             set_font_style(this.ctx, 0.5 * this.size.toString(10), number_data[1]);
-                            this.ctx.textAlign = "left";
-                            this.ctx.text(line, p_x - 0.2 * this.size, p_y);
-                            p_y += this.size * 0.5;
+                            set_circle_style(this.ctx, 7);
+                            this.ctx.fillRect(p_x - 0.2 * this.size, p_y - 0.25 * this.size, this.ctx.measureText(line).width, 0.5 * this.size);
                         }
+                        set_font_style(this.ctx, 0.5 * this.size.toString(10), number_data[1]);
+                        this.ctx.textAlign = "left";
+                        this.ctx.text(line, p_x - 0.2 * this.size, p_y);
+                        p_y += this.size * 0.5;
                     }
+                }
                     break;
             }
 
@@ -1873,14 +1891,32 @@ class Puzzle_square extends Puzzle {
             }
             if (true) { //(this[pu].numberS[i][0].length <= 2 ){
                 if (this.point[i]) {
-                    
+
                     if (this[pu].numberS[i][2]) {
                         let dir = this[pu].numberS[i][2];
                         let angle = 0;
                         switch (dir) {
-                        case 'U': angle = -Math.PI/2; break;
-                        case 'D': angle = Math.PI/2; break;
-                        case 'L': angle = Math.PI; break;
+                            case 'UR':
+                                angle = -Math.PI / 4;
+                                break;
+                            case 'U':
+                                angle = -Math.PI / 2;
+                                break;
+                            case 'UL':
+                                angle = -Math.PI * 3 / 4;
+                                break;
+                            case 'L':
+                                angle = Math.PI;
+                                break;
+                            case 'DL':
+                                angle = Math.PI * 3 / 4;
+                                break;
+                            case 'D':
+                                angle = Math.PI / 2;
+                                break;
+                            case 'DR':
+                                angle = Math.PI / 4;
+                                break;
                         }
                         this.ctx.save();
                         this.ctx.translate(this.point[i].x, this.point[i].y);

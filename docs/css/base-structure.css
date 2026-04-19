@@ -153,7 +153,7 @@ hr.newgridhrline {
     padding: .2em .5em;
 }
 
-#modal-keys li+li {
+#modal-keys li + li {
     border-top: 1px solid var(--fgSubtle);
 }
 
@@ -266,7 +266,8 @@ hr.newgridhrline {
 }
 
 #sub_txt,
-#style_txt {
+#style_txt,
+#style_txt_rot {
     font-size: 12px;
 }
 
@@ -604,8 +605,28 @@ hr.newgridhrline {
     display: inline-block;
 }
 
+.rotate_up_r {
+    transform: rotate(-45deg);
+    display: inline-block;
+}
+
+.rotate_up_l {
+    transform: rotate(-135deg);
+    display: inline-block;
+}
+
 .rotate_down {
     transform: rotate(90deg);
+    display: inline-block;
+}
+
+.rotate_down_l {
+    transform: rotate(135deg);
+    display: inline-block;
+}
+
+.rotate_down_r {
+    transform: rotate(45deg);
     display: inline-block;
 }
 
@@ -639,7 +660,7 @@ input[type=radio] {
     /* Hide radio buttons */
 }
 
-input[type="radio"]:checked+label {
+input[type="radio"]:checked + label {
     background: var(--greyLight);
     color: var(--black);
     box-shadow: 0 0 0 1px var(--orange);
@@ -741,7 +762,7 @@ body textarea {
     border-radius: 0px;
 }
 
-.nav li:hover>ul>li {
+.nav li:hover > ul > li {
     overflow: visible;
     height: 27px;
     left: 10px;
@@ -880,7 +901,7 @@ body textarea {
     height: 100%;
 }
 
-.panel_menu li+li {
+.panel_menu li + li {
     border-left: 1px solid;
 }
 
@@ -913,7 +934,7 @@ body textarea {
     line-height: 1.5em;
 }
 
-.panel_menu_select li+li {
+.panel_menu_select li + li {
     border-top: 1px solid;
 }
 
@@ -1157,7 +1178,7 @@ body textarea {
 }
 
 .modal-subheader:first-child,
-.modal-header+.modal-subheader {
+.modal-header + .modal-subheader {
     margin-top: 0;
 }
 
@@ -1391,7 +1412,7 @@ input[type=number] {
     line-height: 1.1;
 }
 
-#settings-table tr+tr td {
+#settings-table tr + tr td {
     border-top: 1px solid var(--fgSubtle);
 }
 
@@ -1453,7 +1474,7 @@ sup {
     font-size: 14px !important;
 }
 
-.select2-container--default .select2-results>.select2-results__options {
+.select2-container--default .select2-results > .select2-results__options {
     max-height: 340px !important;
 }
 

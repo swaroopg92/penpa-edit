@@ -181,7 +181,9 @@ onload = function() {
     }
 
     function onMove(e) {
-        if (!window.pu) { return; }
+        if (!window.pu) {
+            return;
+        }
         let edit_mode = pu.mode[pu.mode.qa].edit_mode;
         if ((ondown_key === "mousedown" && e.buttons !== 4) || (ondown_key === "touchstart")) { // Ignore Middle button
             if (e.type === "mousemove") {
@@ -1556,35 +1558,51 @@ onload = function() {
                 e.preventDefault();
                 break;
             case "rt_addtop_r":
-                if (pu.grid_is_square()) { pu.resize_top(1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_top(1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_addbottom_r":
-                if (pu.grid_is_square()) { pu.resize_bottom(1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_bottom(1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_addleft_r":
-                if (pu.grid_is_square()) { pu.resize_left(1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_left(1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_addright_r":
-                if (pu.grid_is_square()) { pu.resize_right(1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_right(1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_subtop_r":
-                if (pu.grid_is_square()) { pu.resize_top(-1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_top(-1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_subbottom_r":
-                if (pu.grid_is_square()) { pu.resize_bottom(-1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_bottom(-1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_subleft_r":
-                if (pu.grid_is_square()) { pu.resize_left(-1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_left(-1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "rt_subright_r":
-                if (pu.grid_is_square()) { pu.resize_right(-1, 'white'); }
+                if (pu.grid_is_square()) {
+                    pu.resize_right(-1, 'white');
+                }
                 e.preventDefault();
                 break;
             case "closeBtn_rotate1":
