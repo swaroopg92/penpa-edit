@@ -695,6 +695,7 @@ const PenpaText = {
         side: {EN: "Side:", JP: '幅：', ZH: '尺寸'},
         sides: {EN: "Sides:", JP: '横：', ZH: '尺寸'},
         over: {EN: "Over:", JP: '上：', ZH: '超过'},
+        under: {EN: "Under:", JP: '下：', ZH: '在下面：'},
         border: {EN: "Border:", JP: '境界：', ZH: '边界'},
         order: {EN: "Order:", JP: '注文', ZH: '阶数'},
         cut_corners: {EN: "Cut corners:", JP: '手抜きをする', ZH: '偷工减料'},

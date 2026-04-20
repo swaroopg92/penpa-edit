@@ -255,6 +255,7 @@ function set_display_labels(gridtype) {
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     var type6 = ["nb_penrose1_lb", "nb_penrose1", "nb_penrose2_lb", "nb_penrose2", "nb_penrose2_sl"]; // on - penrose
+    var type7 = ["name_space2", "nb_space2"]; // enable for triangle cut corners
 
     switch (gridtype) {
         case "square":
@@ -274,8 +275,27 @@ function set_display_labels(gridtype) {
                 document.getElementById(i).style.display = "none";
             }
             break;
-        case "hex":
         case "tri":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type7) {
+                document.getElementById(i).style.display = "inline";
+            }
+            break;
+        case "hex":
         case "pyramid":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -718,6 +738,7 @@ function changetype() {
             document.getElementById("name_size1").innerHTML = PenpaText.get('columns');
             document.getElementById("name_size2").innerHTML = PenpaText.get('rows');
             document.getElementById("name_space1").innerHTML = PenpaText.get('over');
+            document.getElementById("name_space2").innerHTML = PenpaText.get('under');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_sqaure');
             document.getElementById("nb_size1").value = 10;
