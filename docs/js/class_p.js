@@ -8355,6 +8355,10 @@ class Puzzle {
                                 } else {
                                     delete this[this.mode.qa].number[k];
                                 }
+                            } else {
+                                // For modes where going down to an empty number doesn't automatically
+                                // delete the circle, you can still delete it by hitting backspace again
+                                delete this[this.mode.qa].number[k];
                             }
                             this.record_replay("number", k, this.undoredo_counter);
                         }
