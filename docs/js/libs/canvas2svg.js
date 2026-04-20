@@ -1,5 +1,5 @@
 /*!!
- *  Canvas 2 Svg v1.0.19
+ *  Canvas 2 Svg v1.0.19 (with arcTo patch)
  *  A low level canvas to SVG converter. Uses a mock canvas context to build an SVG document.
  *
  *  Licensed under the MIT license:
@@ -688,19 +688,9 @@
         // or if the radius radius is zero,
         // then the method must add the point (x1, y1) to the subpath,
         // and connect that point to the previous point (x0, y0) by a straight line.
-        if (((x0 === x1) && (y0 === y1)) ||
-            ((x1 === x2) && (y1 === y2)) ||
-            (radius === 0)) {
-            this.lineTo(x1, y1);
-            return;
-        }
-
-        // Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line,
-        // then the method must add the point (x1, y1) to the subpath,
-        // and connect that point to the previous point (x0, y0) by a straight line.
-        var unit_vec_p1_p0 = normalize([x0 - x1, y0 - y1]);
-        var unit_vec_p1_p2 = normalize([x2 - x1, y2 - y1]);
-        if (unit_vec_p1_p0[0] * unit_vec_p1_p2[1] === unit_vec_p1_p0[1] * unit_vec_p1_p2[0]) {
+        if (((x0 === x1) && (y0 === y1))
+            || ((x1 === x2) && (y1 === y2))
+            || (radius === 0)) {
             this.lineTo(x1, y1);
             return;
         }
@@ -709,51 +699,46 @@
         // and that has one point tangent to the half-infinite line that crosses the point (x0, y0) and ends at the point (x1, y1),
         // and that has a different point tangent to the half-infinite line that ends at the point (x1, y1), and crosses the point (x2, y2).
         // The points at which this circle touches these two lines are called the start and end tangent points respectively.
+        var vec_p1_p0 = [x0 - x1, y0 - y1];
+        var vec_p1_p2 = [x2 - x1, y2 - y1];
+        var len_p1_p0 = Math.hypot(vec_p1_p0[0], vec_p1_p0[1]);
+        var len_p1_p2 = Math.hypot(vec_p1_p2[0], vec_p1_p2[1]);
+        if (len_p1_p0 === 0 || len_p1_p2 === 0) {
+            this.lineTo(x1, y1);
+            return;
+        }
 
-        // note that both vectors are unit vectors, so the length is 1
-        var cos = (unit_vec_p1_p0[0] * unit_vec_p1_p2[0] + unit_vec_p1_p0[1] * unit_vec_p1_p2[1]);
-        var theta = Math.acos(Math.abs(cos));
+        // Available patch for the arc issue: https://github.com/gliffy/canvas2svg/pull/103
+        var unit_vec_p1_p0 = [vec_p1_p0[0] / len_p1_p0, vec_p1_p0[1] / len_p1_p0];
+        var unit_vec_p1_p2 = [vec_p1_p2[0] / len_p1_p2, vec_p1_p2[1] / len_p1_p2];
 
-        // Calculate origin
-        var unit_vec_p1_origin = normalize([
-            unit_vec_p1_p0[0] + unit_vec_p1_p2[0],
-            unit_vec_p1_p0[1] + unit_vec_p1_p2[1]
-        ]);
-        var len_p1_origin = radius / Math.sin(theta / 2);
-        var x = x1 + len_p1_origin * unit_vec_p1_origin[0];
-        var y = y1 + len_p1_origin * unit_vec_p1_origin[1];
+        var cos = unit_vec_p1_p0[0] * unit_vec_p1_p2[0] + unit_vec_p1_p0[1] * unit_vec_p1_p2[1];
+        var theta = Math.acos(Math.max(-1, Math.min(1, cos)));
 
-        // Calculate start angle and end angle
-        // rotate 90deg clockwise (note that y axis points to its down)
-        var unit_vec_origin_start_tangent = [
-            -unit_vec_p1_p0[1],
-            unit_vec_p1_p0[0]
-        ];
-        // rotate 90deg counter clockwise (note that y axis points to its down)
-        var unit_vec_origin_end_tangent = [
-            unit_vec_p1_p2[1],
-            -unit_vec_p1_p2[0]
-        ];
-        var getAngle = function(vector) {
-            // get angle (clockwise) between vector and (1, 0)
-            var x = vector[0];
-            var y = vector[1];
-            if (y >= 0) { // note that y axis points to its down
-                return Math.acos(x);
-            } else {
-                return -Math.acos(x);
-            }
-        };
-        var startAngle = getAngle(unit_vec_origin_start_tangent);
-        var endAngle = getAngle(unit_vec_origin_end_tangent);
+        var tan_theta2 = Math.tan(theta / 2);
+        if (tan_theta2 === 0) {
+            this.lineTo(x1, y1);
+            return;
+        }
+        var len_tangent = radius / tan_theta2;
 
-        // Connect the point (x0, y0) to the start tangent point by a straight line
-        this.lineTo(x + unit_vec_origin_start_tangent[0] * radius,
-            y + unit_vec_origin_start_tangent[1] * radius);
+        var start_tangent = [x1 + unit_vec_p1_p0[0] * len_tangent, y1 + unit_vec_p1_p0[1] * len_tangent];
+        var end_tangent = [x1 + unit_vec_p1_p2[0] * len_tangent, y1 + unit_vec_p1_p2[1] * len_tangent];
 
-        // Connect the start tangent point to the end tangent point by arc
-        // and adding the end tangent point to the subpath.
-        this.arc(x, y, radius, startAngle, endAngle);
+        var unit_vec_orth_p0 = [-unit_vec_p1_p0[1], unit_vec_p1_p0[0]];
+        var unit_vec_orth_p2 = [-unit_vec_p1_p2[1], unit_vec_p1_p2[0]];
+        var det = unit_vec_orth_p0[0] * (-unit_vec_orth_p2[1]) - (-unit_vec_orth_p2[0]) * unit_vec_orth_p0[1];
+        if (det === 0) {
+            this.lineTo(x1, y1);
+            return;
+        }
+
+        var cross = unit_vec_p1_p0[0] * unit_vec_p1_p2[1] - unit_vec_p1_p0[1] * unit_vec_p1_p2[0];
+        var sweep_flag = cross < 0 ? 1 : 0;
+
+        this.lineTo(start_tangent[0], start_tangent[1]);
+        this.__addPathCommand(`A ${radius} ${radius} 0 0 ${sweep_flag} ${end_tangent[0]} ${end_tangent[1]}`);
+        this.__currentPosition = { x: end_tangent[0], y: end_tangent[1] };
     };
 
     /**
