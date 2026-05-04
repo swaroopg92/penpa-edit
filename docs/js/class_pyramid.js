@@ -45,7 +45,11 @@ class Puzzle_pyramid extends Puzzle {
         type = 0;
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
-                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
+                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
+                    use = -1;
+                } else {
+                    use = 1;
+                }
                 adjacent = [k - nx - 1 + j % 2, k - nx + j % 2, k - 1, k + 1, k + nx - 1 + j % 2, k + nx + j % 2];
                 surround = [k + nx * ny - 1, k + 2 * nx * ny - nx - 1 + j % 2, k + nx * ny, k + 2 * nx * ny, k + nx * ny + nx - 1 + j % 2, k + 2 * nx * ny - 1];
                 point[k] = new Point((i + 0.5 + (j % 2) * 0.5) * this.size, (j + 0.5) * this.size, type, adjacent, surround, use);
@@ -56,7 +60,11 @@ class Puzzle_pyramid extends Puzzle {
         type = 1;
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
-                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
+                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
+                    use = -1;
+                } else {
+                    use = 1;
+                }
                 adjacent = [k + nx * ny - nx - 1 + j % 2, k + nx * ny - nx + j % 2, k + nx * ny];
                 surround = [k + nx * ny - 2 * nx]; //for wall
                 point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y - 0.5 * this.size, type, adjacent, surround, use);
@@ -65,7 +73,11 @@ class Puzzle_pyramid extends Puzzle {
         }
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
-                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
+                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
+                    use = -1;
+                } else {
+                    use = 1;
+                }
                 adjacent = [k - nx * ny, k - nx * ny + nx - 1 + j % 2, k - nx * ny + nx + j % 2];
                 surround = [k - nx * ny + 2 * nx]; //for wall
                 point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use);
@@ -77,7 +89,11 @@ class Puzzle_pyramid extends Puzzle {
         type = 2;
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
-                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
+                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
+                    use = -1;
+                } else {
+                    use = 1;
+                }
                 adjacent = [];
                 surround = [k - 1, k + 1]; //for wall
                 point[k] = new Point(point[i + j * nx].x + 0.5 * this.size, point[i + j * nx].y, type, adjacent, surround, use);
@@ -88,7 +104,11 @@ class Puzzle_pyramid extends Puzzle {
         type = 3;
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
-                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
+                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
+                    use = -1;
+                } else {
+                    use = 1;
+                }
                 adjacent = [];
                 surround = [];
                 point[k] = new Point(point[i + j * nx].x - 0.25 * this.size, point[i + j * nx].y + 0.5 * this.size, type, adjacent, surround, use);
@@ -105,7 +125,11 @@ class Puzzle_pyramid extends Puzzle {
         type = 4;
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
-                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) { use = -1; } else { use = 1; }
+                if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
+                    use = -1;
+                } else {
+                    use = 1;
+                }
                 surround = [];
                 adjacent = [];
                 point[k] = new Point(point[i + j * nx].x - r * this.size, point[i + j * nx].y - r * this.size, type, adjacent, surround, use);
@@ -333,7 +357,15 @@ class Puzzle_pyramid extends Puzzle {
 
     key_arrow(key_code, ctrl_key = false) {
         var a, b, c;
-        if (this.theta === 0) { b = [0, 1, 2, 3]; } else if (this.theta === 90) { b = [3, 0, 1, 2]; } else if (this.theta === 180) { b = [2, 3, 0, 1]; } else if (this.theta === 270) { b = [1, 2, 3, 0]; }
+        if (this.theta === 0) {
+            b = [0, 1, 2, 3];
+        } else if (this.theta === 90) {
+            b = [3, 0, 1, 2];
+        } else if (this.theta === 180) {
+            b = [2, 3, 0, 1];
+        } else if (this.theta === 270) {
+            b = [1, 2, 3, 0];
+        }
         if (this.reflect[0] === -1) {
             c = b[0];
             b[0] = b[2];
@@ -363,38 +395,54 @@ class Puzzle_pyramid extends Puzzle {
                 switch (c) {
                     case 0:
                         a = this.cursolS % 2 === 0 ? this.cursolS - 3 : this.cursolS - 1;
-                        if (this.point[a].use === 1) { this.cursolS = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursolS = a;
+                        }
                         break;
                     case 1:
                         a = (this.cursolS % 4 === 0 || this.cursolS % 4 === 1) ? this.cursolS - 4 * (this.nx0) + 2 : this.cursolS - 2;
-                        if (this.point[a].use === 1) { this.cursolS = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursolS = a;
+                        }
                         break;
                     case 2:
                         a = this.cursolS % 2 === 0 ? this.cursolS + 1 : this.cursolS + 3;
-                        if (this.point[a].use === 1) { this.cursolS = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursolS = a;
+                        }
                         break;
                     case 3:
                         a = (this.cursolS % 4 === 0 || this.cursolS % 4 === 1) ? this.cursolS + 2 : this.cursolS + 4 * (this.nx0) - 2;
-                        if (this.point[a].use === 1) { this.cursolS = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursolS = a;
+                        }
                         break;
                 }
             } else {
                 switch (c) {
                     case 0:
                         a = this.cursol - 1;
-                        if (this.point[a].use === 1) { this.cursol = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursol = a;
+                        }
                         break;
                     case 1:
                         a = this.cursol - this.nx0;
-                        if (this.point[a].use === 1) { this.cursol = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursol = a;
+                        }
                         break;
                     case 2:
                         a = this.cursol + 1;
-                        if (this.point[a].use === 1) { this.cursol = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursol = a;
+                        }
                         break;
                     case 3:
                         a = this.cursol + this.nx0;
-                        if (this.point[a].use === 1) { this.cursol = a; }
+                        if (this.point[a].use === 1) {
+                            this.cursol = a;
+                        }
                         break;
                 }
             }
@@ -404,8 +452,12 @@ class Puzzle_pyramid extends Puzzle {
 
     direction_arrow8(x, y, x0, y0) {
         var angle = Math.atan2(y - y0, x - x0) * 360 / 2 / Math.PI + 180;
-        if (this.reflect[0] === -1) { angle = (180 - angle + 360) % 360; }
-        if (this.reflect[1] === -1) { angle = (360 - angle + 360) % 360; }
+        if (this.reflect[0] === -1) {
+            angle = (180 - angle + 360) % 360;
+        }
+        if (this.reflect[1] === -1) {
+            angle = (360 - angle + 360) % 360;
+        }
         angle = (angle - this.theta + 360) % 360;
         angle -= 180;
         var a;
@@ -424,6 +476,7 @@ class Puzzle_pyramid extends Puzzle {
         }
         return a;
     }
+
     ////////////////override/////////////////////
     re_wallmove(num) {
         if (this.drawing && this.last != num) {
@@ -461,8 +514,6 @@ class Puzzle_pyramid extends Puzzle {
             this.draw_frame();
             this.draw_polygonsp("pu_q");
             this.draw_polygonsp("pu_a");
-            this.draw_freeline("pu_q");
-            this.draw_freeline("pu_a");
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_direction("pu_q");
@@ -486,7 +537,6 @@ class Puzzle_pyramid extends Puzzle {
             this.draw_wall("pu_q");
             this.draw_frame();
             this.draw_polygonsp("pu_q");
-            this.draw_freeline("pu_q");
             this.draw_line("pu_q");
             this.draw_direction("pu_q");
             this.draw_lattice();
@@ -778,57 +828,6 @@ class Puzzle_pyramid extends Puzzle {
         }
     }
 
-    draw_freeline(pu) {
-        /*freeline*/
-        for (var i in this[pu].freeline) {
-            set_line_style(this.ctx, this[pu].freeline[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].freeline[i]) {
-                this.ctx.strokeStyle = this[pu + "_col"].freeline[i];
-            }
-            var i1 = i.split(",")[0];
-            var i2 = i.split(",")[1];
-            this.ctx.beginPath();
-            if (this[pu].freeline[i] === 30) {
-                var r = 0.15 * this.size;
-                var dx = this.point[i1].x - this.point[i2].x;
-                var dy = this.point[i1].y - this.point[i2].y;
-                var d = Math.sqrt(dx ** 2 + dy ** 2);
-                this.ctx.moveTo(this.point[i1].x - r / d * dy, this.point[i1].y + r / d * dx);
-                this.ctx.lineTo(this.point[i2].x - r / d * dy, this.point[i2].y + r / d * dx);
-                this.ctx.stroke();
-                this.ctx.moveTo(this.point[i1].x + r / d * dy, this.point[i1].y - r / d * dx);
-                this.ctx.lineTo(this.point[i2].x + r / d * dy, this.point[i2].y - r / d * dx);
-            } else {
-                this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
-                this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
-            }
-            this.ctx.stroke();
-        }
-        for (var i in this[pu].freelineE) {
-            set_line_style(this.ctx, this[pu].freelineE[i]);
-            if (UserSettings.custom_colors_on && this[pu + "_col"].freelineE[i]) {
-                this.ctx.strokeStyle = this[pu + "_col"].freelineE[i];
-            }
-            var i1 = i.split(",")[0];
-            var i2 = i.split(",")[1];
-            this.ctx.beginPath();
-            if (this[pu].freelineE[i] === 30) {
-                var r = 0.15 * this.size;
-                var dx = this.point[i1].x - this.point[i2].x;
-                var dy = this.point[i1].y - this.point[i2].y;
-                var d = Math.sqrt(dx ** 2 + dy ** 2);
-                this.ctx.moveTo(this.point[i1].x - r / d * dy, this.point[i1].y + r / d * dx);
-                this.ctx.lineTo(this.point[i2].x - r / d * dy, this.point[i2].y + r / d * dx);
-                this.ctx.stroke();
-                this.ctx.moveTo(this.point[i1].x + r / d * dy, this.point[i1].y - r / d * dx);
-                this.ctx.lineTo(this.point[i2].x + r / d * dy, this.point[i2].y - r / d * dx);
-            } else {
-                this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
-                this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
-            }
-            this.ctx.stroke();
-        }
-    }
 
     draw_wall(pu) {
         for (var i in this[pu].wall) {
@@ -878,8 +877,12 @@ class Puzzle_pyramid extends Puzzle {
                         "_5": 300
                     }
                     var direction = (direction[this[pu].number[i][0].slice(-2)] - this.theta + 360) % 360;
-                    if (this.reflect[0] === -1) { direction = (180 - direction + 360) % 360; }
-                    if (this.reflect[1] === -1) { direction = (360 - direction + 360) % 360; }
+                    if (this.reflect[0] === -1) {
+                        direction = (180 - direction + 360) % 360;
+                    }
+                    if (this.reflect[1] === -1) {
+                        direction = (360 - direction + 360) % 360;
+                    }
                     switch (direction) {
                         case 120:
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), this.point[i].x - 0.1 * this.size, this.point[i].y + 0.15 * this.size, this.size * 0.8);
@@ -1055,14 +1058,23 @@ class Puzzle_pyramid extends Puzzle {
                     }
                     break;
                 case "8": //long
-                    if (this[pu].number[i][1] === 5) {
-                        set_font_style(this.ctx, 0.5 * this.size.toString(10), this[pu].number[i][1]);
-                        set_circle_style(this.ctx, 7);
-                        this.ctx.fillRect(this.point[i].x - 0.2 * this.size, this.point[i].y - 0.25 * this.size, this.ctx.measureText(this[pu].number[i][0]).width, 0.5 * this.size);
+                    {
+                        let number_data = this[pu].number[i];
+                        let lines = number_data[0].split('\n');
+                        let p_x = this.point[i].x;
+                        let p_y = this.point[i].y;
+                        for (let line of lines) {
+                            if (number_data[1] === 5) {
+                                set_font_style(this.ctx, 0.5 * this.size.toString(10), number_data[1]);
+                                set_circle_style(this.ctx, 7);
+                                this.ctx.fillRect(p_x - 0.2 * this.size, p_y - 0.25 * this.size, this.ctx.measureText(line).width, 0.5 * this.size);
+                            }
+                            set_font_style(this.ctx, 0.5 * this.size.toString(10), number_data[1]);
+                            this.ctx.textAlign = "left";
+                            this.ctx.text(line, p_x - 0.2 * this.size, p_y);
+                            p_y += this.size * 0.5;
+                        }
                     }
-                    set_font_style(this.ctx, 0.5 * this.size.toString(10), this[pu].number[i][1]);
-                    this.ctx.textAlign = "left";
-                    this.ctx.text(this[pu].number[i][0], this.point[i].x - 0.2 * this.size, this.point[i].y);
                     break;
             }
         }
@@ -1295,7 +1307,7 @@ class Puzzle_pyramid extends Puzzle {
                 this.draw_framelinesym(ctx, num, x, y, ccolor);
                 break;
 
-                //number
+            //number
             case "inequality":
                 set_circle_style(ctx, 10, ccolor);
                 this.draw_inequality(ctx, num, x, y);
@@ -1323,7 +1335,7 @@ class Puzzle_pyramid extends Puzzle {
                 this.draw_pills(ctx, num, x, y);
                 break;
 
-                /* arrow */
+            /* arrow */
             case "arrow_B_B":
                 set_circle_style(ctx, 2, ccolor);
                 this.draw_arrowB(ctx, num, x, y);
@@ -1385,7 +1397,7 @@ class Puzzle_pyramid extends Puzzle {
                 this.draw_arroweight(ctx, num, x, y);
                 break;
 
-                /* special */
+            /* special */
             case "kakuro":
                 this.draw_kakuro(ctx, num, x, y, ccolor);
                 break;

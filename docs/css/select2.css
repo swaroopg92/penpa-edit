@@ -11,8 +11,11 @@
     cursor: pointer;
     display: block;
     height: 28px;
-    user-select: none;
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select:none;
+    user-select: none;
 }
 
 .select2-container .select2-selection--single .select2-selection__rendered {
@@ -38,8 +41,11 @@
     cursor: pointer;
     display: block;
     min-height: 32px;
-    user-select: none;
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select:none;
+    user-select: none;
 }
 
 .select2-container .select2-selection--multiple .select2-selection__rendered {
@@ -90,8 +96,11 @@
 
 .select2-results__option {
     padding: 6px;
-    user-select: none;
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select:none;
+    user-select: none;
 }
 
 .select2-results__option[aria-selected] {
@@ -331,6 +340,7 @@
     outline: 0;
     box-shadow: none;
     -webkit-appearance: textfield;
+    appearance: textfield;
 }
 
 .select2-container--default .select2-results>.select2-results__options {

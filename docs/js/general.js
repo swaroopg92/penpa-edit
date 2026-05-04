@@ -16,7 +16,7 @@ function infoMsg(html) {
     })
 }
 
-function boot() {
+async function boot() {
     var obj = document.getElementById("dvique");
     var canvas = document.createElement("canvas");
     canvas.id = "canvas";
@@ -24,6 +24,7 @@ function boot() {
     boot_parameters();
     init_genre_tags();
     set_answer_setting_table_to("and");
+    set_input_patterns();
 
     var urlParam = location.search.substring(1);
     if (!urlParam && location.hash) {
@@ -40,13 +41,10 @@ function boot() {
             paramArray[paramItem[0]] = paramItem[1];
         }
 
-        let hash = "penpa_" + md5(paramArray.p);
 
         // Decrypt puzzle data
-        let local_data;
-        if (localStorageAvailable) {
-            local_data = localStorage.getItem(hash);
-        }
+        const hash = PenpaProgress.getHash(paramArray.p);
+        let local_data = await PenpaProgress.tryLoad(hash);
 
         if (local_data && local_data.includes('&p=')) {
             // This is to account for old links and new links together
@@ -178,7 +176,9 @@ function set_answer_setting_table_to(and_or) {
     }
 
     // Ensure there are no invisible checked boxes
-    invisible.forEach((elem) => { elem.checked = false });
+    invisible.forEach((elem) => {
+        elem.checked = false
+    });
 
     // Show only the options relevant to All/Any constraints
     const ands = table.getElementsByClassName("solcheck_show_and");
@@ -255,6 +255,7 @@ function set_display_labels(gridtype) {
     ]; // on - for sudoku
     var type5 = ["name_size1", "nb_size1", "name_size2", "nb_size2", "nb_size_lb"]; // on - kakuro
     var type6 = ["nb_penrose1_lb", "nb_penrose1", "nb_penrose2_lb", "nb_penrose2", "nb_penrose2_sl"]; // on - penrose
+    var type7 = ["name_space2", "nb_space2"]; // enable for triangle cut corners
 
     switch (gridtype) {
         case "square":
@@ -274,8 +275,27 @@ function set_display_labels(gridtype) {
                 document.getElementById(i).style.display = "none";
             }
             break;
-        case "hex":
         case "tri":
+            for (var i of type) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type2) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type3) {
+                document.getElementById(i).style.display = "inline";
+            }
+            for (var i of type4) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type6) {
+                document.getElementById(i).style.display = "none";
+            }
+            for (var i of type7) {
+                document.getElementById(i).style.display = "inline";
+            }
+            break;
+        case "hex":
         case "pyramid":
             for (var i of type) {
                 document.getElementById(i).style.display = "none";
@@ -718,6 +738,7 @@ function changetype() {
             document.getElementById("name_size1").innerHTML = PenpaText.get('columns');
             document.getElementById("name_size2").innerHTML = PenpaText.get('rows');
             document.getElementById("name_space1").innerHTML = PenpaText.get('over');
+            document.getElementById("name_space2").innerHTML = PenpaText.get('under');
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_sqaure');
             document.getElementById("nb_size1").value = 10;
@@ -740,11 +761,15 @@ function changetype() {
         case "tri":
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
             document.getElementById("name_space1").innerHTML = PenpaText.get('border');
+            document.getElementById("name_space2").innerHTML = PenpaText.get('cut_corners');
+            document.getElementById("name_space2").style.display = "inline";
+            document.getElementById("nb_space2").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").style.display = "inline";
             document.getElementById("nb_sudoku3_lb").innerHTML = PenpaText.get('nb_sudoku3_lb_tri');
             document.getElementById("nb_size1").value = 6;
             document.getElementById("nb_size3").value = 60;
             document.getElementById("nb_space1").value = 0;
+            document.getElementById("nb_space2").value = 0;
             break;
         case "pyramid":
             document.getElementById("name_size1").innerHTML = PenpaText.get('side');
@@ -857,7 +882,8 @@ function CreateCheck() {
         showCancelButton: true,
         confirmButtonColor: Color.BLUE_SKY,
         cancelButtonColor: Color.RED,
-        confirmButtonText: PenpaText.get('create_check_warning_confirm')
+        confirmButtonText: PenpaText.get('create_check_warning_confirm'),
+        cancelButtonText: PenpaText.get('cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             // Save grid size setting
@@ -910,7 +936,7 @@ function replay_choice() {
 
         // Live replay only if within time limit and there is timestamp data
         if ((pu.puzzleinfo.totalMS <= pu.replaycutoff) && ((redo_len > 0 && typeof pu[pu.mode.qa]["command_redo"].__a[redo_len - 1][5] != "undefined") ||
-                (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
+            (undo_len > 0 && typeof pu[pu.mode.qa]["command_undo"].__a[undo_len - 1][5] != "undefined"))) {
 
             // hide forward, backward and speed buttons
             document.getElementById("replay_forward").style.display = "none";
@@ -953,7 +979,7 @@ function replay_choice() {
                     } else {
                         // Fast forward the timer
                         sw_timer.reset();
-                        sw_timer.start({ startValues: { seconds: next_ts / 1000 } });
+                        sw_timer.start({startValues: {seconds: next_ts / 1000}});
 
                         // No waiting
                         setTimeout(pu.live_replay, 0);
@@ -980,7 +1006,7 @@ function replay_choice() {
                         if (sw_timer.isRunning()) {
                             // Fast forward the timer
                             sw_timer.reset();
-                            sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                            sw_timer.start({startValues: {seconds: prev_ts / 1000}});
                         }
 
                         // get time-stamp (ts) of next action
@@ -1000,7 +1026,7 @@ function replay_choice() {
                         if (sw_timer.isRunning()) {
                             // Fast forward the timer
                             sw_timer.reset();
-                            sw_timer.start({ startValues: { seconds: prev_ts / 1000 } });
+                            sw_timer.start({startValues: {seconds: prev_ts / 1000}});
                         }
 
                         // replay has ended and stop the timer
@@ -1127,7 +1153,7 @@ function replay_reset() {
         pu.undo(replay = true);
     }
     pu.first_click = true;
-    sw_timer.start({ startValues: { seconds: 0 } });
+    sw_timer.start({startValues: {seconds: 0}});
     sw_timer.reset();
 }
 
@@ -1346,7 +1372,8 @@ function ResetCheck() {
         showCancelButton: true,
         confirmButtonColor: Color.BLUE_SKY,
         cancelButtonColor: Color.RED,
-        confirmButtonText: PenpaText.get('reset_check_confirm')
+        confirmButtonText: PenpaText.get('reset_check_confirm'),
+        cancelButtonText: PenpaText.get('cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             pu.reset_selectedmode();
@@ -1368,7 +1395,8 @@ function DeleteCheck() {
         showCancelButton: true,
         confirmButtonColor: Color.BLUE_SKY,
         cancelButtonColor: Color.RED,
-        confirmButtonText: PenpaText.get('delete_check_confirm')
+        confirmButtonText: PenpaText.get('delete_check_confirm'),
+        cancelButtonText: PenpaText.get('cancel')
     }).then((result) => {
         if (result.isConfirmed) {
             pu.reset_board(); // contains reset of undo/redo
@@ -1377,13 +1405,36 @@ function DeleteCheck() {
     })
 }
 
-// Use the puzzle title/author to make a default filename relevant to this puzzle
+var filename_bad_chars = /[\\/:*?"<>|]+/gu;
+var filename_input_pattern = /[^\\\/:\*\?"\<\>\|]+/v;
+
+/**
+ * Update the input patterns for filename text boxes and add a title (tooltip) with
+ * explanatory text to them. Called once from boot() and again in trans_text().
+ */
+function set_input_patterns() {
+    [
+        'saveimagename',
+        'savetextname'
+    ].forEach(inputID => {
+        var inputBox = document.getElementById(inputID);
+        inputBox.setAttribute('pattern', filename_input_pattern);
+        inputBox.setAttribute('title', PenpaText.get('file_save_filename_title'))
+    });
+}
+
+
+/**
+ * Use the puzzle title/author to make a default filename relevant to this puzzle
+ *
+ * @returns {string} Filename composed from title and author.
+ */
 function get_filename_base() {
     let title = document.getElementById("saveinfotitle").value;
     let author = document.getElementById("saveinfoauthor").value;
     let name = 'penpa-' + author + '-' + title;
     // Clean the filename by removing spaces and disallowed characters
-    return name.replace(/[-\s\\/:*?"<>|]+/gu, '-');
+    return name.replace(filename_bad_chars, '-').replace(/\s+/g, '-').replace(/-{2,}/gu, '-');
 }
 
 function saveimage() {
@@ -1392,43 +1443,31 @@ function saveimage() {
 
 function saveimage_download() {
     var downloadLink = document.getElementById('download_link');
-    var filename = document.getElementById('saveimagename').value;
-    if (!filename) {
-        filename = get_filename_base();
-    }
+    var filename = get_download_filename('saveimagename');
+
+    var fileExt;
     if (document.getElementById("nb_type1").checked) {
-        if (filename.slice(-4) != ".png") {
-            filename += ".png";
-        }
+        fileExt = "png";
     } else if (document.getElementById("nb_type2").checked) {
-        if (filename.slice(-4) != ".jpg") {
-            filename += ".jpg";
-        }
+        fileExt = "jpg";
     } else if (document.getElementById("nb_type3").checked) {
-        if (filename.slice(-4) != ".svg") {
-            filename += ".svg";
-        }
-    }
-    var str_sym = "\\/:*?\"<>|";
-    var valid_name = 1;
-    for (var i = 0; i < filename.length; i++) {
-        if (str_sym.indexOf(filename[i]) != -1) {
-            valid_name = 0;
-        }
+        fileExt = "svg";
     }
 
-    if (valid_name) {
-        if (document.getElementById("nb_type3").checked) {
+    var cleanFilename = validate_filename(filename, fileExt);
+
+    if (cleanFilename) {
+        if (fileExt === "svg") {
             var text = pu.resizecanvas();
             var downloadLink = document.getElementById('download_link');
-            var blob = new Blob([text], { type: "image/svg+xml" });
+            var blob = new Blob([text], {type: "image/svg+xml"});
             if (window.navigator.msSaveBlob) {
                 // for IE
-                window.navigator.msSaveBlob(blob, filename);
+                window.navigator.msSaveBlob(blob, cleanFilename);
             } else if (URL && URL.createObjectURL) {
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.target = "_blank";
-                downloadLink.download = filename;
+                downloadLink.download = cleanFilename;
                 downloadLink.click();
             } else {
                 Swal.fire({
@@ -1441,15 +1480,13 @@ function saveimage_download() {
         } else {
             if (pu.canvas.msToBlob) { // For IE
                 var blob = pu.canvas.msToBlob();
-                window.navigator.msSaveBlob(blob, filename);
+                window.navigator.msSaveBlob(blob, cleanFilename);
             } else { // Other browsers
                 downloadLink.href = pu.resizecanvas();
-                downloadLink.download = filename;
+                downloadLink.download = cleanFilename;
                 downloadLink.click();
             }
         }
-    } else {
-        errorMsg(PenpaText.get('unsupported_filename'));
     }
 }
 
@@ -1459,7 +1496,7 @@ function saveimage_window() {
     var address = pu.resizecanvas();
     if (document.getElementById("nb_type3").checked) { //svg
         // store in a Blob
-        let blob = new Blob([address], { type: "image/svg+xml" });
+        let blob = new Blob([address], {type: "image/svg+xml"});
         if (URL && URL.createObjectURL) {
             // create an URI pointing to that blob
             url = URL.createObjectURL(blob);
@@ -1627,38 +1664,120 @@ function savetext_copy() {
     infoMsg('<h2 class="info">' + PenpaText.get('copied_success') + '</h2>');
 }
 
-function savetext_download() {
-    var text = document.getElementById("savetextarea").value;
-    var blob = new Blob([text], { type: "text/plain" });
-    let name = get_filename_base() + '.txt';
-    saveblob_download(blob, name);
+/**
+ * Gets the preferred download filename.
+ *
+ * @param {string} filenameInputID ID of the input field to use for the filename.
+ *
+ * @returns {string} Preferred filename for download
+ */
+function get_download_filename(filenameInputID) {
+    // Get filename textbox contents to use as the download filename.
+    var filename = document.getElementById(filenameInputID).value;
+
+    // If filename textbox empty, generate a name from the title/author.
+    if (!filename) {
+        filename = get_filename_base();
+    }
+
+    return filename;
 }
 
-function saveblob_download(blob, defaultFilename) {
-    var downloadLink = document.getElementById('download_link');
-    var filename = document.getElementById("savetextname").value;
-    if (!filename) {
-        filename = defaultFilename;
-    }
-    if (filename.indexOf(".") === -1) {
-        filename += ".txt";
-    }
-    var str_sym = "\\/:*?\"<>|";
-    var valid_name = 1;
-    for (var i = 0; i < filename.length; i++) {
-        if (str_sym.indexOf(filename[i]) != -1) {
-            valid_name = 0;
-        }
+/**
+ * Invokes a file download of the puzzle URL as a text file.
+ *
+ * If the user's filename ends in .url, it will prepend the generated
+ * puzzle URL with the appropriate content to make a proper shortcut file.
+ *
+ * Similar with .desktop for Linux.
+ *
+ * @TODO Learn the xml format used on Apple?
+ *
+ * h/t the author of the page https://www.cyanwerks.com/formats/file-format-url.html
+ * for info that helped with the .url format.
+ */
+function savetext_download() {
+    // Get filename and check ext.
+    var downloadFilename = get_download_filename("savetextname");
+    var isURL = (downloadFilename.match(/\.url$/i));
+    var isDesktop = (downloadFilename.match(/\.desktop$/i));
+
+    // Get generated URL.
+    var urlText = document.getElementById("savetextarea").value;
+    if (!urlText) {
+        errorMsg(PenpaText.get('file_save_no_contents'));
+        return;
     }
 
-    if (valid_name) {
+    // Format blob.
+    var fileContents = urlText;
+    var fileExt = "txt";
+    var mimeType = "text/plain";
+
+    if (isURL) {
+        fileContents = "[InternetShortcut]\nURL=" + urlText;
+        fileExt = "url";
+        mimeType = "application/internet-shortcut";
+    } else if (isDesktop) {
+        var puzTitle = document.getElementById("saveinfotitle").value;
+        // NB: There's a Link type in the spec for .desktop files but I guess most Linux distros don't support it, so I have this file
+        // writing those options as comments that can be changed by the user if they want.
+        fileContents = "#!/usr/bin/env xdg-open\n# To make this shortcut work, you may need to set the file as executable and then right-click and \"Allow Launching\"\n[Desktop Entry]\nVersion=1.0\nTerminal=false\nName=" + puzTitle + "\nIcon=text-html\n# If your distribution supports Link type, use these:\n#Type=Link\n#URL=" + urlText + "\nType=Application\nExec=xdg-open " + urlText;
+        fileExt = "desktop";
+        mimeType = "application/x-desktop";
+    }
+
+    // Perform save.
+    var blob = new Blob([fileContents], {type: mimeType});
+    saveblob_download(blob, downloadFilename, fileExt);
+}
+
+/**
+ * Validates a filename prior to using it for a download.
+ *
+ * @param {string} filename Filename to be used for download
+ * @param {string} fileExt File extension to be used for download
+ * @returns {string|null} Will return valid/fixed filename unless the name is invalid.
+ */
+function validate_filename(filename, fileExt) {
+    var filenamePieces = filename.split(".");
+
+    // Ensure there's a file extension, otherwise add it.
+    if (filenamePieces[filenamePieces.length - 1] !== fileExt) {
+        filename += "." + fileExt;
+    }
+
+    var filenameBad = filename_bad_chars.exec(filename);
+
+    // Check for unwanted symbols.
+    if (filenameBad) {
+        errorMsg(PenpaText.get('unsupported_filename'));
+        return null;
+    }
+
+    return filename;
+}
+
+/**
+ * Saves a Blob data object as a file, assuming the filename is
+ * valid and the browser supports it.
+ *
+ * @param {Blob} blob A blob to be saved to a file.
+ * @param {string} filename Filename to use.
+ * @param {string} fileext File extension to use if missing from filename.
+ */
+function saveblob_download(blob, filename, fileext) {
+    var downloadLink = document.getElementById('download_link');
+    var cleanFilename = validate_filename(filename, fileext || 'txt');
+
+    if (cleanFilename) {
         if (window.navigator.msSaveBlob) {
             // for IE
-            window.navigator.msSaveBlob(blob, filename);
+            window.navigator.msSaveBlob(blob, cleanFilename);
         } else if (URL && URL.createObjectURL) {
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.target = "_blank";
-            downloadLink.download = filename;
+            downloadLink.download = cleanFilename;
             downloadLink.click();
         } else {
             Swal.fire({
@@ -1668,8 +1787,6 @@ function saveblob_download(blob, defaultFilename) {
                 confirmButtonText: PenpaText.get('close'),
             });
         }
-    } else {
-        errorMsg(PenpaText.get('unsupported_filename'));
     }
 }
 
@@ -1783,10 +1900,10 @@ function export_sudoku() {
     }
 }
 
-function import_url(urlstring) {
+async function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
     if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/") !== -1) {
+        if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
 
             let param = urlstring.split('&');
             let paramArray = [];
@@ -1797,13 +1914,10 @@ function import_url(urlstring) {
                 paramArray[paramItem[0]] = paramItem[1];
             }
 
-            let hash = "penpa_" + md5(paramArray.p);
+            const hash = PenpaProgress.getHash(paramArray.p);
 
             // Decrypt puzzle data
-            let local_data;
-            if (localStorageAvailable) {
-                local_data = localStorage.getItem(hash);
-            }
+            let local_data = await PenpaProgress.tryLoad(hash);
 
             if (local_data && local_data.includes('&p=')) {
                 // This is to account for old links and new links together
@@ -1852,7 +1966,7 @@ function show_shortcuts() {
     document.getElementById("modal-keys").style.display = 'block';
 }
 
-function load(urlParam, type = 'url', origurl = null) {
+async function load(urlParam, type = 'url', origurl = null) {
     var param = urlParam.split('&');
     var paramArray = [];
 
@@ -1895,12 +2009,22 @@ function load(urlParam, type = 'url', origurl = null) {
     document.getElementById("nb_space2").value = parsedSpaces[1];
     document.getElementById("nb_space3").value = parsedSpaces[2];
     document.getElementById("nb_space4").value = parsedSpaces[3];
-    if (rtext_para[11] && rtext_para[11] == "1") { document.getElementById("nb_sudoku1").checked = true; }
-    if (rtext_para[12] && rtext_para[12] == "1") { document.getElementById("nb_sudoku2").checked = true; }
-    if (rtext_para[13] && rtext_para[13] == "1") { document.getElementById("nb_sudoku3").checked = true; }
-    if (rtext_para[14] && rtext_para[14] == "1") { document.getElementById("nb_sudoku4").checked = true; }
+    if (rtext_para[11] && rtext_para[11] == "1") {
+        document.getElementById("nb_sudoku1").checked = true;
+    }
+    if (rtext_para[12] && rtext_para[12] == "1") {
+        document.getElementById("nb_sudoku2").checked = true;
+    }
+    if (rtext_para[13] && rtext_para[13] == "1") {
+        document.getElementById("nb_sudoku3").checked = true;
+    }
+    if (rtext_para[14] && rtext_para[14] == "1") {
+        document.getElementById("nb_sudoku4").checked = true;
+    }
     if (UserSettings.gridtype == "penrose_P3") {
-        if (rtext_para[11]) { document.getElementById("nb_penrose1").value = rtext_para[11]; }
+        if (rtext_para[11]) {
+            document.getElementById("nb_penrose1").value = rtext_para[11];
+        }
         if (rtext_para[12]) {
             document.getElementById("nb_penrose2").value = rtext_para[12];
             document.getElementById("nb_penrose2_sl").value = rtext_para[12];
@@ -1955,6 +2079,10 @@ function load(urlParam, type = 'url', origurl = null) {
         // to address mixed versions where the stored value was ON and OFF/ "1" and "2"
         if (rtext_para[19] === "ON" || rtext_para[19] === "1") {
             UserSettings.draw_edges = true;
+        }
+
+        if (rtext_para[19] === "OFF" || rtext_para[19] === "2") {
+            UserSettings.draw_edges = false;
         }
     }
 
@@ -2383,18 +2511,11 @@ function load(urlParam, type = 'url', origurl = null) {
     }
 
     if (!valid_replay && (paramArray.m === "solve" || paramArray.l === "solvedup") && (type != "localstorage")) {
-        // check for local progres
-        // get md5 hash for unique id
+        // check for local progress
+        const hash = PenpaProgress.getHash(pu.url);
+        let local_data = await PenpaProgress.tryLoad(hash);
 
-        let hash = "penpa_" + md5(pu.url);
-
-        // Decrypt puzzle data
-        let local_data = null;
-        if (localStorageAvailable) {
-            local_data = localStorage.getItem(hash);
-        }
-
-        if (local_data !== null) {
+        if (local_data) {
             var local_copy = JSON.parse(decrypt_data(local_data));
             pu.pu_q = local_copy.pu_q;
             pu.pu_a = local_copy.pu_a;
@@ -3812,6 +3933,7 @@ function decode_puzzlink(url) {
             break;
         case "fillomino":
         case "fillomino01": // fillomino alias
+        case "squarejam":
         case "symmarea":
         case "view":
             pu = new Puzzle_square(cols, rows, size);
@@ -4704,7 +4826,7 @@ function decode_puzzlink(url) {
 
             pu.user_tags = ["tatebo-yokobo"]; // Set tags
             break;
-            // ============ https://pzprxs.vercel.app/p ============
+        // ============ https://pzprxs.vercel.app/p ============
         case "canal":
         case "cbanana":
         case "tontti":
