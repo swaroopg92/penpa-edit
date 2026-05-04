@@ -104,7 +104,7 @@ class Puzzle_square extends Puzzle {
                 k++;
             }
         }
-        type = 3;
+        type = 2;
         for (var j = 0; j < ny; j++) {
             for (var i = 0; i < nx; i++) {
                 if (i === 0 || i === nx - 1 || j === 0 || j === ny - 1) {
@@ -368,15 +368,11 @@ class Puzzle_square extends Puzzle {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 90 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, -90);
-        this.redraw();
+        this.rotate_grid(-90);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 90 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.point_move(0, 0, +90);
-        this.redraw();
+        this.rotate_grid(90);
     }
 
     cursolcheck() {
@@ -4276,18 +4272,6 @@ class Puzzle_square extends Puzzle {
                 }
             }
         }
-    }
-
-    rotate_theta(th) {
-        th = (th + this.theta);
-        if (this.reflect[0] === -1) {
-            th = (180 - th + 360) % 360;
-        }
-        if (this.reflect[1] === -1) {
-            th = (360 - th + 360) % 360;
-        }
-        th = th / 180 * Math.PI;
-        return th;
     }
 }
 

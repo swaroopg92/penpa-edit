@@ -655,6 +655,24 @@ class Puzzle {
 
     }
 
+    rotate_grid(th, canvasupdate = true) {
+        this.theta = (this.theta + th * this.reflect[0] * this.reflect[1] + 360) % 360;
+        if (canvasupdate) {
+            this.canvasxy_update();
+            this.canvas_size_setting();
+        }
+        this.point_move(0, 0, th);
+        this.redraw();
+    } 
+
+    rotate_theta(th) {
+        th += this.theta;
+        if (this.reflect[0] === -1) { th = (180 - th) % 360; }
+        if (this.reflect[1] === -1) { th = (0 - th) % 360; }
+        th = th / 180 * Math.PI;
+        return th;
+    }
+
     resize_top(sign, celltype = 'black') {
         sign = parseInt(sign);
         if ((this.ny + 1 * sign) <= this.gridmax['square'] && (this.ny + 1 * sign) > 0) {

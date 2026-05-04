@@ -368,19 +368,11 @@ class Puzzle_hex extends Puzzle {
     }
 
     rotate_left() {
-        this.theta = (this.theta - 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.canvasxy_update();
-        this.canvas_size_setting();
-        this.point_move(0, 0, -30);
-        this.redraw();
+        this.rotate_grid(-30, false);
     }
 
     rotate_right() {
-        this.theta = (this.theta + 30 * this.reflect[0] * this.reflect[1] + 360) % 360;
-        this.canvasxy_update();
-        this.canvas_size_setting();
-        this.point_move(0, 0, 30);
-        this.redraw();
+        this.rotate_grid(30, false);
     }
 
     key_arrow(key_code, ctrl_key = false) {
@@ -1038,98 +1030,98 @@ class Puzzle_hex extends Puzzle {
                 th;
 
             if (i1 % 6 === 0) {
-                th = this.rotate_theta_cage(150);
+                th = this.rotate_theta(150);
                 x1 = this.point[i1].x + r * Math.cos(th) * this.size;
                 y1 = this.point[i1].y - r * Math.sin(th) * this.size;
                 if (i2 % 6 === 1) {
-                    th = this.rotate_theta_cage(90);
+                    th = this.rotate_theta(90);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
                 } else if (i2 % 6 === 3) {
-                    th = this.rotate_theta_cage(210);
+                    th = this.rotate_theta(210);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
                 }
             } else if (i1 % 6 === 1) {
-                th = this.rotate_theta_cage(90);
+                th = this.rotate_theta(90);
                 x1 = this.point[i1].x + r * Math.cos(th) * this.size;
                 y1 = this.point[i1].y - r * Math.sin(th) * this.size;
                 if (i2 % 6 === 2) {
-                    th = this.rotate_theta_cage(30);
+                    th = this.rotate_theta(30);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
                 }
             } else if (i1 % 6 === 2) {
-                th = this.rotate_theta_cage(30);
+                th = this.rotate_theta(30);
                 x1 = this.point[i1].x + r * Math.cos(th) * this.size;
                 y1 = this.point[i1].y - r * Math.sin(th) * this.size;
                 if (i2 % 6 === 0) {
-                    th = this.rotate_theta_cage(150);
+                    th = this.rotate_theta(150);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
-                    th = this.rotate_theta_cage(330);
+                    th = this.rotate_theta(330);
                     x3 = x1 + r0 * Math.cos(th) * this.size;
                     y3 = y1 - r0 * Math.sin(th) * this.size;
                 } else if (i2 % 6 === 5) {
-                    th = this.rotate_theta_cage(330);
+                    th = this.rotate_theta(330);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
                 }
             } else if (i1 % 6 === 3) {
-                th = this.rotate_theta_cage(210);
+                th = this.rotate_theta(210);
                 x1 = this.point[i1].x + r * Math.cos(th) * this.size;
                 y1 = this.point[i1].y - r * Math.sin(th) * this.size;
                 if (i2 % 6 === 1) {
-                    th = this.rotate_theta_cage(90);
+                    th = this.rotate_theta(90);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
-                    th = this.rotate_theta_cage(270);
+                    th = this.rotate_theta(270);
                     x3 = x1 + r0 * Math.cos(th) * this.size;
                     y3 = y1 - r0 * Math.sin(th) * this.size;
                 } else if (i2 % 6 === 4) {
-                    th = this.rotate_theta_cage(270);
+                    th = this.rotate_theta(270);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
                 }
             } else if (i1 % 6 === 4) {
-                th = this.rotate_theta_cage(270);
+                th = this.rotate_theta(270);
                 x1 = this.point[i1].x + r * Math.cos(th) * this.size;
                 y1 = this.point[i1].y - r * Math.sin(th) * this.size;
                 if (i2 % 6 === 0) {
-                    th = this.rotate_theta_cage(150);
+                    th = this.rotate_theta(150);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
-                    th = this.rotate_theta_cage(330);
+                    th = this.rotate_theta(330);
                     x3 = x1 + r0 * Math.cos(th) * this.size;
                     y3 = y1 - r0 * Math.sin(th) * this.size;
                 } else if (i2 % 6 === 2) {
-                    th = this.rotate_theta_cage(30);
+                    th = this.rotate_theta(30);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
-                    th = this.rotate_theta_cage(210);
+                    th = this.rotate_theta(210);
                     x3 = x1 + r0 * Math.cos(th) * this.size;
                     y3 = y1 - r0 * Math.sin(th) * this.size;
                 } else if (i2 % 6 === 5) {
-                    th = this.rotate_theta_cage(330);
+                    th = this.rotate_theta(330);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
                 }
             } else if (i1 % 6 === 5) {
-                th = this.rotate_theta_cage(330);
+                th = this.rotate_theta(330);
                 x1 = this.point[i1].x + r * Math.cos(th) * this.size;
                 y1 = this.point[i1].y - r * Math.sin(th) * this.size;
                 if (i2 % 6 === 1) {
-                    th = this.rotate_theta_cage(90);
+                    th = this.rotate_theta(90);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
-                    th = this.rotate_theta_cage(270);
+                    th = this.rotate_theta(270);
                     x3 = x1 + r0 * Math.cos(th) * this.size;
                     y3 = y1 - r0 * Math.sin(th) * this.size;
                 } else if (i2 % 6 === 3) {
-                    th = this.rotate_theta_cage(210);
+                    th = this.rotate_theta(210);
                     x2 = this.point[i2].x + r * Math.cos(th) * this.size;
                     y2 = this.point[i2].y - r * Math.sin(th) * this.size;
-                    th = this.rotate_theta_cage(30);
+                    th = this.rotate_theta(30);
                     x3 = x1 + r0 * Math.cos(th) * this.size;
                     y3 = y1 - r0 * Math.sin(th) * this.size;
                 }
@@ -3074,30 +3066,6 @@ class Puzzle_hex extends Puzzle {
                 }
             }
         }
-    }
-
-    rotate_theta(th) {
-        th = (th + this.theta);
-        if (this.reflect[0] === -1) {
-            th = (180 - th + 360) % 360;
-        }
-        if (this.reflect[1] === -1) {
-            th = (360 - th + 360) % 360;
-        }
-        th = th / 180 * Math.PI;
-        return th;
-    }
-
-    rotate_theta_cage(th) {
-        th = (th - this.theta);
-        if (this.reflect[0] === -1) {
-            th = (180 - th + 360) % 360;
-        }
-        if (this.reflect[1] === -1) {
-            th = (360 - th + 360) % 360;
-        }
-        th = th / 180 * Math.PI;
-        return th;
     }
 
     check_conflict(current_sol) {
