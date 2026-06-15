@@ -89,7 +89,7 @@ const UserSettings = {
     },
 
     // Toggle language
-    _language: 'EN',
+    _language: null,
     set app_language(newValue) {
         this._language = newValue;
 
@@ -99,6 +99,13 @@ const UserSettings = {
     },
     get app_language() {
         return this._language;
+    },
+
+    detectBrowserLanguage: function() {
+        const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        if (browserLang.startsWith('zh')) return 'ZH';
+        if (browserLang.startsWith('ja')) return 'JP';
+        return 'EN';
     },
 
     // Conflict detection
@@ -529,6 +536,10 @@ const UserSettings = {
                     UserSettings[setting] = cookieQuery;
                 }
             });
+
+            if (!this._language) {
+                this.app_language = this.detectBrowserLanguage();
+            }
 
             const tab_cookie = getCookie("tab_settings");
             if (tab_cookie !== null) {
