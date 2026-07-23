@@ -1,13 +1,6 @@
 # About
 Use following links to do testing of Penpa+. This by no means an exhaustive testing but only sample links to ensure new features have not broken old code.
 
-<!-- https://swaroopg92.github.io/penpa-edit -->
-<details>
-<summary>Penpa+</summary>
-
-* https://git.io/JReKb
-
-</details>
 <!-- ============ https://puzz.link/p or http://pzv.jp/p.html ============ -->
 <details>
 <summary>Aho</summary>
@@ -27,17 +20,20 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 * https://puzz.link/p?akari/20/20/h.k.h.kbz.ha.gb6.hab.hbl.h.zk.h.lbbiab.hb.h.zh.gbg6b.g.i6.zz.g.i6b.g.i.g.zh.hb.h.hbbib.l.hbzi.h.n.ha.ha.gb.gb.hbzbi.h.kb
 * https://puzz.link/p?akari/40/40/i..i8.g.gco1...i1.h.g.hd.i.g...t1.j6.g.hcgch.bo1..jah.g.g.gbh.h.q1.n.j.g.gbi.g.qco.j.g.l.bobqbh..lcobxbi.rbsbmbpbzi.r.mcgckci.sck.j.rdpblbhbkbg.r.n1.j.q.rcl..i6.m7.h.ocl7.i.gbm.h.oakb.i6.qcm.m.i.h.h.p..obj.jb.h.n..g.n.lbi.gbg.p.o.k.kbbg6clbbich1bj6.j.g.n.h.k.h0..l.h.j...n.i.j......bi6bi.gblbgbh1.......i.g.l.g.n.i.i.h....g.c1cmbm66.h.h.g..gb.l1.b.o5.g.hbgcbbj....1.mcg.g.g7.j2.o1....gbgbk..g..g.u...g.g.ibk.g71.bs.h.g.i.jbbi.g.pbh1b.hbg..h.h65.hcmbkbj1cbk.z.j1..p.g.x1.h1..cn1.hbt..6...l1.......bdkbj6.g..g.n.......b.r.h.g.g..n.........h1bl2bg.6.g.n1..........g...i...k.jcm........ib..bl6.g.m
 
+</details>
 <details>
 <summary>All or Nothing</summary>
 
 * https://puzz.link/p?nothing/10/10/8l5n4n2vduron0m54efqfejv1gk69gjv7s84
 
+</details>
 <details>
 <summary>Alternation</summary>
 
 * https://puzz.link/p?alter/9/9/43koipp4cpkqs8g8se1f71s73kpad0d1r1e3f1g2f3e2r3d
 * https://puzz.link/p?alter/10/10/acpqcjamltdal5br4i5gqrbt06bq42noq354l2e2z2z1e3u
 
+</details>
 <details>
 <summary>Anglers</summary>
 
@@ -1055,6 +1051,7 @@ Use following links to do testing of Penpa+. This by no means an exhaustive test
 * https://pzprxs.vercel.app/p?batten/10/5/4021434a0g2222h322g3g1
 * https://pzprxs.vercel.app/p?batten/8/8/0d210721076h64444471h5i
 
+</details>
 <details>
 <summary>Canal View</summary>
 
