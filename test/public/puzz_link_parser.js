@@ -1,17 +1,59 @@
 let assert = chai.assert;
 
-describe("puzz.link parser", () => {
-    let penpa, updateSnapshots;
+describe("Test puzz.link parser", () => {
+    let penpa, updateSnapshots, validationSections, validationErrors;
+
+    // --- URL annotation validation (merged from sync_testing_urls.js) ---
+
+    before(async function () {
+        var source = await (await fetch("/puzz_link_parser.js")).text();
+        var result = parseSections(source);
+        validationSections = result.sections;
+        validationErrors = result.errors;
+    });
+
+    after(function () {
+        window.__validationOk = (validationErrors.length === 0);
+    });
+
+    it("all comment annotations match their array entry names", function () {
+        assert.isEmpty(validationErrors,
+            validationErrors.length + " mismatches found:\n" + validationErrors.map(function (e) { return "  \u2022 " + e; }).join("\n"));
+    });
+
+    it("has at least one section", function () {
+        assert.isAbove(validationSections.length, 0);
+    });
+
+    it("every section has at least one entry", function () {
+        var empty = validationSections.filter(function (s) { return s.entries.length === 0; }).map(function (s) { return s.comment; });
+        assert.isEmpty(empty, "Empty sections: " + empty.join(", "));
+    });
 
     before(() => {
+        window.__parsingOk = true;
         penpa = document.getElementById("penpa").contentWindow;
         updateSnapshots = document.getElementById("update-snapshots").checked;
     });
 
+    afterEach(function () {
+        if (this.currentTest.state === 'failed') {
+            window.__parsingOk = false;
+        }
+    });
+
+    beforeEach(function () {
+        if (!window.__parsingOk) {
+            this.skip();
+        }
+    });
+
     it("connects to the test server", async () => {
         assert.equal("pong", await fetchJson("/ping"));
-    })
+    });
 
+    // Please keeps the puzzle name in annotation and the array entry name in sync. 
+    // The test will fail if they are not the same.
     const urls = [
         // ============ https://puzz.link/p or http://pzv.jp/p.html ============
         // Aho
@@ -159,7 +201,7 @@ describe("puzz.link parser", () => {
         ["Firefly (Hotaru Beam) 2", "https://puzz.link/p?firefly/7/7/e3.h1.13a0.f0.f0.a151543h1.b3.a"],
         ["Firefly (Hotaru Beam) 3", "https://puzz.link/p?firefly/9/9/c25b45c24k23c2340a44c3.m4.c3.a301.c25k13c33b13c"],
         // Minor bug. This parses correctly but isn't rendered right because it's zero rows thick.
-        ["Firefly 4", "https://puzz.link/p?firefly/10/1/4.h0./"],
+        ["Firefly (Hotaru Beam) 4", "https://puzz.link/p?firefly/10/1/4.h0./"],
         // Geradeweg
         ["Geradeweg 1", "https://puzz.link/p?geradeweg/17/10/j6m1q4g4o55o54i1s1o2h3p6h3o2s1i35o53o2g3q6m.+100j"],
         ["Geradeweg 2", "https://puzz.link/p?geradeweg/10/10/g11111111g1111111111l1g11i11g111111111g11111111h1111111111111111g1111g111111111111g11111111g"],
@@ -617,5 +659,15 @@ describe("puzz.link parser", () => {
 
         const expected = snapshot.data ? JSON.parse(snapshot.data) : "SNAPSHOT NOT FOUND";
         assert.deepEqual(expected, data, `Snapshots differ: expected=${JSON.stringify(expected)}, actual=${JSON.stringify(data)}`);
+    });
+
+    it("syncs TESTING.md from puzz_link_parser.js", async function () {
+        if (!document.querySelector("#sync-testing-md").checked ||
+            window.__validationOk === false ||
+            window.__parsingOk !== true) {
+            this.skip();
+        }
+        var resp = await fetchJson("/sync-testing-md", "POST", { updateSnapshots: true });
+        assert.isTrue(resp.success, resp.error || "Sync failed");
     });
 });

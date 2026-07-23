@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { syncTestingMd } = require("./public/sync_testing_urls.js");
 
 const app = express();
 
@@ -31,6 +32,16 @@ app.post("/snapshot", (req, res) => {
     res.json({
         data: returnData,
     });
+})
+
+app.post("/sync-testing-md", (req, res) => {
+    const updateSnapshots = req.body.updateSnapshots;
+    const result = syncTestingMd(updateSnapshots);
+    if (result.success) {
+        res.json(result);
+    } else {
+        res.status(500).json(result);
+    }
 })
 
 const port = 5000;
