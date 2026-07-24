@@ -146,6 +146,7 @@ const EXAMPLE_URLS = [
     ["Fillomino 2", "https://puzz.link/p?fillomino01/7/3/159u159"],
     ["Fillomino 3", "https://puzz.link/p?fillomino/10/10/q-138g84ga3h46g42g33r46g44ga8h12g15g58r21g28g87h42g14g4-13q"],
     ["Fillomino 4", "https://puzz.link/p?fillomino/7/10/r6l8l5l2lah3i5h9i9i4c4o"],
+    ["Fillomino 5", "https://puzz.link/p?fillomino/v:/10/10/6g6g6g6g6q6g6g6g6g6t-42g-42w-42g-42l6i6zi0000o1g287g90000003g1g001g10103g0000"],
     // Firefly (Hotaru Beam)
     ["Firefly (Hotaru Beam) 1", "https://puzz.link/p?firefly/10/10/k40f20c41j22b24g2.3.b21b10b4.2.g21b12e12d32c10f30k"],
     ["Firefly (Hotaru Beam) 2", "https://puzz.link/p?firefly/7/7/e3.h1.13a0.f0.f0.a151543h1.b3.a"],

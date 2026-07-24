@@ -335,6 +335,7 @@ This file is used to sync example URL data to a testing file named `example_urls
 * https://puzz.link/p?fillomino01/7/3/159u159
 * https://puzz.link/p?fillomino/10/10/q-138g84ga3h46g42g33r46g44ga8h12g15g58r21g28g87h42g14g4-13q
 * https://puzz.link/p?fillomino/7/10/r6l8l5l2lah3i5h9i9i4c4o
+* https://puzz.link/p?fillomino/v:/10/10/6g6g6g6g6q6g6g6g6g6t-42g-42w-42g-42l6i6zi0000o1g287g90000003g1g001g10103g0000
 
 </details>
 

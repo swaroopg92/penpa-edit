@@ -1728,14 +1728,21 @@ function decode_puzzlink(url) {
         case "squarejam":
         case "symmarea":
         case "view":
+            if (type === "fillomino01") type = "fillomino";
+
             pu = new Puzzle_square(cols, rows, size);
             if (type !== "view" && type !== "simplegako") {
                 pu.mode_grid("nb_grid2"); // Dashed grid lines
             }
             setupProblem(pu, type === "squarejam" ? "combi" : "number");
 
-            info_number = puzzlink_pu.decodeNumber16();
+            info_number = puzzlink_pu.decodeNumber16(puzzlink_pu.rows * puzzlink_pu.cols);
             puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            if (type === "fillomino") {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
+            }
 
             pu.mode_qa("pu_a");
             pu.mode_set(type === "squarejam" ? "combi" : "number");
@@ -1745,7 +1752,6 @@ function decode_puzzlink(url) {
             // Set tags
             switch (type) {
                 case "fillomino":
-                case "fillomino01":
                     pu.user_tags = ['fillomino'];
                     break;
                 case "symmarea":
@@ -2887,7 +2893,7 @@ function decode_puzzlink(url) {
                 // Determine which row and column
                 row_ind = parseInt(i / puzzlink_pu.cols);
                 col_ind = i % puzzlink_pu.cols;
-                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;                
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
                 number = info_number[i] ? info_number[i] : "";
                 if (info_shade[i] === 1) {
                     pu["pu_q"].number[cell] = [number, 7, "1"];  // White number in circle
