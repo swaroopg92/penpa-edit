@@ -92,6 +92,7 @@ const penpa_tags = {
             "double choco",
             "easy as abc",
             "factors",
+            "family photo",
             "fillmat",
             "firefly (hotaru beam)",
             "geradeweg",

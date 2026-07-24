@@ -2874,6 +2874,34 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = ["border block"];
             break;
+        case "familyphoto":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_shade = puzzlink_pu.decodeNumber2Binary(puzzlink_pu.rows * puzzlink_pu.cols);
+            info_number = puzzlink_pu.decodeNumber16();
+
+            // Add numbers to grid
+            for (var i in info_shade) {
+                // Determine which row and column
+                row_ind = parseInt(i / puzzlink_pu.cols);
+                col_ind = i % puzzlink_pu.cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;                
+                number = info_number[i] ? info_number[i] : "";
+                if (info_shade[i] === 1) {
+                    pu["pu_q"].number[cell] = [number, 7, "1"];  // White number in circle
+                } else {
+                    pu["pu_q"].number[cell] = [number, 1, "1"];  // Black number
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ["family photo"];
+            break;
         // ============ https://pzprxs.vercel.app/p ============
         case "canal":
         case "cbanana":

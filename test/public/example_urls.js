@@ -134,6 +134,10 @@ const EXAMPLE_URLS = [
     ["Factors 1", "https://puzz.link/p?factors/15/15/2ii9p6jlepctpvvnvvcvtsnrvfnvumfuafuqrdigoivvuvjufvv6veme19dokvv1ovoo31to5vv0vsrduvfv*5028-4d-3c6-b4-10-90+249-5a-46-6e+2a0-30-3f+4e0-2d-1c-37-84-30-fce-28+16c-87-87-1e-84+190-62-30+555+604-1e-36$4ec40-b6-6c-8f-1e-3c-606-82+898-9a+288*457e+1b0-20-2ac-283-54-48-96+870=6f8-28-75-62-78e-1e+276-46+438a+7d2c-3c-3c-75-3c-30-37-5b6b+654-20%b50+222+258-48"],
     ["Factors 2", "https://puzz.link/p?factors/9/9/nbuurdjudmrrun8cv6pvvdtnvsr7pg39-2d-2a-308-20-38f8-1e-1267-1c7-1e-48-18-18-2d983a-303e-30fc9-23-36287-48-15-30-14"],
     ["Factors 3", "https://puzz.link/p?factors/9/9/bvftapbukqlvnugu0fvvmbujfvvg3o-202-18-1b-28-2338-3f-368-12e-282-48*6950-12696-1c-1bf-30-2a-10-2d98-23-28c-122-207-36"],
+    // Family Photo
+    ["Family Photo 1", "https://puzz.link/p?familyphoto/10/10/dmg1hh28k5k528hhg1dm4n4r3j4v4zm5j4r4n4"],
+    ["Family Photo 2", "https://puzz.link/p?familyphoto/10/10/j6cpcpj6j6cpcpj6j6cpo5zt-14-17zzj.o"],
+    ["Family Photo 3", "https://puzz.link/p?familyphoto/10/10/k4aahlaa5k5kaalhaa45pan8zzzr.j.h"],
     // Fillmat
     ["Fillmat 1", "https://puzz.link/p?fillmat/9/10/2u3g2a2d4e2d3a3g2s2b2b2e"],
     ["Fillmat 2", "https://puzz.link/p?fillmat/5/5/e.a..b.a.a.d..a.a"],
