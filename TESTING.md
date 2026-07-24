@@ -1,7 +1,7 @@
 # About
 Use following links to do testing of Penpa+. This by no means an exhaustive testing but only sample links to ensure new features have not broken old code.
 
-This file is used to sync example URL data to a testing file. Please keep the structure format consistent and use the `<detail>` and `<summary>` to indicate examples in this file.
+This file is used to sync example URL data to a testing file named `example_urls.js`. Please keep the structure format consistent and use the `<detail>` and `<summary>` to indicate examples in this file.
 
 <!-- ============ https://puzz.link/p or http://pzv.jp/p.html ============ -->
 <details>

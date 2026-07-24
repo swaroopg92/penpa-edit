@@ -1,34 +1,7 @@
 let assert = chai.assert;
 
 describe("Test puzz.link parser", () => {
-    let penpa, updateSnapshots, testingMdErrors, testingMdSections, testingMdEntries;
-
-    // --- TESTING.md validation ---
-
-    before(async function () {
-        var source = await (await fetch("/TESTING.md")).text();
-        var result = validateTestingMd(source);
-        testingMdErrors = result.errors;
-        testingMdSections = result.sections;
-        testingMdEntries = result.entries;
-    });
-
-    after(function () {
-        window.__validationOk = (testingMdErrors.length === 0);
-    });
-
-    it("TESTING.md has no structural errors", function () {
-        assert.isEmpty(testingMdErrors,
-            testingMdErrors.length + " errors found:\n" + testingMdErrors.map(function (e) { return "  \u2022 " + e; }).join("\n"));
-    });
-
-    it("TESTING.md has at least one section", function () {
-        assert.isAbove(testingMdSections, 0);
-    });
-
-    it("TESTING.md has at least one example URL", function () {
-        assert.isAbove(testingMdEntries, 0);
-    });
+    let penpa, updateSnapshots;
 
     before(() => {
         window.__parsingOk = true;

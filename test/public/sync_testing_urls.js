@@ -9,10 +9,6 @@
  *   const { syncExampleUrls } = require('./public/sync_testing_urls.js')
  */
 
-/**
- * Parse TESTING.md source into sections and entries (reverse of generateTestingMd).
- * Entry names are derived from section name + index (e.g., "Aho 1", "Aho 2").
- */
 function parseTestingMd(source) {
     var lines = source.split('\n');
     var sections = [];
@@ -53,11 +49,6 @@ function parseTestingMd(source) {
     return sections;
 }
 
-/**
- * Validate TESTING.md source for structural correctness.
- * Checks: every <details> has a <summary>, every section has URLs,
- * no duplicate section names, and no dangling <details> without closing </details>.
- */
 function validateTestingMd(source) {
     var lines = source.split('\n');
     var errors = [];
@@ -131,9 +122,6 @@ function validateTestingMd(source) {
     };
 }
 
-/**
- * Generate the JS code for example_urls.js from sections.
- */
 function generateExampleUrls(sections) {
     var lines = [];
     var currentDomain = null;
@@ -167,7 +155,6 @@ function generateExampleUrls(sections) {
     return lines.join('\n');
 }
 
-// deal with standalone runner
 if (typeof module !== 'undefined' && module.exports) {
     var fs = require('fs');
     var path = require('path');
@@ -178,9 +165,17 @@ if (typeof module !== 'undefined' && module.exports) {
     /**
      * Sync example_urls.js from TESTING.md.
      * TESTING.md is the source of truth; example_urls.js is generated.
+     * Validates TESTING.md structure first, then only writes if content changed.
      */
     function syncExampleUrls(update) {
         var source = fs.readFileSync(TESTING_MD, 'utf-8');
+
+        // Validate structure first — reject if TESTING.md has errors
+        var validation = validateTestingMd(source);
+        if (validation.errors.length > 0) {
+            return { success: false, error: validation.errors.join('\n') };
+        }
+
         var sections = parseTestingMd(source);
 
         var total = 0;
@@ -191,7 +186,11 @@ if (typeof module !== 'undefined' && module.exports) {
 
         if (update) {
             var code = generateExampleUrls(sections);
-            fs.writeFileSync(EXAMPLE_URLS_JS, code, 'utf-8');
+            // Only write if content actually changed (avoids live.js reload loop)
+            var existing = fs.existsSync(EXAMPLE_URLS_JS) ? fs.readFileSync(EXAMPLE_URLS_JS, 'utf-8') : '';
+            if (code !== existing) {
+                fs.writeFileSync(EXAMPLE_URLS_JS, code, 'utf-8');
+            }
         }
         return info;
     }

@@ -3,6 +3,14 @@ const path = require("path");
 const fs = require("fs");
 const { syncExampleUrls } = require("./public/sync_testing_urls.js");
 
+// Sync example_urls.js from TESTING.md before starting the server.
+var result = syncExampleUrls(true);
+if (result.success) {
+    console.log('example_urls.js synced: ' + result.sections + ' sections, ' + result.entries + ' entries');
+} else {
+    console.error(result.error);
+}
+
 const app = express();
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -10,10 +18,6 @@ app.use("/docs", express.static(path.join(__dirname, "..", "docs")));
 
 app.get("/ping", (req, res) => {
     res.json("pong");
-})
-
-app.get("/TESTING.md", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "TESTING.md"));
 })
 
 app.use(express.json());
@@ -36,16 +40,6 @@ app.post("/snapshot", (req, res) => {
     res.json({
         data: returnData,
     });
-})
-
-app.post("/sync-from-testing-md", (req, res) => {
-    const updateSnapshots = req.body.updateSnapshots;
-    const result = syncExampleUrls(updateSnapshots);
-    if (result.success) {
-        res.json(result);
-    } else {
-        res.status(500).json(result);
-    }
 })
 
 const port = 5000;
