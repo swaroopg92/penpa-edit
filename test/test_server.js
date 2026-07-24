@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { syncTestingMd } = require("./public/sync_testing_urls.js");
+const { syncExampleUrls } = require("./public/sync_testing_urls.js");
 
 const app = express();
 
@@ -10,6 +10,10 @@ app.use("/docs", express.static(path.join(__dirname, "..", "docs")));
 
 app.get("/ping", (req, res) => {
     res.json("pong");
+})
+
+app.get("/TESTING.md", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "TESTING.md"));
 })
 
 app.use(express.json());
@@ -34,9 +38,9 @@ app.post("/snapshot", (req, res) => {
     });
 })
 
-app.post("/sync-testing-md", (req, res) => {
+app.post("/sync-from-testing-md", (req, res) => {
     const updateSnapshots = req.body.updateSnapshots;
-    const result = syncTestingMd(updateSnapshots);
+    const result = syncExampleUrls(updateSnapshots);
     if (result.success) {
         res.json(result);
     } else {
