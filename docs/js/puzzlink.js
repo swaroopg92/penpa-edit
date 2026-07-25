@@ -2908,6 +2908,39 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = ["family photo"];
             break;
+        case "kazunori":
+        case "wafusuma":
+            pu = new Puzzle_square(cols, rows, size);
+            if (type === "wafusuma") pu.mode_grid("nb_grid2");
+            setupProblem(pu, "number");
+
+            if (type === "kazunori") {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2);
+            }
+
+            info_number = puzzlink_pu.decodeNumber16();
+            for (var i in info_number) {
+                if (i < (puzzlink_pu.cols - 1) * puzzlink_pu.rows) {
+                    row_ind = parseInt(i / (puzzlink_pu.cols - 1));
+                    col_ind = i % (puzzlink_pu.cols - 1);
+                    cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                } else {
+                    var tmp = i - (puzzlink_pu.cols - 1) * puzzlink_pu.rows;
+                    row_ind = parseInt(tmp / puzzlink_pu.cols);
+                    col_ind = tmp % puzzlink_pu.cols;
+                    cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                }
+
+                number = info_number[i] === "?" ? " " : info_number[i];
+                pu["pu_q"].number[cell] = [number, 6, "6"];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            UserSettings.tab_settings = ["Surface", "Number Normal"];
+            pu.user_tags = [type === "kazunori" ? "kazunori room" : "wafusuma"];
+            break;
         // ============ https://pzprxs.vercel.app/p ============
         case "canal":
         case "cbanana":

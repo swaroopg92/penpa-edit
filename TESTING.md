@@ -480,6 +480,15 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Kazunori Room</summary>
+
+* https://puzz.link/p?kazunori/6/6/000000000000.g-1ag-13g-10kcjckbg-22g-17g6l-19hfgdg-1ehbg-22g-15h6l
+* https://puzz.link/p?kazunori/8/8/dfbmjltqeoiggosudi5m1vr0zzzzzr
+* https://puzz.link/p?kazunori/18/15/a2324goh8la242gl2ggn145oi964i9h1om2e5gh2808i22l4gg91g001v2fo3o060ov5sc000vvg00001kt1g001tvfo001vjc01g0g6h8k4jag3l4w8i6m7ock5h7g8j7gak9hcoaj8l4k7l2zu7k9g-10o9makah3h5n-10p4jai7p6h64h8i4har82h-10j4g98g5nd56jci86o6ka6lah3n8m9k7z5h7h8g4ga88g6k4hag8k6k8h3kai8l6g4gedi6qbj2k8nd-10q8zh
+
+</details>
+
+<details>
 <summary>Kropki</summary>
 
 * https://puzz.link/p?kropki/1/10/h3e
@@ -1128,6 +1137,13 @@ This file is used to sync example URL data to a testing file named `example_urls
 
 * https://puzz.link/p?view/8/8/k0g1g0i2h031h1g2k2j4k2g1h012h2i2g1g1k
 * https://puzz.link/p?view/10/10/2g0g0r1i4g1j5g4i2j3k4g2j2q0i2g1v4l3j2
+
+</details>
+
+<details>
+<summary>Wafusuma</summary>
+
+* https://puzz.link/p?wafusuma/8/8/w-15h.h-13h.h-12h.h-11h.w-10-10f-11ccbbzz3547869a
 
 </details>
 
