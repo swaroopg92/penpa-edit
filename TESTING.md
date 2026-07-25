@@ -607,6 +607,14 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Minarism</summary>
+
+* https://puzz.link/p?minarism/7/7/4lh4k334l3m322qg2lghhmhhj3y2k1khj55
+* https://puzz.link/p?minarism/12/12/hhhkhkgihjhihihihsgggthhhnhmhlgmgngggthhhsgigigigjgihkgkggggjhi1l2ig1ghpgjgi11k4ugbjgjhj8hlg12glh9jgjhj4gu5k12igjgpgh1hi3l2igjh
+
+</details>
+
+<details>
 <summary>Minesweeper</summary>
 
 * https://puzz.link/p?mines/4/6/2h1k14h23k1h2

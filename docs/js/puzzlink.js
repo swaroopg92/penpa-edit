@@ -949,6 +949,36 @@ class Puzzlink {
 
         return [number_list1, number_list2, extra_list];
     }
+
+    decodeMinarism() {
+        var number_list = {};
+        var ec = 0,
+            i = 0;
+
+        // There are no limits for this type yet
+        for (i = 0; i < this.gridurl.length; i++) {
+            var ca = this.gridurl.charAt(i)
+            if (this.include(ca, "0", "9") || this.include(ca, "a", "f")) {
+                number_list[ec] = parseInt(this.gridurl.substr(i, 1), 16);
+            } else if (ca === "-") {
+                number_list[ec] = parseInt(this.gridurl.substr(i + 1, 2), 16);
+                i += 2;
+            } else if (ca === "g") {
+                number_list[ec] = "<";  // the smaller operator
+            } else if (ca === "h") {
+                number_list[ec] = ">";  // the larger operator
+            } else if (ca === ".") {
+                number_list[ec] = '?';
+            } else if (ca >= "i" && ca <= "z") {
+                ec += parseInt(ca, 36) - 18;
+            }
+
+            ec++;
+        }
+
+        this.gridurl = this.gridurl.substr(i + 1);
+        return number_list;
+    }
 }
 
 class DisjointSets {
@@ -1304,7 +1334,7 @@ function decode_puzzlink(url) {
                     pu["pu_q"].number[cell] = [info_number[i], 6, "1"];
                 }
             }
-            
+
             pu.mode_qa("pu_a");
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal"];
@@ -2958,6 +2988,7 @@ function decode_puzzlink(url) {
             pu.user_tags = ["family photo"];
             break;
         case "kazunori":
+        case "minarism":
         case "wafusuma":
             pu = new Puzzle_square(cols, rows, size);
             if (type === "wafusuma") pu.mode_grid("nb_grid2");
@@ -2968,17 +2999,28 @@ function decode_puzzlink(url) {
                 puzzlink_pu.drawBorder(pu, info_edge, 2);
             }
 
-            info_number = puzzlink_pu.decodeNumber16();
+            info_number = (type === "minarism") ? puzzlink_pu.decodeMinarism() : puzzlink_pu.decodeNumber16();
             for (var i in info_number) {
+                var border_type = -1;
                 if (i < (cols - 1) * rows) {
                     row_ind = parseInt(i / (cols - 1));
                     col_ind = i % (cols - 1);
-                    cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                    border_type = 3;
+                    cell = border_type * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
                 } else {
                     var tmp = i - (cols - 1) * rows;
                     row_ind = parseInt(tmp / cols);
                     col_ind = tmp % cols;
-                    cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                    border_type = 2;
+                    cell = border_type * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
+                }
+
+                if (type === "minarism" && ["<", ">"].includes(info_number[i])) {
+                    const symbolValue = border_type === 3
+                        ? (info_number[i] === "<" ? 1 : 3)
+                        : (info_number[i] === "<" ? 2 : 4);
+                    pu["pu_q"].symbol[cell] = [symbolValue, "inequality", 2];
+                    continue;
                 }
 
                 number = info_number[i] === "?" ? " " : info_number[i];

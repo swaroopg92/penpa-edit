@@ -264,6 +264,9 @@ const EXAMPLE_URLS = [
     ["Mid-loop 1", "https://puzz.link/p?midloop/10/10/13579b37b9bdfwffgfzzzzzzzzzzzzz"],
     ["Mid-loop 2", "https://puzz.link/p?midloop/9/10/yfxfy7fz77fzj7fxbfx7bfx7fgfudfzgfg"],
     ["Mid-loop 3", "https://puzz.link/p?midloop/10/10/tfxfh7fxfzn7bfzhfztfzjfh7ftfpft77bfzhfi"],
+    // Minarism
+    ["Minarism 1", "https://puzz.link/p?minarism/7/7/4lh4k334l3m322qg2lghhmhhj3y2k1khj55"],
+    ["Minarism 2", "https://puzz.link/p?minarism/12/12/hhhkhkgihjhihihihsgggthhhnhmhlgmgngggthhhsgigigigjgihkgkggggjhi1l2ig1ghpgjgi11k4ugbjgjhj8hlg12glh9jgjhj4gu5k12igjgpgh1hi3l2igjh"],
     // Minesweeper
     ["Minesweeper 1", "https://puzz.link/p?mines/4/6/2h1k14h23k1h2"],
     ["Minesweeper 2", "https://puzz.link/p?mines/10/10/2g4i2g2k33j4h3h3g1i3j3h23h43h3h3h34h32h3j3i2g3h3h3j33k2g2i3g1"],
