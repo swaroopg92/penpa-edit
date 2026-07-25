@@ -1054,7 +1054,7 @@ function decode_puzzlink(url) {
 
             // Decode URL
             info_edge = puzzlink_pu.decodeBorder();
-            info_number = puzzlink_pu.decodeNumber16(puzzlink_pu.rows * puzzlink_pu.cols);
+            info_number = puzzlink_pu.decodeNumber16(rows * cols);
 
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
             if (type === "ripple") {
@@ -1295,8 +1295,8 @@ function decode_puzzlink(url) {
             info_number = puzzlink_pu.decodeKakuru();
             for (var i in info_number) {
                 // Determine which row and column
-                row_ind = parseInt(i / puzzlink_pu.cols);
-                col_ind = i % puzzlink_pu.cols;
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
                 pu["pu_q"].surface[cell] = 4;
 
@@ -1785,7 +1785,7 @@ function decode_puzzlink(url) {
             }
             setupProblem(pu, type === "squarejam" ? "combi" : "number");
 
-            info_number = puzzlink_pu.decodeNumber16(puzzlink_pu.rows * puzzlink_pu.cols);
+            info_number = puzzlink_pu.decodeNumber16(rows * cols);
             puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
 
             if (type === "fillomino") {
@@ -2208,7 +2208,7 @@ function decode_puzzlink(url) {
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "combi");
 
-            info_number = puzzlink_pu.decodeNumber16(puzzlink_pu.rows * puzzlink_pu.cols);
+            info_number = puzzlink_pu.decodeNumber16(rows * cols);
             var string_map = type === "pentominous" ? "FILNPTUVWXYZ" : "ILOST";
             for (var i in info_number) {
                 if (info_number[i] === string_map.length) {
@@ -2868,7 +2868,7 @@ function decode_puzzlink(url) {
             pu.mode_grid("nb_grid2"); // Dashed gridlines
             setupProblem(pu, "combi");
 
-            info_number = puzzlink_pu.decodeNumber2Binary(puzzlink_pu.rows * puzzlink_pu.cols);
+            info_number = puzzlink_pu.decodeNumber2Binary(rows * cols);
             puzzlink_pu.drawBinary2Surface(pu, info_number, 5); // 5 is for icy/water style
 
             info_edge = puzzlink_pu.decodeBorder();
@@ -2934,14 +2934,14 @@ function decode_puzzlink(url) {
             pu.mode_grid("nb_grid2"); // Dashed gridlines
             setupProblem(pu, "combi");
 
-            info_shade = puzzlink_pu.decodeNumber2Binary(puzzlink_pu.rows * puzzlink_pu.cols);
+            info_shade = puzzlink_pu.decodeNumber2Binary(rows * cols);
             info_number = puzzlink_pu.decodeNumber16();
 
             // Add numbers to grid
             for (var i in info_shade) {
                 // Determine which row and column
-                row_ind = parseInt(i / puzzlink_pu.cols);
-                col_ind = i % puzzlink_pu.cols;
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
                 number = info_number[i] ? info_number[i] : "";
                 if (info_shade[i] === 1) {
@@ -2970,14 +2970,14 @@ function decode_puzzlink(url) {
 
             info_number = puzzlink_pu.decodeNumber16();
             for (var i in info_number) {
-                if (i < (puzzlink_pu.cols - 1) * puzzlink_pu.rows) {
-                    row_ind = parseInt(i / (puzzlink_pu.cols - 1));
-                    col_ind = i % (puzzlink_pu.cols - 1);
+                if (i < (cols - 1) * rows) {
+                    row_ind = parseInt(i / (cols - 1));
+                    col_ind = i % (cols - 1);
                     cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
                 } else {
-                    var tmp = i - (puzzlink_pu.cols - 1) * puzzlink_pu.rows;
-                    row_ind = parseInt(tmp / puzzlink_pu.cols);
-                    col_ind = tmp % puzzlink_pu.cols;
+                    var tmp = i - (cols - 1) * rows;
+                    row_ind = parseInt(tmp / cols);
+                    col_ind = tmp % cols;
                     cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 2) + col_ind + 2;
                 }
 
@@ -2988,7 +2988,7 @@ function decode_puzzlink(url) {
             pu.mode_qa("pu_a");
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal"];
-            pu.user_tags = [type === "kazunori" ? "kazunori room" : "wafusuma"];
+            pu.user_tags = [type === "kazunori" ? "kazunori room" : type];
             break;
         // ============ https://pzprxs.vercel.app/p ============
         case "canal":
