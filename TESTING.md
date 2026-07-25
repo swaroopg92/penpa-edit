@@ -527,10 +527,10 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
-<summary>Look-Air</summary>
+<summary>Kuroclone</summary>
 
-* https://puzz.link/p?lookair/10/10/3a1k3c1a1f1b0b5d1g2f2g3d5b1b3f1a0c3k1a3
-* https://puzz.link/p?lookair/12/3/m5b0b.b0m
+* https://puzz.link/p?kuroclone/11/9/00g1o3s7ufs7o3g100fv3v0v0703g3s3v3vozzzb19711q
+* https://puzz.link/p?kuroclone/5/5/00000000a2aw
 
 </details>
 
@@ -541,6 +541,14 @@ This file is used to sync example URL data to a testing file named `example_urls
 * https://puzz.link/p?kurotto/13/12/g1g1h.h0g1h2g0h4h4g1h3g1h.h2g4i2h.g1h2j.h2g.h.j6h.g.h3i6g2h5h5g4h2g.h.h3g.h5g.h.h8g9i3h.g.h6j5h3g.h.j7h.g.h9h
 * https://puzz.link/p?kurotto/4/4/g4g3.l.3g3g
 * https://puzz.link/p?kurotto/9/17/i123zg5h2g2h66h3g3h.7h.g4h4x567i4.5x5h7g4h56h8g5h.7h.g6h7zg234i
+
+</details>
+
+<details>
+<summary>Look-Air</summary>
+
+* https://puzz.link/p?lookair/10/10/3a1k3c1a1f1b0b5d1g2f2g3d5b1b3f1a0c3k1a3
+* https://puzz.link/p?lookair/12/3/m5b0b.b0m
 
 </details>
 
@@ -1273,6 +1281,13 @@ This file is used to sync example URL data to a testing file named `example_urls
 <summary>Key West</summary>
 
 * https://pzprxs.vercel.app/p?keywest/7/7/ak861056ao860067eka
+
+</details>
+
+<details>
+<summary>Kuromenbun</summary>
+
+* https://pzprxs.vercel.app/p?kuromenbun/8/8/i4h4o61i8i4gg07n000eu00g2g5h5n5h2l1h6n6h4l4i2l2i2g0=
 
 </details>
 

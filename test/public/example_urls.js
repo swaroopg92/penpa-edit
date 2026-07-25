@@ -229,14 +229,17 @@ const EXAMPLE_URLS = [
     ["Kurodoko 2", "https://puzz.link/p?kurodoko/12/12/9l9l5l4l2l7l5l3l4l3h5p7h3l7l4l8l8l2l7l5l7l7"],
     ["Kurodoko 3", "https://puzz.link/p?kurodoko/4/4/g4g3.l.3g3g"],
     ["Kurodoko 4", "https://puzz.link/p?kurodoko/9/9/man5h365i4zo4i684h4n8m"],
-    // Look-Air
-    ["Look-Air 1", "https://puzz.link/p?lookair/10/10/3a1k3c1a1f1b0b5d1g2f2g3d5b1b3f1a0c3k1a3"],
-    ["Look-Air 2", "https://puzz.link/p?lookair/12/3/m5b0b.b0m"],
+    // Kuroclone
+    ["Kuroclone 1", "https://puzz.link/p?kuroclone/11/9/00g1o3s7ufs7o3g100fv3v0v0703g3s3v3vozzzb19711q"],
+    ["Kuroclone 2", "https://puzz.link/p?kuroclone/5/5/00000000a2aw"],
     // Kurotto
     ["Kurotto 1", "https://puzz.link/p?kurotto/10/10/sah2j.8.h.4.h6l6g4.l.8i9h9j.7.h.7.h5l5t6h3i"],
     ["Kurotto 2", "https://puzz.link/p?kurotto/13/12/g1g1h.h0g1h2g0h4h4g1h3g1h.h2g4i2h.g1h2j.h2g.h.j6h.g.h3i6g2h5h5g4h2g.h.h3g.h5g.h.h8g9i3h.g.h6j5h3g.h.j7h.g.h9h"],
     ["Kurotto 3", "https://puzz.link/p?kurotto/4/4/g4g3.l.3g3g"],
     ["Kurotto 4", "https://puzz.link/p?kurotto/9/17/i123zg5h2g2h66h3g3h.7h.g4h4x567i4.5x5h7g4h56h8g5h.7h.g6h7zg234i"],
+    // Look-Air
+    ["Look-Air 1", "https://puzz.link/p?lookair/10/10/3a1k3c1a1f1b0b5d1g2f2g3d5b1b3f1a0c3k1a3"],
+    ["Look-Air 2", "https://puzz.link/p?lookair/12/3/m5b0b.b0m"],
     // Lither (Litherslink)
     ["Lither (Litherslink) 1", "https://puzz.link/p?lither/8/8/g02881d3667c63c338c6b086cid12185bd"],
     ["Lither (Litherslink) 2", "https://puzz.link/p?lither/3/3/2c116b"],
@@ -559,6 +562,8 @@ const EXAMPLE_URLS = [
     ["Japanese Sums 2", "https://pzprxs.vercel.app/p?japanesesums/8/8/4/3..g..1g44.g..3g46h16h28h24h.34g82h.2.g5.h23.g214g13hai"],
     // Key West
     ["Key West 1", "https://pzprxs.vercel.app/p?keywest/7/7/ak861056ao860067eka"],
+    // Kuromenbun
+    ["Kuromenbun 1", "https://pzprxs.vercel.app/p?kuromenbun/8/8/i4h4o61i8i4gg07n000eu00g2g5h5n5h2l1h6n6h4l4i2l2i2g0="],
     // Nibunnogo
     ["Nibunnogo 1", "https://pzprxs.vercel.app/p?nibunnogo/10/10/i16ai3ch22aidj7cjch6bmce53drbg6ddibch2dagcib"],
     ["Nibunnogo 2", "https://pzprxs.vercel.app/p?nibunnogo/9/6/r3c2dgdgacg2c3cgdbgag3c2cp"],

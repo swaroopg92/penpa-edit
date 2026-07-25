@@ -1656,6 +1656,7 @@ function decode_puzzlink(url) {
         case "castle":
         case "hebi":
         case "snakes": // hebi alias
+        case "kuroclone":
         case "tetrochain":
         case "yajikazu":
         case "yajilin":
@@ -1680,6 +1681,11 @@ function decode_puzzlink(url) {
                 pu.mode_grid("nb_grid2");
             }
             setupProblem(pu, "combi");
+
+            if (type === "kuroclone") {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2);
+            }
 
             var arrows = puzzlink_pu.decodeYajilinArrows(type === "castle");
 
@@ -1754,7 +1760,7 @@ function decode_puzzlink(url) {
             }
 
             pu.mode_qa("pu_a");
-            if (type === "yajikazu" || type === "tetrochain") {
+            if (type === "yajikazu" || type === "tetrochain" || type === "kuroclone") {
                 pu.mode_set("surface");
                 UserSettings.tab_settings = ["Surface"];
             } else if (type === "hebi") {
@@ -3195,6 +3201,26 @@ function decode_puzzlink(url) {
 
             // Set tags
             pu.user_tags = ['key west'];
+            break;
+        case "kuromenbun":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            // Decode URL
+            info_edge = puzzlink_pu.decodeBorder();
+            info_number = puzzlink_pu.decodeNumber16(rows * cols);
+
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1") // Black Style, Normal submode is 1
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface"); //include redraw
+            UserSettings.tab_settings = ["Surface"];
+
+            // Set tags
+            pu.user_tags = [type];
             break;
         default:
             errorMsg(PenpaText.get('puzzlink_not_supported', type));
