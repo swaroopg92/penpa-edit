@@ -480,6 +480,14 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Kakuru</summary>
+
+* https://puzz.link/p?kakuru/9/9/5.6++i.I++khBoHkJK.j7.Jm+++inc+++mL.Db.KLkNo9dk++c.c++E.f
+* https://puzz.link/p?kakuru/5/5/+36_+_l9clibl_+_Eh+/
+
+</details>
+
+<details>
 <summary>Kazunori Room</summary>
 
 * https://puzz.link/p?kazunori/6/6/000000000000.g-1ag-13g-10kcjckbg-22g-17g6l-19hfgdg-1ehbg-22g-15h6l

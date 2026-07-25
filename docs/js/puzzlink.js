@@ -277,6 +277,33 @@ class Puzzlink {
         return obj;
     }
 
+    decodeKakuru() {
+        // Refer to: decodeKakuru in robx/pzprjs => src/variety/kakuru.js
+
+        var number_list = {};
+        var c = 0;
+
+        for (var i = 0; i < this.gridurl.length; i++) {
+            var ca = this.gridurl.charAt(i);
+            if (ca === "+" || ca === "_") {
+                number_list[c] = "?";
+            } else if (ca >= "k" && ca <= "z") {
+                // Decodes cell position
+                c += parseInt(ca, 36) - 19;
+            } else if (ca !== ".") {
+                number_list[c] = this.decval(ca);
+            }
+
+            c++;
+            if (c >= this.rows * this.cols) {
+                break;
+            }
+        }
+
+        this.gridurl = this.gridurl.substr(i);
+        return number_list;
+    }
+
     decval(ca) {
         if (ca >= "0" && ca <= "9") {
             return parseInt(ca, 36);
@@ -1260,6 +1287,28 @@ function decode_puzzlink(url) {
 
             // Set tags
             pu.user_tags = ['kakuro'];
+            break;
+        case "kakuru":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "number");
+
+            info_number = puzzlink_pu.decodeKakuru();
+            for (var i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / puzzlink_pu.cols);
+                col_ind = i % puzzlink_pu.cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].surface[cell] = 4;
+
+                if (info_number[i] !== "?") {
+                    pu["pu_q"].number[cell] = [info_number[i], 6, "1"];
+                }
+            }
+            
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            UserSettings.tab_settings = ["Surface", "Number Normal"];
+            pu.user_tags = ['kakuru'];
             break;
         case "aqre":
         case "ayeheya":

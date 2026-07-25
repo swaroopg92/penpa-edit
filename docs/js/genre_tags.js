@@ -110,6 +110,7 @@ const penpa_tags = {
             "ichimagamx (crossing ichimaga)",
             "juosan",
             "kazunori room",
+            "kakuru",
             "kropki",
             "kurochute",
             "kurodoko",

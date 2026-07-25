@@ -207,6 +207,9 @@ const EXAMPLE_URLS = [
     ["Kakuro 3", "https://puzz.link/p?kakuro/2/2/k...-5"],
     ["Kakuro 4", "https://puzz.link/p?kakuro/5/5/kC-e-c-z..-8lff-giO"],
     ["Kakuro 5", "https://puzz.link/p?kakuro/6/6/m-eoI5lD-t.l-co-bm8-e-i97ggc"],
+    // Kakuru
+    ["Kakuru 1", "https://puzz.link/p?kakuru/9/9/5.6++i.I++khBoHkJK.j7.Jm+++inc+++mL.Db.KLkNo9dk++c.c++E.f"],
+    ["Kakuru 2", "https://puzz.link/p?kakuru/5/5/+36_+_l9clibl_+_Eh+/"],
     // Kazunori Room
     ["Kazunori Room 1", "https://puzz.link/p?kazunori/6/6/000000000000.g-1ag-13g-10kcjckbg-22g-17g6l-19hfgdg-1ehbg-22g-15h6l"],
     ["Kazunori Room 2", "https://puzz.link/p?kazunori/8/8/dfbmjltqeoiggosudi5m1vr0zzzzzr"],
