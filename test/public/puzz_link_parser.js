@@ -25,7 +25,7 @@ describe("Test puzz.link parser", () => {
         assert.equal("pong", await fetchJson("/ping"));
     });
 
-    const urls = EXAMPLE_URLS;
+    const urls = shuffle([...EXAMPLE_URLS]);  // shuffle the tests
     const testCases = [];
 
     for (let url of urls) {
