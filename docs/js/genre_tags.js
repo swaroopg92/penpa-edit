@@ -182,6 +182,7 @@ const penpa_tags = {
             "dotchi-dotchi loop",
             "Inaba's island",
             "japanesesums",
+            "key west",
             "nibunnogo",
             "one room one door",
             "rassi silai",

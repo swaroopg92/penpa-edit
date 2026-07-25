@@ -1270,6 +1270,13 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Key West</summary>
+
+* https://pzprxs.vercel.app/p?keywest/7/7/ak861056ao860067eka
+
+</details>
+
+<details>
 <summary>Nibunnogo</summary>
 
 * https://pzprxs.vercel.app/p?nibunnogo/10/10/i16ai3ch22aidj7cjch6bmce53drbg6ddibch2dagcib

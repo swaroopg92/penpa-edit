@@ -3169,6 +3169,33 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = ["battenberg painting"];
             break;
+        case "keywest":
+            pu = new Puzzle_square(cols, rows, size);
+
+            // Don't draw any of the grid
+            pu.mode_grid("nb_grid3");
+            pu.mode_grid("nb_lat2");
+            pu.mode_grid("nb_out2");
+            setupProblem(pu, "number");
+
+            info_number = puzzlink_pu.decodeNumber4();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+
+            for (i = 0; i < rows; i++) {
+                for (j = 0; j < cols; j++) {
+                    cell = pu.nx0 * (2 + i) + 2 + j;
+                    pu["pu_q"].symbol[cell] = [1, "circle_L", 2]; // Circle all cells
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            pu.subcombimode("linex");
+            UserSettings.tab_settings = ["Surface", "Number Normal", "Composite"];
+
+            // Set tags
+            pu.user_tags = ['key west'];
+            break;
         default:
             errorMsg(PenpaText.get('puzzlink_not_supported', type));
             break;

@@ -557,6 +557,8 @@ const EXAMPLE_URLS = [
     // Japanese Sums
     ["Japanese Sums 1", "https://pzprxs.vercel.app/p?japanesesums/6/6/5/.6g3h96g7h7.g6h13g..g74g5h58g..1"],
     ["Japanese Sums 2", "https://pzprxs.vercel.app/p?japanesesums/8/8/4/3..g..1g44.g..3g46h16h28h24h.34g82h.2.g5.h23.g214g13hai"],
+    // Key West
+    ["Key West 1", "https://pzprxs.vercel.app/p?keywest/7/7/ak861056ao860067eka"],
     // Nibunnogo
     ["Nibunnogo 1", "https://pzprxs.vercel.app/p?nibunnogo/10/10/i16ai3ch22aidj7cjch6bmce53drbg6ddibch2dagcib"],
     ["Nibunnogo 2", "https://pzprxs.vercel.app/p?nibunnogo/9/6/r3c2dgdgacg2c3cgdbgag3c2cp"],
