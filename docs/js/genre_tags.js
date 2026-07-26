@@ -111,6 +111,8 @@ const penpa_tags = {
             "juosan",
             "kazunori room",
             "kakuru",
+            "kaitoramma",
+            "new kaitoramma",
             "kropki",
             "kurochute",
             "kuroclone",

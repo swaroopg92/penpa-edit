@@ -210,6 +210,11 @@ const EXAMPLE_URLS = [
     // Kakuru
     ["Kakuru 1", "https://puzz.link/p?kakuru/9/9/5.6++i.I++khBoHkJK.j7.Jm+++inc+++mL.Db.KLkNo9dk++c.c++E.f"],
     ["Kakuru 2", "https://puzz.link/p?kakuru/5/5/+36_+_l9clibl_+_Eh+/"],
+    // KaitoRamma
+    ["KaitoRamma 1", "https://puzz.link/p?kramma/c/10/10/96000006090206903b1690000i00010i00"],
+    ["KaitoRamma 2", "https://puzz.link/p?kramma/10/10/96000006090206903b1690000i00010i00"],
+    // New KaitoRamma
+    ["New KaitoRamma 1", "https://puzz.link/p?kramman/6/6/0aa28463112060j0"],
     // Kazunori Room
     ["Kazunori Room 1", "https://puzz.link/p?kazunori/6/6/000000000000.g-1ag-13g-10kcjckbg-22g-17g6l-19hfgdg-1ehbg-22g-15h6l"],
     ["Kazunori Room 2", "https://puzz.link/p?kazunori/8/8/dfbmjltqeoiggosudi5m1vr0zzzzzr"],

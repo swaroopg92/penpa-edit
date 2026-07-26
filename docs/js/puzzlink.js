@@ -2494,6 +2494,50 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = [type === "yinyang" ? 'yin-yang' : type]; // Genre Tags
             break;
+        case "kramma":
+        case "kramman":
+            var enable_dots = true;
+
+            if (urldata[1] === "c") {
+                enable_dots = false;
+                cols = parseInt(urldata[2]);
+                rows = parseInt(urldata[3]);
+                puzzlink_pu = new Puzzlink(cols, rows, urldata[4]);
+            }
+
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            if (enable_dots) {
+                info_crossmark = puzzlink_pu.decodeCrossMark();
+                puzzlink_pu.drawCrossMark(pu, info_crossmark, "circle_SS", 2); // 2 for black circle
+            }
+
+            info_number = puzzlink_pu.decodeNumber3();
+            // Draw the circles
+            for (i in info_number) {
+                if (info_number[i] === 0) {
+                    continue;
+                }
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].symbol[cell] = [info_number[i], "circle_M", 1];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            map_genre_tag = {
+                "kramma": "kaitoramma",
+                "kramman": "new kaitoramma"
+            };
+
+            pu.user_tags = [map_genre_tag[type] || type]; // Genre Tags
+            break;
         case "hitori":
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "surface");

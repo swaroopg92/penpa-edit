@@ -488,6 +488,21 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>KaitoRamma</summary>
+
+* https://puzz.link/p?kramma/c/10/10/96000006090206903b1690000i00010i00
+* https://puzz.link/p?kramma/10/10/96000006090206903b1690000i00010i00
+
+</details>
+
+<details>
+<summary>New KaitoRamma</summary>
+
+* https://puzz.link/p?kramman/6/6/0aa28463112060j0
+
+</details>
+
+<details>
 <summary>Kazunori Room</summary>
 
 * https://puzz.link/p?kazunori/6/6/000000000000.g-1ag-13g-10kcjckbg-22g-17g6l-19hfgdg-1ehbg-22g-15h6l
