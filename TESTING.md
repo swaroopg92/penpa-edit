@@ -532,6 +532,14 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Kuroclone</summary>
+
+* https://puzz.link/p?kuroclone/11/9/00g1o3s7ufs7o3g100fv3v0v0703g3s3v3vozzzb19711q
+* https://puzz.link/p?kuroclone/5/5/00000000a2aw
+
+</details>
+
+<details>
 <summary>Kurodoko</summary>
 
 * https://puzz.link/p?kurodoko/10/10/3n5k2l5j4s5h76n98h3s4j4l4k3n4
@@ -542,12 +550,16 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
-<summary>Kuroclone</summary>
+<summary>Kurarin</summary>
 
-* https://puzz.link/p?kuroclone/11/9/00g1o3s7ufs7o3g100fv3v0v0703g3s3v3vozzzb19711q
-* https://puzz.link/p?kuroclone/5/5/00000000a2aw
+* https://pzprxs.vercel.app/p?kurarin/16/6/g2i2j2h2hcgcgcgcgcico2h2q2p2j2kcichcgc2h22gc22h2m2hcj2y2h2jcgcgcgcicicg2i2h2j2h
+* https://pzprxs.vercel.app/p?kurarin/9/9/och2h8s2j422h2l2v2j222h222j2s8g82h2l2l2s8h2h2l3i
+* https://pzprxs.vercel.app/p?kurarin/16/6/g2i2j2h2hcgcgcgcgcico2h2q2p2j2kcichcgc2h22gc22h2m2hcj2y2h2jcgcgcgcicicg2i2h2j2h
+* https://pzprxs.vercel.app/p?kurarin/17/17/w4cg8cg48g44g84gcy8h8hch8hcz8h4h8hch8x84g84gc8g88g88g8y8h8h4h4hczch8h8h8hcx88g44gccg48gc8gcych8h8h8hcz8hchch4h8x88gccg88g88g8cgcych8h4h8hcz8hch8h4h4xc8g88g84gc4gccg8y8h8h8h8hczch8hch4hcx88g8cg8cgccgc8gcw
 
 </details>
+
+
 
 <details>
 <summary>Kurotto</summary>
@@ -1339,6 +1351,15 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Sansa Road</summary>
+
+* https://pzprxs.vercel.app/p?sansaroad/14/9/m4l8u4k4g4zh4i4g4g8t44h4w2n4nct4p8u4j44o2p4z8t
+* https://pzprxs.vercel.app/p?sansaroad/10/10/pch8gcg4t8x8x8h88cs8g8s888h8x8x8tcg8g8h8p
+* https://pzprxs.vercel.app/p?sansaroad/10/10/m4u4v4zj4q4i4z4zq4h4zu4m
+
+</details>
+
+<details>
 <summary>Smullyanic Dynasty</summary>
 
 * https://pzprxs.vercel.app/p?smullyan/14/14/0222212212111121323232333112233322333233221313333133232221312213133231233323243222321332331223213222222334322231222023222332212310123433332123313333231311223234343331322323233331323202121222122221
@@ -1351,6 +1372,13 @@ This file is used to sync example URL data to a testing file named `example_urls
 
 * https://pzprxs.vercel.app/p?suguru/6/6/adbli15d2tluj2g1l2l3l4l5g
 * https://pzprxs.vercel.app/p?suguru/16/6/gkca9ilcv6lapem2c8fraajtje56rd8u3r2j5h1n3k3p4m4j42j2m2p5k5g2l2h2j3000g0000000000000000
+
+</details>
+
+<details>
+<summary>Tetrochain-K</summary>
+
+* https://pzprxs.vercel.app/p?tetrochaink/10/10/1i1h1j8wchcccg2n3hcccccv8cr3j4h8r8p2g2i3o2k1j8l1z3g2h2h3g
 
 </details>
 

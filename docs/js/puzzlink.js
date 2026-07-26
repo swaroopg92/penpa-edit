@@ -600,6 +600,8 @@ class Puzzlink {
     }
 
     decodeMidloop() {
+        // Refer to: decodeDot in robx/pzprjs => Encode.js
+
         // Every cell, corner and edge is a point, unless it is on the grid edge.
         // Small even digits are white dots. Small odd digits are black dots.
         // Large digits/characters are spacing
@@ -644,6 +646,50 @@ class Puzzlink {
                 cell = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
             }
             pu["pu_q"].symbol[cell] = [info[i] + 1, "circle_SS", behind_line];
+        }
+    }
+
+    drawKurarin(pu, info, enable_sansa = false, behind_line = 2) {
+        var row_ind, col_ind, cell;
+        const kurarin_dot_map = [2, 5, 1];
+        for (var i in info) {
+            for (var j = 2 * i; j < 2 * i + 2; j++) {
+                var dot = j === 2 * i ? (info[i] >> 2) & 3 : info[i] & 3;
+                if (dot === 0) continue;
+
+                row_ind = parseInt(j / (2 * this.cols - 1));
+                col_ind = j % (2 * this.cols - 1);
+
+                if (row_ind % 2 === 0 && col_ind % 2 === 0) {
+                    // cell center
+                    row_ind = (row_ind) / 2;
+                    col_ind = (col_ind) / 2;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+
+                    if (enable_sansa && dot === 1) {
+                        // special judge for sansa road triangles
+                        pu["pu_q"].symbol[cell] = [1, "tridown_M", behind_line];
+                        continue;
+                    }
+                } else if (col_ind % 2 === 0) {
+                    // vertical edge
+                    row_ind = (row_ind - 1) / 2;
+                    col_ind = (col_ind) / 2;
+                    cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                } else if (row_ind % 2 === 0) {
+                    // horizonal edge
+                    row_ind = (row_ind) / 2;
+                    col_ind = (col_ind - 1) / 2;
+                    cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                } else {
+                    // corner/vertex
+                    row_ind = (row_ind - 1) / 2;
+                    col_ind = (col_ind - 1) / 2;
+                    cell = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                }
+
+                pu["pu_q"].symbol[cell] = [kurarin_dot_map[dot - 1], "circle_SS", behind_line];
+            }
         }
     }
 
@@ -3246,6 +3292,21 @@ function decode_puzzlink(url) {
             // Set tags
             pu.user_tags = ['key west'];
             break;
+        case "kurarin":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawKurarin(pu, info_number);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            pu.user_tags = [type]; // Set tags
+            break;
         case "kuromenbun":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);
@@ -3265,6 +3326,20 @@ function decode_puzzlink(url) {
 
             // Set tags
             pu.user_tags = [type];
+            break;
+        case "tetrochaink":
+        case "sansaroad":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawKurarin(pu, info_number, type === "sansaroad");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface");
+            UserSettings.tab_settings = ["Surface"];
+
+            pu.user_tags = [type === "tetrochaink" ? "tetrochain-k" : "sansa road"]; // Set tags
             break;
         default:
             errorMsg(PenpaText.get('puzzlink_not_supported', type));

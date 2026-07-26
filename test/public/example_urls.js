@@ -229,14 +229,19 @@ const EXAMPLE_URLS = [
     ["Kurochute 1", "https://puzz.link/p?kurochute/13/13/31i33j13h3g3g47k.h1k71j4h1i2i2m2m531j1g53m1h13k33i3i6g1k34m1j1i5h3n4k41k39h1g32i13"],
     ["Kurochute 2", "https://puzz.link/p?kurochute/6/7/h12341p1l2p21234h"],
     ["Kurochute 3", "https://puzz.link/p?kurochute/9/9/h1h22k32h1h351j25i2h1g3g1k13i2h1h222j2i33h1i2h33h"],
+    // Kuroclone
+    ["Kuroclone 1", "https://puzz.link/p?kuroclone/11/9/00g1o3s7ufs7o3g100fv3v0v0703g3s3v3vozzzb19711q"],
+    ["Kuroclone 2", "https://puzz.link/p?kuroclone/5/5/00000000a2aw"],
     // Kurodoko
     ["Kurodoko 1", "https://puzz.link/p?kurodoko/10/10/3n5k2l5j4s5h76n98h3s4j4l4k3n4"],
     ["Kurodoko 2", "https://puzz.link/p?kurodoko/12/12/9l9l5l4l2l7l5l3l4l3h5p7h3l7l4l8l8l2l7l5l7l7"],
     ["Kurodoko 3", "https://puzz.link/p?kurodoko/4/4/g4g3.l.3g3g"],
     ["Kurodoko 4", "https://puzz.link/p?kurodoko/9/9/man5h365i4zo4i684h4n8m"],
-    // Kuroclone
-    ["Kuroclone 1", "https://puzz.link/p?kuroclone/11/9/00g1o3s7ufs7o3g100fv3v0v0703g3s3v3vozzzb19711q"],
-    ["Kuroclone 2", "https://puzz.link/p?kuroclone/5/5/00000000a2aw"],
+    // Kurarin
+    ["Kurarin 1", "https://pzprxs.vercel.app/p?kurarin/16/6/g2i2j2h2hcgcgcgcgcico2h2q2p2j2kcichcgc2h22gc22h2m2hcj2y2h2jcgcgcgcicicg2i2h2j2h"],
+    ["Kurarin 2", "https://pzprxs.vercel.app/p?kurarin/9/9/och2h8s2j422h2l2v2j222h222j2s8g82h2l2l2s8h2h2l3i"],
+    ["Kurarin 3", "https://pzprxs.vercel.app/p?kurarin/16/6/g2i2j2h2hcgcgcgcgcico2h2q2p2j2kcichcgc2h22gc22h2m2hcj2y2h2jcgcgcgcicicg2i2h2j2h"],
+    ["Kurarin 4", "https://pzprxs.vercel.app/p?kurarin/17/17/w4cg8cg48g44g84gcy8h8hch8hcz8h4h8hch8x84g84gc8g88g88g8y8h8h4h4hczch8h8h8hcx88g44gccg48gc8gcych8h8h8hcz8hchch4h8x88gccg88g88g8cgcych8h4h8hcz8hch8h4h4xc8g88g84gc4gccg8y8h8h8h8hczch8hch4hcx88g8cg8cgccgc8gcw"],
     // Kurotto
     ["Kurotto 1", "https://puzz.link/p?kurotto/10/10/sah2j.8.h.4.h6l6g4.l.8i9h9j.7.h.7.h5l5t6h3i"],
     ["Kurotto 2", "https://puzz.link/p?kurotto/13/12/g1g1h.h0g1h2g0h4h4g1h3g1h.h2g4i2h.g1h2j.h2g.h.j6h.g.h3i6g2h5h5g4h2g.h.h3g.h5g.h.h8g9i3h.g.h6j5h3g.h.j7h.g.h9h"],
@@ -581,12 +586,18 @@ const EXAMPLE_URLS = [
     // Rassi Silai
     ["Rassi Silai 1", "https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4"],
     ["Rassi Silai 2", "https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
+    // Sansa Road
+    ["Sansa Road 1", "https://pzprxs.vercel.app/p?sansaroad/14/9/m4l8u4k4g4zh4i4g4g8t44h4w2n4nct4p8u4j44o2p4z8t"],
+    ["Sansa Road 2", "https://pzprxs.vercel.app/p?sansaroad/10/10/pch8gcg4t8x8x8h88cs8g8s888h8x8x8tcg8g8h8p"],
+    ["Sansa Road 3", "https://pzprxs.vercel.app/p?sansaroad/10/10/m4u4v4zj4q4i4z4zq4h4zu4m"],
     // Smullyanic Dynasty
     ["Smullyanic Dynasty 1", "https://pzprxs.vercel.app/p?smullyan/14/14/0222212212111121323232333112233322333233221313333133232221312213133231233323243222321332331223213222222334322231222023222332212310123433332123313333231311223234343331322323233331323202121222122221"],
     ["Smullyanic Dynasty 2", "https://pzprxs.vercel.app/p?smullyan/6/6/2h1i4i1i32i35h1g4g3j2h"],
     // Suguru (Capsules)
     ["Suguru (Capsules) 1", "https://pzprxs.vercel.app/p?suguru/6/6/adbli15d2tluj2g1l2l3l4l5g"],
     ["Suguru (Capsules) 2", "https://pzprxs.vercel.app/p?suguru/16/6/gkca9ilcv6lapem2c8fraajtje56rd8u3r2j5h1n3k3p4m4j42j2m2p5k5g2l2h2j3000g0000000000000000"],
+    // Tetrochain-K
+    ["Tetrochain-K 1", "https://pzprxs.vercel.app/p?tetrochaink/10/10/1i1h1j8wchcccg2n3hcccccv8cr3j4h8r8p2g2i3o2k1j8l1z3g2h2h3g"],
     // Tonttiraja
     ["Tonttiraja 1", "https://pzprxs.vercel.app/p?tontti/v:/6/6/.j.p6h4p6j6"],
     ["Tonttiraja 2", "https://pzprxs.vercel.app/p?tontti/10/10/1k4u1j7i3r6y1w-11m3n2"],
