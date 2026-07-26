@@ -219,6 +219,9 @@ const EXAMPLE_URLS = [
     ["Kazunori Room 1", "https://puzz.link/p?kazunori/6/6/000000000000.g-1ag-13g-10kcjckbg-22g-17g6l-19hfgdg-1ehbg-22g-15h6l"],
     ["Kazunori Room 2", "https://puzz.link/p?kazunori/8/8/dfbmjltqeoiggosudi5m1vr0zzzzzr"],
     ["Kazunori Room 3", "https://puzz.link/p?kazunori/18/15/a2324goh8la242gl2ggn145oi964i9h1om2e5gh2808i22l4gg91g001v2fo3o060ov5sc000vvg00001kt1g001tvfo001vjc01g0g6h8k4jag3l4w8i6m7ock5h7g8j7gak9hcoaj8l4k7l2zu7k9g-10o9makah3h5n-10p4jai7p6h64h8i4har82h-10j4g98g5nd56jci86o6ka6lah3n8m9k7z5h7h8g4ga88g6k4hag8k6k8h3kai8l6g4gedi6qbj2k8nd-10q8zh"],
+    // Koburin
+    ["Koburin 1", "https://puzz.link/p?koburin/10/10/kdjbzichdu.paj.ldq"],
+    ["Koburin 2", "https://puzz.link/p?koburin/b/15/15/...j.j...ai...k..lbj.j.kdk2.7.g...m.k.k.k.k.g..7.g1.7.g2..g.k.k.k.k.m...g.g...mci.j.lcj..k..bi1...j.j.../"],
     // Kropki
     ["Kropki 1", "https://puzz.link/p?kropki/1/10/h3e"],
     ["Kropki 2", "https://puzz.link/p?kropki/10/1/h3e"],
@@ -586,6 +589,9 @@ const EXAMPLE_URLS = [
     // Rassi Silai
     ["Rassi Silai 1", "https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4"],
     ["Rassi Silai 2", "https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],
+    // Retsurin
+    ["Retsurin 1", "https://pzprxs.vercel.app/p?retsurin/10/10/2j5i3zg2zm4o.g2x3o"],
+    ["Retsurin 2", "https://pzprxs.vercel.app/p?retsurin/b/10/13/2026k02u6r1u.y.r.l.r.u2k"],
     // Sansa Road
     ["Sansa Road 1", "https://pzprxs.vercel.app/p?sansaroad/14/9/m4l8u4k4g4zh4i4g4g8t44h4w2n4nct4p8u4j44o2p4z8t"],
     ["Sansa Road 2", "https://pzprxs.vercel.app/p?sansaroad/10/10/pch8gcg4t8x8x8h88cs8g8s888h8x8x8tcg8g8h8p"],

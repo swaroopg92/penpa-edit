@@ -512,6 +512,14 @@ This file is used to sync example URL data to a testing file named `example_urls
 </details>
 
 <details>
+<summary>Koburin</summary>
+
+* https://puzz.link/p?koburin/10/10/kdjbzichdu.paj.ldq
+* https://puzz.link/p?koburin/b/15/15/...j.j...ai...k..lbj.j.kdk2.7.g...m.k.k.k.k.g..7.g1.7.g2..g.k.k.k.k.m...g.g...mci.j.lcj..k..bi1...j.j.../
+
+</details>
+
+<details>
 <summary>Kropki</summary>
 
 * https://puzz.link/p?kropki/1/10/h3e
@@ -1347,6 +1355,14 @@ This file is used to sync example URL data to a testing file named `example_urls
 
 * https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4
 * https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000
+
+</details>
+
+<details>
+<summary>Retsurin</summary>
+
+* https://pzprxs.vercel.app/p?retsurin/10/10/2j5i3zg2zm4o.g2x3o
+* https://pzprxs.vercel.app/p?retsurin/b/10/13/2026k02u6r1u.y.r.l.r.u2k
 
 </details>
 

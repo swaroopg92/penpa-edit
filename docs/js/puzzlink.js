@@ -1828,6 +1828,49 @@ function decode_puzzlink(url) {
             // Set tags
             pu.user_tags = [map_genre_tag[type] || type];
             break;
+        case "koburin":
+        case "retsurin":
+            var skip_shading = true;
+
+            // changes the url format to indicate shading or not
+            if (urldata[1] === "b") {
+                skip_shading = false;
+                cols = parseInt(urldata[2]);
+                rows = parseInt(urldata[3]);
+                puzzlink_pu = new Puzzlink(cols, rows, urldata[4]);
+            }
+
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            if (type === "koburin") {
+                info_number = puzzlink_pu.decodeNumber4();
+            }
+
+            if (type === "retsurin") {
+                info_number = puzzlink_pu.decodeNumber16();
+            }
+
+            if (skip_shading) {
+                puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+            } else {
+                for (var i in info_number) {
+                    // Determine which row and column
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                    number = info_number[i] === "?" ? " " : info_number[i];
+                    pu["pu_q"].number[cell] = [number, 1, "1"];
+                    pu["pu_q"].surface[cell] = 3; // Light gray background
+                    puzzlink_pu.removeBorderForContinousPart(pu, row_ind, col_ind);
+                }
+            }
+
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = [type];
+            break;
         case "tapa":
         case "tapaloop":
             pu = new Puzzle_square(cols, rows, size);
