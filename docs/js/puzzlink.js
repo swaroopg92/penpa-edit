@@ -77,6 +77,40 @@ class Puzzlink {
         }
     }
 
+    addBorderForContinousPart(pu, row_ind, col_ind, enforce_same_shading = false) {
+        var cell_edges = [
+            [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind, pu.nx0], // Left
+            [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 2 + col_ind, pu.nx0], // Right
+            [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind, 1], // Above
+            [pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind, 1], // Below
+        ];
+
+        var cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+        var edgex, edgey;
+
+        // Borders
+        for (var e of cell_edges) {
+            edgex = e[0];
+            edgey = e[0] + e[1];
+            var key = edgex.toString() + "," + edgey.toString();
+
+            if (key in pu.pu_q.lineE) {
+                if (enforce_same_shading) {
+                    // Only remove the edge if the adjacent cell is the same shading (castle only)
+                    var adjacent = cell - (pu.nx0 + 1 - e[1]);
+                    if (pu.pu_q.surface[cell] === pu.pu_q.surface[adjacent]) {
+                        delete pu.pu_q.lineE[key];
+                        pu.pu_q.deletelineE[key] = 1;
+                    }
+                } else {
+                    delete pu.pu_q.lineE[key];
+                }
+            } else {
+                pu.pu_q.lineE[key] = 2;
+            }
+        }
+    }
+
     decodeNumber16(max_length = Infinity) {
         // refer to: genericDecodeNumber16 in robx/pzprjs => Encode.js
 
@@ -1775,34 +1809,7 @@ function decode_puzzlink(url) {
                     pu["pu_q"].surface[cell] = 4;
                 }
 
-                var cell_edges = [
-                    [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind, pu.nx0], // Left
-                    [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 2 + col_ind, pu.nx0], // Right
-                    [pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind, 1], // Above
-                    [pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind, 1], // Below
-                ];
-
-                // Borders
-                for (var e of cell_edges) {
-                    edgex = e[0];
-                    edgey = e[0] + e[1];
-                    var key = edgex.toString() + "," + edgey.toString();
-
-                    if (key in pu.pu_q.lineE) {
-                        if (type === "castle") {
-                            // Only remove the edge if the adjacent cell is the same shading (castle only)
-                            var adjacent = cell - (pu.nx0 + 1 - e[1]);
-                            if (pu.pu_q.surface[cell] === pu.pu_q.surface[adjacent]) {
-                                delete pu.pu_q.lineE[key];
-                                pu.pu_q.deletelineE[key] = 1;
-                            }
-                        } else {
-                            delete pu.pu_q.lineE[key];
-                        }
-                    } else {
-                        pu.pu_q.lineE[key] = 2;
-                    }
-                }
+                puzzlink_pu.addBorderForContinousPart(pu, row_ind, col_ind, type === "castle");
             }
 
             pu.mode_qa("pu_a");
@@ -1862,7 +1869,7 @@ function decode_puzzlink(url) {
                     number = info_number[i] === "?" ? " " : info_number[i];
                     pu["pu_q"].number[cell] = [number, 1, "1"];
                     pu["pu_q"].surface[cell] = 3; // Light gray background
-                    puzzlink_pu.removeBorderForContinousPart(pu, row_ind, col_ind);
+                    puzzlink_pu.addBorderForContinousPart(pu, row_ind, col_ind);
                 }
             }
 
