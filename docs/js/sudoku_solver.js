@@ -729,6 +729,7 @@ var SudokuSolver = (function() {
             antiDiagonals: [],
             antiKing: [],
             antiKnight: [],
+            sequenceTopBottom: [],
             chessKings: [],
             polePosition: [],
             chessKings: [],
@@ -962,9 +963,6 @@ sumOrProductKillers: [],
         if (constraints.somewhere.length) {
             constraints.supported.push("somewhere");
         }
-        if (constraints.oddEvenSums.length) {
-            constraints.supported.push("odd even sum");
-        }
         if (constraints.arrows.length || variantEnabled(puzzle, "arrow")) {
             constraints.supported.push("arrow");
         }
@@ -1029,6 +1027,9 @@ sumOrProductKillers: [],
                     constraints.differentParity.push(cageCells);
                 }
             }
+        }
+        if (variantEnabled(puzzle, "odd even sum")) {
+            constraints.supported.push("odd even sum");
         }
         var windokuRegionSignatures = ["1:1|1:2|1:3|2:1|2:2|2:3|3:1|3:2|3:3",
             "1:4|1:5|1:6|2:4|2:5|2:6|3:4|3:5|3:6",
@@ -1364,7 +1365,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             constraints.supported.push("anti king");
         }
         if (variantEnabled(puzzle, "sequence top-bottom")) {
-            constraints.sequenceTopBottom = true;
+            constraints.sequenceTopBottom = [true];
             constraints.supported.push("sequence top-bottom");
         }
         if (variantEnabled(puzzle, "poleposition")) {
@@ -1454,9 +1455,11 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                 for (var mirrorCol = 0; mirrorCol < mirrorBoxWidth; mirrorCol++) {
                     constraints.cloneGroups.push([
                         { row: mirrorRow, col: mirrorCol },
-                        { row: mirrorRow, col: SIZE - 1 - mirrorCol },
-                        { row: SIZE - 1 - mirrorRow, col: mirrorCol },
                         { row: SIZE - 1 - mirrorRow, col: SIZE - 1 - mirrorCol }
+                    ]);
+                    constraints.cloneGroups.push([
+                        { row: mirrorRow, col: SIZE - 1 - mirrorCol },
+                        { row: SIZE - 1 - mirrorRow, col: mirrorCol }
                     ]);
                 }
             }
@@ -1495,7 +1498,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             constraints.supported.push("diagonallynonconsecutive");
         }
         if (variantEnabled(puzzle, "noevenneighbours")) {
-            addGridPairs(constraints.noEvenNeighbours, [[0, 1], [1, -1], [1, 0], [1, 1]]);
+            addGridPairs(constraints.noEvenNeighbours, [[0, 1], [1, 0]]);
             constraints.supported.push("noevenneighbours");
         }
         if (variantEnabled(puzzle, "nothreeinarow")) {
@@ -2043,7 +2046,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             for (var r = 0; r < SIZE; r++) {
                 for (var c = 0; c < SIZE; c++) {
                     var cellKeyText = cellKey(puzzle, r, c);
-                    var entry = puzzle.pu_q.numberS && puzzle.pu_q.numberS[cellKeyText];
+                    var entry = puzzle.pu_q.number && puzzle.pu_q.number[cellKeyText];
                     if (entry && entry[0] !== undefined) {
                         var val = parseInt(entry[0], 10);
                         if (!isNaN(val)) {
@@ -5615,6 +5618,7 @@ var SudokuTools = (function() {
             applyMode("classic", "sudoku", "1", "");
         });
         sudokuRow.appendChild(sudokuButton);
+        sudokuHeader.appendChild(sudokuRow);
 
         var sudokuRule = document.createElement("div");
         sudokuRule.className = "sudoku-variant-rule";
@@ -5634,7 +5638,6 @@ var SudokuTools = (function() {
         });
 
         sudokuGroup.appendChild(sudokuHeader);
-        sudokuGroup.appendChild(sudokuRow);
         sudokuGroup.appendChild(sudokuRule);
         toolbar.appendChild(sudokuGroup);
 
@@ -5724,6 +5727,9 @@ var SudokuTools = (function() {
                 });
                 row.appendChild(negative);
             }
+            if (row.children.length > 0) {
+                header.appendChild(row);
+            }
             var close = document.createElement("span");
             close.className = "sudoku-variant-close";
             close.textContent = "\u00d7";
@@ -5754,9 +5760,6 @@ var SudokuTools = (function() {
             });
 
             group.appendChild(header);
-            if (row.children.length > 0) {
-                group.appendChild(row);
-            }
             group.appendChild(ruleDiv);
             toolbar.appendChild(group);
         });

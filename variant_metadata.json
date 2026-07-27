@@ -6791,10 +6791,10 @@
       ],
       "inputType": {
         "categories": [
-          "number"
+          "cell"
         ],
         "instructions": [
-          "Select \"Number\" (Small)."
+          "Select \"Number\" and enter the sum in the lower-left cell."
         ]
       }
     },

@@ -170,6 +170,15 @@ const penpa_constraints = {
             "submodeset": ["1", "1", "11"],
             "styleset": ["", 10, 1]
         },
+        "upperrightheavykiller": {
+            "show": [
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_number_lb", "sub_number1_lb"
+            ],
+            "modeset": ["sudoku", "number"],
+            "submodeset": ["1", "1"],
+            "styleset": ["", 1]
+        },
 
         "zones": {
             "show": ["mo_surface_lb",

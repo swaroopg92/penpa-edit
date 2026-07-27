@@ -83,6 +83,9 @@
 
   let boardHost: HTMLElement;
   let variantHost: HTMLElement;
+  let inputModesSection: HTMLElement;
+  let desktopInputModesAnchor: HTMLElement;
+  let mobileVariantSlot: HTMLElement;
   let logHost: HTMLElement;
   let legacyControlsHost: HTMLElement;
   let variants: VariantOption[] = [];
@@ -93,6 +96,7 @@
   let zoom = 1;
   let variantMenuOpen = false;
   let inputVariantMenuOpen = false;
+  let mobileControlsVisible = true;
   let studioModal:
     | "confirm-grid"
     | "confirm-generate"
@@ -378,11 +382,16 @@
         { value: "L", label: "L", submode: "3", input: "L" },
         { value: "C", label: "C", submode: "3", input: "C" },
       ];
-    } else if (variant === "upperrightheavykiller") {
+    } else if (mode === "number" && variant === "oddevensum") {
+      toolPanelOptions = [
+        { value: "O", label: "O", submode: "11", input: "O" },
+        { value: "E", label: "E", submode: "11", input: "E" },
+      ];
+    } else if (mode === "number" && variant === "upperrightheavykiller") {
       toolPanelOptions = Array.from({ length: 10 }, (_, index) => ({
         value: String(index),
         label: String(index),
-        submode: "3",
+        submode: "1",
       }));
     } else if (variant === "anticonsecutive" || variant === "nonconsecutive") {
       toolPanelOptions = [{ value: "X", label: "X", submode: "cross", sym: "cross", num: 1 }];
@@ -463,23 +472,11 @@
         { value: "1", label: "Left diagonal" },
         { value: "2", label: "Right diagonal" },
       ];
-    } else if (
-      mode === "number" ||
-      [
-        "killer", "upperrightheavykiller", "productkiller", "solokiller", "sumorproductkiller",
-        "threedigitnumberskiller", "outsidekiller", "sandwich", "evensandwich", "doublesandwich",
-        "paritysandwich", "sumsandwich", "xsums", "bouncingxsums", "skyscraper", "sumskyscrapers",
-        "parityskyscrapers", "littlekiller", "weightedlittlekiller", "productlittlekiller",
-        "japanesesums", "bigsmalljapanesesums", "oddevensum", "samesum", "triplesum", "partitionedsums",
-        "positionsums", "innerframesum", "wrongoutsidesum", "sumnexttonine", "diagonalsumisnine",
-        "diagonaltens", "teneleven", "tenspositionproducts", "multiplication", "clock", "tableaux"
-      ].includes(variant)
-    ) {
+    } else if (mode === "number") {
       const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
       toolPanelOptions = digits.map((val) => ({
         value: String(val),
         label: String(val),
-        submode: variant === "upperrightheavykiller" ? "3" : undefined,
       }));
     } else if (["symbol", "number", "sudoku"].includes(mode)) {
       const symbolname = mode === "symbol" ? String(pu?.mode?.[pu?.mode?.qa]?.symbol?.[0] || "circle_L") : undefined;
@@ -1701,6 +1698,17 @@
     }
     let observer: MutationObserver | undefined;
     let resizeObserver: ResizeObserver | undefined;
+    const mobileLayout = window.matchMedia("(max-width: 768px)");
+    const placeInputModes = () => {
+      if (!inputModesSection) return;
+      if (mobileLayout.matches && mobileVariantSlot) {
+        mobileVariantSlot.appendChild(inputModesSection);
+      } else if (desktopInputModesAnchor?.parentElement) {
+        desktopInputModesAnchor.after(inputModesSection);
+      }
+    };
+    placeInputModes();
+    mobileLayout.addEventListener("change", placeInputModes);
     let syncFrame = 0;
     const requestSync = () => {
       if (syncFrame) return;
@@ -1801,6 +1809,7 @@
       document.removeEventListener("pointerdown", closeVariantMenu);
       document.removeEventListener("pointerdown", clearConflictHighlights);
       document.removeEventListener("keydown", clearConflictHighlights);
+      mobileLayout.removeEventListener("change", placeInputModes);
     };
   });
 </script>
@@ -1822,7 +1831,18 @@
 >
   <ToastContainer {toasts} onDismiss={dismissToast} />
 
-  <div class="mobile-header">
+  <div class="mobile-header" class:controls-hidden={!mobileControlsVisible}>
+    <div class="mobile-visibility-row">
+      <button
+        type="button"
+        class="mobile-visibility-toggle"
+        aria-expanded={mobileControlsVisible}
+        on:click={() => (mobileControlsVisible = !mobileControlsVisible)}
+      >
+        {mobileControlsVisible ? "Hide controls" : "Show controls"}
+      </button>
+    </div>
+    <div class="mobile-controls-content">
     {#if isEmbedded}
       <div class="mobile-header-row">
         <button
@@ -1891,6 +1911,8 @@
         </div>
       </div>
     {/if}
+      <div bind:this={mobileVariantSlot} class="mobile-variant-slot"></div>
+    </div>
   </div>
   <main
     class="studio-grid"
@@ -2076,7 +2098,9 @@
         </section>
       </div>
 
+      <div bind:this={desktopInputModesAnchor} class="desktop-input-modes-anchor"></div>
       <section
+        bind:this={inputModesSection}
         class="input-modes-section"
         class:hidden-section={layer === "modes"}
         class:panel-above={mobilePanelPosition === "above"}
@@ -3643,16 +3667,17 @@ href="https://github.com/semiexp/cspuz_core"
   :global(.svelte-home .sudoku-variant-header) {
     display: flex !important;
     align-items: center !important;
+    flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    gap: 5px !important;
-    padding: 3px 6px !important;
+    gap: 3px 5px !important;
+    padding: 2px 5px !important;
     font-size: 11px !important;
     font-weight: 650 !important;
     color: inherit !important;
     background: #e2e8f0 !important;
     cursor: pointer !important;
     user-select: none !important;
-    min-height: 22px !important;
+    min-height: 18px !important;
   }
   :global(.svelte-home .variant-accordion-chevron) {
     font-size: 9px !important;
@@ -3703,14 +3728,15 @@ href="https://github.com/semiexp/cspuz_core"
     display: flex !important;
     align-items: center !important;
     flex-wrap: wrap !important;
+    flex: 1 1 120px !important;
     gap: 3px !important;
-    padding: 3px 6px !important;
-    border-top: 1px solid #cbd5e1 !important;
-    background: #ffffff !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
   }
   :global(.svelte-home .sudoku-variant-row button) {
-    min-height: 20px !important;
-    height: 20px !important;
+    min-height: 18px !important;
+    height: 18px !important;
     padding: 1px 6px !important;
     font-size: 10px !important;
     line-height: 1.2 !important;
@@ -4994,6 +5020,9 @@ href="https://github.com/semiexp/cspuz_core"
   .mobile-header {
     display: none;
   }
+  .desktop-input-modes-anchor {
+    display: none;
+  }
 
   @media (max-width: 768px) {
     .studio-shell .mobile-header {
@@ -5002,12 +5031,36 @@ href="https://github.com/semiexp/cspuz_core"
       background: #202b36;
       padding: 8px;
       gap: 8px;
-      width: 100%;
+      width: calc(100% - 16px);
+      margin: 8px 8px 0;
       height: auto;
       box-sizing: border-box;
-      border-bottom: 1px solid #10161c;
+      border: 1px solid #10161c;
+      border-radius: 10px;
       flex-shrink: 0;
       z-index: 101;
+    }
+    .studio-shell .mobile-controls-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+    .studio-shell .mobile-header.controls-hidden .mobile-controls-content {
+      display: none;
+    }
+    .studio-shell .mobile-visibility-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .studio-shell .mobile-header .mobile-visibility-toggle {
+      flex: 0 0 auto;
+      padding: 3px 8px;
+      font-size: 10px;
+    }
+    .studio-shell .mobile-variant-slot {
+      width: 100%;
+      min-width: 0;
     }
     .studio-shell .mobile-header button {
       padding: 6px 12px;
@@ -5048,13 +5101,15 @@ href="https://github.com/semiexp/cspuz_core"
     .board-column {
       flex: 1;
       min-height: 0;
-      width: 100%;
+      width: calc(100% - 16px);
       height: 100%;
+      margin: 8px;
       order: 2;
       overflow: auto;
       position: relative;
       background: #f8fafc;
-      padding: 10px 0;
+      padding: 0;
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -5189,6 +5244,16 @@ href="https://github.com/semiexp/cspuz_core"
     .studio-shell.dark .input-modes-section.panel-below {
       background: #32414f;
       border-color: #40505f;
+    }
+    .studio-shell :global(.mobile-variant-slot > .input-modes-section) {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 6px !important;
+      border: 1px solid #344353 !important;
+      border-radius: 7px !important;
+      background: #263340 !important;
+      box-shadow: none !important;
+      box-sizing: border-box;
     }
 
     :global(.svelte-home .studio-shell .legacy-variant-host .sudoku-variant-tools) {

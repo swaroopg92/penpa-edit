@@ -19,6 +19,105 @@ function emptyBoard() {
     });
 }
 
+function variantPuzzle(variant, pu_q) {
+    const nx0 = 13;
+    const inset = 2;
+    return {
+        nx: 9, ny: 9, nx0, ny0: nx0, space: [0, 0, 0, 0],
+        activeSudokuVariants: ["classic", variant],
+        centerlist: Array.from({ length: 9 }, (_, row) =>
+            Array.from({ length: 9 }, (__, col) => (row + inset) * nx0 + col + inset)).flat(),
+        point: {},
+        pu_q: {
+            number: {}, numberS: {}, symbol: {}, surface: {}, wall: {},
+            thermo: [], nobulbthermo: [], killercages: [],
+            ...(pu_q || {})
+        }
+    };
+}
+
+test("variant parser regressions keep global and cell constraints usable", function() {
+    const noEven = SudokuSolver.readConstraints(variantPuzzle("noevenneighbours"));
+    assert.equal(noEven.noEvenNeighbours.length, 144);
+    assert.equal(noEven.noEvenNeighbours.every(function(pair) {
+        return Math.abs(pair[0].row - pair[1].row) +
+            Math.abs(pair[0].col - pair[1].col) === 1;
+    }), true, "No Even Neighbours only generates orthogonal pairs");
+
+    const mirror = SudokuSolver.readConstraints(variantPuzzle("mirror"));
+    assert.equal(mirror.cloneGroups.length, 18);
+    assert.equal(SudokuCSP.solve(emptyBoard(), mirror).solved, true,
+        "an empty Mirror grid has at least one solution");
+
+    const sequence = SudokuSolver.readConstraints(variantPuzzle("sequence top-bottom"));
+    assert.deepEqual(sequence.sequenceTopBottom, [true]);
+    assert.doesNotThrow(function() {
+        SudokuCSP.findConflict(emptyBoard(), sequence);
+    });
+});
+
+test("Upper Right Heavy Killer reads cell clues and enforces both directions", function() {
+    const constraints = SudokuSolver.readConstraints(variantPuzzle("upperrightheavykiller", {
+        number: { 41: ["10", 1, "1"] }
+    }));
+    assert.equal(constraints.upperrightheavykiller[0]["1,0"], 10);
+
+    const valid = emptyBoard();
+    valid[1][0] = 4;
+    valid[0][1] = 6;
+    assert.equal(SudokuCSP.findConflict(valid, constraints), null);
+
+    const missingClue = SudokuSolver.readConstraints(variantPuzzle("upperrightheavykiller"));
+    assert.equal(SudokuCSP.findConflict(valid, missingClue)?.constraint, "upperrightheavykiller");
+
+    const wronglyClued = emptyBoard();
+    wronglyClued[1][0] = 6;
+    wronglyClued[0][1] = 4;
+    assert.equal(SudokuCSP.findConflict(wronglyClued, constraints)?.constraint, "upperrightheavykiller");
+});
+
+test("Multiplication Table rejects incorrect two-digit products", function() {
+    const constraints = SudokuSolver.readConstraints(variantPuzzle("multiplication", {
+        killercages: [[28, 29, 41, 42]]
+    }));
+    [[7, 9, 3, 5], [4, 1, 2, 5]].forEach(function(values) {
+        const board = emptyBoard();
+        board[0][0] = values[0];
+        board[0][1] = values[1];
+        board[1][0] = values[2];
+        board[1][1] = values[3];
+        assert.equal(SudokuCSP.findConflict(board, constraints)?.constraint, "cellRelations");
+    });
+});
+
+test("Odd Even Sum reads O/E killer labels and checks the cage sum parity", function() {
+    const odd = SudokuSolver.readConstraints(variantPuzzle("odd even sum", {
+        killercages: [[28, 29]],
+        numberS: { 788: ["O", 1, "1"] }
+    }));
+    assert.deepEqual(odd.oddEvenSums.map(function(clue) {
+        return {
+            cells: clue.cells.map(function(cell) { return { row: cell.row, col: cell.col }; }),
+            parity: clue.parity
+        };
+    }), [{
+        cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }],
+        parity: "odd"
+    }]);
+    assert.equal(odd.supported.includes("odd even sum"), true);
+
+    const board = emptyBoard();
+    board[0][0] = 2;
+    board[0][1] = 4;
+    assert.equal(SudokuCSP.findConflict(board, odd)?.constraint, "oddEvenSums");
+
+    const even = SudokuSolver.readConstraints(variantPuzzle("odd even sum", {
+        killercages: [[28, 29]],
+        numberS: { 788: ["E", 1, "1"] }
+    }));
+    assert.equal(SudokuCSP.findConflict(board, even), null);
+});
+
 test("caps each automatic CSP analysis run at 60 seconds", function() {
     assert.equal(SudokuSolver.AUTO_RUN_LIMIT_MS, 60000);
 });

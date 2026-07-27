@@ -1943,6 +1943,18 @@ registerConstraint("threeDigitNumbersKillers", {
         }
     });
 
+    registerConstraint("oddEvenSums", {
+        validatePartial: function(board, clue) {
+            var sum = 0;
+            for (var index = 0; index < clue.cells.length; index++) {
+                var value = cellValue(board, clue.cells[index]);
+                if (!value) return true;
+                sum += value;
+            }
+            return clue.parity === "odd" ? sum % 2 === 1 : sum % 2 === 0;
+        }
+    });
+
     registerConstraint("noThreeInRow", {
         validatePartial: function(board, cells) {
             var values = cells.map(function(cell) { return cellValue(board, cell); });
