@@ -1740,8 +1740,16 @@ function decode_puzzlink(url) {
         case "masyu":
         case "nothing":
         case "pearl": // masyu alias
+        case "wblink":
             pu = new Puzzle_square(cols, rows, size);
-            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            if (type === "wblink") {
+                // Don't draw any of the grid
+                pu.mode_grid("nb_grid3");
+                pu.mode_grid("nb_lat2");
+                pu.mode_grid("nb_out2");
+            } else {
+                pu.mode_grid("nb_grid2"); // Dashed gridlines
+            }
             setupProblem(pu, "combi");
 
             if (type === 'moonsun' || type === 'nothing') {
@@ -1761,7 +1769,7 @@ function decode_puzzlink(url) {
                 row_ind = parseInt(i / cols);
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                pu["pu_q"].symbol[cell] = [info_number[i], value, 1];
+                pu["pu_q"].symbol[cell] = [info_number[i], value, type === "wblink" ? 2 : 1];
             }
 
             pu.mode_qa("pu_a");
@@ -1774,6 +1782,8 @@ function decode_puzzlink(url) {
                 pu.user_tags = ['all or nothing'];
             } else if (type === "moonsun") {
                 pu.user_tags = ['moon or sun'];
+            } else if (type === "wblink") {
+                pu.user_tags = ['shirokuro-link'];
             } else {
                 pu.user_tags = ["masyu"];
             }
@@ -3331,13 +3341,13 @@ function decode_puzzlink(url) {
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "combi");
 
-            const nagare_map = {1: 3, 2: 7, 3: 1, 4: 5};
+            const nagare_map = { 1: 3, 2: 7, 3: 1, 4: 5 };
             info_number = puzzlink_pu.decodeNumber10();
             for (var i in info_number) {
                 row_ind = parseInt(i / cols);
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                
+
                 var number = info_number[i];
                 if (number === 5) {
                     // black background only
@@ -3357,7 +3367,7 @@ function decode_puzzlink(url) {
             pu.subcombimode("edgesub");
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = ["nagare (nagareru-loop)"];
-            break;           
+            break;
 
         case "nondango":
             pu = new Puzzle_square(cols, rows, size);
@@ -3372,7 +3382,7 @@ function decode_puzzlink(url) {
                 row_ind = parseInt(i / cols);
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                
+
                 if (info_number[i] !== 0 || i >= rows * cols) continue;
                 pu["pu_q"].symbol[cell] = [4, "circle_M", 1];
             }

@@ -159,6 +159,7 @@ const penpa_tags = {
             "shakashaka",
             "shikaku",
             "shimaguni (islands)",
+            "shirokuro-link",
             "simple loop",
             "simplegako",
             "slant (gokigen)",

@@ -984,6 +984,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Shirokuro-link</summary>
+
+* https://puzz.link/p?wblink/9/8/0656100960019i3322i3069j
+
+</details>
+
+<details>
 <summary>Simplegako</summary>
 
 * https://puzz.link/p?simplegako/7/7/7h432h65i11j3g7j2j4l2p

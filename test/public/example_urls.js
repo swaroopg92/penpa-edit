@@ -423,6 +423,8 @@ const EXAMPLE_URLS = [
     ["Shimaguni (Islands) 1", "https://puzz.link/p?shimaguni/15/10/319eqrdmkg4t6bsufv7lo3r7jk9acr3408vvv7rs3hod4kgv21rk7lpzg5g3i"],
     ["Shimaguni (Islands) 2", "https://puzz.link/p?shimaguni/4/4/7qoo90h2g"],
     ["Shimaguni (Islands) 3", "https://puzz.link/p?shimaguni/40/10/5bc9s7d2amojovom9dcncvctmqlelultbtbtbtbo7qnqnqn2jlflelf576v6t6uab2d3r2s8l4qml9so3o3orov0575456fg0g8g0gc6o3g0011g000200f70000o0f0h0101207cn4k4k7v3v3r3uzoagaah4zq"],
+    // Shirokuro-link
+    ["Shirokuro-link 1", "https://puzz.link/p?wblink/9/8/0656100960019i3322i3069j"],
     // Simplegako
     ["Simplegako 1", "https://puzz.link/p?simplegako/7/7/7h432h65i11j3g7j2j4l2p"],
     ["Simplegako 2", "https://puzz.link/p?simplegako/5/5/r9r"],
