@@ -626,6 +626,8 @@ const EXAMPLE_URLS = [
     // Suguru (Capsules)
     ["Suguru (Capsules) 1", "https://pzprxs.vercel.app/p?suguru/6/6/adbli15d2tluj2g1l2l3l4l5g"],
     ["Suguru (Capsules) 2", "https://pzprxs.vercel.app/p?suguru/16/6/gkca9ilcv6lapem2c8fraajtje56rd8u3r2j5h1n3k3p4m4j42j2m2p5k5g2l2h2j3000g0000000000000000"],
+    // Sumiwake
+    ["Sumiwake 1", "https://pzprxs.vercel.app/p?sumiwake/16/6/xbkcg7bzo6cybk76bv3s8btp6foj7obvc3s8800c004g00o00800"],
     // Tetrochain-K
     ["Tetrochain-K 1", "https://pzprxs.vercel.app/p?tetrochaink/10/10/1i1h1j8wchcccg2n3hcccccv8cr3j4h8r8p2g2i3o2k1j8l1z3g2h2h3g"],
     // Tonttiraja

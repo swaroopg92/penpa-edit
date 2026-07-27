@@ -1467,6 +1467,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Sumiwake</summary>
+
+* https://pzprxs.vercel.app/p?sumiwake/16/6/xbkcg7bzo6cybk76bv3s8btp6foj7obvc3s8800c004g00o00800
+
+</details>
+
+<details>
 <summary>Tetrochain-K</summary>
 
 * https://pzprxs.vercel.app/p?tetrochaink/10/10/1i1h1j8wchcccg2n3hcccccv8cr3j4h8r8p2g2i3o2k1j8l1z3g2h2h3g

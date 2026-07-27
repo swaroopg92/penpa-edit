@@ -205,6 +205,7 @@ const penpa_tags = {
             "sananko",
             "sansa road",
             "smullyan (smullyanic dynasty)",
+            "sumiwake",
             "suguru (capsules)",
             "tetrochain-k",
             "tonttiraja",

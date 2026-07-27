@@ -410,7 +410,7 @@ class Puzzlink {
     }
 
     decodeNumber4(max_length = Infinity) {
-        // refer to: decode4Cell in robx/pzprjs => Encode.js
+        // refer to: decode4Cell & decode4Cross in robx/pzprjs => Encode.js
 
         var number_list = {};
         var i = 0;
@@ -3623,6 +3623,32 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
 
             pu.user_tags = ["portal loop"]; // Set tags
+            break;
+        case "sumiwake":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            // Decode URL
+            info_number = puzzlink_pu.decodeNumber4((rows + 1) * (cols + 1));
+            for (var i in info_number) {
+                row_ind = parseInt(i / (cols + 1));
+                col_ind = i % (cols + 1);
+                cell = pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 1) + col_ind + 1;
+                value = info_number[i] === "?" ? " " : info_number[i];
+                pu["pu_q"].symbol[cell] = [value, "circle_M", 1];
+            }            
+
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface"); //include redraw
+            UserSettings.tab_settings = ["Surface"];
+
+            // Set tags
+            pu.user_tags = ["sumiwake"];
             break;
         default:
             errorMsg(PenpaText.get('puzzlink_not_supported', type));
