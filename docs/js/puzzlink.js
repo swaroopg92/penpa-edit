@@ -1470,6 +1470,36 @@ function decode_puzzlink(url) {
                     pu.user_tags = [type];
             }
             break;
+        case "martini":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            // Decode URL
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style
+
+            info_number = puzzlink_pu.decodeNumber16();
+            for (var i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                number = info_number[i] === "?" ? " " : info_number[i];
+
+                if (number === 0) {
+                    pu["pu_q"].symbol[cell] = [2, "circle_L", 1];
+                } else {
+                    pu["pu_q"].number[cell] = [number, 6, "1"];
+                }
+            }
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface"); //include redraw
+            UserSettings.tab_settings = ["Surface"];
+            pu.user_tags = ['martini'];
+            break;
         case "island":
         case "kurochute":
         case "kurodoko":

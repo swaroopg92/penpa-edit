@@ -264,6 +264,8 @@ const EXAMPLE_URLS = [
     ["Mannequin Gate 1", "https://puzz.link/p?mannequin/10/10/abkt6ij7o7j4nvnu69g4fapb2nsefe4ja3huhag21g2k1h1j1"],
     ["Mannequin Gate 2", "https://puzz.link/p?mannequin/12/6/4iek7nvr48j82gbe5ts00mvovsu"],
     ["Mannequin Gate 3", "https://puzz.link/p?mannequin/v:/8/8/kb6esvkd8akgbglb8auucos04120g3g4g1g2g"],
+    // Martini
+    ["Martini 1", "https://puzz.link/p?martini/10/10/212748kh9a5ko3g742eu709g007vho9g007oi0i.i4i0i.i0i.m.i.0l0j0l.0i.m3i0i3i.i0i.i3i"],
     // Masyu
     ["Masyu 1", "https://puzz.link/p?masyu/15/10/i0a02000000ik20620i6i0a021c049c209490j0100a0019329"],
     ["Masyu 2", "https://puzz.link/p?mashu/13/9/013009k10a3a39310c9313693i016030j039a20"],
