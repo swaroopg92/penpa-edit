@@ -710,6 +710,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Myopia</summary>
+
+* https://puzz.link/p?myopia/8/8/m2g1j4g1h8g8m4i4g12k1h8j8k8i1h4
+* https://puzz.link/p?myopia/10/10/g1h6gel6kag13jah3mam67j138lcmdn8g9cjfl3g2j
+
+</details>
+
+<details>
 <summary>Nagenawa</summary>
 
 * https://puzz.link/p?nagenawa/8/8/04h800f00o00e08602ga1040-380000
@@ -860,6 +868,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 
 * https://puzz.link/p?pentominous/8/8/i0gcu9gcbt2cg0ucg2i
 * https://puzz.link/p?pentominous/10/10/zzzzz080gi14o1g000000000c006o03o00030o06c
+
+</details>
+
+<details>
+<summary>Pentopia</summary>
+
+* https://puzz.link/p?pentopia/10/10/i8k6zg8g8g8p3gbh8g8g2zx18i5//p
 
 </details>
 

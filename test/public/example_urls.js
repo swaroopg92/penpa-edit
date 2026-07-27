@@ -304,6 +304,9 @@ const EXAMPLE_URLS = [
     // Mukkonn Enn
     ["Mukkonn Enn 1", "https://puzz.link/p?mukkonn/12/12/zg..21l.21.1...g2.2.j1..4p.45.k33..g3..2g.21.j.211g..23t..33g2..2j2..1g.32.g.3..k3..3p.34.j.24.g.2..21.2l3.23zg"],
     ["Mukkonn Enn 2", "https://puzz.link/p?mukkonn/11/8/q.4.3g..2.h..22h...2g.43.i..13i...1n3.44n_3...g3..._l_i_l...2i..2.m6.1.g6..1j"],
+    // Myopia
+    ["Myopia 1", "https://puzz.link/p?myopia/8/8/m2g1j4g1h8g8m4i4g12k1h8j8k8i1h4"],
+    ["Myopia 2", "https://puzz.link/p?myopia/10/10/g1h6gel6kag13jah3mam67j138lcmdn8g9cjfl3g2j"],
     // Nagenawa
     ["Nagenawa 1", "https://puzz.link/p?nagenawa/8/8/04h800f00o00e08602ga1040-380000"],
     ["Nagenawa 2", "https://puzz.link/p?nagenawa/4/4/iqg21g462"],
@@ -373,6 +376,8 @@ const EXAMPLE_URLS = [
     // Pentominous
     ["Pentominous 1", "https://puzz.link/p?pentominous/8/8/i0gcu9gcbt2cg0ucg2i"],
     ["Pentominous 2", "https://puzz.link/p?pentominous/10/10/zzzzz080gi14o1g000000000c006o03o00030o06c"],
+    // Pentopia
+    ["Pentopia 1", "https://puzz.link/p?pentopia/10/10/i8k6zg8g8g8p3gbh8g8g2zx18i5//p"],
     // Putteria
     ["Putteria 1", "https://puzz.link/p?putteria/10/10/4b5pf5aprd948qbr8hjiejbftaadvscftra6zzzzz"],
     ["Putteria 2", "https://puzz.link/p?putteria/8/8/adcaagl55ac0dntnvpnvjrng0123456789abcdef1g1z1z1h1"],

@@ -1114,6 +1114,23 @@ class Puzzlink {
         this.gridurl = this.gridurl.substr(i + 1);
         return number_list;
     }
+
+    drawOpia(pu, info_number) {
+        var row_ind, col_ind, cell;
+        for (var i in info_number) {
+            // Determine which row and column
+            row_ind = parseInt(i / this.cols);
+            col_ind = i % this.cols;
+            cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+
+            var is_up = (info_number[i] & 1) ? 1 : 0;
+            var is_down = (info_number[i] & 2) ? 1 : 0;
+            var is_left = (info_number[i] & 4) ? 1 : 0;
+            var is_right = (info_number[i] & 8) ? 1 : 0;
+
+            pu["pu_q"].symbol[cell] = [[is_left, is_up, is_right, is_down], "arrow_cross", 1]
+        }
+    }
 }
 
 class DisjointSets {
@@ -3263,6 +3280,26 @@ function decode_puzzlink(url) {
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal"];
             pu.user_tags = [type === "kazunori" ? "kazunori room" : type];
+            break;
+        case "myopia":
+        case "pentopia":
+            pu = new Puzzle_square(cols, rows, size);
+            if (type === "myopia") {
+                // Draw grid dots only
+                pu.mode_grid("nb_grid3");
+                pu.mode_grid("nb_lat1");
+                pu.mode_grid("nb_out2");
+            }
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawOpia(pu, info_number);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode(type === "myopia" ? "edgesub" : "blpo");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = [type];
             break;
         // ============ https://pzprxs.vercel.app/p ============
         case "canal":
