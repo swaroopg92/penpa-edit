@@ -1471,8 +1471,33 @@ function decode_puzzlink(url) {
             pu.user_tags = ['kakuro'];
             break;
         case "kakuru":
+        case "numrope":
+        case "sananko":
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "number");
+
+            if (type === "numrope") {
+                info_line = puzzlink_pu.decodeBorder();
+                for (var i in info_line) {
+                    if (info_line[i] === 1) {
+                        // Determine Vertical Border or Horizontal
+                        if (i < (cols - 1) * rows) {
+                            row_ind = parseInt(i / (cols - 1));
+                            col_ind = i % (cols - 1);
+                            edgex = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                            edgey = edgex + 1;
+                        } else {
+                            i -= (cols - 1) * rows; // offset to 0
+                            row_ind = parseInt(i / cols);
+                            col_ind = i % cols;
+                            edgex = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                            edgey = edgex + pu.nx0;
+                        }
+                        var key = edgex.toString() + "," + edgey.toString();
+                        pu["pu_q"]["line"][key] = 5;
+                    }
+                }
+            }
 
             info_number = puzzlink_pu.decodeKakuru();
             for (var i in info_number) {
@@ -1482,15 +1507,16 @@ function decode_puzzlink(url) {
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
                 pu["pu_q"].surface[cell] = 4;
 
+                style = type === "kakuru" ? 6 : 7;
                 if (info_number[i] !== "?") {
-                    pu["pu_q"].number[cell] = [info_number[i], 6, "1"];
+                    pu["pu_q"].number[cell] = [info_number[i], style, "1"];
                 }
             }
 
             pu.mode_qa("pu_a");
             pu.mode_set("number");
             UserSettings.tab_settings = ["Surface", "Number Normal"];
-            pu.user_tags = ['kakuru'];
+            pu.user_tags = [type === "numrope" ? "number rope" : type];
             break;
         case "aqre":
         case "ayeheya":

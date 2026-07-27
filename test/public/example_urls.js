@@ -340,6 +340,8 @@ const EXAMPLE_URLS = [
     ["Numberlink 3", "https://puzz.link/p?numlin/10/10/1w2h3k4k6g5i7k2n8k5i4g1k8k6h7w3"],
     ["Numberlink 4", "https://puzz.link/p?numlin/10/10/j48315g977k512g2g48s3g66j6i22j55g9m76g49g93g1g188g4j7g44k3h"],
     ["Numberlink 5", "https://puzz.link/p?numlin/7/7/l6g1l2l3l4l5l654321"],
+    // Number Rope
+    ["Number Rope 1", "https://puzz.link/p?numrope/7/7/5s180k1t03cr94mpm0++s+kKqAqak+s++/"],
     // Nuribou
     ["Nuribou 1", "https://puzz.link/p?nuribou/10/10/k2i37zhal8k7h2zhfw3m2g"],
     ["Nuribou 2", "https://puzz.link/p?nuribou/9/9/n2u.i8o9i4o5i.u1n"],
@@ -602,6 +604,8 @@ const EXAMPLE_URLS = [
     // Retsurin
     ["Retsurin 1", "https://pzprxs.vercel.app/p?retsurin/10/10/2j5i3zg2zm4o.g2x3o"],
     ["Retsurin 2", "https://pzprxs.vercel.app/p?retsurin/b/10/13/2026k02u6r1u.y.r.l.r.u2k"],
+    // San-Anko
+    ["San-Anko 1", "https://pzprxs.vercel.app/p?sananko/10/10/n+0q31k1.33q44n7o7q2oax11.+k63k36m+3n"],
     // Sansa Road
     ["Sansa Road 1", "https://pzprxs.vercel.app/p?sansaroad/14/9/m4l8u4k4g4zh4i4g4g8t44h4w2n4nct4p8u4j44o2p4z8t"],
     ["Sansa Road 2", "https://pzprxs.vercel.app/p?sansaroad/10/10/pch8gcg4t8x8x8h88cs8g8s888h8x8x8tcg8g8h8p"],

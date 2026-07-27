@@ -791,6 +791,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Number Rope</summary>
+
+* https://puzz.link/p?numrope/7/7/5s180k1t03cr94mpm0++s+kKqAqak+s++/
+
+</details>
+
+<details>
 <summary>Nuribou</summary>
 
 * https://puzz.link/p?nuribou/10/10/k2i37zhal8k7h2zhfw3m2g
@@ -1394,6 +1401,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 
 * https://pzprxs.vercel.app/p?retsurin/10/10/2j5i3zg2zm4o.g2x3o
 * https://pzprxs.vercel.app/p?retsurin/b/10/13/2026k02u6r1u.y.r.l.r.u2k
+
+</details>
+
+<details>
+<summary>San-Anko</summary>
+
+* https://pzprxs.vercel.app/p?sananko/10/10/n+0q31k1.33q44n7o7q2oax11.+k63k36m+3n
 
 </details>
 
