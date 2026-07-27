@@ -39,3 +39,10 @@ test("Clear Mark and Solve record a Penpa undo transaction", function() {
     assert.match(puzzle, /undo\(replay = false\)[\s\S]*?a\[0\]\s*===\s*"sudokuTransaction"/);
     assert.match(puzzle, /redo\(replay = false\)[\s\S]*?a\[0\]\s*===\s*"sudokuTransaction"/);
 });
+
+test("hideSidebar URL flag removes the desktop left sidebar", function() {
+    assert.match(app, /checkUrlFlag\("hideSidebar"\)/);
+    assert.match(app, /class:hide-left-sidebar=\{hideLeftSidebar\}/);
+    assert.match(app, /\.studio-shell\.hide-left-sidebar \.studio-grid \.column\.controls\s*\{\s*display:\s*none !important/);
+    assert.match(app, /@media \(min-width:\s*769px\)/);
+});

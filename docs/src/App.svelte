@@ -116,6 +116,20 @@
   let darkTheme = true;
   let mobileActiveTab: "none" | "controls" | "actions" | "solver" = "none";
   let solverRunning = false;
+  function checkUrlFlag(name: string) {
+    if (typeof window === "undefined") return false;
+    const sources = [
+      window.location.search,
+      window.location.hash.replace(/^#/, "?"),
+    ];
+    for (const source of sources) {
+      const params = new URLSearchParams(source);
+      if (!params.has(name)) continue;
+      const value = (params.get(name) || "").trim().toLowerCase();
+      return !["0", "false", "no", "off"].includes(value);
+    }
+    return false;
+  }
   function checkIsEmbedded() {
     if (typeof window === "undefined") return false;
     return (
@@ -126,6 +140,7 @@
     );
   }
   let isEmbedded = checkIsEmbedded();
+  let hideLeftSidebar = checkUrlFlag("hideSidebar");
   let lastLogLine = "Idle";
   let fullLogContent = "";
   let fullLogExpanded = false;
@@ -1670,6 +1685,7 @@
   }
 
   onMount(() => {
+    hideLeftSidebar = checkUrlFlag("hideSidebar");
     isEmbedded =
       new URLSearchParams(window.location.search).has("embed") ||
       new URLSearchParams(window.location.hash.replace(/^#/, "?")).has("embed") ||
@@ -1797,7 +1813,13 @@
   />
 </svelte:head>
 
-<div class="studio-shell" class:ready={initialized} class:dark={darkTheme} class:embedded={isEmbedded}>
+<div
+  class="studio-shell"
+  class:ready={initialized}
+  class:dark={darkTheme}
+  class:embedded={isEmbedded}
+  class:hide-left-sidebar={hideLeftSidebar}
+>
   <ToastContainer {toasts} onDismiss={dismissToast} />
 
   <div class="mobile-header">
@@ -5623,5 +5645,16 @@ href="https://github.com/semiexp/cspuz_core"
     border-color: #4b5a68 !important;
     background: #263340 !important;
     color: #c2ced7 !important;
+  }
+
+  @media (min-width: 769px) {
+    .studio-shell.hide-left-sidebar .studio-grid {
+      grid-template-columns:
+        minmax(0, 1fr)
+        clamp(245px, 22vw, 315px) !important;
+    }
+    .studio-shell.hide-left-sidebar .studio-grid .column.controls {
+      display: none !important;
+    }
   }
 </style>
