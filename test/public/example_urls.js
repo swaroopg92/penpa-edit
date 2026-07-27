@@ -307,6 +307,9 @@ const EXAMPLE_URLS = [
     // Myopia
     ["Myopia 1", "https://puzz.link/p?myopia/8/8/m2g1j4g1h8g8m4i4g12k1h8j8k8i1h4"],
     ["Myopia 2", "https://puzz.link/p?myopia/10/10/g1h6gel6kag13jah3mam67j138lcmdn8g9cjfl3g2j"],
+    // Nagareru-Loop
+    ["Nagareru-Loop 1", "https://puzz.link/p?nagare/16/16/h77a77c9n79n7g59c5d7d6b9d7f5d9g666555555565e5h9e5j5a2a57775775555557a1t6d9g85a7a56a6a65d55c85c89b1a55c55c85g9d6b3b"],
+    ["Nagareru-Loop 2", "https://puzz.link/p?nagare/10/10/j1a2a4a2a1o4b4c2k2a2b4b3n2a1b4b3o"],
     // Nagenawa
     ["Nagenawa 1", "https://puzz.link/p?nagenawa/8/8/04h800f00o00e08602ga1040-380000"],
     ["Nagenawa 2", "https://puzz.link/p?nagenawa/4/4/iqg21g462"],

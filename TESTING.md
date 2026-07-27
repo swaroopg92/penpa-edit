@@ -718,6 +718,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Nagareru-Loop</summary>
+
+* https://puzz.link/p?nagare/16/16/h77a77c9n79n7g59c5d7d6b9d7f5d9g666555555565e5h9e5j5a2a57775775555557a1t6d9g85a7a56a6a65d55c85c89b1a55c55c85g9d6b3b
+* https://puzz.link/p?nagare/10/10/j1a2a4a2a1o4b4c2k2a2b4b3n2a1b4b3o
+
+</details>
+
+<details>
 <summary>Nagenawa</summary>
 
 * https://puzz.link/p?nagenawa/8/8/04h800f00o00e08602ga1040-380000

@@ -3327,6 +3327,38 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = [type];
             break;
+        case "nagare":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            const nagare_map = {1: 3, 2: 7, 3: 1, 4: 5};
+            info_number = puzzlink_pu.decodeNumber10();
+            for (var i in info_number) {
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                
+                var number = info_number[i];
+                if (number === 5) {
+                    // black background only
+                    pu["pu_q"].surface[cell] = 4;
+                } else if (number >= 5 && number <= 9) {
+                    // black background with white arrows
+                    pu["pu_q"].surface[cell] = 4;
+                    pu["pu_q"].symbol[cell] = [nagare_map[number - 5], "arrow_B_W", 1];
+                } else if (number >= 1 && number <= 4) {
+                    // white background with black arrows
+                    pu["pu_q"].symbol[cell] = [nagare_map[number], "arrow_B_B", 1];
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ["nagare (nagareru-loop)"];
+            break;           
+
         case "nondango":
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "symbol");

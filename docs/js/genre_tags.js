@@ -133,6 +133,7 @@ const penpa_tags = {
             "nagenawa",
             "new kaitoramma",
             "nikoji",
+            "nagare (nagareru-loop)",
             "nondango",
             "nonogram",
             "norinori",
