@@ -3327,6 +3327,30 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = [type];
             break;
+        case "nondango":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "symbol");
+
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            info_number = puzzlink_pu.decodeNumber2Binary(rows * cols);
+            for (var i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                
+                if (info_number[i] !== 0 || i >= rows * cols) continue;
+                pu["pu_q"].symbol[cell] = [4, "circle_M", 1];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("symbol");
+            pu.subsymbolmode("circle_M"); // can't override composite mode over symbols, so use subsymbolmode instead
+            UserSettings.tab_settings = ["Surface", "Shape"];
+            pu.user_tags = [type];
+            break;
         // ============ https://pzprxs.vercel.app/p ============
         case "canal":
         case "cbanana":

@@ -746,6 +746,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Nondango</summary>
+
+* https://puzz.link/p?nondango/11/11/444ii5kl8f8bobklh54i0k3i76gs2hc0880a50s1jk74vfrbeafdndd9pbberf57ddvfg
+
+</details>
+
+<details>
 <summary>Nonogram</summary>
 
 * https://puzz.link/p?nonogram/4/10/123h456h789habcn1g2g3g4g3g2g1g
