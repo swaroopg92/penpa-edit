@@ -301,6 +301,9 @@ const EXAMPLE_URLS = [
     ["Moon or Sun 2", "https://puzz.link/p?moonsun/10/10/54a94i93264d0qil0200vs03vs1stv0fu0vsk6lja01621i415ak6biai3b0c6bg6gi030"],
     ["Moon or Sun 3", "https://puzz.link/p?moonsun/7/7/000000000000000000306k916560a9i7900"],
     ["Moon or Sun 4", "https://puzz.link/p?moonsun/7/7/2b2a2imi0i38h49mi873300390i0a262970"],
+    // Mukkonn Enn
+    ["Mukkonn Enn 1", "https://puzz.link/p?mukkonn/12/12/zg..21l.21.1...g2.2.j1..4p.45.k33..g3..2g.21.j.211g..23t..33g2..2j2..1g.32.g.3..k3..3p.34.j.24.g.2..21.2l3.23zg"],
+    ["Mukkonn Enn 2", "https://puzz.link/p?mukkonn/11/8/q.4.3g..2.h..22h...2g.43.i..13i...1n3.44n_3...g3..._l_i_l...2i..2.m6.1.g6..1j"],
     // Nagenawa
     ["Nagenawa 1", "https://puzz.link/p?nagenawa/8/8/04h800f00o00e08602ga1040-380000"],
     ["Nagenawa 2", "https://puzz.link/p?nagenawa/4/4/iqg21g462"],

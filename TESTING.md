@@ -702,6 +702,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Mukkonn Enn</summary>
+
+* https://puzz.link/p?mukkonn/12/12/zg..21l.21.1...g2.2.j1..4p.45.k33..g3..2g.21.j.211g..23t..33g2..2j2..1g.32.g.3..k3..3p.34.j.24.g.2..21.2l3.23zg
+* https://puzz.link/p?mukkonn/11/8/q.4.3g..2.h..22h...2g.43.i..13i...1n3.44n_3...g3..._l_i_l...2i..2.m6.1.g6..1j
+
+</details>
+
+<details>
 <summary>Nagenawa</summary>
 
 * https://puzz.link/p?nagenawa/8/8/04h800f00o00e08602ga1040-380000

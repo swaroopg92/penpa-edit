@@ -863,23 +863,78 @@ class Puzzlink {
         return number_list;
     }
 
-    drawCompassNumbers(pu, info_number, sub_mode) {
+    decodeCompass(max_length = Infinity) {
+        // slightly different from decodeNumber16 (with encoded gray surfaces)
+        // if there are no side effects from other puzzles, this function might be merged into decodeNumber16
+
+        var number_list = {};
+        var i = 0;
+        var c = 0;
+
+        while (i < this.gridurl.length) {
+            var ca = this.gridurl.charAt(i);
+            var res = this.readNumber16(ca, i);
+            if (res[0] !== -1) {
+                number_list[c] = res[0];
+                i += res[1];
+                c++;
+            } else if (ca === "_") {
+                // padding for gray cells in compass puzzle
+                number_list[c] = -1;
+                number_list[c + 1] = -1;
+                number_list[c + 2] = -1;
+                number_list[c + 3] = -1;
+                c += 4;
+                i++;
+            } else if (ca >= "g" && ca <= "z") {
+                c += parseInt(ca, 36) - 15;
+                i++;
+            } else {
+                i++;
+            }
+
+            if (c >= max_length) {
+                break;
+            }
+        }
+
+        // Remove what was parsed so the next function call reads what is left
+        this.gridurl = this.gridurl.substr(i);
+
+        return number_list;
+    }
+
+    drawCompass(pu, info_number) {
         // Compass numbers are given as groups of four numbers
         // Compass lists them in a different order than Penpa+
         var number_order = [0, 3, 2, 1];
         var indexes = Object.keys(info_number).sort((a, b) => a - b);
+        var shading_flag = false;
 
         for (var compass_index = 0; compass_index < indexes.length; compass_index += 4) {
             var cell_index = indexes[compass_index] - compass_index * (3 / 4);
             var row_ind = parseInt(cell_index / this.cols);
             var col_ind = cell_index % this.cols;
             var cell = 8 * (pu.ny0 * pu.nx0) + 4 * (pu.nx0 * (2 + row_ind) + 2 + col_ind);
+
             for (var j = 0; j < 4; j++) {
+                if (info_number[indexes[compass_index + j]] === -1) {
+                    // deal with shaded cells (gray) in compass puzzle
+                    shading_flag = true;
+                    break;
+                }
+
                 var number = info_number[indexes[compass_index + j]];
-                pu["pu_q"].numberS[cell + number_order[j]] = [number === "?" ? " " : number, sub_mode];
+                pu["pu_q"].numberS[cell + number_order[j]] = [number === "?" ? " " : number, 1];
+                shading_flag = false;
             }
+
             cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-            pu["pu_q"].symbol[cell] = [1, "compass", 1];
+            if (!shading_flag) {
+                pu["pu_q"].symbol[cell] = [1, "compass", 1];
+            } else {
+                pu["pu_q"].surface[cell] = 4;
+            }
         }
     }
 
@@ -1990,20 +2045,21 @@ function decode_puzzlink(url) {
             pu.user_tags = ['araf'];
             break;
         case "compass":
+        case "mukkonn":
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed grid lines
             setupProblem(pu, "combi");
 
-            info_number = puzzlink_pu.decodeNumber16();
-            puzzlink_pu.drawCompassNumbers(pu, info_number, 1);
+            info_number = puzzlink_pu.decodeCompass();
+            puzzlink_pu.drawCompass(pu, info_number);
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
-            pu.subcombimode("edgesub");
-            UserSettings.tab_settings = ["Surface", "Edge Normal", "Composite"];
+            pu.subcombimode(type === "compass" ? "edgesub" : "linex");
+            UserSettings.tab_settings = ["Surface", type === "compass" ? "Edge Normal" : "Line Normal", "Composite"];
 
             // Set tags
-            pu.user_tags = ['compass'];
+            pu.user_tags = [type === "compass" ? "compass" : "mukkonn enn"];
             break;
         case "coral":
         case "cts":

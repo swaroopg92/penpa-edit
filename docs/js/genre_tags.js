@@ -128,6 +128,7 @@ const penpa_tags = {
             "mochikoro",
             "mochinyoro",
             "moon or sun",
+            "mukkonn enn",
             "nagenawa",
             "new kaitoramma",
             "nikoji",
