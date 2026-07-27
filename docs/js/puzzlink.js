@@ -3596,6 +3596,24 @@ function decode_puzzlink(url) {
 
             pu.user_tags = [type === "tetrochaink" ? "tetrochain-k" : "sansa road"]; // Set tags
             break;
+        case "portal":
+            pu = new Puzzle_square(cols, rows, size);
+            pu.mode_grid("nb_grid2"); // Dashed gridlines
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeNumber16(rows * cols);
+            puzzlink_pu.drawNumbers(pu, info_number, 6, "1");
+
+            info_shade = puzzlink_pu.decodeNumber2Binary(rows * cols);
+            puzzlink_pu.drawBinary2Surface(pu, info_shade, 4); // 4 is for black shading
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            pu.user_tags = ["portal loop"]; // Set tags
+            break;
         default:
             errorMsg(PenpaText.get('puzzlink_not_supported', type));
             break;

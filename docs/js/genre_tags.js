@@ -198,6 +198,7 @@ const penpa_tags = {
             "kuromenbun",
             "nibunnogo",
             "one room one door",
+            "portal loop",
             "rassi silai",
             "retsurin",
             "sananko",

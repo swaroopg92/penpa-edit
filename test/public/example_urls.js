@@ -603,6 +603,9 @@ const EXAMPLE_URLS = [
     // One Room One Door
     ["One Room One Door 1", "https://pzprxs.vercel.app/p?oneroom/10/8/4k94j266sdc488g0206rv300cro00.4g321g26"],
     ["One Room One Door 2", "https://pzprxs.vercel.app/p?oneroom/10/10/274ssohvv000000000focossvvvvvv00000012h34001101h10g-11"],
+    // Portal Loop
+    ["Portal Loop 1", "https://pzprxs.vercel.app/p?portal/8/8/n1i.2o1g.k43k.g2o4i.3n"],
+    ["Portal Loop 2", "https://pzprxs.vercel.app/p?portal/3/3/o10"],
     // Rassi Silai
     ["Rassi Silai 1", "https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4"],
     ["Rassi Silai 2", "https://pzprxs.vercel.app/p?rassi/10/10/aqkqpdas5sbtnatdl27ms31of1k6803vfsne000000001g1g00000000"],

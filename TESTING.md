@@ -1404,6 +1404,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Portal Loop</summary>
+
+* https://pzprxs.vercel.app/p?portal/8/8/n1i.2o1g.k43k.g2o4i.3n
+* https://pzprxs.vercel.app/p?portal/3/3/o10
+
+</details>
+
+<details>
 <summary>Rassi Silai</summary>
 
 * https://pzprxs.vercel.app/p?rassi/8/8/b2stfautich00cq80j2gk0u060p124gl0o2g4
