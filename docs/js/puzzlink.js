@@ -2762,6 +2762,22 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = [type === "yinyang" ? 'yin-yang' : type]; // Genre Tags
             break;
+        case "dosufuwa":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+            
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            info_shade = puzzlink_pu.decodeCrossMark(0);
+            puzzlink_pu.drawBinary2Surface(pu, info_shade, 4);  // encoding compatible with this
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("blwh");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ['dosufuwa (dosun-fuwari)']; // Genre Tags
+            break;
         case "kramma":
         case "kramman":
             var enable_dots = true;

@@ -88,6 +88,7 @@ const penpa_tags = {
             "detour",
             "dominion",
             "doppelblock",
+            "dosufuwa (dosun-fuwari)",
             "double back",
             "double choco",
             "easy as abc",

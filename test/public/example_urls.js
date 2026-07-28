@@ -116,6 +116,9 @@ const EXAMPLE_URLS = [
     // Doppelblock
     ["Doppelblock 1", "https://puzz.link/p?doppelblock/8/8/48acg5fc00000000w4h6k5p1k3v2i"],
     ["Doppelblock 2", "https://puzz.link/p?doppelblock/6/6/g53865iag5"],
+    // Dosun-Fuwari
+    ["Dosun-Fuwari 1", "https://puzz.link/p?dosufuwa/11/11/1gnuvonu1hvv5qrvtmnv5ktni9p4vqtvvvvvqjlcvktf5a242a2750000000000563113281116"],
+    ["Dosun-Fuwari 2", "https://puzz.link/p?dosufuwa/6/6/avvvvlag000a./"],
     // Double Back
     ["Double Back 1", "https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70"],
     ["Double Back 2", "https://puzz.link/p?doubleback/8/8/b2stfautich00cq80j2gk0u0"],

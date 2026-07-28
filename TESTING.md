@@ -274,6 +274,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Dosun-Fuwari</summary>
+
+* https://puzz.link/p?dosufuwa/11/11/1gnuvonu1hvv5qrvtmnv5ktni9p4vqtvvvvvqjlcvktf5a242a2750000000000563113281116
+* https://puzz.link/p?dosufuwa/6/6/avvvvlag000a./
+
+</details>
+
+<details>
 <summary>Double Back</summary>
 
 * https://puzz.link/p?doubleback/10/10/o1g300000000162c4o007vvvvvvvvvvv7f70
