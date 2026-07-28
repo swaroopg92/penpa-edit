@@ -1172,6 +1172,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Tatamibari</summary>
+
+* https://puzz.link/p?tatamibari/9/6/h.r1.h2g3r3q3g2g3i
+* https://puzz.link/p?tatamibari/18/18/i1i2q2i3o3t31o2i31j3l1o2q13w3h1m3i1k3i3g2m2h2r3m1h2g2g1i1zh1r3i3l1k3n2zg2t3t3r2m2g
+
+</details>
+
+<details>
 <summary>Tatebo-Yokobo</summary>
 
 * https://puzz.link/p?tateyoko/10/10/p2i3xn2np1i21pi32n1nrn1i2pn2n1nri2pi3xn3i22n1ri2qi42i2x2i2p2np2i4xi22nqn2n2n3nqi4xn2npn1n2p

@@ -3424,6 +3424,35 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Shape"];
             pu.user_tags = [type];
             break;
+        case "tatamibari":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            const tatamibari_map = { 1: 2, 2: 1, 3: 5 };
+            info_number = puzzlink_pu.decodeNumber4();   
+            for (i in info_number) {
+                number = info_number[i];
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                
+                if (number === "?") {
+                    pu["pu_q"].number[cell] = [number, 1, "1"];
+                } else {
+                    pu["pu_q"].symbol[cell] = [tatamibari_map[number] || number, "line", 1];
+                }
+            }
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi"); //include redraw
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            // Set tags
+            pu.user_tags = ["tatamibari"];
+            break;
         case "voxas":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);

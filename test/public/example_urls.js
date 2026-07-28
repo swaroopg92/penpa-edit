@@ -506,6 +506,9 @@ const EXAMPLE_URLS = [
     // Tasquare
     ["Tasquare 1", "https://puzz.link/p?tasquare/10/10/.i.h.h.i.h.h1i2i4h2i5i1z1i6iah2ibi9h.h.i.h.h.i./"],
     ["Tasquare 2", "https://puzz.link/p?tasquare/10/10/.n.i+fffm-ffj+100m-10i2g.k2l2k2k2k2k2k.l.j2i./"],
+    // Tatamibari
+    ["Tatamibari 1", "https://puzz.link/p?tatamibari/9/6/h.r1.h2g3r3q3g2g3i"],
+    ["Tatamibari 2", "https://puzz.link/p?tatamibari/18/18/i1i2q2i3o3t31o2i31j3l1o2q13w3h1m3i1k3i3g2m2h2r3m1h2g2g1i1zh1r3i3l1k3n2zg2t3t3r2m2g"],
     // Tatebo-Yokobo
     ["Tatebo-Yokobo 1", "https://puzz.link/p?tateyoko/10/10/p2i3xn2np1i21pi32n1nrn1i2pn2n1nri2pi3xn3i22n1ri2qi42i2x2i2p2np2i4xi22nqn2n2n3nqi4xn2npn1n2p"],
     ["Tatebo-Yokobo 2", "http://pzv.jp/p.html?tateyoko/10/10/2i22ppi23i2xi43nq2i2r2i3xi22n1no1i4pi5p1nxpi2q3i32x2i4rn1i4x2i3pn2nq2i33nqn3i3ppn1i2"],
