@@ -74,6 +74,7 @@ const penpa_tags = {
             "ayeheya (ekawayeh)",
             "barns",
             "border block",
+            "bosanowa (bossa nova)",
             "box",
             "chocona",
             "circlesquare",

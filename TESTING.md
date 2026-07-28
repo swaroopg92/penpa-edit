@@ -135,6 +135,15 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Bossa Nova</summary>
+
+* https://puzz.link/p?bosanowa/6/6/0kue01sgy2k2g2n
+* https://puzz.link/p?bosanowa/h/8/7/u1qk2701sjg0n1i4g6k4q4g6i6j3h5o
+* https://puzz.link/p?bosanowa/t/10/5/ttttggjj7ni2j2u3j3q2j2i
+
+</details>
+
+<details>
 <summary>Box</summary>
 
 * https://puzz.link/p?box/10/10/98opg-14f789mmmm-1n66999

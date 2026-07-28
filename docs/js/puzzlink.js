@@ -3376,6 +3376,27 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = ["border block"];
             break;
+        case "bosanowa":
+            if (urldata[1] === "t" || urldata[1] === "h") {
+                // all the unused cells are shaded in black
+                cols = parseInt(urldata[2]);
+                rows = parseInt(urldata[3]);
+                puzzlink_pu = new Puzzlink(cols, rows, urldata[4]);
+            }
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "number");
+
+            info_shade = puzzlink_pu.decodeNumber2Binary(rows * cols);
+            puzzlink_pu.drawBinary2Surface(pu, info_shade, 4);
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1");
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("number");
+            UserSettings.tab_settings = ["Surface", "Number Normal"];
+            pu.user_tags = ["bosanowa (bossa nova)"];
+            break;
         case "familyphoto":
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed gridlines

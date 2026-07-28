@@ -57,6 +57,10 @@ const EXAMPLE_URLS = [
     // Border Block
     ["Border Block 1", "https://puzz.link/p?bdblock/10/10/51b20o7p66g51/k4g6h1g4s1g2h2g7zr3g2h6g5s5g6h7g3k"],
     ["Border Block 2", "https://puzz.link/p?bdblock/15/15/.......4/m4n2q1zg3i3zi2m2x4j1i3j4x2m2zi1i1zg3q2n4m"],
+    // Bossa Nova
+    ["Bossa Nova 1", "https://puzz.link/p?bosanowa/6/6/0kue01sgy2k2g2n"],
+    ["Bossa Nova 2", "https://puzz.link/p?bosanowa/h/8/7/u1qk2701sjg0n1i4g6k4q4g6i6j3h5o"],
+    ["Bossa Nova 3", "https://puzz.link/p?bosanowa/t/10/5/ttttggjj7ni2j2u3j3q2j2i"],
     // Box
     ["Box 1", "https://puzz.link/p?box/10/10/98opg-14f789mmmm-1n66999"],
     ["Box 2", "https://puzz.link/p?box/11/7/555kbfba933ggf-1cjic"],
