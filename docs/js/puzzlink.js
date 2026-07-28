@@ -1131,32 +1131,6 @@ class Puzzlink {
             pu["pu_q"].symbol[cell] = [[is_left, is_up, is_right, is_down], "arrow_cross", 1]
         }
     }
-
-    decodeVoxas() {
-        var number_list = {};
-        var ec = 0, i = 0;
-
-        // There are no limits for this type yet
-        for (i = 0; i < this.gridurl.length; i++) {
-            var ca = this.gridurl.charAt(i)
-            if (this.include(ca, "0", "4")) {
-                number_list[ec] = parseInt(ca, 16) + 1;
-            } else if (this.include(ca, "5", "9")) {
-                number_list[ec] = parseInt(ca, 16) - 4;
-                ec++;
-            } else if (this.include(ca, "a", "e")) {
-                number_list[ec] = parseInt(ca, 16) - 9;
-                ec += 2;
-            } else if (this.include(ca, "g", "z")) {
-                ec += parseInt(ca, 36) - 16;
-            }
-
-            ec++;
-        }
-
-        this.gridurl = this.gridurl.substr(i + 1);
-        return number_list;
-    }
 }
 
 class DisjointSets {
@@ -3457,9 +3431,9 @@ function decode_puzzlink(url) {
 
             // Decode URL
             const voxas_map = { 2: 2, 3: 5, 4: 1 };
-            info_number = puzzlink_pu.decodeVoxas();
-            puzzlink_pu.drawBorder(pu, info_number, 2);
+            info_number = puzzlink_pu.decodeNumber4();            
             for (var i in info_number) {
+                info_number[i]++;
                 number = info_number[i];
                 if (i < (cols - 1) * rows) {
                     row_ind = parseInt(i / (cols - 1));
@@ -3475,6 +3449,7 @@ function decode_puzzlink(url) {
                     pu["pu_q"].symbol[cell] = [voxas_map[number], "circle_SS", 2];
                 }
             }
+            puzzlink_pu.drawBorder(pu, info_number, 2);
 
             // Change to Solution Tab
             pu.mode_qa("pu_a");
