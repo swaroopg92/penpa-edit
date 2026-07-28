@@ -155,6 +155,12 @@ const EXAMPLE_URLS = [
     ["Firefly (Hotaru Beam) 2", "https://puzz.link/p?firefly/7/7/e3.h1.13a0.f0.f0.a151543h1.b3.a"],
     ["Firefly (Hotaru Beam) 3", "https://puzz.link/p?firefly/9/9/c25b45c24k23c2340a44c3.m4.c3.a301.c25k13c33b13c"],
     ["Firefly (Hotaru Beam) 4", "https://puzz.link/p?firefly/10/1/4.h0./"],
+    // FiveCells
+    ["FiveCells 1", "https://puzz.link/p?fivecells/10/10/2b1b1b3b3b3b2b1b2b2b2b3b0b2b0b2b2b2b2b1b2b3b3b2b2b2b3b3b3b0b2b1b3b2"],
+    ["FiveCells 2", "https://puzz.link/p?fivecells/15/15/777a1b7d7777e77722c77f7d3a7a2b7e7d3a277731a7772f7e7c2a7a0c7e7a777c777c777a7d27c0a7e7e7b1a3b7772b777g7e7a1b73c2a7b2c77a1c777b3b7777d7c3777"],
+    // FourCells
+    ["FourCells 1", "https://puzz.link/p?fourcells/10/10/b3a3b3c33a3b3b3b3b3a333a3a33e33c333b33e3b33a3a333c33b3c33b333c3a3a3b33a"],
+    ["FourCells 2", "https://puzz.link/p?fourcells/13/13/3a2a3a7d2c2a2a7a23a2a3a3b37a2c13b2a273c2b3a2b7a2a22b2a3a27a2d7777777777777a2a2b73a32a3b2a2a732b2b3a2a27b33a31a3a3a73a23c2a3b7a2b22b3a3a72a22a2"],
     // Geradeweg
     ["Geradeweg 1", "https://puzz.link/p?geradeweg/17/10/j6m1q4g4o55o54i1s1o2h3p6h3o2s1i35o53o2g3q6m.+100j"],
     ["Geradeweg 2", "https://puzz.link/p?geradeweg/10/10/g11111111g1111111111l1g11i11g111111111g11111111h1111111111111111g1111g111111111111g11111111g"],
@@ -176,6 +182,9 @@ const EXAMPLE_URLS = [
     // Hebi-Ichigo
     ["Hebi-Ichigo 1", "https://puzz.link/p?hebi/10/10/k0.04a32c14l350.a40a23a11b44p40b0.a0.a40a0.25l0.c23a214.k"],
     ["Hebi-Ichigo 2", "https://puzz.link/p?snakes/5/5/g13c31g35c12a"],
+    // Heteromino
+    ["Heteromino 1", "https://puzz.link/p?heteromino/7/10/e7a7777d7c7c7d7c77a7d77a7a7h7a7b7a7a7d7a"],
+    ["Heteromino 2", "https://puzz.link/p?heteromino/25/25/7777777777777777777777777777777777777777777777777777a7b77b77777a777d7777a77a777a7777b777b777777a77a77c77c77c777777777b777a7e77c777777777777b7777a77c777777777777777777777777777777777b77777777777b777777777c77f77b7b777777c7777e77b7b777777d77777c777c7777777d7777c777b7b7777777b77777b7777b7b77777777777777b77777c777777777777777777777777777777777d77777a77777777777777f777b7d777777777b77b77c7a77a777777777f777d7b7777777777b7b777c77a77777777777777b777f77777777777777a7777b77777777777777777777777777777777777777777777777777777777777777"],
     // Heyablock
     ["Heyablock 1", "https://puzz.link/p?heyablock/10/10/498g17buntfqsh12247obovv003o00vv3o3o726h22j2h4g6g2"],
     ["Heyablock 2", "https://puzz.link/p?heyablock/15/10/4i894gi914i2944i894gi914i294000vvv000vvv000vvv000vvv0001122222024024311331235234"],

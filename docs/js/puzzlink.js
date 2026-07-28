@@ -3062,20 +3062,41 @@ function decode_puzzlink(url) {
             }
             pu.user_tags = [map_genre_tag[type]]; // Set tags
             break;
+        case "fivecells":
+        case "fourcells":
+        case "heteromino":
         case "nawabari":
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed grid lines
             setupProblem(pu, "combi");
 
             info_number = puzzlink_pu.decodeNumber10();
-            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+            for (var i in info_number) {
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                number = info_number[i];
+
+                if (number === 7) {
+                    // deal with holes in the grid
+                    if (type === "heteromino") {
+                        pu["pu_q"].surface[cell] = 4; // Black background
+                    } else {
+                        pu["pu_q"].surface[cell] = 3; // Light Gray background
+                        puzzlink_pu.addBorderForContinousPart(pu, row_ind, col_ind, true);
+                    }
+                } else {
+                    pu["pu_q"].number[cell] = [number, 1, "1"];
+                }
+            }
 
             pu.mode_qa("pu_a");
             pu.mode_set("combi");
             pu.subcombimode("edgesub");
             UserSettings.tab_settings = ["Surface", "Composite"];
 
-            pu.user_tags = ["territory (nawabari)"]; // Set tags
+            pu.user_tags = [type === "nawabari" ? "territory (nawabari)" : type]; // Set tags
             break;
         case "dbchoco":
             pu = new Puzzle_square(cols, rows, size);
