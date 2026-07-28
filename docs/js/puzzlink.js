@@ -2655,6 +2655,38 @@ function decode_puzzlink(url) {
 
             pu.user_tags = [type === "gokigen" ? 'slant (gokigen)' : type]; // Genre Tags
             break
+        case "lightshadow":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "surface");
+
+            info_number = puzzlink_pu.decodeNumber16();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "1", false);
+
+            for (var i in info_number) {
+                if (isNaN(info_number[i])) continue;
+
+                // Determine which row and column
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                number = info_number[i];
+
+                // odd number are black, even numbers are white
+                if (number % 2 === 0) {
+                    number = number === 0 ? "?" : number / 2;
+                    pu["pu_q"].number[cell] = [number, 1, "1"];
+                } else {
+                    number = number === 1 ? "?" : (number - 1) / 2;
+                    pu["pu_q"].number[cell] = [number, 4, "1"];
+                    pu["pu_q"].surface[cell] = 4; // black background
+                }
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("surface");
+            UserSettings.tab_settings = ["Surface"];
+            pu.user_tags = ['light and shadow']; // Genre Tags
+            break;
         case "ringring":
             pu = new Puzzle_square(cols, rows, size);
             pu.mode_grid("nb_grid2"); // Dashed gridlines
@@ -3637,7 +3669,7 @@ function decode_puzzlink(url) {
                 cell = pu.nx0 * pu.ny0 + pu.nx0 * (row_ind + 1) + col_ind + 1;
                 value = info_number[i] === "?" ? " " : info_number[i];
                 pu["pu_q"].symbol[cell] = [value, "circle_M", 1];
-            }            
+            }
 
             info_edge = puzzlink_pu.decodeBorder();
             puzzlink_pu.drawBorder(pu, info_edge, 2); // 2 is for Black Style

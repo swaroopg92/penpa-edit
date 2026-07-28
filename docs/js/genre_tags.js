@@ -117,6 +117,7 @@ const penpa_tags = {
             "kurochute",
             "kuroclone",
             "kurodoko",
+            "light and shadow",
             "lither (litherslink)",
             "lookair",
             "mannequin gate",

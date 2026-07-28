@@ -253,6 +253,8 @@ const EXAMPLE_URLS = [
     // Look-Air
     ["Look-Air 1", "https://puzz.link/p?lookair/10/10/3a1k3c1a1f1b0b5d1g2f2g3d5b1b3f1a0c3k1a3"],
     ["Look-Air 2", "https://puzz.link/p?lookair/12/3/m5b0b.b0m"],
+    // Light and Shadow
+    ["Light and Shadow 1", "https://puzz.link/p?lightshadow/10/10/i5890j16j01h0l6g1n90i10i07i81i10n0g9l7h01j12j1050i"],
     // Lither (Litherslink)
     ["Lither (Litherslink) 1", "https://puzz.link/p?lither/8/8/g02881d3667c63c338c6b086cid12185bd"],
     ["Lither (Litherslink) 2", "https://puzz.link/p?lither/3/3/2c116b"],

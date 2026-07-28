@@ -588,6 +588,13 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Light and Shadow</summary>
+
+* https://puzz.link/p?lightshadow/10/10/i5890j16j01h0l6g1n90i10i07i81i10n0g9l7h01j12j1050i
+
+</details>
+
+<details>
 <summary>Lither (Litherslink)</summary>
 
 * https://puzz.link/p?lither/8/8/g02881d3667c63c338c6b086cid12185bd
