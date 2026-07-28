@@ -538,16 +538,15 @@ class Puzzlink {
         }
     }
 
-    decodeCrossMark(hasborder = false) {
+    decodeCrossMark(border_type = -1) {
         // refer to decodeCrossMark in robx/pzprjs => Encode.js
+        // border_type = -1: shrink to inner grid, 0: no change (for compatibility), 1: expand to outer grid
 
         var cc = 0,
             i = 0,
             crossmark_list = {};
-        var cp = hasborder ? 1 : 0,
-            cp2 = cp << 1;
-        var rows = this.rows - 1 + cp2,
-            cols = this.cols - 1 + cp2;
+        var rows = this.rows + (border_type),
+            cols = this.cols + (border_type);
 
         for (i = 0; i < this.gridurl.length; i++) {
             var ca = this.gridurl.charAt(i);
@@ -575,14 +574,16 @@ class Puzzlink {
         return crossmark_list;
     }
 
-    drawCrossMark(pu, info, symbol, style, hasborder = false) {
+    drawCrossMark(pu, info, symbol, style, border_type = -1) {
+        // border_type = -1: shrink to inner grid, 0: no change (for compatibility), 1: expand to outer grid
+        // this parameter should be consistent with that in decodeCrossMark
+
         var i, row_ind, col_ind, cell;
-        var cp = hasborder ? 1 : 0,
-            cp2 = cp << 1;
+        var cp = (border_type === 1) ? 1 : 0;
 
         for (i in info) {
-            row_ind = parseInt(i / (this.cols - 1 + cp2)) - cp + pu.space[0]; // border shrink/expand + offset
-            col_ind = (i % (this.cols - 1 + cp2)) - cp + pu.space[2]; // border shrink/expand + offset
+            row_ind = parseInt(i / (this.cols + (border_type))) - cp + pu.space[0]; // border shrink/expand + offset
+            col_ind = (i % (this.cols + (border_type))) - cp + pu.space[2]; // border shrink/expand + offset
             cell = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
             if (info[i] === 1) {
                 pu["pu_q"].symbol[cell] = [style, symbol, 2]; // 2 for behind line
@@ -3263,8 +3264,8 @@ function decode_puzzlink(url) {
             pu.mode_grid("nb_grid2"); // Dashed gridlines
             setupProblem(pu, "combi");
 
-            info_crossmark = puzzlink_pu.decodeCrossMark(true);
-            puzzlink_pu.drawCrossMark(pu, info_crossmark, "circle_SS", 2, true); // 2 for black circle
+            info_crossmark = puzzlink_pu.decodeCrossMark(1);
+            puzzlink_pu.drawCrossMark(pu, info_crossmark, "circle_SS", 2, 1); // 2 for black circle
 
             puzzlink_nb = new Puzzlink(cols, rows, urldata[4]);
             info_number = puzzlink_nb.decodeNumber16();
@@ -3615,8 +3616,8 @@ function decode_puzzlink(url) {
             pu = new Puzzle_square(cols + 1, rows + 1, size);
             setupProblem(pu, "combi");
 
-            info_crossmark = puzzlink_pu.decodeCrossMark(false);
-            puzzlink_pu.drawCrossMark(pu, info_crossmark, "sudokuetc", 1, false); // Large square
+            info_crossmark = puzzlink_pu.decodeCrossMark();
+            puzzlink_pu.drawCrossMark(pu, info_crossmark, "sudokuetc", 1); // Large square
             info_number = puzzlink_pu.decodeNumber16ExCell(true);
             puzzlink_pu.drawNumbersExCell(pu, info_number, 1, "1");
 
