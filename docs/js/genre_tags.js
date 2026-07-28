@@ -191,6 +191,7 @@ const penpa_tags = {
             "voxas",
             "vslither (vertex slitherlink)",
             "yajikazu (yajisan-kazusan)",
+            "yajitatami",
             "yin-yang",
             // ============ https://pzprxs.vercel.app/p ============
             "battenberg painting",

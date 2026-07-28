@@ -729,6 +729,8 @@ class Puzzlink {
     }
 
     decodeYajilinArrows(parsing_castle = false) {
+        // refer to: decodeArrowNumber16 in robx/pzprjs => Encode.js
+
         // Arrows start with one number giving direction and the next giving the number
         var arrows = {};
         var i = 0;
@@ -740,6 +742,11 @@ class Puzzlink {
             if ("a" <= ca && ca <= "z") {
                 c += parseInt(ca, 36) - 9;
                 i++;
+
+                if (c >= this.rows * this.cols) {
+                    break;  // limit for the board size
+                }
+
                 continue;
             }
 
@@ -765,10 +772,11 @@ class Puzzlink {
                 cell_value = "" + parseInt(cell_value, 16);
             }
             arrows[c] = [direc % 5, cell_value, shading]; // [direction, number, shading]
-            c += 1;
             i += number_length + 1;
+            c += 1;
         }
 
+        this.gridurl = this.gridurl.substr(i);
         return arrows;
     }
 
@@ -1928,6 +1936,7 @@ function decode_puzzlink(url) {
         case "yajikazu":
         case "yajilin":
         case "yajirin": // yajilin alias
+        case "yajitatami":
             if (type === "yajirin") {
                 type = "yajilin";
             } else if (type === "snakes") {
@@ -1998,6 +2007,11 @@ function decode_puzzlink(url) {
 
                 puzzlink_pu.addBorderForContinousPart(pu, row_ind, col_ind, type === "castle");
             }
+            
+            if (type === "yajitatami") {
+                info_edge = puzzlink_pu.decodeBorder();
+                puzzlink_pu.drawBorder(pu, info_edge, 2);
+            }
 
             pu.mode_qa("pu_a");
             if (type === "yajikazu" || type === "tetrochain" || type === "kuroclone") {
@@ -2008,7 +2022,7 @@ function decode_puzzlink(url) {
                 UserSettings.tab_settings = ["Surface", "Number Normal"];
             } else {
                 pu.mode_set("combi");
-                pu.subcombimode("linex");
+                pu.subcombimode(type === "yajitatami" ? "edgesub" : "linex");
                 UserSettings.tab_settings = ["Surface", "Composite"];
             }
 

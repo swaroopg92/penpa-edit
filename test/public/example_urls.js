@@ -584,6 +584,11 @@ const EXAMPLE_URLS = [
     ["Yajilin 5", "https://puzz.link/p?yajilin/10/10/40u23k10h20l10h20k13l40i"],
     ["Yajilin 6", "https://puzz.link/p?yajilin/b/11/11/m31e23e23c23g10a22i32j12j32j40j31j31p"],
     ["Yajilin 7", "https://puzz.link/p?yajilin/6/3/1122334400a1.2.3.4.0.a-13e3-23e4-33e5962563"],
+    // Yajitatami
+    ["Yajitatami 1", "https://puzz.link/p?yajitatami/8/8/a43n23j43f232313d43g43b33h33b00k0g40082001g6g0081000g"],
+    ["Yajitatami 2", "https://puzz.link/p?yajitatami/8/8/zzlq0hb54gghk104o4ef05v82i0"],
+    ["Yajitatami 3", "https://puzz.link/p?yajitatami/8/8/c3.i3.b1.a4.1.d1.e1.c1.1.n4.i1.b1./"],
+    ["Yajitatami 4", "https://puzz.link/p?yajitatami/14/18/c33d36o43h33j3212h12e13a13m43e13b1414f13a14i44h46a44b43e24a17a23e14j34p42c2322f23b23i24a43b23d32a22q42x35h"],
     // Yin-Yang
     ["Yin-Yang 1", "https://puzz.link/p?yinyang/v:/6/6/l2a70001f0kb"],
     ["Yin-Yang 2", "https://puzz.link/p?yinyang/v:/14/8/59000k00074i00027a8ala6j620g793b606n39"],
