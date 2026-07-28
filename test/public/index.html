@@ -21,7 +21,6 @@
     <button id="run-tests">Loading...</button>
     <label for="update-snapshots">Update Snapshots</label>
     <input id="update-snapshots" type="checkbox" />
-
     <!-- Include Mocha testing library. The list of test results are put in div#mocha -->
     <div id="mocha"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.3.7/chai.min.js"></script>
@@ -38,6 +37,8 @@
 
     <!-- Include test files -->
     <script src="./utils.js"></script>
+    <script src="./sync_testing_urls.js"></script>
+    <script src="./example_urls.js"></script>
     <script src="./puzz_link_parser.js"></script>
 
     <script>
@@ -46,10 +47,8 @@
             button.textContent = "Run tests";
 
             button.onclick = () => {
-                // Clear the last test result from the DOM
                 const testReport = document.querySelector("div#mocha");
                 testReport.innerHTML = "";
-                // Run the test suite
                 mocha.run();
             };
         }

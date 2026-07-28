@@ -1,6 +1,15 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { syncExampleUrls } = require("./public/sync_testing_urls.js");
+
+// Sync example_urls.js from TESTING.md before starting the server.
+var result = syncExampleUrls(true);
+if (result.success) {
+    console.log('example_urls.js synced: ' + result.sections + ' sections, ' + result.entries + ' entries');
+} else {
+    console.error(result.error);
+}
 
 const app = express();
 
