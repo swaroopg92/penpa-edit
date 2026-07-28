@@ -55,25 +55,25 @@ class Puzzlink {
 
         // Add edges to grid
         for (var i in info_edge) {
-            if (info_edge[i] === 1) {
-                // Determine Vertical Border or Horizontal
-                if (i < (this.cols - 1) * this.rows) {
-                    row_ind = parseInt(i / (this.cols - 1)) + row_offset;
-                    col_ind = i % (this.cols - 1) + col_offset;
-                    // plus 1 at end because the 0 reference is from column 1 due to inside border
-                    edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
-                    edgey = edgex + pu.nx0;
-                } else {
-                    i -= (this.cols - 1) * this.rows; //offset to 0
-                    row_ind = parseInt(i / this.cols) + row_offset;
-                    col_ind = i % this.cols + col_offset;
-                    // 2 + row_ind, as 1st horizontal is the 0 reference
-                    edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
-                    edgey = edgex + 1;
-                }
-                var key = edgex.toString() + "," + edgey.toString();
-                pu["pu_q"]["lineE"][key] = edge_style;
+            if (info_edge[i] === 0) continue;
+
+            // Determine Vertical Border or Horizontal
+            if (i < (this.cols - 1) * this.rows) {
+                row_ind = parseInt(i / (this.cols - 1)) + row_offset;
+                col_ind = i % (this.cols - 1) + col_offset;
+                // plus 1 at end because the 0 reference is from column 1 due to inside border
+                edgex = pu.nx0 * pu.ny0 + pu.nx0 * (1 + row_ind) + 1 + col_ind + 1;
+                edgey = edgex + pu.nx0;
+            } else {
+                i -= (this.cols - 1) * this.rows; //offset to 0
+                row_ind = parseInt(i / this.cols) + row_offset;
+                col_ind = i % this.cols + col_offset;
+                // 2 + row_ind, as 1st horizontal is the 0 reference
+                edgex = pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 1 + col_ind;
+                edgey = edgex + 1;
             }
+            var key = edgex.toString() + "," + edgey.toString();
+            pu["pu_q"]["lineE"][key] = edge_style;
         }
     }
 
@@ -1130,6 +1130,32 @@ class Puzzlink {
 
             pu["pu_q"].symbol[cell] = [[is_left, is_up, is_right, is_down], "arrow_cross", 1]
         }
+    }
+
+    decodeVoxas() {
+        var number_list = {};
+        var ec = 0, i = 0;
+
+        // There are no limits for this type yet
+        for (i = 0; i < this.gridurl.length; i++) {
+            var ca = this.gridurl.charAt(i)
+            if (this.include(ca, "0", "4")) {
+                number_list[ec] = parseInt(ca, 16) + 1;
+            } else if (this.include(ca, "5", "9")) {
+                number_list[ec] = parseInt(ca, 16) - 4;
+                ec++;
+            } else if (this.include(ca, "a", "e")) {
+                number_list[ec] = parseInt(ca, 16) - 9;
+                ec += 2;
+            } else if (this.include(ca, "g", "z")) {
+                ec += parseInt(ca, 36) - 16;
+            }
+
+            ec++;
+        }
+
+        this.gridurl = this.gridurl.substr(i + 1);
+        return number_list;
     }
 }
 
@@ -3400,7 +3426,6 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = ["nagare (nagareru-loop)"];
             break;
-
         case "nondango":
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "symbol");
@@ -3424,6 +3449,41 @@ function decode_puzzlink(url) {
             pu.subsymbolmode("circle_M"); // can't override composite mode over symbols, so use subsymbolmode instead
             UserSettings.tab_settings = ["Surface", "Shape"];
             pu.user_tags = [type];
+            break;
+        case "voxas":
+            // Setup board
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            // Decode URL
+            const voxas_map = { 2: 2, 3: 5, 4: 1 };
+            info_number = puzzlink_pu.decodeVoxas();
+            puzzlink_pu.drawBorder(pu, info_number, 2);
+            for (var i in info_number) {
+                number = info_number[i];
+                if (i < (cols - 1) * rows) {
+                    row_ind = parseInt(i / (cols - 1));
+                    col_ind = i % (cols - 1);
+                    cell = 3 * pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                } else {
+                    i -= (cols - 1) * rows; //offset to 0
+                    row_ind = parseInt(i / cols);
+                    col_ind = i % cols;
+                    cell = 2 * pu.nx0 * pu.ny0 + pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                }
+                if (number >= 2 && number <= 4) {
+                    pu["pu_q"].symbol[cell] = [voxas_map[number], "circle_SS", 2];
+                }
+            }
+
+            // Change to Solution Tab
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi"); //include redraw
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+
+            // Set tags
+            pu.user_tags = ["voxas"];
             break;
         // ============ https://pzprxs.vercel.app/p ============
         case "canal":

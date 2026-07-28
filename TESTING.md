@@ -1267,6 +1267,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Voxas</summary>
+
+* https://puzz.link/p?voxas/8/8/pbjbk7ch5aibjcn0ch3cl073dv6cjdi
+* https://puzz.link/p?voxas/14/14/s7d7b835b5b7azw7d5c705c7a8czw5c7a807c8b6cr2ag2ag2ct3ag2ag2dzn0dg2bg1ct1bg2dg2azn3cg0bg0dt2bg0cg0c
+
+</details>
+
+<details>
 <summary>Wafusuma</summary>
 
 * https://puzz.link/p?wafusuma/8/8/w-15h.h-13h.h-12h.h-11h.w-10-10f-11ccbbzz3547869a

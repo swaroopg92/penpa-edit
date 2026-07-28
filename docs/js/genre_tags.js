@@ -182,6 +182,7 @@ const penpa_tags = {
             "usotatami",
             "wafusuma",
             "view",
+            "voxas",
             "vslither (vertex slitherlink)",
             "yajikazu (yajisan-kazusan)",
             "yin-yang",

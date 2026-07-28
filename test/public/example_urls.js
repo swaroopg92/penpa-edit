@@ -546,6 +546,9 @@ const EXAMPLE_URLS = [
     // View
     ["View 1", "https://puzz.link/p?view/8/8/k0g1g0i2h031h1g2k2j4k2g1h012h2i2g1g1k"],
     ["View 2", "https://puzz.link/p?view/10/10/2g0g0r1i4g1j5g4i2j3k4g2j2q0i2g1v4l3j2"],
+    // Voxas
+    ["Voxas 1", "https://puzz.link/p?voxas/8/8/pbjbk7ch5aibjcn0ch3cl073dv6cjdi"],
+    ["Voxas 2", "https://puzz.link/p?voxas/14/14/s7d7b835b5b7azw7d5c705c7a8czw5c7a807c8b6cr2ag2ag2ct3ag2ag2dzn0dg2bg1ct1bg2dg2azn3cg0bg0dt2bg0cg0c"],
     // Wafusuma
     ["Wafusuma 1", "https://puzz.link/p?wafusuma/8/8/w-15h.h-13h.h-12h.h-11h.w-10-10f-11ccbbzz3547869a"],
     // Yajikazu (Yajisan-Kazusan)
