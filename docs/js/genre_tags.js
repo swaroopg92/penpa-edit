@@ -153,6 +153,7 @@ const penpa_tags = {
             "pencils",
             "pentopia",
             "putteria",
+            "rail pool",
             "regional yajilin",
             "renban (renban-madoguchi)",
             "ring-ring",

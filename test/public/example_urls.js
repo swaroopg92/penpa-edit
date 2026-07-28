@@ -393,6 +393,10 @@ const EXAMPLE_URLS = [
     // Putteria
     ["Putteria 1", "https://puzz.link/p?putteria/10/10/4b5pf5aprd948qbr8hjiejbftaadvscftra6zzzzz"],
     ["Putteria 2", "https://puzz.link/p?putteria/8/8/adcaagl55ac0dntnvpnvjrng0123456789abcdef1g1z1z1h1"],
+    // Rail Pool
+    ["Rail Pool 1", "https://puzz.link/p?railpool/17/10/13t8r2q36zo45zm12q9p8u8t123n4zo1zzq3qg1gc2g003000a630302s0188g0480270o3g20p000b0g8o42690027gc0000080"],
+    ["Rail Pool 2", "https://puzz.link/p?railpool/16/6/p7s73l2t5z23l2u23s2z3q5n3n2s9q4oq4u268q48q6c888g0520ih080g480000000c006003001g00"],
+    ["Rail Pool 3", "https://puzz.link/p?railpool/16/6/z20o2m20o26zn26k00q20n2r0n0zq2487st3s8ruvrev248srju1prgeo360tjm"],
     // Regional Yajilin (Yajilin Regions)
     ["Regional Yajilin (Yajilin Regions) 1", "https://puzz.link/p?yajilin-regions/11/6/0457vvfnvnpkvun421100422g2123g1g1"],
     ["Regional Yajilin (Yajilin Regions) 2", "https://puzz.link/p?yajirin-regions/8/8/b2om8i4108q00s3vg1s00sg0q"],

@@ -924,6 +924,15 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Rail Pool</summary>
+
+* https://puzz.link/p?railpool/17/10/13t8r2q36zo45zm12q9p8u8t123n4zo1zzq3qg1gc2g003000a630302s0188g0480270o3g20p000b0g8o42690027gc0000080
+* https://puzz.link/p?railpool/16/6/p7s73l2t5z23l2u23s2z3q5n3n2s9q4oq4u268q48q6c888g0520ih080g480000000c006003001g00
+* https://puzz.link/p?railpool/16/6/z20o2m20o26zn26k00q20n2r0n0zq2487st3s8ruvrev248srju1prgeo360tjm
+
+</details>
+
+<details>
 <summary>Regional Yajilin (Yajilin Regions)</summary>
 
 * https://puzz.link/p?yajilin-regions/11/6/0457vvfnvnpkvun421100422g2123g1g1

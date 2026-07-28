@@ -864,6 +864,54 @@ class Puzzlink {
         return number_list;
     }
 
+    decodeRailPool() {
+        var c = 0,
+            i = 0,
+            number_list = {},
+            off = false,
+            bd = this.board;
+
+        for (i = 0; i < this.gridurl.length; i++) {
+            var ca = this.gridurl.charAt(i);
+
+            if (this.include(ca, "0", "j")) {
+                while (this.include(ca, "0", "j")) {
+                    var curNum = 0;
+                    while (this.include(ca, "a", "j")) {
+                        var curDigit = parseInt(ca, 36) - 10;
+                        curNum = (curNum + curDigit) * 10;
+                        ca = this.gridurl.charAt(++i);
+                    }
+                    curNum += parseInt(ca, 10);
+                    if (!number_list[c]) {
+                        number_list[c] = [];
+                    }
+                    number_list[c].push(curNum === 0 ? "?" : +ca);
+                    ca = this.gridurl.charAt(++i);
+                }
+                i--;
+                c++;
+                off = true;
+            } else if (this.include(ca, "k", "z")) {
+                c += parseInt(ca, 36) - 19;
+                if (off) {
+                    c--;
+                }
+                off = false;
+            }
+
+            if (c >= this.rows * this.cols || ca === "/") {
+                break;
+            }
+        }
+        this.gridurl = this.gridurl.substr(i + 1);
+        if (this.gridurl[0] === "/") {
+            this.gridurl = this.gridurl.substr(1);
+        }
+
+        return number_list;
+    }
+
     decodeCompass(max_length = Infinity) {
         // slightly different from decodeNumber16 (with encoded gray surfaces)
         // if there are no side effects from other puzzles, this function might be merged into decodeNumber16
@@ -2765,7 +2813,7 @@ function decode_puzzlink(url) {
         case "dosufuwa":
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "combi");
-            
+
             info_edge = puzzlink_pu.decodeBorder();
             puzzlink_pu.drawBorder(pu, info_edge, 2);
 
@@ -3441,19 +3489,38 @@ function decode_puzzlink(url) {
             UserSettings.tab_settings = ["Surface", "Shape"];
             pu.user_tags = [type];
             break;
+        case "railpool":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            info_number = puzzlink_pu.decodeRailPool();
+            puzzlink_pu.drawNumbers(pu, info_number, 1, "4", false);
+
+            info_edge = puzzlink_pu.decodeBorder();
+            puzzlink_pu.drawBorder(pu, info_edge, 2);
+
+            info_shade = puzzlink_pu.decodeNumber2Binary(rows * cols);
+            puzzlink_pu.drawBinary2Surface(pu, info_shade, 4);
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("linex");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ["rail pool"];
+            break;
         case "tatamibari":
             // Setup board
             pu = new Puzzle_square(cols, rows, size);
             setupProblem(pu, "combi");
 
             const tatamibari_map = { 1: 2, 2: 1, 3: 5 };
-            info_number = puzzlink_pu.decodeNumber4();   
+            info_number = puzzlink_pu.decodeNumber4();
             for (i in info_number) {
                 number = info_number[i];
                 row_ind = parseInt(i / cols);
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
-                
+
                 if (number === "?") {
                     pu["pu_q"].number[cell] = [number, 1, "1"];
                 } else {
@@ -3477,7 +3544,7 @@ function decode_puzzlink(url) {
 
             // Decode URL
             const voxas_map = { 2: 2, 3: 5, 4: 1 };
-            info_number = puzzlink_pu.decodeNumber4();            
+            info_number = puzzlink_pu.decodeNumber4();
             for (var i in info_number) {
                 info_number[i]++;
                 number = info_number[i];
