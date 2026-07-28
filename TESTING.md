@@ -561,6 +561,14 @@ This file is used to sync example URL data to a testing file named `./test/publi
 </details>
 
 <details>
+<summary>Kusabi</summary>
+
+* https://puzz.link/p?kusabi/7/7/1a11j3a1a2c2g1d3i1c
+* https://puzz.link/p?kusabi/12/12/b.c.e.a.a...a....a..c.b.a.b.b..b.a.a..c.a.a...a.a...e.a.e.c.a..a.....a.b.a.b.f.c.a.e.c.a..a.d..d.a
+
+</details>
+
+<details>
 <summary>Kropki</summary>
 
 * https://puzz.link/p?kropki/1/10/h3e

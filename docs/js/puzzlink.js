@@ -2017,7 +2017,7 @@ function decode_puzzlink(url) {
 
                 puzzlink_pu.addBorderForContinousPart(pu, row_ind, col_ind, type === "castle");
             }
-            
+
             if (type === "yajitatami") {
                 info_edge = puzzlink_pu.decodeBorder();
                 puzzlink_pu.drawBorder(pu, info_edge, 2);
@@ -3499,6 +3499,25 @@ function decode_puzzlink(url) {
             pu.subcombimode(type === "myopia" ? "edgesub" : "blpo");
             UserSettings.tab_settings = ["Surface", "Composite"];
             pu.user_tags = [type];
+            break;
+        case "kusabi":
+            pu = new Puzzle_square(cols, rows, size);
+            setupProblem(pu, "combi");
+
+            const kusabi_map = {1: "同", 2: "短", 3: "長", "?": ""};
+            info_number = puzzlink_pu.decodeNumber10();
+            for (var i in info_number) {
+                row_ind = parseInt(i / cols);
+                col_ind = i % cols;
+                cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
+                pu["pu_q"].number[cell] = [kusabi_map[info_number[i]] || "", 6, "1"];
+            }
+
+            pu.mode_qa("pu_a");
+            pu.mode_set("combi");
+            pu.subcombimode("edgesub");
+            UserSettings.tab_settings = ["Surface", "Composite"];
+            pu.user_tags = ["kusabi"];
             break;
         case "nagare":
             pu = new Puzzle_square(cols, rows, size);

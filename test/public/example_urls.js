@@ -238,6 +238,9 @@ const EXAMPLE_URLS = [
     // Koburin
     ["Koburin 1", "https://puzz.link/p?koburin/10/10/kdjbzichdu.paj.ldq"],
     ["Koburin 2", "https://puzz.link/p?koburin/b/15/15/...j.j...ai...k..lbj.j.kdk2.7.g...m.k.k.k.k.g..7.g1.7.g2..g.k.k.k.k.m...g.g...mci.j.lcj..k..bi1...j.j.../"],
+    // Kusabi
+    ["Kusabi 1", "https://puzz.link/p?kusabi/7/7/1a11j3a1a2c2g1d3i1c"],
+    ["Kusabi 2", "https://puzz.link/p?kusabi/12/12/b.c.e.a.a...a....a..c.b.a.b.b..b.a.a..c.a.a...a.a...e.a.e.c.a..a.....a.b.a.b.f.c.a.e.c.a..a.d..d.a"],
     // Kropki
     ["Kropki 1", "https://puzz.link/p?kropki/1/10/h3e"],
     ["Kropki 2", "https://puzz.link/p?kropki/10/1/h3e"],

@@ -119,6 +119,7 @@ const penpa_tags = {
             "kaitoramma",
             "koburin",
             "kropki",
+            "kusabi",
             "kurochute",
             "kuroclone",
             "kurodoko",
