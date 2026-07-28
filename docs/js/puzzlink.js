@@ -465,6 +465,11 @@ class Puzzlink {
         // Remove what was parsed
         this.gridurl = this.gridurl.substr(number_list.length / 3);
 
+        if (isFinite(max_length)) {
+            // reshape number_list to fit with board size
+            number_list = number_list.slice(0, max_length);
+        }
+
         return number_list;
     }
 
@@ -518,6 +523,11 @@ class Puzzlink {
         }
         // Remove what was parsed
         this.gridurl = this.gridurl.substr(number_list.length / 5);
+
+        if (isFinite(max_length)) {
+            // reshape number_list to fit with board size
+            number_list = number_list.slice(0, max_length);
+        }
 
         return number_list;
     }
@@ -3535,7 +3545,7 @@ function decode_puzzlink(url) {
                 col_ind = i % cols;
                 cell = pu.nx0 * (2 + row_ind) + 2 + col_ind;
 
-                if (info_number[i] !== 0 || i >= rows * cols) continue;
+                if (info_number[i] !== 0) continue;
                 pu["pu_q"].symbol[cell] = [4, "circle_M", 1];
             }
 
