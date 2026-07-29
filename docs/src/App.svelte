@@ -86,6 +86,10 @@
   let inputModesSection: HTMLElement;
   let desktopInputModesAnchor: HTMLElement;
   let mobileVariantSlot: HTMLElement;
+  let legacyMobileVariantSlot: HTMLElement;
+  let legacyModesSection: HTMLElement;
+  let desktopLegacyModesAnchor: HTMLElement;
+  let mobileMiscSlot: HTMLElement;
   let logHost: HTMLElement;
   let legacyControlsHost: HTMLElement;
   let variants: VariantOption[] = [];
@@ -96,6 +100,12 @@
   let zoom = 1;
   let variantMenuOpen = false;
   let inputVariantMenuOpen = false;
+  let mobileDeckView: "keypad" | "variants" | "misc" = "keypad";
+  let mobileVariantDrawerOpen = false;
+  let mobileVariantLabel = "Sudoku";
+  let mobileInputModeLabel = "Number";
+  let mobileVariantCount = 1;
+  let mobileInputModeCount = 1;
   let mobileControlsVisible = true;
   let studioModal:
     | "confirm-grid"
@@ -207,10 +217,6 @@
 
   function toggleMobilePanelPosition() {
     mobilePanelPosition = mobilePanelPosition === "above" ? "below" : "above";
-    window.localStorage.setItem(
-      "penpa-mobile-input-panel-position",
-      mobilePanelPosition,
-    );
     queueMicrotask(fitBoard);
   }
 
@@ -244,6 +250,96 @@
     noteMode = mode;
     (window as any).pu?.submode_check?.(`sub_sudoku${mode}`);
     queueMicrotask(syncState);
+  }
+
+  function useMobileDigit(value: string) {
+    applyToolPanelOption({ value, label: value });
+  }
+
+  function useMobileClear() {
+    applyToolPanelOption({ value: "delete", label: "Clear", action: "delete" });
+  }
+
+  function showMobileLayer(nextLayer: "problem" | "solution" | "modes") {
+    mobileDeckView = nextLayer === "modes" ? "misc" : "keypad";
+    mobileVariantDrawerOpen = false;
+    chooseLayer(nextLayer);
+  }
+
+  function toggleMobileVariants(showAddMenu = false) {
+    const shouldOpen =
+      !mobileVariantDrawerOpen ||
+      (showAddMenu && !inputVariantMenuOpen);
+    mobileVariantDrawerOpen = shouldOpen;
+    mobileDeckView = "keypad";
+    inputVariantMenuOpen = shouldOpen && showAddMenu;
+    queueMicrotask(fitBoard);
+  }
+
+  function activeMobileVariantGroups() {
+    return Array.from(
+      variantHost?.querySelectorAll<HTMLElement>(".sudoku-variant-group") || [],
+    ).filter((group) =>
+      group.querySelector<HTMLButtonElement>(".sudoku-variant-mode:not(:disabled)"),
+    );
+  }
+
+  function syncMobileToolSelection() {
+    const groups = activeMobileVariantGroups();
+    const activeButton = variantHost?.querySelector<HTMLButtonElement>(
+      ".sudoku-variant-mode.active",
+    );
+    const activeGroup = activeButton?.closest<HTMLElement>(".sudoku-variant-group");
+    const activeVariant =
+      activeGroup?.dataset.variant ||
+      activeButton?.dataset.variant ||
+      currentVariant ||
+      "classic";
+    const modes = activeGroup
+      ? Array.from(
+          activeGroup.querySelectorAll<HTMLButtonElement>(
+            ".sudoku-variant-mode:not(:disabled)",
+          ),
+        )
+      : [];
+    mobileVariantCount = groups.length || 1;
+    mobileInputModeCount = modes.length || 1;
+    mobileVariantLabel =
+      activeVariant === "classic"
+        ? "Sudoku"
+        : guideFor(activeVariant).title;
+    mobileInputModeLabel =
+      activeButton?.textContent?.trim() || toolPanelMode || "Number";
+  }
+
+  function cycleMobileVariant() {
+    const groups = activeMobileVariantGroups();
+    if (!groups.length) return;
+    const active = groups.findIndex((group) =>
+      Boolean(group.querySelector(".sudoku-variant-mode.active")),
+    );
+    const nextGroup = groups[(active + 1 + groups.length) % groups.length];
+    nextGroup
+      .querySelector<HTMLButtonElement>(".sudoku-variant-mode:not(:disabled)")
+      ?.click();
+    queueMicrotask(syncMobileToolSelection);
+  }
+
+  function cycleMobileInputMode() {
+    const active = variantHost?.querySelector<HTMLButtonElement>(
+      ".sudoku-variant-mode.active",
+    );
+    const group = active?.closest<HTMLElement>(".sudoku-variant-group");
+    if (!group) return;
+    const modes = Array.from(
+      group.querySelectorAll<HTMLButtonElement>(
+        ".sudoku-variant-mode:not(:disabled)",
+      ),
+    );
+    if (!modes.length) return;
+    const index = modes.indexOf(active!);
+    modes[(index + 1 + modes.length) % modes.length].click();
+    queueMicrotask(syncMobileToolSelection);
   }
 
   function syncToolPanel() {
@@ -524,6 +620,7 @@
       if (entry[1] === "triup_L") selected.add("trio-high");
     }
     toolPanelSelected = selected;
+    queueMicrotask(syncMobileToolSelection);
   }
 
   function applyToolPanelOption(option: ToolPanelOption) {
@@ -1688,27 +1785,24 @@
       new URLSearchParams(window.location.hash.replace(/^#/, "?")).has("embed") ||
       window.location.search.includes("embed") ||
       window.location.hash.includes("embed");
-    const savedPanelPosition = window.localStorage.getItem(
-      "penpa-mobile-input-panel-position",
-    );
-    if (savedPanelPosition === "above" || savedPanelPosition === "below") {
-      mobilePanelPosition = savedPanelPosition;
-    } else if (isEmbedded) {
-      mobilePanelPosition = "below";
-    }
     let observer: MutationObserver | undefined;
     let resizeObserver: ResizeObserver | undefined;
     const mobileLayout = window.matchMedia("(max-width: 768px)");
-    const placeInputModes = () => {
-      if (!inputModesSection) return;
-      if (mobileLayout.matches && mobileVariantSlot) {
+    const placeMobilePanels = () => {
+      const useMobileDeck = mobileLayout.matches || isEmbedded;
+      if (inputModesSection && useMobileDeck && mobileVariantSlot) {
         mobileVariantSlot.appendChild(inputModesSection);
       } else if (desktopInputModesAnchor?.parentElement) {
         desktopInputModesAnchor.after(inputModesSection);
       }
+      if (legacyModesSection && useMobileDeck && mobileMiscSlot) {
+        mobileMiscSlot.appendChild(legacyModesSection);
+      } else if (desktopLegacyModesAnchor?.parentElement) {
+        desktopLegacyModesAnchor.after(legacyModesSection);
+      }
     };
-    placeInputModes();
-    mobileLayout.addEventListener("change", placeInputModes);
+    placeMobilePanels();
+    mobileLayout.addEventListener("change", placeMobilePanels);
     let syncFrame = 0;
     const requestSync = () => {
       if (syncFrame) return;
@@ -1809,7 +1903,7 @@
       document.removeEventListener("pointerdown", closeVariantMenu);
       document.removeEventListener("pointerdown", clearConflictHighlights);
       document.removeEventListener("keydown", clearConflictHighlights);
-      mobileLayout.removeEventListener("change", placeInputModes);
+      mobileLayout.removeEventListener("change", placeMobilePanels);
     };
   });
 </script>
@@ -1831,7 +1925,152 @@
 >
   <ToastContainer {toasts} onDismiss={dismissToast} />
 
-  <div class="mobile-header" class:controls-hidden={!mobileControlsVisible}>
+  <section class="mobile-input-deck" aria-label="Puzzle inputs">
+    {#if !isEmbedded}
+      <div class="mobile-deck-tabs" role="tablist" aria-label="Input layer">
+        <button type="button" role="tab"
+          aria-selected={layer === "problem" && mobileDeckView !== "misc"}
+          class:active={layer === "problem" && mobileDeckView !== "misc"}
+          on:click={() => showMobileLayer("problem")}>Set</button>
+        <button type="button" role="tab"
+          aria-selected={layer === "solution" && mobileDeckView !== "misc"}
+          class:active={layer === "solution" && mobileDeckView !== "misc"}
+          on:click={() => showMobileLayer("solution")}>Solve</button>
+        <button type="button" role="tab"
+          aria-selected={mobileDeckView === "misc"}
+          class:active={mobileDeckView === "misc"}
+          on:click={() => showMobileLayer("modes")}>Misc</button>
+      </div>
+    {/if}
+
+    <div class:hidden-section={mobileDeckView !== "keypad"} class="mobile-keypad">
+      {#if !isEmbedded}
+        <button type="button" class="deck-action action-slot"
+          class:active={mobileActiveTab === "actions"}
+          aria-label="Penpa actions" title="Penpa actions"
+          on:click={() => (mobileActiveTab = mobileActiveTab === "actions" ? "none" : "actions")}
+        ><i class="fa fa-bars" aria-hidden="true"></i></button>
+      {/if}
+      <button type="button" class="deck-action auto-slot"
+        class:embedded-slot-1={isEmbedded} class:active={autoEnabled}
+        aria-label={autoEnabled ? "Disable auto solve" : "Enable auto solve"}
+        title="Auto solve" on:click={() => legacyClick("sudoku_auto_solver")}
+      ><i class="fa fa-refresh" aria-hidden="true"></i></button>
+      <button type="button" class="deck-action solve-slot"
+        class:embedded-slot-2={isEmbedded}
+        aria-label="Solve once" title="Solve once"
+        on:click={() => legacyClick("sudoku_solve_once")}
+      ><i class="fa fa-magic" aria-hidden="true"></i></button>
+      <button type="button" class="deck-action variants-slot"
+        class:embedded-slot-3={isEmbedded}
+        aria-label="Show variants" title="Show variants"
+        class:active={mobileVariantDrawerOpen && !inputVariantMenuOpen}
+        on:click={() => toggleMobileVariants(false)}
+      ><i class="fa fa-puzzle-piece" aria-hidden="true"></i></button>
+
+      {#if layer === "problem" && !isEmbedded}
+        {#each toolPanelOptions.slice(0, 12) as option, index}
+          <button
+            type="button"
+            class="variant-input-key"
+            class:selected={toolPanelSelected.has(option.value)}
+            class:panel-action={Boolean(option.action)}
+            style={`grid-column: ${(index % 3) + 2}; grid-row: ${Math.floor(index / 3) + 1}`}
+            aria-label={option.label}
+            title={option.label}
+            on:pointerdown={(event) => useToolPanelOption(event, option)}
+          >
+            {#if option.sym && option.num !== undefined}
+              <canvas
+                use:renderSymbol={{ sym: option.sym, num: option.num, darkTheme }}
+                class="symbol-canvas"
+              ></canvas>
+            {:else}
+              {option.label}
+            {/if}
+          </button>
+        {/each}
+        <button type="button" class="set-tool-key add-variant-key"
+          aria-label="Add variant" title="Add variant"
+          class:active={mobileVariantDrawerOpen && inputVariantMenuOpen}
+          on:click={() => toggleMobileVariants(true)}
+        ><i class="fa fa-plus" aria-hidden="true"></i></button>
+        <button type="button" class="set-tool-key current-variant-key"
+          aria-label={`Current variant: ${mobileVariantLabel}. Cycle variant`}
+          title={`Current variant: ${mobileVariantLabel}`}
+          on:click={cycleMobileVariant}>
+          <span>{mobileVariantLabel}</span>
+          {#if mobileVariantCount > 1}<i class="fa fa-refresh cycle-indicator" aria-hidden="true"></i>{/if}
+        </button>
+        <button type="button" class="set-tool-key current-mode-key"
+          aria-label={`Current input mode: ${mobileInputModeLabel}. Cycle input mode`}
+          title={`Current input mode: ${mobileInputModeLabel}`}
+          on:click={cycleMobileInputMode}>
+          <span>{mobileInputModeLabel}</span>
+          {#if mobileInputModeCount > 1}<i class="fa fa-refresh cycle-indicator" aria-hidden="true"></i>{/if}
+        </button>
+      {:else}
+        {#each ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as digit, index}
+          <button type="button" class="digit-key"
+            style={`grid-column: ${(index % 3) + 2}; grid-row: ${Math.floor(index / 3) + 1}`}
+            aria-label={`Enter ${digit}`}
+            on:pointerdown={(event) => {
+              event.preventDefault();
+              useMobileDigit(digit);
+            }}>{digit}</button>
+        {/each}
+        <button type="button" class="key-clear" aria-label="Clear selected cell"
+          title="Clear" on:pointerdown={(event) => {
+            event.preventDefault();
+            useMobileClear();
+          }}><i class="fa fa-times" aria-hidden="true"></i></button>
+        <button type="button" class="key-zero digit-key" aria-label="Enter 0"
+          on:pointerdown={(event) => {
+            event.preventDefault();
+            useMobileDigit("0");
+          }}>0</button>
+        <button type="button" class="key-undo" aria-label="Undo" title="Undo"
+          on:click={() => legacyClick("sudoku_undo")}
+        ><i class="fa fa-undo" aria-hidden="true"></i></button>
+
+        <button type="button" class="note-key note-normal"
+          class:active={noteMode === "1"} aria-label="Normal digit input"
+          title="Normal" on:click={() => chooseNoteMode("1")}
+        ><span class="note-icon"><b>1</b></span></button>
+        <button type="button" class="note-key note-center"
+          class:active={noteMode === "3"} aria-label="Center note input"
+          title="Center notes" on:click={() => chooseNoteMode("3")}
+        ><span class="note-icon"><small>23</small></span></button>
+        <button type="button" class="note-key note-corner"
+          class:active={noteMode === "2"} aria-label="Corner note input"
+          title="Corner notes" on:click={() => chooseNoteMode("2")}>
+          <span class="note-icon corner-numbers">
+            <small>4</small><small>5</small><small>6</small><small>7</small>
+          </span>
+        </button>
+      {/if}
+      <button type="button" class="note-key note-clear"
+        aria-label="Clear marks" title="Clear marks" on:click={clearMarks}
+      ><i class="fa fa-eraser" aria-hidden="true"></i></button>
+    </div>
+
+    <div class="mobile-deck-pane mobile-top-variant-drawer"
+      class:add-mode={inputVariantMenuOpen}
+      class:hidden-section={!mobileVariantDrawerOpen}
+      aria-label="Variant input modes">
+      <button type="button" class="deck-back" aria-label="Close variants"
+        on:click={() => (mobileVariantDrawerOpen = false)}
+      ><i class="fa fa-times" aria-hidden="true"></i></button>
+      <div bind:this={mobileVariantSlot} class="mobile-variant-slot"></div>
+    </div>
+    <div class="mobile-deck-pane"
+      class:hidden-section={mobileDeckView !== "misc"}
+      aria-label="Mode controls">
+      <div bind:this={mobileMiscSlot} class="mobile-misc-slot"></div>
+    </div>
+  </section>
+
+  <div class="mobile-header old-mobile-header" class:controls-hidden={!mobileControlsVisible}>
     <div class="mobile-visibility-row">
       <button
         type="button"
@@ -1911,7 +2150,7 @@
         </div>
       </div>
     {/if}
-      <div bind:this={mobileVariantSlot} class="mobile-variant-slot"></div>
+      <div bind:this={legacyMobileVariantSlot} class="mobile-variant-slot"></div>
     </div>
   </div>
   <main
@@ -2083,7 +2322,12 @@
           </section>
         {/if}
 
+        <div
+          bind:this={desktopLegacyModesAnchor}
+          class="desktop-legacy-modes-anchor"
+        ></div>
         <section
+          bind:this={legacyModesSection}
           class="legacy-modes-section"
           class:hidden-section={layer !== "modes"}
         >
@@ -3734,6 +3978,7 @@ href="https://github.com/semiexp/cspuz_core"
     border: 0 !important;
     background: transparent !important;
   }
+
   :global(.svelte-home .sudoku-variant-row button) {
     min-height: 18px !important;
     height: 18px !important;
@@ -5720,6 +5965,326 @@ href="https://github.com/semiexp/cspuz_core"
     }
     .studio-shell.hide-left-sidebar .studio-grid .column.controls {
       display: none !important;
+    }
+  }
+
+  /* Compact input deck shared by mobile and embedded layouts. */
+  .mobile-input-deck {
+    display: none;
+    flex-direction: column;
+    flex: 0 0 auto;
+    gap: 6px;
+    height: 217px;
+    width: calc(100% - 16px);
+    margin: 0 8px max(8px, env(safe-area-inset-bottom));
+    padding: 6px !important;
+    box-sizing: border-box;
+    border: 1px solid #344353 !important;
+    border-radius: 10px !important;
+    background: #202b36 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 31, 0.24) !important;
+    z-index: 101;
+  }
+  .old-mobile-header {
+    display: none !important;
+  }
+  .mobile-deck-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .mobile-deck-tabs button,
+  .mobile-input-deck .mobile-keypad > button,
+  .mobile-input-deck .deck-back {
+    min-width: 0;
+    min-height: 38px;
+    padding: 4px;
+    border: 1px solid #435467;
+    border-radius: 7px;
+    color: #d7e0e8;
+    background: #2a3744;
+    font-weight: 750;
+    touch-action: manipulation;
+  }
+  .mobile-deck-tabs button {
+    min-height: 30px;
+    font-size: 11px;
+  }
+  .mobile-deck-tabs button.active,
+  .mobile-input-deck .mobile-keypad > button.active {
+    color: #fff;
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+  }
+  .mobile-keypad {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(38px, 1fr));
+    gap: 5px;
+  }
+  .mobile-keypad > button {
+    font-size: 17px;
+  }
+  .mobile-keypad > .digit-key {
+    background: #334756;
+  }
+  .mobile-keypad > .digit-key:hover {
+    background: #3b5263;
+  }
+  .mobile-keypad .deck-action {
+    color: #9fd3f4;
+  }
+  .action-slot {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .auto-slot {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .solve-slot {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .variants-slot {
+    grid-column: 1;
+    grid-row: 4;
+  }
+  .auto-slot.embedded-slot-1 {
+    grid-row: 1;
+  }
+  .solve-slot.embedded-slot-2 {
+    grid-row: 2;
+  }
+  .variants-slot.embedded-slot-3 {
+    grid-row: 3;
+  }
+  .key-clear {
+    grid-column: 2;
+    grid-row: 4;
+  }
+  .key-zero {
+    grid-column: 3;
+    grid-row: 4;
+  }
+  .key-undo {
+    grid-column: 4;
+    grid-row: 4;
+  }
+  .note-normal {
+    grid-column: 5;
+    grid-row: 1;
+  }
+  .note-center {
+    grid-column: 5;
+    grid-row: 2;
+  }
+  .note-corner {
+    grid-column: 5;
+    grid-row: 3;
+  }
+  .note-clear {
+    grid-column: 5;
+    grid-row: 4;
+  }
+  .add-variant-key {
+    grid-column: 5;
+    grid-row: 1;
+  }
+  .current-variant-key {
+    grid-column: 5;
+    grid-row: 2;
+  }
+  .current-mode-key {
+    grid-column: 5;
+    grid-row: 3;
+  }
+  .set-tool-key {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    overflow: hidden;
+    font-size: 9px !important;
+    line-height: 1.05;
+    text-align: center;
+  }
+  .set-tool-key > span {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .set-tool-key .cycle-indicator {
+    flex: 0 0 auto;
+    color: #9fd3f4;
+    font-size: 8px;
+  }
+  .variant-input-key {
+    overflow: hidden;
+    font-size: 12px !important;
+  }
+  .variant-input-key.selected {
+    color: #fff !important;
+    border-color: var(--primary-color) !important;
+    background: var(--primary-color) !important;
+  }
+  .variant-input-key .symbol-canvas {
+    display: block;
+    margin: auto;
+  }
+  .note-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    box-sizing: border-box;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+  }
+  .note-icon b {
+    font-size: 17px;
+    line-height: 1;
+  }
+  .note-icon > small {
+    font-size: 9px;
+    line-height: 1;
+  }
+  .corner-numbers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    margin: auto;
+    font-size: 7px;
+    line-height: 1;
+  }
+  .corner-numbers small {
+    font-size: 7px;
+  }
+  .mobile-deck-pane {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    max-height: min(34vh, 260px);
+    overflow: auto;
+  }
+  .mobile-top-variant-drawer {
+    position: fixed;
+    top: max(8px, env(safe-area-inset-top));
+    right: 8px;
+    left: 8px;
+    max-height: min(48vh, 390px);
+    padding: 6px;
+    border: 1px solid #435467;
+    border-radius: 10px;
+    background: #202b36;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    z-index: 400;
+  }
+  .mobile-top-variant-drawer :global(.input-mode-variant-menu) {
+    position: static !important;
+    inset: auto !important;
+    max-height: none;
+    margin-top: 6px;
+    overflow: visible !important;
+  }
+  .mobile-top-variant-drawer.add-mode :global(.input-mode-tools) {
+    display: none;
+  }
+  .mobile-deck-pane .deck-back {
+    position: sticky;
+    top: 0;
+    float: left;
+    width: 32px;
+    min-height: 32px;
+    margin: 0 5px 5px 0;
+    z-index: 5;
+  }
+  .mobile-variant-slot,
+  .mobile-misc-slot {
+    min-width: 0;
+    width: 100%;
+  }
+  .desktop-legacy-modes-anchor {
+    display: none;
+  }
+  .mobile-input-deck :global(.input-modes-section),
+  .mobile-input-deck :global(.legacy-modes-section) {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 5px !important;
+    box-sizing: border-box;
+    border: 0 !important;
+    border-radius: 6px !important;
+    background: #263340 !important;
+    box-shadow: none !important;
+  }
+  .mobile-input-deck :global(.input-modes-heading) {
+    display: none;
+  }
+  .mobile-input-deck :global(.sudoku-variant-tools) {
+    overflow-x: hidden !important;
+  }
+  .mobile-input-deck :global(.legacy-modes-section) {
+    max-height: min(32vh, 250px);
+    color: #dce5ec;
+    overflow: auto;
+  }
+  .studio-shell.embedded {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .studio-shell.embedded .mobile-input-deck {
+    display: flex;
+    order: 2;
+    height: 190px;
+  }
+  .studio-shell.embedded .studio-grid {
+    display: flex !important;
+    flex: 1 1 auto;
+    order: 1;
+    min-height: 0;
+    padding: 0;
+  }
+  .studio-shell.embedded .studio-grid .column.controls,
+  .studio-shell.embedded .studio-grid .column.actions {
+    display: none !important;
+  }
+  .studio-shell.embedded .board-column {
+    flex: 1 1 auto;
+    width: calc(100% - 16px);
+    min-height: 0;
+    margin: 8px;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .studio-shell .mobile-input-deck {
+      display: flex;
+      order: 2;
+    }
+    .studio-shell .studio-grid {
+      order: 1;
+    }
+    .studio-shell .mobile-input-panel {
+      display: none !important;
+    }
+    .studio-shell .controls-top-drawer {
+      display: none !important;
+    }
+    .studio-shell .board-column {
+      order: 1;
+    }
+    .studio-shell .mobile-input-deck :global(.legacy-modes-section) {
+      display: flex;
+      height: 100%;
+      max-height: none;
     }
   }
 </style>
