@@ -181,7 +181,7 @@
   let toolPanelOptions: ToolPanelOption[] = [];
   let toolPanelSelected = new Set<string>();
   let slotColumns: boolean[] = [];
-  let mobilePanelPosition: "above" | "below" = "above";
+  let mobilePanelPosition: "above" | "below" = "below";
 
   const variantTabs: Array<{ value: VariantTab; label: string }> = [
     { value: "no-input", label: "No input" },
@@ -217,7 +217,15 @@
 
   function toggleMobilePanelPosition() {
     mobilePanelPosition = mobilePanelPosition === "above" ? "below" : "above";
-    queueMicrotask(fitBoard);
+    window.localStorage.setItem(
+      "penpa-mobile-input-panel-position",
+      mobilePanelPosition,
+    );
+    mobileActiveTab = "none";
+    window.requestAnimationFrame(() => {
+      fitBoard();
+      window.requestAnimationFrame(fitBoard);
+    });
   }
 
   function legacyPress(id: string) {
@@ -1785,6 +1793,13 @@
       new URLSearchParams(window.location.hash.replace(/^#/, "?")).has("embed") ||
       window.location.search.includes("embed") ||
       window.location.hash.includes("embed");
+    const savedPanelPosition = window.localStorage.getItem(
+      "penpa-mobile-input-panel-position",
+    );
+    mobilePanelPosition =
+      savedPanelPosition === "above" || savedPanelPosition === "below"
+        ? savedPanelPosition
+        : "below";
     let observer: MutationObserver | undefined;
     let resizeObserver: ResizeObserver | undefined;
     const mobileLayout = window.matchMedia("(max-width: 768px)");
@@ -1811,6 +1826,16 @@
         syncState();
       });
     };
+    const syncVariantModeClick = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (!target?.closest(".sudoku-variant-mode")) return;
+      queueMicrotask(() => {
+        syncState();
+        syncToolPanel();
+        syncMobileToolSelection();
+      });
+    };
+    variantHost.addEventListener("click", syncVariantModeClick);
     const syncDisplayTheme = (event: Event) => {
       const detail = (event as CustomEvent<{ dark: boolean }>).detail;
       darkTheme = Boolean(detail?.dark);
@@ -1904,6 +1929,7 @@
       document.removeEventListener("pointerdown", clearConflictHighlights);
       document.removeEventListener("keydown", clearConflictHighlights);
       mobileLayout.removeEventListener("change", placeMobilePanels);
+      variantHost.removeEventListener("click", syncVariantModeClick);
     };
   });
 </script>
@@ -1925,7 +1951,12 @@
 >
   <ToastContainer {toasts} onDismiss={dismissToast} />
 
-  <section class="mobile-input-deck" aria-label="Puzzle inputs">
+  <section
+    class="mobile-input-deck"
+    class:panel-top={mobilePanelPosition === "above"}
+    class:panel-bottom={mobilePanelPosition === "below"}
+    aria-label="Puzzle inputs"
+  >
     {#if !isEmbedded}
       <div class="mobile-deck-tabs" role="tablist" aria-label="Input layer">
         <button type="button" role="tab"
@@ -2732,6 +2763,18 @@
             >
           </div>
           <div class="action-group bottom-actions">
+            <button
+              class="mobile-panel-position-action"
+              on:click={toggleMobilePanelPosition}
+            >
+              <span
+                ><i
+                  class={`fa ${mobilePanelPosition === "below" ? "fa-arrow-up" : "fa-arrow-down"}`}
+                  aria-hidden="true"
+                ></i></span
+              >
+              Move inputs to {mobilePanelPosition === "below" ? "top" : "bottom"}
+            </button>
             {#if activeVariantHasExample}
               <button on:click={loadExample}><span><i class="fa fa-book" aria-hidden="true"></i></span>Load Example</button>
               {#if import.meta.env.DEV}
@@ -5985,6 +6028,9 @@ href="https://github.com/semiexp/cspuz_core"
     box-shadow: 0 2px 8px rgba(15, 23, 31, 0.24) !important;
     z-index: 101;
   }
+  .mobile-panel-position-action {
+    display: none !important;
+  }
   .old-mobile-header {
     display: none !important;
   }
@@ -6267,10 +6313,22 @@ href="https://github.com/semiexp/cspuz_core"
   @media (max-width: 768px) {
     .studio-shell .mobile-input-deck {
       display: flex;
+      flex-basis: 217px;
       order: 2;
+    }
+    .studio-shell:not(.embedded) .mobile-input-deck.panel-bottom {
+      order: 2;
+      margin: 0 8px max(8px, env(safe-area-inset-bottom));
+    }
+    .studio-shell:not(.embedded) .mobile-input-deck.panel-top {
+      order: 0;
+      margin: max(8px, env(safe-area-inset-top)) 8px 0;
     }
     .studio-shell .studio-grid {
       order: 1;
+    }
+    .studio-shell .penpa-actions .mobile-panel-position-action {
+      display: inline-flex !important;
     }
     .studio-shell .mobile-input-panel {
       display: none !important;
