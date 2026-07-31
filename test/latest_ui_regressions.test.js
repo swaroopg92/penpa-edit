@@ -8,6 +8,7 @@ const app = fs.readFileSync(path.join(root, "docs/src/App.svelte"), "utf8");
 const general = fs.readFileSync(path.join(root, "docs/js/general.js"), "utf8");
 const catalog = fs.readFileSync(path.join(root, "docs/src/variationCatalog.ts"), "utf8");
 const solver = fs.readFileSync(path.join(root, "docs/js/sudoku_solver.js"), "utf8");
+const solverModule = require("../docs/js/sudoku_solver.js");
 const legacyGeneral = fs.readFileSync(path.join(root, "docs/js/general.js"), "utf8");
 
 test("new-grid confirmation offers Cancel, Keep variants, and Classic actions", function() {
@@ -74,6 +75,16 @@ test("variant input types separate cages from surface shading", function() {
     assert.match(app, /value: "shading", label: "Shading"/);
     assert.match(app, /inputTypeIcons\[primaryVariantTab\(variant\)\]/);
     assert.doesNotMatch(app, /variantMetadata\.icons/);
+});
+
+test("Partitioned Sums uses cell clues with top and left outside layers", function() {
+    const metadata = JSON.parse(fs.readFileSync(path.join(root, "variant_metadata.json"), "utf8"));
+    const partitionedSums = metadata.variants.find((variant) => variant.id === "partitionedsums");
+
+    assert.deepEqual(partitionedSums.inputType.categories, ["cell"]);
+    assert.deepEqual(solverModule.outsideExpansionSides("partitionedsums"), ["top", "left"]);
+    assert.match(catalog, /variation\.value === "partitionedsums"[\s\S]*?add\("number", "1", 1/);
+    assert.match(app, /SudokuSolver\?\.outsideExpansionSides\?\.\(selectedVariant\)/);
 });
 
 test("mobile actions place Clear Mark after Undo and keep About and Save Example in a bottom row", function() {

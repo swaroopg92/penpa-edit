@@ -1698,7 +1698,8 @@ class Puzzle {
         // small-number mode as a cell selection reproduces the old XV bug:
         // Penpa starts the rectangular/multi-cell lifecycle before the edge is
         // available to key_number().
-        if (this.xv_mode || this.sudoku_edge_clue_mode || this.sudoku_corner_clue_mode) {
+        if (this.xv_mode || this.sudoku_edge_clue_mode || this.sudoku_corner_clue_mode ||
+            this.sudoku_midpoint_clue_mode) {
             return false;
         }
         return (edit_mode === "number" && !["2", "3", "9"].includes(submode)); // ignore arrow submode
@@ -8455,7 +8456,8 @@ class Puzzle {
     key_space(keypressed = 0, shift_key = false, ctrl_key = false) {
         if (this.mode[this.mode.qa].edit_mode === "number") {
             let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
-            let direct_clue = (this.xv_mode || this.sudoku_edge_clue_mode || this.sudoku_corner_clue_mode) &&
+            let direct_clue = (this.xv_mode || this.sudoku_edge_clue_mode || this.sudoku_corner_clue_mode ||
+                this.sudoku_midpoint_clue_mode) &&
                 this.cursol >= 0 && this.point[this.cursol];
             if (this.selection.length > 0 || direct_clue) {
                 if (this.selection.length === 1) {
@@ -8664,7 +8666,8 @@ class Puzzle {
         var number;
         if (this.mode[this.mode.qa].edit_mode === "number") {
             let submode = this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0];
-            let direct_clue = (this.xv_mode || this.sudoku_edge_clue_mode || this.sudoku_corner_clue_mode) &&
+            let direct_clue = (this.xv_mode || this.sudoku_edge_clue_mode || this.sudoku_corner_clue_mode ||
+                this.sudoku_midpoint_clue_mode) &&
                 this.cursol >= 0 && this.point[this.cursol];
             if (this.selection.length > 0 || direct_clue) {
                 if (this.selection.length === 1) {
@@ -8815,7 +8818,8 @@ class Puzzle {
             // Deal with starting a rectangular selection
             if (e !== null && (this.mouse_mode === "down_left" || this.mouse_mode === "down_right") &&
                 !(this.xv_mode && edit_mode === "number" && String(submode) === "5") &&
-                !this.sudoku_edge_clue_mode && !this.sudoku_corner_clue_mode)
+                !this.sudoku_edge_clue_mode && !this.sudoku_corner_clue_mode &&
+                !this.sudoku_midpoint_clue_mode)
                 this.handle_rect_mousedown(e, ctrl_key, num, obj);
 
             switch (edit_mode) {
@@ -13761,32 +13765,46 @@ class Puzzle {
         return output;
     }
 
+    trigger_solution_complete() {
+        let customMessage = document.getElementById("custom_message");
+        let message = customMessage ? customMessage.value : "";
+        message = DOMPurify.sanitize(message);
+        if (message == "" || message.includes("http-equiv=")) {
+            message = Identity.solveDefaultMessage;
+        }
+        setTimeout(() => {
+            Swal.fire({
+                title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
+                html: '<h2 class="wish">' + message + '</h2>',
+                background: 'url(js/images/new_year.jpg)',
+                icon: 'success',
+                confirmButtonText: Identity.solveOKButtonText,
+            })
+        }, 20);
+        sw_timer.pause();
+        this.sol_flag = 1;
+    }
+
     check_solution() {
+        if (this.mmode === "solve" && typeof SudokuSolver !== "undefined" &&
+            typeof SudokuSolver.checkCompletion === "function") {
+            let completion = SudokuSolver.checkCompletion(this);
+            if (completion.handled) {
+                if (completion.complete && this.sol_flag === 0) {
+                    this.trigger_solution_complete();
+                } else if (!completion.complete && this.sol_flag === 1) {
+                    this.sol_flag = 0;
+                }
+                return;
+            }
+        }
         if (!this.multisolution) {
             if (this.solution) {
                 var text = JSON.stringify(this.make_solution());
                 let conflict = this.check_conflict(text);
                 if (!conflict) {
                     if (text === this.solution && this.sol_flag === 0) {
-                        let message = document.getElementById("custom_message").value;
-                        message = DOMPurify.sanitize(message);
-                        if (message == "" || message.includes("http-equiv=")) {
-                            message = Identity.solveDefaultMessage;
-                        }
-                        setTimeout(() => {
-                            Swal.fire({
-                                title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
-                                html: '<h2 class="wish">' + message + '</h2>',
-                                background: 'url(js/images/new_year.jpg)',
-                                icon: 'success',
-                                confirmButtonText: Identity.solveOKButtonText,
-                                // timer: 5000
-                            })
-                        }, 20);
-                        sw_timer.pause();
-                        // this.mouse_mode = "out";
-                        // this.mouseevent(0, 0, 0);
-                        this.sol_flag = 1;
+                        this.trigger_solution_complete();
                         // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                         // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                     } else if (text != this.solution && this.sol_flag === 1) { // If the answer changes, check again
@@ -13805,22 +13823,7 @@ class Puzzle {
                     for (var j = 0; j < text.length; j++) {
                         let user_sol = JSON.stringify(text[j]);
                         if (user_sol === author_sol && this.sol_flag === 0) {
-                            let message = document.getElementById("custom_message").value;
-                            message = DOMPurify.sanitize(message);
-                            if (message == "" || message.includes("http-equiv=")) {
-                                message = Identity.solveDefaultMessage;
-                            }
-                            setTimeout(() => {
-                                Swal.fire({
-                                    title: Identity.solveTitle ? '<h3 class="wish">' + Identity.solveTitle + '</h3>' : undefined,
-                                    html: '<h2 class="wish">' + message + '</h2>',
-                                    background: 'url(js/images/new_year.jpg)',
-                                    icon: 'success',
-                                    confirmButtonText: Identity.solveOKButtonText,
-                                })
-                            }, 20);
-                            sw_timer.pause();
-                            this.sol_flag = 1;
+                            this.trigger_solution_complete();
                             // document.getElementById("pu_a_label").innerHTML = "Correct Solution";
                             // document.getElementById("pu_a_label").style.backgroundColor = Color.GREEN_LIGHT_VERY;
                             i = this.solution.length; // to break the outer for loop

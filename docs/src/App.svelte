@@ -878,25 +878,9 @@
     variantSearch = "";
     if (
       select.value === selectedVariant &&
-      (["little killer", "sandwich", "skyscraper", "mastermind"].includes(selectedVariant) ||
+      (["little killer", "sandwich", "skyscraper", "mastermind", "partitionedsums"].includes(selectedVariant) ||
         outsideVariationValues.has(selectedVariant))
     ) {
-      const leftTopOnly = [
-        "sandwich",
-        "edgedifference",
-        "evensandwich",
-        "oddsandwich",
-        "before9",
-        "before1after9",
-        "nextto9",
-        "outsideconsecutive",
-        "outsidekiller",
-        "parityskyscrapers",
-        "positionsums",
-        "japanesesums",
-        "oddsums",
-        "bigsmalljapanesesums",
-      ].includes(selectedVariant);
       let layers = [
         "outside",
         "outside234",
@@ -909,14 +893,16 @@
       if (selectedVariant === "before1after9") layers = 2;
       if (selectedVariant === "positionsums") layers = 2;
       if (["bigsmalljapanesesums", "japanesesums", "partitionedsums"].includes(selectedVariant)) layers = 5;
-      ensureOutsideSpace(
-        layers,
-        selectedVariant === "triplesum"
-          ? [2]
-          : leftTopOnly
-            ? [0, 2]
-            : [0, 1, 2, 3],
-      );
+      const sideIndex: Record<string, number> = {
+        top: 0,
+        bottom: 1,
+        left: 2,
+        right: 3,
+      };
+      const expansionSides =
+        (window as any).SudokuSolver?.outsideExpansionSides?.(selectedVariant) ||
+        ["top", "bottom", "left", "right"];
+      ensureOutsideSpace(layers, expansionSides.map((side: string) => sideIndex[side]));
     }
   }
 
@@ -1663,7 +1649,7 @@
           // Never expose the internal option value as the menu label. The
           // catalog is backed directly by variant_metadata.json's `name` field.
           label:
-            variationByValue.get(option.value)?.name ||
+            guideFor(option.value).title ||
             option.textContent ||
             "Unnamed variant",
           group:
@@ -3757,14 +3743,6 @@ href="https://github.com/semiexp/cspuz_core"
     align-content: start;
     gap: 8px;
   }
-  .tool-help > div + div {
-    display: flex;
-    flex: 1;
-    min-height: 0;
-    flex-direction: column;
-    padding-top: 8px;
-    border-top: 1px solid #e2e7eb;
-  }
   .tool-help .help-label {
     display: block;
     margin-bottom: 5px;
@@ -4307,7 +4285,7 @@ href="https://github.com/semiexp/cspuz_core"
     border-radius: 5px !important;
     font-size: 11px !important;
   }
-  :global(body.sudoku-solver-running) .board-host #puzzle-container {
+  :global(body.sudoku-solver-running) .board-host :global(#puzzle-container) {
     pointer-events: none;
     cursor: progress;
   }
@@ -4896,26 +4874,6 @@ href="https://github.com/semiexp/cspuz_core"
     color: #263443;
     background: #fff;
   }
-  .choice-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .choice-group.three {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .choice-group button {
-    min-height: 36px;
-    border: 1px solid #bdc8d3;
-    border-right: 0;
-    background: #f7f9fb;
-  }
-  .choice-group button:first-child {
-    border-radius: 6px 0 0 6px;
-  }
-  .choice-group button:last-child {
-    border-right: 1px solid #bdc8d3;
-    border-radius: 0 6px 6px 0;
-  }
   .screenshot-row {
     display: flex;
     align-items: center;
@@ -5147,9 +5105,6 @@ href="https://github.com/semiexp/cspuz_core"
   }
   .studio-shell.dark .tool-help p {
     color: #bac6cf;
-  }
-  .studio-shell.dark .tool-help > div + div {
-    border-color: #40505f;
   }
   .studio-shell.dark .modes-heading button,
   .studio-shell.dark .tool-input-panel button {
@@ -5687,9 +5642,6 @@ href="https://github.com/semiexp/cspuz_core"
       height: 26px;
       padding: 3px 4px;
     }
-    .studio-shell .controls-top-drawer .note-modes span {
-      display: none;
-    }
     .studio-shell.dark .mobile-input-panel-header button {
       color: #dce5ec;
       border-color: #536473;
@@ -5718,24 +5670,6 @@ href="https://github.com/semiexp/cspuz_core"
       background: var(--primary-color);
       color: #fff;
       border-color: var(--primary-color);
-    }
-    .studio-shell .reviewed-checkbox {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: #9ab0c2;
-      cursor: pointer;
-      user-select: none;
-      padding: 4px 6px;
-      background: #1a242f;
-      border: 1px solid #344353;
-      border-radius: 6px;
-    }
-    .studio-shell .reviewed-checkbox input[type="checkbox"] {
-      cursor: pointer;
-      accent-color: var(--primary-color);
-      margin: 0;
     }
     .studio-shell .mobile-header-row.solver-row {
       display: flex;

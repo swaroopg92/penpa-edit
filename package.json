@@ -1,20 +1,22 @@
 {
   "name": "penpa-tests",
   "scripts": {
+    "build:csp-variants": "node scripts/build-sudoku-csp-variants.mjs",
+    "predev": "npm run build:csp-variants",
     "dev": "vite",
+    "prebuild": "npm run build:csp-variants",
     "build": "vite build && node scripts/copy-static-assets.mjs",
     "preview": "vite preview",
     "test:solver": "node --test test/sudoku_solver.test.js",
     "test": "nodemon --watch test/test_server.js test/test_server.js",
-    "local": "npx browser-sync start --server"
+    "prelocal": "npm run build:csp-variants",
+    "local": "vite --host 127.0.0.1"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
-    "browser-sync": "^2.29.3",
     "chai": "^4.5.0",
     "express": "^4.21.2",
-    "mocha": "^10.8.2",
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.1.14",
     "playwright": "^1.61.1",
     "svelte": "^5.56.4",
     "typescript": "^7.0.2",

@@ -14,6 +14,7 @@ type RawVariation = {
     reviewed?: boolean;
     otherNames?: string;
     wikiOnly?: boolean;
+    gridSizeReplacesNine?: boolean;
 };
 
 type VariantMetadata = {
@@ -155,6 +156,10 @@ function genericSetting(variation: Variation) {
     if (variation.value === "sudokuwithstars") {
         add("number", "1", 1, ["mo_number_lb", "sub_number1_lb"]);
         add("symbol", "star", 2, ["mo_symbol_lb", "ms4", "li_star", "ms_star"]);
+        return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
+    }
+    if (variation.value === "partitionedsums") {
+        add("number", "1", 1, ["mo_number_lb", "sub_number1_lb"]);
         return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
     }
     if (variation.inputType.categories.includes("no-input")) {

@@ -1,5 +1,8 @@
 const assert = require("node:assert/strict");
+const workerFs = require("node:fs");
+const workerPath = require("node:path");
 const test = require("node:test");
+const workerVm = require("node:vm");
 
 const SudokuCSP = require("../docs/js/sudoku_csp.js");
 const SudokuSolver = require("../docs/js/sudoku_solver.js");
@@ -120,6 +123,10 @@ test("Odd Even Sum reads O/E killer labels and checks the cage sum parity", func
 
 test("caps each automatic CSP analysis run at 60 seconds", function() {
     assert.equal(SudokuSolver.AUTO_RUN_LIMIT_MS, 60000);
+});
+
+test("draws automatic CSP marks with Penpa's green font style", function() {
+    assert.equal(SudokuSolver.AUTO_MARK_FONT_STYLE, 2);
 });
 
 test("Tinder requires exactly one repeated pair, not a triple", function() {
@@ -293,8 +300,55 @@ test("applies a solution to a legacy puzzle mode without Sudoku settings", funct
     const changed = SudokuSolver.applySolution(puzzle, solution);
 
     assert.equal(changed, 81);
+    assert.equal(puzzle.mode.qa, "pu_a", "Solve Once leaves Penpa in Solution mode for share links");
     assert.deepEqual(puzzle.mode.pu_a.sudoku, ["1", 9]);
     assert.deepEqual(puzzle.pu_a.number[28], ["5", 9, "1"]);
+});
+
+test("CSP completion status validates a full supported grid without an encoded answer", function() {
+    const solved = boardFromString(
+        "534678912" +
+        "672195348" +
+        "198342567" +
+        "859761423" +
+        "426853791" +
+        "713924856" +
+        "961537284" +
+        "287419635" +
+        "345286179"
+    );
+    const solutionEntries = Object.fromEntries(solved.flatMap(function(row, rowIndex) {
+        return row.map(function(digit, colIndex) {
+            return [(rowIndex + 2) * 13 + colIndex + 2, [String(digit), 9, "1"]];
+        });
+    }));
+    const puzzle = variantPuzzle("classic");
+    puzzle.gridtype = "sudoku";
+    puzzle.activeSudokuVariants = ["classic"];
+    puzzle.mode = { qa: "pu_a" };
+    puzzle.pu_q.number[28] = [solutionEntries[28][0], 1, "1"];
+    delete solutionEntries[28];
+    puzzle.pu_a = { number: solutionEntries };
+
+    assert.deepEqual(SudokuSolver.checkCompletion(puzzle), {
+        handled: true,
+        complete: true,
+        conflict: null
+    });
+
+    puzzle.pu_a.number[29] = ["5", 9, "1"];
+    const invalid = SudokuSolver.checkCompletion(puzzle);
+    assert.equal(invalid.handled, true);
+    assert.equal(invalid.complete, false);
+    assert.equal(invalid.conflict.kind, "duplicate");
+
+    puzzle.pu_a.number[29] = ["3", 9, "1"];
+    delete puzzle.pu_q.number[28];
+    assert.deepEqual(SudokuSolver.checkCompletion(puzzle), {
+        handled: true,
+        complete: false,
+        conflict: null
+    });
 });
 
 test("rejects conflicting givens", function() {
@@ -742,7 +796,7 @@ test("counts Skyscraper visibility from an outside clue", function() {
     assert.equal(SudokuSolver.solve(solved, { skyscrapers: [{ clue: 1, cells: cells }] }).solved, false);
 });
 
-test("sums digits strictly between 1 and 6 for Sandwich clues", function() {
+test("sums digits strictly between 1 and the grid-size digit for Sandwich clues", function() {
     const solved = boardFromString(
         "123456789456789123789123456" +
         "234567891567891234891234567" +
@@ -751,9 +805,9 @@ test("sums digits strictly between 1 and 6 for Sandwich clues", function() {
     const firstRow = Array.from({ length: 9 }, function(_, col) { return { row: 0, col: col }; });
     const secondRow = Array.from({ length: 9 }, function(_, col) { return { row: 1, col: col }; });
 
-    assert.equal(SudokuSolver.solve(solved, { sandwiches: [{ clue: 14, cells: firstRow }] }).solved, true);
-    assert.equal(SudokuSolver.solve(solved, { sandwiches: [{ clue: 24, cells: secondRow }] }).solved, true);
-    assert.equal(SudokuSolver.solve(solved, { sandwiches: [{ clue: 13, cells: firstRow }] }).solved, false);
+    assert.equal(SudokuSolver.solve(solved, { sandwiches: [{ clue: 35, cells: firstRow }] }).solved, true);
+    assert.equal(SudokuSolver.solve(solved, { sandwiches: [{ clue: 0, cells: secondRow }] }).solved, true);
+    assert.equal(SudokuSolver.solve(solved, { sandwiches: [{ clue: 34, cells: firstRow }] }).solved, false);
 });
 
 test("reads a zero-valued Sandwich clue from an expanded margin", function() {
@@ -888,6 +942,22 @@ test("non-consecutive rejects consecutive orthogonal neighbors", function() {
     assert.equal(result.solved, false);
 });
 
+test("knightmare and pirate cells reject their forbidden digit pairs", function() {
+    const knightBoard = emptyBoard();
+    knightBoard[0][1] = 2;
+    knightBoard[1][3] = 3;
+    assert.equal(SudokuCSP.findConflict(knightBoard, {
+        knightmare: [[{ row: 0, col: 1 }, { row: 1, col: 3 }]]
+    })?.constraint, "knightmare");
+
+    const pirateBoard = emptyBoard();
+    pirateBoard[0][0] = 5;
+    pirateBoard[0][1] = 6;
+    assert.equal(SudokuCSP.findConflict(pirateBoard, {
+        pirateCells: [[{ row: 0, col: 0 }, { row: 0, col: 1 }]]
+    })?.constraint, "pirateCells");
+});
+
 test("catalog global constraints cover diagonal, parity, queen, and touch rules", function() {
     const diagonalPair = [[{ row: 0, col: 0 }, { row: 1, col: 1 }]];
     let board = emptyBoard();
@@ -935,6 +1005,44 @@ test("catalog edge relations enforce arithmetic and parity clues", function() {
     }).solved, false);
 });
 
+test("extracted edge relations retain negative and catalog-only rules", function() {
+    const cells = [{ row: 0, col: 0 }, { row: 0, col: 1 }];
+    [
+        { values: [2, 3], relation: "notFives" },
+        { values: [1, 9], relation: "notTermination" },
+        { values: [2, 5], relation: "lesser", target: 1 },
+        { values: [2, 5], relation: "sumnine" },
+        { values: [4, 5], relation: "notSumnine" },
+        { values: [4, 6], relation: "primesums" },
+        { values: [2, 3], relation: "notPrimesums" },
+        { values: [2, 4], relation: "twodigitprimenumbers" },
+        { values: [2, 3], relation: "notTwodigitprimenumbers" }
+    ].forEach(function(testCase) {
+        const board = emptyBoard();
+        board[0][0] = testCase.values[0];
+        board[0][1] = testCase.values[1];
+        assert.equal(SudokuCSP.findConflict(board, {
+            edgeRelations: [{
+                cells,
+                relation: testCase.relation,
+                target: testCase.target
+            }]
+        })?.constraint, "edgeRelations", testCase.relation);
+    });
+
+    const xyBoard = emptyBoard();
+    xyBoard[0][0] = 2;
+    xyBoard[0][1] = 5;
+    xyBoard[1][0] = 3;
+    assert.equal(SudokuCSP.findConflict(xyBoard, {
+        edgeRelations: [{
+            cells,
+            relation: "notXydifference",
+            reference: { row: 1, col: 0 }
+        }]
+    })?.constraint, "edgeRelations");
+});
+
 test("catalog line and four-cell relations enforce their shared CSP families", function() {
     const line = [{ row: 0, col: 0 }, { row: 1, col: 2 }, { row: 2, col: 4 }];
     let board = emptyBoard();
@@ -966,6 +1074,79 @@ test("catalog line and four-cell relations enforce their shared CSP families", f
     assert.equal(SudokuSolver.solve(board, {
         quadRelations: [{ cells: cells, relation: "equalproducts" }]
     }).solved, false);
+});
+
+test("extracted catalog lines retain complete-board validation", function() {
+    const solved = boardFromString(
+        "534678912" + "672195348" + "198342567" +
+        "859761423" + "426853791" + "713924856" +
+        "961537284" + "287419635" + "345286179"
+    );
+    assert.equal(SudokuCSP.solve(solved, {
+        catalogLines: [{
+            relation: "sequence",
+            path: [{ row: 0, col: 0 }, { row: 0, col: 3 }, { row: 0, col: 4 }]
+        }]
+    }).solved, true);
+    assert.equal(SudokuCSP.solve(solved, {
+        catalogLines: [{
+            relation: "sequence",
+            path: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }]
+        }]
+    }).solved, false);
+    assert.equal(SudokuCSP.solve(solved, {
+        catalogLines: [{
+            relation: "renban",
+            path: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }]
+        }]
+    }).solved, true);
+});
+
+test("extracted catalog and quad families retain less common relations", function() {
+    const trioCells = [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 0 }];
+    let board = emptyBoard();
+    board[0][0] = 1;
+    board[0][1] = 2;
+    board[1][0] = 7;
+    assert.equal(SudokuCSP.findConflict(board, {
+        catalogLines: [{ relation: "24trio", path: trioCells }]
+    })?.constraint, "catalogLines");
+
+    const quadCells = [
+        { row: 0, col: 0 }, { row: 0, col: 1 },
+        { row: 1, col: 0 }, { row: 1, col: 1 }
+    ];
+    function quadConflict(values, clue) {
+        const quadBoard = emptyBoard();
+        quadBoard[0][0] = values[0];
+        quadBoard[0][1] = values[1];
+        quadBoard[1][0] = values[2];
+        quadBoard[1][1] = values[3];
+        return SudokuCSP.findConflict(quadBoard, {
+            quadRelations: [Object.assign({ cells: quadCells }, clue)]
+        });
+    }
+
+    assert.equal(quadConflict([1, 3, 5, 7], { relation: "quadro" })?.constraint,
+        "quadRelations");
+    assert.equal(quadConflict([1, 2, 3, 4], {
+        relation: "quadruple", digits: [9]
+    })?.constraint, "quadRelations");
+    assert.equal(quadConflict([1, 2, 3, 4], {
+        relation: "mathrax", text: "5+"
+    }), null);
+    assert.equal(quadConflict([1, 2, 3, 4], {
+        relation: "mathrax", text: "4+"
+    })?.constraint, "quadRelations");
+    assert.equal(quadConflict([1, 2, 4, 3], {
+        relation: "equaldifferences"
+    }), null);
+    assert.equal(quadConflict([1, 2, 6, 3], {
+        relation: "equalratios"
+    }), null);
+    assert.equal(quadConflict([1, 3, 5, 7], {
+        relation: "consecutivequads", kind: "white"
+    })?.constraint, "quadRelations");
 });
 
 test("limits candidates using white and black Kropki dots", function() {
@@ -1705,6 +1886,18 @@ test("validates all directional shape relations", function() {
     assert.equal(accepted({ relation: "search9", origin: { row: 0, col: 0 }, searchDigit: 9,
         rays: [[{ row: 0, col: 1 }, { row: 0, col: 2 }, { row: 0, col: 3 }, { row: 0, col: 4 },
             { row: 0, col: 5 }, { row: 0, col: 6 }]] }), false);
+    assert.equal(accepted({ relation: "sumdetector", origin: { row: 0, col: 0 },
+        rays: [[{ row: 0, col: 1 }, { row: 0, col: 8 }]] }), true);
+    assert.equal(accepted({ relation: "sumdetector", origin: { row: 0, col: 0 },
+        rays: [[{ row: 0, col: 1 }, { row: 0, col: 2 }]] }), false);
+    assert.equal(accepted({ relation: "detection", origin: { row: 0, col: 0 },
+        rays: [[{ row: 1, col: 5 }]],
+        allDiagonalRays: [[{ row: 1, col: 5 }]]
+    }), true);
+    assert.equal(accepted({ relation: "detection", origin: { row: 0, col: 0 },
+        rays: [],
+        allDiagonalRays: [[{ row: 1, col: 5 }]]
+    }), false);
 });
 
 test("validates coded, pencilmark, cage, thermo, symmetry, and outside catalog variants", function() {
@@ -2666,6 +2859,324 @@ test("supports registering new CSP constraint handlers", function() {
 
     assert.equal(SudokuCSP.registeredConstraints().includes("testAllowedDigits"), true);
     assert.deepEqual(result.candidates[0][0], [2, 4]);
+});
+
+test("Partitioned Sums reads normal-number clues only from top and left layers", function() {
+    const constraints = SudokuSolver.readConstraints({
+        nx: 14,
+        ny: 14,
+        nx0: 18,
+        ny0: 18,
+        space: [5, 0, 5, 0],
+        activeSudokuVariants: ["classic", "partitionedsums"],
+        point: {},
+        pu_q: {
+            number: {
+                115: ["12", 1, "1"], // top of column 1
+                132: ["15", 1, "1"], // left of row 1
+                295: ["99", 1, "1"], // bottom: must be ignored
+                142: ["98", 1, "1"]  // right: must be ignored
+            },
+            numberS: {},
+            symbol: {},
+            surface: {},
+            killercages: []
+        }
+    });
+
+    assert.deepEqual(constraints.outsideRelations.map(function(clue) {
+        return { axis: clue.axis, value: clue.value };
+    }), [
+        { axis: "column", value: [12] },
+        { axis: "row", value: [15] }
+    ]);
+});
+
+test("late constraint registration invalidates compiled evaluators", function() {
+    const solved = boardFromString(
+        "534678912" + "672195348" + "198342567" +
+        "859761423" + "426853791" + "713924856" +
+        "961537284" + "287419635" + "345286179"
+    );
+    const constraints = { testLateRegistration: [true] };
+
+    assert.equal(SudokuCSP.solve(solved, constraints).solved, true);
+    SudokuCSP.registerConstraint("testLateRegistration", {
+        validatePartial: function() {
+            return false;
+        }
+    });
+    assert.equal(SudokuCSP.solve(solved, constraints).solved, false);
+});
+
+test("solver and generator workers load extracted variant handlers", function() {
+    const workerDirectory = workerPath.join(__dirname, "..", "docs", "js");
+
+    function loadWorker(filename) {
+        const messages = [];
+        const context = workerVm.createContext({
+            self: {
+                postMessage: function(message) {
+                    messages.push(message);
+                }
+            },
+            importScripts: function() {
+                Array.from(arguments).forEach(function(source) {
+                    const script = workerFs.readFileSync(
+                        workerPath.join(workerDirectory, source),
+                        "utf8"
+                    );
+                    workerVm.runInContext(script, context, { filename: source });
+                });
+            }
+        });
+        workerVm.runInContext(
+            workerFs.readFileSync(workerPath.join(workerDirectory, filename), "utf8"),
+            context,
+            { filename: filename }
+        );
+        return { context, messages };
+    }
+
+    const solverWorker = loadWorker("sudoku_solver_worker.js");
+    const generatorWorker = loadWorker("sudoku_generator_worker.js");
+    assert.equal(solverWorker.context.SudokuCSP.registeredConstraints().includes("antiKing"), true);
+    assert.equal(generatorWorker.context.SudokuCSP.registeredConstraints().includes("antiKnight"), true);
+    ["upperrightheavykiller", "regionAllDifferent", "palindromes"].forEach(function(name) {
+        assert.equal(solverWorker.context.SudokuCSP.registeredConstraints().includes(name), true);
+        assert.equal(generatorWorker.context.SudokuCSP.registeredConstraints().includes(name), true);
+    });
+
+    const board = emptyBoard();
+    board[2][2] = 5;
+    board[3][3] = 5;
+    solverWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board,
+            constraints: {
+                antiKing: [[{ row: 2, col: 2 }, { row: 3, col: 3 }]]
+            }
+        }
+    });
+    assert.equal(solverWorker.messages[0].result.solved, false);
+    assert.equal(solverWorker.messages[0].result.conflict.constraint, "antiKing");
+
+    const knightWorker = loadWorker("sudoku_solver_worker.js");
+    const knightBoard = emptyBoard();
+    knightBoard[0][1] = 6;
+    knightBoard[1][3] = 6;
+    knightWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: knightBoard,
+            constraints: {
+                antiKnight: [[{ row: 0, col: 1 }, { row: 1, col: 3 }]]
+            }
+        }
+    });
+    assert.equal(knightWorker.messages[0].result.solved, false);
+    assert.equal(knightWorker.messages[0].result.conflict.constraint, "antiKnight");
+
+    const edgeWorker = loadWorker("sudoku_solver_worker.js");
+    const edgeBoard = emptyBoard();
+    edgeBoard[0][0] = 1;
+    edgeBoard[0][1] = 2;
+    edgeWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: edgeBoard,
+            constraints: {
+                edgeRelations: [{
+                    cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }],
+                    relation: "sum",
+                    target: 9
+                }]
+            }
+        }
+    });
+    assert.equal(edgeWorker.messages[0].result.solved, false);
+    assert.equal(edgeWorker.messages[0].result.conflict.constraint, "edgeRelations");
+
+    const directionalWorker = loadWorker("sudoku_solver_worker.js");
+    const directionalBoard = emptyBoard();
+    directionalBoard[0][0] = 5;
+    directionalBoard[0][1] = 3;
+    directionalWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: directionalBoard,
+            constraints: {
+                directionalMarks: [{
+                    relation: "pointtonext",
+                    origin: { row: 0, col: 0 },
+                    targets: [{ row: 0, col: 1 }]
+                }]
+            }
+        }
+    });
+    assert.equal(directionalWorker.messages[0].result.solved, false);
+    assert.equal(directionalWorker.messages[0].result.conflict.constraint, "directionalMarks");
+
+    const catalogWorker = loadWorker("sudoku_solver_worker.js");
+    const catalogBoard = boardFromString(
+        "534678912" + "672195348" + "198342567" +
+        "859761423" + "426853791" + "713924856" +
+        "961537284" + "287419635" + "345286179"
+    );
+    catalogWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: catalogBoard,
+            constraints: {
+                catalogLines: [{
+                    relation: "sequence",
+                    path: [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }]
+                }]
+            }
+        }
+    });
+    assert.equal(catalogWorker.messages[0].result.solved, false);
+    assert.equal(catalogWorker.context.SudokuCSP.registeredConstraints().includes("catalogLines"), true);
+
+    const quadWorker = loadWorker("sudoku_solver_worker.js");
+    const quadBoard = emptyBoard();
+    quadBoard[0][0] = 1;
+    quadBoard[0][1] = 2;
+    quadBoard[1][0] = 4;
+    quadBoard[1][1] = 3;
+    quadWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: quadBoard,
+            constraints: {
+                quadRelations: [{
+                    relation: "equalsums",
+                    cells: [
+                        { row: 0, col: 0 }, { row: 0, col: 1 },
+                        { row: 1, col: 0 }, { row: 1, col: 1 }
+                    ]
+                }]
+            }
+        }
+    });
+    assert.equal(quadWorker.messages[0].result.solved, false);
+    assert.equal(quadWorker.messages[0].result.conflict.constraint, "quadRelations");
+
+    const outsideWorker = loadWorker("sudoku_solver_worker.js");
+    outsideWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: catalogBoard,
+            constraints: {
+                outsideRelations: [{
+                    relation: "before9",
+                    value: 34,
+                    cells: Array.from({ length: 9 }, function(_, col) {
+                        return { row: 0, col };
+                    })
+                }]
+            }
+        }
+    });
+    assert.equal(outsideWorker.messages[0].result.solved, false);
+    assert.equal(outsideWorker.messages[0].result.conflict.constraint, "outsideRelations");
+
+    const cageWorker = loadWorker("sudoku_solver_worker.js");
+    const cageBoard = emptyBoard();
+    cageBoard[1][0] = 4;
+    cageBoard[0][1] = 6;
+    cageWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: cageBoard,
+            constraints: { upperrightheavykiller: [{ "1,0": 11 }] }
+        }
+    });
+    assert.equal(cageWorker.messages[0].result.solved, false);
+    assert.equal(cageWorker.messages[0].result.conflict.constraint, "upperrightheavykiller");
+
+    const regionWorker = loadWorker("sudoku_solver_worker.js");
+    const regionBoard = emptyBoard();
+    regionBoard[0][0] = 1;
+    regionBoard[4][4] = 2;
+    regionWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: regionBoard,
+            constraints: {
+                shadedParityGroups: [[{ row: 0, col: 0 }, { row: 4, col: 4 }]]
+            }
+        }
+    });
+    assert.equal(regionWorker.messages[0].result.solved, false);
+    assert.equal(regionWorker.messages[0].result.conflict.constraint, "shadedParityGroups");
+
+    const lineWorker = loadWorker("sudoku_solver_worker.js");
+    const lineBoard = emptyBoard();
+    lineBoard[0][0] = 1;
+    lineBoard[4][4] = 2;
+    lineWorker.context.self.onmessage({
+        data: {
+            type: "solve",
+            board: lineBoard,
+            constraints: {
+                palindromes: [[{ row: 0, col: 0 }, { row: 4, col: 4 }]]
+            }
+        }
+    });
+    assert.equal(lineWorker.messages[0].result.solved, false);
+    assert.equal(lineWorker.messages[0].result.conflict.constraint, "palindromes");
+});
+
+test("loads extracted CSP variant modules through the public registry seam", function() {
+    [
+        "antiKing",
+        "antiKnight",
+        "chessKings",
+        "knightmare",
+        "disparity",
+        "nonConsecutive",
+        "diagonalNonConsecutive",
+        "noEvenNeighbours",
+        "noThreeInRow",
+        "queenDigits",
+        "pirateCells",
+        "touchyCells",
+        "oddEvenSums",
+        "sequenceTopBottom",
+        "cellRelations",
+        "edgeRelations",
+        "directionalMarks",
+        "catalogLines",
+        "quadRelations",
+        "outsideRelations",
+        "soloKillerGroups",
+        "mathdoku",
+        "sumsetCages",
+        "upperrightheavykiller",
+        "topheavy",
+        "shadedParityGroups",
+        "regionAllDifferent",
+        "scatteredAllDifferent",
+        "invalidRegions",
+        "extraLargeRegions",
+        "difference2Neighbours",
+        "regionCoverage",
+        "renbanRegions",
+        "cloneGroups",
+        "consecutiveCloneGroups",
+        "shapeMatchings",
+        "cloneShapeChecks",
+        "hiddenCloneShapeChecks",
+        "fullRankGroups",
+        "rossiniLines",
+        "palindromes",
+        "almostPalindromes",
+        "disguisedPalindromes"
+    ].forEach(function(name) {
+        assert.equal(SudokuCSP.registeredConstraints().includes(name), true, name);
+    });
 });
 
 test("validates new variants: bouncing x-sums, czech outsider, diagonal sum is nine, diagonal tens, disparity, distances", function() {
@@ -3898,32 +4409,64 @@ test("all recently implemented variants are recognized as supported by readConst
 });
 
 
-test("validates midpoint variant across grid", function() {
-    const solved = emptyBoard();
+test("reads midpoint clues from both edges and intersections", function() {
+    const puzzle = variantPuzzle("midpoint", {
+        number: {
+            200: ["12", 6, "5"],
+            201: ["123", 6, "5"],
+            202: ["99", 6, "5"]
+        }
+    });
+    puzzle.point = {
+        200: { type: 2, neighbor: [28, 29] },
+        201: { type: 1, neighbor: [28, 29, 41, 42] },
+        202: { type: 0, neighbor: [28] }
+    };
 
-    // Target is midpoint between (0, 0) and (0, 4) -> (0, 2)
-    solved[0][0] = 1; solved[0][4] = 2;
+    const constraints = SudokuSolver.readConstraints(puzzle);
 
-    assert.equal(SudokuCSP.solve(solved, {
-        midpoints: [{ text: "12", pairs: [
-            [{ row: 0, col: 0 }, { row: 0, col: 4 }],
-            [{ row: 0, col: 1 }, { row: 0, col: 3 }]
-        ] }]
-    }).solved, true);
+    assert.equal(constraints.supported.includes("midpoint"), true);
+    assert.deepEqual(constraints.midpoints.map(function(clue) {
+        return {
+            text: clue.text,
+            pairs: clue.pairs.map(function(pair) {
+                return pair.map(function(cell) { return [cell.row, cell.col]; });
+            })
+        };
+    }), [
+        { text: "12", pairs: [[[0, 0], [0, 1]]] },
+        { text: "123", pairs: [
+            [[0, 0], [1, 1]],
+            [[0, 1], [1, 0]]
+        ] }
+    ]);
+});
 
-    assert.equal(SudokuCSP.solve(solved, {
-        midpoints: [{ text: "45", pairs: [
-            [{ row: 0, col: 0 }, { row: 0, col: 4 }],
-            [{ row: 0, col: 1 }, { row: 0, col: 3 }]
-        ] }]
-    }).solved, true);
-    solved[0][1] = 6; solved[0][3] = 7;
-    assert.equal(SudokuCSP.solve(solved, {
-        midpoints: [{ text: "45", pairs: [
-            [{ row: 0, col: 0 }, { row: 0, col: 4 }],
-            [{ row: 0, col: 1 }, { row: 0, col: 3 }]
-        ] }]
-    }).solved, false);
+test("midpoint clues allow any listed digits and require one centered pair", function() {
+    const clue = {
+        text: "123",
+        pairs: [[{ row: 0, col: 0 }, { row: 1, col: 1 }]]
+    };
+    const board = emptyBoard();
+    board[0][0] = 1;
+    board[1][1] = 3;
+    assert.equal(SudokuCSP.findConflict(board, { midpoints: [clue] }), null);
+
+    board[1][1] = 4;
+    assert.equal(SudokuCSP.findConflict(board, { midpoints: [clue] })?.constraint, "midpoints");
+
+    const alternatePair = emptyBoard();
+    alternatePair[0][1] = 2;
+    alternatePair[1][0] = 3;
+    assert.equal(SudokuCSP.findConflict(alternatePair, {
+        midpoints: [{
+            text: "123",
+            pairs: [
+                [{ row: 0, col: 0 }, { row: 1, col: 1 }],
+                [{ row: 0, col: 1 }, { row: 1, col: 0 }]
+            ]
+        }]
+    }), null);
 });
 
 test("Argyle Sudoku enforces all-different on 8 dashed diagonal lines", function() {
@@ -3946,6 +4489,65 @@ test("Argyle Sudoku enforces all-different on 8 dashed diagonal lines", function
     assert.ok(candidatesResult.conflict);
     assert.equal(candidatesResult.conflict.kind, "duplicate");
     assert.deepEqual(candidatesResult.conflict.cells, [{ row: 1, col: 0 }, { row: 8, col: 7 }]);
+});
+
+test("uses 6 as the largest digit in grid-size-aware variants", function() {
+    const centerlist = Array.from({ length: 6 }, function(_, row) {
+        return Array.from({ length: 6 }, function(__, col) {
+            return (row + 2) * 10 + col + 2;
+        });
+    }).flat();
+    const parsedSearch = SudokuSolver.readConstraints({
+        nx: 6, ny: 6, nx0: 10, space: [0, 0, 0, 0],
+        activeSudokuVariants: ["classic", "search9"],
+        centerlist, point: {},
+        pu_q: { symbol: { 22: [5, "arrow_B_G", 2] }, number: {} }
+    });
+    assert.equal(parsedSearch.directionalMarks[0].searchDigit, 6,
+        "Search 9 becomes Search 6");
+
+    const parsedSumSandwich = SudokuSolver.readConstraints({
+        nx: 6, ny: 6, nx0: 10, space: [0, 0, 0, 0],
+        activeSudokuVariants: ["classic", "sumsandwich"],
+        centerlist, point: {},
+        pu_q: { number: { 12: ["16", 1, "10"] }, symbol: {} }
+    });
+    assert.deepEqual(parsedSumSandwich.sumsandwiches[0].sequence, [1, 6],
+        "Sum Sandwich accepts a 1-to-6 sequence clue");
+
+    const solved = [
+        [1, 2, 3, 4, 5, 6],
+        [4, 5, 6, 1, 2, 3],
+        [2, 3, 4, 5, 6, 1],
+        [5, 6, 1, 2, 3, 4],
+        [3, 4, 5, 6, 1, 2],
+        [6, 1, 2, 3, 4, 5]
+    ];
+    const firstRow = Array.from({ length: 6 }, function(_, col) {
+        return { row: 0, col };
+    });
+    const secondRow = Array.from({ length: 6 }, function(_, col) {
+        return { row: 1, col };
+    });
+
+    assert.equal(SudokuCSP.solve(solved, {
+        sandwiches: [{ clue: 14, cells: firstRow }]
+    }).solved, true, "Sandwich uses endpoints 1 and 6");
+    assert.equal(SudokuCSP.solve(solved, {
+        outsideRelations: [{ relation: "before9", value: 15, cells: firstRow }]
+    }).solved, true, "Before 9 uses 6 as its marker");
+    assert.equal(SudokuCSP.solve(solved, {
+        outsideRelations: [{ relation: "nextto9", value: 15, cells: secondRow }]
+    }).solved, true, "Next to 9 uses the neighbors of 6");
+    assert.equal(SudokuCSP.solve(solved, {
+        outsideRelations: [{ relation: "sumnexttonine", value: 6, cells: secondRow }]
+    }).solved, true, "Sum Next to Nine uses the neighbors of 6");
+    assert.equal(SudokuCSP.solve(solved, {
+        unicorn: [{
+            cell: { row: 1, col: 2 },
+            neighbors: [{ row: 2, col: 0 }, { row: 3, col: 3 }]
+        }]
+    }).solved, false, "Unicorn applies to the largest digit, 6");
 });
 
 test("Argyle Sudoku is unsupported outside a 9x9 grid", function() {

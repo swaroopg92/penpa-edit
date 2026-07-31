@@ -239,6 +239,8 @@ class Puzzle_square extends Puzzle {
                     type = [1];
                 } else if (edit_mode === "symbol" && this.diagonal_consecutive_mode) {
                     type = [1];
+                } else if (edit_mode === "symbol" && this.sudoku_midpoint_clue_mode) {
+                    type = [1, 2, 3];
                 } else if (edit_mode === "symbol" && this.sudoku_corner_clue_mode) {
                     type = [1];
                 } else if (edit_mode === "symbol" && (this.sudoku_edge_clue_mode ||
@@ -251,7 +253,9 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "number":
-                if (this.sudoku_corner_clue_mode) {
+                if (this.sudoku_midpoint_clue_mode) {
+                    type = [1, 2, 3];
+                } else if (this.sudoku_corner_clue_mode) {
                     type = [1];
                 } else if ((this.xv_mode && submode === "5") || this.sudoku_edge_clue_mode) {
                     type = [2, 3];

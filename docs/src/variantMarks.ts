@@ -82,7 +82,8 @@ export function inferredMarkChoice(variation: Variation): VariantMarkChoice {
     if (variation.value === "xivi" || variation.value === "termination") return { position: "edge", mark: "text" };
     if (variation.value === "clock") return { position: "center", mark: "cage" };
     if (variation.value === "slotmachine") return { position: "center", mark: "surface" };
-    if (variation.value === "midpoint" || variation.value === "fadedkropki") return { position: "edge", mark: "circle" };
+    if (variation.value === "midpoint") return { position: "multiple", mark: "circle" };
+    if (variation.value === "fadedkropki") return { position: "edge", mark: "circle" };
     if (["wheel", "pinnochio", "little killer", "weighted little killer", "product little killer", "bouncing x-sums", "czech outsider"].includes(variation.value)) {
         return { position: "multiple", mark: "multiple" };
     }

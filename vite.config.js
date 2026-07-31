@@ -2,11 +2,18 @@ import { defineConfig } from "vite";
 import { svelte, vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import {
+  MAX_DEV_API_BODY_BYTES,
+  resolveContainedPath,
+  validateMutationHeaders,
+  validateVariantId,
+  validateVariantMetadata
+} from "./scripts/vite-security.mjs";
 
 const metadataPath = resolve(process.cwd(), "variant_metadata.json");
 
 function readMetadata() {
-  return JSON.parse(readFileSync(metadataPath, "utf8"));
+  return validateVariantMetadata(JSON.parse(readFileSync(metadataPath, "utf8")));
 }
 
 function devApiPlugin() {
@@ -20,6 +27,45 @@ function devApiPlugin() {
           res.setHeader("Content-Type", "application/json; charset=utf-8");
           res.end(JSON.stringify(payload));
         };
+        const mutationPaths = new Set([
+          "/api/variant-metadata",
+          "/api/add-variant",
+          "/api/save-example",
+          "/api/toggle-reviewed"
+        ]);
+        const isMutation = mutationPaths.has(pathname) && ["POST", "PUT", "PATCH", "DELETE"].includes(req.method || "");
+        if (isMutation) {
+          const headerError = validateMutationHeaders(req.headers, Boolean(req.socket.encrypted));
+          if (headerError) {
+            sendJson(headerError.status, { error: headerError.error });
+            req.resume();
+            return;
+          }
+        }
+        const readJsonBody = (callback) => {
+          const chunks = [];
+          let byteLength = 0;
+          let tooLarge = false;
+          req.on("data", chunk => {
+            byteLength += chunk.length;
+            if (byteLength > MAX_DEV_API_BODY_BYTES) {
+              tooLarge = true;
+              return;
+            }
+            chunks.push(chunk);
+          });
+          req.on("end", () => {
+            if (tooLarge) {
+              sendJson(413, { error: "Request body is too large." });
+              return;
+            }
+            try {
+              callback(JSON.parse(Buffer.concat(chunks).toString("utf8")));
+            } catch (err) {
+              sendJson(400, { error: "Invalid JSON: " + err.message });
+            }
+          });
+        };
 
         if (pathname === "/api/variant-metadata" && req.method === "GET") {
           try {
@@ -31,16 +77,9 @@ function devApiPlugin() {
         }
 
         if (pathname === "/api/variant-metadata" && req.method === "PUT") {
-          let body = "";
-          req.on("data", chunk => { body += chunk.toString(); });
-          req.on("end", () => {
+          readJsonBody((metadata) => {
             try {
-              const metadata = JSON.parse(body);
-              if (!metadata || typeof metadata !== "object" || Array.isArray(metadata) ||
-                  !Array.isArray(metadata.variants)) {
-                sendJson(400, { error: 'Metadata must be a JSON object containing a "variants" array.' });
-                return;
-              }
+              validateVariantMetadata(metadata);
               writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + "\n", "utf8");
               sendJson(200, { message: "variant_metadata.json saved. Reload the wiki to apply it." });
             } catch (err) {
@@ -50,12 +89,10 @@ function devApiPlugin() {
           return;
         }
 
-        if (req.url === "/api/add-variant" && req.method === "POST") {
-          let body = "";
-          req.on("data", chunk => { body += chunk.toString(); });
-          req.on("end", () => {
+        if (pathname === "/api/add-variant" && req.method === "POST") {
+          readJsonBody((data) => {
             try {
-              const data = JSON.parse(body);
+              validateVariantId(data.id);
               const metadata = readMetadata();
 
               if (metadata.variants.some(v => v.id === data.id)) {
@@ -76,27 +113,23 @@ function devApiPlugin() {
                 tags: data.tags
               });
 
-              writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
-              res.setHeader("Content-Type", "application/json");
-              res.end(JSON.stringify({ message: "Variant added successfully!" }));
+              validateVariantMetadata(metadata);
+              writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + "\n", "utf8");
+              sendJson(200, { message: "Variant added successfully!" });
             } catch (err) {
-              res.statusCode = 500;
-              res.end("Error adding variant");
+              sendJson(400, { error: "Could not add variant: " + err.message });
             }
           });
           return;
         }
 
-        if (req.url === "/api/save-example" && req.method === "POST") {
-          let body = "";
-          req.on("data", chunk => { body += chunk.toString(); });
-          req.on("end", () => {
+        if (pathname === "/api/save-example" && req.method === "POST") {
+          readJsonBody((data) => {
             try {
-              const data = JSON.parse(body);
               const { variantId, example } = data;
-              if (!variantId || typeof example !== "string" || !example) {
-                res.statusCode = 400;
-                res.end("Variant ID and solving example are required");
+              validateVariantId(variantId);
+              if (typeof example !== "string" || !example) {
+                sendJson(400, { error: "Variant ID and solving example are required." });
                 return;
               }
 
@@ -112,31 +145,25 @@ function devApiPlugin() {
               }
 
               if (updated) {
-                writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
-                res.setHeader("Content-Type", "application/json");
-                res.end(JSON.stringify({ message: "Example saved successfully!" }));
+                writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + "\n", "utf8");
+                sendJson(200, { message: "Example saved successfully!" });
               } else {
-                res.statusCode = 404;
-                res.end("Variant not found in metadata");
+                sendJson(404, { error: "Variant not found in metadata." });
               }
             } catch (err) {
-              res.statusCode = 500;
-              res.end("Error saving example: " + err.message);
+              sendJson(400, { error: "Could not save example: " + err.message });
             }
           });
           return;
         }
 
-        if (req.url === "/api/toggle-reviewed" && req.method === "POST") {
-          let body = "";
-          req.on("data", chunk => { body += chunk.toString(); });
-          req.on("end", () => {
+        if (pathname === "/api/toggle-reviewed" && req.method === "POST") {
+          readJsonBody((data) => {
             try {
-              const data = JSON.parse(body);
               const { variantId, reviewed } = data;
-              if (!variantId || typeof reviewed !== "boolean") {
-                res.statusCode = 400;
-                res.end("Variant ID and reviewed boolean are required");
+              validateVariantId(variantId);
+              if (typeof reviewed !== "boolean") {
+                sendJson(400, { error: "Variant ID and reviewed boolean are required." });
                 return;
               }
 
@@ -152,16 +179,13 @@ function devApiPlugin() {
               }
 
               if (updated) {
-                writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
-                res.setHeader("Content-Type", "application/json");
-                res.end(JSON.stringify({ message: "Reviewed status saved successfully!" }));
+                writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + "\n", "utf8");
+                sendJson(200, { message: "Reviewed status saved successfully!" });
               } else {
-                res.statusCode = 404;
-                res.end("Variant not found in metadata");
+                sendJson(404, { error: "Variant not found in metadata." });
               }
             } catch (err) {
-              res.statusCode = 500;
-              res.end("Error saving reviewed status: " + err.message);
+              sendJson(400, { error: "Could not save reviewed status: " + err.message });
             }
           });
           return;
@@ -175,8 +199,11 @@ function devApiPlugin() {
 function variantDetailPages() {
   const metadata = readMetadata();
   const ids = Array.from(new Set(metadata.variants
-    .filter((variant) => variant.status !== "hidden")
-    .map((variant) => variant.id.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase())
+    .filter((variant) => variant.status !== "hidden" && variant.id !== "")
+    .map((variant) => {
+      validateVariantId(variant.id);
+      return variant.id.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
+    })
   ));
   return {
     name: "variant-detail-pages",
@@ -189,7 +216,7 @@ function variantDetailPages() {
         const source = template
           .replace("<head>", "<head><base href=\"../../\">")
           .replace('data-catalog-page="variants"', `data-catalog-page="detail" data-variant-id="${id}"`);
-        const idDirectory = resolve(pageDirectory, id);
+        const idDirectory = resolveContainedPath(pageDirectory, id);
         mkdirSync(idDirectory, { recursive: true });
         writeFileSync(resolve(idDirectory, "index.html"), source, "utf8");
       });

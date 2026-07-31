@@ -1920,7 +1920,7 @@ function saveblob_download(blob, filename, fileext) {
 function savetext_window() {
     var text = document.getElementById("savetextarea").value;
     if (text) {
-        window.open(text);
+        PenpaUrlSecurity.openHttpUrl(text);
     }
 }
 
@@ -2181,9 +2181,11 @@ async function load(urlParam, type = 'url', origurl = null) {
         }
     }
     if (rtext_para[17] && rtext_para[17] !== "") {
-        psource = DOMPurify.sanitize(rtext_para[17]);
-        if (document.getElementById("puzzlesourcelink")) document.getElementById("puzzlesourcelink").href = psource;
-        if (document.getElementById("puzzlesource")) document.getElementById("puzzlesource").innerHTML = "Source";
+        psource = PenpaUrlSecurity.normalizeHttpUrl(rtext_para[17]) || "";
+        const sourceLink = document.getElementById("puzzlesourcelink");
+        if (sourceLink && psource) sourceLink.href = psource;
+        if (sourceLink && !psource) sourceLink.removeAttribute("href");
+        if (document.getElementById("puzzlesource")) document.getElementById("puzzlesource").textContent = psource ? "Source" : "";
         if (document.getElementById("saveinfosource")) document.getElementById("saveinfosource").value = psource;
     }
 

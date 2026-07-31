@@ -1,4 +1,5 @@
 import { variationByValue, variantMetadata } from "./variationCatalog";
+import { replaceGridSizeNine } from "./gridSizeMetadata.mjs";
 
 export type VariantGuide = {
     title: string;
@@ -23,8 +24,8 @@ export function guideFor(variant: string): VariantGuide {
     const catalogRule = catalog?.rules?.[`${size}x${size}`] || catalog?.rule;
     const metadataGuide = variantRules[variant];
     return catalog ? {
-        title: catalog.name,
-        rule: catalogRule || "",
+        title: replaceGridSizeNine(catalog.name, size, catalog.gridSizeReplacesNine),
+        rule: replaceGridSizeNine(catalogRule || "", size, catalog.gridSizeReplacesNine),
         usage: metadataGuide?.usage || "Use the clue tools shown for this variation; marks remain native Penpa objects for SVG and URL export."
     } : {
         title: variant.replace(/\b\w/g, (letter) => letter.toUpperCase()),

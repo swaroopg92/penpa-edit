@@ -390,6 +390,7 @@
       "otherNames": "",
       "id": "before1after9",
       "name": "Before 1 - After 9",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Numbers outside the grid indicate the sum of all digits before the digit 1 in that row/column or after the digit 9 in that row/column, going from left to right and from top to bottom."
       },
@@ -408,6 +409,7 @@
       "otherNames": "",
       "id": "before9",
       "name": "Before 9",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "The clues outside the grid show the sum of the digits that appear before 9 in the corresponding row or column."
       },
@@ -865,6 +867,7 @@
       "otherNames": "",
       "id": "consecutivechains",
       "name": "Consecutive Chains",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Digits in the grey areas must form a chain of consecutive digits from 1 to 9 by moving horizontally or vertically from one cell to the next."
       },
@@ -1206,6 +1209,7 @@
     {
       "id": "diagonal",
       "name": "Diagonal",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Each main diagonal contains each digit from 1 to 9."
       },
@@ -1587,6 +1591,7 @@
       "otherNames": "",
       "id": "double sandwich",
       "name": "Double Sandwich",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Clues outside the grid indicate the sum of the digit(s) placed between the digits 1, 5 and 9 in the respective row or column in the correct order. The order of the digits 1,5 and 9 is not given."
       },
@@ -2122,7 +2127,7 @@
       ]
     },
     {
-      "id": "first seen odd/even",
+      "id": "firstseenoddeven",
       "name": "First Seen Odd/Even",
       "rules": {
         "9x9": "Clues outside the grid indicate the first digit of a specific parity (odd or even) encountered when looking into the grid from that direction. Any number of opposite-parity digits may appear before the first seen digit."
@@ -3350,6 +3355,7 @@
       "otherNames": "Next to Nine Sudoku",
       "id": "nextto9",
       "name": "Next to 9",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "The clues outside the grid indicate the digits that sit next to 9 in that row or column. These clues are given in increasing order."
       },
@@ -3790,6 +3796,7 @@
       "otherNames": "",
       "id": "onetouch",
       "name": "One Touch",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Every digit 1-9 has exactly one touching pair in the grid. All these touches are marked by a circle. If there are less than 9 circles in the grid, that means there is at least one marked 2x2 block which contains two pairs of touching digits."
       },
@@ -4194,7 +4201,7 @@
       "status": "available",
       "inputType": {
         "categories": [
-          "outside"
+          "cell"
         ],
         "instructions": []
       },
@@ -4706,6 +4713,7 @@
     {
       "id": "queen",
       "name": "Queen",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "The digit 9 must not be repeated in the same diagonal of any length."
       },
@@ -4944,6 +4952,7 @@
     {
       "id": "sandwich",
       "name": "Sandwich",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Each number outside the grid is the sum of digits between 1 and 9 in the corresponding row or column."
       },
@@ -5002,6 +5011,7 @@
     {
       "id": "search9",
       "name": "Search 9",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Each arrow points to at least one 9 in the corresponding direction. Each digit in a cell with an arrow is the distance from that cell to the nearest cell containing a 9."
       },
@@ -5657,6 +5667,7 @@
       "otherNames": "",
       "id": "sum next to nine",
       "name": "Sum Next to Nine",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Clues outside the grid indicate the sum of the immediate neighbours of the digit 9 in the corresponding row or column."
       },
@@ -5713,6 +5724,7 @@
       "otherNames": "",
       "id": "sumsandwich",
       "name": "Sum Sandwich",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "The clues outside the grid indicate all numbers placed in the corresponding direction that are the sum of the numbers placed in the two neighbouring cells in that direction, e.g. 132. If a number is not clued outside the grid, then it must not be the sum of its two neighbours in that direction."
       },
@@ -6213,6 +6225,7 @@
       "otherNames": "",
       "id": "unicorn",
       "name": "Unicorn",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Chess Knights, placed in cells with number 9, must attack only different numbers."
       },
@@ -6612,6 +6625,7 @@
     {
       "id": "nextto9",
       "name": "Next to 9",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "Outside clues indicate the sum of the immediate neighbors of the digit 9 in that row or column."
       },
@@ -6851,6 +6865,7 @@
     {
       "id": "sequence top-bottom",
       "name": "Sequence Top-Bottom",
+      "gridSizeReplacesNine": true,
       "rules": {
         "9x9": "There are two sequences: one running from digit 1 in the top row to digit 9 in the bottom row, and another from digit 1 in the bottom row to digit 9 in the top row. Each sequence must consist of consecutive numbers, with each number touching the next either by side or corner."
       },
@@ -6880,7 +6895,7 @@
       "id": "midpoint",
       "name": "Midpoint",
       "rules": {
-        "9x9": "A circle is the midpoint of some pair of cells with digits shown inside that clue."
+        "9x9": "A clue on an edge or intersection may show one or more digits. It is the midpoint of at least one pair of cells whose digits are listed in the clue."
       },
       "tags": [
         "math"

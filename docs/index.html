@@ -64,7 +64,7 @@
     <!-- STYLES -->
     <!-- Local styles -->
     <script>
-        var ver = "3.3.30"; // Also defined in class_p.js
+        var ver = "3.3.40";
         let style_sources = [
             "./css/font-awesome.min.css",
             "./css/light_theme.css",
@@ -141,8 +141,10 @@
             "./js/class_panel.js",
             "./js/style.js",
             "./js/sudoku_csp.js",
+            "./js/sudoku_csp_variants/browser.js",
             "./js/sudoku_generator.js",
             "./js/sudoku_solver.js",
+            "./js/url_security.js",
             "./js/general.js",
             "./js/customcolor.js",
             "./js/penpa_text.js"
@@ -831,7 +833,7 @@
             <label id="puzzletitle" class="info"></label>
             <label id="puzzleauthor" class="info"></label>
             <div><input type="button" id="puzzlerules" value="Show Rules"/></div>
-            <div><a id="puzzlesourcelink" href="" target="_blank"><label id="puzzlesource" class="info"></label></a>
+            <div><a id="puzzlesourcelink" href="" target="_blank" rel="noopener noreferrer"><label id="puzzlesource" class="info"></label></a>
             </div>
             <div><label id="solution_check" class="info"/></label></div>
         </div>

@@ -134,6 +134,12 @@ onload = function() {
                 obj = coord_point(event);
                 pu.type = previousTypes;
             }
+            if (pu.sudoku_midpoint_clue_mode) {
+                let previousTypes = pu.type;
+                pu.type = [1, 2, 3];
+                obj = coord_point(event);
+                pu.type = previousTypes;
+            }
             if (pu.sudoku_corner_clue_mode) {
                 let previousTypes = pu.type;
                 pu.type = [1];
@@ -209,6 +215,12 @@ onload = function() {
             }
             if (pu.sudoku_corner_clue_mode && (!pu.isBattenburgCorner(num) ||
                 (x - pu.point[num].x) ** 2 + (y - pu.point[num].y) ** 2 > (0.3 * pu.size) ** 2)) return;
+            if (pu.sudoku_midpoint_clue_mode) {
+                let cluePoint = pu.point[num];
+                let clueDistance = cluePoint ? (x - cluePoint.x) ** 2 + (y - cluePoint.y) ** 2 : Infinity;
+                if ((!pu.isKropkiEdge(num) && !pu.isBattenburgCorner(num)) ||
+                    clueDistance > (0.3 * pu.size) ** 2) return;
+            }
 
             let ctrl = isCtrlKeyHeld(e) || isShiftKeyHeld(e);
 

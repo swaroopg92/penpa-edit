@@ -572,9 +572,6 @@
     letter-spacing: 0.02em;
     text-decoration: none;
   }
-  .brand span {
-    color: #e5b858;
-  }
   nav {
     display: flex;
     align-self: stretch;
@@ -621,14 +618,6 @@
     max-width: 900px;
     margin-bottom: 30px;
   }
-  .eyebrow {
-    margin: 0 0 8px;
-    color: #b16c24;
-    font-size: calc(12px * var(--font-scale, 1));
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
   h1 {
     margin: 0;
     color: #102938;
@@ -662,29 +651,6 @@
     margin-right: 4px;
     color: #183a4d;
     font-size: calc(15px * var(--font-scale, 1));
-  }
-  .notes {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
-    margin: 0 0 20px;
-  }
-  .notes > div {
-    padding: 18px 20px;
-    border-left: 3px solid #268096;
-    background: #fff;
-    box-shadow: 0 8px 25px rgba(27, 52, 63, 0.05);
-  }
-  .notes h2 {
-    margin: 0 0 6px;
-    color: #183a4d;
-    font-size: calc(15px * var(--font-scale, 1));
-  }
-  .notes p {
-    margin: 0;
-    color: #5a6e77;
-    font-size: calc(13px * var(--font-scale, 1));
-    line-height: 1.55;
   }
   .toolbar {
     position: sticky;
@@ -790,10 +756,6 @@
   .tag:hover {
     border-color: #267f95;
     background: #dceff2;
-  }
-  td.approach {
-    min-width: 260px;
-    color: #516871;
   }
   code {
     display: block;
@@ -920,7 +882,7 @@
     font-size: 12px;
     font-weight: 600;
   }
-  .variant-detail > section {
+  .detail-layout > div > section {
     margin-top: 22px;
     padding: 22px;
     border: 1px solid #cfdbdd;
@@ -1058,17 +1020,6 @@
   :global(html.dark) .summary strong {
     color: #e5b858 !important;
   }
-  :global(html.dark) .notes > div {
-    border-left-color: #176fae !important;
-    background: #263340 !important;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
-  }
-  :global(html.dark) .notes h2 {
-    color: #dde6ed !important;
-  }
-  :global(html.dark) .notes p {
-    color: #aebdca !important;
-  }
   :global(html.dark) .toolbar {
     border-color: #40505f !important;
     background: rgba(38, 51, 64, 0.95) !important;
@@ -1115,9 +1066,6 @@
   }
   :global(html.dark) td.rule {
     color: #dde6ed !important;
-  }
-  :global(html.dark) td.approach {
-    color: #aebdca !important;
   }
   :global(html.dark) code {
     color: #8c9ba5 !important;
@@ -1167,7 +1115,7 @@
   :global(html.dark) .variant-detail h2 {
     color: #dde6ed !important;
   }
-  :global(html.dark) .variant-detail > section {
+  :global(html.dark) .detail-layout > div > section {
     border-color: #40505f !important;
     background: #263340 !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
@@ -1209,114 +1157,6 @@
   }
   :global(html.dark) .back-link {
     color: #2b8bc7 !important;
-  }
-  .dev-form-card {
-    margin-top: 40px;
-    padding: 24px;
-    border: 1px solid #cbd8da;
-    border-radius: 8px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 246, 248, 0.9));
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(10px);
-  }
-  :global(html.dark) .dev-form-card {
-    border-color: #40505f;
-    background: linear-gradient(135deg, rgba(38, 51, 64, 0.9), rgba(28, 38, 48, 0.9));
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-  }
-  .dev-form-card h2 {
-    margin: 0 0 8px;
-    color: #102938;
-    font-size: calc(20px * var(--font-scale, 1));
-    font-family: Georgia, serif;
-  }
-  :global(html.dark) .dev-form-card h2 {
-    color: #eef4f8;
-  }
-  .dev-form-desc {
-    margin: 0 0 20px;
-    color: #526773;
-    font-size: calc(13px * var(--font-scale, 1));
-  }
-  :global(html.dark) .dev-form-desc {
-    color: #aebdca;
-  }
-  .metadata-editor-label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: calc(13px * var(--font-scale, 1));
-    font-weight: 700;
-  }
-  .metadata-editor {
-    width: 100%;
-    min-height: 65vh;
-    resize: vertical;
-    padding: 14px;
-    border: 1px solid #b9c9ce;
-    border-radius: 6px;
-    color: #20313b;
-    background: #f8fbfc;
-    font: 12px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
-    tab-size: 2;
-  }
-  .metadata-editor:focus {
-    border-color: #267f95;
-    outline: 3px solid rgba(38, 127, 149, 0.16);
-  }
-  :global(html.dark) .metadata-editor {
-    color: #dce6ed;
-    border-color: #526372;
-    background: #17222c;
-  }
-  .form-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: flex-end;
-    margin-top: 8px;
-  }
-  .form-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background: #267f95;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-  }
-  .form-actions button:hover:not(:disabled) {
-    background: #1d6375;
-    transform: translateY(-1px);
-  }
-  .form-actions button:active:not(:disabled) {
-    transform: translateY(0);
-  }
-  .form-actions button:disabled {
-    background: #b9cbcf;
-    cursor: not-allowed;
-  }
-  :global(html.dark) .form-actions button {
-    background: #e5b858;
-    color: #17202a;
-  }
-  :global(html.dark) .form-actions button:hover:not(:disabled) {
-    background: #cca043;
-  }
-  .save-status {
-    margin-top: 16px;
-    padding: 12px;
-    border-radius: 4px;
-    font-size: calc(13px * var(--font-scale, 1));
-    font-weight: 600;
-  }
-  .save-status.success {
-    background: #dff2e9;
-    color: #176245;
-  }
-  .save-status.error {
-    background: #fde8e9;
-    color: #602d30;
   }
   thead th.sortable {
     cursor: pointer;

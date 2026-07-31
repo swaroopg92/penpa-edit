@@ -1,5 +1,5 @@
 /* CSP analysis worker: keeps recursive search off the UI thread. */
-importScripts("./sudoku_csp.js");
+importScripts("./sudoku_csp.js", "./sudoku_csp_variants/browser.js");
 
 self.onmessage = async function(event) {
     if (!event.data || (event.data.type !== "analyze" && event.data.type !== "solve")) return;

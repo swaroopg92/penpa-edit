@@ -1,5 +1,10 @@
 var SudokuCSPRuntime = typeof SudokuCSP !== "undefined" ? SudokuCSP :
     (typeof require === "function" ? require("./sudoku_csp.js") : null);
+var SudokuWorkerAssetVersion = typeof ver !== "undefined" ? ver : "3.3.40";
+
+function sudokuWorkerUrl(filename) {
+    return "./js/" + filename + "?v=" + encodeURIComponent(SudokuWorkerAssetVersion);
+}
 
 var SudokuSolver = (function() {
     var SIZE = 9;
@@ -19,6 +24,7 @@ var SudokuSolver = (function() {
     var activeAnalysisAbort = null;
     var conflictHighlightTimer = null;
     var CONFLICT_HIGHLIGHT_MS = 4000;
+    var AUTO_MARK_FONT_STYLE = 2;
 
     function setSolverRunning(running) {
         if (typeof document === "undefined") return;
@@ -270,7 +276,7 @@ var SudokuSolver = (function() {
                 return SudokuCSPRuntime.getCandidatesAsync(board, constraints, analysisOptions);
             }
             return new Promise(function(resolve, reject) {
-                var worker = new Worker("./js/sudoku_solver_worker.js?v=3.3.30");
+                var worker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
                 var settled = false;
                 function finish(result, error) {
                     if (settled) return;
@@ -803,6 +809,7 @@ sumOrProductKillers: [],
             evenPassage: [],
             xv: [],
             battenburg: [],
+            midpoints: [],
             skyscrapers: [],
             sandwiches: [],
             uniqueRectangles: [],
@@ -3167,10 +3174,11 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                 var text = String(entry[0]).trim();
                 if (text === "") return;
                 var point = puzzle.point && puzzle.point[key];
-                if (!point) return;
+                if (!point || [1, 2, 3].indexOf(point.type) === -1) return;
 
                 var nbrs = (point.neighbor || []).map(function(n) { return keyToCell(puzzle, n); }).filter(Boolean);
-                if (nbrs.length === 0) return;
+                if ((point.type === 1 && nbrs.length !== 4) ||
+                    ([2, 3].indexOf(point.type) !== -1 && nbrs.length !== 2)) return;
 
                 var centerRow = nbrs.reduce(function(sum, c) { return sum + c.row; }, 0) / nbrs.length;
                 var centerCol = nbrs.reduce(function(sum, c) { return sum + c.col; }, 0) / nbrs.length;
@@ -3193,9 +3201,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                     constraints.midpoints.push({ text: text, pairs: validPairs });
                 }
             });
-            if (constraints.midpoints.length > 0) {
-                constraints.supported.push("midpoint");
-            }
+            constraints.supported.push("midpoint");
         }
 
         if (variantEnabled(puzzle, "anticonsecutive")) {
@@ -3525,8 +3531,9 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                             outsideColumn, outsideBoxHeight, "column");
                         addOutsideRelation((outsideStartCol - 1) + (outsideStartRow + outsideIndex) * puzzle.nx0,
                             outsideRow, outsideBoxWidth, "row");
-                        var leftTopOnly = ["starproduct", "edgedifference", "before9", "nextto9", "outsideconsecutive", "outsidekiller", "parityskyscrapers", "japanesesums", "oddsums", "bigsmalljapanesesums"].indexOf(variant) !== -1;
-                        if (!leftTopOnly) {
+                        var expansionSides = outsideExpansionSides(variant);
+                        if (expansionSides.indexOf("bottom") !== -1 &&
+                            expansionSides.indexOf("right") !== -1) {
                             addOutsideRelation((outsideStartCol + outsideIndex) + (outsideStartRow + SIZE) * puzzle.nx0,
                                 outsideColumn.slice().reverse(), outsideBoxHeight, "column");
                             addOutsideRelation((outsideStartCol + SIZE) + (outsideStartRow + outsideIndex) * puzzle.nx0,
@@ -3989,6 +3996,45 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         return changes.length;
     }
 
+    function commitSolveOnce(puzzle, solvedBoard) {
+        var changed = applySolution(puzzle, solvedBoard);
+        if (puzzle.mode.qa !== "pu_a") {
+            puzzle.mode_qa("pu_a");
+        }
+        return changed;
+    }
+
+    function checkCompletion(puzzle) {
+        var incomplete = { handled: true, complete: false, conflict: null };
+        if (!puzzle || !isClassicSudoku(puzzle) || !SudokuCSPRuntime) {
+            return { handled: false, complete: false, conflict: null };
+        }
+        var constraints = readConstraints(puzzle);
+        var active = Array.isArray(puzzle.activeSudokuVariants) ?
+            puzzle.activeSudokuVariants : [puzzle.activeSudokuVariant || "classic"];
+        var supported = (constraints.supported || []).map(canonicalVariantName);
+        var unsupported = active.some(function(name) {
+            var normalized = canonicalVariantName(name);
+            return normalized !== "classic" && supported.indexOf(normalized) === -1;
+        });
+        if (unsupported) {
+            return { handled: false, complete: false, conflict: null };
+        }
+
+        var board = readBoard(puzzle, true);
+        if (board.some(function(row) {
+            return row.some(function(digit) { return !digit; });
+        })) {
+            return incomplete;
+        }
+        var result = SudokuCSPRuntime.solve(board, constraints);
+        return {
+            handled: true,
+            complete: !!(result && result.solved),
+            conflict: result && result.solved ? null : (result && result.conflict || null)
+        };
+    }
+
     function clearAutoSolution(puzzle) {
         if (!puzzle || !puzzle.pu_a || !puzzle.pu_a.number) {
             return 0;
@@ -4048,7 +4094,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         if (!result.valid || !result.satisfiable) {
             return;
         }
-        set_font_style(puzzle.ctx, 0.3 * puzzle.size.toString(10), 3);
+        set_font_style(puzzle.ctx, 0.3 * puzzle.size.toString(10), AUTO_MARK_FONT_STYLE);
         for (var row = 0; row < SIZE; row++) {
             for (var col = 0; col < SIZE; col++) {
                 if (board[row][col]) {
@@ -4058,10 +4104,10 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                 var point = puzzle.point[key];
                 var values = result.candidates[row][col];
                 if (values.length === 1) {
-                    set_font_style(puzzle.ctx, 0.7 * puzzle.size.toString(10), 3);
+                    set_font_style(puzzle.ctx, 0.7 * puzzle.size.toString(10), AUTO_MARK_FONT_STYLE);
                     // Match Penpa's normal Sudoku baseline exactly.
                     puzzle.ctx.text(values[0].toString(), point.x, point.y + (0.06 * puzzle.size));
-                    set_font_style(puzzle.ctx, 0.3 * puzzle.size.toString(10), 3);
+                    set_font_style(puzzle.ctx, 0.3 * puzzle.size.toString(10), AUTO_MARK_FONT_STYLE);
                     continue;
                 }
                 for (var i = 0; i < values.length; i++) {
@@ -4195,9 +4241,22 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         });
     }
 
+    function outsideExpansionSides(variant) {
+        if (variant === "triplesum") return ["left"];
+        var topLeftOnly = [
+            "starproduct", "sandwich", "edgedifference", "evensandwich", "oddsandwich",
+            "before9", "before1after9", "nextto9", "outsideconsecutive",
+            "outsidekiller", "parityskyscrapers", "positionsums",
+            "japanesesums", "oddsums", "bigsmalljapanesesums", "partitionedsums"
+        ];
+        return topLeftOnly.indexOf(variant) !== -1 ?
+            ["top", "left"] : ["top", "bottom", "left", "right"];
+    }
+
     return {
         SIZE: SIZE,
         AUTO_RUN_LIMIT_MS: AUTO_RUN_LIMIT_MS,
+        AUTO_MARK_FONT_STYLE: AUTO_MARK_FONT_STYLE,
         TEST_BOARD_URL: TEST_BOARD_URL,
         isClassicSudoku: isClassicSudoku,
         canonicalVariantName: canonicalVariantName,
@@ -4209,6 +4268,8 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         getCandidates: getCandidates,
         solve: solve,
         applySolution: applySolution,
+        commitSolveOnce: commitSolveOnce,
+        checkCompletion: checkCompletion,
         clearAutoSolution: clearAutoSolution,
         startAutoAnalysis: startAutoAnalysis,
         scheduleAutoAnalysis: scheduleAutoAnalysis,
@@ -4219,6 +4280,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         primeUniqueSolution: primeUniqueSolution,
         showConflict: showConflict,
         shouldDiscoverVariant: shouldDiscoverVariant,
+        outsideExpansionSides: outsideExpansionSides,
         puzzleSize: puzzleSize,
         defaultIrregularRegions: defaultIrregularRegions,
         irregularRegionIds: irregularRegionIds,
@@ -4364,7 +4426,7 @@ var SudokuTools = (function() {
             window.setTimeout(function() { finish(SudokuSolver.solve(board, constraints)); }, 0);
             return;
         }
-        var checkWorker = new Worker("./js/sudoku_solver_worker.js?v=3.3.30");
+        var checkWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
         solveOnceWorker = checkWorker;
         checkWorker.onmessage = function(event) {
             if (event.data.type !== "result") return;
@@ -4433,8 +4495,7 @@ var SudokuTools = (function() {
         function handleResult(result) {
             cleanup();
             if (result && result.solved) {
-                SudokuSolver.applySolution(pu, result.board);
-                if (pu.mode.qa !== "pu_q") pu.mode_qa("pu_q");
+                SudokuSolver.commitSolveOnce(pu, result.board);
                 pu.redraw();
                 document.dispatchEvent(new CustomEvent("sudoku-solved"));
                 generatorLog("Solved", "Puzzle solved successfully.");
@@ -4469,7 +4530,7 @@ var SudokuTools = (function() {
         }
 
         try {
-            solveWorker = new Worker("./js/sudoku_solver_worker.js?v=3.3.30");
+            solveWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
             solveTimeout = setTimeout(function() {
                 cleanup();
                 const msg = "Solving timed out after 30 seconds.";
@@ -4757,7 +4818,7 @@ var SudokuTools = (function() {
             }
             return;
         }
-        generatorWorker = new Worker("./js/sudoku_generator_worker.js?v=3.3.30");
+        generatorWorker = new Worker(sudokuWorkerUrl("sudoku_generator_worker.js"));
         generatorWorker.onmessage = function(event) {
             if (event.data.type === "progress") {
                 generatorLog("Generating", null, event.data.progress);
@@ -5259,13 +5320,15 @@ var SudokuTools = (function() {
         pu.lc_mode = pu.activeSudokuVariant === "lc";
         pu.odd_even_mode = pu.activeSudokuVariant === "odd even" || pu.activeSudokuVariant === "odd even count" || pu.activeSudokuVariant === "odd even bridge";
         pu.battenburg_mode = pu.activeSudokuVariant === "battenburg";
+        pu.sudoku_midpoint_clue_mode = pu.activeSudokuVariant === "midpoint" &&
+            (mode === "number" || mode === "symbol");
         pu.sudoku_edge_clue_mode = ["difference", "sum", "product", "arithmetic", "greater", "lesser",
             "consecutive", "evensumpairs", "oddsumpairs", "inequality", "xydifference", "perfectsquares", "multiplication", "xivi", "lc",
             "primesums", "twodigitprimenumbers", "blocksumrelations", "divisor", "eitheror", "anticonsecutive", "fives", "sumnine", "fadedkropki", "doublekropki",
-            "oneortwodifferencepairs", "teneleven", "tenspositionproducts", "midpoint"].indexOf(pu.activeSudokuVariant) !== -1 &&
+            "oneortwodifferencepairs", "teneleven", "tenspositionproducts"].indexOf(pu.activeSudokuVariant) !== -1 &&
             (mode === "number" || mode === "symbol");
         pu.sudoku_corner_clue_mode = ["quadruple", "equalsums", "equaldifferences", "equalproducts",
-            "equalratios", "consecutivequads", "quadmax", "quadmin", "exclusion", "groupsum", "wheel", "crosssums", "determinant", "fullorhalf", "midpoint"].indexOf(pu.activeSudokuVariant) !== -1 &&
+            "equalratios", "consecutivequads", "quadmax", "quadmin", "exclusion", "groupsum", "wheel", "crosssums", "determinant", "fullorhalf"].indexOf(pu.activeSudokuVariant) !== -1 &&
             (mode === "number" || mode === "symbol");
         pu.sudoku_directional_cell_mode = ["biggestneighbours", "smallestneighbours", "eliminate", "pointtonext", "pointtoprevious",
             "search9", "sumdetector", "detection", "deadoralivearrows", "twindetector"].indexOf(pu.activeSudokuVariant) !== -1 && mode === "symbol";
@@ -5275,7 +5338,8 @@ var SudokuTools = (function() {
         if (pu.battenburg_mode) {
             UserSettings.draw_edges = true;
         }
-        if (pu.xv_mode || pu.lc_mode || pu.sudoku_edge_clue_mode || pu.sudoku_corner_clue_mode || pu.diagonal_consecutive_mode) {
+        if (pu.xv_mode || pu.lc_mode || pu.sudoku_edge_clue_mode || pu.sudoku_corner_clue_mode ||
+            pu.sudoku_midpoint_clue_mode || pu.diagonal_consecutive_mode) {
             UserSettings.draw_edges = true;
         }
         pu.mode_set(mode);
