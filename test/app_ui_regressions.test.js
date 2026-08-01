@@ -93,3 +93,20 @@ test("Shift-number selects corner entry while Ctrl-number selects center entry",
     assert.match(app, /function toolPanelNumberShortcut[\s\S]*?shiftKey[\s\S]*?chooseNoteMode\("2"\)/);
     assert.match(app, /function toolPanelNumberShortcut[\s\S]*?ctrlKey[\s\S]*?chooseNoteMode\("3"\)/);
 });
+
+test("solver settings control the saved time limit and toast preference", function() {
+    assert.match(app, /id="sudoku_solver_settings"[\s\S]*?>Settings<\/button>/);
+    assert.match(app, /studioModal === "solver-settings"[\s\S]*?>60 seconds<[\s\S]*?>120 seconds<[\s\S]*?>No limit</);
+    assert.match(app, /solverTimeLimitStorageKey = "sudotoku-solver-time-limit"/);
+    assert.match(app, /solverToastStorageKey = "sudotoku-solver-toast"/);
+    assert.match(app, /if \(!message \|\| !solverToastsEnabled\) return/);
+    assert.match(solver, /function sudokuSolverTimeLimitMs\(\)[\s\S]*?SudokuSolverPreferences\.timeLimitMs/);
+    assert.match(solver, /if \(runLimitMs !== null\)[\s\S]*?setTimeout/);
+    assert.match(solver, /if \(solveRunLimitMs !== null\)[\s\S]*?setTimeout/);
+});
+
+test("solver controls and status use separate horizontal rows", function() {
+    assert.match(app, /#sudoku_solver_settings[\s\S]*?flex-direction:\s*row !important/);
+    assert.match(app, /\.log-host #sudoku-solver-status[\s\S]*?flex:\s*0 0 100% !important/);
+    assert.match(app, /\.bottom-actions\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3/);
+});

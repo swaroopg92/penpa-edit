@@ -8,8 +8,19 @@ function sudokuWorkerUrl(filename) {
     return "./js/" + filename + "?v=" + encodeURIComponent(SudokuWorkerAssetVersion);
 }
 
+function sudokuSolverTimeLimitMs() {
+    if (typeof window === "undefined" || !window.SudokuSolverPreferences) return 60000;
+    var value = window.SudokuSolverPreferences.timeLimitMs;
+    return value === null ? null : (Number(value) > 0 ? Number(value) : 60000);
+}
+
+function sudokuSolverTimeLimitLabel(limitMs) {
+    return Math.round(limitMs / 1000) + " s";
+}
+
 var SudokuSolver = (function() {
     var SIZE = 9;
+    // Kept as the public default for compatibility; active runs read the saved preference.
     var AUTO_RUN_LIMIT_MS = 60000;
     var TEST_BOARD_URL = "https://swaroopg92.github.io/penpa-edit/#m=edit&p=7Vbvb+I4EP3OX3Hy17W0sU2cH9J+oL9WqtpeuW231yJUpRAKbSC7IbRVKv73nZmYi2Ponm6lk3rSCTCP5/i9mbEzYbka548rHsFLhdzjAl4q9OgTdvHtmdfFrMzS+DfeW5XTvADA+e9HR3ySZMuUH18/7B089p4Pe39+9G+UujybfHg46F8+jK++ir43+1h4Z1m4OD0/2Ms+fK5uTqe9p/Qw1efLfDTN0mScVDdXxy/Z4ii8n07E/vF0P5wkC2/5PbyInvb6nz51BiaQYee1iuKqz6vP8YAJxpmEj2BDXvXj1+o0ZnVOjFdf4ALGxZCz+SorZ6M8ywu24aqTerkEeNjAK5pHtF+TwgN8ZjDAa4CjWTHK0tuTmjmPB9UFZxjBHq1GyOb5U4pmGCH+HuXzuxkSd0kJlVxOZ98YVzBhwt04rHnV+5U8QGqTB8I6D0Q78sD0/t08ouF6DRv1B2RyGw8wqcsGhg38Er/CeBa/MhltSlDvJlMCCdjcvwgfCdUQXboisgiNhG8RARKhRZBLtyF8ErUJV8N3A9OeY6tDJzBNS6zQA3Kx4oiU4xLREt0QwiMbKzLhkU9gM7TK0hVCOtZCuFZCuEUQkippu0vSsVdJqqWVtlBbyoqusSNU7QhhswVt+TWNF3AKeKVoPKDRo9Gn8YSuOYTDIULNBZZIgkoUcYlpAoZvLiUUF7H0uVRQIsTQzKQPSSH2BZe6W2Pd5TKAIBEHAZcRFBlxBC3Pg3RQPwR9z+h7oC+MvgB9afQl6OPxQ9wFfd/o+6Cvjb4G/dDoQzuVuOfkpcALThnpYPyGlwqw0ZGgY+clN9drwEZfgr4dD95BhCF+ZXwV+OKNRPFgHUxeGny18dXga9dHG18Nvtr4avC188IjTxh88bQTBt8AfWHTrmjr9mns0qhpSwO87f9RY/i1E/O3IQygYviws1/++2KGnQE87Ngyz26Xq2KSjNLb9CUZlSyuH7r2TItbrOZ3KTwhLCrL82/ZbLFLYTPVImf3i7xId04hmY7v35LCqR1Sd3kxdmJ6TrKsncv3VVK0F9dPqBZVFvD4sX4nRZE/t5h5Uk5bhPWoaimlC6eYZdIOMXlMHLd5U451h70w+gzgDuLB//9M/jP/THDTvPfQht5DCHSu8+InTaaZdOkdrQbYn3Qba3YX/0ZjsWZdfquLYLDbjQTYHb0EWLedALXdUYDcairAvdFXUNVtLRiV213QaqvBoJXdYwbDzg8=";
     var candidateCache = {
@@ -208,7 +219,7 @@ var SudokuSolver = (function() {
         } else if (event.type === "cancelled") {
             setSolverStatus(elements, "Restarting");
         } else if (event.type === "timeout") {
-            setSolverStatus(elements, "Stopped · 60 s limit");
+            setSolverStatus(elements, "Stopped · " + (event.limitLabel || "time limit"));
         }
         if (elements.output && event.message) {
             var line = "[" + new Date().toLocaleTimeString() + "] " + event.message;
@@ -222,6 +233,7 @@ var SudokuSolver = (function() {
         if (activeAnalysisAbort) activeAnalysisAbort();
         var generation = ++candidateCache.generation;
         var startedAt = Date.now();
+        var runLimitMs = sudokuSolverTimeLimitMs();
         var timedOut = false;
         var timeoutId = null;
         candidateCache.pendingSignature = signature;
@@ -232,7 +244,7 @@ var SudokuSolver = (function() {
         var analysisOptions = {
             seedSolutions: seedSolutions,
             isCancelled: function() {
-                if (Date.now() - startedAt >= AUTO_RUN_LIMIT_MS) {
+                if (runLimitMs !== null && Date.now() - startedAt >= runLimitMs) {
                     timedOut = true;
                 }
                 return generation !== candidateCache.generation ||
@@ -257,7 +269,8 @@ var SudokuSolver = (function() {
                         var terminalEvent = timedOut && event.type === "cancelled" ? "timeout" : event.type;
                         appendSolverLog(Object.assign({}, event, {
                             type: terminalEvent,
-                            message: (timedOut ? "Solver stopped at the 60-second limit." : event.message) +
+                            limitLabel: runLimitMs === null ? "" : sudokuSolverTimeLimitLabel(runLimitMs) + " limit",
+                            message: (timedOut ? "Solver stopped at the " + sudokuSolverTimeLimitLabel(runLimitMs) + " limit." : event.message) +
                                 " Total runtime: " +
                                 ((Date.now() - startedAt) / 1000).toFixed(3) + " s."
                         }));
@@ -313,17 +326,20 @@ var SudokuSolver = (function() {
             });
         }
 
-        timeoutId = setTimeout(function() {
-            if (generation !== candidateCache.generation) return;
-            timedOut = true;
-            if (activeAnalysisAbort) activeAnalysisAbort();
-            setSolverRunning(false);
-            appendSolverLog({
-                type: "timeout",
-                message: "Solver stopped at the 60-second limit. Total runtime: " +
-                    ((Date.now() - startedAt) / 1000).toFixed(3) + " s."
-            });
-        }, AUTO_RUN_LIMIT_MS);
+        if (runLimitMs !== null) {
+            timeoutId = setTimeout(function() {
+                if (generation !== candidateCache.generation) return;
+                timedOut = true;
+                if (activeAnalysisAbort) activeAnalysisAbort();
+                setSolverRunning(false);
+                appendSolverLog({
+                    type: "timeout",
+                    limitLabel: sudokuSolverTimeLimitLabel(runLimitMs) + " limit",
+                    message: "Solver stopped at the " + sudokuSolverTimeLimitLabel(runLimitMs) + " limit. Total runtime: " +
+                        ((Date.now() - startedAt) / 1000).toFixed(3) + " s."
+                });
+            }, runLimitMs);
+        }
 
         runAnalysis().then(function(result) {
             clearTimeout(timeoutId);
@@ -3595,6 +3611,7 @@ var SudokuTools = (function() {
 
         var solveWorker = null;
         var solveTimeout = null;
+        var solveRunLimitMs = sudokuSolverTimeLimitMs();
 
         function cleanup() {
             if (solveTimeout) {
@@ -3647,16 +3664,18 @@ var SudokuTools = (function() {
 
         try {
             solveWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
-            solveTimeout = setTimeout(function() {
-                cleanup();
-                const msg = "Solving timed out after 30 seconds.";
-                generatorLog("Timeout", msg);
-                if (typeof Swal !== "undefined") {
-                    Swal.fire({ icon: "warning", title: "Timeout", text: msg });
-                } else {
-                    alert(msg);
-                }
-            }, 30000);
+            if (solveRunLimitMs !== null) {
+                solveTimeout = setTimeout(function() {
+                    cleanup();
+                    const msg = "Solving timed out after " + sudokuSolverTimeLimitLabel(solveRunLimitMs) + ".";
+                    generatorLog("Timeout", msg);
+                    if (typeof Swal !== "undefined") {
+                        Swal.fire({ icon: "warning", title: "Timeout", text: msg });
+                    } else {
+                        alert(msg);
+                    }
+                }, solveRunLimitMs);
+            }
 
             solveWorker.onmessage = function(event) {
                 if (event.data.type === "result") {

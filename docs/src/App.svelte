@@ -11,6 +11,55 @@
   import { metadataVariantIdForActiveVariants } from "./exampleSave.mjs";
   import ToastContainer, { type ToastItem, type ToastType } from "./ToastContainer.svelte";
 
+  type SolverTimeLimit = "60" | "120" | "none";
+  const solverTimeLimitStorageKey = "sudotoku-solver-time-limit";
+  const solverToastStorageKey = "sudotoku-solver-toast";
+  let solverTimeLimit: SolverTimeLimit = "60";
+  let solverToastsEnabled = true;
+
+  function publishSolverPreferences() {
+    if (typeof window === "undefined") return;
+    (window as any).SudokuSolverPreferences = {
+      timeLimitMs:
+        solverTimeLimit === "none" ? null : Number(solverTimeLimit) * 1000,
+      toast: solverToastsEnabled,
+    };
+  }
+
+  function loadSolverPreferences() {
+    try {
+      const savedLimit = window.localStorage.getItem(solverTimeLimitStorageKey);
+      if (savedLimit === "60" || savedLimit === "120" || savedLimit === "none") {
+        solverTimeLimit = savedLimit;
+      }
+      solverToastsEnabled =
+        window.localStorage.getItem(solverToastStorageKey) !== "off";
+    } catch {
+      // Keep defaults when browser storage is unavailable.
+    }
+    publishSolverPreferences();
+  }
+
+  function updateSolverTimeLimit(value: SolverTimeLimit) {
+    solverTimeLimit = value;
+    try {
+      window.localStorage.setItem(solverTimeLimitStorageKey, value);
+    } catch {
+      // The preference still applies for the current session.
+    }
+    publishSolverPreferences();
+  }
+
+  function updateSolverToasts(enabled: boolean) {
+    solverToastsEnabled = enabled;
+    try {
+      window.localStorage.setItem(solverToastStorageKey, enabled ? "on" : "off");
+    } catch {
+      // The preference still applies for the current session.
+    }
+    publishSolverPreferences();
+  }
+
   if (typeof window !== "undefined") {
     (window as any).SudokuSolverRuleText = Object.fromEntries(
       Object.entries(variantRules).map(([key, val]) => [key.replace(/\s+/g, ""), val.rule])
@@ -30,7 +79,7 @@
     title?: string,
     duration = 4000
   ) {
-    if (!message) return;
+    if (!message || !solverToastsEnabled) return;
     const id = nextToastId++;
     const newToast: ToastItem = { id, type, title, message, duration };
     toasts = [newToast, ...toasts.filter(t => t.id !== id)].slice(0, 4);
@@ -91,6 +140,7 @@
   let desktopLegacyModesAnchor: HTMLElement;
   let mobileMiscSlot: HTMLElement;
   let logHost: HTMLElement;
+  let solverSettingsButton: HTMLButtonElement;
   let legacyControlsHost: HTMLElement;
   let variants: VariantOption[] = [];
   let selectedVariant = "classic";
@@ -111,6 +161,9 @@
     | "confirm-grid"
     | "confirm-generate"
     | "screenshot"
+    | "share"
+    | "settings"
+    | "solver-settings"
     | "info"
     | null = null;
   let actionMenu: "new-grid" | "transform" | "clone" | null = null;
@@ -1777,6 +1830,7 @@
     boardHost.appendChild(board);
     variantHost.appendChild(variantTools);
     logHost.appendChild(log);
+    logHeader.insertBefore(solverSettingsButton, autoSolver);
     logHeader.insertBefore(
       autoSolver,
       document.getElementById("sudoku-solver-status"),
@@ -1801,6 +1855,7 @@
   }
 
   onMount(() => {
+    loadSolverPreferences();
     hideLeftSidebar = checkUrlFlag("hideSidebar");
     isEmbedded =
       new URLSearchParams(window.location.search).has("embed") ||
@@ -2171,6 +2226,13 @@
         <button
           type="button"
           class="solver-btn"
+          on:click={() => (studioModal = "solver-settings")}
+        >
+          <span><i class="fa fa-cog" aria-hidden="true"></i></span> Settings
+        </button>
+        <button
+          type="button"
+          class="solver-btn"
           class:active={autoEnabled}
           on:click={() => legacyClick("sudoku_auto_solver")}
         >
@@ -2191,6 +2253,8 @@
         >
           <span>↶</span> Undo
         </button>
+      </div>
+      <div class="solver-status-row">
         <div class="solver-status">
           <span class="status-indicator" class:running={solverRunning && !isNoSolution} class:error-bulb={isNoSolution} title={isNoSolution ? "No solution found" : (solverRunning ? "Solver running" : "Solver idle")}></span>
           <span class="log-text">{lastLogLine}</span>
@@ -2668,7 +2732,15 @@
       class:open={mobileActiveTab === "actions"}
       aria-label="Solver and Penpa controls"
     >
-      <section bind:this={logHost} class="log-host"></section>
+      <section bind:this={logHost} class="log-host">
+        <button
+          bind:this={solverSettingsButton}
+          type="button"
+          id="sudoku_solver_settings"
+          class="solver-settings-btn"
+          on:click={() => (studioModal = "solver-settings")}
+        ><i class="fa fa-cog" aria-hidden="true"></i>Settings</button>
+      </section>
 
       <section class="penpa-actions">
         <h2>Penpa actions</h2>
@@ -2964,6 +3036,64 @@
           </div>
         {/if}
 
+      {:else if studioModal === "solver-settings"}
+        <h2 id="studio-modal-title">Solver Settings</h2>
+        <div class="solver-settings-grid">
+          <fieldset>
+            <legend>Time limit</legend>
+            <label>
+              <input
+                type="radio"
+                name="solver-time-limit"
+                checked={solverTimeLimit === "60"}
+                on:change={() => updateSolverTimeLimit("60")}
+              />
+              <span>60 seconds</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="solver-time-limit"
+                checked={solverTimeLimit === "120"}
+                on:change={() => updateSolverTimeLimit("120")}
+              />
+              <span>120 seconds</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="solver-time-limit"
+                checked={solverTimeLimit === "none"}
+                on:change={() => updateSolverTimeLimit("none")}
+              />
+              <span>No limit</span>
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>Toast notifications</legend>
+            <label>
+              <input
+                type="radio"
+                name="solver-toast"
+                checked={solverToastsEnabled}
+                on:change={() => updateSolverToasts(true)}
+              />
+              <span>On</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="solver-toast"
+                checked={!solverToastsEnabled}
+                on:change={() => updateSolverToasts(false)}
+              />
+              <span>Off</span>
+            </label>
+          </fieldset>
+        </div>
+        <div class="studio-modal-actions">
+          <button class="primary" on:click={() => (studioModal = null)}>Close</button>
+        </div>
       {:else if studioModal === "settings"}
         <h2 id="studio-modal-title">General Settings</h2>
 
@@ -4225,7 +4355,7 @@ href="https://github.com/semiexp/cspuz_core"
   /* Right column: solver log first, followed by grouped Penpa actions. */
   .log-host {
     order: -1;
-    flex: 0 0 196px;
+    flex: 0 0 224px;
     min-height: 0;
   }
   :global(.svelte-home .log-host .sudoku-solver-log) {
@@ -4240,10 +4370,11 @@ href="https://github.com/semiexp/cspuz_core"
   }
   :global(.svelte-home .log-host .sudoku-solver-log-header) {
     display: flex !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 6px !important;
-    min-height: 48px;
+    min-height: 76px;
     box-sizing: border-box;
     margin: 0;
     padding: 6px 10px;
@@ -4253,15 +4384,17 @@ href="https://github.com/semiexp/cspuz_core"
   }
   :global(.svelte-home .log-host #sudoku_auto_solver),
   :global(.svelte-home .log-host #sudoku_solve_once),
-  :global(.svelte-home .log-host #sudoku_solve_clear) {
+  :global(.svelte-home .log-host #sudoku_solve_clear),
+  :global(.svelte-home .log-host #sudoku_solver_settings) {
     display: inline-flex !important;
-    flex-direction: column !important;
+    flex: 1 1 0 !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 58px !important;
-    min-width: 58px !important;
-    max-width: 58px !important;
-    height: 40px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 34px !important;
     margin: 0 !important;
     padding: 3px 2px !important;
     border: 1px solid #bfcad4;
@@ -4274,9 +4407,10 @@ href="https://github.com/semiexp/cspuz_core"
   }
   :global(.svelte-home .log-host #sudoku_auto_solver i),
   :global(.svelte-home .log-host #sudoku_solve_once i),
-  :global(.svelte-home .log-host #sudoku_solve_clear i) {
+  :global(.svelte-home .log-host #sudoku_solve_clear i),
+  :global(.svelte-home .log-host #sudoku_solver_settings i) {
     font-size: 13px;
-    margin-bottom: 2px;
+    margin: 0;
   }
   :global(.svelte-home .log-host #sudoku_auto_solver.active) {
     color: #fff;
@@ -4292,8 +4426,10 @@ href="https://github.com/semiexp/cspuz_core"
     font-weight: 650;
   }
   :global(.svelte-home .log-host #sudoku-solver-status) {
-    margin-left: auto !important;
-    justify-self: end !important;
+    flex: 0 0 100% !important;
+    min-height: 20px;
+    margin: 0 !important;
+    justify-content: flex-start !important;
   }
   :global(.svelte-home #sudoku-solver-status::before) {
     content: "";
@@ -4513,7 +4649,30 @@ href="https://github.com/semiexp/cspuz_core"
     flex: 0 0 17px;
   }
   .bottom-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .solver-settings-grid {
+    display: grid;
+    gap: 14px;
+  }
+  .solver-settings-grid fieldset {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid #cbd5df;
+    border-radius: 8px;
+  }
+  .solver-settings-grid legend {
+    padding: 0 5px;
+    font-size: 12px;
+    font-weight: 750;
+  }
+  .solver-settings-grid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
   }
   .info-copy {
     display: grid;
@@ -5726,11 +5885,21 @@ href="https://github.com/semiexp/cspuz_core"
     .studio-shell.dark .mobile-header-row.solver-row {
       background: #1b2630;
     }
+    .studio-shell .solver-status-row {
+      display: flex;
+      width: 100%;
+      min-height: 26px;
+      margin-top: 2px;
+      padding: 2px 6px;
+      box-sizing: border-box;
+      background: #1a242f;
+      border-radius: 6px;
+    }
     .studio-shell .solver-btn {
-      flex: 0 0 74px !important;
-      width: 74px !important;
-      min-width: 74px !important;
-      max-width: 74px !important;
+      flex: 1 1 0 !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
       justify-content: center !important;
       text-align: center !important;
       box-sizing: border-box !important;
