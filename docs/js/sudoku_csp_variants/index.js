@@ -15,6 +15,7 @@ var installers = [
     require("./chess_kings.js"),
     require("./knightmare.js"),
     require("./disparity.js"),
+    require("./dutch_flat_mates.js"),
     require("./non_consecutive.js"),
     require("./diagonal_non_consecutive.js"),
     require("./no_even_neighbours.js"),

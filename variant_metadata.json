@@ -1552,6 +1552,26 @@
       }
     },
     {
+      "id": "dutchflatmates",
+      "name": "Dutch Flat Mates",
+      "rules": {
+        "9x9": "Each digit 5 in the grid must have a digit 1 directly above it or a digit 9 directly below it, or both."
+      },
+      "tags": [
+        "neighbour",
+        "position"
+      ],
+      "status": "available",
+      "inputType": {
+        "categories": [
+          "no-input"
+        ],
+        "instructions": [
+          "This is a global rule and requires no additional marks."
+        ]
+      }
+    },
+    {
       "otherNames": "",
       "id": "double",
       "name": "Double",

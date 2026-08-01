@@ -119,6 +119,35 @@
     };
 });
 
+// Source: dutch_flat_mates.js
+(function(root, factory) {
+    var install = factory();
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = install;
+    } else {
+        install(root.SudokuCSP);
+    }
+})(typeof globalThis !== "undefined" ? globalThis : this, function() {
+    return function installDutchFlatMates(csp) {
+        if (!csp || typeof csp.registerConstraint !== "function") {
+            throw new Error("dutchFlatMates requires SudokuCSP.registerConstraint");
+        }
+
+        csp.registerConstraint("dutchFlatMates", {
+            validatePartial: function(board, relation, helpers) {
+                if (board.length !== 9) return false;
+                if (helpers.cellValue(board, relation.cell) !== 5) return true;
+
+                var above = relation.above ? helpers.cellValue(board, relation.above) : null;
+                var below = relation.below ? helpers.cellValue(board, relation.below) : null;
+                if (above === 1 || below === 9) return true;
+
+                return !!((relation.above && !above) || (relation.below && !below));
+            }
+        });
+    };
+});
+
 // Source: non_consecutive.js
 (function(root, factory) {
     var install = factory();
@@ -378,6 +407,50 @@
                 var size = board.length;
                 if (!hasSequencePath(board, 1, 0, size, size - 1, helpers.cellValue)) return false;
                 return hasSequencePath(board, 1, size - 1, size, 0, helpers.cellValue);
+            }
+        });
+    };
+});
+
+// Source: cage_constraints/killer.js
+(function(root, factory) {
+    var install = factory();
+    if (typeof module !== "undefined" && module.exports) module.exports = install;
+    else install(root.SudokuCSP);
+})(typeof globalThis !== "undefined" ? globalThis : this, function() {
+    "use strict";
+    return function installKiller(csp) {
+        csp.registerConstraint("killers", {
+            validatePartial: function(board, cage, helpers) {
+                var seen = 0;
+                var total = 0;
+                var blanks = 0;
+                for (var index = 0; index < cage.cells.length; index++) {
+                    var digit = helpers.cellValue(board, cage.cells[index]);
+                    if (!digit) {
+                        blanks++;
+                        continue;
+                    }
+                    var bit = 1 << digit;
+                    if (seen & bit) return false;
+                    seen |= bit;
+                    total += board.isZeroEight ? digit - 1 : digit;
+                }
+                if (!cage.total) return true;
+                if (total > cage.total || (!blanks && total !== cage.total)) return false;
+
+                var available = [];
+                for (var value = 1; value <= helpers.size; value++) {
+                    if (!(seen & (1 << value))) available.push(value);
+                }
+                if (available.length < blanks) return false;
+                var minimum = available.slice(0, blanks).reduce(function(sum, value) {
+                    return sum + value;
+                }, 0);
+                var maximum = available.slice(available.length - blanks).reduce(function(sum, value) {
+                    return sum + value;
+                }, 0);
+                return total + minimum <= cage.total && total + maximum >= cage.total;
             }
         });
     };

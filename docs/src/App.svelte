@@ -724,7 +724,33 @@
     if (!option) return;
     event.preventDefault();
     event.stopImmediatePropagation();
+    if (layer === "solution") {
+      if (event.shiftKey) chooseNoteMode("2");
+      else if (event.ctrlKey) chooseNoteMode("3");
+    }
     applyToolPanelOption(option);
+  }
+
+  function desktopLayerShortcut(event: KeyboardEvent) {
+    const target = event.target as HTMLElement | null;
+    if (
+      target?.closest(
+        "input, textarea, select, [contenteditable='true'], .modal, .swal2-container",
+      ) ||
+      isEmbedded ||
+      window.matchMedia("(max-width: 768px)").matches
+    )
+      return;
+    const layerByKey: Record<string, "problem" | "solution" | "modes"> = {
+      F2: "problem",
+      F3: "solution",
+      F4: "modes",
+    };
+    const nextLayer = layerByKey[event.key];
+    if (!nextLayer) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    chooseLayer(nextLayer);
   }
 
   function revealAllModes() {
@@ -827,6 +853,8 @@
     if (size === 9) return "";
     if (value === "windoku") return "Windoku requires a 9 × 9 grid";
     if (value === "argyle") return "Argyle requires a 9 × 9 grid";
+    if (value === "dutchflatmates")
+      return "Dutch Flat Mates requires a 9 × 9 grid";
     return "";
   }
 
@@ -1870,6 +1898,7 @@
       window.addEventListener("load", () => window.setTimeout(begin, 0), {
         once: true,
       });
+    document.addEventListener("keydown", desktopLayerShortcut, true);
     document.addEventListener("keydown", cycleInputMode, true);
     document.addEventListener("keydown", toolPanelNumberShortcut, true);
     document.addEventListener("pointerup", requestSync);
@@ -1906,6 +1935,7 @@
       observer?.disconnect();
       resizeObserver?.disconnect();
       if (syncFrame) window.cancelAnimationFrame(syncFrame);
+      document.removeEventListener("keydown", desktopLayerShortcut, true);
       document.removeEventListener("keydown", cycleInputMode, true);
       document.removeEventListener("keydown", toolPanelNumberShortcut, true);
       document.removeEventListener("pointerup", requestSync);
@@ -2185,18 +2215,18 @@
               <button
                 class:active={layer === "problem"}
                 on:click={() => chooseLayer("problem")}
-                ><i class="fa fa-pencil" aria-hidden="true"></i>Set</button
+                ><i class="fa fa-pencil" aria-hidden="true"></i>Set <kbd>F2</kbd></button
               >
             {/if}
             <button
               class:active={layer === "solution"}
               on:click={() => chooseLayer("solution")}
-              ><i class="fa fa-check" aria-hidden="true"></i>{currentVariant === "sudokuwithstars" ? "Star" : "Solve"}</button
+              ><i class="fa fa-check" aria-hidden="true"></i>{currentVariant === "sudokuwithstars" ? "Star" : "Solve"} <kbd>F3</kbd></button
             >
             <button
               class:active={layer === "modes"}
               on:click={() => chooseLayer("modes")}
-              ><i class="fa fa-sliders" aria-hidden="true"></i>Misc</button
+              ><i class="fa fa-sliders" aria-hidden="true"></i>Misc <kbd>F4</kbd></button
             >
           </div>
           {#if layer === "solution"}
@@ -3258,6 +3288,19 @@ href="https://github.com/semiexp/cspuz_core"
   }
   .segmented button:last-child {
     border-radius: 0 6px 6px 0;
+  }
+  .segmented kbd {
+    padding: 1px 3px;
+    color: #65717d;
+    border: 1px solid #c6d0d9;
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    background: #fff;
+    font-size: 8px;
+    line-height: 1;
+  }
+  .segmented button.active kbd {
+    color: #1a202c;
   }
   .note-modes {
     display: grid;

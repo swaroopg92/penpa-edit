@@ -1055,46 +1055,6 @@ registerConstraint("threeDigitNumbersKillers", {
         }
     });
 
-    registerConstraint("killers", {
-        validatePartial: function(board, cage) {
-            var seen = 0;
-            var total = 0;
-            var blanks = 0;
-            for (var i = 0; i < cage.cells.length; i++) {
-                var digit = cellValue(board, cage.cells[i]);
-                if (!digit) {
-                    blanks++;
-                    continue;
-                }
-                var bit = 1 << digit;
-                if (seen & bit) {
-                    return false;
-                }
-                seen |= bit;
-                total += (board.isZeroEight ? digit - 1 : digit);
-            }
-            if (!cage.total) {
-                return true;
-            }
-            if (total > cage.total || (!blanks && total !== cage.total)) {
-                return false;
-            }
-            var available = [];
-            for (var value = 1; value <= SIZE; value++) {
-                if (!(seen & (1 << value))) {
-                    available.push(value);
-                }
-            }
-            if (available.length < blanks) {
-                return false;
-            }
-            var minimum = available.slice(0, blanks).reduce(function(sum, value) { return sum + value; }, 0);
-            var maximum = available.slice(available.length - blanks).reduce(function(sum, value) { return sum + value; }, 0);
-            return total + minimum <= cage.total && total + maximum >= cage.total;
-        }
-    });
-
-
     registerConstraint("zones", {
         validatePartial: function(board, cage) {
             var missing = cage.digits.slice();

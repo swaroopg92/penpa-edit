@@ -7,6 +7,8 @@ const workerVm = require("node:vm");
 const SudokuCSP = require("../docs/js/sudoku_csp.js");
 const SudokuSolver = require("../docs/js/sudoku_solver.js");
 const SudokuGenerator = require("../docs/js/sudoku_generator.js");
+const SudokuVariants = require("../docs/js/sudoku_variants/index.js");
+const SudokuVariantRuntime = require("../docs/js/sudoku_variants/runtime.js");
 
 function boardFromString(value) {
     return Array.from({ length: 9 }, function(_, row) {
@@ -39,6 +41,324 @@ function variantPuzzle(variant, pu_q) {
     };
 }
 
+test("build-discovered Variant Registry resolves migrated IDs and aliases", function() {
+    ["antiking", "antiknight", "diagonal", "dutchflatmates", "killer", "mirror",
+        "multiplication", "partitionedsums", "windoku"].forEach(function(id) {
+        assert.equal(SudokuVariants.ids().includes(id), true, id + " is build-discovered");
+    });
+    assert.equal(SudokuVariants.resolve("Dutch Flat Mates").id, "dutchflatmates");
+    assert.equal(SudokuVariants.resolve("partitioned sums").id, "partitionedsums");
+    assert.deepEqual(SudokuVariants.resolve("killer").inputType.categories, ["cage"]);
+    assert.deepEqual(SudokuVariants.resolve("partitionedsums").inputType.categories, ["cell"]);
+    assert.equal(SudokuVariants.resolve("unknown variant"), null);
+});
+
+test("global descriptors reproduce representative legacy geometry", function() {
+    var cases = [
+        ["anti king", "antiKing", 272],
+        ["anti knight", "antiKnight", 224],
+        ["non consecutive", "nonConsecutive", 144],
+        ["noevenneighbours", "noEvenNeighbours", 144],
+        ["nothreeinarow", "noThreeInRow", 126],
+        ["mirror", "cloneGroups", 18],
+        ["windoku", "regionAllDifferent", 4]
+    ];
+    cases.forEach(function(item) {
+        var interpretation = SudokuVariants.interpretPuzzle(variantPuzzle(item[0]));
+        assert.deepEqual(interpretation.diagnostics, [], item[0]);
+        assert.equal(interpretation.instances.filter(function(instance) {
+            return instance.type === item[1];
+        }).length, item[2], item[0]);
+    });
+});
+
+test("authored-mark descriptors consume normalized Puzzle Evidence", function() {
+    var coded = SudokuVariants.interpretPuzzle(variantPuzzle("coded", {
+        numberS: { 788: ["A", 1], 792: ["A", 1] }
+    }));
+    assert.deepEqual(coded.diagnostics, []);
+    assert.deepEqual(coded.instances[0].payload.groups[0], [
+        { row: 0, col: 0 }, { row: 0, col: 1 }
+    ]);
+
+    var marks = Array(9).fill(0); marks[1] = 1; marks[6] = 1;
+    var pencilmarks = SudokuVariants.interpretPuzzle(variantPuzzle("pencilmarks", {
+        number: { 28: [marks, 1, "7"] }
+    }));
+    assert.deepEqual(pencilmarks.diagnostics, []);
+    assert.deepEqual(pencilmarks.instances[0].payload, {
+        cell: { row: 0, col: 0 }, allowed: [2, 7]
+    });
+
+    var line = {};
+    [0, 1, 2].forEach(function(boxRow) {
+        [0, 1, 2].forEach(function(boxCol) {
+            var row = boxRow * 3, col = boxCol * 3;
+            var first = (row + 2) * 13 + col + 2;
+            line[first + "," + (first + 1)] = 5;
+        });
+    });
+    var winner = SudokuVariants.interpretPuzzle(variantPuzzle("tic-tac-toe winner", { line: line }));
+    assert.deepEqual(winner.diagnostics, []);
+    assert.equal(winner.instances.length, 1);
+    assert.equal(winner.instances[0].payload.length, 9);
+});
+
+test("marked-family descriptors normalize edge, quad, and directional clues once", function() {
+    var xvPuzzle = variantPuzzle("xv", { number: { 1000: ["V", 1, "5"] } });
+    xvPuzzle.point[1000] = { neighbor: [28, 29], type: 1 };
+    var xv = SudokuSolver.readConstraints(xvPuzzle);
+    assert.deepEqual(xv.xv, [{
+        cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }], kind: "V", family: "xv"
+    }]);
+
+    var quadPuzzle = variantPuzzle("quadruple", { number: { 1001: ["127", 1, "1"] } });
+    quadPuzzle.point[1001] = { neighbor: [28, 29, 41, 42], type: 0 };
+    var quad = SudokuSolver.readConstraints(quadPuzzle);
+    assert.equal(quad.quadRelations.length, 1);
+    assert.deepEqual(quad.quadRelations[0].digits, [1, 2, 7]);
+
+    var directionPuzzle = variantPuzzle("pointtonext", {
+        symbol: { 28: [5, "arrow_B_G", 2, "pointtonext"] }
+    });
+    var directional = SudokuSolver.readConstraints(directionPuzzle);
+    assert.equal(directional.directionalMarks.length, 1);
+    assert.equal(directional.directionalMarks[0].targets.length, 8);
+    assert.deepEqual(directional.directionalMarks[0].origin, { row: 0, col: 0, key: 28 });
+    assert.deepEqual(directional.directionalMarks[0].targets[0], { row: 0, col: 1 });
+});
+
+test("batch 4 and 5 variants are descriptor-owned marked families", function() {
+    var quadIds = ["clockfaces", "consecutivequads", "crosssums", "determinant",
+        "equaldifferences", "equalproducts", "equalratios", "equalsums", "exclusion",
+        "fullorhalf", "groupsum", "mathrax", "quadro"];
+    var directionalIds = ["biggestneighbours", "deadoralivearrows", "detection", "eliminate",
+        "pointtoprevious", "quadmax", "quadmin", "search9", "smallestneighbours",
+        "sumdetector", "twindetector"];
+    quadIds.concat(directionalIds).forEach(function(id) {
+        assert.equal(SudokuVariants.ids().includes(id), true, id + " is descriptor-owned");
+    });
+
+    var quadPuzzle = variantPuzzle("equalsums", { symbol: { 1001: [1, "circle_SS", 2] } });
+    quadPuzzle.point[1001] = { neighbor: [28, 29, 41, 42], type: 0 };
+    var quad = SudokuVariants.interpretPuzzle(quadPuzzle);
+    assert.deepEqual(quad.diagnostics, []);
+    assert.equal(quad.instances.length, 1);
+    assert.equal(quad.instances[0].payload.relation, "equalsums");
+    assert.equal(SudokuSolver.readConstraints(quadPuzzle).quadRelations.length, 1,
+        "the compatibility view contains one descriptor-owned quad clue");
+
+    var directionalPuzzle = variantPuzzle("search9", {
+        symbol: { 28: [5, "arrow_B_G", 2, "search9"] }
+    });
+    var directional = SudokuVariants.interpretPuzzle(directionalPuzzle);
+    assert.deepEqual(directional.diagnostics, []);
+    assert.equal(directional.instances.length, 1);
+    assert.equal(directional.instances[0].payload.relation, "search9");
+    assert.equal(directional.instances[0].payload.searchDigit, 9);
+    assert.equal(SudokuSolver.readConstraints(directionalPuzzle).directionalMarks.length, 1,
+        "the compatibility view contains one descriptor-owned directional clue");
+});
+
+test("batch 6 edge variants are descriptor-owned", function() {
+    var ids = ["arithmetic", "blocksumrelations", "consecutive", "diagonallyconsecutive",
+        "diagonalsumisnine", "diagonaltens", "difference", "divisor", "eitheror",
+        "evensumpairs", "fives", "greater", "inequality", "lesser", "multiples",
+        "oddsumpairs", "oneortwodifferencepairs", "perfectsquares", "primesums", "product",
+        "ratio", "sum", "sumnine", "teneleven", "tenspositionproducts", "termination",
+        "twodigitprimenumbers", "xydifference"];
+    ids.forEach(function(id) {
+        assert.equal(SudokuVariants.ids().includes(id), true, id + " is descriptor-owned");
+    });
+
+    var numericPuzzle = variantPuzzle("difference", { number: { 1000: [3, 6, "5"] } });
+    numericPuzzle.point[1000] = { neighbor: [28, 29], type: 2 };
+    var numeric = SudokuVariants.interpretPuzzle(numericPuzzle);
+    assert.deepEqual(numeric.diagnostics, []);
+    assert.equal(numeric.instances.length, 1);
+    assert.equal(numeric.instances[0].payload.target, 3);
+    assert.equal(SudokuSolver.readConstraints(numericPuzzle).edgeRelations.length, 1);
+
+    var diagonalPuzzle = variantPuzzle("diagonallyconsecutive", {
+        symbol: { 1001: [[1, 0], "diagonal_consecutive", 2] }
+    });
+    diagonalPuzzle.point[1001] = { neighbor: [28, 29, 41, 42], type: 0 };
+    var diagonal = SudokuVariants.interpretPuzzle(diagonalPuzzle);
+    assert.deepEqual(diagonal.diagnostics, []);
+    assert.equal(diagonal.instances.length, 128);
+    assert.equal(diagonal.instances.filter(function(instance) {
+        return instance.payload.relation === "diagonalConsecutive";
+    }).length, 1);
+    assert.equal(SudokuSolver.readConstraints(diagonalPuzzle).edgeRelations.length, 128);
+});
+
+test("batch 7 cell variants are descriptor-owned", function() {
+    var ids = ["average", "clock", "clonedstrands", "codedpairs", "countingneighbours",
+        "fortress", "pinocchio", "slotmachine", "trio", "wheel"];
+    ids.forEach(function(id) {
+        assert.equal(SudokuVariants.ids().includes(id), true, id + " is descriptor-owned");
+    });
+
+    var trioPuzzle = variantPuzzle("trio", { symbol: { 28: [1, "circle_L", 2] } });
+    var trio = SudokuVariants.interpretPuzzle(trioPuzzle);
+    assert.deepEqual(trio.diagnostics, []);
+    assert.equal(trio.instances.length, 1);
+    assert.deepEqual([trio.instances[0].payload.minimum, trio.instances[0].payload.maximum], [1, 3]);
+    assert.equal(SudokuSolver.readConstraints(trioPuzzle).cellRelations.length, 1);
+
+    var codedPuzzle = variantPuzzle("codedpairs", {
+        killercages: [[28, 29], [41, 42]], numberS: { 788: ["A", 1], 840: ["A", 1] }
+    });
+    var coded = SudokuVariants.interpretPuzzle(codedPuzzle);
+    assert.deepEqual(coded.diagnostics, []);
+    assert.equal(coded.instances.length, 1);
+    assert.equal(coded.instances[0].payload.pairs.length, 2);
+    assert.equal(SudokuSolver.readConstraints(codedPuzzle).cellRelations.length, 1);
+
+    var counting = SudokuVariants.interpretPuzzle(variantPuzzle("countingneighbours"));
+    assert.deepEqual(counting.diagnostics, []);
+    assert.equal(counting.instances.length, 81);
+});
+
+test("Puzzle Interpretation emits Dutch Flat Mates Constraint Instances", function() {
+    const interpretation = SudokuVariants.interpretPuzzle(
+        variantPuzzle("Dutch Flat Mates")
+    );
+    assert.deepEqual(interpretation.activeVariantIds, ["dutchflatmates"]);
+    assert.deepEqual(interpretation.diagnostics, []);
+    assert.equal(interpretation.instances.length, 81);
+    assert.deepEqual(interpretation.instances[0], {
+        type: "dutchFlatMates",
+        version: 1,
+        payload: {
+            cell: { row: 0, col: 0 },
+            above: null,
+            below: { row: 1, col: 0 }
+        },
+        variantId: "dutchflatmates"
+    });
+});
+
+test("Puzzle Evidence normalizes Killer cages for interpretation", function() {
+    const puzzle = variantPuzzle("killer", {
+        killercages: [[28, 29]],
+        numberS: { 788: ["10", 1, "1"] }
+    });
+    const interpretation = SudokuVariants.interpretPuzzle(puzzle);
+    assert.deepEqual(interpretation.diagnostics, []);
+    assert.deepEqual(interpretation.instances, [{
+        type: "killers",
+        version: 1,
+        payload: {
+            cells: [{ row: 0, col: 0 }, { row: 0, col: 1 }],
+            total: 10
+        },
+        variantId: "killer"
+    }]);
+});
+
+test("Multiplication interprets normalized cage rows", function() {
+    const interpretation = SudokuVariants.interpretPuzzle(variantPuzzle("multiplication", {
+        killercages: [[28, 29, 41, 42]]
+    }));
+    assert.deepEqual(interpretation.diagnostics, []);
+    assert.deepEqual(interpretation.instances, [{
+        type: "cellRelations",
+        version: 1,
+        payload: {
+            relation: "multiplication",
+            top: [{ row: 0, col: 0 }, { row: 0, col: 1 }],
+            bottom: [{ row: 1, col: 0 }, { row: 1, col: 1 }]
+        },
+        variantId: "multiplication"
+    }]);
+});
+
+test("Partitioned Sums interprets only above and left clue layers", function() {
+    const interpretation = SudokuVariants.interpretPuzzle(variantPuzzle("partitioned sums", {
+        number: {
+            2: ["10", 1, "1"],
+            15: ["20", 1, "1"],
+            26: ["11", 1, "1"],
+            27: ["22", 1, "1"],
+            145: ["99", 1, "1"]
+        }
+    }));
+    assert.deepEqual(interpretation.diagnostics, []);
+    assert.deepEqual(interpretation.instances.map(function(instance) {
+        return {
+            relation: instance.payload.relation,
+            axis: instance.payload.axis,
+            value: instance.payload.value,
+            first: instance.payload.cells[0]
+        };
+    }), [
+        { relation: "partitionedsums", axis: "column", value: [10, 20], first: { row: 0, col: 0 } },
+        { relation: "partitionedsums", axis: "row", value: [11, 22], first: { row: 0, col: 0 } }
+    ]);
+});
+
+test("SudokuSolver exposes Puzzle Interpretation and a grouped compatibility view", function() {
+    const puzzle = variantPuzzle("dutchflatmates");
+    const interpretation = SudokuSolver.interpretPuzzle(puzzle);
+    assert.equal(interpretation.instances.length, 81);
+    assert.deepEqual(interpretation.diagnostics, []);
+
+    const constraints = SudokuSolver.readConstraints(puzzle);
+    assert.equal(constraints.dutchFlatMates.length, 81);
+    assert.equal(constraints.supported.includes("dutchflatmates"), true);
+    assert.deepEqual(constraints.diagnostics, []);
+
+    ["killer", "multiplication", "partitionedsums"].forEach(function(variant) {
+        const empty = SudokuSolver.readConstraints(variantPuzzle(variant));
+        assert.equal(empty.supported.includes(variant), true,
+            variant + " remains supported before its first clue is drawn");
+    });
+});
+
+test("Variant Composition is independent of activation order", function() {
+    const first = variantPuzzle("killer", { killercages: [[28, 29]] });
+    first.activeSudokuVariants = ["classic", "killer", "dutchflatmates"];
+    const second = variantPuzzle("killer", { killercages: [[28, 29]] });
+    second.activeSudokuVariants = ["classic", "dutchflatmates", "killer"];
+    assert.deepEqual(
+        SudokuVariants.interpretPuzzle(first),
+        SudokuVariants.interpretPuzzle(second)
+    );
+});
+
+test("Constraint Families expose versioned payload contracts", function() {
+    const killers = SudokuVariants.constraintFamily("killers");
+    assert.equal(killers.version, 1);
+    assert.equal(killers.validatePayload({
+        cells: [{ row: 0, col: 0 }], total: 5
+    }), true);
+    assert.equal(killers.validatePayload({ cells: [], total: "five" }), false);
+    assert.equal(SudokuVariants.constraintFamily("missing"), null);
+});
+
+test("Variant Composition validates declared conflicts before parsing", function() {
+    const family = [{
+        type: "testRule", version: 1, validatePayload: function() { return true; }
+    }];
+    const registry = SudokuVariantRuntime.createRegistry([
+        {
+            id: "first", label: "First", constraintTypes: ["testRule"],
+            conflictsWith: ["second"], parse: function(_, emit) { emit("testRule", {}); }
+        },
+        {
+            id: "second", label: "Second", constraintTypes: ["testRule"],
+            parse: function(_, emit) { emit("testRule", {}); }
+        }
+    ], family);
+    const interpretation = registry.interpretPuzzle({
+        nx: 9, ny: 9, space: [0, 0, 0, 0],
+        activeSudokuVariants: ["first", "second"]
+    });
+    assert.equal(interpretation.instances.length, 0);
+    assert.equal(interpretation.diagnostics[0].code, "conflicting-variants");
+});
+
 test("variant parser regressions keep global and cell constraints usable", function() {
     const noEven = SudokuSolver.readConstraints(variantPuzzle("noevenneighbours"));
     assert.equal(noEven.noEvenNeighbours.length, 144);
@@ -57,6 +377,50 @@ test("variant parser regressions keep global and cell constraints usable", funct
     assert.doesNotThrow(function() {
         SudokuCSP.findConflict(emptyBoard(), sequence);
     });
+});
+
+test("Dutch Flat Mates requires a 1 above or a 9 below every 5", function() {
+    const constraints = SudokuSolver.readConstraints(variantPuzzle("dutchflatmates"));
+    assert.equal(constraints.supported.includes("dutchflatmates"), true);
+    assert.equal(constraints.dutchFlatMates.length, 81);
+
+    const aboveValid = emptyBoard();
+    aboveValid[4][4] = 5;
+    aboveValid[3][4] = 1;
+    aboveValid[5][4] = 8;
+    assert.equal(SudokuCSP.findConflict(aboveValid, constraints), null);
+
+    const belowValid = emptyBoard();
+    belowValid[4][4] = 5;
+    belowValid[3][4] = 8;
+    belowValid[5][4] = 9;
+    assert.equal(SudokuCSP.findConflict(belowValid, constraints), null);
+
+    const bothValid = emptyBoard();
+    bothValid[4][4] = 5;
+    bothValid[3][4] = 1;
+    bothValid[5][4] = 9;
+    assert.equal(SudokuCSP.findConflict(bothValid, constraints), null);
+
+    const unresolved = emptyBoard();
+    unresolved[4][4] = 5;
+    unresolved[3][4] = 8;
+    assert.equal(SudokuCSP.findConflict(unresolved, constraints), null,
+        "an empty lower neighbour can still become 9");
+
+    const invalid = emptyBoard();
+    invalid[4][4] = 5;
+    invalid[3][4] = 8;
+    invalid[5][4] = 7;
+    assert.equal(SudokuCSP.findConflict(invalid, constraints)?.constraint, "dutchFlatMates");
+
+    const topEdgeInvalid = emptyBoard();
+    topEdgeInvalid[0][2] = 5;
+    topEdgeInvalid[1][2] = 7;
+    assert.equal(SudokuCSP.findConflict(topEdgeInvalid, constraints)?.constraint, "dutchFlatMates");
+
+    assert.equal(SudokuCSP.solve(emptyBoard(), constraints).solved, true,
+        "the global rule admits a complete Sudoku solution");
 });
 
 test("Upper Right Heavy Killer reads cell clues and enforces both directions", function() {
@@ -1551,17 +1915,8 @@ test("reads native Penpa cage boundaries through the refreshed Killer cache", fu
 });
 
 test("normalizes multiple selected variants at once", function() {
-    const puzzle = {
-        nx0: 13,
-        activeSudokuVariants: ["classic", "diagonal", "anti diagonal", "odd even"],
-        centerlist: [28],
-        point: {},
-        pu_q: {
-            line: {},
-            number: {},
-            symbol: { 28: [3, "circle_L", 2] }
-        }
-    };
+    const puzzle = variantPuzzle("odd even", { symbol: { 28: [3, "circle_L", 2] } });
+    puzzle.activeSudokuVariants = ["classic", "diagonal", "anti diagonal", "odd even"];
 
     const constraints = SudokuSolver.readConstraints(puzzle);
 
@@ -1569,17 +1924,12 @@ test("normalizes multiple selected variants at once", function() {
     assert.equal(constraints.antiDiagonals.length, 2);
     assert.equal(constraints.oddEven.length, 1);
     assert.equal(constraints.supported.includes("diagonal"), true);
-    assert.equal(constraints.supported.includes("anti diagonal"), true);
+    assert.equal(constraints.supported.includes("antidiagonal"), true);
 });
 
 test("normalizes anti-king, anti-knight, chess kings, and non-consecutive global pairs", function() {
-    const puzzle = {
-        nx0: 13,
-        activeSudokuVariants: ["classic", "anti king", "anti knight", "chess kings", "non consecutive"],
-        centerlist: [],
-        point: {},
-        pu_q: { line: {}, number: {}, symbol: {} }
-    };
+    const puzzle = variantPuzzle("anti king");
+    puzzle.activeSudokuVariants = ["classic", "anti king", "anti knight", "chess kings", "non consecutive"];
 
     const constraints = SudokuSolver.readConstraints(puzzle);
 
@@ -1587,10 +1937,10 @@ test("normalizes anti-king, anti-knight, chess kings, and non-consecutive global
     assert.equal(constraints.antiKnight.length, 224);
     assert.equal(constraints.chessKings[0].pairs.length, 272);
     assert.equal(constraints.nonConsecutive.length, 144);
-    assert.equal(constraints.supported.includes("anti king"), true);
-    assert.equal(constraints.supported.includes("anti knight"), true);
-    assert.equal(constraints.supported.includes("chess kings"), true);
-    assert.equal(constraints.supported.includes("non consecutive"), true);
+    assert.equal(constraints.supported.includes("antiking"), true);
+    assert.equal(constraints.supported.includes("antiknight"), true);
+    assert.equal(constraints.supported.includes("chesskings"), true);
+    assert.equal(constraints.supported.includes("nonconsecutive"), true);
 });
 
 
@@ -1732,7 +2082,7 @@ test("reads center and corner direction-arrow variants", function() {
     };
     const cornerClue = SudokuSolver.readConstraints(cornerPuzzle).directionalMarks[0];
     assert.equal(cornerClue.relation, "quadmax");
-    assert.deepEqual(cornerClue.target, { row: 0, col: 1, key: 29 });
+    assert.deepEqual(cornerClue.target, { row: 0, col: 1 });
 });
 
 test("recognizes spaced Search 9 names and Fat Gray arrows as supported", function() {
@@ -2940,6 +3290,10 @@ test("solver and generator workers load extracted variant handlers", function() 
 
     const solverWorker = loadWorker("sudoku_solver_worker.js");
     const generatorWorker = loadWorker("sudoku_generator_worker.js");
+    ["antiking", "dutchflatmates", "killer", "mirror", "windoku"].forEach(function(id) {
+        assert.equal(Array.from(solverWorker.context.SudokuVariantRegistry.ids()).includes(id), true);
+        assert.equal(Array.from(generatorWorker.context.SudokuVariantRegistry.ids()).includes(id), true);
+    });
     assert.equal(solverWorker.context.SudokuCSP.registeredConstraints().includes("antiKing"), true);
     assert.equal(generatorWorker.context.SudokuCSP.registeredConstraints().includes("antiKnight"), true);
     ["upperrightheavykiller", "regionAllDifferent", "palindromes"].forEach(function(name) {
@@ -3136,6 +3490,7 @@ test("loads extracted CSP variant modules through the public registry seam", fun
         "chessKings",
         "knightmare",
         "disparity",
+        "dutchFlatMates",
         "nonConsecutive",
         "diagonalNonConsecutive",
         "noEvenNeighbours",
@@ -4559,6 +4914,32 @@ test("Argyle Sudoku is unsupported outside a 9x9 grid", function() {
     const constraints = SudokuSolver.readConstraints(dummyPuzzle);
     assert.equal(constraints.supported.includes("argyle"), false);
     assert.equal(constraints.diagonalAllDifferent.length, 0);
+});
+
+test("Dutch Flat Mates is unsupported outside a 9x9 grid", function() {
+    const dummyPuzzle = {
+        nx: 8, ny: 8, nx0: 8, ny0: 8, space: [0, 0, 0, 0],
+        activeSudokuVariants: ["classic", "dutchflatmates"],
+        centerlist: [], point: {}, pu_q: { number: {}, symbol: {}, surface: {}, killercages: [] }
+    };
+    const constraints = SudokuSolver.readConstraints(dummyPuzzle);
+    assert.equal(constraints.supported.includes("dutchflatmates"), false);
+    assert.equal(constraints.dutchFlatMates.length, 0);
+    assert.equal(constraints.diagnostics[0].code, "unsupported-size");
+    const refused = SudokuSolver.solve(Array.from({ length: 8 }, function() {
+        return Array(8).fill(0);
+    }), constraints);
+    assert.equal(refused.solved, false);
+    assert.equal(refused.diagnostics[0].variantId, "dutchflatmates");
+    assert.equal(SudokuCSP.solve(Array.from({ length: 8 }, function() {
+        return Array(8).fill(0);
+    }), {
+        dutchFlatMates: [{
+            cell: { row: 0, col: 0 },
+            above: null,
+            below: { row: 1, col: 0 }
+        }]
+    }).solved, false);
 });
 
 test("solver conflict highlights clear after the toast duration", function() {

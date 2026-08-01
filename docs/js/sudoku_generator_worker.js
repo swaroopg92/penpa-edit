@@ -1,5 +1,5 @@
 /* Puzzle generation worker: uniqueness checks never block Penpa's canvas. */
-importScripts("./sudoku_csp.js", "./sudoku_csp_variants/browser.js", "./sudoku_generator.js");
+importScripts("./sudoku_csp.js", "./sudoku_csp_variants/browser.js", "./sudoku_variants/browser.js", "./sudoku_generator.js");
 
 self.onmessage = function(event) {
     if (!event.data || event.data.type !== "generate") return;

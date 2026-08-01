@@ -1,5 +1,7 @@
 var SudokuCSPRuntime = typeof SudokuCSP !== "undefined" ? SudokuCSP :
     (typeof require === "function" ? require("./sudoku_csp.js") : null);
+var SudokuVariantRegistryRuntime = typeof SudokuVariantRegistry !== "undefined" ? SudokuVariantRegistry :
+    (typeof require === "function" ? require("./sudoku_variants/index.js") : null);
 var SudokuWorkerAssetVersion = typeof ver !== "undefined" ? ver : "3.3.40";
 
 function sudokuWorkerUrl(filename) {
@@ -717,7 +719,7 @@ var SudokuSolver = (function() {
         return canonicalVariantName(puzzle.activeSudokuVariant) === wanted;
     }
 
-    function readConstraints(puzzle) {
+    function readLegacyConstraints(puzzle) {
         var tightFitMapping = getTightFitMapping(puzzle);
         SIZE = tightFitMapping.isTightFit ? tightFitMapping.abstractSize : (puzzleSize(puzzle) || SIZE);
         var isZeroEight = ["0to8", "08arrow", "08skyscrapers"].some(function(v) { return variantEnabled(puzzle, v); });
@@ -744,6 +746,7 @@ var SudokuSolver = (function() {
             diagonalNonConsecutive: [],
             noEvenNeighbours: [],
             noThreeInRow: [],
+            dutchFlatMates: [],
             queenDigits: [],
             pirateCells: [],
             touchyCells: [],
@@ -1024,7 +1027,7 @@ sumOrProductKillers: [],
                         constraints.oddEvenSums.push({ cells: cageCells, parity: label === "O" ? "odd" : "even" });
                     }
                 }
-                if (variantEnabled(puzzle, "killer") || (!usesCagedRegions && !variantEnabled(puzzle, "extraregion"))) {
+                if (!variantEnabled(puzzle, "killer") && !usesCagedRegions && !variantEnabled(puzzle, "extraregion")) {
                     constraints.killers.push({ cells: cageCells, total: readKillerTotal(puzzle, cages[k]) });
                 }
                 if (variantEnabled(puzzle, "different parity")) {
@@ -1151,22 +1154,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             }
             constraints.supported.push("ordering");
         }
-        if (variantEnabled(puzzle, "codedpairs")) {
-            var codedPairGroups = {};
-            for (var codedPairIndex = 0; codedPairIndex < cages.length; codedPairIndex++) {
-                var codedPairCells = pathToCells(puzzle, cages[codedPairIndex]);
-                var codedPairLabel = readCageLabel(puzzle, cages[codedPairIndex]);
-                if (codedPairCells.length === 2 && codedPairLabel) {
-                    (codedPairGroups[codedPairLabel] || (codedPairGroups[codedPairLabel] = [])).push(codedPairCells);
-                }
-            }
-            Object.keys(codedPairGroups).forEach(function(label) {
-                if (codedPairGroups[label].length > 1) constraints.cellRelations.push({
-                    relation: "codedpairs", pairs: codedPairGroups[label]
-                });
-            });
-            constraints.supported.push("codedpairs");
-        }
         if (variantEnabled(puzzle, "codedclone")) {
             var codedCloneGroups = {};
             for (var codedCloneIndex = 0; codedCloneIndex < cages.length; codedCloneIndex++) {
@@ -1197,433 +1184,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             });
             constraints.supported.push("codedclone");
         }
-        if (variantEnabled(puzzle, "multiplication")) {
-
-            regionCages.forEach(function(cage) {
-                var rows = cage.map(function(cell) { return cell.row; });
-                var topRow = Math.min.apply(null, rows), bottomRow = Math.max.apply(null, rows);
-                var topCells = cage.filter(function(cell) { return cell.row === topRow; })
-                    .sort(function(first, second) { return first.col - second.col; });
-                var bottomCells = cage.filter(function(cell) { return cell.row === bottomRow; })
-                    .sort(function(first, second) { return first.col - second.col; });
-                if (topRow !== bottomRow && topCells.length && bottomCells.length) {
-                    constraints.cellRelations.push({ relation: "multiplication", top: topCells, bottom: bottomCells });
-                }
-            });
-            constraints.supported.push("multiplication");
-        }
-        if (variantEnabled(puzzle, "clock")) {
-            regionCages.forEach(function(cage) {
-                var ordered = cage.slice().sort(function(first, second) { return first.col - second.col; });
-                if (ordered.length === 4 && ordered.every(function(cell) { return cell.row === ordered[0].row; }) &&
-                    ordered.every(function(cell, index) { return !index || cell.col === ordered[index - 1].col + 1; })) {
-                    constraints.cellRelations.push({ relation: "clock", cells: ordered });
-                }
-            });
-            constraints.supported.push("clock");
-        }
-        if (variantEnabled(puzzle, "fortress")) {
-            var fortressCells = {};
-            Object.keys(puzzle.pu_q.surface || {}).forEach(function(key) {
-                if (!puzzle.pu_q.surface[key]) return;
-                var centerIndex = (puzzle.centerlist || []).indexOf(Number(key));
-                if (centerIndex < 0) return;
-                var cell = { row: Math.floor(centerIndex / SIZE), col: centerIndex % SIZE };
-                fortressCells[cell.row + ":" + cell.col] = true;
-            });
-            for (var fortressRow = 0; fortressRow < SIZE; fortressRow++) {
-                for (var fortressCol = 0; fortressCol < SIZE; fortressCol++) {
-                    [[1, 0], [0, 1]].forEach(function(offset) {
-                        var nextRow = fortressRow + offset[0], nextCol = fortressCol + offset[1];
-                        if (nextRow >= SIZE || nextCol >= SIZE) return;
-                        var firstShaded = !!fortressCells[fortressRow + ":" + fortressCol];
-                        var secondShaded = !!fortressCells[nextRow + ":" + nextCol];
-                        if (firstShaded === secondShaded) return;
-                        constraints.cellRelations.push({ relation: "fortress",
-                            shaded: firstShaded ? { row: fortressRow, col: fortressCol } : { row: nextRow, col: nextCol },
-                            unshaded: firstShaded ? { row: nextRow, col: nextCol } : { row: fortressRow, col: fortressCol } });
-                    });
-                }
-            }
-            constraints.supported.push("fortress");
-        }
-        if (variantEnabled(puzzle, "trio")) {
-            Object.keys(puzzle.pu_q.symbol || {}).forEach(function(key) {
-                if (!activeCells[key]) return;
-                var entry = puzzle.pu_q.symbol[key];
-                var ranges = { circle_L: [1, 3], square_L: [4, 6], triup_L: [7, 9], tri: [7, 9] };
-                if (!entry || !ranges[entry[1]]) return;
-                constraints.cellRelations.push({ relation: "trio", cell: keyToCell(puzzle, Number(key)),
-                    minimum: ranges[entry[1]][0], maximum: Math.min(SIZE, ranges[entry[1]][1]) });
-            });
-            constraints.supported.push("trio");
-        }
-        if (variantEnabled(puzzle, "slotmachine")) {
-            var slotColumns = [];
-            for (var slotCol = 0; slotCol < SIZE; slotCol++) {
-                var fullyShaded = true;
-                var slotCells = [];
-                for (var slotRow = 0; slotRow < SIZE; slotRow++) {
-                    var slotKey = cellKey(puzzle, slotRow, slotCol);
-                    if (!puzzle.pu_q.surface || !puzzle.pu_q.surface[slotKey]) fullyShaded = false;
-                    slotCells.push({ row: slotRow, col: slotCol });
-                }
-                if (fullyShaded) slotColumns.push(slotCells);
-            }
-            if (slotColumns.length > 1) constraints.cellRelations.push({ relation: "slotmachine", columns: slotColumns });
-            constraints.supported.push("slotmachine");
-        }
-        if (variantEnabled(puzzle, "pinocchio") || variantEnabled(puzzle, "pinnochio")) {
-            var pinnochioClues = [];
-            Object.keys(puzzle.pu_q.number || {}).forEach(function(key) {
-                if (!activeCells[key]) return;
-                var entry = puzzle.pu_q.number[key];
-                if (!entry || entry[1] !== 0 || entry[2] !== "1") return;
-                var value = digitFromEntry(entry);
-                var cell = keyToCell(puzzle, Number(key));
-                if (value && cell) pinnochioClues.push({ cell: cell, value: value });
-            });
-            if (pinnochioClues.length) constraints.cellRelations.push({ relation: "pinnochio", clues: pinnochioClues });
-            constraints.supported.push("pinocchio");
-        }
-        if (variantEnabled(puzzle, "average")) {
-            var averageMarks = {};
-            Object.keys(puzzle.pu_q.wall || {}).forEach(function(edge) {
-                var endpoints = edge.split(",").map(Number);
-                if (endpoints.length !== 2 || !puzzle.point[endpoints[0]] || !puzzle.point[endpoints[1]]) return;
-                var firstPoint = puzzle.point[endpoints[0]], secondPoint = puzzle.point[endpoints[1]];
-                var middleX = (firstPoint.x + secondPoint.x) / 2, middleY = (firstPoint.y + secondPoint.y) / 2;
-                var nearest = null, nearestDistance = Infinity;
-                Object.keys(activeCells).forEach(function(cellKeyText) {
-                    var center = puzzle.point[cellKeyText];
-                    if (!center) return;
-                    var distance = Math.pow(center.x - middleX, 2) + Math.pow(center.y - middleY, 2);
-                    if (distance < nearestDistance) { nearestDistance = distance; nearest = Number(cellKeyText); }
-                });
-                if (nearest !== null) averageMarks[nearest + ":" +
-                    (Math.abs(firstPoint.x - secondPoint.x) > Math.abs(firstPoint.y - secondPoint.y) ? "horizontal" : "vertical")] = true;
-            });
-            for (var averageRow = 0; averageRow < SIZE; averageRow++) {
-                for (var averageCol = 0; averageCol < SIZE; averageCol++) {
-                    [["horizontal", [0, -1], [0, 1]], ["vertical", [-1, 0], [1, 0]]].forEach(function(data) {
-                        var firstRow = averageRow + data[1][0], firstCol = averageCol + data[1][1];
-                        var secondRow = averageRow + data[2][0], secondCol = averageCol + data[2][1];
-                        if (firstRow < 0 || firstCol < 0 || secondRow >= SIZE || secondCol >= SIZE) return;
-                        var averageKey = cellKey(puzzle, averageRow, averageCol);
-                        constraints.cellRelations.push({ relation: "average", center: { row: averageRow, col: averageCol },
-                            ends: [{ row: firstRow, col: firstCol }, { row: secondRow, col: secondCol }],
-                            marked: !!averageMarks[averageKey + ":" + data[0]] });
-                    });
-                }
-            }
-            constraints.supported.push("average");
-        }
-
-        var mainDiagonal = [];
-        var reverseDiagonal = [];
-        for (var diagonalIndex = 0; diagonalIndex < SIZE; diagonalIndex++) {
-            mainDiagonal.push({ row: diagonalIndex, col: diagonalIndex });
-            reverseDiagonal.push({ row: diagonalIndex, col: SIZE - 1 - diagonalIndex });
-        }
-        if (variantEnabled(puzzle, "diagonal")) {
-            constraints.diagonalAllDifferent.push(mainDiagonal, reverseDiagonal);
-            constraints.supported.push("diagonal");
-        }
-        if (variantEnabled(puzzle, "anti diagonal")) {
-            constraints.antiDiagonals.push(mainDiagonal, reverseDiagonal);
-            constraints.supported.push("anti diagonal");
-        }
-        if (variantEnabled(puzzle, "argyle") && SIZE === 9) {
-            var argylePaths = [
-                [{row:0,col:1},{row:1,col:2},{row:2,col:3},{row:3,col:4},{row:4,col:5},{row:5,col:6},{row:6,col:7},{row:7,col:8}],
-                [{row:0,col:4},{row:1,col:5},{row:2,col:6},{row:3,col:7},{row:4,col:8}],
-                [{row:0,col:4},{row:1,col:3},{row:2,col:2},{row:3,col:1},{row:4,col:0}],
-                [{row:0,col:7},{row:1,col:6},{row:2,col:5},{row:3,col:4},{row:4,col:3},{row:5,col:2},{row:6,col:1},{row:7,col:0}],
-                [{row:1,col:0},{row:2,col:1},{row:3,col:2},{row:4,col:3},{row:5,col:4},{row:6,col:5},{row:7,col:6},{row:8,col:7}],
-                [{row:1,col:8},{row:2,col:7},{row:3,col:6},{row:4,col:5},{row:5,col:4},{row:6,col:3},{row:7,col:2},{row:8,col:1}],
-                [{row:4,col:0},{row:5,col:1},{row:6,col:2},{row:7,col:3},{row:8,col:4}],
-                [{row:4,col:8},{row:5,col:7},{row:6,col:6},{row:7,col:5},{row:8,col:4}]
-            ];
-            argylePaths.forEach(function(path) {
-                constraints.diagonalAllDifferent.push(path);
-            });
-            constraints.supported.push("argyle");
-        }
-
-        function addGridPairs(target, offsets) {
-            for (var pairRow = 0; pairRow < SIZE; pairRow++) {
-                for (var pairCol = 0; pairCol < SIZE; pairCol++) {
-                    offsets.forEach(function(offset) {
-                        var neighborRow = pairRow + offset[0];
-                        var neighborCol = pairCol + offset[1];
-                        if (neighborRow >= 0 && neighborRow < SIZE &&
-                            neighborCol >= 0 && neighborCol < SIZE) {
-                            target.push([
-                                { row: pairRow, col: pairCol },
-                                { row: neighborRow, col: neighborCol }
-                            ]);
-                        }
-                    });
-                }
-            }
-        }
-        if (variantEnabled(puzzle, "anti king")) {
-            addGridPairs(constraints.antiKing, [[0, 1], [1, -1], [1, 0], [1, 1]]);
-            constraints.supported.push("anti king");
-        }
-        if (variantEnabled(puzzle, "sequence top-bottom")) {
-            constraints.sequenceTopBottom = [true];
-            constraints.supported.push("sequence top-bottom");
-        }
-        if (variantEnabled(puzzle, "poleposition")) {
-            constraints.polePosition = [true];
-            constraints.supported.push("poleposition");
-        }
-        if (variantEnabled(puzzle, "citywalk")) {
-            constraints.citywalk = [true];
-            constraints.supported.push("citywalk");
-        }
-        if (variantEnabled(puzzle, "anti knight")) {
-            addGridPairs(constraints.antiKnight, [[1, -2], [1, 2], [2, -1], [2, 1]]);
-            constraints.supported.push("anti knight");
-        }
-        if (variantEnabled(puzzle, "chess kings")) {
-            var pairs = [];
-            addGridPairs(pairs, [[0, 1], [1, -1], [1, 0], [1, 1]]);
-            constraints.chessKings.push({ pairs: pairs });
-            constraints.supported.push("chess kings");
-        }
-        if (variantEnabled(puzzle, "knightmare")) {
-            addGridPairs(constraints.knightmare, [[1, -2], [1, 2], [2, -1], [2, 1]]);
-            constraints.supported.push("knightmare");
-        }
-        if (variantEnabled(puzzle, "non consecutive")) {
-            addGridPairs(constraints.nonConsecutive, [[0, 1], [1, 0]]);
-            constraints.supported.push("non consecutive");
-        }
-
-        if (variantEnabled(puzzle, "symmetricunequal")) {
-            for (var symmetricRow = 0; symmetricRow < SIZE; symmetricRow++) {
-                for (var symmetricCol = 0; symmetricCol < SIZE; symmetricCol++) {
-                    var oppositeRow = SIZE - 1 - symmetricRow;
-                    var oppositeCol = SIZE - 1 - symmetricCol;
-                    if (symmetricRow * SIZE + symmetricCol < oppositeRow * SIZE + oppositeCol) {
-                        constraints.symmetricUnequal.push([
-                            { row: symmetricRow, col: symmetricCol },
-                            { row: oppositeRow, col: oppositeCol }
-                        ]);
-                    }
-                }
-            }
-            constraints.supported.push("symmetricunequal");
-        }
-        if (variantEnabled(puzzle, "odd labyrinth")) {
-            constraints.oddLabyrinth.push(true);
-            constraints.supported.push("oddlabyrinth");
-        }
-        if (variantEnabled(puzzle, "even passage")) {
-            constraints.evenPassage.push(true);
-            constraints.supported.push("evenpassage");
-        }
-        if (variantEnabled(puzzle, "divisible by three")) {
-            constraints.divisiblebythree.push(true);
-            constraints.supported.push("divisiblebythree");
-        }
-        if (variantEnabled(puzzle, "odd tapa")) {
-            constraints.oddtapa.push(true);
-            constraints.supported.push("oddtapa");
-        }
-        if (variantEnabled(puzzle, "tic-tac-toe")) {
-            constraints.tictactoe.push(true);
-            constraints.supported.push("tictactoe");
-        }
-        if (variantEnabled(puzzle, "tic-tac-toe winner")) {
-            var tictactoeLines = connectedLinePaths(puzzle, 5);
-            var boxLines = [[], [], [], [], [], [], [], [], []];
-            tictactoeLines.forEach(function(path) {
-                if (path.length > 0) {
-                    var box = Math.floor(path[0].row / 3) * 3 + Math.floor(path[0].col / 3);
-                    boxLines[box].push(path);
-                }
-            });
-            for (var i = 0; i < 9; i++) {
-                if (boxLines[i].length !== 1) {
-                    throw new Error("Tic-Tac-Toe Winner requires exactly one gray line per 3x3 box.");
-                }
-            }
-            constraints.tictactoewinner = [boxLines];
-            constraints.supported.push("tictactoewinner");
-        }
-        if (variantEnabled(puzzle, "mirror")) {
-            var mirrorDimensions = boxDimensions(SIZE);
-            var mirrorBoxHeight = mirrorDimensions.height;
-            var mirrorBoxWidth = mirrorDimensions.width;
-            for (var mirrorRow = 0; mirrorRow < mirrorBoxHeight; mirrorRow++) {
-                for (var mirrorCol = 0; mirrorCol < mirrorBoxWidth; mirrorCol++) {
-                    constraints.cloneGroups.push([
-                        { row: mirrorRow, col: mirrorCol },
-                        { row: SIZE - 1 - mirrorRow, col: SIZE - 1 - mirrorCol }
-                    ]);
-                    constraints.cloneGroups.push([
-                        { row: mirrorRow, col: SIZE - 1 - mirrorCol },
-                        { row: SIZE - 1 - mirrorRow, col: mirrorCol }
-                    ]);
-                }
-            }
-            constraints.supported.push("mirror");
-        }
-        if (variantEnabled(puzzle, "coded")) {
-            var codeCells = {};
-            for (var codedRow = 0; codedRow < SIZE; codedRow++) {
-                for (var codedCol = 0; codedCol < SIZE; codedCol++) {
-                    var codedKey = cellKey(puzzle, codedRow, codedCol);
-                    var codedCorner = 4 * (codedKey + puzzle.nx0 * puzzle.ny0);
-                    var codedEntry = puzzle.pu_q.numberS &&
-                        (puzzle.pu_q.numberS[codedCorner] || puzzle.pu_q.numberS[4 * codedKey]);
-                    if (!codedEntry || codedEntry[0] === undefined || codedEntry[0] === "") continue;
-                    var code = String(codedEntry[0]).trim().toUpperCase();
-                    (codeCells[code] || (codeCells[code] = [])).push({ row: codedRow, col: codedCol });
-                }
-            }
-            constraints.codedGroups.push({ groups: Object.keys(codeCells).map(function(code) { return codeCells[code]; }) });
-            constraints.supported.push("coded");
-        }
-        if (variantEnabled(puzzle, "pencilmarks")) {
-            for (var pencilRow = 0; pencilRow < SIZE; pencilRow++) {
-                for (var pencilCol = 0; pencilCol < SIZE; pencilCol++) {
-                    var pencilEntry = puzzle.pu_q.number[cellKey(puzzle, pencilRow, pencilCol)];
-                    if (!pencilEntry || pencilEntry[2] !== "7" || !Array.isArray(pencilEntry[0])) continue;
-                    var allowed = pencilEntry[0].map(function(enabled, index) { return enabled === 1 ? index + 1 : 0; })
-                        .filter(Boolean);
-                    if (allowed.length) constraints.pencilmarkCells.push({ cell: { row: pencilRow, col: pencilCol }, allowed: allowed });
-                }
-            }
-            constraints.supported.push("pencilmarks");
-        }
-        if (variantEnabled(puzzle, "diagonallynonconsecutive")) {
-            addGridPairs(constraints.diagonalNonConsecutive, [[1, -1], [1, 1]]);
-            constraints.supported.push("diagonallynonconsecutive");
-        }
-        if (variantEnabled(puzzle, "noevenneighbours")) {
-            addGridPairs(constraints.noEvenNeighbours, [[0, 1], [1, 0]]);
-            constraints.supported.push("noevenneighbours");
-        }
-        if (variantEnabled(puzzle, "nothreeinarow")) {
-            for (var tripleIndex = 0; tripleIndex < SIZE; tripleIndex++) {
-                for (var tripleOffset = 0; tripleOffset <= SIZE - 3; tripleOffset++) {
-                    constraints.noThreeInRow.push([
-                        { row: tripleIndex, col: tripleOffset },
-                        { row: tripleIndex, col: tripleOffset + 1 },
-                        { row: tripleIndex, col: tripleOffset + 2 }
-                    ], [
-                        { row: tripleOffset, col: tripleIndex },
-                        { row: tripleOffset + 1, col: tripleIndex },
-                        { row: tripleOffset + 2, col: tripleIndex }
-                    ]);
-                }
-            }
-            constraints.supported.push("nothreeinarow");
-        }
-        if (variantEnabled(puzzle, "queen")) {
-            for (var queenRow = 0; queenRow < SIZE; queenRow++) {
-                for (var queenCol = 0; queenCol < SIZE; queenCol++) {
-                    [[1, -1], [1, 1]].forEach(function(offset) {
-                        var row = queenRow + offset[0];
-                        var col = queenCol + offset[1];
-                        while (row < SIZE && col >= 0 && col < SIZE) {
-                            constraints.queenDigits.push([
-                                { row: queenRow, col: queenCol }, { row: row, col: col }
-                            ]);
-                            row += offset[0]; col += offset[1];
-                        }
-                    });
-                }
-            }
-            constraints.supported.push("queen");
-        }
-        if (variantEnabled(puzzle, "pirate")) {
-            for (var pirateRow = 0; pirateRow < SIZE; pirateRow++) {
-                for (var pirateCol = 0; pirateCol < SIZE; pirateCol++) {
-                    [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(function(offset) {
-                        var neighborRow = pirateRow + offset[0];
-                        var neighborCol = pirateCol + offset[1];
-                        if (neighborRow >= 0 && neighborRow < SIZE && neighborCol >= 0 && neighborCol < SIZE) {
-                            constraints.pirateCells.push([
-                                { row: pirateRow, col: pirateCol },
-                                { row: neighborRow, col: neighborCol }
-                            ]);
-                        }
-                    });
-                }
-            }
-            constraints.supported.push("pirate");
-        }
-        if (variantEnabled(puzzle, "touchy")) {
-            for (var touchRow = 0; touchRow < SIZE; touchRow++) {
-                for (var touchCol = 0; touchCol < SIZE; touchCol++) {
-                    var neighbors = [];
-                    [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(function(offset) {
-                        var neighborRow = touchRow + offset[0];
-                        var neighborCol = touchCol + offset[1];
-                        if (neighborRow >= 0 && neighborRow < SIZE && neighborCol >= 0 && neighborCol < SIZE) {
-                            neighbors.push({ row: neighborRow, col: neighborCol });
-                        }
-                    });
-                    constraints.touchyCells.push({ cell: { row: touchRow, col: touchCol }, neighbors: neighbors });
-                }
-            }
-            constraints.supported.push("touchy");
-        }
-        if (variantEnabled(puzzle, "unicorn")) {
-            for (var unicornRow = 0; unicornRow < SIZE; unicornRow++) {
-                for (var unicornCol = 0; unicornCol < SIZE; unicornCol++) {
-                    var neighbors = [];
-                    [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]].forEach(function(offset) {
-                        var nRow = unicornRow + offset[0];
-                        var nCol = unicornCol + offset[1];
-                        if (nRow >= 0 && nRow < SIZE && nCol >= 0 && nCol < SIZE) {
-                            neighbors.push({ row: nRow, col: nCol });
-                        }
-                    });
-                    constraints.unicorn.push({ cell: { row: unicornRow, col: unicornCol }, neighbors: neighbors });
-                }
-            }
-            constraints.supported.push("unicorn");
-        }
-        if (variantEnabled(puzzle, "disjoint")) {
-            var dimensions = boxDimensions(SIZE);
-            var boxHeight = dimensions.height;
-            var boxWidth = dimensions.width;
-            for (var positionRow = 0; positionRow < boxHeight; positionRow++) {
-                for (var positionCol = 0; positionCol < boxWidth; positionCol++) {
-                    var disjointGroup = [];
-                    for (var boxRow = 0; boxRow < SIZE / boxHeight; boxRow++) {
-                        for (var boxCol = 0; boxCol < SIZE / boxWidth; boxCol++) {
-                            disjointGroup.push({
-                                row: boxRow * boxHeight + positionRow,
-                                col: boxCol * boxWidth + positionCol
-                            });
-                        }
-                    }
-                    constraints.diagonalAllDifferent.push(disjointGroup);
-                }
-            }
-            constraints.supported.push("disjoint");
-        }
-        if (variantEnabled(puzzle, "windoku") && SIZE === 9) {
-            var windokuStarts = [[1, 1], [1, 5], [5, 1], [5, 5]];
-            windokuStarts.forEach(function(start) {
-                var windowCells = [];
-                for (var r = 0; r < 3; r++) {
-                    for (var c = 0; c < 3; c++) {
-                        windowCells.push({ row: start[0] + r, col: start[1] + c });
-                    }
-                }
-                constraints.regionAllDifferent.push(windowCells);
-            });
-            constraints.supported.push("windoku");
-        }
-
         if (variantEnabled(puzzle, "renban") && variantRegionCages.length) {
             Array.prototype.push.apply(constraints.renbanRegions, variantRegionCages);
             if (constraints.supported.indexOf("renban") === -1) constraints.supported.push("renban");
@@ -2098,11 +1658,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             });
             constraints.supported.push("disguisedpalindromes");
         }
-        if (variantEnabled(puzzle, "clonedstrands")) {
-            var clonedStrands = connectedLinePaths(puzzle, 3);
-            if (clonedStrands.length) constraints.cellRelations.push({ relation: "clonedstrands", strands: clonedStrands });
-            constraints.supported.push("clonedstrands");
-        }
         ["equal sum line", "german whispers", "factor lines", "24-trio", "24trio"].forEach(function(variant) {
             if (!variantEnabled(puzzle, variant)) return;
             [1, 2, 3, 4, 5, 80].forEach(function(st) {
@@ -2138,112 +1693,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             }
             constraints.supported.push("equalsumlines");
         }
-        var diagVariant = ["diagonallyconsecutive", "diagonal sum is nine", "diagonal tens"].find(function(name) {
-            return variantEnabled(puzzle, name);
-        });
-        if (diagVariant) {
-            var markedDiagonalPairs = {};
-            Object.keys(puzzle.pu_q.symbol || {}).forEach(function(key) {
-                var entry = puzzle.pu_q.symbol[key];
-                var point = puzzle.point && puzzle.point[key];
-                if (!entry || entry[1] !== "diagonal_consecutive" || !Array.isArray(entry[0]) || !point) return;
-                var cells = (point.neighbor || []).filter(function(neighbor) { return activeCells[neighbor]; })
-                    .map(function(neighbor) { return keyToCell(puzzle, neighbor); }).filter(Boolean)
-                    .sort(function(first, second) { return first.row - second.row || first.col - second.col; });
-                if (cells.length !== 4) return;
-                var cornerRow = cells[0].row, cornerCol = cells[0].col;
-                if (entry[0][0] === 1) markedDiagonalPairs[cornerRow + ":" + cornerCol + ":left"] = true;
-                if (entry[0][1] === 1) markedDiagonalPairs[cornerRow + ":" + cornerCol + ":right"] = true;
-            });
-            for (var diagonalRow = 0; diagonalRow < SIZE - 1; diagonalRow++) {
-                for (var diagonalCol = 0; diagonalCol < SIZE - 1; diagonalCol++) {
-                    [["left", [{ row: diagonalRow, col: diagonalCol }, { row: diagonalRow + 1, col: diagonalCol + 1 }]],
-                        ["right", [{ row: diagonalRow, col: diagonalCol + 1 }, { row: diagonalRow + 1, col: diagonalCol }]]]
-                        .forEach(function(pair) {
-                            var marked = !!markedDiagonalPairs[diagonalRow + ":" + diagonalCol + ":" + pair[0]];
-                            var relation, notRelation;
-                            if (diagVariant === "diagonallyconsecutive") {
-                                relation = "diagonalConsecutive";
-                                notRelation = "notDiagonalConsecutive";
-                            } else if (diagVariant === "diagonal sum is nine") {
-                                relation = "diagonalSumIsNine";
-                                notRelation = "notDiagonalSumIsNine";
-                            } else if (diagVariant === "diagonal tens") {
-                                relation = "diagonalTens";
-                                notRelation = "notDiagonalTens";
-                            }
-                            constraints.edgeRelations.push({ cells: pair[1],
-                                relation: marked ? relation : notRelation });
-                        });
-                }
-            }
-            constraints.supported.push(diagVariant);
-        }
-        var quadVariant = ["quadruple", "equalsums", "equaldifferences", "equalproducts", "equalratios",
-            "consecutivequads", "clockfaces", "exclusion", "groupsum", "crosssums", "determinant", "fullorhalf", "mathrax"].find(function(name) { return variantEnabled(puzzle, name); });
-        if (quadVariant) {
-            function quadCells(key) {
-                var point = puzzle.point && puzzle.point[key];
-                if (!point || !Array.isArray(point.neighbor)) return [];
-                return point.neighbor.filter(function(neighbor) { return activeCells[neighbor]; })
-                    .map(function(neighbor) { return keyToCell(puzzle, neighbor); }).filter(Boolean)
-                    .sort(function(first, second) { return first.row - second.row || first.col - second.col; });
-            }
-            if (quadVariant === "quadruple" || quadVariant === "exclusion" || quadVariant === "groupsum" || quadVariant === "determinant" || quadVariant === "mathrax") {
-                Object.keys(puzzle.pu_q.number || {}).forEach(function(key) {
-                    var cells = quadCells(key);
-                    if (cells.length !== 4) return;
-                    var text = String(puzzle.pu_q.number[key][0]).trim();
-                    if (quadVariant === "mathrax") {
-                        constraints.quadRelations.push({ cells: cells, relation: quadVariant, text: text });
-                        return;
-                    }
-                    var digits = text.split("").map(Number).filter(function(value) {
-                        return value >= 1 && value <= SIZE;
-                    });
-                    var total = parseInt(text, 10);
-                    if ((quadVariant === "groupsum" || quadVariant === "determinant") && Number.isFinite(total)) {
-                        constraints.quadRelations.push({ cells: cells, relation: quadVariant, total: total });
-                    } else if (digits.length) constraints.quadRelations.push({ cells: cells, relation: quadVariant, digits: digits });
-                });
-            } else if (quadVariant === "crosssums") {
-                Object.keys(puzzle.pu_q.symbol || {}).forEach(function(key) {
-                    var entry = puzzle.pu_q.symbol[key], cells = quadCells(key);
-                    if (entry && entry[1] === "cross" && cells.length === 4) {
-                        constraints.quadRelations.push({ cells: cells, relation: "crosssums" });
-                    }
-                });
-            } else {
-                Object.keys(puzzle.pu_q.symbol || {}).forEach(function(key) {
-                    var cells = quadCells(key);
-                    if (cells.length !== 4) return;
-                    if (quadVariant === "clockfaces" && puzzle.pu_q.symbol[key][1] !== "circle_SS") return;
-                    if (quadVariant === "fullorhalf" && ["circle_SS", "square_SS"].indexOf(puzzle.pu_q.symbol[key][1]) === -1) return;
-                    constraints.quadRelations.push({ cells: cells, relation: quadVariant,
-                        kind: quadVariant === "fullorhalf" ?
-                            (puzzle.pu_q.symbol[key][1] === "circle_SS" ? "circle" : "square") :
-                            (puzzle.pu_q.symbol[key] && puzzle.pu_q.symbol[key][0] === 2 ? "black" : "white") });
-                });
-                if (quadVariant === "clockfaces") {
-                    for (var clockRow = 0; clockRow < SIZE - 1; clockRow++) {
-                        for (var clockCol = 0; clockCol < SIZE - 1; clockCol++) {
-                            var clockCells = [
-                                { row: clockRow, col: clockCol }, { row: clockRow, col: clockCol + 1 },
-                                { row: clockRow + 1, col: clockCol }, { row: clockRow + 1, col: clockCol + 1 }
-                            ];
-                            var alreadyMarked = constraints.quadRelations.some(function(clue) {
-                                return clue.relation === "clockfaces" && clue.cells.every(function(cell, index) {
-                                    return cell.row === clockCells[index].row && cell.col === clockCells[index].col;
-                                });
-                            });
-                            if (!alreadyMarked) constraints.quadRelations.push({ cells: clockCells, relation: "clockfaces", kind: "none" });
-                        }
-                    }
-                }
-            }
-            constraints.supported.push(quadVariant);
-        }
-
         if (variantEnabled(puzzle, "emitters")) {
             var emitterCells = [];
             var symbols = puzzle.pu_q.symbol || {};
@@ -2299,18 +1748,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             constraints.supported.push("emitters");
         }
 
-        if (variantEnabled(puzzle, "quadro")) {
-            for (var quadroRow = 0; quadroRow < SIZE - 1; quadroRow++) {
-                for (var quadroCol = 0; quadroCol < SIZE - 1; quadroCol++) {
-                    constraints.quadRelations.push({ relation: "quadro", cells: [
-                        { row: quadroRow, col: quadroCol }, { row: quadroRow, col: quadroCol + 1 },
-                        { row: quadroRow + 1, col: quadroCol }, { row: quadroRow + 1, col: quadroCol + 1 }
-                    ] });
-                }
-            }
-            constraints.supported.push("quadro");
-        }
-
         var symbols = puzzle.pu_q.symbol || {};
 
         if (variantEnabled(puzzle, "starproduct") || variantEnabled(puzzle, "sudokuwithstars")) {
@@ -2331,137 +1768,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                 if (constraints.starCells) {
                     constraints.starCellValues = constraints.starCells;
                 }
-            }
-        }
-        var directionalVariants = ["biggestneighbours", "smallestneighbours", "eliminate", "pointtonext", "pointtoprevious",
-            "quadmax", "quadmin", "search9", "sumdetector", "detection", "deadoralivearrows", "twindetector"].filter(function(name) {
-                return variantEnabled(puzzle, name);
-            });
-        if (directionalVariants.length) {
-            var directionOffsets = [
-                [0, -1], [-1, -1], [-1, 0], [-1, 1],
-                [0, 1], [1, 1], [1, 0], [1, -1]
-            ];
-            function activeArrowDirections(entry) {
-                if (!entry || ["arrow_eight", "arrow_B_G", "arrow_B_B", "arrow_B_W"].indexOf(entry[1]) === -1) return [];
-                if (Array.isArray(entry[0])) {
-                    return entry[0].map(function(enabled, index) { return enabled === 1 ? index : -1; })
-                        .filter(function(index) { return index >= 0; });
-                }
-                var direction = parseInt(entry[0], 10) - 1;
-                return direction >= 0 && direction < 8 ? [direction] : [];
-            }
-            function boardCell(row, col) {
-                return row >= 0 && row < SIZE && col >= 0 && col < SIZE ? { row: row, col: col } : null;
-            }
-            function expectedDirectionalSymbol(variant) {
-                if (variant === "biggestneighbours" || variant === "smallestneighbours" || variant === "sumdetector" || variant === "detection" || variant === "twindetector") return ["arrow_eight"];
-                if (variant === "quadmax" || variant === "quadmin") return ["arrow_B_B"];
-                if (variant === "deadoralivearrows") return ["arrow_B_W", "arrow_B_G"];
-                return ["arrow_B_G"];
-            }
-            directionalVariants.forEach(function(directionalVariant) {
-              Object.keys(symbols).forEach(function(key) {
-                var entry = symbols[key];
-                if (!entry || expectedDirectionalSymbol(directionalVariant).indexOf(entry[1]) === -1) return;
-                var owner = entry[3];
-                if (owner && canonicalVariantName(owner) !== canonicalVariantName(directionalVariant)) return;
-                if (!owner) {
-                    var sameSymbolVariants = directionalVariants.filter(function(variant) {
-                        return expectedDirectionalSymbol(variant).indexOf(entry[1]) !== -1;
-                    });
-                    var currentOwner = sameSymbolVariants.find(function(variant) {
-                        return canonicalVariantName(variant) === canonicalVariantName(puzzle.activeSudokuVariant);
-                    }) || sameSymbolVariants[0];
-                    if (currentOwner !== directionalVariant) return;
-                }
-                var directions = activeArrowDirections(entry);
-                if (!directions.length) return;
-                var origin = activeCells[key] ? keyToCell(puzzle, Number(key)) : null;
-                if (origin && directionalVariant !== "quadmax" && directionalVariant !== "quadmin") {
-                    var rays = directions.map(function(direction) {
-                        var offset = directionOffsets[direction];
-                        var ray = [];
-                        for (var distance = 1; distance < SIZE; distance++) {
-                            var rayCell = boardCell(origin.row + offset[0] * distance,
-                                origin.col + offset[1] * distance);
-                            if (!rayCell) break;
-                            ray.push(rayCell);
-                        }
-                        return ray;
-                    }).filter(function(ray) { return ray.length; });
-                    var usesSightline = directionalVariant === "eliminate" || directionalVariant === "detection" || directionalVariant === "deadoralivearrows" ||
-                        directionalVariant === "twindetector" ||
-                        directionalVariant === "pointtonext" || directionalVariant === "pointtoprevious";
-                    var targets = usesSightline ? [].concat.apply([], rays) : rays.map(function(ray) { return ray[0]; });
-                    if (!targets.length) return;
-                    var clue = { relation: directionalVariant, origin: origin, targets: targets, isWhite: entry[1] === "arrow_B_W" };
-                    if (directionalVariant === "biggestneighbours" || directionalVariant === "smallestneighbours") {
-                        clue.neighbors = directionOffsets.map(function(offset) {
-                            return boardCell(origin.row + offset[0], origin.col + offset[1]);
-                        }).filter(Boolean);
-                    } else if (directionalVariant === "search9") {
-                        clue.searchDigit = SIZE;
-                        clue.rays = rays;
-                    } else if (directionalVariant === "sumdetector") {
-                        clue.rays = rays;
-                    } else if (directionalVariant === "twindetector") {
-                        clue.rays = rays;
-                        clue.allRays = [0, 1, 2, 3, 4, 5, 6, 7].map(function(direction) {
-                            var offset = directionOffsets[direction], ray = [];
-                            for (var distance = 1; distance < SIZE; distance++) {
-                                var rayCell = boardCell(origin.row + offset[0] * distance, origin.col + offset[1] * distance);
-                                if (!rayCell) break;
-                                ray.push(rayCell);
-                            }
-                            return ray;
-                        });
-                    } else if (directionalVariant === "detection") {
-                        clue.rays = rays;
-                        clue.allDiagonalRays = [1, 3, 5, 7].map(function(direction) {
-                            var offset = directionOffsets[direction], ray = [];
-                            for (var distance = 1; distance < SIZE; distance++) {
-                                var rayCell = boardCell(origin.row + offset[0] * distance, origin.col + offset[1] * distance);
-                                if (!rayCell) break;
-                                ray.push(rayCell);
-                            }
-                            return ray;
-                        });
-                    }
-                    constraints.directionalMarks.push(clue);
-                    return;
-                }
-                if (directionalVariant === "quadmax" || directionalVariant === "quadmin") {
-                    var point = puzzle.point && puzzle.point[key];
-                    var cornerCells = point && (point.neighbor || []).filter(function(neighbor) {
-                        return activeCells[neighbor];
-                    }).map(function(neighbor) { return keyToCell(puzzle, neighbor); }).filter(Boolean);
-                    if (!cornerCells || cornerCells.length !== 4) return;
-                    var minRow = Math.min.apply(null, cornerCells.map(function(cell) { return cell.row; }));
-                    var minCol = Math.min.apply(null, cornerCells.map(function(cell) { return cell.col; }));
-                    var targetOffsets = { 1: [0, 0], 3: [0, 1], 5: [1, 1], 7: [1, 0] };
-                    directions.forEach(function(direction) {
-                        var targetOffset = targetOffsets[direction];
-                        if (!targetOffset) return;
-                        var target = cornerCells.find(function(cell) {
-                            return cell.row === minRow + targetOffset[0] && cell.col === minCol + targetOffset[1];
-                        });
-                        if (target) constraints.directionalMarks.push({
-                            relation: directionalVariant, target: target, cells: cornerCells
-                        });
-                    });
-                }
-              });
-              constraints.supported.push(directionalVariant);
-            });
-            if (directionalVariants.indexOf("sumdetector") !== -1) {
-                var sumDetectorClues = constraints.directionalMarks.filter(function(clue) {
-                    return clue.relation === "sumdetector";
-                });
-                constraints.directionalMarks = constraints.directionalMarks.filter(function(clue) {
-                    return clue.relation !== "sumdetector";
-                });
-                if (sumDetectorClues.length) constraints.sumDetectorGroups.push({ clues: sumDetectorClues });
             }
         }
         Object.keys(symbols).forEach(function(key) {
@@ -2749,7 +2055,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             var entry = numbers[key];
             var point = puzzle.point && puzzle.point[key];
             var kind = entry && entry[0] !== undefined ? entry[0].toString().toUpperCase() : "";
-            var isXV = variantEnabled(puzzle, "xv") && (kind === "V" || kind === "X");
+            var isXV = false; // XV is interpreted by its Variant Descriptor.
             var isXIVI = variantEnabled(puzzle, "xivi") && (kind === "VI" || kind === "XI");
             if ((!isXV && !isXIVI) || !point) {
                 return;
@@ -2764,35 +2070,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             }
         });
 
-        if (variantEnabled(puzzle, "xv") && puzzle.xvNegativeConstraint === true) {
-            var markedXVEdges = {};
-            constraints.xv.forEach(function(clue) {
-                var first = clue.cells[0].row * SIZE + clue.cells[0].col;
-                var second = clue.cells[1].row * SIZE + clue.cells[1].col;
-                markedXVEdges[Math.min(first, second) + ":" + Math.max(first, second)] = true;
-            });
-            for (var xvRow = 0; xvRow < SIZE; xvRow++) {
-                for (var xvCol = 0; xvCol < SIZE; xvCol++) {
-                    [[xvRow + 1, xvCol], [xvRow, xvCol + 1]].forEach(function(neighbor) {
-                        if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) {
-                            return;
-                        }
-                        var first = xvRow * SIZE + xvCol;
-                        var second = neighbor[0] * SIZE + neighbor[1];
-                        var edge = Math.min(first, second) + ":" + Math.max(first, second);
-                        if (!markedXVEdges[edge]) {
-                            constraints.xv.push({
-                                cells: [
-                                    { row: xvRow, col: xvCol },
-                                    { row: neighbor[0], col: neighbor[1] }
-                                ],
-                                kind: "none"
-                            });
-                        }
-                    });
-                }
-            }
-        }
         if (variantEnabled(puzzle, "xivi")) {
             var markedXIVIEdges = {};
             constraints.xv.forEach(function(clue) {
@@ -2953,217 +2230,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                 }
             });
             constraints.supported.push("mathdoku");
-        }
-
-        var catalogEdgeVariant = ["difference", "sum", "product", "arithmetic", "greater", "lesser", "divisor", "multiples", "eitheror", "blocksumrelations", "tenspositionproducts", "ratio",
-            "consecutive", "evensumpairs", "oddsumpairs", "inequality", "xydifference", "perfectsquares",
-            "primesums", "twodigitprimenumbers", "fives", "sumnine", "oneortwodifferencepairs", "teneleven", "termination"].find(function(name) {
-                return variantEnabled(puzzle, name);
-            });
-        if (catalogEdgeVariant) {
-            var catalogMarkedEdges = {};
-            function catalogEdgeCells(key) {
-                var point = puzzle.point && puzzle.point[key];
-                if (!point || !Array.isArray(point.neighbor)) return [];
-                return point.neighbor.filter(function(neighbor) { return activeCells[neighbor]; })
-                    .map(function(neighbor) { return keyToCell(puzzle, neighbor); }).filter(Boolean);
-            }
-            if (["difference", "sum", "product", "arithmetic", "greater", "lesser", "inequality", "divisor", "multiples", "eitheror", "blocksumrelations", "tenspositionproducts", "ratio", "termination"].indexOf(catalogEdgeVariant) !== -1) {
-                Object.keys(numbers).forEach(function(key) {
-                    var cells = catalogEdgeCells(key);
-                    var target = numbers[key] && parseInt(numbers[key][0], 10);
-                    var text = numbers[key] && String(numbers[key][0]).trim();
-                    if (cells.length === 2 && (Number.isFinite(target) ||
-                        ((catalogEdgeVariant === "inequality" || catalogEdgeVariant === "blocksumrelations") &&
-                            (text === "<" || text === ">" || text === "^" || text === "v" || text === "V")) ||
-                        (catalogEdgeVariant === "ratio" && text.indexOf(":") !== -1))) {
-                        cells.sort(function(first, second) { return first.row - second.row || first.col - second.col; });
-                        var sign = text;
-                        if (text === "^") sign = "<";
-                        if (text === "v" || text === "V") sign = ">";
-                        var edgeClue = { cells: cells, relation: catalogEdgeVariant, target: target, sign: sign };
-                        if (catalogEdgeVariant === "blocksumrelations") {
-                            var blockDimensions = boxDimensions(SIZE);
-                            var blockHeight = blockDimensions.height, blockWidth = blockDimensions.width;
-                            if (cells[0].row === cells[1].row) {
-                                var blockStartRow = Math.floor(cells[0].row / blockHeight) * blockHeight;
-                                edgeClue.groups = [cells[0].col, cells[1].col].map(function(col) {
-                                    return Array.from({ length: blockHeight }, function(_, offset) { return { row: blockStartRow + offset, col: col }; });
-                                });
-                            } else {
-                                var blockStartCol = Math.floor(cells[0].col / blockWidth) * blockWidth;
-                                edgeClue.groups = [cells[0].row, cells[1].row].map(function(row) {
-                                    return Array.from({ length: blockWidth }, function(_, offset) { return { row: row, col: blockStartCol + offset }; });
-                                });
-                            }
-                        }
-                        constraints.edgeRelations.push(edgeClue);
-                    }
-                });
-            } else {
-                Object.keys(symbols).forEach(function(key) {
-                    if (catalogEdgeVariant === "consecutive" &&
-                        (!symbols[key] || symbols[key][1] !== "circle_SS" || symbols[key][0] !== 1)) return;
-                    if ((catalogEdgeVariant === "xydifference" || catalogEdgeVariant === "primesums" || catalogEdgeVariant === "twodigitprimenumbers" || catalogEdgeVariant === "fives" || catalogEdgeVariant === "sumnine") && (!symbols[key] ||
-                        ["diamond_L", "diamond_SS", "circle_SS"].indexOf(symbols[key][1]) === -1)) return;
-                    if (catalogEdgeVariant === "perfectsquares" &&
-                        (!symbols[key] || ["diamond_SS", "circle_SS"].indexOf(symbols[key][1]) === -1 || symbols[key][0] !== 1)) return;
-                    if (catalogEdgeVariant === "oneortwodifferencepairs" &&
-                        (!symbols[key] || symbols[key][1] !== "circle_SS")) return;
-                    if (catalogEdgeVariant === "teneleven" &&
-                        (!symbols[key] || symbols[key][1] !== "bars_G")) return;
-                    var cells = catalogEdgeCells(key);
-                    if (cells.length !== 2) return;
-                    cells.sort(function(first, second) { return first.row - second.row || first.col - second.col; });
-                    var first = cells[0].row * SIZE + cells[0].col;
-                    var second = cells[1].row * SIZE + cells[1].col;
-                    catalogMarkedEdges[Math.min(first, second) + ":" + Math.max(first, second)] = true;
-                    constraints.edgeRelations.push({
-                        cells: cells,
-                        relation: catalogEdgeVariant === "evensumpairs" ? "evenSum" :
-                            catalogEdgeVariant === "oddsumpairs" ? "oddSum" : catalogEdgeVariant,
-                        reference: catalogEdgeVariant === "xydifference" ?
-                            (cells[0].row === cells[1].row ? { row: cells[0].row, col: 0 } :
-                                { row: 0, col: cells[0].col }) : null
-                    });
-                });
-                if ((catalogEdgeVariant === "consecutive" && puzzle.consecutiveNegativeConstraint === true) || catalogEdgeVariant === "sumnine") {
-                    for (var catalogRow = 0; catalogRow < SIZE; catalogRow++) {
-                        for (var catalogCol = 0; catalogCol < SIZE; catalogCol++) {
-                            [[catalogRow + 1, catalogCol], [catalogRow, catalogCol + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var first = catalogRow * SIZE + catalogCol;
-                                var second = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(first, second) + ":" + Math.max(first, second)]) {
-                                    constraints.edgeRelations.push({ cells: [
-                                        { row: catalogRow, col: catalogCol },
-                                        { row: neighbor[0], col: neighbor[1] }
-                                    ], relation: catalogEdgeVariant === "sumnine" ? "notSumnine" : "notConsecutive" });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "perfectsquares") {
-                    for (var squareRow = 0; squareRow < SIZE; squareRow++) {
-                        for (var squareCol = 0; squareCol < SIZE; squareCol++) {
-                            [[squareRow + 1, squareCol], [squareRow, squareCol + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var squareFirst = squareRow * SIZE + squareCol;
-                                var squareSecond = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(squareFirst, squareSecond) + ":" + Math.max(squareFirst, squareSecond)]) {
-                                    constraints.edgeRelations.push({ cells: [
-                                        { row: squareRow, col: squareCol }, { row: neighbor[0], col: neighbor[1] }
-                                    ], relation: "notPerfectSquare" });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "fives") {
-                    for (var fivesRow = 0; fivesRow < SIZE; fivesRow++) {
-                        for (var fivesCol = 0; fivesCol < SIZE; fivesCol++) {
-                            [[fivesRow + 1, fivesCol], [fivesRow, fivesCol + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var fivesFirst = fivesRow * SIZE + fivesCol;
-                                var fivesSecond = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(fivesFirst, fivesSecond) + ":" + Math.max(fivesFirst, fivesSecond)]) {
-                                    constraints.edgeRelations.push({ cells: [
-                                        { row: fivesRow, col: fivesCol }, { row: neighbor[0], col: neighbor[1] }
-                                    ], relation: "notFives" });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "termination") {
-                    for (var termRow = 0; termRow < SIZE; termRow++) {
-                        for (var termCol = 0; termCol < SIZE; termCol++) {
-                            [[termRow + 1, termCol], [termRow, termCol + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var termFirst = termRow * SIZE + termCol;
-                                var termSecond = neighbor[0] * SIZE + neighbor[1];
-                                if (activeCells[termFirst] && activeCells[termSecond] && !catalogMarkedEdges[Math.min(termFirst, termSecond) + ":" + Math.max(termFirst, termSecond)]) {
-                                    constraints.edgeRelations.push({ cells: [
-                                        { row: termRow, col: termCol }, { row: neighbor[0], col: neighbor[1] }
-                                    ], relation: "notTermination" });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "teneleven") {
-                    for (var tenRow = 0; tenRow < SIZE; tenRow++) {
-                        for (var tenCol = 0; tenCol < SIZE; tenCol++) {
-                            [[tenRow + 1, tenCol], [tenRow, tenCol + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var tenFirst = tenRow * SIZE + tenCol;
-                                var tenSecond = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(tenFirst, tenSecond) + ":" + Math.max(tenFirst, tenSecond)]) {
-                                    constraints.edgeRelations.push({ cells: [
-                                        { row: tenRow, col: tenCol }, { row: neighbor[0], col: neighbor[1] }
-                                    ], relation: "notTenEleven" });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "xydifference") {
-                    for (var xyRow = 0; xyRow < SIZE; xyRow++) {
-                        for (var xyCol = 0; xyCol < SIZE; xyCol++) {
-                            [[xyRow + 1, xyCol], [xyRow, xyCol + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var xyFirst = xyRow * SIZE + xyCol;
-                                var xySecond = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(xyFirst, xySecond) + ":" + Math.max(xyFirst, xySecond)]) {
-                                    constraints.edgeRelations.push({
-                                        cells: [
-                                            { row: xyRow, col: xyCol }, { row: neighbor[0], col: neighbor[1] }
-                                        ],
-                                        relation: "notXydifference",
-                                        reference: xyRow === neighbor[0] ? { row: xyRow, col: 0 } : { row: 0, col: xyCol }
-                                    });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "primesums") {
-                    for (var row = 0; row < SIZE; row++) {
-                        for (var col = 0; col < SIZE; col++) {
-                            [[row + 1, col], [row, col + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var first = row * SIZE + col;
-                                var second = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(first, second) + ":" + Math.max(first, second)]) {
-                                    constraints.edgeRelations.push({
-                                        cells: [{ row: row, col: col }, { row: neighbor[0], col: neighbor[1] }],
-                                        relation: "notPrimesums"
-                                    });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (catalogEdgeVariant === "twodigitprimenumbers") {
-                    for (var row = 0; row < SIZE; row++) {
-                        for (var col = 0; col < SIZE; col++) {
-                            [[row + 1, col], [row, col + 1]].forEach(function(neighbor) {
-                                if (neighbor[0] >= SIZE || neighbor[1] >= SIZE) return;
-                                var first = row * SIZE + col;
-                                var second = neighbor[0] * SIZE + neighbor[1];
-                                if (!catalogMarkedEdges[Math.min(first, second) + ":" + Math.max(first, second)]) {
-                                    constraints.edgeRelations.push({
-                                        cells: [{ row: row, col: col }, { row: neighbor[0], col: neighbor[1] }],
-                                        relation: "notTwodigitprimenumbers"
-                                    });
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-            constraints.supported.push(catalogEdgeVariant);
         }
 
         if (variantEnabled(puzzle, "midpoint")) {
@@ -3434,7 +2500,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             "fullrank", "outsideparity", "parityparty", "serbianframe", "median", "descriptivepairs",
             "maximin", "minimax", "ascendingstarters", "before9", "oddevenbigsmall", "before1after9", "firstseenoddeven", "maxascending",
             "innerframesum", "missingdigit", "nextto9", "outsideconsecutive", "outsidegreaterthan", "outsidekiller", "parityskyscrapers", "sumbyx",
-            "position", "sumnexttonine", "wrongoutsidesum", "doublesandwich", "xaverage", "triplesum", "japanesesums", "oddsums", "partitionedsums", "bigsmalljapanesesums"].filter(function(name) {
+            "position", "sumnexttonine", "wrongoutsidesum", "doublesandwich", "xaverage", "triplesum", "japanesesums", "oddsums", "bigsmalljapanesesums"].filter(function(name) {
             return variantEnabled(puzzle, name);
         });
         if (activeOutsideVariants.length) {
@@ -3485,7 +2551,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
                             outsideColumn, outsideBoxHeight, "column", "before1");
                         addOutsideRelation((outsideStartCol - 2) + (outsideStartRow + outsideIndex) * puzzle.nx0,
                             outsideRow, outsideBoxWidth, "row", "before1");
-                    } else if (variant === "partitionedsums" || variant === "bigsmalljapanesesums" || variant === "japanesesums") {
+                    } else if (variant === "bigsmalljapanesesums" || variant === "japanesesums") {
                         var colClues = [];
                         var rowClues = [];
                         for (var layer = 0; layer < 5; layer++) {
@@ -3764,26 +2830,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             }
             constraints.supported.push("rossini");
         }
-        var wheelVariant = ["wheel"].find(function(name) { return variantEnabled(puzzle, name); });
-        if (wheelVariant) {
-            Object.keys(symbols).forEach(function(key) {
-                var entry = symbols[key];
-                var expected = "circle_L";
-                if (!entry || entry[1] !== expected) return;
-                var point = puzzle.point && puzzle.point[key];
-                var cells = point && (point.neighbor || []).filter(function(neighbor) { return activeCells[neighbor]; })
-                    .map(function(neighbor) { return keyToCell(puzzle, neighbor); }).filter(Boolean)
-                    .sort(function(first, second) { return first.row - second.row || first.col - second.col; });
-                var numberEntry = numbers[key];
-                var digits = numberEntry && String(numberEntry[0]).split("").map(Number)
-                    .filter(function(value) { return value >= 1 && value <= SIZE; });
-                if (cells && cells.length === 4 && digits && digits.length === 4) {
-                    constraints.cellRelations.push({ relation: "wheel", digits: digits,
-                        cells: [cells[0], cells[1], cells[3], cells[2]] });
-                }
-            });
-            constraints.supported.push(wheelVariant);
-        }
         if (variantEnabled(puzzle, "disparity")) {
             function getCellRegion(r, c) {
                 if (constraints.regionAllDifferent && constraints.regionAllDifferent.length > 0) {
@@ -3822,48 +2868,109 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         if (variantEnabled(puzzle, "different parity")) {
             constraints.supported.push("different parity");
         }
-        if (variantEnabled(puzzle, "countingneighbours")) {
-            var markedCells = {};
-            Object.keys(symbols).forEach(function(key) {
-                var entry = symbols[key];
-                if (!entry || !activeCells[key]) return;
-                var cell = keyToCell(puzzle, Number(key));
-                if (!cell) return;
-                if (entry[1] === "circle_L" || entry[1] === "cross") {
-                    markedCells[key] = entry[1] === "circle_L" ? "circle" : "cross";
+        return constraints;
+    }
+
+    function interpretationState(puzzle) {
+        var legacyConstraints = readLegacyConstraints(puzzle);
+        var requested = Array.isArray(puzzle && puzzle.activeSudokuVariants) ?
+            puzzle.activeSudokuVariants : [puzzle && puzzle.activeSudokuVariant || "classic"];
+        var migratedNames = requested.filter(function(name) {
+            return SudokuVariantRegistryRuntime && SudokuVariantRegistryRuntime.resolve(name);
+        });
+        var descriptorPuzzle = Object.create(puzzle || null);
+        descriptorPuzzle.activeSudokuVariants = ["classic"].concat(migratedNames);
+        var descriptorInterpretation = SudokuVariantRegistryRuntime ?
+            SudokuVariantRegistryRuntime.interpretPuzzle(descriptorPuzzle) :
+            { activeVariantIds: [], instances: [], diagnostics: [] };
+        var descriptorIds = descriptorInterpretation.activeVariantIds;
+
+        var instances = descriptorInterpretation.instances.slice();
+        Object.keys(legacyConstraints).forEach(function(type) {
+            if (!Array.isArray(legacyConstraints[type]) || type === "supported") return;
+            legacyConstraints[type].forEach(function(payload) {
+                var migratedPayload = type === "dutchFlatMates" && descriptorIds.indexOf("dutchflatmates") !== -1 ||
+                    type === "killers" && descriptorIds.indexOf("killer") !== -1 ||
+                    type === "cellRelations" && payload && payload.relation === "multiplication" &&
+                        descriptorIds.indexOf("multiplication") !== -1 ||
+                    type === "outsideRelations" && payload && payload.relation === "partitionedsums" &&
+                        descriptorIds.indexOf("partitionedsums") !== -1;
+                if (!migratedPayload) {
+                    instances.push({ type: type, version: 1, payload: payload, variantId: "legacy" });
                 }
             });
-            var diagOffsets = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-            var orthoOffsets = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-            Object.keys(activeCells).forEach(function(key) {
-                if (activeCells[key]) {
-                    var cell = keyToCell(puzzle, Number(key));
-                    if (cell) {
-                        var diagonals = [], orthogonals = [];
-                        diagOffsets.forEach(function(o) {
-                            var r = cell.row + o[0], c = cell.col + o[1];
-                            if (r >= 0 && r < SIZE && c >= 0 && c < SIZE && activeCells[cellKey(puzzle, r, c)]) {
-                                diagonals.push({ row: r, col: c });
-                            }
-                        });
-                        orthoOffsets.forEach(function(o) {
-                            var r = cell.row + o[0], c = cell.col + o[1];
-                            if (r >= 0 && r < SIZE && c >= 0 && c < SIZE && activeCells[cellKey(puzzle, r, c)]) {
-                                orthogonals.push({ row: r, col: c });
-                            }
-                        });
-                        constraints.cellRelations.push({
-                            relation: "countingneighbours",
-                            cell: cell,
-                            kind: markedCells[key] || "none",
-                            diagonals: diagonals,
-                            orthogonals: orthogonals
-                        });
-                    }
-                }
+        });
+
+        var activeVariantIds = [];
+        var diagnostics = descriptorInterpretation.diagnostics.slice();
+        requested.forEach(function(name) {
+            var id = canonicalVariantName(name);
+            if (!id || id === "classic" || activeVariantIds.indexOf(id) !== -1) return;
+            activeVariantIds.push(id);
+            if (SudokuVariantRegistryRuntime && SudokuVariantRegistryRuntime.resolve(name)) return;
+            var supported = (legacyConstraints.supported || []).some(function(value) {
+                return canonicalVariantName(value) === id;
             });
-            constraints.supported.push("countingneighbours");
-        }
+            if (!supported) {
+                diagnostics.push({
+                    code: "unknown-or-unsupported-variant",
+                    variantId: id,
+                    message: "The active Sudoku variant could not be interpreted: " + name
+                });
+            }
+        });
+        activeVariantIds.sort();
+        return {
+            legacyConstraints: legacyConstraints,
+            interpretation: {
+                activeVariantIds: activeVariantIds,
+                instances: instances,
+                diagnostics: diagnostics
+            }
+        };
+    }
+
+    function interpretPuzzle(puzzle) {
+        return interpretationState(puzzle).interpretation;
+    }
+
+    function readConstraints(puzzle) {
+        var state = interpretationState(puzzle);
+        var constraints = state.legacyConstraints;
+        var migratedIds = {};
+        state.interpretation.activeVariantIds.forEach(function(id) {
+            var diagnostic = state.interpretation.diagnostics.some(function(value) {
+                return value.variantId === id;
+            });
+            if (!diagnostic && SudokuVariantRegistryRuntime && SudokuVariantRegistryRuntime.resolve(id)) {
+                migratedIds[id] = true;
+            }
+        });
+        state.interpretation.instances.forEach(function(instance) {
+            if (instance.variantId === "legacy") return;
+            if (instance.type === "dutchFlatMates") constraints[instance.type] = [];
+            if (instance.type === "killers" && instance.variantId === "killer") constraints[instance.type] = [];
+            if (instance.type === "cellRelations" && instance.variantId === "multiplication") {
+                constraints[instance.type] = (constraints[instance.type] || []).filter(function(payload) {
+                    return payload.relation !== "multiplication";
+                });
+            }
+            if (instance.type === "outsideRelations" && instance.variantId === "partitionedsums") {
+                constraints[instance.type] = (constraints[instance.type] || []).filter(function(payload) {
+                    return payload.relation !== "partitionedsums";
+                });
+            }
+        });
+        state.interpretation.instances.forEach(function(instance) {
+            if (instance.variantId === "legacy") return;
+            (constraints[instance.type] || (constraints[instance.type] = [])).push(instance.payload);
+        });
+        Object.keys(migratedIds).forEach(function(id) {
+            if (!(constraints.supported || []).some(function(value) {
+                return canonicalVariantName(value) === id;
+            })) constraints.supported.push(id);
+        });
+        constraints.diagnostics = state.interpretation.diagnostics;
         return constraints;
     }
 
@@ -3873,6 +2980,14 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
     }
 
     function solve(board, constraints) {
+        if (constraints && Array.isArray(constraints.diagnostics) && constraints.diagnostics.length) {
+            return {
+                solved: false,
+                board: null,
+                diagnostics: constraints.diagnostics,
+                error: "Sudoku variants could not be interpreted."
+            };
+        }
         return SudokuCSPRuntime.solve(board, constraints);
     }
 
@@ -4264,6 +3379,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         cellKey: cellKey,
         digitFromEntry: digitFromEntry,
         readBoard: readBoard,
+        interpretPuzzle: interpretPuzzle,
         readConstraints: readConstraints,
         getCandidates: getCandidates,
         solve: solve,
@@ -4408,7 +3524,7 @@ var SudokuTools = (function() {
                 if (button) button.title = "The grid has at least 1 solution";
                 generatorLog("✓", "The grid has at least 1 solution.");
                 if (typeof window !== "undefined" && window.showToast) {
-                    window.showToast("The grid has at least 1 solution.", "success", "Solve Once");
+                    window.showToast("This puzzle has at least one solution.", "success", "Find Solution");
                 }
             } else {
                 var conflict = result && result.conflict;
@@ -4498,9 +3614,9 @@ var SudokuTools = (function() {
                 SudokuSolver.commitSolveOnce(pu, result.board);
                 pu.redraw();
                 document.dispatchEvent(new CustomEvent("sudoku-solved"));
-                generatorLog("Solved", "Puzzle solved successfully.");
+                generatorLog("Solved", "This puzzle has at least one solution.");
                 if (typeof window !== "undefined" && window.showToast) {
-                    window.showToast("Puzzle solved successfully!", "success", "Solve Once");
+                    window.showToast("This puzzle has at least one solution.", "success", "Find Solution");
                 }
             } else {
                 SudokuSolver.showConflict(pu, result && result.conflict);

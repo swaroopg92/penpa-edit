@@ -1,6 +1,7 @@
 "use strict";
 
 var installers = [
+    require("./killer.js"),
     require("./solo_killer_groups.js"),
     require("./mathdoku.js"),
     require("./sumset_cages.js"),

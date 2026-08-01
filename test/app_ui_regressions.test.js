@@ -10,6 +10,7 @@ const general = fs.readFileSync(path.join(root, "docs/js/general.js"), "utf8");
 const puzzle = fs.readFileSync(path.join(root, "docs/js/class_p.js"), "utf8");
 const square = fs.readFileSync(path.join(root, "docs/js/class_square.js"), "utf8");
 const main = fs.readFileSync(path.join(root, "docs/js/main.js"), "utf8");
+const metadata = JSON.parse(fs.readFileSync(path.join(root, "variant_metadata.json"), "utf8"));
 
 test("New grid offers every supported size from 6 through 9", function() {
     assert.match(app, /let newGridSize:\s*6\s*\|\s*7\s*\|\s*8\s*\|\s*9/);
@@ -63,4 +64,32 @@ test("native Penpa completion uses CSP validation and Solve Once stays in Soluti
         solver.match(/function handleResult\(result\) \{([\s\S]*?)\n        \}/)?.[1] || "",
         /mode_qa\("pu_q"\)/
     );
+});
+
+test("Solve Once reports Find Solution and confirms at least one solution", function() {
+    assert.equal(solver.includes('"success", "Solve Once"'), false);
+    assert.equal(solver.includes('"success", "Find Solution"'), true);
+    assert.equal(solver.includes('generatorLog("Solved", "This puzzle has at least one solution.")'), true);
+});
+
+test("Dutch Flat Mates is a no-input variant restricted to 9x9", function() {
+    const variant = metadata.variants.find((item) => item.id === "dutchflatmates");
+    assert.equal(variant.name, "Dutch Flat Mates");
+    assert.deepEqual(variant.inputType.categories, ["no-input"]);
+    assert.deepEqual(Object.keys(variant.rules), ["9x9"]);
+    assert.match(app, /value === "dutchflatmates"[\s\S]*?requires a 9/);
+});
+
+test("desktop F2-F4 shortcuts switch Set, Solve, and Misc modes", function() {
+    assert.match(app, /function desktopLayerShortcut[\s\S]*?F2:\s*"problem"[\s\S]*?F3:\s*"solution"[\s\S]*?F4:\s*"modes"/);
+    assert.match(app, /function desktopLayerShortcut[\s\S]*?isEmbedded[\s\S]*?matchMedia\("\(max-width: 768px\)"\)/);
+    assert.match(app, /function desktopLayerShortcut[\s\S]*?preventDefault\(\)[\s\S]*?stopImmediatePropagation\(\)[\s\S]*?chooseLayer\(nextLayer\)/);
+    ["F2", "F3", "F4"].forEach(function(key) {
+        assert.match(app, new RegExp("<kbd>" + key + "<\\/kbd>"));
+    });
+});
+
+test("Shift-number selects corner entry while Ctrl-number selects center entry", function() {
+    assert.match(app, /function toolPanelNumberShortcut[\s\S]*?shiftKey[\s\S]*?chooseNoteMode\("2"\)/);
+    assert.match(app, /function toolPanelNumberShortcut[\s\S]*?ctrlKey[\s\S]*?chooseNoteMode\("3"\)/);
 });
