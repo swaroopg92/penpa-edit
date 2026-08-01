@@ -3215,7 +3215,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             }
             return;
         }
-        var board = readBoard(puzzle, true);
+        var board = readBoard(puzzle, false);
         var constraints = readConstraints(puzzle);
         var signature = JSON.stringify([board, constraints]);
         if (candidateCache.signature !== signature) {
@@ -3285,7 +3285,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             drawAutoCandidates(puzzle);
             return false;
         }
-        var board = readBoard(puzzle, true);
+        var board = readBoard(puzzle, false);
         var constraints = readConstraints(puzzle);
         var activeVariants = Array.isArray(puzzle.activeSudokuVariants) ?
             puzzle.activeSudokuVariants : [puzzle.activeSudokuVariant || "classic"];
@@ -3585,7 +3585,7 @@ var SudokuTools = (function() {
             }
             return;
         }
-        var board = SudokuSolver.readBoard(pu, false);
+        var board = SudokuSolver.readBoard(pu, true);
         var constraints = SudokuSolver.readConstraints(pu);
 
         var active = Array.isArray(pu.activeSudokuVariants) ? pu.activeSudokuVariants :

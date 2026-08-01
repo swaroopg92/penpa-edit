@@ -134,3 +134,18 @@ test("mobile action and variant drawers retain their intended state", function()
     assert.match(app, /mobile-top-variant-drawer[\s\S]*?\.variant-search-control[\s\S]*?position:\s*sticky/);
     assert.match(app, /mobile-top-variant-drawer[\s\S]*?\.variant-tabs[\s\S]*?top:\s*38px/);
 });
+
+test("Auto Solve ignores answer marks while Solve Once respects them", function() {
+    const autoAnalysis = solver.match(/function startAutoAnalysis\(puzzle\) \{([\s\S]*?)\n    \}/)?.[1] || "";
+    const autoDrawing = solver.match(/function drawAutoCandidates\(puzzle\) \{([\s\S]*?)\n    \}/)?.[1] || "";
+    const solveOnce = solver.match(/function solveOnce\(\) \{([\s\S]*?)\n    \}/)?.[1] || "";
+    assert.match(autoAnalysis, /readBoard\(puzzle, false\)/);
+    assert.match(autoDrawing, /readBoard\(puzzle, false\)/);
+    assert.match(solveOnce, /readBoard\(pu, true\)/);
+});
+
+test("Penpa Actions shows Solver Settings only on mobile", function() {
+    assert.match(app, /class="solver-settings-action"[\s\S]*?Solver settings/);
+    assert.match(app, /\.solver-settings-action\s*\{[\s\S]*?display:\s*none !important/);
+    assert.match(app, /@media \(max-width:\s*768px\)[\s\S]*?\.penpa-actions \.solver-settings-action[\s\S]*?display:\s*inline-flex !important/);
+});

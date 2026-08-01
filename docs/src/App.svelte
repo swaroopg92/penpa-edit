@@ -2862,7 +2862,9 @@
             <button on:click={openLoadModal}
               ><span>⇩</span>Load</button
             >
-            <button on:click={() => (studioModal = "solver-settings")}
+            <button
+              class="solver-settings-action"
+              on:click={() => (studioModal = "solver-settings")}
               ><span>⚙</span>Solver settings</button
             >
           </div>
@@ -6174,7 +6176,8 @@ href="https://github.com/semiexp/cspuz_core"
     box-shadow: 0 2px 8px rgba(15, 23, 31, 0.24) !important;
     z-index: 101;
   }
-  .mobile-panel-position-action {
+  .mobile-panel-position-action,
+  .solver-settings-action {
     display: none !important;
   }
   .old-mobile-header {
@@ -6485,6 +6488,9 @@ href="https://github.com/semiexp/cspuz_core"
       order: 1;
     }
     .studio-shell .penpa-actions .mobile-panel-position-action {
+      display: inline-flex !important;
+    }
+    .studio-shell .penpa-actions .solver-settings-action {
       display: inline-flex !important;
     }
     .studio-shell .mobile-input-panel {
