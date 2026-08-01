@@ -162,6 +162,7 @@
     | "confirm-generate"
     | "screenshot"
     | "share"
+    | "load"
     | "settings"
     | "solver-settings"
     | "info"
@@ -180,6 +181,7 @@
   let screenshotType: "png" | "jpg" | "svg" = "png";
   let screenshotBorder = false;
   let screenshotName = "Classic";
+  let loadUrl = "";
   let darkTheme = true;
   let mobileActiveTab: "none" | "controls" | "actions" | "solver" = "none";
   let solverRunning = false;
@@ -1386,6 +1388,26 @@
     studioModal = "settings";
   }
 
+  function openLoadModal() {
+    loadUrl = "";
+    actionMenu = null;
+    studioModal = "load";
+  }
+
+  async function submitLoadUrl() {
+    const importer = (window as any).import_url;
+    if (typeof importer !== "function") return;
+    const loaded = await importer(loadUrl);
+    if (loaded) {
+      studioModal = null;
+      mobileActiveTab = "none";
+      window.setTimeout(() => {
+        syncFromLegacy();
+        fitBoard();
+      }, 0);
+    }
+  }
+
   function updateSetting(key: string, val: any) {
     if (typeof (window as any).UserSettings !== "undefined") {
       (window as any).UserSettings[key] = val;
@@ -1816,6 +1838,7 @@
     const autoSolver = document.getElementById("sudoku_auto_solver");
     const solveOnce = document.getElementById("sudoku_solve_once");
     const solveClear = document.getElementById("sudoku_solve_clear");
+    const solverStatus = document.getElementById("sudoku-solver-status");
     const logHeader = log?.querySelector(".sudoku-solver-log-header");
     if (
       !board ||
@@ -1823,6 +1846,7 @@
       !log ||
       !autoSolver ||
       !solveOnce ||
+      !solverStatus ||
       !logHeader ||
       !document.getElementById("canvas")
     )
@@ -1830,21 +1854,21 @@
     boardHost.appendChild(board);
     variantHost.appendChild(variantTools);
     logHost.appendChild(log);
-    logHeader.insertBefore(solverSettingsButton, autoSolver);
     logHeader.insertBefore(
       autoSolver,
-      document.getElementById("sudoku-solver-status"),
+      solverStatus,
     );
     logHeader.insertBefore(
       solveOnce,
-      document.getElementById("sudoku-solver-status"),
+      solverStatus,
     );
     if (solveClear) {
       logHeader.insertBefore(
         solveClear,
-        document.getElementById("sudoku-solver-status"),
+        solverStatus,
       );
     }
+    logHeader.insertBefore(solverSettingsButton, solverStatus);
     moveLegacyControls();
     syncState();
     initialized = true;
@@ -1970,7 +1994,7 @@
       if (!target?.closest(".action-dropdown")) actionMenu = null;
       if (
         !target?.closest(
-          ".controls-top-drawer, .penpa-actions, .log-host, .mobile-header, .column.actions",
+          ".controls-top-drawer, .penpa-actions, .log-host, .mobile-header, .column.actions, .action-slot",
         )
       ) {
         mobileActiveTab = "none";
@@ -2835,8 +2859,11 @@
                 ? "Light"
                 : "Dark"}</button
             >
-            <button on:click={() => legacyPress("input_url")}
+            <button on:click={openLoadModal}
               ><span>⇩</span>Load</button
+            >
+            <button on:click={() => (studioModal = "solver-settings")}
+              ><span>⚙</span>Solver settings</button
             >
           </div>
           <div class="action-group final-actions">
@@ -3036,63 +3063,51 @@
           </div>
         {/if}
 
+      {:else if studioModal === "load"}
+        <h2 id="studio-modal-title">Load Puzzle</h2>
+        <label class="modal-field" for="load-puzzle-url">
+          Puzzle URL
+          <textarea
+            id="load-puzzle-url"
+            class="modal-textarea"
+            rows="3"
+            bind:value={loadUrl}
+            placeholder="Paste a Sudotoku, Penpa, or puzz.link URL"
+          ></textarea>
+        </label>
+        <div class="studio-modal-actions">
+          <button on:click={() => (studioModal = null)}>Cancel</button>
+          <button class="primary" on:click={submitLoadUrl}>Load</button>
+        </div>
       {:else if studioModal === "solver-settings"}
         <h2 id="studio-modal-title">Solver Settings</h2>
-        <div class="solver-settings-grid">
-          <fieldset>
-            <legend>Time limit</legend>
-            <label>
-              <input
-                type="radio"
-                name="solver-time-limit"
-                checked={solverTimeLimit === "60"}
-                on:change={() => updateSolverTimeLimit("60")}
-              />
-              <span>60 seconds</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="solver-time-limit"
-                checked={solverTimeLimit === "120"}
-                on:change={() => updateSolverTimeLimit("120")}
-              />
-              <span>120 seconds</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="solver-time-limit"
-                checked={solverTimeLimit === "none"}
-                on:change={() => updateSolverTimeLimit("none")}
-              />
-              <span>No limit</span>
-            </label>
-          </fieldset>
-          <fieldset>
-            <legend>Toast notifications</legend>
-            <label>
-              <input
-                type="radio"
-                name="solver-toast"
-                checked={solverToastsEnabled}
-                on:change={() => updateSolverToasts(true)}
-              />
-              <span>On</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="solver-toast"
-                checked={!solverToastsEnabled}
-                on:change={() => updateSolverToasts(false)}
-              />
-              <span>Off</span>
-            </label>
-          </fieldset>
+        <div class="modal-settings-grid solver-settings-grid">
+          <label>
+            <span>Time limit</span>
+            <select
+              value={solverTimeLimit}
+              on:change={(e) => updateSolverTimeLimit(e.currentTarget.value as SolverTimeLimit)}
+              class="modal-select"
+            >
+              <option value="60">60 seconds</option>
+              <option value="120">120 seconds</option>
+              <option value="none">None</option>
+            </select>
+          </label>
+          <label>
+            <span>Toast notifications</span>
+            <select
+              value={solverToastsEnabled ? "on" : "off"}
+              on:change={(e) => updateSolverToasts(e.currentTarget.value === "on")}
+              class="modal-select"
+            >
+              <option value="on">On</option>
+              <option value="off">Off</option>
+            </select>
+          </label>
         </div>
         <div class="studio-modal-actions">
-          <button class="primary" on:click={() => (studioModal = null)}>Close</button>
+          <button class="primary" on:click={() => (studioModal = null)}>Save</button>
         </div>
       {:else if studioModal === "settings"}
         <h2 id="studio-modal-title">General Settings</h2>
@@ -3243,7 +3258,7 @@
         </div>
 
         <div class="studio-modal-actions" style="margin-top: 20px; justify-content: center;">
-          <button class="primary" on:click={() => (studioModal = null)}>Close</button>
+          <button class="primary" on:click={() => (studioModal = null)}>Save</button>
         </div>
       {:else}
         <h2 id="studio-modal-title">About Sudotoku</h2>
@@ -4427,9 +4442,11 @@ href="https://github.com/semiexp/cspuz_core"
   }
   :global(.svelte-home .log-host #sudoku-solver-status) {
     flex: 0 0 100% !important;
-    min-height: 20px;
+    min-height: 0;
     margin: 0 !important;
+    padding: 0 !important;
     justify-content: flex-start !important;
+    line-height: 1.2;
   }
   :global(.svelte-home #sudoku-solver-status::before) {
     content: "";
@@ -4650,29 +4667,6 @@ href="https://github.com/semiexp/cspuz_core"
   }
   .bottom-actions {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .solver-settings-grid {
-    display: grid;
-    gap: 14px;
-  }
-  .solver-settings-grid fieldset {
-    display: grid;
-    gap: 8px;
-    margin: 0;
-    padding: 12px;
-    border: 1px solid #cbd5df;
-    border-radius: 8px;
-  }
-  .solver-settings-grid legend {
-    padding: 0 5px;
-    font-size: 12px;
-    font-weight: 750;
-  }
-  .solver-settings-grid label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 28px;
   }
   .info-copy {
     display: grid;
@@ -5269,6 +5263,11 @@ href="https://github.com/semiexp/cspuz_core"
   .studio-shell.dark :global(.sudoku-doublekropki-negative),
   .studio-shell.dark :global(.sudoku-xv-negative),
   .studio-shell.dark :global(.sudoku-battenburg-negative) {
+    color: #dce5ec !important;
+    border-color: #536473 !important;
+    background: #263340 !important;
+  }
+  .studio-shell.dark .solver-settings-btn {
     color: #dce5ec !important;
     border-color: #536473 !important;
     background: #263340 !important;
@@ -5957,7 +5956,8 @@ href="https://github.com/semiexp/cspuz_core"
 
   :global(.svelte-home .log-host #sudoku_auto_solver),
   :global(.svelte-home .log-host #sudoku_solve_once),
-  :global(.svelte-home .log-host #sudoku_solve_clear) {
+  :global(.svelte-home .log-host #sudoku_solve_clear),
+  :global(.svelte-home .log-host #sudoku_solver_settings) {
     width: auto !important;
     padding: 0 8px !important;
     display: inline-flex !important;
@@ -6370,7 +6370,7 @@ href="https://github.com/semiexp/cspuz_core"
     top: max(8px, env(safe-area-inset-top));
     right: 8px;
     left: 8px;
-    max-height: min(48vh, 390px);
+    max-height: min(78vh, 620px);
     padding: 6px;
     border: 1px solid #435467;
     border-radius: 10px;
@@ -6384,6 +6384,17 @@ href="https://github.com/semiexp/cspuz_core"
     max-height: none;
     margin-top: 6px;
     overflow: visible !important;
+  }
+  .mobile-top-variant-drawer :global(.variant-search-control) {
+    position: sticky;
+    top: 0;
+    z-index: 7;
+    background: #202b36;
+  }
+  .mobile-top-variant-drawer :global(.variant-tabs) {
+    top: 38px;
+    z-index: 6;
+    background: #202b36;
   }
   .mobile-top-variant-drawer.add-mode :global(.input-mode-tools) {
     display: none;

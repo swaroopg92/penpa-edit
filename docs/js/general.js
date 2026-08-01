@@ -2027,8 +2027,37 @@ function export_sudoku() {
     }
 }
 
+function normalizePenpaLoadInput(urlstring) {
+    if (typeof urlstring !== "string") return "";
+
+    const input = urlstring.trim();
+    if (!input) return "";
+
+    try {
+        const fallbackBase = typeof window !== "undefined" && window.location
+            ? window.location.href
+            : "https://sudotoku.invalid/";
+        const parsed = new URL(input, fallbackBase);
+        const candidates = [parsed.hash, parsed.search];
+        for (const candidate of candidates) {
+            const params = candidate.replace(/^[#?]/, "");
+            if (/(^|&)m=(?:edit|solve)(?:&|$)/i.test(params) && /(^|&)p=/.test(params)) {
+                return params;
+            }
+        }
+    } catch (error) {
+        // Keep supporting raw Penpa parameter strings and older saved links.
+    }
+
+    if (input.includes("/penpa-edit/#")) return input.split("/penpa-edit/#")[1];
+    if (input.includes("/penpa-edit/?")) return input.split("/penpa-edit/?")[1];
+    return input.replace(/^[#?]/, "");
+}
+
 async function import_url(urlstring) {
-    urlstring = urlstring || document.getElementById("urlstring").value;
+    urlstring = normalizePenpaLoadInput(
+        urlstring || document.getElementById("urlstring")?.value || ""
+    );
     if (urlstring !== "") {
         if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
 
@@ -2054,26 +2083,20 @@ async function import_url(urlstring) {
                 } else if (url.includes("?")) {
                     url = url.split('?')[1];
                 }
-                load(url, type = 'localstorage', origurl = paramArray.p);
+                await load(url, 'localstorage', paramArray.p);
             } else {
-                let paramString = urlstring;
-                if (paramString.includes("/penpa-edit/#")) {
-                    paramString = paramString.split("/penpa-edit/#")[1];
-                } else if (paramString.includes("/penpa-edit/?")) {
-                    paramString = paramString.split("/penpa-edit/?")[1];
-                } else if (typeof paramString === "string" && (paramString.startsWith("?") || paramString.startsWith("#"))) {
-                    paramString = paramString.slice(1);
-                }
-                load(paramString, 'local');
+                await load(urlstring, 'local');
             }
 
             document.getElementById("modal-load").style.display = 'none';
             if (UserSettings.tab_settings > 0) {
                 selectBox.setValue(UserSettings.tab_settings);
             }
+            return true;
         } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p(\.html)?\?/)) {
             decode_puzzlink(urlstring);
             document.getElementById("modal-load").style.display = 'none';
+            return true;
         } else {
             Swal.fire({
                 html: PenpaText.get('invalid_url'),
@@ -2082,6 +2105,7 @@ async function import_url(urlstring) {
             });
         }
     }
+    return false;
 }
 
 function load_feedback() {
@@ -3474,5 +3498,5 @@ if (!String.prototype.startsWith) {
 if (typeof module !== "undefined" && module.exports) {
     module.exports = { isEmpty, encrypt_data, decrypt_data, request_shortlink, get_download_filename, 
                      get_filename_base, filename_bad_chars, validate_filename, errorMsg, infoMsg, 
-                     update_textarea};
+                     update_textarea, normalizePenpaLoadInput};
 }

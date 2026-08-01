@@ -96,7 +96,7 @@ test("Shift-number selects corner entry while Ctrl-number selects center entry",
 
 test("solver settings control the saved time limit and toast preference", function() {
     assert.match(app, /id="sudoku_solver_settings"[\s\S]*?>Settings<\/button>/);
-    assert.match(app, /studioModal === "solver-settings"[\s\S]*?>60 seconds<[\s\S]*?>120 seconds<[\s\S]*?>No limit</);
+    assert.match(app, /studioModal === "solver-settings"[\s\S]*?<select[\s\S]*?>60 seconds<[\s\S]*?>120 seconds<[\s\S]*?>None<[\s\S]*?<select[\s\S]*?>On<[\s\S]*?>Off</);
     assert.match(app, /solverTimeLimitStorageKey = "sudotoku-solver-time-limit"/);
     assert.match(app, /solverToastStorageKey = "sudotoku-solver-toast"/);
     assert.match(app, /if \(!message \|\| !solverToastsEnabled\) return/);
@@ -107,6 +107,30 @@ test("solver settings control the saved time limit and toast preference", functi
 
 test("solver controls and status use separate horizontal rows", function() {
     assert.match(app, /#sudoku_solver_settings[\s\S]*?flex-direction:\s*row !important/);
+    assert.match(app, /\.studio-shell\.dark \.solver-settings-btn[\s\S]*?background:\s*#263340 !important/);
     assert.match(app, /\.log-host #sudoku-solver-status[\s\S]*?flex:\s*0 0 100% !important/);
     assert.match(app, /\.bottom-actions\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3/);
+});
+
+test("solver toolbar moves every button before marking the board ready", function() {
+    const mover = app.match(/function moveLegacyNodes\(\) \{([\s\S]*?)\n  \}/)?.[1] || "";
+    assert.match(mover, /const solverStatus = document\.getElementById\("sudoku-solver-status"\)/);
+    assert.match(mover, /logHeader\.insertBefore\([\s\S]*?autoSolver,[\s\S]*?solverStatus/);
+    assert.match(mover, /solveClear[\s\S]*?logHeader\.insertBefore\(solverSettingsButton, solverStatus\)/);
+    assert.match(mover, /initialized = true/);
+});
+
+test("load and settings use the Svelte modal patterns", function() {
+    assert.match(app, /studioModal === "load"[\s\S]*?<h2 id="studio-modal-title">Load Puzzle<\/h2>/);
+    assert.match(app, /studioModal === "solver-settings"[\s\S]*?>Save<\/button>/);
+    assert.match(app, /studioModal === "settings"[\s\S]*?>Save<\/button>/);
+    assert.doesNotMatch(app, /legacyPress\("input_url"\)/);
+});
+
+test("mobile action and variant drawers retain their intended state", function() {
+    assert.match(app, /\.action-slot[\s\S]*?mobileActiveTab = "none"/);
+    assert.match(app, /on:click=\{\(\) => \(studioModal = "solver-settings"\)\}[\s\S]*?Solver settings/);
+    assert.match(app, /\.mobile-top-variant-drawer\s*\{[\s\S]*?max-height:\s*min\(78vh, 620px\)/);
+    assert.match(app, /mobile-top-variant-drawer[\s\S]*?\.variant-search-control[\s\S]*?position:\s*sticky/);
+    assert.match(app, /mobile-top-variant-drawer[\s\S]*?\.variant-tabs[\s\S]*?top:\s*38px/);
 });
