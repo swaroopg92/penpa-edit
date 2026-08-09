@@ -10,6 +10,8 @@ const general = fs.readFileSync(path.join(root, "docs/js/general.js"), "utf8");
 const puzzle = fs.readFileSync(path.join(root, "docs/js/class_p.js"), "utf8");
 const square = fs.readFileSync(path.join(root, "docs/js/class_square.js"), "utf8");
 const main = fs.readFileSync(path.join(root, "docs/js/main.js"), "utf8");
+const constraints = fs.readFileSync(path.join(root, "docs/js/constraints.js"), "utf8");
+const variationCatalog = fs.readFileSync(path.join(root, "docs/src/variationCatalog.ts"), "utf8");
 const metadata = JSON.parse(fs.readFileSync(path.join(root, "variant_metadata.json"), "utf8"));
 
 test("New grid offers every supported size from 6 through 9", function() {
@@ -94,6 +96,13 @@ test("Shift-number selects corner entry while Ctrl-number selects center entry",
     assert.match(app, /function toolPanelNumberShortcut[\s\S]*?ctrlKey[\s\S]*?chooseNoteMode\("3"\)/);
 });
 
+test("keyboard shortcuts tolerate events dispatched at the iframe document", function() {
+    assert.match(app, /function eventTargetElement\(event: Event\)/);
+    assert.match(app, /event\.target instanceof Element/);
+    assert.match(app, /function desktopLayerShortcut[\s\S]*?const target = eventTargetElement\(event\)/);
+    assert.match(app, /function cycleInputMode[\s\S]*?const target = eventTargetElement\(event\)/);
+});
+
 test("solver settings control the saved time limit and toast preference", function() {
     assert.match(app, /id="sudoku_solver_settings"[\s\S]*?>Settings<\/button>/);
     assert.match(app, /studioModal === "solver-settings"[\s\S]*?<select[\s\S]*?>60 seconds<[\s\S]*?>120 seconds<[\s\S]*?>None<[\s\S]*?<select[\s\S]*?>On<[\s\S]*?>Off</);
@@ -148,4 +157,32 @@ test("Penpa Actions shows Solver Settings only on mobile", function() {
     assert.match(app, /class="solver-settings-action"[\s\S]*?Solver settings/);
     assert.match(app, /\.solver-settings-action\s*\{[\s\S]*?display:\s*none !important/);
     assert.match(app, /@media \(max-width:\s*768px\)[\s\S]*?\.penpa-actions \.solver-settings-action[\s\S]*?display:\s*inline-flex !important/);
+});
+
+test("Add Variant has one metadata-backed availability source without status labels", function() {
+    assert.doesNotMatch(app, /class="csp-badge"|class="unsupported-badge"/);
+    assert.doesNotMatch(general, /implemented_sudoku|label:\s*"Available"|label:\s*"Planned"/);
+    assert.doesNotMatch(constraints, /"implemented_sudoku"/);
+    assert.match(variationCatalog, /editorVariations[\s\S]*?variation\.status === "available"/);
+    assert.match(variationCatalog, /editorGroup\.label = "Variants"/);
+    assert.doesNotMatch(variationCatalog, /label === "Available"|label === "Unsupported CSP"/);
+});
+
+test("mobile theme toggle updates the global Penpa theme and persists it", function() {
+    assert.match(app, /function toggleTheme\(\)[\s\S]*?settings\.color_theme\s*=\s*darkTheme\s*\?\s*2\s*:\s*1/);
+    assert.match(app, /function toggleTheme\(\)[\s\S]*?document\.cookie\s*=\s*`color_theme=/);
+    assert.match(app, /const syncDisplayTheme[\s\S]*?document\.documentElement\.classList\.toggle\("dark",\s*darkTheme\)/);
+});
+
+test("mobile workspace uses the dynamic viewport and keeps the bottom deck in view", function() {
+    assert.match(app, /:global\(\.svelte-home #svelte-app\)[\s\S]*?height:\s*100dvh/);
+    assert.match(app, /@media \(max-width:\s*768px\)[\s\S]*?\.studio-shell\s*\{[\s\S]*?height:\s*100dvh/);
+    assert.match(app, /\.mobile-input-deck[\s\S]*?max-height:\s*calc\(100dvh/);
+});
+
+test("battle mode does not bind listeners to its omitted variant host", function() {
+    assert.match(app, /let variantHost:\s*HTMLElement \| undefined/);
+    assert.match(app, /variantHost\?\.addEventListener\("click", syncVariantModeClick\)/);
+    assert.match(app, /variantHost\?\.removeEventListener\("click", syncVariantModeClick\)/);
+    assert.match(app, /if \(!isBattle\) \{[\s\S]*?variantHost\.appendChild\(variantTools\)[\s\S]*?logHost\.appendChild\(log\)/);
 });

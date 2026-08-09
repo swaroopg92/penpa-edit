@@ -1,5 +1,4 @@
 const penpa_constraints = {
-    "implemented_sudoku": ["classic", "0 to 8", "odd even", "odd even bridge", "odd even count", "odd even sum", "diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "arrow", "thermo", "killer", "kropki", "palindrome", "xv", "battenburg", "skyscraper", "sandwich", "uniquerectangles", "sumskyscrapers", "sumsandwich", "positionsums", "inequalitytriples", "oneortwodifferencepairs", "teneleven", "tenspositionproducts", "fullorhalf", "samesum", "xaverage", "triplesum", "partitionedsums", "oneknightstep", "zones", "somewhere", "argyle"],
     "options_groups": ["general", "sudoku", "puzzle"],
     "options": {
         "general": ["all"],

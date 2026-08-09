@@ -1,20 +1,4 @@
-/* Puzzle generation worker: uniqueness checks never block Penpa's canvas. */
-var workerAssetQuery = self.location && self.location.search || "";
-function importWorkerAsset(path) {
-    var lastError;
-    for (var attempt = 0; attempt < 3; attempt++) {
-        try {
-            var separator = workerAssetQuery ? "&" : "?";
-            importScripts(path + workerAssetQuery + (attempt ? separator + "asset_retry=" + attempt + "_" + Date.now() : ""));
-            return;
-        } catch (error) {
-            lastError = error;
-        }
-    }
-    throw lastError;
-}
-["./sudoku_csp.js", "./sudoku_csp_variants/browser.js", "./sudoku_variants/browser.js", "./sudoku_generator.js"].forEach(importWorkerAsset);
-
+/* Entry point appended to the self-contained puzzle-generation worker bundle. */
 self.onmessage = function(event) {
     if (!event.data || event.data.type !== "generate") return;
     try {

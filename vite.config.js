@@ -11,6 +11,29 @@ import {
 } from "./scripts/vite-security.mjs";
 
 const metadataPath = resolve(process.cwd(), "variant_metadata.json");
+const generatedWorkersPath = resolve(process.cwd(), "generated", "workers");
+
+function generatedWorkersPlugin() {
+  const workerFiles = new Set(["sudoku_solver_worker_bundle.js", "sudoku_generator_worker_bundle.js"]);
+  return {
+    name: "generated-workers",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const filename = new URL(req.url || "/", "http://localhost").pathname.replace(/^\/js\//, "");
+        if (!workerFiles.has(filename)) return next();
+        try {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "text/javascript; charset=utf-8");
+          res.setHeader("Cache-Control", "no-store");
+          res.end(readFileSync(resolve(generatedWorkersPath, filename)));
+        } catch (error) {
+          res.statusCode = 503;
+          res.end(`Worker bundle is unavailable. Run npm run build:csp-variants. ${error.message}`);
+        }
+      });
+    }
+  };
+}
 
 function readMetadata() {
   return validateVariantMetadata(JSON.parse(readFileSync(metadataPath, "utf8")));
@@ -226,14 +249,16 @@ function variantDetailPages() {
 
 export default defineConfig({
   root: "docs",
-  plugins: [variantDetailPages(), devApiPlugin(), svelte({ preprocess: vitePreprocess() })],
+  envDir: resolve(process.cwd()),
+  plugins: [generatedWorkersPlugin(), variantDetailPages(), devApiPlugin(), svelte({ preprocess: vitePreprocess() })],
   build: {
     outDir: "../dist",
     emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(process.cwd(), "docs/index.html"),
-        list: resolve(process.cwd(), "docs/list.html")
+        list: resolve(process.cwd(), "docs/list.html"),
+        battle: resolve(process.cwd(), "docs/battle.html")
       }
     }
   }

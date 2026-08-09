@@ -23,6 +23,7 @@
     "vite": "^8.1.4"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.2",
     "jules": "^1.0.0"
   }
 }

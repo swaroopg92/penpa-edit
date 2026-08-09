@@ -1,5 +1,19 @@
 /* CSP analysis worker: keeps recursive search off the UI thread. */
-importScripts("./sudoku_csp.js", "./sudoku_csp_variants/browser.js", "./sudoku_variants/browser.js");
+var workerAssetQuery = self.location && self.location.search || "";
+function importWorkerAsset(path) {
+    var lastError;
+    for (var attempt = 0; attempt < 3; attempt++) {
+        try {
+            var separator = workerAssetQuery ? "&" : "?";
+            importScripts(path + workerAssetQuery + (attempt ? separator + "asset_retry=" + attempt + "_" + Date.now() : ""));
+            return;
+        } catch (error) {
+            lastError = error;
+        }
+    }
+    throw lastError;
+}
+["./sudoku_csp.js", "./sudoku_csp_variants/browser.js", "./sudoku_variants/browser.js"].forEach(importWorkerAsset);
 
 self.onmessage = async function(event) {
     if (!event.data || (event.data.type !== "analyze" && event.data.type !== "solve")) return;

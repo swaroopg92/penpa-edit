@@ -87,6 +87,15 @@ var SudokuGenerator = (function() {
         var constraints = {};
         if (variants.indexOf("diagonal") !== -1) constraints.diagonalAllDifferent = diagonals(size);
         if (variants.indexOf("anti diagonal") !== -1) constraints.antiDiagonals = diagonals(size);
+        if (variants.indexOf("windoku") !== -1) {
+            constraints.regionAllDifferent = [[1, 1], [1, 5], [5, 1], [5, 5]].map(function(start) {
+                var region = [];
+                for (var row = 0; row < 3; row++) {
+                    for (var col = 0; col < 3; col++) region.push({ row: start[0] + row, col: start[1] + col });
+                }
+                return region;
+            });
+        }
         function addPairs(name, offsets) {
             if (variants.indexOf(name.replace(/([A-Z])/g, " $1").toLowerCase()) === -1) return;
             constraints[name] = [];
@@ -108,8 +117,21 @@ var SudokuGenerator = (function() {
     }
 
     function makeSolution(size, variants, constraints, random) {
+        var windokuOnly = variants.every(function(variant) {
+            return variant === "classic" || variant === "windoku";
+        }) && variants.indexOf("windoku") !== -1;
+        if (windokuOnly && constraints.regionAllDifferent) {
+            for (var windokuAttempt = 0; windokuAttempt < 2000; windokuAttempt++) {
+                var windokuBase = classicSolution(size, random);
+                var validWindoku = constraints.regionAllDifferent.every(function(region) {
+                    var digits = region.map(function(cell) { return windokuBase[cell.row][cell.col]; });
+                    return new Set(digits).size === region.length;
+                });
+                if (validWindoku) return windokuBase;
+            }
+        }
         var needsSearch = variants.some(function(variant) {
-            return ["diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive"].indexOf(variant) !== -1;
+            return ["diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "windoku"].indexOf(variant) !== -1;
         });
         var base;
         if (!needsSearch) {
@@ -305,7 +327,7 @@ var SudokuGenerator = (function() {
         if (variants.indexOf("classic") === -1) variants.unshift("classic");
         variants = variants.filter(function(value, index) { return variants.indexOf(value) === index; });
         var supported = ["classic", "diagonal", "anti diagonal", "anti king", "anti knight",
-            "non consecutive", "odd even", "kropki", "xv", "battenburg"];
+            "non consecutive", "odd even", "kropki", "xv", "battenburg", "windoku"];
         var unsupported = variants.filter(function(variant) { return supported.indexOf(variant) === -1; });
         if (!options.preserveExisting && unsupported.length) {
             throw new Error("Generation is not implemented for: " + unsupported.join(", ") + ".");
@@ -427,13 +449,14 @@ var SudokuGenerator = (function() {
             Object.keys(marks).forEach(function(name) { marks[name] = constraints[name] || []; });
         }
 
-        // Non-minimal mode: add back 8 extra clues that were stripped
+        // Non-minimal modes add back the requested number of stripped clues.
         if (options.minimal === false && !options.preserveExisting) {
             var removedIndices = [];
             for (var ri = 0; ri < size * size; ri++) {
                 if (board[Math.floor(ri / size)][ri % size] === 0) removedIndices.push(ri);
             }
-            var extra = shuffle(removedIndices, random).slice(0, 8);
+            var extraClues = Number.isInteger(options.extraClues) ? Math.max(0, options.extraClues) : 8;
+            var extra = shuffle(removedIndices, random).slice(0, extraClues);
             extra.forEach(function(idx) {
                 board[Math.floor(idx / size)][idx % size] = solution[Math.floor(idx / size)][idx % size];
                 givens++;

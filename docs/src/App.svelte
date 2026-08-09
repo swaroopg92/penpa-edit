@@ -131,7 +131,7 @@
     | "intersection";
 
   let boardHost: HTMLElement;
-  let variantHost: HTMLElement;
+  let variantHost: HTMLElement | undefined;
   let inputModesSection: HTMLElement;
   let desktopInputModesAnchor: HTMLElement;
   let mobileVariantSlot: HTMLElement;
@@ -185,6 +185,12 @@
   let darkTheme = true;
   let mobileActiveTab: "none" | "controls" | "actions" | "solver" = "none";
   let solverRunning = false;
+  let solverStartedAt = 0;
+  let solverElapsedSeconds = 0;
+  let solverClock: number | undefined;
+  $: solverElapsedLabel = `${Math.floor(solverElapsedSeconds / 60)}:${String(
+    solverElapsedSeconds % 60,
+  ).padStart(2, "0")}`;
   function checkUrlFlag(name: string) {
     if (typeof window === "undefined") return false;
     const sources = [
@@ -209,6 +215,7 @@
     );
   }
   let isEmbedded = checkIsEmbedded();
+  let isBattle = checkUrlFlag("battle");
   let hideLeftSidebar = checkUrlFlag("hideSidebar");
   let lastLogLine = "Idle";
   let fullLogContent = "";
@@ -764,7 +771,7 @@
   }
 
   function toolPanelNumberShortcut(event: KeyboardEvent) {
-    const target = event.target as HTMLElement | null;
+    const target = eventTargetElement(event);
     if (
       target?.closest(
         "input, textarea, select, [contenteditable='true'], .modal, .swal2-container",
@@ -787,7 +794,7 @@
   }
 
   function desktopLayerShortcut(event: KeyboardEvent) {
-    const target = event.target as HTMLElement | null;
+    const target = eventTargetElement(event);
     if (
       target?.closest(
         "input, textarea, select, [contenteditable='true'], .modal, .swal2-container",
@@ -1666,6 +1673,7 @@
   function toggleTheme() {
     darkTheme = !darkTheme;
     document.documentElement.classList.toggle("dark", darkTheme);
+    document.cookie = `color_theme=${darkTheme ? "2" : "1"};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
     const settings = (window as any).UserSettings;
     if (settings) {
       // THEME_LIGHT=1, THEME_DARK=2 (see settings.js)
@@ -1779,6 +1787,19 @@
     solverRunning =
       document.body.classList.contains("sudoku-solver-running") ||
       document.body.classList.contains("sudoku-solve-check-running");
+    if (solverRunning && !solverStartedAt) {
+      solverStartedAt = Date.now();
+      solverElapsedSeconds = 0;
+      window.clearInterval(solverClock);
+      solverClock = window.setInterval(() => {
+        solverElapsedSeconds = Math.floor((Date.now() - solverStartedAt) / 1000);
+      }, 250);
+    } else if (!solverRunning && solverStartedAt) {
+      solverElapsedSeconds = Math.floor((Date.now() - solverStartedAt) / 1000);
+      solverStartedAt = 0;
+      window.clearInterval(solverClock);
+      solverClock = undefined;
+    }
     const logOutput = document.getElementById("sudoku-solver-log-output");
     if (logOutput) {
       fullLogContent = logOutput.textContent || "";
@@ -1791,7 +1812,7 @@
   }
 
   function cycleInputMode(event: KeyboardEvent) {
-    const target = event.target as HTMLElement | null;
+    const target = eventTargetElement(event);
     if (
       target?.closest(
         "input, textarea, select, [contenteditable='true'], .modal, .swal2-container",
@@ -1840,36 +1861,32 @@
     const solveClear = document.getElementById("sudoku_solve_clear");
     const solverStatus = document.getElementById("sudoku-solver-status");
     const logHeader = log?.querySelector(".sudoku-solver-log-header");
-    if (
-      !board ||
-      !variantTools ||
-      !log ||
-      !autoSolver ||
-      !solveOnce ||
-      !solverStatus ||
-      !logHeader ||
-      !document.getElementById("canvas")
-    )
-      return false;
+    if (!board || !document.getElementById("canvas")) return false;
+    if (!isBattle && (
+      !variantTools || !log || !autoSolver || !solveOnce || !solverStatus ||
+      !logHeader || !variantHost || !logHost || !solverSettingsButton
+    )) return false;
     boardHost.appendChild(board);
-    variantHost.appendChild(variantTools);
-    logHost.appendChild(log);
-    logHeader.insertBefore(
-      autoSolver,
-      solverStatus,
-    );
-    logHeader.insertBefore(
-      solveOnce,
-      solverStatus,
-    );
-    if (solveClear) {
+    if (!isBattle) {
+      variantHost.appendChild(variantTools);
+      logHost.appendChild(log);
       logHeader.insertBefore(
-        solveClear,
+        autoSolver,
         solverStatus,
       );
+      logHeader.insertBefore(
+        solveOnce,
+        solverStatus,
+      );
+      if (solveClear) {
+        logHeader.insertBefore(
+          solveClear,
+          solverStatus,
+        );
+      }
+      logHeader.insertBefore(solverSettingsButton, solverStatus);
+      moveLegacyControls();
     }
-    logHeader.insertBefore(solverSettingsButton, solverStatus);
-    moveLegacyControls();
     syncState();
     initialized = true;
     window.requestAnimationFrame(() => window.requestAnimationFrame(fitBoard));
@@ -1897,7 +1914,7 @@
     let resizeObserver: ResizeObserver | undefined;
     const mobileLayout = window.matchMedia("(max-width: 768px)");
     const placeMobilePanels = () => {
-      const useMobileDeck = mobileLayout.matches || isEmbedded;
+      const useMobileDeck = mobileLayout.matches || (isEmbedded && !isBattle);
       if (inputModesSection && useMobileDeck && mobileVariantSlot) {
         mobileVariantSlot.appendChild(inputModesSection);
       } else if (desktopInputModesAnchor?.parentElement) {
@@ -1928,10 +1945,11 @@
         syncMobileToolSelection();
       });
     };
-    variantHost.addEventListener("click", syncVariantModeClick);
+    variantHost?.addEventListener("click", syncVariantModeClick);
     const syncDisplayTheme = (event: Event) => {
       const detail = (event as CustomEvent<{ dark: boolean }>).detail;
       darkTheme = Boolean(detail?.dark);
+      document.documentElement.classList.toggle("dark", darkTheme);
     };
     const start = () => {
       installVariationCatalog();
@@ -1947,6 +1965,10 @@
       }
       document.documentElement.classList.toggle("dark", darkTheme);
       observer = new MutationObserver(requestSync);
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
       [
         document.getElementById("constraints_settings_opt"),
         document.getElementById("sudoku_auto_solver"),
@@ -2013,6 +2035,7 @@
     return () => {
       observer?.disconnect();
       resizeObserver?.disconnect();
+      window.clearInterval(solverClock);
       if (syncFrame) window.cancelAnimationFrame(syncFrame);
       document.removeEventListener("keydown", desktopLayerShortcut, true);
       document.removeEventListener("keydown", cycleInputMode, true);
@@ -2024,9 +2047,13 @@
       document.removeEventListener("pointerdown", clearConflictHighlights);
       document.removeEventListener("keydown", clearConflictHighlights);
       mobileLayout.removeEventListener("change", placeMobilePanels);
-      variantHost.removeEventListener("click", syncVariantModeClick);
+      variantHost?.removeEventListener("click", syncVariantModeClick);
     };
   });
+
+  function eventTargetElement(event: Event): Element | null {
+    return event.target instanceof Element ? event.target : null;
+  }
 </script>
 
 <svelte:head>
@@ -2042,10 +2069,12 @@
   class:ready={initialized}
   class:dark={darkTheme}
   class:embedded={isEmbedded}
+  class:battle={isBattle}
   class:hide-left-sidebar={hideLeftSidebar}
 >
   <ToastContainer {toasts} onDismiss={dismissToast} />
 
+  {#if !isBattle}
   <section
     class="mobile-input-deck"
     class:panel-top={mobilePanelPosition === "above"}
@@ -2077,6 +2106,7 @@
           on:click={() => (mobileActiveTab = mobileActiveTab === "actions" ? "none" : "actions")}
         ><i class="fa fa-bars" aria-hidden="true"></i></button>
       {/if}
+      {#if !isBattle}
       <button type="button" class="deck-action auto-slot"
         class:embedded-slot-1={isEmbedded} class:active={autoEnabled}
         aria-label={autoEnabled ? "Disable auto solve" : "Enable auto solve"}
@@ -2093,6 +2123,7 @@
         class:active={mobileVariantDrawerOpen && !inputVariantMenuOpen}
         on:click={() => toggleMobileVariants(false)}
       ><i class="fa fa-puzzle-piece" aria-hidden="true"></i></button>
+      {/if}
 
       {#if layer === "problem" && !isEmbedded}
         {#each toolPanelOptions.slice(0, 12) as option, index}
@@ -2195,6 +2226,7 @@
       <div bind:this={mobileMiscSlot} class="mobile-misc-slot"></div>
     </div>
   </section>
+  {/if}
 
   <div class="mobile-header old-mobile-header" class:controls-hidden={!mobileControlsVisible}>
     <div class="mobile-visibility-row">
@@ -2281,7 +2313,7 @@
       <div class="solver-status-row">
         <div class="solver-status">
           <span class="status-indicator" class:running={solverRunning && !isNoSolution} class:error-bulb={isNoSolution} title={isNoSolution ? "No solution found" : (solverRunning ? "Solver running" : "Solver idle")}></span>
-          <span class="log-text">{lastLogLine}</span>
+          <span class="log-text">{lastLogLine}{solverRunning ? ` · ${solverElapsedLabel}` : ""}</span>
         </div>
       </div>
     {/if}
@@ -2290,8 +2322,9 @@
   </div>
   <main
     class="studio-grid"
-    class:embedded-right={isEmbedded && mobilePanelPosition === "below"}
+    class:embedded-right={isEmbedded && (isBattle || mobilePanelPosition === "below")}
   >
+    {#if !isBattle}
     <aside class="column controls" aria-label="Puzzle controls">
       <div
         class="controls-top-drawer"
@@ -2404,26 +2437,13 @@
                       >{variantIcon(variant.value)}</span
                     >
                     <span>{variant.label}</span>
-                    <span class="capability-badges">
-                      {#if variationByValue.get(variant.value)?.example}
-                        <span
-                          class="example-badge"
-                          title="Example puzzle available"
-                          aria-label="Example puzzle available">📖</span
-                        >
-                      {/if}
-                      {#if variationByValue.get(variant.value)?.status === "available"}
-                        <span
-                          class="csp-badge"
-                          title="CSP solver implemented"
-                          aria-label="CSP solver implemented">⬢</span
-                        >
-                      {:else}
-                        <span class="unsupported-badge" title="Planned"
-                          >Planned</span
-                        >
-                      {/if}
-                    </span>
+                    {#if variationByValue.get(variant.value)?.example}
+                      <span
+                        class="example-badge"
+                        title="Example puzzle available"
+                        aria-label="Example puzzle available">📖</span
+                      >
+                    {/if}
                     {#if conflict}<span class="input-conflict"
                         >Used by {guideFor(conflict).title}</span
                       >{/if}
@@ -2559,26 +2579,13 @@
                 >
                   <span class="variant-icon">{variantIcon(variant.value)}</span>
                   <span>{variant.label}</span>
-                  <span class="capability-badges">
-                    {#if variationByValue.get(variant.value)?.example}
-                      <span
-                        class="example-badge"
-                        title="Example puzzle available"
-                        aria-label="Example puzzle available">📖</span
-                      >
-                    {/if}
-                    {#if variationByValue.get(variant.value)?.status === "available"}
-                      <span
-                        class="csp-badge"
-                        title="CSP solver implemented"
-                        aria-label="CSP solver implemented">⬢</span
-                      >
-                    {:else}
-                      <span class="unsupported-badge" title="Planned"
-                        >Planned</span
-                      >
-                    {/if}
-                  </span>
+                  {#if variationByValue.get(variant.value)?.example}
+                    <span
+                      class="example-badge"
+                      title="Example puzzle available"
+                      aria-label="Example puzzle available">📖</span
+                    >
+                  {/if}
                   {#if conflict}<span class="input-conflict"
                       >Used by {guideFor(conflict).title}</span
                     >{/if}
@@ -2707,6 +2714,7 @@
         </section>
       {/if}
     </aside>
+    {/if}
 
     <section class="column board-column" aria-label="Puzzle board">
       <div class="zoom-controls" aria-label="Board zoom">
@@ -2743,7 +2751,7 @@
           <i></i><i></i><i></i>
           <i></i><i></i><i></i>
         </span>
-        <strong>Solver running…</strong>
+        <strong>Solver running… {solverElapsedLabel}</strong>
         <small>The board is locked until this run finishes.</small>
         <button on:click={() => (window as any).SudokuTools?.stopWork?.()}
           >Stop</button
@@ -2751,6 +2759,7 @@
       </div>
     </section>
 
+    {#if !isBattle}
     <aside
       class="column actions"
       class:open={mobileActiveTab === "actions"}
@@ -2881,6 +2890,12 @@
           </div>
           <div class="action-group bottom-actions">
             <button
+              class="battle-action"
+              title="Open realtime Sudoku Battle"
+              on:click={() => (window.location.href = "./battle.html")}
+              ><span>⚔</span>Battle</button
+            >
+            <button
               class="mobile-panel-position-action"
               on:click={toggleMobilePanelPosition}
             >
@@ -2911,6 +2926,7 @@
         </div>
       </section>
     </aside>
+    {/if}
   </main>
 </div>
 
@@ -3436,6 +3452,7 @@ href="https://github.com/semiexp/cspuz_core"
   .segmented button:last-child {
     border-radius: 0 6px 6px 0;
   }
+
   .segmented kbd {
     padding: 1px 3px;
     color: #65717d;
@@ -3643,25 +3660,6 @@ href="https://github.com/semiexp/cspuz_core"
     font-weight: 750;
     white-space: nowrap;
   }
-  .capability-badges {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 5px;
-  }
-  .csp-badge {
-    color: #16805d;
-    font-size: 11px;
-  }
-  .unsupported-badge {
-    padding: 2px 4px;
-    border-radius: 4px;
-    color: #a33c3c;
-    background: #fbe9e9;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-  }
   .variant-rule-preview {
     position: absolute;
     top: 54px;
@@ -3840,6 +3838,7 @@ href="https://github.com/semiexp/cspuz_core"
   .studio-shell {
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     min-height: 0;
     overflow: hidden;
   }
@@ -5348,13 +5347,6 @@ href="https://github.com/semiexp/cspuz_core"
   .studio-shell.dark .variant-rule-preview strong {
     color: #eef4f8;
   }
-  .studio-shell.dark .csp-badge {
-    color: #64d3aa;
-  }
-  .studio-shell.dark .unsupported-badge {
-    color: #ffb4b4;
-    background: #542f35;
-  }
   .studio-shell.dark .action-menu {
     border-color: #4b5a68;
     background: #263340;
@@ -5531,6 +5523,7 @@ href="https://github.com/semiexp/cspuz_core"
       flex-direction: column;
       overflow: hidden;
       height: 100vh;
+      height: 100dvh;
       width: 100vw;
     }
     .studio-grid {
@@ -6166,6 +6159,7 @@ href="https://github.com/semiexp/cspuz_core"
     flex: 0 0 auto;
     gap: 6px;
     height: 217px;
+    max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
     width: calc(100% - 16px);
     margin: 0 8px max(8px, env(safe-area-inset-bottom));
     padding: 6px !important;
@@ -6507,5 +6501,62 @@ href="https://github.com/semiexp/cspuz_core"
       height: 100%;
       max-height: none;
     }
+  }
+
+  /* The Battle shell owns the room actions; Penpa only supplies compact puzzle input. */
+  @media (min-width: 769px) {
+    .studio-shell.embedded.battle .mobile-input-deck {
+      display: none !important;
+    }
+    .studio-shell.embedded.battle .studio-grid.embedded-right .column.controls {
+      display: flex !important;
+    }
+    .studio-shell.battle .tool-input-panel button {
+      aspect-ratio: 1;
+      min-height: 0 !important;
+      padding: 3px !important;
+    }
+  }
+  @media (max-width: 768px) {
+    .studio-shell.embedded.battle .studio-grid {
+      display: flex !important;
+    }
+    .studio-shell.embedded.battle .studio-grid .column.controls {
+      display: none !important;
+    }
+    .studio-shell.embedded.battle .mobile-input-deck {
+      display: flex !important;
+      height: 205px;
+      max-height: 42dvh;
+    }
+    .studio-shell.battle .mobile-keypad {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+    }
+    .studio-shell.battle .mobile-keypad > button {
+      grid-column: auto !important;
+      grid-row: auto !important;
+      aspect-ratio: 1;
+      width: 100%;
+      min-height: 0;
+      padding: 2px;
+    }
+    .studio-shell.battle .mobile-keypad .key-zero {
+      display: none;
+    }
+  }
+  .studio-shell.embedded.battle .mobile-input-deck,
+  .studio-shell.embedded.battle .studio-grid .column.controls,
+  .studio-shell.embedded.battle .studio-grid .column.actions {
+    display: none !important;
+  }
+  .studio-shell.embedded.battle .studio-grid {
+    display: flex !important;
+    padding: 0 !important;
+  }
+  .studio-shell.embedded.battle .board-column {
+    flex: 1 1 auto !important;
+    width: calc(100% - 16px) !important;
+    max-width: none !important;
   }
 </style>

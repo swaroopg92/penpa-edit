@@ -1514,6 +1514,7 @@ class Puzzle_square extends Puzzle {
         var p_x, p_y, factor;
         var str_alph_low = "abcdefghijklmnopqrstuvwxyz";
         for (var i in this[pu].number) {
+            var numberColor = UserSettings.custom_colors_on && this[pu + "_col"].number[i] ? this[pu + "_col"].number[i] : "none";
             if (i.slice(-1) === "E") { // Overwriting in Edge Mode
                 if (!this.point[i.slice(0, -1)]) continue;
                 p_x = this.point[i.slice(0, -1)].x;
@@ -1564,7 +1565,7 @@ class Puzzle_square extends Puzzle {
 
             switch (this[pu].number[i][2]) {
                 case "1": //normal
-                    set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
+                    set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1], numberColor);
 
                     // if some numbers present in the corner (like Killer sudoku etc) then displace the numbers slightly lower to avoid overlap
                     let offset = UserSettings.sudoku_normal_bottom ? 0.16 : 0.06;
@@ -1573,7 +1574,7 @@ class Puzzle_square extends Puzzle {
                     break;
                 case "2": //arrow
                     var arrowlength = 0.7;
-                    set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
+                    set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1], numberColor);
                     var direction = {
                         "_0": 90,
                         "_1": 180,
@@ -1609,7 +1610,7 @@ class Puzzle_square extends Puzzle {
                             this.ctx.text(this[pu].number[i][0].slice(0, -2), p_x - 0.05 * this.size, p_y + 0.15 * this.size, this.size * 0.7);
                             break;
                         default:
-                            set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
+                            set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1], numberColor);
                             this.ctx.text(this[pu].number[i][0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
                             break;
                     }
@@ -1695,7 +1696,7 @@ class Puzzle_square extends Puzzle {
                     // Conditions - Clue is on the corner (type 1), style is with background circle
                     let quad = (this.types[1].indexOf(this.point[i].type) !== -1) && [5, 6, 7, 11].includes(this[pu].number[i][1]) && this.version_ge(3, 1, 2);
                     if (quad) {
-                        set_font_style(this.ctx, 0.31 * this.size.toString(10), this[pu].number[i][1]);
+                        set_font_style(this.ctx, 0.31 * this.size.toString(10), this[pu].number[i][1], numberColor);
                         if (values.length === 1) {
                             this.ctx.text(values[0], p_x, p_y + 0.00 * this.size, this.size * 0.6);
                         } else if (values.length === 2) {
@@ -1713,19 +1714,19 @@ class Puzzle_square extends Puzzle {
                         }
                     } else {
                         if (values.length === 1) {
-                            set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
+                            set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1], numberColor);
                             this.ctx.text(values[0], p_x, p_y + 0.06 * this.size, this.size * 0.8);
                         } else if (values.length === 2) {
-                            set_font_style(this.ctx, 0.48 * this.size.toString(10), this[pu].number[i][1]);
+                            set_font_style(this.ctx, 0.48 * this.size.toString(10), this[pu].number[i][1], numberColor);
                             this.ctx.text(values[0], p_x - 0.16 * this.size, p_y - 0.15 * this.size, this.size * 0.8);
                             this.ctx.text(values[1], p_x + 0.18 * this.size, p_y + 0.19 * this.size, this.size * 0.8);
                         } else if (values.length === 3) {
-                            set_font_style(this.ctx, 0.45 * this.size.toString(10), this[pu].number[i][1]);
+                            set_font_style(this.ctx, 0.45 * this.size.toString(10), this[pu].number[i][1], numberColor);
                             this.ctx.text(values[0], p_x - 0.22 * this.size, p_y - 0.14 * this.size, this.size * 0.8);
                             this.ctx.text(values[1], p_x + 0.24 * this.size, p_y - 0.05 * this.size, this.size * 0.8);
                             this.ctx.text(values[2], p_x - 0.0 * this.size, p_y + 0.3 * this.size, this.size * 0.8);
                         } else if (values.length === 4) {
-                            set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1]);
+                            set_font_style(this.ctx, 0.4 * this.size.toString(10), this[pu].number[i][1], numberColor);
                             this.ctx.text(values[0], p_x - 0.0 * this.size, p_y - 0.22 * this.size, this.size * 0.8);
                             this.ctx.text(values[1], p_x - 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
                             this.ctx.text(values[2], p_x + 0.26 * this.size, p_y + 0.04 * this.size, this.size * 0.8);
@@ -1759,19 +1760,19 @@ class Puzzle_square extends Puzzle {
 
                         // Fast path, no conflict checking, just draw it all at once
                         if (!UserSettings.check_pencil_marks) {
-                            set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                            set_font_style(this.ctx, fontSize, this[pu].number[i][1], numberColor);
                             this.ctx.text(this[pu].number[i][0], p_x, p_y + dy * factor * this.size, maxWidth);
                         }
                             // Slow path: have to draw the digits one by one so we can change
                         // colors on them individually
                         else {
                             // Calculate text width to see if the font needs to be shrunk
-                            set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                            set_font_style(this.ctx, fontSize, this[pu].number[i][1], numberColor);
                             var width = this.ctx.measureText(this[pu].number[i][0]).width;
                             if (width > maxWidth) {
                                 fontSize = maxWidth / width * fontSize;
                                 width = maxWidth;
-                                set_font_style(this.ctx, fontSize, this[pu].number[i][1]);
+                                set_font_style(this.ctx, fontSize, this[pu].number[i][1], numberColor);
                             }
 
                             // Left align since we're drawing each digit separately
@@ -1810,10 +1811,10 @@ class Puzzle_square extends Puzzle {
                     const keepSinglePencilmarkSmall = this.pencilmarks_mode ||
                         (Array.isArray(this.activeSudokuVariants) && this.activeSudokuVariants.includes("pencilmarks"));
                     if (sum === 1 && !keepSinglePencilmarkSmall) {
-                        set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1]);
+                        set_font_style(this.ctx, 0.7 * this.size.toString(10), this[pu].number[i][1], numberColor);
                         this.ctx.text((pos + 1).toString(), p_x, p_y + 0.06 * this.size, this.size * 0.8);
                     } else {
-                        set_font_style(this.ctx, 0.3 * this.size.toString(10), this[pu].number[i][1]);
+                        set_font_style(this.ctx, 0.3 * this.size.toString(10), this[pu].number[i][1], numberColor);
                         for (var j = 0; j < 9; j++) {
                             if (this[pu].number[i][0][j] === 1) {
                                 var style = this.ctx.fillStyle;
@@ -1840,11 +1841,11 @@ class Puzzle_square extends Puzzle {
 
                     for (let line of lines) {
                         if (type === 5) {
-                            set_font_style(ctx, halfSizeStr, type);
+                            set_font_style(ctx, halfSizeStr, type, numberColor);
                             set_circle_style(ctx, 7);
                             ctx.fillRect(p_x - xOffset, p_y - yOffset, ctx.measureText(line).width, halfSize);
                         }
-                        set_font_style(ctx, halfSizeStr, type);
+                        set_font_style(ctx, halfSizeStr, type, numberColor);
                         ctx.textAlign = "left";
                         ctx.text(line, p_x - xOffset, p_y);
                         p_y += halfSize;

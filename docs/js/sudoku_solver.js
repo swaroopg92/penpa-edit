@@ -4,8 +4,9 @@ var SudokuVariantRegistryRuntime = typeof SudokuVariantRegistry !== "undefined" 
     (typeof require === "function" ? require("./sudoku_variants/index.js") : null);
 var SudokuWorkerAssetVersion = typeof ver !== "undefined" ? ver : "3.3.40";
 
-function sudokuWorkerUrl(filename) {
-    return "./js/" + filename + "?v=" + encodeURIComponent(SudokuWorkerAssetVersion);
+function sudokuWorkerUrl(filename, retry) {
+    return "./js/" + filename + "?v=" + encodeURIComponent(SudokuWorkerAssetVersion) +
+        (retry ? "&retry=" + Date.now() : "");
 }
 
 function sudokuSolverTimeLimitMs() {
@@ -291,7 +292,7 @@ var SudokuSolver = (function() {
                 return SudokuCSPRuntime.getCandidatesAsync(board, constraints, analysisOptions);
             }
             return new Promise(function(resolve, reject) {
-                var worker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
+                var worker = new Worker(sudokuWorkerUrl("sudoku_solver_worker_bundle.js"));
                 var settled = false;
                 function finish(result, error) {
                     if (settled) return;
@@ -3554,11 +3555,11 @@ var SudokuTools = (function() {
                 }
             }
         }
-        if (typeof Worker === "undefined") {
+        function generateWithoutWorker() {
             window.setTimeout(function() { finish(SudokuSolver.solve(board, constraints)); }, 0);
             return;
         }
-        var checkWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
+        var checkWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker_bundle.js"));
         solveOnceWorker = checkWorker;
         checkWorker.onmessage = function(event) {
             if (event.data.type !== "result") return;
@@ -3663,7 +3664,7 @@ var SudokuTools = (function() {
         }
 
         try {
-            solveWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker.js"));
+            solveWorker = new Worker(sudokuWorkerUrl("sudoku_solver_worker_bundle.js"));
             if (solveRunLimitMs !== null) {
                 solveTimeout = setTimeout(function() {
                     cleanup();
@@ -3773,7 +3774,7 @@ var SudokuTools = (function() {
         if (!generatorPausedRequest) return;
         var request = generatorPausedRequest;
         generatorPausedRequest = null;
-        generatePuzzle(request.size, request.variants, request.negative, request.sourcePuzzle, request.seed);
+        generatePuzzle(request.size, request.variants, request.negative, request.sourcePuzzle, request.seed, request.difficulty);
     }
 
     function stopWork() {
@@ -3873,6 +3874,7 @@ var SudokuTools = (function() {
         });
         var select = byId("constraints_settings_opt");
         if (select) select.value = pu.activeSudokuVariant;
+        if (generatedVariants.indexOf("windoku") !== -1) ensureWindokuCages();
         syncDiagonalLines();
         renderVariantTools();
         if (pu.activeSudokuVariant === "classic") {
@@ -3897,7 +3899,69 @@ var SudokuTools = (function() {
         SudokuSolver.primeUniqueSolution(pu, result.solution);
     }
 
-    function generatePuzzle(size, variants, negative, sourcePuzzle, seed) {
+    function prepareBattleGrid(size) {
+        size = size === 6 ? 6 : 9;
+        var rows = byId("nb_size1");
+        var columns = byId("nb_size2");
+        if (rows) rows.value = String(size);
+        if (columns) columns.value = String(size);
+        window.sudotokuNewGridSize = size;
+        ["nb_sudoku5", "nb_sudoku6", "nb_sudoku8"].forEach(function(id) {
+            var option = byId(id);
+            if (option) option.checked = id === "nb_sudoku5" && size === 6;
+        });
+        resetForNewGrid();
+        if (typeof create_newboard === "function") create_newboard();
+        return true;
+    }
+
+    function setBattleDigit(row, col, digit, color, shadingColor) {
+        if (!pu || !pu.pu_a || !Number.isInteger(row) || !Number.isInteger(col)) return false;
+        var size = SudokuSolver.puzzleSize(pu);
+        if (row < 0 || col < 0 || row >= size || col >= size) return false;
+        var key = SudokuSolver.cellKey(pu, row, col);
+        if (pu.pu_q && pu.pu_q.number && pu.pu_q.number[key]) return false;
+        if (digit === null || digit === undefined || Number(digit) === 0) {
+            delete pu.pu_a.number[key];
+            if (pu.pu_a_col && pu.pu_a_col.number) delete pu.pu_a_col.number[key];
+            if (pu.pu_a.surface) delete pu.pu_a.surface[key];
+            if (pu.pu_a_col && pu.pu_a_col.surface) delete pu.pu_a_col.surface[key];
+        } else {
+            digit = Number(digit);
+            if (!Number.isInteger(digit) || digit < 1 || digit > size) return false;
+            pu.pu_a.number[key] = [String(digit), color ? 1 : 9, "1"];
+            pu.pu_a_col = pu.pu_a_col || {};
+            pu.pu_a_col.number = pu.pu_a_col.number || {};
+            if (color) {
+                pu.pu_a_col.number[key] = color;
+                if (typeof UserSettings !== "undefined") UserSettings.custom_colors_on = true;
+            }
+            if (shadingColor) {
+                pu.pu_a.surface = pu.pu_a.surface || {};
+                pu.pu_a_col.surface = pu.pu_a_col.surface || {};
+                pu.pu_a.surface[key] = 1;
+                pu.pu_a_col.surface[key] = shadingColor;
+            }
+        }
+        pu.redraw();
+        return true;
+    }
+
+    function focusBattleCell(row, col) {
+        if (!pu || !Number.isInteger(row) || !Number.isInteger(col)) return false;
+        var size = SudokuSolver.puzzleSize(pu);
+        if (row < 0 || col < 0 || row >= size || col >= size) return false;
+        var key = SudokuSolver.cellKey(pu, row, col);
+        if (typeof pu.mode_qa === "function") pu.mode_qa("pu_a");
+        pu.cursol = key;
+        pu.selection = [key];
+        pu.redraw();
+        var canvas = byId("canvas");
+        if (canvas && typeof canvas.focus === "function") canvas.focus();
+        return true;
+    }
+
+    function generatePuzzle(size, variants, negative, sourcePuzzle, seed, difficulty, workerRetry) {
         stopGenerator();
         var startedAt = Date.now();
         variants = Array.isArray(variants) && variants.length ? variants : ["classic"];
@@ -3907,12 +3971,14 @@ var SudokuTools = (function() {
             variants: variants.slice(),
             negative: negative,
             sourcePuzzle: sourcePuzzle,
-            seed: seed
+            seed: seed,
+            difficulty: difficulty
         };
         var label = variants.filter(function(variant) { return variant !== "classic"; }).join(" + ") || "classic";
         // Read generator settings
         var genSymmetry = (window.UserSettings && window.UserSettings.generator_symmetry) || 'rotational180';
-        var genMinimal = window.UserSettings ? (window.UserSettings.generator_difficulty_minimal !== false) : true;
+        var genMinimal = difficulty ? difficulty === "hard" : (window.UserSettings ? (window.UserSettings.generator_difficulty_minimal !== false) : true);
+        var genExtraClues = difficulty === "easy" ? 12 : difficulty === "normal" ? 8 : 0;
         var genCluesOnMarks = window.UserSettings ? (window.UserSettings.generator_clues_on_marks !== false) : true;
         var symLabel = genSymmetry === 'none' ? 'no symmetry' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
         document.body.classList.add("sudoku-solver-running");
@@ -3938,10 +4004,12 @@ var SudokuTools = (function() {
                     preserveExisting: sourcePuzzle && sourcePuzzle.preserveExisting,
                     symmetry: genSymmetry,
                     minimal: genMinimal,
+                    extraClues: genExtraClues,
                     seed: seed
                 });
+                stopGenerator();
                 applyGeneratedPuzzle(direct);
-                document.body.classList.remove("sudoku-solver-running");
+                document.dispatchEvent(new CustomEvent("sudoku-generated", { detail: direct }));
                 var symDesc = genSymmetry === 'none' ? 'no symmetry constraint' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
                 generatorLog("Generated · unique", "Generated " +
                     (direct.preserveExisting ? "digit-minimal " : (genMinimal ? "minimal " : "medium ")) + direct.givens + "-given " + label +
@@ -3950,10 +4018,11 @@ var SudokuTools = (function() {
                     ((Date.now() - startedAt) / 1000).toFixed(3) + " s.");
             } catch (error) {
                 stopGenerator("Generator failed: " + error.message);
+                document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: error.message }));
             }
             return;
         }
-        generatorWorker = new Worker(sudokuWorkerUrl("sudoku_generator_worker.js"));
+        generatorWorker = new Worker(sudokuWorkerUrl("sudoku_generator_worker_bundle.js", workerRetry));
         generatorWorker.onmessage = function(event) {
             if (event.data.type === "progress") {
                 generatorLog("Generating", null, event.data.progress);
@@ -3962,6 +4031,7 @@ var SudokuTools = (function() {
                 stopGenerator();
                 try {
                     applyGeneratedPuzzle(result);
+                    document.dispatchEvent(new CustomEvent("sudoku-generated", { detail: result }));
                     var symDescW = genSymmetry === 'none' ? 'no symmetry constraint' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
                     generatorLog("Generated · unique", "Generated " +
                         (result.preserveExisting ? "digit-minimal " : (genMinimal ? "minimal " : "medium ")) + result.givens + "-given " + label +
@@ -3970,13 +4040,27 @@ var SudokuTools = (function() {
                         ((Date.now() - startedAt) / 1000).toFixed(3) + " s.");
                 } catch (error) {
                     stopGenerator("Generator validation failed: " + error.message);
+                    document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: error.message }));
                 }
             } else if (event.data.type === "error") {
                 stopGenerator("Generator failed: " + event.data.message);
+                document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: event.data.message }));
             }
         };
         generatorWorker.onerror = function(event) {
+            if (!workerRetry) {
+                if (generatorWorker) generatorWorker.terminate();
+                generatorWorker = null;
+                if (generatorTimeout) clearTimeout(generatorTimeout);
+                generatorTimeout = null;
+                generatorLog("Retrying", "A generator worker asset did not load. Retrying once with a fresh worker.");
+                setTimeout(function() {
+                    generatePuzzle(size, variants, negative, sourcePuzzle, seed, difficulty, true);
+                }, 150);
+                return;
+            }
             stopGenerator("Generator failed: " + (event.message || "worker error"));
+            document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: event.message || "worker error" }));
         };
         generatorWorker.postMessage({
             type: "generate",
@@ -3988,6 +4072,7 @@ var SudokuTools = (function() {
             preserveExisting: sourcePuzzle && sourcePuzzle.preserveExisting,
             symmetry: genSymmetry,
             minimal: genMinimal,
+            extraClues: genExtraClues,
             seed: seed
         });
         generatorTimeout = setTimeout(function() {
@@ -5297,6 +5382,9 @@ var SudokuTools = (function() {
             if (typeof Swal !== "undefined") {
                 Swal.fire({ icon: "warning", title: "Windoku requires 9 × 9", text: "Create or resize the grid to 9 × 9 first." });
             }
+        }
+        if (typeof Worker === "undefined") {
+            generateWithoutWorker();
             return;
         }
         if (variant === "argyle" && SudokuSolver.puzzleSize(pu) !== 9) {
@@ -5431,6 +5519,9 @@ var SudokuTools = (function() {
         enterIrregularEditor: enterIrregularEditor,
         finishIrregularEditor: finishIrregularEditor,
         generatePuzzle: generatePuzzle,
+        prepareBattleGrid: prepareBattleGrid,
+        setBattleDigit: setBattleDigit,
+        focusBattleCell: focusBattleCell,
         pauseGenerator: pauseGenerator,
         stopWork: stopWork,
         scheduleSolveOnceCheck: scheduleSolveOnceCheck

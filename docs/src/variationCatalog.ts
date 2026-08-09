@@ -68,10 +68,6 @@ export const variations: Variation[] = allVariations
         all.findIndex((candidate) => candidate.value === item.value) === index)
     .sort((first, second) => first.name.localeCompare(second.name));
 
-const hiddenVariationValues = new Set(allVariations
-    .filter((item) => item.status === "hidden")
-    .map((item) => item.value));
-
 export const variationByValue = new Map(variations.map((item) => [item.value, item]));
 Object.entries(scrapedAliases).forEach(([alias, canonical]) => {
     const target = variationByValue.get(canonical);
@@ -502,27 +498,16 @@ export function installVariationCatalog() {
     if (select.dataset.variationCatalog === "ready") return;
     _installingCatalog = true;
     try {
-    constraints.options.sudoku = constraints.options.sudoku.filter((value: string) => !hiddenVariationValues.has(value));
-    Array.from(select.options).filter((option) => hiddenVariationValues.has(option.value)).forEach((option) => option.remove());
+    const selectedValue = select.value || "classic";
+    const editorVariations = variations.filter((variation) =>
+        !variation.wikiOnly && variation.status === "available"
+    );
+    const editorGroup = document.createElement("optgroup");
+    editorGroup.label = "Variants";
+    constraints.options.sudoku = editorVariations.map((variation) => variation.value);
+    select.replaceChildren(editorGroup);
 
-    let implementedGroup = Array.from(select.children).find((element) =>
-        element instanceof HTMLOptGroupElement && element.label === "Available") as HTMLOptGroupElement | undefined;
-    if (!implementedGroup) {
-        implementedGroup = document.createElement("optgroup");
-        implementedGroup.label = "Available";
-        select.prepend(implementedGroup);
-    }
-    let unsupportedGroup = Array.from(select.children).find((element) =>
-        element instanceof HTMLOptGroupElement && element.label === "Unsupported CSP") as HTMLOptGroupElement | undefined;
-    if (!unsupportedGroup) {
-        unsupportedGroup = document.createElement("optgroup");
-        unsupportedGroup.label = "Unsupported CSP";
-    }
-    Array.from(select.children).filter((element) =>
-        element instanceof HTMLOptGroupElement && element.label === "Variation catalog"
-    ).forEach((element) => element.remove());
-    variations.forEach((variation) => {
-        if (variation.wikiOnly) return;
+    editorVariations.forEach((variation) => {
         if (regionGridVariants.includes(variation.value)) {
             // Replace legacy cage-based settings so every consumer—not only
             // the custom toolbar—sees the persisted region-number editor.
@@ -531,30 +516,16 @@ export function installVariationCatalog() {
             constraints.setting[variation.value] = genericSetting(variation);
         }
         constraints.setting[variation.value].outside = outsideVariationValues.has(variation.value);
-        if (!constraints.options.sudoku.includes(variation.value)) constraints.options.sudoku.push(variation.value);
-        const existingOption = Array.from(select.options).find((option) => option.value === variation.value);
-        const targetGroup = variation.status === "available" ? implementedGroup : unsupportedGroup;
-        if (existingOption) {
-            // The legacy select may use the internal variant ID as its label.
-            // Metadata names are the display source of truth, even when the
-            // option is already filed under the correct group.
-            existingOption.textContent = variation.name;
-            if (existingOption.parentElement !== targetGroup) targetGroup.appendChild(existingOption);
-        } else {
-            const option = document.createElement("option");
-            option.value = variation.value;
-            option.textContent = variation.name;
-            targetGroup.appendChild(option);
-        }
+        const option = document.createElement("option");
+        option.value = variation.value;
+        option.textContent = variation.name;
+        editorGroup.appendChild(option);
     });
-    [implementedGroup, unsupportedGroup].forEach((group) => {
-        if (!group) return;
-        const sorted = Array.from(group.children).sort((a, b) =>
-            (a.textContent || "").localeCompare(b.textContent || "")
-        );
-        sorted.forEach((option) => group.appendChild(option));
-    });
-    if (unsupportedGroup.children.length && !unsupportedGroup.parentElement) select.appendChild(unsupportedGroup);
+    const sorted = Array.from(editorGroup.children).sort((a, b) =>
+        (a.textContent || "").localeCompare(b.textContent || "")
+    );
+    sorted.forEach((option) => editorGroup.appendChild(option));
+    select.value = constraints.options.sudoku.includes(selectedValue) ? selectedValue : "classic";
     select.dataset.variationCatalog = "ready";
     if (typeof (window as any).$ === "function") {
         try {

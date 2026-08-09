@@ -5,6 +5,7 @@ temp/
 tmp/
 .DS_Store
 notes/
+.env
 
 # Pycharm IDE
 .idea/
