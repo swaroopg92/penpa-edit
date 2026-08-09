@@ -25,6 +25,7 @@ docs/css/images/parch.psd
 jsconfig.json
 node_modules/
 dist/
+/supabase/
 
 # AI
 agents.md
