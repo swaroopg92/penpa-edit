@@ -10364,18 +10364,55 @@ var SudokuGenerator = (function() {
             Object.keys(marks).forEach(function(name) { marks[name] = constraints[name] || []; });
         }
 
-        // Non-minimal modes add back the requested number of stripped clues.
+        // Non-minimal modes add back the requested number of stripped clues in symmetric units.
         if (options.minimal === false && !options.preserveExisting) {
-            var removedIndices = [];
+            var removedUnits = [];
+            var seenRemoved = {};
+            var symmetry = options.symmetry || 'rotational180';
             for (var ri = 0; ri < size * size; ri++) {
-                if (board[Math.floor(ri / size)][ri % size] === 0) removedIndices.push(ri);
+                if (seenRemoved[ri]) continue;
+                var rRow = Math.floor(ri / size);
+                var rCol = ri % size;
+                if (board[rRow][rCol] === 0) {
+                    var rotIdx = (size * size - 1) - ri;
+                    var mirH = rRow * size + (size - 1 - rCol);
+                    var mirV = (size - 1 - rRow) * size + rCol;
+                    var symUnit;
+                    if (symmetry === 'none') {
+                        seenRemoved[ri] = true;
+                        symUnit = [ri];
+                    } else if (symmetry === 'all_axis') {
+                        var idxs = [ri, rotIdx, mirH, mirV];
+                        var uniq = idxs.filter(function(i, pos) { return idxs.indexOf(i) === pos; });
+                        uniq.forEach(function(i) { seenRemoved[i] = true; });
+                        symUnit = uniq;
+                    } else { // rotational180
+                        seenRemoved[ri] = seenRemoved[rotIdx] = true;
+                        symUnit = ri === rotIdx ? [ri] : [ri, rotIdx];
+                    }
+                    var allEmpty = symUnit.every(function(idx) {
+                        return board[Math.floor(idx / size)][idx % size] === 0;
+                    });
+                    if (allEmpty) {
+                        removedUnits.push(symUnit);
+                    }
+                }
             }
-            var extraClues = Number.isInteger(options.extraClues) ? Math.max(0, options.extraClues) : 8;
-            var extra = shuffle(removedIndices, random).slice(0, extraClues);
-            extra.forEach(function(idx) {
-                board[Math.floor(idx / size)][idx % size] = solution[Math.floor(idx / size)][idx % size];
-                givens++;
-            });
+            var targetExtra = Number.isInteger(options.extraClues) ? Math.max(0, options.extraClues) : 8;
+            var shuffledUnits = shuffle(removedUnits, random);
+            var addedCount = 0;
+            for (var ui = 0; ui < shuffledUnits.length && addedCount < targetExtra; ui++) {
+                var unitToRestore = shuffledUnits[ui];
+                unitToRestore.forEach(function(idx) {
+                    var r = Math.floor(idx / size);
+                    var c = idx % size;
+                    if (board[r][c] === 0) {
+                        board[r][c] = solution[r][c];
+                        givens++;
+                        addedCount++;
+                    }
+                });
+            }
         }
 
         var finalAnswers = CSP.createProblem(board, constraints).enumerateAnswers(2);

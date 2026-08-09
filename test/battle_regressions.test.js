@@ -19,8 +19,8 @@ const generator = fs.readFileSync(path.join(root, "docs/js/sudoku_generator.js")
 
 test("battle is a production page backed by the existing Penpa board", () => {
   assert.match(vite, /envDir:\s*resolve\(process\.cwd\(\)\)/);
-  assert.match(vite, /battle:\s*resolve\(process\.cwd\(\),\s*"docs\/battle\.html"\)/);
-  assert.match(app, /class="battle-action"[\s\S]*?\.\/battle\.html/);
+  assert.match(vite, /battle:\s*resolve\(process\.cwd\(\),\s*"docs\/battle\/index\.html"\)/);
+  assert.match(app, /class="battle-action"[\s\S]*?\.\/battle/);
   assert.match(battle, /index\.html\?embed=1&hideSidebar=1&battle=1|boardFrameSource/);
   assert.match(solver, /prepareBattleGrid:\s*prepareBattleGrid/);
   assert.match(solver, /setBattleDigit:\s*setBattleDigit/);
@@ -92,8 +92,8 @@ test("battle uses one dedicated digit and note panel with responsive ordering", 
   assert.match(battle, /class="battle-input-panel"/);
   assert.match(battle, /mode-normal[\s\S]*mode-center[\s\S]*mode-corner/);
   assert.match(battle, /digit <= room\.grid_size/);
-  assert.match(battle, /\.battle-input-panel\{[\s\S]*grid-template-columns:repeat\(3,1fr\)[\s\S]*grid-template-rows:repeat\(4,1fr\)/);
-  assert.match(battle, /@media\(max-width:700px\)[\s\S]*\.battle-input-panel\{grid-template-columns:repeat\(4,1fr\);grid-template-rows:repeat\(3,1fr\)/);
+  assert.match(battle, /\.battle-input-panel\{display:grid;grid-template-columns:repeat\(3,1fr\);grid-template-rows:repeat\(4,1fr\);gap:6px;width:100%\}/);
+  assert.match(battle, /@media\(max-width:700px\)[\s\S]*\.battle-input-panel\{flex:0 0 auto;display:grid;grid-template-columns:repeat\(4,52px\);grid-template-rows:repeat\(3,52px\)/);
   assert.match(app, /\{#if !isBattle\}[\s\S]*class="mobile-input-deck"/);
   assert.match(app, /\{#if !isBattle\}[\s\S]*class="column controls"/);
 });
@@ -162,7 +162,7 @@ test("spectators join by URL without creating a player and receive a read-only s
   assert.match(battle, /select\("\*"\)\.eq\("code", roomCode\)\.single\(\)/);
   assert.match(battle, /watching \? "&watch=1" : ""/);
   assert.match(battle, /spectatorMode \? watchRoom\(roomCode\) : joinRoom\(roomCode\)/);
-  assert.match(battle, /\{#if !spectatorMode\}<div class="battle-input-panel"/);
+  assert.match(battle, /\{#if !spectatorMode\}[\s\S]*class="battle-input-panel"/);
   assert.match(battle, /play-area\.spectator \.board\{pointer-events:none\}/);
   assert.match(battle, />Join<\/button><button on:click=\{\(\) => watchRoom\(active\.code\)\}>Watch<\/button>/);
 });

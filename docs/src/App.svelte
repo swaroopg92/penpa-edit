@@ -2892,7 +2892,7 @@
             <button
               class="battle-action"
               title="Open realtime Sudoku Battle"
-              on:click={() => (window.location.href = "./battle.html")}
+              on:click={() => (window.location.href = "./battle")}
               ><span>⚔</span>Battle</button
             >
             <button

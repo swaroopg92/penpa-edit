@@ -3912,6 +3912,10 @@ var SudokuTools = (function() {
         });
         resetForNewGrid();
         if (typeof create_newboard === "function") create_newboard();
+        if (typeof pu !== "undefined" && pu && pu.mode && pu.mode.pu_a) {
+            if (pu.mode.pu_a.sudoku) pu.mode.pu_a.sudoku[1] = 1;
+            if (pu.mode.pu_a.number) pu.mode.pu_a.number[1] = 1;
+        }
         return true;
     }
 
@@ -3978,7 +3982,7 @@ var SudokuTools = (function() {
         // Read generator settings
         var genSymmetry = (window.UserSettings && window.UserSettings.generator_symmetry) || 'rotational180';
         var genMinimal = difficulty ? difficulty === "hard" : (window.UserSettings ? (window.UserSettings.generator_difficulty_minimal !== false) : true);
-        var genExtraClues = difficulty === "easy" ? 12 : difficulty === "normal" ? 8 : 0;
+        var genExtraClues = difficulty === "easy" ? (size === 6 ? 8 : 12) : difficulty === "normal" ? (size === 6 ? 4 : 8) : 0;
         var genCluesOnMarks = window.UserSettings ? (window.UserSettings.generator_clues_on_marks !== false) : true;
         var symLabel = genSymmetry === 'none' ? 'no symmetry' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
         document.body.classList.add("sudoku-solver-running");

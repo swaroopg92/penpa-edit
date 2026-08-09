@@ -168,7 +168,7 @@ test("battle generation does not depend on runtime importScripts variant request
           return {
             color: window.pu.pu_a_col.number[key],
             shade: window.pu.pu_a_col.surface[key],
-            customColors: window.UserSettings.custom_colors_on,
+            customColors: window.UserSettings ? window.UserSettings.custom_colors_on : true,
           };
         }
       }

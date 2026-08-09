@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import { svelte, vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   MAX_DEV_API_BODY_BYTES,
@@ -232,7 +232,7 @@ function variantDetailPages() {
     name: "variant-detail-pages",
     writeBundle(options) {
       const outputDirectory = options.dir || resolve(process.cwd(), "dist");
-      const template = readFileSync(resolve(outputDirectory, "list.html"), "utf8");
+      const template = readFileSync(resolve(outputDirectory, "list", "index.html"), "utf8");
       const pageDirectory = resolve(outputDirectory, "list");
       mkdirSync(pageDirectory, { recursive: true });
       ids.forEach((id) => {
@@ -247,18 +247,35 @@ function variantDetailPages() {
   };
 }
 
+function directoryTrailingSlashPlugin() {
+  return {
+    name: "directory-trailing-slash",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = new URL(req.url || "/", "http://localhost");
+        if (url.pathname === "/battle") {
+          req.url = "/battle/" + url.search;
+        } else if (url.pathname === "/list") {
+          req.url = "/list/" + url.search;
+        }
+        next();
+      });
+    }
+  };
+}
+
 export default defineConfig({
   root: "docs",
   envDir: resolve(process.cwd()),
-  plugins: [generatedWorkersPlugin(), variantDetailPages(), devApiPlugin(), svelte({ preprocess: vitePreprocess() })],
+  plugins: [generatedWorkersPlugin(), directoryTrailingSlashPlugin(), variantDetailPages(), devApiPlugin(), svelte({ preprocess: vitePreprocess() })],
   build: {
     outDir: "../dist",
     emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(process.cwd(), "docs/index.html"),
-        list: resolve(process.cwd(), "docs/list.html"),
-        battle: resolve(process.cwd(), "docs/battle.html")
+        list: resolve(process.cwd(), "docs/list/index.html"),
+        battle: resolve(process.cwd(), "docs/battle/index.html")
       }
     }
   }

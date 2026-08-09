@@ -13,18 +13,19 @@
 
   // Keep these lists explicit so supported battle variants are easy to edit.
   const battleVariantIdsBySize: Record<6 | 9, string[]> = {
-    6: ["classic", "diagonal", "anti king", "anti knight", "non consecutive", "odd even", "kropki", "xv", "battenburg"],
-    9: ["classic", "diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "odd even", "kropki", "xv", "battenburg", "windoku"],
+    6: ["classic", "diagonal", "anti king", "anti knight", "non consecutive", "battenburg", "disjoint", "touchy", "mirror", "symmetric unequal", "sequence top-bottom"],
+    9: ["classic", "diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "battenburg", "disjoint", "windoku", "touchy", "mirror", "symmetric unequal", "sequence top-bottom"],
   };
   $: variantOptions = battleVariantIdsBySize[gridSize].map((value) => ({
     value,
     label: value === "classic" ? "Classic" : variations.find((item) => item.value === value)?.name || value,
   }));
+  const colors: BattlePlayer["color"][] = ["blue", "red", "green", "orange"];
   const penpaColors: Record<BattlePlayer["color"], string> = {
-    red: "#ff0000", blue: "#0000ff", green: "#008000", orange: "#ff8000",
+    blue: "#0000ff", red: "#ff0000", green: "#008000", orange: "#ff8000",
   };
   const penpaShades: Record<BattlePlayer["color"], string> = {
-    red: "rgba(255,0,0,.14)", blue: "rgba(0,0,255,.12)", green: "rgba(0,128,0,.14)", orange: "rgba(255,128,0,.16)",
+    blue: "rgba(0,0,255,.12)", red: "rgba(255,0,0,.14)", green: "rgba(0,128,0,.14)", orange: "rgba(255,128,0,.16)",
   };
 
   let boardFrame: HTMLIFrameElement;
@@ -63,6 +64,11 @@
   let knownBoard: number[][] = [];
   let inputBusy = false;
   let applyingRemote = false;
+  let botToken = "";
+  let botPlayerId = "";
+  let knownSolution: number[][] = [];
+  let playerMoveStats: Record<string, { correct: number; incorrect: number }> = {};
+  let botClock: number | undefined;
   let clock: number | undefined;
   let generationClock: number | undefined;
   let heartbeatClock: number | undefined;
@@ -70,15 +76,20 @@
 
   $: boardSrc = boardFrameSource(room?.puzzle_hash || "");
   $: isHost = Boolean(room && myPlayerId === room.host_player_id);
-  $: boardVisible = Boolean(room?.status === "playing" && countdown === 0 && boardLoaded);
+  $: boardVisible = Boolean((room?.status === "playing" || room?.status === "finished") && countdown === 0 && boardLoaded);
   $: if (room?.status === "playing") roomInfoOpen = false;
+  $: if (room?.status === "playing" && isHost && botToken) { if (!botClock) startBotLoop(); } else if (room?.status !== "playing") { stopBotLoop(); }
   $: syncBattleReveal(boardVisible);
   $: elapsedLabel = formatTime(elapsedSeconds);
-  $: myColor = players.find((player) => player.id === myPlayerId)?.color || "red";
+  $: myColor = players.find((player) => player.id === myPlayerId)?.color || "blue";
   $: winners = room?.status === "finished" && players.length
     ? players.filter((player) => player.score === Math.max(...players.map((entry) => entry.score)))
     : [];
   $: variantLabel = room?.variants?.filter((item) => item !== "classic").map((value) => variantOptions.find((item) => item.value === value)?.label || value).join(" + ") || "Classic";
+  $: activeVariantRules = (room?.variants || [])
+    .filter((v) => v !== "classic")
+    .map((v) => variations.find((entry) => entry.value === v))
+    .filter((item): item is typeof variations[0] => Boolean(item));
 
   function formatTime(seconds: number) {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
@@ -199,7 +210,18 @@
     }
   }
 
+  function resetSessionTimers() {
+    generating = false;
+    preparingBoard = false;
+    generationSeconds = 0;
+    elapsedSeconds = 0;
+    countdown = 0;
+    clearInterval(generationClock);
+    clearInterval(botClock);
+  }
+
   function acceptRoom(data: any, watching = false) {
+    resetSessionTimers();
     spectatorMode = watching;
     room = data.room as BattleRoom; myPlayerId = data.player_id; roomCode = room.code;
     difficulty = room.difficulty || "easy"; gridSize = room.grid_size;
@@ -226,17 +248,26 @@
 
   async function prepareRoomBoard() {
     if (!supabase || !room || !isHost || room.status !== "preparing" || preparingBoard) return;
-    preparingBoard = true; error = "";
+    preparingBoard = true; error = ""; resetSessionTimers(); generating = true;
+    generationClock = window.setInterval(() => generationSeconds += 1, 1000);
     try {
       const { result, puzzleHash } = await generatePuzzle();
+      if (result?.solution) knownSolution = result.solution;
       const { error: rpcError } = await supabase.rpc("prepare_battle_room", {
         p_room_id: room.id, p_player_token: playerToken(), p_puzzle_hash: puzzleHash,
         p_givens: result.board, p_solution: result.solution,
       });
       if (rpcError) throw rpcError;
       await refreshRoom();
-    } catch (cause: any) { error = cause?.message || "Could not prepare the board."; }
-    finally { preparingBoard = false; }
+    } catch (cause: any) {
+      error = cause?.message || "Could not prepare the board.";
+      try {
+        await supabase.from("battle_rooms").update({ status: "lobby" }).eq("id", room.id);
+        await refreshRoom();
+      } catch (e) {}
+    } finally {
+      preparingBoard = false; generating = false; clearInterval(generationClock);
+    }
   }
 
   async function joinRoom(code = roomCode) {
@@ -301,6 +332,7 @@
     const { data } = await supabase.from("battle_players").select("id,room_id,name,score,color,joined_at")
       .eq("room_id", room.id).is("left_at", null).order("score", { ascending: false }).order("joined_at", { ascending: true });
     players = (data || []) as BattlePlayer[];
+    if (!players.length) await returnToLobby();
   }
 
   async function handlePlayerChange() {
@@ -316,8 +348,18 @@
   async function loadConfirmedMoves() {
     if (!supabase || !room) return;
     const { data } = await supabase.from("battle_moves").select("room_id,player_id,row_index,col_index,digit,correct,score_delta")
-      .eq("room_id", room.id).eq("correct", true);
-    for (const move of (data || []) as ConfirmedMove[]) applyConfirmedMove(move);
+      .eq("room_id", room.id);
+    const stats: Record<string, { correct: number; incorrect: number }> = {};
+    for (const move of (data || []) as any[]) {
+      if (!stats[move.player_id]) stats[move.player_id] = { correct: 0, incorrect: 0 };
+      if (move.correct) {
+        stats[move.player_id].correct += 1;
+        applyConfirmedMove(move as ConfirmedMove);
+      } else {
+        stats[move.player_id].incorrect += 1;
+      }
+    }
+    playerMoveStats = stats;
   }
 
   async function subscribeToRoom() {
@@ -328,7 +370,16 @@
       .on("postgres_changes", { event: "*", schema: "public", table: "battle_players", filter: `room_id=eq.${room.id}` }, handlePlayerChange)
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "battle_rooms", filter: `id=eq.${room.id}` }, refreshRoom)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "battle_moves", filter: `room_id=eq.${room.id}` }, (payload) => {
-        const move = payload.new as ConfirmedMove; if (move.correct) applyConfirmedMove(move); refreshPlayers();
+        const move = payload.new as any;
+        if (!playerMoveStats[move.player_id]) playerMoveStats[move.player_id] = { correct: 0, incorrect: 0 };
+        if (move.correct) {
+          playerMoveStats[move.player_id].correct += 1;
+          applyConfirmedMove(move as ConfirmedMove);
+        } else {
+          playerMoveStats[move.player_id].incorrect += 1;
+        }
+        playerMoveStats = { ...playerMoveStats };
+        refreshPlayers();
       }).subscribe();
   }
 
@@ -342,18 +393,30 @@
 
   async function rematch() {
     if (!supabase || !room || !isHost) return;
-    busy = true; error = "";
-    const { error: rpcError } = await supabase.rpc("begin_battle_rematch", { p_room_id: room.id, p_player_token: playerToken() });
-    if (rpcError) error = rpcError.message;
-    await refreshRoom(); await refreshPlayers(); busy = false;
+    busy = true; error = ""; resetSessionTimers(); playerMoveStats = {};
+    try {
+      const { error: rpcError } = await supabase.rpc("begin_battle_rematch", { p_room_id: room.id, p_player_token: playerToken() });
+      if (rpcError) throw rpcError;
+      boardLoaded = false; knownBoard = []; knownSolution = [];
+      await refreshRoom(); await refreshPlayers();
+    } catch (cause: any) { error = cause?.message || "Could not start rematch."; }
+    finally { busy = false; }
   }
 
   async function abortBattle() {
     if (!supabase || !room || !isHost) return;
     busy = true; error = "";
-    const { error: rpcError } = await supabase.rpc("abort_battle_room", { p_room_id: room.id, p_player_token: playerToken() });
-    if (rpcError) error = rpcError.message;
-    await refreshRoom(); await refreshPlayers(); busy = false;
+    try {
+      const { error: rpcError } = await supabase.rpc("abort_battle_room", { p_room_id: room.id, p_player_token: playerToken() });
+      if (rpcError) {
+        await supabase.from("battle_rooms").update({
+          status: "finished", finished_at: new Date().toISOString(), finish_reason: "aborted"
+        }).eq("id", room.id);
+      }
+      await refreshRoom(); await refreshPlayers();
+      showBattleToast("Battle aborted.");
+    } catch (cause: any) { error = cause?.message || "Could not abort battle."; }
+    finally { busy = false; }
   }
 
   async function saveName() {
@@ -375,14 +438,74 @@
   }
 
   async function returnToLobby() {
+    stopBotLoop(); resetSessionTimers();
     if (supabase && room && !spectatorMode) await supabase.rpc("leave_battle_room", { p_room_id: room.id, p_player_token: playerToken() });
     await leaveBattleChannel(channel); channel = null; room = null; players = []; myPlayerId = "";
-    boardLoaded = false; spectatorMode = false; history.replaceState(null, "", location.pathname); await refreshLobby();
+    botToken = ""; botPlayerId = ""; boardLoaded = false; spectatorMode = false; history.replaceState(null, "", location.pathname); await refreshLobby();
+  }
+
+  async function addBotPlayer() {
+    if (!supabase || !room || players.length !== 1 || !isHost) return;
+    busy = true; error = "";
+    try {
+      botToken = crypto.randomUUID();
+      const botName = "🤖 Sudotoku Bot";
+      const { data, error: rpcError } = await supabase.rpc("join_battle_room", {
+        p_room_code: room.code, p_player_name: botName, p_player_token: botToken,
+      });
+      if (rpcError) throw rpcError;
+      botPlayerId = data.player_id;
+      await refreshPlayers();
+      showBattleToast("Sudotoku Bot joined the room!");
+    } catch (cause: any) { error = cause?.message || "Could not add bot player."; }
+    finally { busy = false; }
+  }
+
+  function stopBotLoop() {
+    if (botClock) {
+      clearInterval(botClock);
+      botClock = undefined;
+    }
+  }
+
+  function startBotLoop() {
+    stopBotLoop();
+    if (!isHost || !botToken || room?.status !== "playing") return;
+    botClock = window.setInterval(async () => {
+      if (room?.status !== "playing" || !supabase || !room) { stopBotLoop(); return; }
+      try {
+        const { error: rpcError } = await supabase.rpc("submit_bot_move", {
+          p_room_id: room.id, p_player_token: botToken,
+        });
+        if (rpcError) {
+          const frame = frameWindow();
+          if (!frame?.pu || !frame?.SudokuSolver) return;
+          const currentBoard: number[][] = frame.SudokuSolver.readBoard(frame.pu, true);
+          const sol: number[][] = knownSolution || frame.SudokuSolver.solution || [];
+          if (!sol || !sol.length) return;
+          const size = room.grid_size || 9;
+          const emptyCells: Array<{ r: number; c: number }> = [];
+          for (let r = 0; r < size; r++) {
+            for (let c = 0; c < size; c++) {
+              if (!currentBoard[r]?.[c]) emptyCells.push({ r, c });
+            }
+          }
+          if (!emptyCells.length) { stopBotLoop(); return; }
+          const pick = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          const digit = sol[pick.r]?.[pick.c];
+          if (digit) {
+            await supabase.rpc("submit_battle_move", {
+              p_room_id: room.id, p_player_token: botToken, p_row_index: pick.r, p_col_index: pick.c, p_digit: digit,
+            });
+          }
+        }
+      } catch (e) {}
+    }, 5000);
   }
 
   function applyConfirmedMove(move: ConfirmedMove) {
     const frame = frameWindow(); if (!frame?.SudokuTools || !frame?.pu) return;
-    const colorName = players.find((player) => player.id === move.player_id)?.color || "red";
+    const colorName = players.find((player) => player.id === move.player_id)?.color || "blue";
     const color = penpaColors[colorName];
     applyingRemote = true;
     frame.SudokuTools.setBattleDigit(move.row_index, move.col_index, move.digit, color, penpaShades[colorName]);
@@ -402,12 +525,13 @@
       for (const change of changes) {
         const previous = knownBoard[change.row]?.[change.col] || 0;
         if (!change.digit || previous) { frame.SudokuTools.setBattleDigit(change.row, change.col, previous); continue; }
+        // Instantly format with player's color before submitting RPC to eliminate blue text flash
+        frame.SudokuTools.setBattleDigit(change.row, change.col, change.digit, penpaColors[myColor], penpaShades[myColor]);
         const { data, error: rpcError } = await supabase.rpc("submit_battle_move", {
           p_room_id: room.id, p_player_token: playerToken(), p_row_index: change.row, p_col_index: change.col, p_digit: change.digit,
         });
         if (rpcError) throw rpcError;
         if (!data.correct) frame.SudokuTools.setBattleDigit(change.row, change.col, null);
-        else frame.SudokuTools.setBattleDigit(change.row, change.col, change.digit, penpaColors[myColor], penpaShades[myColor]);
       }
       knownBoard = frame.SudokuSolver.readBoard(frame.pu, true);
     } catch (cause: any) { error = cause?.message || "Move could not be submitted."; knownBoard = frame.SudokuSolver.readBoard(frame.pu, true); }
@@ -433,6 +557,10 @@
     boardLoaded = true;
     const frame = await waitForBoard(); knownBoard = frame.SudokuSolver.readBoard(frame.pu, true);
     applyThemeToBoard();
+    if (frame?.pu?.mode?.pu_a) {
+      if (frame.pu.mode.pu_a.sudoku) frame.pu.mode.pu_a.sudoku[1] = 1;
+      if (frame.pu.mode.pu_a.number) frame.pu.mode.pu_a.number[1] = 1;
+    }
     if (!spectatorMode) {
       frame.document.addEventListener("keyup", inspectBoardInput);
       frame.document.addEventListener("pointerup", inspectBoardInput);
@@ -498,27 +626,41 @@
     </section>
   {:else}
     <section class="room-shell">
-      <div class="mobile-room-summary"><strong>{variantLabel}</strong><div class="summary-players">{#each players as player}<span style={`--player-color:${penpaColors[player.color]}`}><i></i>{player.name} <b>{player.score}</b>{player.id === room.host_player_id ? " ★" : ""}</span>{/each}</div><b class="timer">{elapsedLabel}</b>{#if spectatorMode}<button class="spectator-back" on:click={returnToLobby}>← Lobby</button>{:else}<button class="info-button" aria-label="Room information" title="Room information" on:click={() => roomInfoOpen = !roomInfoOpen}>{roomInfoOpen ? "×" : "ⓘ"}</button>{/if}</div>
+      <div class="mobile-room-summary"><strong>{variantLabel}</strong><div class="summary-players">{#each players as player}<span class="player-badge-pill" style={`--player-color:${penpaColors[player.color]}`}><i></i>{player.name} <b>{player.score}</b>{#if room?.status === "finished" && playerMoveStats[player.id]}<small class="pill-stats">✓{playerMoveStats[player.id].correct}/✗{playerMoveStats[player.id].incorrect}</small>{/if}{player.id === room?.host_player_id ? " ★" : ""}</span>{/each}</div><b class="timer">{elapsedLabel}</b>{#if spectatorMode}<button class="spectator-back" on:click={returnToLobby}>← Lobby</button>{:else}<button class="info-button" aria-label="Room information" title="Room information" on:click={() => roomInfoOpen = !roomInfoOpen}>{roomInfoOpen ? "×" : "ⓘ"}</button>{/if}</div>
       <div class="room-layout">
         <aside class="room-sidebar" class:open={roomInfoOpen}>
           <div class="sidebar-section room-summary"><div class="sidebar-title"><small>Variant</small><strong>{variantLabel}</strong><span>{room.grid_size}×{room.grid_size} · {room.difficulty}</span></div><div class="room-code"><small>Room</small><strong>{room.code}</strong></div></div>
-          {#if !spectatorMode}<div class="sidebar-section personal-settings"><div class="identity compact">{#if editingName}<input maxlength="24" bind:value={draftName} /><button class="small" on:click={saveName}>Save</button>{:else}<strong>{playerName}</strong><button class="icon-button" aria-label="Edit name" title="Edit name" on:click={editName}>✎</button>{/if}</div></div>
-          <div class="sidebar-section theme-section"><small>Appearance</small><button class="theme-toggle" on:click={toggleTheme}>{darkMode ? "☀ Light" : "☾ Dark"}</button></div>{/if}
-          <div class="sidebar-section player-section"><small>Players</small><div class="players">{#each players as player}<div class="player" class:me={player.id === myPlayerId} style={`--player-color:${penpaColors[player.color]}`}><i></i><span>{player.name}{player.id === room.host_player_id ? " ★" : ""}</span><b>{player.score}</b></div>{/each}</div></div>
-          <div class="sidebar-section timer-section"><small>Time</small><b class="desktop-timer">{elapsedLabel}</b></div>
+          <div class="sidebar-section variant-rules-section">
+            <small>Rules</small>
+            {#if activeVariantRules.length}
+              {#each activeVariantRules as v}
+                <div class="variant-rule-item"><strong>{v.name}</strong><p>{v.rule}</p></div>
+              {/each}
+            {:else}
+              <div class="variant-rule-item"><strong>Classic Sudoku</strong><p>Place digits 1 to {room?.grid_size || 9} into each row, column, and box without repeating.</p></div>
+            {/if}
+          </div>
+          <div class="sidebar-section player-section"><small>Players</small><div class="players">{#each players as player}<div class="player" class:me={player.id === myPlayerId} style={`--player-color:${penpaColors[player.color]}`}><i></i><span>{player.name}{player.id === room.host_player_id ? " ★" : ""}</span><div class="score-col"><b>{player.score}</b>{#if room?.status === "finished" && playerMoveStats[player.id]}<small class="move-breakdown">✓{playerMoveStats[player.id].correct} ✗{playerMoveStats[player.id].incorrect}</small>{/if}</div></div>{/each}</div></div>
           <div class="battle-actions">{#if spectatorMode}<button on:click={returnToLobby}>← Back to lobby</button>{:else}{#if room.status !== "playing"}<button on:click={copyInvite}>{copied ? "✓ Copied!" : "⧉ Copy invite"}</button><button on:click={returnToLobby}>← Back to lobby</button>{/if}{#if room.status === "playing" && isHost}<button class="danger" disabled={busy} on:click={abortBattle}>Abort battle</button>{/if}{#if room.status === "finished" && isHost}<button class="primary" disabled={busy} on:click={rematch}>Rematch</button>{/if}{/if}</div>
         </aside>
         <div class="play-area" class:spectator={spectatorMode}>
           <div class="board-stage" class:revealed={boardVisible}>
             {#if room.status === "preparing"}<iframe class="board hidden-board" title="Sudoku generator" bind:this={boardFrame} src={boardFrameSource()} on:load={boardReady}></iframe>{:else if room.puzzle_hash}<iframe class="board" title="Shared Sudoku board" bind:this={boardFrame} src={boardSrc} on:load={boardReady}></iframe>{/if}
-            {#if !boardVisible}<div class="board-cover">{#if room.status === "preparing"}<strong>Building the board</strong><span>{generating ? `Generating puzzle… ${generationSeconds}s` : "Loading room…"}</span>{:else if room.status === "lobby"}<strong>Ready in the lobby</strong><span>{boardLoaded ? "The board is loaded and hidden until battle starts." : "Loading the board…"}</span>{#if isHost}<button class="primary start-in-grid" disabled={busy || !boardLoaded} on:click={startBattle}>Start battle</button>{/if}{:else if countdown > 0}<strong class="countdown">{countdown}</strong><span>Get ready!</span>{:else if room.status === "finished"}<strong>{room.finish_reason === "time_limit" ? "Time limit reached" : "Battle complete"}</strong><span>{winners.length ? `${winners.map((player) => player.name).join(" & ")} ${winners.length > 1 ? "tie" : "wins"} with ${winners[0].score} points.` : "Final scores recorded."}</span>{:else}<strong>Loading the board</strong>{/if}</div>{/if}
+            {#if !boardVisible}<div class="board-cover">{#if room.status === "preparing"}<strong>Building the board</strong><span>{generating ? `Generating puzzle… ${generationSeconds}s` : "Loading room…"}</span>{#if error || generationSeconds > 15}<div class="prep-actions"><button class="primary small" on:click={prepareRoomBoard}>↻ Retry board</button><button class="small" on:click={returnToLobby}>← Back to lobby</button></div>{/if}{:else if room.status === "lobby"}<strong>Ready in the lobby</strong><span>{boardLoaded ? "The board is loaded and hidden until battle starts." : "Loading the board…"}</span>{#if isHost}<button class="primary start-in-grid" disabled={busy || !boardLoaded} on:click={startBattle}>Start battle</button>{#if players.length === 1}<button class="secondary bot-btn start-in-grid" disabled={busy || !boardLoaded} on:click={addBotPlayer}>🤖 Play against bot</button>{/if}{/if}{:else if countdown > 0}<strong class="countdown">{countdown}</strong><span>Get ready!</span>{:else if room.status === "finished"}<strong>{room.finish_reason === "time_limit" ? "Time limit reached" : "Battle complete"}</strong><span>{winners.length ? `${winners.map((player) => player.name).join(" & ")} ${winners.length > 1 ? "tie" : "wins"} with ${winners[0].score} points.` : "Final scores recorded."}</span>{:else}<strong>Loading the board</strong>{/if}</div>{/if}
           </div>
-          {#if !spectatorMode}<div class="battle-input-panel" aria-label="Battle number input">
-            <button class:active={noteMode === "normal"} class="mode-normal" aria-label="Normal digits" title="Normal digits (Z)" on:click={() => chooseBattleNoteMode("normal")}><span class="note-icon"><b>1</b></span><kbd>z</kbd></button>
-            <button class:active={noteMode === "center"} class="mode-center" aria-label="Center notes" title="Center notes (X)" on:click={() => chooseBattleNoteMode("center")}><span class="note-icon"><small>23</small></span><kbd>x</kbd></button>
-            <button class:active={noteMode === "corner"} class="mode-corner" aria-label="Corner notes" title="Corner notes (C)" on:click={() => chooseBattleNoteMode("corner")}><span class="note-icon corner-numbers"><small>4</small><small>5</small><small>6</small><small>7</small></span><kbd>c</kbd></button>
-            {#each [1,2,3,4,5,6,7,8,9] as digit}{#if digit <= room.grid_size}<button class={`digit digit-${digit}`} disabled={!boardVisible} on:click={() => enterBattleDigit(digit)}>{digit}</button>{/if}{/each}
-          </div>{/if}
+          {#if !spectatorMode}
+            <div class="right-controls">
+              <div class="sidebar-section personal-settings"><div class="identity compact">{#if editingName}<input maxlength="24" bind:value={draftName} /><button class="small" on:click={saveName}>Save</button>{:else}<strong>{playerName}</strong><button class="icon-button" aria-label="Edit name" title="Edit name" on:click={editName}>✎</button>{/if}</div></div>
+              <div class="sidebar-section theme-section"><small>Appearance</small><button class="theme-toggle" on:click={toggleTheme}>{darkMode ? "☀ Light" : "☾ Dark"}</button></div>
+              <div class="sidebar-section timer-section"><small>Time</small><b class="desktop-timer">{elapsedLabel}</b></div>
+              <div class="battle-input-panel" aria-label="Battle number input">
+                <button class:active={noteMode === "normal"} class="mode-normal" aria-label="Normal digits" title="Normal digits (Z)" on:click={() => chooseBattleNoteMode("normal")}><span class="note-icon"><b>1</b></span><kbd>z</kbd></button>
+                <button class:active={noteMode === "center"} class="mode-center" aria-label="Center notes" title="Center notes (X)" on:click={() => chooseBattleNoteMode("center")}><span class="note-icon"><small>23</small></span><kbd>x</kbd></button>
+                <button class:active={noteMode === "corner"} class="mode-corner" aria-label="Corner notes" title="Corner notes (C)" on:click={() => chooseBattleNoteMode("corner")}><span class="note-icon corner-numbers"><small>4</small><small>5</small><small>6</small><small>7</small></span><kbd>c</kbd></button>
+                {#each [1,2,3,4,5,6,7,8,9] as digit}{#if digit <= room.grid_size}<button class={`digit digit-${digit}`} disabled={!boardVisible} on:click={() => enterBattleDigit(digit)}>{digit}</button>{/if}{/each}
+              </div>
+            </div>
+          {/if}
         </div>
       </div>
     </section>
@@ -533,16 +675,21 @@
   header{display:flex;align-items:center;justify-content:space-between}.theme-toggle{white-space:nowrap}
   button{border:1px solid #c8d1d8;border-radius:8px;background:white;color:#23313d;padding:9px 12px;cursor:pointer} button:hover{border-color:#2582b8} button:disabled{opacity:.5;cursor:not-allowed}.primary{border-color:#1679b4;background:#1688ca;color:white}.wide{width:100%;margin-top:14px}.small{padding:5px 9px;font-size:12px}.icon-button{border:0;padding:3px 6px;background:transparent;font-size:18px}.active{border-color:#1688ca!important;background:#e8f5fc!important;color:#096698!important}
   .lobby-layout{display:grid;grid-template-columns:minmax(300px,560px) minmax(280px,420px);gap:18px;max-width:1000px;margin:auto}.card{border:1px solid #d6dee4;border-radius:14px;background:white;padding:18px;box-shadow:0 5px 24px #1b344511}.identity{display:flex;align-items:center;gap:8px;min-height:34px;margin-bottom:12px}.identity.compact{border:1px solid #cbd6de;border-radius:8px;padding:3px 5px;background:#f6f9fa}.identity span{color:#677580;font-size:13px}.identity input{min-width:0;padding:7px;border:1px solid #bdc9d2;border-radius:7px}.choice-row{display:flex;align-items:center;gap:7px;margin:10px 0}.choice-row>span{width:80px;color:#586875;font-size:13px}.choice-row button{text-transform:capitalize}.variants{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}.variants>span{grid-column:1/-1;color:#586875;font-size:13px}.variants label{display:flex;gap:7px;font-size:13px}.join-code{display:flex;gap:7px;margin-top:11px}.join-code input{min-width:0;flex:1;padding:9px;border:1px solid #bdc9d2;border-radius:8px;text-transform:uppercase}.section-title{display:flex;align-items:center;justify-content:space-between}.section-title h2{margin:0}.room-row{display:flex;width:100%;justify-content:space-between;align-items:center;margin-top:9px;text-align:left}.room-row span:first-child{display:flex;flex-direction:column;gap:2px}.room-row small,.muted{color:#71808c}.skeleton{height:54px;margin-top:9px;border-radius:8px;background:linear-gradient(90deg,#edf1f4 25%,#f8fafb 50%,#edf1f4 75%);background-size:200% 100%;animation:shimmer 1s infinite}@keyframes shimmer{to{background-position:-200% 0}}
-  .room-shell{display:flex;flex-direction:column;gap:10px;max-width:1400px;height:calc(100vh - 82px);margin:auto}.room-bar{display:flex;align-items:center;gap:15px;border:1px solid #d6dee4;border-radius:12px;background:white;padding:9px 12px}.room-bar>div:first-child{display:flex;gap:7px;align-items:baseline}.room-bar small{color:#74828d}.room-meta{flex:1;color:#61717d;font-size:13px}.room-bar .identity{margin:0}.timer{min-width:55px;font-variant-numeric:tabular-nums;font-weight:800}.players{display:flex;gap:7px;overflow-x:auto}.mobile-score-strip{display:none}.player{display:flex;align-items:center;gap:7px;min-width:145px;border:1px solid #d6dee4;border-left:5px solid var(--player-color);border-radius:8px;background:white;padding:7px 9px}.player i{width:9px;height:9px;border-radius:50%;background:var(--player-color)}.player span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player.me{box-shadow:inset 0 0 0 1px var(--player-color)}.battle-actions{display:flex;gap:7px}.play-layout{display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr) minmax(120px,180px);gap:10px;flex:1;min-height:0}.board-stage{position:relative;min-height:0;border:1px solid #cbd5dc;border-radius:12px;overflow:hidden;background:#e8edf1}.board{width:100%;height:100%;border:0;visibility:hidden}.board-stage.revealed .board{visibility:visible}.hidden-board{position:absolute;inset:0;opacity:0;pointer-events:none}.board-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#edf4f7,#dfe9ee);text-align:center;color:#475a68}.board-cover strong{font-size:22px;color:#20323f}.board-cover .countdown{font-size:clamp(72px,18vw,180px);line-height:1;color:#1688ca}.battle-input-panel{align-self:center;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:6px;width:100%}.battle-input-panel button{aspect-ratio:1;padding:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:750}.battle-input-panel kbd{font-size:10px;opacity:.65}.mode-normal{grid-column:1;grid-row:1}.mode-center{grid-column:2;grid-row:1}.mode-corner{grid-column:3;grid-row:1}.digit-1{grid-column:1;grid-row:2}.digit-2{grid-column:2;grid-row:2}.digit-3{grid-column:3;grid-row:2}.digit-4{grid-column:1;grid-row:3}.digit-5{grid-column:2;grid-row:3}.digit-6{grid-column:3;grid-row:3}.digit-7{grid-column:1;grid-row:4}.digit-8{grid-column:2;grid-row:4}.digit-9{grid-column:3;grid-row:4}.error{position:fixed;right:18px;bottom:10px;max-width:min(520px,calc(100vw - 36px));border-radius:9px;background:#b42318;color:white;padding:10px 14px;z-index:10}
+  .room-shell{display:flex;flex-direction:column;gap:10px;max-width:1400px;height:calc(100vh - 82px);margin:auto}.room-bar{display:flex;align-items:center;gap:15px;border:1px solid #d6dee4;border-radius:12px;background:white;padding:9px 12px}.room-bar>div:first-child{display:flex;gap:7px;align-items:baseline}.room-bar small{color:#74828d}.room-meta{flex:1;color:#61717d;font-size:13px}.room-bar .identity{margin:0}.timer{min-width:55px;font-variant-numeric:tabular-nums;font-weight:800}.players{display:flex;gap:7px;overflow-x:auto}.mobile-score-strip{display:none}.player{display:flex;align-items:center;gap:7px;min-width:145px;border:1px solid #d6dee4;border-left:5px solid var(--player-color);border-radius:8px;background:white;padding:7px 9px}.player i{width:9px;height:9px;border-radius:50%;background:var(--player-color)}.player span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player.me{box-shadow:inset 0 0 0 1px var(--player-color)}.battle-actions{display:flex;gap:7px}.play-layout{display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr) minmax(120px,180px);gap:10px;flex:1;min-height:0}.board-stage{position:relative;min-height:0;border:1px solid #cbd5dc;border-radius:12px;overflow:hidden;background:#e8edf1}.board{width:100%;height:100%;border:0;visibility:hidden}.board-stage.revealed .board{visibility:visible}.hidden-board{position:absolute;inset:0;opacity:0;pointer-events:none}.board-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#edf4f7,#dfe9ee);text-align:center;color:#475a68}.board-cover strong{font-size:22px;color:#20323f}.board-cover .countdown{font-size:clamp(72px,18vw,180px);line-height:1;color:#1688ca}.error{position:fixed;right:18px;bottom:10px;max-width:min(520px,calc(100vw - 36px));border-radius:9px;background:#b42318;color:white;padding:10px 14px;z-index:10}
   main.dark{background:#17212a;color:#e1e8ed}main.dark .card,main.dark .room-bar,main.dark .player,main.dark button,main.dark input{border-color:#435360;background:#24313c;color:#e1e8ed}main.dark .identity.compact{background:#1c2832;border-color:#435360}main.dark .room-meta,main.dark .muted,main.dark .room-row small{color:#a9b7c2}main.dark .board-cover{background:linear-gradient(135deg,#26343f,#1d2932);color:#b9c5ce}main.dark .board-cover strong{color:#eef3f6}
-  @media(max-width:700px){main{padding:8px}header{margin-bottom:7px}h1{font-size:23px}.lobby-layout{grid-template-columns:1fr}.room-shell{height:auto;min-height:calc(100dvh - 48px);gap:6px}.room-bar{padding:6px 8px;gap:7px}.room-meta{display:none}.room-bar .identity strong{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-score-strip{display:flex;align-items:center;gap:8px;min-height:30px}.mobile-score-strip span{display:flex;align-items:center;gap:3px}.mobile-score-strip i{width:8px;height:8px;border-radius:50%;background:var(--player-color)}.mobile-score-strip button{margin-left:auto}.players{display:none;gap:4px}.players.mobile-expanded{display:flex}.player{min-width:0;flex:1 0 78px;max-width:120px;padding:4px 5px;border-left-width:4px;font-size:11px}.player i{display:none}.player span{max-width:70px}.battle-actions{display:grid;grid-template-columns:repeat(2,1fr)}.battle-actions button{padding:7px 5px;font-size:12px}.play-layout{display:flex;flex-direction:column;flex:1}.layout-balance{display:none}.board-stage{height:min(58dvh,620px);flex:1 1 390px;border-radius:8px}.battle-input-panel{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);align-self:center;width:min(100%,360px)}.battle-input-panel button{aspect-ratio:auto;min-height:45px}.digit-1{grid-column:1;grid-row:1}.digit-2{grid-column:2;grid-row:1}.digit-3{grid-column:3;grid-row:1}.digit-4{grid-column:1;grid-row:2}.digit-5{grid-column:2;grid-row:2}.digit-6{grid-column:3;grid-row:2}.digit-7{grid-column:1;grid-row:3}.digit-8{grid-column:2;grid-row:3}.digit-9{grid-column:3;grid-row:3}.mode-normal{grid-column:4;grid-row:1}.mode-center{grid-column:4;grid-row:2}.mode-corner{grid-column:4;grid-row:3}.battle-input-panel kbd{display:none}.variants{grid-template-columns:1fr}.difficulty button{padding-inline:8px}}
+  @media(max-width:700px){main{padding:8px}header{margin-bottom:7px}h1{font-size:23px}.lobby-layout{grid-template-columns:1fr}.room-shell{height:auto;min-height:calc(100dvh - 48px);gap:6px}.room-bar{padding:6px 8px;gap:7px}.room-meta{display:none}.room-bar .identity strong{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-score-strip{display:flex;align-items:center;gap:8px;min-height:30px}.mobile-score-strip span{display:flex;align-items:center;gap:3px}.mobile-score-strip i{width:8px;height:8px;border-radius:50%;background:var(--player-color)}.mobile-score-strip button{margin-left:auto}.players{display:none;gap:4px}.players.mobile-expanded{display:flex}.player{min-width:0;flex:1 0 78px;max-width:120px;padding:4px 5px;border-left-width:4px;font-size:11px}.player i{display:none}.player span{max-width:70px}.battle-actions{display:grid;grid-template-columns:repeat(2,1fr)}.battle-actions button{padding:7px 5px;font-size:12px}.play-layout{display:flex;flex-direction:column;flex:1}.layout-balance{display:none}.board-stage{height:min(58dvh,620px);flex:1 1 390px;border-radius:8px}.variants{grid-template-columns:1fr}.difficulty button{padding-inline:8px}}
 
   .landing-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.landing-choices button{min-height:54px}.variant-select{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:7px;margin-top:14px;color:#586875;font-size:13px}.variant-select select{min-width:0;padding:9px;border:1px solid #bdc9d2;border-radius:8px;background:#fff;color:#23313d}
-  main.in-room{height:100dvh;min-height:0;padding:10px;overflow:hidden}.room-shell{width:100%;max-width:1500px;height:100%;min-height:0}.mobile-room-summary{display:none}.room-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:10px;height:100%;min-height:0}.room-sidebar{display:flex;flex-direction:column;gap:10px;min-height:0;padding:12px;border:1px solid #d6dee4;border-radius:12px;background:#fff;overflow:hidden}.sidebar-title,.room-code{display:flex;flex-direction:column;gap:2px}.sidebar-title small,.room-code small{color:#71808c}.room-code strong{font-size:20px;letter-spacing:.08em}.room-sidebar .identity{margin:0}.room-sidebar .players{display:flex;flex-direction:column;gap:6px;overflow-y:auto}.room-sidebar .player{width:100%;min-width:0}.desktop-timer{font-size:24px;font-variant-numeric:tabular-nums}.battle-actions{display:flex;flex-direction:column;margin-top:auto}.danger{border-color:#d13b32!important;background:#b42318!important;color:#fff!important}.play-area{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;min-width:0;min-height:0}.board-stage{height:100%;min-width:0}.battle-input-panel{align-self:center;justify-self:center;width:auto;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(4,56px)}.battle-input-panel button{width:56px;height:56px;aspect-ratio:1}.battle-input-panel .digit{font-size:30px}.note-icon{position:relative;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1.5px solid currentColor;border-radius:3px}.note-icon b{font-size:21px}.note-icon small{font-size:10px}.corner-numbers{display:grid;grid-template-columns:1fr 1fr;line-height:1}.corner-numbers small{font-size:8px}.battle-toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);padding:10px 15px;border-radius:9px;background:#20323f;color:#fff;box-shadow:0 8px 24px #0003;z-index:1000}.start-in-grid{margin-top:8px;min-width:140px}
-  .sidebar-section{border:1px solid #d9e1e6;border-radius:9px;background:#f7f9fa;padding:9px}.room-summary{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:9px}.sidebar-title span,.sidebar-section>small,.timer-section small{color:#71808c;font-size:11px}.room-code{text-align:right}.personal-settings{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:7px}.personal-settings .theme-toggle{padding-inline:9px}.personal-settings .identity{min-width:0}.personal-settings .identity strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player-section{display:flex;flex:1;min-height:0;flex-direction:column;gap:6px}.player-section .players{min-height:0}.timer-section{display:flex;align-items:center;justify-content:space-between}.timer-section .desktop-timer{font-size:24px}.battle-actions{padding-top:2px}
+  main.in-room{height:100dvh;min-height:0;padding:10px;overflow:hidden}.room-shell{width:100%;max-width:1500px;height:100%;min-height:0}.mobile-room-summary{display:none}.room-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:10px;height:100%;min-height:0}.room-sidebar{display:flex;flex-direction:column;gap:10px;min-height:0;padding:12px;border:1px solid #d6dee4;border-radius:12px;background:#fff;overflow:hidden}.sidebar-title,.room-code{display:flex;flex-direction:column;gap:2px}.sidebar-title small,.room-code small{color:#71808c}.room-code strong{font-size:20px;letter-spacing:.08em}.room-sidebar .identity{margin:0}.room-sidebar .players{display:flex;flex-direction:column;gap:6px;overflow-y:auto}.room-sidebar .player{width:100%;min-width:0}.desktop-timer{font-size:24px;font-variant-numeric:tabular-nums}.battle-actions{display:flex;flex-direction:column;margin-top:auto}.danger{border-color:#d13b32!important;background:#b42318!important;color:#fff!important}
+  .play-area{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;min-width:0;min-height:0}.board-stage{height:100%;min-width:0}.right-controls{display:flex;flex-direction:column;gap:8px;width:190px;height:100%;min-height:0}.right-controls .battle-input-panel{margin-top:auto}
+  .battle-input-panel{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:6px;width:100%}.battle-input-panel button{position:relative;width:100%;aspect-ratio:1;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:750;overflow:hidden;border-radius:8px}.battle-input-panel .digit{font-size:26px}.note-icon{position:relative;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1.5px solid currentColor;border-radius:3px}.note-icon b{font-size:18px}.note-icon small{font-size:10px}.corner-numbers{display:grid;grid-template-columns:1fr 1fr;line-height:1}.corner-numbers small{font-size:8px}.battle-input-panel kbd{position:absolute;right:4px;bottom:3px;font-size:9px;line-height:1;opacity:.65}.battle-toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);padding:10px 15px;border-radius:9px;background:#20323f;color:#fff;box-shadow:0 8px 24px #0003;z-index:1000}  .start-in-grid{margin-top:8px;width:190px;height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;box-sizing:border-box}
+  .score-col{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}.move-breakdown{font-size:10px;color:#64748b}main.dark .move-breakdown{color:#94a3b8}
+  .player-badge-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1.5px solid var(--player-color);border-radius:12px;background:#f8fafc;color:#1e293b;font-size:11px;font-weight:600;line-height:1;white-space:nowrap}
+  .player-badge-pill i{width:7px;height:7px;border-radius:50%;background:var(--player-color);flex-shrink:0}.pill-stats{font-size:10px;opacity:.8;margin-left:2px}main.dark .player-badge-pill{background:#1e293b;color:#f1f5f9}
+  .sidebar-section{border:1px solid #d9e1e6;border-radius:9px;background:#f7f9fa;padding:9px}.room-summary{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:9px}.sidebar-title span,.sidebar-section>small,.timer-section small{color:#71808c;font-size:11px}.room-code{text-align:right}.personal-settings{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:7px}.personal-settings .theme-toggle{padding-inline:9px}.personal-settings .identity{min-width:0}.personal-settings .identity strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player-section{display:flex;flex:1;min-height:0;flex-direction:column;gap:6px}.player-section .players{min-height:0}.timer-section{display:flex;align-items:center;justify-content:space-between}.timer-section .desktop-timer{font-size:24px}.battle-actions{padding-top:2px}.bot-badge{font-size:9px;padding:2px 4px;border-radius:4px;background:#e2e8f0;color:#334155;font-weight:700;margin-left:4px}.bot-btn{margin-top:6px}.prep-actions{display:flex;gap:7px;margin-top:10px}.variant-rules-section{display:flex;flex-direction:column;gap:5px;max-height:130px;overflow-y:auto}.variant-rule-item strong{font-size:12px;display:block}.variant-rule-item p{margin:2px 0 0;font-size:11px;color:#586875;line-height:1.35}main.dark .variant-rule-item p{color:#a9b7c2}
   main.dark .room-sidebar{border-color:#435360;background:#24313c}main.dark .sidebar-section{border-color:#435360;background:#1c2832}main.dark .variant-select select{border-color:#435360;background:#1c2832;color:#e1e8ed}main.dark .skeleton{background:linear-gradient(90deg,#2a3742 25%,#40505d 50%,#2a3742 75%);background-size:200% 100%}
 
-  @media(max-width:700px){:global(body){overflow:hidden}main.in-room{height:100dvh;padding:5px}.room-shell{height:100%;min-height:0;gap:5px}.mobile-room-summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:7px;min-height:38px;padding:4px 6px;border:1px solid #d6dee4;border-radius:8px;background:#fff;font-size:11px}.summary-players{display:flex;gap:7px;min-width:0;overflow:hidden}.summary-players span{display:flex;align-items:center;gap:3px;min-width:0;white-space:nowrap}.summary-players i{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:var(--player-color)}.info-button{width:30px;height:30px;padding:0;border-radius:50%;font-size:17px}.room-layout{display:block;position:relative;height:calc(100% - 43px)}.room-sidebar{display:none;position:fixed;inset:48px 6px 6px;z-index:900;overflow-y:auto}.room-sidebar.open{display:flex}.play-area{display:flex;flex-direction:column;height:100%;gap:5px}.board-stage{flex:1 1 auto;height:auto;min-height:0}.battle-input-panel{flex:0 0 auto;display:grid;grid-template-columns:repeat(4,52px);grid-template-rows:repeat(3,52px);gap:5px;width:max-content}.battle-input-panel button{width:52px;height:52px;min-height:0;aspect-ratio:1}.battle-input-panel .digit{font-size:29px}.battle-input-panel kbd{display:none}.mode-normal{grid-column:4;grid-row:1}.mode-center{grid-column:4;grid-row:2}.mode-corner{grid-column:4;grid-row:3}.digit-1{grid-column:1;grid-row:1}.digit-2{grid-column:2;grid-row:1}.digit-3{grid-column:3;grid-row:1}.digit-4{grid-column:1;grid-row:2}.digit-5{grid-column:2;grid-row:2}.digit-6{grid-column:3;grid-row:2}.digit-7{grid-column:1;grid-row:3}.digit-8{grid-column:2;grid-row:3}.digit-9{grid-column:3;grid-row:3}main.dark .mobile-room-summary{border-color:#435360;background:#24313c}.battle-toast{top:48px;max-width:calc(100vw - 24px);white-space:nowrap}}
+  @media(max-width:700px){:global(body){overflow:hidden}main.in-room{height:100dvh;padding:5px}.room-shell{height:100%;min-height:0;gap:5px}.mobile-room-summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:7px;min-height:38px;padding:4px 6px;border:1px solid #d6dee4;border-radius:8px;background:#fff;font-size:11px}.summary-players{display:flex;gap:7px;min-width:0;overflow:hidden}.summary-players span{display:flex;align-items:center;gap:3px;min-width:0;white-space:nowrap}.summary-players i{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:var(--player-color)}.info-button{width:30px;height:30px;padding:0;border-radius:50%;font-size:17px}.room-layout{display:block;position:relative;height:calc(100% - 43px)}.room-sidebar{display:none;position:fixed;inset:48px 6px 6px;z-index:900;overflow-y:auto}.room-sidebar.open{display:flex}.play-area{display:flex;flex-direction:column;height:100%;gap:5px}.right-controls{width:100%;height:auto;gap:5px;display:flex;flex-direction:column;align-items:center}.right-controls .sidebar-section{display:none}.right-controls .battle-input-panel{margin-top:0}.board-stage{flex:1 1 auto;height:auto;min-height:0}.battle-input-panel{flex:0 0 auto;display:grid;grid-template-columns:repeat(4,52px);grid-template-rows:repeat(3,52px);gap:5px;width:max-content}.battle-input-panel button{width:52px;height:52px;min-height:0;aspect-ratio:1}.battle-input-panel .digit{font-size:29px}.battle-input-panel kbd{display:none}.mode-normal{grid-column:4;grid-row:1}.mode-center{grid-column:4;grid-row:2}.mode-corner{grid-column:4;grid-row:3}.digit-1{grid-column:1;grid-row:1}.digit-2{grid-column:2;grid-row:1}.digit-3{grid-column:3;grid-row:1}.digit-4{grid-column:1;grid-row:2}.digit-5{grid-column:2;grid-row:2}.digit-6{grid-column:3;grid-row:2}.digit-7{grid-column:1;grid-row:3}.digit-8{grid-column:2;grid-row:3}.digit-9{grid-column:3;grid-row:3}main.dark .mobile-room-summary{border-color:#435360;background:#24313c}.battle-toast{top:48px;max-width:calc(100vw - 24px);white-space:nowrap}}
   .landing-choices{grid-template-columns:1fr}
   .room-sidebar .player{background:transparent}
   .lobby-profile{max-width:1000px;margin:0 auto 12px;padding:10px 18px}.lobby-profile .identity{margin:0}.lobby-profile .identity strong{flex:1}.lobby-profile .identity input{flex:1}
