@@ -46,7 +46,8 @@ var SudokuCSP = (function() {
     }
 
     function cellValue(board, cell) {
-        return board[cell.row][cell.col];
+        if (!cell || cell.row === undefined || cell.col === undefined) return 0;
+        return (board[cell.row] && board[cell.row][cell.col]) || 0;
     }
 
     function maskToDigits(mask) {
@@ -1970,6 +1971,20 @@ registerConstraint("threeDigitNumbersKillers", {
             var a = cellValue(board, pair[0]);
             var b = cellValue(board, pair[1]);
             return !a || !b || Math.abs(a - b) !== 1;
+        }
+    });
+
+    registerConstraint("consecutive", {
+        validatePartial: function(board, clue) {
+            var first = cellValue(board, clue.cells ? clue.cells[0] : clue[0]);
+            var second = cellValue(board, clue.cells ? clue.cells[1] : clue[1]);
+            if (first && second) {
+                var isConsec = Math.abs(first - second) === 1;
+                var kind = clue.kind || "marked";
+                if (kind === "none") return !isConsec;
+                return isConsec;
+            }
+            return true;
         }
     });
 

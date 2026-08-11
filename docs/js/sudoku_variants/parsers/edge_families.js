@@ -20,7 +20,7 @@
     }
     function symbolAccepted(variant, entry) {
         if (!entry) return false;
-        if (variant === "consecutive") return entry[1] === "circle_SS" && entry[0] === 1;
+        if (variant === "consecutive") return (entry[1] === "circle_SS" && entry[0] === 1) || entry[1] === "bars_G";
         if (["xydifference", "primesums", "twodigitprimenumbers", "fives", "sumnine"].indexOf(variant) !== -1)
             return ["diamond_L", "diamond_SS", "circle_SS"].indexOf(entry[1]) !== -1;
         if (variant === "perfectsquares") return ["diamond_SS", "circle_SS"].indexOf(entry[1]) !== -1 && entry[0] === 1;
@@ -77,10 +77,14 @@
                         (cells[0].row === cells[1].row ? { row: cells[0].row, col: 0 } : { row: 0, col: cells[0].col }) : null
                 });
             });
+            var requested = (evidence.option("activeSudokuVariants") || [evidence.option("activeSudokuVariant")] || []).map(function(v) {
+                return String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            });
+            var isConsecutiveNegative = (requested.indexOf("consecutive") !== -1 && requested.indexOf("consecutivepairs") === -1) || evidence.option("consecutiveNegativeConstraint") === true;
             var addNegative = variant === "sumnine" || variant === "perfectsquares" || variant === "fives" ||
                 variant === "teneleven" || variant === "xydifference" || variant === "primesums" ||
                 variant === "twodigitprimenumbers" ||
-                (variant === "consecutive" && evidence.option("consecutiveNegativeConstraint") === true);
+                (variant === "consecutive" && isConsecutiveNegative);
             if (!addNegative) return;
             evidence.pairs([[0,1],[1,0]]).forEach(function(pair) {
                 if (marked[edgeKey(pair, evidence.size)]) return;

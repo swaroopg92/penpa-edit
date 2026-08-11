@@ -116,6 +116,12 @@
             }
         },
         {
+            type: "kropki", version: 1,
+            validatePayload: function(payload) {
+                return !!payload && cellPair(payload.cells) && typeof payload.kind === "string";
+            }
+        },
+        {
             type: "edgeRelations", version: 1,
             validatePayload: function(payload) {
                 return !!payload && cellPair(payload.cells) && typeof payload.relation === "string";

@@ -113,6 +113,18 @@ var SudokuGenerator = (function() {
         addPairs("antiKing", [[1, -1], [1, 1]]);
         addPairs("antiKnight", [[1, -2], [1, 2], [2, -1], [2, 1]]);
         addPairs("nonConsecutive", [[1, 0], [0, 1]]);
+        if (variants.indexOf("symmetric unequal") !== -1 || variants.indexOf("symmetricunequal") !== -1) {
+            constraints.symmetricUnequal = [];
+            for (var suR = 0; suR < size; suR++) {
+                for (var suC = 0; suC < size; suC++) {
+                    var oppR = size - 1 - suR;
+                    var oppC = size - 1 - suC;
+                    if (suR < oppR || (suR === oppR && suC < oppC)) {
+                        constraints.symmetricUnequal.push([{ row: suR, col: suC }, { row: oppR, col: oppC }]);
+                    }
+                }
+            }
+        }
         return constraints;
     }
 
@@ -131,7 +143,7 @@ var SudokuGenerator = (function() {
             }
         }
         var needsSearch = variants.some(function(variant) {
-            return ["diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "windoku"].indexOf(variant) !== -1;
+            return ["diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "windoku", "symmetric unequal", "symmetricunequal", "disjoint"].indexOf(variant) !== -1;
         });
         var base;
         if (!needsSearch) {
@@ -272,19 +284,86 @@ var SudokuGenerator = (function() {
         return marks;
     }
 
+    function allBattenburgWithNegative(solution) {
+        var size = solution.length;
+        var marks = [];
+        for (var row = 0; row < size - 1; row++) {
+            for (var col = 0; col < size - 1; col++) {
+                var cells = [{ row: row, col: col }, { row: row, col: col + 1 },
+                    { row: row + 1, col: col }, { row: row + 1, col: col + 1 }];
+                var isChecker = checkerboard(solution, cells);
+                marks.push({ cells: cells, kind: isChecker ? "marked" : "none" });
+            }
+        }
+        return marks;
+    }
+
+    function allEdgesWithNegative(solution, variant) {
+        var size = solution.length;
+        var marks = [];
+        for (var row = 0; row < size; row++) {
+            for (var col = 0; col < size; col++) {
+                [[row + 1, col], [row, col + 1]].forEach(function(neighbor) {
+                    if (neighbor[0] >= size || neighbor[1] >= size) return;
+                    var cells = [{ row: row, col: col }, { row: neighbor[0], col: neighbor[1] }];
+                    var kind = edgeKind(solution, cells, variant) || "none";
+                    marks.push({ cells: cells, kind: kind });
+                });
+            }
+        }
+        return marks;
+    }
+
+    function allConsecutiveWithNegative(solution) {
+        var size = solution.length;
+        var marks = [];
+        for (var row = 0; row < size; row++) {
+            for (var col = 0; col < size; col++) {
+                [[row + 1, col], [row, col + 1]].forEach(function(neighbor) {
+                    if (neighbor[0] >= size || neighbor[1] >= size) return;
+                    var cells = [{ row: row, col: col }, { row: neighbor[0], col: neighbor[1] }];
+                    var isConsec = Math.abs(solution[row][col] - solution[neighbor[0]][neighbor[1]]) === 1;
+                    marks.push({ cells: cells, kind: isConsec ? "marked" : "none" });
+                });
+            }
+        }
+        return marks;
+    }
+
     function solutionSupportsGeneratedMarks(solution, variants) {
         var always = function() { return 0; };
         return (variants.indexOf("kropki") === -1 || symmetricEdges(solution, "kropki", always).length > 0) &&
+            (variants.indexOf("kropkipairs") === -1 || symmetricEdges(solution, "kropki", always).length > 0) &&
             (variants.indexOf("xv") === -1 || symmetricEdges(solution, "xv", always).length > 0) &&
+            (variants.indexOf("xvpairs") === -1 || symmetricEdges(solution, "xv", always).length > 0) &&
+            (variants.indexOf("consecutivepairs") === -1 || symmetricEdges(solution, "consecutive", always).length > 0) &&
             (variants.indexOf("battenburg") === -1 || symmetricBattenburg(solution, always).length > 0);
     }
 
     function addGeneratedMarks(constraints, solution, variants, random) {
-        var marks = { oddEven: [], kropki: [], xv: [], battenburg: [] };
+        var marks = { oddEven: [], kropki: [], xv: [], battenburg: [], consecutive: [] };
         if (variants.indexOf("odd even") !== -1) marks.oddEven = symmetricOddEvenMarks(solution, random);
-        if (variants.indexOf("kropki") !== -1) marks.kropki = symmetricEdges(solution, "kropki", random);
-        if (variants.indexOf("xv") !== -1) marks.xv = symmetricEdges(solution, "xv", random);
-        if (variants.indexOf("battenburg") !== -1) marks.battenburg = symmetricBattenburg(solution, random);
+        if (variants.indexOf("kropki") !== -1 && variants.indexOf("kropkipairs") === -1) {
+            marks.kropki = allEdgesWithNegative(solution, "kropki");
+        } else if (variants.indexOf("kropkipairs") !== -1) {
+            marks.kropki = symmetricEdges(solution, "kropki", random);
+        }
+
+        if (variants.indexOf("xv") !== -1 && variants.indexOf("xvpairs") === -1) {
+            marks.xv = allEdgesWithNegative(solution, "xv");
+        } else if (variants.indexOf("xvpairs") !== -1) {
+            marks.xv = symmetricEdges(solution, "xv", random);
+        }
+
+        if (variants.indexOf("battenburg") !== -1) {
+            marks.battenburg = allBattenburgWithNegative(solution);
+        }
+
+        if (variants.indexOf("consecutive") !== -1 && variants.indexOf("consecutivepairs") === -1) {
+            marks.consecutive = allConsecutiveWithNegative(solution);
+        } else if (variants.indexOf("consecutivepairs") !== -1) {
+            marks.consecutive = symmetricEdges(solution, "consecutive", random);
+        }
         Object.keys(marks).forEach(function(name) {
             var combined = (constraints[name] || []).concat(marks[name]);
             var seen = {};
@@ -327,14 +406,13 @@ var SudokuGenerator = (function() {
         if (variants.indexOf("classic") === -1) variants.unshift("classic");
         variants = variants.filter(function(value, index) { return variants.indexOf(value) === index; });
         var supported = ["classic", "diagonal", "anti diagonal", "anti king", "anti knight",
-            "non consecutive", "odd even", "kropki", "xv", "battenburg", "windoku"];
+            "non consecutive", "consecutive", "consecutivepairs", "odd even",
+            "kropki", "kropkipairs", "xv", "xvpairs", "battenburg", "windoku",
+            "disjoint", "touchy", "mirror", "symmetric unequal", "symmetricunequal",
+            "sequence top-bottom", "sequencetopbottom"];
         var unsupported = variants.filter(function(variant) { return supported.indexOf(variant) === -1; });
         if (!options.preserveExisting && unsupported.length) {
             throw new Error("Generation is not implemented for: " + unsupported.join(", ") + ".");
-        }
-        if (!options.preserveExisting && options.negative &&
-            (options.negative.kropki || options.negative.xv || options.negative.battenburg)) {
-            throw new Error("Symmetric generation with negative Kropki, XV, or Battenburg is not implemented yet.");
         }
         if (!options.preserveExisting && size === 6 && variants.indexOf("anti diagonal") !== -1) {
             throw new Error("Anti-diagonal generation currently requires a 9×9 grid.");
@@ -356,14 +434,20 @@ var SudokuGenerator = (function() {
         } else {
             solution = makeSolution(size, variants, constraints, random);
         }
-        // Existing puzzles keep their native Penpa clue objects. Their normalized
-        // CSP constraints stay fixed while only the completed cell digits are
-        // considered for removal; this works for every constraint read by the
-        // solver without lossy clue reconstruction.
         var marks = options.preserveExisting ?
             { oddEven: [], kropki: [], xv: [], battenburg: [] } :
             addGeneratedMarks(constraints, solution, variants, random);
         var board = solution.map(function(row) { return row.slice(); });
+        if (typeof options.onProgress === "function") {
+            options.onProgress({
+                step: "3a",
+                message: "Generated solution grid.",
+                board: board.map(function(r) { return r.slice(); }),
+                marks: marks,
+                solution: solution,
+                givens: size * size
+            });
+        }
         var units = [];
         var seenCells = {};
         var symmetry = options.symmetry || 'rotational180';
@@ -392,8 +476,12 @@ var SudokuGenerator = (function() {
         units = shuffle(units, random);
         var givens = size * size;
         var markUnits = [];
+        var fullClueList = ["kropki", "xv", "consecutive", "battenburg"];
         if (!options.preserveExisting) {
             Object.keys(marks).forEach(function(name) {
+                if (fullClueList.indexOf(name) !== -1 && variants.indexOf(name + "pairs") === -1) {
+                    return;
+                }
                 symmetricMarkUnits(marks[name], size).forEach(function(unit) {
                     markUnits.push({ name: name, marks: unit });
                 });
@@ -401,44 +489,113 @@ var SudokuGenerator = (function() {
         }
         markUnits = shuffle(markUnits, random);
         var totalAttempts = units.length + markUnits.length;
-
-        for (var attempt = 0; attempt < units.length; attempt++) {
-            var unit = units[attempt];
+        var startTime = Date.now();
+        var maxTimeMs = 20000;
+        var attempt = 0;
+        var batchSize = 4;
+        while (attempt < units.length) {
+            if (Date.now() - startTime >= maxTimeMs) {
+                if (typeof options.onProgress === "function") {
+                    options.onProgress({
+                        step: "timeout",
+                        message: "20s time limit reached (" + givens + " givens remaining). Returning unique puzzle.",
+                        attempt: attempt,
+                        total: totalAttempts,
+                        givens: givens
+                    });
+                }
+                break;
+            }
+            var end = Math.min(attempt + batchSize, units.length);
+            var batchUnits = units.slice(attempt, end);
             if (options.preserveExisting && Array.isArray(options.sourceBoard)) {
-                var containsGiven = unit.some(function(index) {
+                batchUnits = batchUnits.filter(function(unit) {
+                    return !unit.some(function(index) {
+                        var r = Math.floor(index / size);
+                        var c = index % size;
+                        return options.sourceBoard[r] && options.sourceBoard[r][c] !== 0;
+                    });
+                });
+            }
+            if (!batchUnits.length) {
+                attempt = end;
+                continue;
+            }
+
+            var batchPrevious = [];
+            batchUnits.forEach(function(unit) {
+                unit.forEach(function(index) {
                     var r = Math.floor(index / size);
                     var c = index % size;
-                    return options.sourceBoard[r] && options.sourceBoard[r][c] !== 0;
+                    batchPrevious.push({ index: index, val: board[r][c] });
+                    board[r][c] = 0;
                 });
-                if (containsGiven) continue;
-            }
-            var previous = unit.map(function(index) {
-                var row = Math.floor(index / size);
-                var col = index % size;
-                var value = board[row][col];
-                board[row][col] = 0;
-                return value;
             });
+
             var answers = CSP.createProblem(board, constraints).enumerateAnswers(2);
             if (answers.length === 1) {
-                givens -= unit.length;
+                var removedCount = batchPrevious.length;
+                givens -= removedCount;
+                if (typeof options.onProgress === "function") {
+                    options.onProgress({
+                        step: "3c",
+                        message: "Step 3c: Pruning givens... Batch-removed " + removedCount + " digits (" + givens + " givens remaining).",
+                        attempt: end,
+                        total: totalAttempts,
+                        givens: givens,
+                        board: board.map(function(r) { return r.slice(); }),
+                        marks: marks,
+                        solution: solution
+                    });
+                }
             } else {
-                unit.forEach(function(index, offset) {
-                    board[Math.floor(index / size)][index % size] = previous[offset];
+                batchPrevious.forEach(function(item) {
+                    board[Math.floor(item.index / size)][item.index % size] = item.val;
                 });
+                for (var b = 0; b < batchUnits.length; b++) {
+                    var unit = batchUnits[b];
+                    var singlePrevious = unit.map(function(index) {
+                        var r = Math.floor(index / size);
+                        var c = index % size;
+                        var val = board[r][c];
+                        board[r][c] = 0;
+                        return val;
+                    });
+                    var singleAnswers = CSP.createProblem(board, constraints).enumerateAnswers(2);
+                    if (singleAnswers.length === 1) {
+                        givens -= unit.length;
+                    } else {
+                        unit.forEach(function(index, offset) {
+                            board[Math.floor(index / size)][index % size] = singlePrevious[offset];
+                        });
+                    }
+                    if (typeof options.onProgress === "function") {
+                        options.onProgress({
+                            step: "3c",
+                            message: "Step 3c: Pruning givens (" + givens + " givens remaining).",
+                            attempt: attempt + b + 1,
+                            total: totalAttempts,
+                            givens: givens,
+                            board: board.map(function(r) { return r.slice(); }),
+                            marks: marks,
+                            solution: solution
+                        });
+                    }
+                }
             }
-            if (typeof options.onProgress === "function") {
-                options.onProgress({ attempt: attempt + 1, total: totalAttempts, givens: givens });
-            }
+            attempt = end;
         }
 
         markUnits.forEach(function(unit, markAttempt) {
+            if (Date.now() - startTime >= maxTimeMs) return;
             var before = (constraints[unit.name] || []).slice();
             constraints[unit.name] = before.filter(function(mark) { return unit.marks.indexOf(mark) === -1; });
             var answers = CSP.createProblem(board, constraints).enumerateAnswers(2);
             if (answers.length !== 1) constraints[unit.name] = before;
             if (typeof options.onProgress === "function") {
                 options.onProgress({
+                    step: "3c",
+                    message: "Step 3c: Pruning extra marks (" + givens + " givens remaining).",
                     attempt: units.length + markAttempt + 1,
                     total: totalAttempts,
                     givens: givens

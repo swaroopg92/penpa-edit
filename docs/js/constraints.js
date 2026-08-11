@@ -218,6 +218,24 @@ const penpa_constraints = {
             "submodeset": ["1", "circle_SS"],
             "styleset": ["", ""]
         },
+        "kropkipairs": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_circle", "li_circle_SS", "ms1_bars", "li_circle", "li_bars", "ul_bars"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "circle_SS"],
+            "styleset": ["", ""]
+        },
+        "consecutivepairs": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_bars", "li_bars", "ul_bars"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "bars_G"],
+            "styleset": ["", ""]
+        },
         "palindrome": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
@@ -253,6 +271,15 @@ const penpa_constraints = {
             "styleset": ["", 6]
         },
         "xv": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_number_lb", "sub_number5_lb",
+            ],
+            "modeset": ["sudoku", "number"],
+            "submodeset": ["1", "5"],
+            "styleset": ["", 6]
+        },
+        "xvpairs": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
                 "mo_number_lb", "sub_number5_lb",

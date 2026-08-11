@@ -18,7 +18,7 @@
         chesskings: ["Chess Kings", "chessKings", "chessKings", ["chess kings"]],
         knightmare: ["Knightmare", "knightmare", "knightmare"],
         nonconsecutive: ["Non Consecutive", "nonConsecutive", "nonConsecutive", ["non consecutive"]],
-        symmetricunequal: ["Symmetric Unequal", "symmetricUnequal", "symmetricUnequal"],
+        symmetricunequal: ["Symmetric Unequal", "symmetricUnequal", "symmetricUnequal", ["symmetric unequal"]],
         oddlabyrinth: ["Odd Labyrinth", "oddLabyrinth", "oddLabyrinth", ["odd labyrinth"]],
         evenpassage: ["Even Passage", "evenPassage", "evenPassage", ["even passage"]],
         divisiblebythree: ["Divisible by Three", "divisiblebythree", "divisibleByThree", ["divisible by three"]],
@@ -42,7 +42,8 @@
             id: id, label: definition[0], aliases: definition[3] || [],
             supportedSizes: definition[4] || [6, 7, 8, 9],
             constraintTypes: [definition[1]], parse: parsers[definition[2]],
-            tags: ["global"],
+            tags: ["global", "canGenerateFromScratch"],
+            canGenerateFromScratch: true,
             inputType: { categories: ["no-input"], instructions: ["This is a global rule and requires no additional marks."] }
         };
     };

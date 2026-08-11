@@ -66,7 +66,11 @@ const allVariations: Variation[] = variantMetadata.variants.map((item) => {
 export const variations: Variation[] = allVariations
     .filter((item, index, all) => item.status !== "hidden" &&
         all.findIndex((candidate) => candidate.value === item.value) === index)
-    .sort((first, second) => first.name.localeCompare(second.name));
+    .sort((first, second) => {
+        if (first.value === "classic") return -1;
+        if (second.value === "classic") return 1;
+        return first.name.localeCompare(second.name);
+    });
 
 export const variationByValue = new Map(variations.map((item) => [item.value, item]));
 Object.entries(scrapedAliases).forEach(([alias, canonical]) => {

@@ -165,10 +165,21 @@
 
         function authoredMarks(sourceName) {
             var source = puzzle.pu_q && puzzle.pu_q[sourceName] || {};
+            var centerLookup = Object.create(null);
+            if (Array.isArray(puzzle.centerlist) && puzzle.centerlist.length > 0) {
+                puzzle.centerlist.forEach(function(k) { centerLookup[k] = true; });
+            } else {
+                for (var r = 0; r < size; r++) {
+                    for (var c = 0; c < size; c++) {
+                        centerLookup[keyForCell(r, c)] = true;
+                    }
+                }
+            }
             return Object.freeze(Object.keys(source).sort(function(a, b) { return Number(a) - Number(b); })
                 .map(function(key) {
                     var point = puzzle.point && puzzle.point[key];
                     var neighbors = point && Array.isArray(point.neighbor) ? point.neighbor
+                        .filter(function(n) { return centerLookup[n]; })
                         .map(cellFromKey).filter(Boolean) : [];
                     var anchoredCell = cellFromKey(Number(key));
                     if (anchoredCell) anchoredCell = Object.freeze({
@@ -594,6 +605,12 @@
             }
         },
         {
+            type: "kropki", version: 1,
+            validatePayload: function(payload) {
+                return !!payload && cellPair(payload.cells) && typeof payload.kind === "string";
+            }
+        },
+        {
             type: "edgeRelations", version: 1,
             validatePayload: function(payload) {
                 return !!payload && cellPair(payload.cells) && typeof payload.relation === "string";
@@ -816,7 +833,7 @@
     }
     function symbolAccepted(variant, entry) {
         if (!entry) return false;
-        if (variant === "consecutive") return entry[1] === "circle_SS" && entry[0] === 1;
+        if (variant === "consecutive") return (entry[1] === "circle_SS" && entry[0] === 1) || entry[1] === "bars_G";
         if (["xydifference", "primesums", "twodigitprimenumbers", "fives", "sumnine"].indexOf(variant) !== -1)
             return ["diamond_L", "diamond_SS", "circle_SS"].indexOf(entry[1]) !== -1;
         if (variant === "perfectsquares") return ["diamond_SS", "circle_SS"].indexOf(entry[1]) !== -1 && entry[0] === 1;
@@ -873,10 +890,14 @@
                         (cells[0].row === cells[1].row ? { row: cells[0].row, col: 0 } : { row: 0, col: cells[0].col }) : null
                 });
             });
+            var requested = (evidence.option("activeSudokuVariants") || [evidence.option("activeSudokuVariant")] || []).map(function(v) {
+                return String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            });
+            var isConsecutiveNegative = (requested.indexOf("consecutive") !== -1 && requested.indexOf("consecutivepairs") === -1) || evidence.option("consecutiveNegativeConstraint") === true;
             var addNegative = variant === "sumnine" || variant === "perfectsquares" || variant === "fives" ||
                 variant === "teneleven" || variant === "xydifference" || variant === "primesums" ||
                 variant === "twodigitprimenumbers" ||
-                (variant === "consecutive" && evidence.option("consecutiveNegativeConstraint") === true);
+                (variant === "consecutive" && isConsecutiveNegative);
             if (!addNegative) return;
             evidence.pairs([[0,1],[1,0]]).forEach(function(pair) {
                 if (marked[edgeKey(pair, evidence.size)]) return;
@@ -1236,9 +1257,32 @@
                 marked[edgeKey(mark.neighbors, evidence.size)] = true;
                 emit("xv", { cells: mark.neighbors, kind: kind, family: "xv" });
             });
-            if (evidence.option("xvNegativeConstraint") === true) {
+            var requested = (evidence.option("activeSudokuVariants") || [evidence.option("activeSudokuVariant")] || []).map(function(v) {
+                return String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            });
+            var isXVNegative = (requested.indexOf("xv") !== -1 && requested.indexOf("xvpairs") === -1) || evidence.option("xvNegativeConstraint") === true;
+            if (isXVNegative) {
                 orthogonalPairs(evidence).forEach(function(pair) {
                     if (!marked[edgeKey(pair, evidence.size)]) emit("xv", { cells: pair, kind: "none" });
+                });
+            }
+        },
+        kropki: function(evidence, emit) {
+            var marked = Object.create(null);
+            evidence.symbolMarks().forEach(function(mark) {
+                var entry = mark.entry;
+                if (!entry || entry[1] !== "circle_SS" || (entry[0] !== 1 && entry[0] !== 2) || mark.neighbors.length !== 2) return;
+                var kind = entry[0] === 2 ? "black" : "white";
+                marked[edgeKey(mark.neighbors, evidence.size)] = true;
+                emit("kropki", { cells: mark.neighbors, kind: kind });
+            });
+            var requested = (evidence.option("activeSudokuVariants") || [evidence.option("activeSudokuVariant")] || []).map(function(v) {
+                return String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            });
+            var isKropkiNegative = (requested.indexOf("kropki") !== -1 && requested.indexOf("kropkipairs") === -1) || evidence.option("kropkiNegativeConstraint") === true;
+            if (isKropkiNegative) {
+                orthogonalPairs(evidence).forEach(function(pair) {
+                    if (!marked[edgeKey(pair, evidence.size)]) emit("kropki", { cells: pair, kind: "none" });
                 });
             }
         },
@@ -1288,6 +1332,7 @@
     "use strict";
     var labels = {
         arithmetic: "Arithmetic", blocksumrelations: "Block Sum Relations", consecutive: "Consecutive",
+        consecutivepairs: "Consecutive Pairs",
         difference: "Difference", divisor: "Divisor", eitheror: "Either Or", evensumpairs: "Even Sum Pairs",
         fives: "Fives", greater: "Greater", inequality: "Inequality", lesser: "Lesser", multiples: "Multiples",
         oddsumpairs: "Odd Sum Pairs", oneortwodifferencepairs: "One or Two Difference Pairs",
@@ -1302,11 +1347,20 @@
     };
     return function(id) {
         if (!labels[id]) throw new Error("Unknown edge Variant Descriptor: " + id);
-        return {
+        var descriptor = {
             id: id, label: labels[id], aliases: aliases[id] || [], constraintTypes: ["edgeRelations"],
             parse: id.indexOf("diagonal") === 0 ? parsers.diagonal(id) : parsers.catalog(id),
             inputType: { categories: [id.indexOf("diagonal") === 0 ? "intersection" : "edge"], instructions: [] }
         };
+        if (id === "consecutive") {
+            descriptor.canGenerateFromScratch = true;
+            descriptor.generateWithFullClues = true;
+            descriptor.tags = ["canGenerateFromScratch", "generateWithFullClues"];
+        } else if (id === "consecutivepairs") {
+            descriptor.canGenerateFromScratch = true;
+            descriptor.tags = ["canGenerateFromScratch"];
+        }
+        return descriptor;
     };
 });
 
@@ -1330,7 +1384,7 @@
         chesskings: ["Chess Kings", "chessKings", "chessKings", ["chess kings"]],
         knightmare: ["Knightmare", "knightmare", "knightmare"],
         nonconsecutive: ["Non Consecutive", "nonConsecutive", "nonConsecutive", ["non consecutive"]],
-        symmetricunequal: ["Symmetric Unequal", "symmetricUnequal", "symmetricUnequal"],
+        symmetricunequal: ["Symmetric Unequal", "symmetricUnequal", "symmetricUnequal", ["symmetric unequal"]],
         oddlabyrinth: ["Odd Labyrinth", "oddLabyrinth", "oddLabyrinth", ["odd labyrinth"]],
         evenpassage: ["Even Passage", "evenPassage", "evenPassage", ["even passage"]],
         divisiblebythree: ["Divisible by Three", "divisiblebythree", "divisibleByThree", ["divisible by three"]],
@@ -1354,7 +1408,8 @@
             id: id, label: definition[0], aliases: definition[3] || [],
             supportedSizes: definition[4] || [6, 7, 8, 9],
             constraintTypes: [definition[1]], parse: parsers[definition[2]],
-            tags: ["global"],
+            tags: ["global", "canGenerateFromScratch"],
+            canGenerateFromScratch: true,
             inputType: { categories: ["no-input"], instructions: ["This is a global rule and requires no additional marks."] }
         };
     };
@@ -1549,6 +1604,15 @@
     else (root.SudokuVariantDescriptorSources || (root.SudokuVariantDescriptorSources = [])).push(descriptor);
 })(typeof globalThis !== "undefined" ? globalThis : this, function(createDescriptor) {
     "use strict"; return createDescriptor("consecutive");
+});
+
+(function(root, factory) {
+    var descriptor = factory(typeof module !== "undefined" && module.exports ?
+        require("../parsers/edge_descriptor.js") : root.createSudokuEdgeVariantDescriptor);
+    if (typeof module !== "undefined" && module.exports) module.exports = descriptor;
+    else (root.SudokuVariantDescriptorSources || (root.SudokuVariantDescriptorSources = [])).push(descriptor);
+})(typeof globalThis !== "undefined" ? globalThis : this, function(createDescriptor) {
+    "use strict"; return createDescriptor("consecutivepairs");
 });
 
 (function(root, factory) {
@@ -1888,6 +1952,21 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function(createDescriptor) {
     "use strict";
     return createDescriptor("knightmare");
+});
+
+(function(root, factory) {
+    var descriptor = factory(typeof module !== "undefined" && module.exports ?
+        require("../parsers/marked_families.js") : root.SudokuVariantMarkedFamilyParsers);
+    if (typeof module !== "undefined" && module.exports) module.exports = descriptor;
+    else (root.SudokuVariantDescriptorSources || (root.SudokuVariantDescriptorSources = [])).push(descriptor);
+})(typeof globalThis !== "undefined" ? globalThis : this, function(parsers) {
+    "use strict";
+    return {
+        id: "kropkipairs", label: "Kropki Pairs", aliases: ["kropki pairs"], constraintTypes: ["kropki"], parse: parsers.kropki,
+        canGenerateFromScratch: true,
+        tags: ["canGenerateFromScratch"],
+        inputType: { categories: ["edge"], instructions: ["Click an edge to cycle through a black dot, a white dot, and no dot."] }
+    };
 });
 
 (function(root, factory) {
@@ -2426,6 +2505,24 @@
     "use strict";
     return {
         id: "xv", label: "XV", constraintTypes: ["xv"], parse: parsers.xv,
+        canGenerateFromScratch: true,
+        generateWithFullClues: true,
+        tags: ["canGenerateFromScratch", "generateWithFullClues"],
+        inputType: { categories: ["edge"], instructions: [] }
+    };
+});
+
+(function(root, factory) {
+    var descriptor = factory(typeof module !== "undefined" && module.exports ?
+        require("../parsers/marked_families.js") : root.SudokuVariantMarkedFamilyParsers);
+    if (typeof module !== "undefined" && module.exports) module.exports = descriptor;
+    else (root.SudokuVariantDescriptorSources || (root.SudokuVariantDescriptorSources = [])).push(descriptor);
+})(typeof globalThis !== "undefined" ? globalThis : this, function(parsers) {
+    "use strict";
+    return {
+        id: "xvpairs", label: "XV Pairs", aliases: ["xv pairs"], constraintTypes: ["xv"], parse: parsers.xv,
+        canGenerateFromScratch: true,
+        tags: ["canGenerateFromScratch"],
         inputType: { categories: ["edge"], instructions: [] }
     };
 });

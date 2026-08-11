@@ -2843,6 +2843,13 @@ async function load(urlParam, type = 'url', origurl = null) {
                 }
                 pu.activeSudokuVariants = decoded;
                 pu.activeSudokuVariant = decoded[decoded.length - 1];
+                // Generated puzzles exhaustively mark every edge and rely on the
+                // negative constraint flag so the solver enforces "no mark = not
+                // applicable". Restore these flags whenever the variant is present.
+                if (decoded.indexOf("kropki") !== -1 && decoded.indexOf("kropkipairs") === -1) pu.kropkiNegativeConstraint = true;
+                if (decoded.indexOf("xv") !== -1 && decoded.indexOf("xvpairs") === -1) pu.xvNegativeConstraint = true;
+                if (decoded.indexOf("battenburg") !== -1) pu.battenburgNegativeConstraint = true;
+                if (decoded.indexOf("consecutive") !== -1 && decoded.indexOf("consecutivepairs") === -1) pu.consecutiveNegativeConstraint = true;
             }
         } catch (e) {
             console.error("Failed to parse variants parameter", e);

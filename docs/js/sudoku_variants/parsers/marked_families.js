@@ -187,9 +187,32 @@
                 marked[edgeKey(mark.neighbors, evidence.size)] = true;
                 emit("xv", { cells: mark.neighbors, kind: kind, family: "xv" });
             });
-            if (evidence.option("xvNegativeConstraint") === true) {
+            var requested = (evidence.option("activeSudokuVariants") || [evidence.option("activeSudokuVariant")] || []).map(function(v) {
+                return String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            });
+            var isXVNegative = (requested.indexOf("xv") !== -1 && requested.indexOf("xvpairs") === -1) || evidence.option("xvNegativeConstraint") === true;
+            if (isXVNegative) {
                 orthogonalPairs(evidence).forEach(function(pair) {
                     if (!marked[edgeKey(pair, evidence.size)]) emit("xv", { cells: pair, kind: "none" });
+                });
+            }
+        },
+        kropki: function(evidence, emit) {
+            var marked = Object.create(null);
+            evidence.symbolMarks().forEach(function(mark) {
+                var entry = mark.entry;
+                if (!entry || entry[1] !== "circle_SS" || (entry[0] !== 1 && entry[0] !== 2) || mark.neighbors.length !== 2) return;
+                var kind = entry[0] === 2 ? "black" : "white";
+                marked[edgeKey(mark.neighbors, evidence.size)] = true;
+                emit("kropki", { cells: mark.neighbors, kind: kind });
+            });
+            var requested = (evidence.option("activeSudokuVariants") || [evidence.option("activeSudokuVariant")] || []).map(function(v) {
+                return String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            });
+            var isKropkiNegative = (requested.indexOf("kropki") !== -1 && requested.indexOf("kropkipairs") === -1) || evidence.option("kropkiNegativeConstraint") === true;
+            if (isKropkiNegative) {
+                orthogonalPairs(evidence).forEach(function(pair) {
+                    if (!marked[edgeKey(pair, evidence.size)]) emit("kropki", { cells: pair, kind: "none" });
                 });
             }
         },

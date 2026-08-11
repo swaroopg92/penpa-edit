@@ -931,7 +931,11 @@
             variant.label.toLowerCase().includes(query) ||
             variant.value.toLowerCase().includes(query)),
       )
-      .sort((a, b) => a.label.localeCompare(b.label));
+      .sort((a, b) => {
+        if (a.value === "classic") return -1;
+        if (b.value === "classic") return 1;
+        return a.label.localeCompare(b.label);
+      });
   })();
 
   function ensureOutsideSpace(target = 1, sides = [0, 1, 2, 3]) {
@@ -1130,27 +1134,57 @@
     studioModal = "confirm-generate";
   }
 
-  function confirmGenerator() {
+  function confirmGenerateFromScratch() {
+    const size = newGridSize;
+    const variantsToGenerate = [...generatorVariants];
+    const negative = { ...generatorNegative };
+    if (!(window as any).SudokuTools?.canGenerateFromScratch?.(variantsToGenerate)) {
+      studioModal = null;
+      (window as any).Swal?.fire?.({
+        icon: "warning",
+        title: "Cannot generate from scratch",
+        text: "Generation from scratch is not implemented for one or more selected variants.",
+      });
+      return;
+    }
+    if (
+      size === 6 &&
+      variantsToGenerate.includes("anti diagonal")
+    ) {
+      studioModal = null;
+      (window as any).Swal?.fire?.({
+        icon: "warning",
+        title: "Cannot generate this combination",
+        text: "Anti-diagonal generation currently requires a 9 × 9 grid.",
+      });
+      return;
+    }
+    studioModal = null;
+    window.setTimeout(
+      () =>
+        (window as any).SudokuTools?.generatePuzzleFromScratch?.(
+          size,
+          variantsToGenerate,
+          negative,
+        ),
+      0,
+    );
+  }
+
+  function confirmGenerateFromCurrentGrid() {
     const size = newGridSize;
     const variantsToGenerate = [...generatorVariants];
     const negative = { ...generatorNegative };
     if (
       generatorSource !== "existing" &&
-      (negative.kropki ||
-        negative.doublekropki ||
-        negative.xv ||
-        negative.battenburg ||
-        (size === 6 && variantsToGenerate.includes("anti diagonal")))
+      size === 6 &&
+      variantsToGenerate.includes("anti diagonal")
     ) {
       studioModal = null;
-      const reason =
-        negative.kropki || negative.doublekropki || negative.xv || negative.battenburg
-          ? "Symmetric generation with a negative edge/corner rule is not implemented yet."
-          : "Anti-diagonal generation currently requires a 9 × 9 grid.";
       (window as any).Swal?.fire?.({
         icon: "warning",
         title: "Cannot generate this combination",
-        text: reason,
+        text: "Anti-diagonal generation currently requires a 9 × 9 grid.",
       });
       return;
     }
@@ -1767,7 +1801,11 @@
             (option.parentElement as HTMLOptGroupElement | null)?.label ||
             "Variants",
         }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        .sort((a, b) => {
+          if (a.value === "classic") return -1;
+          if (b.value === "classic") return 1;
+          return a.label.localeCompare(b.label);
+        });
       selectedVariant = select.value || "classic";
     }
     if (isEmbedded) {
@@ -2964,7 +3002,7 @@
           >
         </div>
       {:else if studioModal === "confirm-generate"}
-        <h2 id="studio-modal-title">Generate from existing clues</h2>
+        <h2 id="studio-modal-title">Generate Sudoku</h2>
         <p>
           {generatorVariants.length == 0
             ? "This will be a Classic Sudoku."
@@ -2974,7 +3012,8 @@
         </p>
         <div class="studio-modal-actions">
           <button on:click={() => (studioModal = null)}>Cancel</button>
-          <button class="primary" on:click={confirmGenerator}>Generate</button>
+          <button class="primary" on:click={confirmGenerateFromScratch}>From scratch</button>
+          <button on:click={confirmGenerateFromCurrentGrid}>From current grid</button>
         </div>
       {:else if studioModal === "screenshot"}
         <h2 id="studio-modal-title">Screenshot</h2>
@@ -3300,13 +3339,7 @@
               target="_blank"
               rel="noreferrer">Sudoku Editor Plus</a
             >
-            for CSP solver inspiration. This website uses a vibecoded CSP implementation,
-            but I hope to learn to integrate
-            <a
-href="https://github.com/semiexp/cspuz_core"
-              target="_blank"
-              rel="noreferrer">cspuz_core</a
-            > someday.
+            for CSP solver inspiration. This website uses a vibecoded CSP implementation.
           </p>
           <p>
             <a
@@ -3321,8 +3354,11 @@ href="https://github.com/semiexp/cspuz_core"
             The solver runs on your device, and it does not collect nor send any
             of your data.
           </p>
-          <a href="./list.html" target="_blank" rel="noreferrer"
+          <a href="./list/" target="_blank" rel="noreferrer"
             >See list of variants ↗</a
+          >
+          <a href="./battle/" target="_blank" rel="noreferrer"
+            >Play multiplayer Battle mode ↗</a
           >
           <a
             href="https://github.com/lemononmars/penpa-edit"
@@ -4482,9 +4518,13 @@ href="https://github.com/semiexp/cspuz_core"
     border-radius: 5px !important;
     font-size: 11px !important;
   }
+  :global(.board-host #puzzle-container) {
+    transition: filter 0.2s ease;
+  }
   :global(body.sudoku-solver-running) .board-host :global(#puzzle-container) {
     pointer-events: none;
     cursor: progress;
+    filter: blur(2.5px);
   }
   .board-busy-overlay {
     position: absolute;
@@ -4502,7 +4542,7 @@ href="https://github.com/semiexp/cspuz_core"
     cursor: progress;
   }
   :global(body.sudoku-solver-running) .board-busy-overlay {
-    display: flex;
+    display: none !important;
   }
   .board-busy-overlay small {
     color: #65727f;

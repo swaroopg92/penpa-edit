@@ -6,10 +6,9 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function(parsers) {
     "use strict";
     return {
-        id: "xv", label: "XV", constraintTypes: ["xv"], parse: parsers.xv,
+        id: "xvpairs", label: "XV Pairs", aliases: ["xv pairs"], constraintTypes: ["xv"], parse: parsers.xv,
         canGenerateFromScratch: true,
-        generateWithFullClues: true,
-        tags: ["canGenerateFromScratch", "generateWithFullClues"],
+        tags: ["canGenerateFromScratch"],
         inputType: { categories: ["edge"], instructions: [] }
     };
 });

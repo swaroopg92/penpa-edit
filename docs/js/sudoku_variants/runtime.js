@@ -162,10 +162,21 @@
 
         function authoredMarks(sourceName) {
             var source = puzzle.pu_q && puzzle.pu_q[sourceName] || {};
+            var centerLookup = Object.create(null);
+            if (Array.isArray(puzzle.centerlist) && puzzle.centerlist.length > 0) {
+                puzzle.centerlist.forEach(function(k) { centerLookup[k] = true; });
+            } else {
+                for (var r = 0; r < size; r++) {
+                    for (var c = 0; c < size; c++) {
+                        centerLookup[keyForCell(r, c)] = true;
+                    }
+                }
+            }
             return Object.freeze(Object.keys(source).sort(function(a, b) { return Number(a) - Number(b); })
                 .map(function(key) {
                     var point = puzzle.point && puzzle.point[key];
                     var neighbors = point && Array.isArray(point.neighbor) ? point.neighbor
+                        .filter(function(n) { return centerLookup[n]; })
                         .map(cellFromKey).filter(Boolean) : [];
                     var anchoredCell = cellFromKey(Number(key));
                     if (anchoredCell) anchoredCell = Object.freeze({

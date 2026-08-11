@@ -105,7 +105,7 @@ test("authored-mark descriptors consume normalized Puzzle Evidence", function() 
 });
 
 test("marked-family descriptors normalize edge, quad, and directional clues once", function() {
-    var xvPuzzle = variantPuzzle("xv", { number: { 1000: ["V", 1, "5"] } });
+    var xvPuzzle = variantPuzzle("xvpairs", { number: { 1000: ["V", 1, "5"] } });
     xvPuzzle.point[1000] = { neighbor: [28, 29], type: 1 };
     var xv = SudokuSolver.readConstraints(xvPuzzle);
     assert.deepEqual(xv.xv, [{
@@ -1963,10 +1963,10 @@ test("reads palindrome paths from foreground line segments", function() {
     }), [[0, 0], [1, 1], [2, 2]]);
 });
 
-test("reads XV edge clues and keeps negative XV off by default", function() {
+test("reads XV edge clues and enforces negative XV on base variant by default", function() {
     const puzzle = {
         nx0: 13,
-        activeSudokuVariant: "xv",
+        activeSudokuVariant: "xvpairs",
         centerlist: [28, 29],
         point: { 200: { neighbor: [28, 29] } },
         pu_q: {
@@ -2002,10 +2002,10 @@ test("negative XV toggle constrains unmarked orthogonal edges", function() {
     assert.equal(edge.kind, "none");
 });
 
-test("selected Kropki variant leaves negative constraints off by default", function() {
+test("selected Kropki Pairs variant leaves negative constraints off by default", function() {
     const puzzle = {
         nx0: 13,
-        activeSudokuVariant: "kropki",
+        activeSudokuVariant: "kropkipairs",
         centerlist: [28, 29],
         point: {},
         pu_q: { symbol: {} }
@@ -2059,6 +2059,39 @@ test("Consecutive reads only white dots and applies its negative toggle", functi
     assert.equal(negative.length > 0, true);
     assert.equal(constraints.kropki.length, 0);
 });
+
+test("Consecutive reads bars_G marks from generator and expands negative edges", function() {
+    // The generator places bars_G (gray bar) for consecutive white-dot marks.
+    // readConstraints must read these into constraints.consecutive and, when
+    // consecutiveNegativeConstraint is true, add "none" entries for unmarked edges.
+    const puzzle = {
+        nx0: 13,
+        activeSudokuVariant: "consecutive",
+        activeSudokuVariants: ["classic", "consecutive"],
+        consecutiveNegativeConstraint: true,
+        centerlist: [28, 29, 41, 42],
+        ny: 4,    // 2x2 grid for test
+        nx: 4,
+        point: {
+            200: { neighbor: [28, 29] }   // horizontal edge between (0,0)-(0,1)
+        },
+        pu_q: { symbol: {
+            200: [1, "bars_G", 2]
+        } }
+    };
+
+    const constraints = SudokuSolver.readConstraints(puzzle);
+    const markedDirect = constraints.consecutive.filter(function(c) { return c.kind === "marked"; });
+    const noneDirect   = constraints.consecutive.filter(function(c) { return c.kind === "none"; });
+
+    // The bars_G mark on edge 200 should be read as a marked consecutive pair
+    assert.equal(markedDirect.length, 1);
+    // With negative constraint on, all other edges get "none" entries
+    assert.equal(noneDirect.length > 0, true);
+    // Kropki should not claim consecutive marks
+    assert.equal(constraints.kropki.length, 0);
+});
+
 
 test("reads center and corner direction-arrow variants", function() {
     const centerPuzzle = {
@@ -3272,11 +3305,12 @@ test("solver and generator workers load extracted variant handlers", function() 
             },
             importScripts: function() {
                 Array.from(arguments).forEach(function(source) {
+                    const cleanSource = String(source || "").split("?")[0];
                     const script = workerFs.readFileSync(
-                        workerPath.join(workerDirectory, source),
+                        workerPath.join(workerDirectory, cleanSource),
                         "utf8"
                     );
-                    workerVm.runInContext(script, context, { filename: source });
+                    workerVm.runInContext(script, context, { filename: cleanSource });
                 });
             }
         });
@@ -4964,5 +4998,22 @@ test("solver conflict highlights clear after the toast duration", function() {
     }
     assert.deepEqual(puzzle.conflict_cells, []);
     assert.equal(redraws, 2);
+});
+
+test("canGenerateFromScratch recognizes supported variants and full clue markers", function() {
+    assert.equal(SudokuSolver.canGenerateFromScratch(["classic"]), true);
+    assert.equal(SudokuSolver.canGenerateFromScratch(["classic", "kropki"]), true);
+    assert.equal(SudokuSolver.canGenerateFromScratch(["classic", "xv"]), true);
+    assert.equal(SudokuSolver.canGenerateFromScratch(["classic", "battenburg"]), true);
+    assert.equal(SudokuSolver.canGenerateFromScratch(["classic", "consecutive"]), true);
+    assert.equal(SudokuSolver.canGenerateFromScratch(["classic", "anti king", "diagonal"]), true);
+
+    assert.equal(SudokuSolver.generateWithFullClues.kropki, true);
+    assert.equal(SudokuSolver.generateWithFullClues.xv, true);
+    assert.equal(SudokuSolver.generateWithFullClues.battenburg, true);
+    assert.equal(SudokuSolver.generateWithFullClues.consecutive, true);
+    assert.equal(!!SudokuSolver.generateWithFullClues.kropkipairs, false);
+    assert.equal(!!SudokuSolver.generateWithFullClues.xvpairs, false);
+    assert.equal(!!SudokuSolver.generateWithFullClues.consecutivepairs, false);
 });
 

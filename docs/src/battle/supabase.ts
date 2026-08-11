@@ -65,7 +65,8 @@ export function normalizeRoomCode(value: string) {
 }
 
 export function boardFrameSource(puzzleHash = "") {
-  const base = "./index.html?embed=1&hideSidebar=1&battle=1";
+  const rootPath = location.pathname.includes("/battle") ? "../index.html" : "./index.html";
+  const base = `${rootPath}?embed=1&hideSidebar=1&battle=1`;
   return puzzleHash ? `${base}${puzzleHash.startsWith("#") ? puzzleHash : `#${puzzleHash}`}` : base;
 }
 

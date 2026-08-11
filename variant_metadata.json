@@ -1,6 +1,9 @@
 {
   "version": 3,
   "markOverrides": {},
+  "scrapedAliases": {
+    "symmetricunequal": "symmetric unequal"
+  },
   "variants": [
     {
       "otherNames": "",
@@ -852,6 +855,25 @@
       "tags": [
         "consecutive",
         "converse",
+        "neighbour",
+        "math"
+      ],
+      "status": "available",
+      "inputType": {
+        "categories": [
+          "edge"
+        ],
+        "instructions": []
+      }
+    },
+    {
+      "id": "consecutivepairs",
+      "name": "Consecutive Pairs",
+      "rules": {
+        "9x9": "Adjacent cells marked with a bar contain consecutive digits."
+      },
+      "tags": [
+        "consecutive",
         "neighbour",
         "math"
       ],
@@ -2865,6 +2887,28 @@
       "tags": [
         "consecutive",
         "converse",
+        "neighbour",
+        "hybrid",
+        "math"
+      ],
+      "status": "available",
+      "inputType": {
+        "categories": [
+          "edge"
+        ],
+        "instructions": [
+          "Click an edge to cycle through a black dot, a white dot, and no dot."
+        ]
+      }
+    },
+    {
+      "id": "kropkipairs",
+      "name": "Kropki Pairs",
+      "rules": {
+        "9x9": "Adjacent cells marked with a white circle contain consecutive digits. Adjacent cells marked with a black circle contains digits where one digit is double of the other digit. The circle between 1 and 2 can be of either colour."
+      },
+      "tags": [
+        "consecutive",
         "neighbour",
         "hybrid",
         "math"
@@ -5868,7 +5912,7 @@
       ]
     },
     {
-      "id": "symmetricunequal",
+      "id": "symmetricUnequal",
       "name": "Symmetric Unequal",
       "rules": {
         "9x9": "Cells that are 180° symmetric about the centre must not contain the same digit."
@@ -6535,6 +6579,26 @@
       },
       "tags": [
         "converse",
+        "math",
+        "neighbour"
+      ],
+      "status": "available",
+      "inputType": {
+        "categories": [
+          "edge"
+        ],
+        "instructions": [
+          "Click an edge to cycle through V, X, and no clue."
+        ]
+      }
+    },
+    {
+      "id": "xvpairs",
+      "name": "XV Pairs",
+      "rules": {
+        "9x9": "Adjacent cells with digits summing to 5 are marked by V. Adjacent cells with digits summing to 10 are marked by X."
+      },
+      "tags": [
         "math",
         "neighbour"
       ],

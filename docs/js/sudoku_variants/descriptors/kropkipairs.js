@@ -6,10 +6,9 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function(parsers) {
     "use strict";
     return {
-        id: "xv", label: "XV", constraintTypes: ["xv"], parse: parsers.xv,
+        id: "kropkipairs", label: "Kropki Pairs", aliases: ["kropki pairs"], constraintTypes: ["kropki"], parse: parsers.kropki,
         canGenerateFromScratch: true,
-        generateWithFullClues: true,
-        tags: ["canGenerateFromScratch", "generateWithFullClues"],
-        inputType: { categories: ["edge"], instructions: [] }
+        tags: ["canGenerateFromScratch"],
+        inputType: { categories: ["edge"], instructions: ["Click an edge to cycle through a black dot, a white dot, and no dot."] }
     };
 });

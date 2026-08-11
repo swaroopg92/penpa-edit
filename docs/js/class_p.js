@@ -7810,6 +7810,10 @@ class Puzzle {
         let submode = this.mode[this.mode.qa][edit_mode];
         let orientation = submode[2] && submode[2] !== 'R' ? [submode[2]] : [];
 
+        if ((key === "0" || key === 0) && (edit_mode === "sudoku" || this.gridtype === "sudoku")) {
+            return;
+        }
+
         // If ZXCV is disabled
         if (!UserSettings.shortcuts_enabled || force_no_shortcut) {
             var str_all = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
@@ -9693,9 +9697,19 @@ class Puzzle {
     }
 
     mouse_sudoku(x, y, num, ctrl_key = false) {
-        // if (this.point[num].type === 0) {}  // Add this line, to ignore corners and allow diagonal selection, and set type = [0, 1]
         if (this.mouse_mode === "down_left") {
-            num = this.coord_p_edgex(x, y, 0.15); // reducing the bounding box for edge cells to be less aggressive
+            if (this.battleMode || window.isBattleMode) {
+                if (this.point[num] && this.types[0].indexOf(this.point[num].type) === -1) {
+                    var centerNeighbor = (this.point[num].neighbor || []).find((c) => this.centerlist.includes(c));
+                    if (centerNeighbor !== undefined) {
+                        num = centerNeighbor;
+                    } else {
+                        return;
+                    }
+                }
+            } else {
+                num = this.coord_p_edgex(x, y, 0.15); // reducing the bounding box for edge cells to be less aggressive
+            }
             this.drawing = true;
             if (!ctrl_key) {
                 this.selection = [];

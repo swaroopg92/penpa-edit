@@ -7,6 +7,7 @@
     "use strict";
     var labels = {
         arithmetic: "Arithmetic", blocksumrelations: "Block Sum Relations", consecutive: "Consecutive",
+        consecutivepairs: "Consecutive Pairs",
         difference: "Difference", divisor: "Divisor", eitheror: "Either Or", evensumpairs: "Even Sum Pairs",
         fives: "Fives", greater: "Greater", inequality: "Inequality", lesser: "Lesser", multiples: "Multiples",
         oddsumpairs: "Odd Sum Pairs", oneortwodifferencepairs: "One or Two Difference Pairs",
@@ -21,10 +22,19 @@
     };
     return function(id) {
         if (!labels[id]) throw new Error("Unknown edge Variant Descriptor: " + id);
-        return {
+        var descriptor = {
             id: id, label: labels[id], aliases: aliases[id] || [], constraintTypes: ["edgeRelations"],
             parse: id.indexOf("diagonal") === 0 ? parsers.diagonal(id) : parsers.catalog(id),
             inputType: { categories: [id.indexOf("diagonal") === 0 ? "intersection" : "edge"], instructions: [] }
         };
+        if (id === "consecutive") {
+            descriptor.canGenerateFromScratch = true;
+            descriptor.generateWithFullClues = true;
+            descriptor.tags = ["canGenerateFromScratch", "generateWithFullClues"];
+        } else if (id === "consecutivepairs") {
+            descriptor.canGenerateFromScratch = true;
+            descriptor.tags = ["canGenerateFromScratch"];
+        }
+        return descriptor;
     };
 });
