@@ -141,7 +141,11 @@ function genericSetting(variation: Variation) {
         add("symbol", "cross", 2, ["mo_symbol_lb", "ms1", "li_cross"]);
         return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
     }
-    if (["consecutive", "evensumpairs", "oddsumpairs", "fadedkropki"].includes(variation.value)) {
+    if (variation.value === "consecutive") {
+        add("symbol", "bars_G", 2, ["mo_symbol_lb", "ms1", "ms1_bars", "li_bars", "ul_bars"]);
+        return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
+    }
+    if (["evensumpairs", "oddsumpairs", "fadedkropki"].includes(variation.value)) {
         add("symbol", "circle_SS", 2, ["mo_symbol_lb", "ms1", "ms1_circle", "li_circle_SS"]);
         return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
     }
@@ -263,7 +267,11 @@ function genericSetting(variation: Variation) {
                 : ["mo_symbol_lb", "ms3", "li_arrow_eight"]);
         return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
     }
-    if (variation.value === "consecutive" || variation.value === "evensumpairs") {
+    if (variation.value === "consecutive") {
+        add("symbol", "bars_G", 2, ["mo_symbol_lb", "ms1", "ms1_bars", "li_bars", "ul_bars"]);
+        return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
+    }
+    if (variation.value === "evensumpairs") {
         add("symbol", "circle_SS", 2, ["mo_symbol_lb", "ms1", "ms1_circle", "li_circle_SS"]);
         return { show: Array.from(new Set(show)), modeset: modes, submodeset: submodes, styleset: styles, outside: false };
     }

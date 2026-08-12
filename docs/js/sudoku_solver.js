@@ -260,6 +260,7 @@ var SudokuSolver = (function() {
                     }
                     if (event.type === "done" || event.type === "invalid" ||
                         event.type === "unsatisfiable" || event.type === "cancelled") {
+                        keepSetMode(puzzle);
                         candidateCache.conflict = event.conflict || null;
                         if (typeof puzzle !== "undefined" && puzzle) {
                             showConflict(puzzle, event.conflict);
@@ -3081,21 +3082,6 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         return digitFromEntry(puzzle[puzzle.mode.qa].number[key]);
     }
 
-    function enterSolutionSudokuMode(puzzle) {
-        puzzle.mode.pu_a = puzzle.mode.pu_a || {};
-        if (!Array.isArray(puzzle.mode.pu_a.sudoku)) {
-            puzzle.mode.pu_a.sudoku = ["1", 9];
-        }
-        puzzle.mode.pu_a.edit_mode = "sudoku";
-        puzzle.mode.pu_a.sudoku[0] = "1";
-        puzzle.mode.pu_a.sudoku[1] = 9;
-        if (puzzle.mode.qa !== "pu_a") {
-            puzzle.mode_qa("pu_a");
-        } else {
-            puzzle.mode_set("sudoku", "new", true);
-        }
-    }
-
     function beginPenpaUndoTransaction(puzzle, label) {
         if (!puzzle || !puzzle.pu_q || !puzzle.pu_q.command_undo ||
             !puzzle.pu_q_col || !puzzle.pu_q_col.command_undo) {
@@ -3175,12 +3161,12 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         }
         puzzle.mode.qa = oldQa;
         if (!changes.length && !changesS.length) {
-            enterSolutionSudokuMode(puzzle);
+            keepSetMode(puzzle);
             puzzle.redraw();
             return 0;
         }
         beginPenpaUndoTransaction(puzzle, "Solve");
-        enterSolutionSudokuMode(puzzle);
+        keepSetMode(puzzle);
         for (var i = 0; i < changes.length; i++) {
             puzzle.pu_a.number[changes[i].key] = changes[i].value;
         }
@@ -3195,11 +3181,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
     }
 
     function commitSolveOnce(puzzle, solvedBoard) {
-        var changed = applySolution(puzzle, solvedBoard);
-        if (puzzle.mode.qa !== "pu_a") {
-            puzzle.mode_qa("pu_a");
-        }
-        return changed;
+        return applySolution(puzzle, solvedBoard);
     }
 
     function checkCompletion(puzzle) {
@@ -3245,7 +3227,7 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
             return 0;
         }
         beginPenpaUndoTransaction(puzzle, "Clear Mark");
-        enterSolutionSudokuMode(puzzle);
+        keepSetMode(puzzle);
         for (var i = 0; i < keys.length; i++) {
             delete puzzle.pu_a.number[keys[i]];
         }
@@ -3512,6 +3494,128 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         return { size: size, variants: list, negative: negative, sourcePuzzle: null, seed: seed, difficulty: difficulty };
     }
 
+    function pointForCells(puzzle, cells, pointGroup) {
+        if (!puzzle || !cells || !cells.length) return null;
+        var wanted = {};
+        cells.forEach(function(cell) {
+            var key = cellKey(puzzle, cell.row, cell.col);
+            if (key !== null && key !== undefined) wanted[key] = true;
+        });
+        if (Object.keys(wanted).length !== cells.length) return null;
+
+        var centers = {};
+        var size = puzzleSize(puzzle) || SIZE;
+        for (var row = 0; row < size; row++) {
+            for (var col = 0; col < size; col++) centers[cellKey(puzzle, row, col)] = true;
+        }
+        (puzzle.centerlist || []).forEach(function(key) { centers[key] = true; });
+
+        var acceptedTypes = null;
+        if (pointGroup === "edge") {
+            acceptedTypes = puzzle.types && Array.isArray(puzzle.types[2]) ? puzzle.types[2] : [2, 3, 4];
+        } else if (pointGroup === "vertex") {
+            acceptedTypes = puzzle.types && Array.isArray(puzzle.types[1]) ? puzzle.types[1] : [1];
+        }
+        var keys = Object.keys(puzzle.point || {});
+        for (var index = 0; index < keys.length; index++) {
+            var pointKey = Number(keys[index]);
+            var point = puzzle.point[pointKey];
+            if (!point || !Array.isArray(point.neighbor)) continue;
+            if (acceptedTypes && acceptedTypes.indexOf(point.type) === -1) continue;
+            var centerNeighbors = point.neighbor.filter(function(neighbor) {
+                return centers[Number(neighbor)] || centers[neighbor];
+            });
+            if (centerNeighbors.length !== cells.length) continue;
+            if (centerNeighbors.every(function(neighbor) { return wanted[Number(neighbor)] || wanted[neighbor]; })) {
+                return pointKey;
+            }
+        }
+        return null;
+    }
+
+    function consecutiveBarDirection(cells) {
+        if (!cells || cells.length !== 2) return 1;
+        return cells[0].row === cells[1].row ? 1 : 2;
+    }
+
+    function shouldAnimateGeneration(puzzle, root) {
+        return !(puzzle && puzzle.battleMode) && !(root && root.isBattleMode);
+    }
+
+    function keepSetMode(puzzle) {
+        if (puzzle && puzzle.mode && puzzle.mode.qa !== "pu_q" && typeof puzzle.mode_qa === "function") {
+            puzzle.mode_qa("pu_q");
+        }
+    }
+
+    function undoSolverEdit(puzzle) {
+        if (!puzzle || typeof puzzle.undo !== "function") return false;
+        keepSetMode(puzzle);
+        puzzle.undo();
+        return true;
+    }
+
+    function createGenerationBoardAnimator(options) {
+        options = options || {};
+        var intervalMs = Number(options.intervalMs) || 25;
+        var random = options.random || Math.random;
+        var schedule = options.schedule || function(callback, delay) { return setTimeout(callback, delay); };
+        var cancelTimer = options.cancel || function(timer) { clearTimeout(timer); };
+        var applyCell = options.applyCell || function() {};
+        var plannedBoard = (options.initialBoard || []).map(function(row) { return row.slice(); });
+        var queue = [];
+        var timer = null;
+        var idleCallbacks = [];
+
+        function notifyIdle() {
+            if (queue.length || timer !== null) return;
+            var callbacks = idleCallbacks.splice(0);
+            callbacks.forEach(function(callback) { callback(); });
+        }
+        function tick() {
+            timer = null;
+            var change = queue.shift();
+            if (change) applyCell(change.row, change.col, change.digit);
+            if (queue.length) timer = schedule(tick, intervalMs);
+            else notifyIdle();
+        }
+        function enqueue(board, enqueueOptions) {
+            if (!Array.isArray(board)) return;
+            enqueueOptions = enqueueOptions || {};
+            if (!plannedBoard.length) plannedBoard = board.map(function(row) { return row.map(function() { return 0; }); });
+            var changes = [];
+            board.forEach(function(row, rowIndex) {
+                row.forEach(function(digit, colIndex) {
+                    var previous = plannedBoard[rowIndex] ? Number(plannedBoard[rowIndex][colIndex]) || 0 : 0;
+                    var next = Number(digit) || 0;
+                    if (previous !== next) changes.push({ row: rowIndex, col: colIndex, digit: next });
+                });
+            });
+            if (enqueueOptions.randomize) {
+                for (var index = changes.length - 1; index > 0; index--) {
+                    var other = Math.floor(random() * (index + 1));
+                    var temporary = changes[index];
+                    changes[index] = changes[other];
+                    changes[other] = temporary;
+                }
+            }
+            Array.prototype.push.apply(queue, changes);
+            plannedBoard = board.map(function(row) { return row.slice(); });
+            if (queue.length && timer === null) timer = schedule(tick, intervalMs);
+        }
+        function whenIdle(callback) {
+            if (queue.length || timer !== null) idleCallbacks.push(callback);
+            else callback();
+        }
+        function cancel() {
+            if (timer !== null) cancelTimer(timer);
+            timer = null;
+            queue = [];
+            idleCallbacks = [];
+        }
+        return { enqueue: enqueue, whenIdle: whenIdle, cancel: cancel };
+    }
+
     return {
         SIZE: SIZE,
         AUTO_RUN_LIMIT_MS: AUTO_RUN_LIMIT_MS,
@@ -3545,6 +3649,12 @@ if (variantEnabled(puzzle, "sumorproductkiller")) {
         defaultIrregularRegions: defaultIrregularRegions,
         irregularRegionIds: irregularRegionIds,
         irregularBoundaryEdges: irregularBoundaryEdges,
+        pointForCells: pointForCells,
+        consecutiveBarDirection: consecutiveBarDirection,
+        shouldAnimateGeneration: shouldAnimateGeneration,
+        keepSetMode: keepSetMode,
+        undoSolverEdit: undoSolverEdit,
+        createGenerationBoardAnimator: createGenerationBoardAnimator,
         generateWithFullClues: generateWithFullClues,
         canGenerateFromScratch: canGenerateFromScratch,
         generatePuzzleFromScratch: generatePuzzleFromScratch
@@ -3557,6 +3667,7 @@ var SudokuTools = (function() {
     var generatorTimeout = null;
     var generatorActiveRequest = null;
     var generatorPausedRequest = null;
+    var generationBoardAnimator = null;
     var solveOnceTimer = null;
     var solveOnceWorker = null;
     var solveOnceSignature = null;
@@ -3594,7 +3705,7 @@ var SudokuTools = (function() {
     }
 
     function toggleAuto() {
-        if (generatorWorker) {
+        if (generatorWorker || generationBoardAnimator || generatorActiveRequest) {
             stopGenerator("Generation stopped.");
             return;
         }
@@ -3866,6 +3977,8 @@ var SudokuTools = (function() {
     function stopGenerator(message) {
         if (generatorWorker) generatorWorker.terminate();
         generatorWorker = null;
+        if (generationBoardAnimator) generationBoardAnimator.cancel();
+        generationBoardAnimator = null;
         if (generatorTimeout) clearTimeout(generatorTimeout);
         generatorTimeout = null;
         generatorActiveRequest = null;
@@ -3885,6 +3998,8 @@ var SudokuTools = (function() {
         if (!generatorWorker || !generatorActiveRequest) return;
         generatorWorker.terminate();
         generatorWorker = null;
+        if (generationBoardAnimator) generationBoardAnimator.cancel();
+        generationBoardAnimator = null;
         if (generatorTimeout) clearTimeout(generatorTimeout);
         generatorTimeout = null;
         generatorPausedRequest = generatorActiveRequest;
@@ -3908,7 +4023,7 @@ var SudokuTools = (function() {
     }
 
     function stopWork() {
-        if (generatorWorker) {
+        if (generatorWorker || generationBoardAnimator || generatorActiveRequest) {
             stopGenerator("Generation stopped.");
             return;
         }
@@ -3925,7 +4040,47 @@ var SudokuTools = (function() {
         }
     }
 
-    function applyGeneratedPuzzle(result) {
+    function restoreGeneratedMarks(result) {
+        if (!pu || !pu.pu_q || !result || result.preserveExisting) return false;
+        var oddEvenList = result.oddEvenMarks || (result.marks && result.marks.oddEven) || [];
+        var kropkiList = result.kropkiMarks || (result.marks && result.marks.kropki) || [];
+        var consecutiveList = result.consecutiveMarks || (result.marks && result.marks.consecutive) || [];
+        var xvList = result.xvMarks || (result.marks && result.marks.xv) || [];
+        var battenburgList = result.battenburgMarks || (result.marks && result.marks.battenburg) || [];
+
+        if (!pu.pu_q.symbol) pu.pu_q.symbol = {};
+        if (!pu.pu_q.number) pu.pu_q.number = {};
+        oddEvenList.forEach(function(mark) {
+            var key = SudokuSolver.cellKey(pu, mark.cell.row, mark.cell.col);
+            pu.pu_q.symbol[key] = [3, mark.parity === "odd" ? "circle_L" : "square_L", 2];
+        });
+        kropkiList.forEach(function(mark) {
+            if (mark.kind === "none") return;
+            var key = SudokuSolver.pointForCells(pu, mark.cells, "edge");
+            if (key !== null) pu.pu_q.symbol[key] = [mark.kind === "black" ? 2 : 1, "circle_SS", 2];
+        });
+        consecutiveList.forEach(function(mark) {
+            if (mark.kind === "none") return;
+            var key = SudokuSolver.pointForCells(pu, mark.cells, "edge");
+            if (key !== null) pu.pu_q.symbol[key] = [SudokuSolver.consecutiveBarDirection(mark.cells), "bars_G", 2];
+        });
+        xvList.forEach(function(mark) {
+            if (mark.kind === "none") return;
+            var key = SudokuSolver.pointForCells(pu, mark.cells, "edge");
+            if (key !== null) pu.pu_q.number[key] = [mark.kind, 6, "5"];
+        });
+        battenburgList.forEach(function(mark) {
+            if (mark.kind === "none") return;
+            var key = SudokuSolver.pointForCells(pu, mark.cells, "vertex");
+            if (key !== null) pu.pu_q.symbol[key] = [1, "sudokuetc", 2];
+        });
+        pu.redraw();
+        return true;
+    }
+
+    function applyGeneratedPuzzle(result, options) {
+        options = options || {};
+        var boardMode = options.boardMode || "replace";
         if (!pu || !pu.pu_q) return;
         SudokuTools.autoEnabled = false;
         SudokuSolver.cancelCandidateAnalysis();
@@ -3937,7 +4092,9 @@ var SudokuTools = (function() {
         if (pu.mode && pu.mode.qa !== "pu_q" && typeof pu.mode_qa === "function") {
             pu.mode_qa("pu_q");
         }
-        if (result.preserveExisting) {
+        if (boardMode === "preserve") {
+            // The paced preview mutates only the cells that differ from the current board.
+        } else if (result.preserveExisting) {
             // Remove only playable-cell givens. Outside clues, edge labels,
             // cages, paths, symbols, and every other native Penpa mark remain.
             result.board.forEach(function(row, rowIndex) {
@@ -3957,86 +4114,14 @@ var SudokuTools = (function() {
             pu.pu_q_col.number = {};
             pu.pu_q_col.symbol = {};
         }
-        result.board.forEach(function(row, rowIndex) {
-            row.forEach(function(digit, colIndex) {
-                if (digit) pu.pu_q.number[SudokuSolver.cellKey(pu, rowIndex, colIndex)] = [digit, 1, "1"];
-            });
-        });
-        var oddEvenList = result.oddEvenMarks || (result.marks && result.marks.oddEven) || [];
-        var kropkiList = result.kropkiMarks || (result.marks && result.marks.kropki) || [];
-        var consecutiveList = result.consecutiveMarks || (result.marks && result.marks.consecutive) || [];
-        var xvList = result.xvMarks || (result.marks && result.marks.xv) || [];
-        var battenburgList = result.battenburgMarks || (result.marks && result.marks.battenburg) || [];
-
-        (!result.preserveExisting ? oddEvenList : []).forEach(function(mark) {
-            var key = SudokuSolver.cellKey(pu, mark.cell.row, mark.cell.col);
-            pu.pu_q.symbol[key] = [3, mark.parity === "odd" ? "circle_L" : "square_L", 2];
-        });
-
-        function pointForCells(cells, expectedType) {
-            if (!cells || !cells.length) return null;
-            var wantedMap = {};
-            cells.forEach(function(cell) {
-                var k = SudokuSolver.cellKey(pu, cell.row, cell.col);
-                if (k !== null && k !== undefined) wantedMap[k] = true;
-            });
-            var wantedCount = Object.keys(wantedMap).length;
-            if (wantedCount !== cells.length) return null;
-
-            var centers = {};
-            var size = SudokuSolver.puzzleSize(pu) || 9;
-            for (var r = 0; r < size; r++) {
-                for (var c = 0; c < size; c++) {
-                    centers[SudokuSolver.cellKey(pu, r, c)] = true;
-                }
-            }
-            if (Array.isArray(pu.centerlist)) {
-                pu.centerlist.forEach(function(k) { centers[k] = true; });
-            }
-
-            var keys = Object.keys(pu.point || {});
-            for (var index = 0; index < keys.length; index++) {
-                var pointKey = Number(keys[index]);
-                var point = pu.point[pointKey];
-                if (!point || !Array.isArray(point.neighbor)) continue;
-                if (expectedType !== undefined && point.type !== expectedType) continue;
-
-                var centerNeighbors = point.neighbor.filter(function(n) {
-                    return centers[Number(n)] || centers[n];
+        if (boardMode === "replace") {
+            result.board.forEach(function(row, rowIndex) {
+                row.forEach(function(digit, colIndex) {
+                    if (digit) pu.pu_q.number[SudokuSolver.cellKey(pu, rowIndex, colIndex)] = [digit, 1, "1"];
                 });
-                if (centerNeighbors.length !== wantedCount) continue;
-
-                var matchAll = centerNeighbors.every(function(n) {
-                    return wantedMap[Number(n)] || wantedMap[n];
-                });
-                if (matchAll) return pointKey;
-            }
-            return null;
+            });
         }
-
-        if (!pu.pu_q.symbol) pu.pu_q.symbol = {};
-        if (!pu.pu_q.number) pu.pu_q.number = {};
-
-        (!result.preserveExisting ? kropkiList : []).forEach(function(mark) {
-            if (mark.kind === "none") return;
-            var key = pointForCells(mark.cells, 2);
-            if (key !== null) pu.pu_q.symbol[key] = [mark.kind === "black" ? 2 : 1, "circle_SS", 2];
-        });
-        (!result.preserveExisting ? consecutiveList : []).forEach(function(mark) {
-            if (mark.kind === "none") return;
-            var key = pointForCells(mark.cells, 2);
-            if (key !== null) pu.pu_q.symbol[key] = [1, "bars_G", 2];
-        });
-        (!result.preserveExisting ? xvList : []).forEach(function(mark) {
-            if (mark.kind === "none") return;
-            var key = pointForCells(mark.cells, 2);
-            if (key !== null) pu.pu_q.number[key] = [mark.kind, 6, "5"];
-        });
-        (!result.preserveExisting ? battenburgList : []).forEach(function(mark) {
-            if (mark.kind === "none") return;
-            var key = pointForCells(mark.cells, 1);
-            if (key !== null) pu.pu_q.symbol[key] = [1, "sudokuetc", 2];
-        });
+        restoreGeneratedMarks(result);
         // For negative-constraint variants, all edges were exhaustively marked during
         // generation. The solver's readConstraints must expand undotted/unmarked edges
         // with "none" entries so the round-trip uniqueness check uses the same
@@ -4067,7 +4152,7 @@ var SudokuTools = (function() {
         }
         setToolbarState();
         pu.redraw();
-        try {
+        if (!options.skipFinalize) try {
             var displayedBoard = SudokuSolver.readBoard(pu, false);
             var displayedConstraints = SudokuSolver.readConstraints(pu);
             var displayedAnswers = SudokuCSPRuntime.createProblem(displayedBoard, displayedConstraints).enumerateAnswers(2);
@@ -4080,7 +4165,7 @@ var SudokuTools = (function() {
         } catch (rtErr) {
             console.warn("[SudokuSolver] Round-trip verification note:", rtErr);
         }
-        SudokuSolver.primeUniqueSolution(pu, result.solution);
+        if (!options.skipFinalize) SudokuSolver.primeUniqueSolution(pu, result.solution);
     }
 
     function prepareBattleGrid(size) {
@@ -4172,6 +4257,8 @@ var SudokuTools = (function() {
         var genMinimal = difficulty ? difficulty === "hard" : (window.UserSettings ? (window.UserSettings.generator_difficulty_minimal !== false) : true);
         var genExtraClues = difficulty === "easy" ? (size === 6 ? 8 : 12) : difficulty === "normal" ? (size === 6 ? 4 : 8) : 0;
         var genCluesOnMarks = window.UserSettings ? (window.UserSettings.generator_clues_on_marks !== false) : true;
+        var animatePreference = !window.SudokuSolverPreferences || window.SudokuSolverPreferences.animateDigits !== false;
+        var animateGeneration = animatePreference && SudokuSolver.shouldAnimateGeneration(pu, window);
         var symLabel = genSymmetry === 'none' ? 'no symmetry' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
         document.body.classList.add("sudoku-solver-running");
         var generatorButton = byId("sudoku_auto_solver");
@@ -4185,6 +4272,62 @@ var SudokuTools = (function() {
             label + " puzzle with " + symLabel + (genMinimal ? ", minimal clues" : ", medium clues (+8)") +
             (genCluesOnMarks ? "" : ", no clues on marks") + ", then proving uniqueness with CSP. Note: Generator will halt after 20 seconds.\n",
             { attempt: 0, total: Math.ceil(size * size / 2) });
+
+        function previewGeneratedBoard(progress) {
+            if (!animateGeneration || !progress || !progress.board || typeof pu === "undefined" || !pu) return;
+            if (!generationBoardAnimator) {
+                var preview = Object.assign({}, progress, {
+                    variants: variants.slice(),
+                    preserveExisting: !!(sourcePuzzle && sourcePuzzle.preserveExisting)
+                });
+                applyGeneratedPuzzle(preview, {
+                    boardMode: sourcePuzzle ? "preserve" : "clear",
+                    skipFinalize: true
+                });
+                generationBoardAnimator = SudokuSolver.createGenerationBoardAnimator({
+                    initialBoard: SudokuSolver.readBoard(pu, false),
+                    intervalMs: 25,
+                    applyCell: function(row, col, digit) {
+                        var key = SudokuSolver.cellKey(pu, row, col);
+                        if (digit) pu.pu_q.number[key] = [digit, 1, "1"];
+                        else delete pu.pu_q.number[key];
+                        pu.redraw();
+                    }
+                });
+            }
+            generationBoardAnimator.enqueue(progress.board, { randomize: progress.step === "3a" });
+        }
+
+        function releaseGeneratorWorker() {
+            if (generatorWorker) generatorWorker.terminate();
+            generatorWorker = null;
+            if (generatorTimeout) clearTimeout(generatorTimeout);
+            generatorTimeout = null;
+        }
+
+        function finishGeneratedPuzzle(result) {
+            releaseGeneratorWorker();
+            previewGeneratedBoard(result);
+            var finish = function() {
+                try {
+                    applyGeneratedPuzzle(result);
+                    document.dispatchEvent(new CustomEvent("sudoku-generated", { detail: result }));
+                    var symmetryDescription = genSymmetry === "none" ? "no symmetry constraint" :
+                        genSymmetry === "all_axis" ? "all-axis symmetry" : "180-degree rotational symmetry";
+                    stopGenerator();
+                    generatorLog("Generated - unique", "Generated " +
+                        (result.preserveExisting ? "digit-minimal " : (genMinimal ? "minimal " : "medium ")) + result.givens + "-given " + label +
+                        (result.preserveExisting ? " puzzle while preserving its existing variant clues. No rotational digit pair" :
+                            " puzzle with " + symmetryDescription + ". No clue pair") + " can be removed while preserving uniqueness. Total runtime: " +
+                        ((Date.now() - startedAt) / 1000).toFixed(3) + " s.");
+                } catch (error) {
+                    stopGenerator("Generator validation failed: " + error.message);
+                    document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: error.message }));
+                }
+            };
+            if (generationBoardAnimator) generationBoardAnimator.whenIdle(finish);
+            else finish();
+        }
         if (typeof Worker === "undefined") {
             try {
                 var direct = SudokuGenerator.generate({
@@ -4200,22 +4343,11 @@ var SudokuTools = (function() {
                     seed: seed,
                     onProgress: function(p) {
                         generatorLog("Generating", p && p.message ? p.message : null, p);
-                        if (p && p.board && typeof pu !== "undefined" && pu) {
-                            applyGeneratedPuzzle(p);
-                            pu.redraw();
-                        }
+                        previewGeneratedBoard(p);
                         document.dispatchEvent(new CustomEvent("sudoku-generation-progress", { detail: p }));
                     }
                 });
-                stopGenerator();
-                applyGeneratedPuzzle(direct);
-                document.dispatchEvent(new CustomEvent("sudoku-generated", { detail: direct }));
-                var symDesc = genSymmetry === 'none' ? 'no symmetry constraint' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
-                generatorLog("Generated · unique", "Generated " +
-                    (direct.preserveExisting ? "digit-minimal " : (genMinimal ? "minimal " : "medium ")) + direct.givens + "-given " + label +
-                    (direct.preserveExisting ? " puzzle while preserving its existing variant clues. No rotational digit pair" :
-                        " puzzle with " + symDesc + ". No clue pair") + " can be removed while preserving uniqueness. Total runtime: " +
-                    ((Date.now() - startedAt) / 1000).toFixed(3) + " s.");
+                finishGeneratedPuzzle(direct);
             } catch (error) {
                 stopGenerator("Generator failed: " + error.message);
                 document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: error.message }));
@@ -4227,27 +4359,10 @@ var SudokuTools = (function() {
             if (event.data.type === "progress") {
                 var p = event.data.progress;
                 generatorLog("Generating", p && p.message ? p.message : null, p);
-                if (p && p.board && typeof pu !== "undefined" && pu) {
-                    applyGeneratedPuzzle(p);
-                    pu.redraw();
-                }
+                previewGeneratedBoard(p);
                 document.dispatchEvent(new CustomEvent("sudoku-generation-progress", { detail: p }));
             } else if (event.data.type === "result") {
-                var result = event.data.result;
-                stopGenerator();
-                try {
-                    applyGeneratedPuzzle(result);
-                    document.dispatchEvent(new CustomEvent("sudoku-generated", { detail: result }));
-                    var symDescW = genSymmetry === 'none' ? 'no symmetry constraint' : genSymmetry === 'all_axis' ? 'all-axis symmetry' : '180° rotational symmetry';
-                    generatorLog("Generated · unique", "Generated " +
-                        (result.preserveExisting ? "digit-minimal " : (genMinimal ? "minimal " : "medium ")) + result.givens + "-given " + label +
-                        (result.preserveExisting ? " puzzle while preserving its existing variant clues. No rotational digit pair" :
-                            " puzzle with " + symDescW + ". No clue pair") + " can be removed while preserving uniqueness. Total runtime: " +
-                        ((Date.now() - startedAt) / 1000).toFixed(3) + " s.");
-                } catch (error) {
-                    stopGenerator("Generator validation failed: " + error.message);
-                    document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: error.message }));
-                }
+                finishGeneratedPuzzle(event.data.result);
             } else if (event.data.type === "error") {
                 stopGenerator("Generator failed: " + event.data.message);
                 document.dispatchEvent(new CustomEvent("sudoku-generation-error", { detail: event.data.message }));
@@ -5682,7 +5797,7 @@ var SudokuTools = (function() {
                 setToolbarState();
                 if (!removed && pu) pu.redraw();
             },
-            sudoku_undo: function() { pu.undo(); },
+            sudoku_undo: function() { SudokuSolver.undoSolverEdit(pu); },
             sudoku_redo: function() { pu.redo(); },
             sudoku_keypad: function() {
                 UserSettings.panel_shown = !UserSettings.panel_shown;
@@ -5690,8 +5805,7 @@ var SudokuTools = (function() {
             sudoku_auto_solver: toggleAuto,
             sudoku_solve_once: solveOnce,
             sudoku_solve_clear: function() {
-                var removed = SudokuSolver.clearAutoSolution(pu);
-                if (!removed && pu) pu.redraw();
+                SudokuSolver.undoSolverEdit(pu);
             },
             sudoku_load_test_board: loadTestBoard,
             sudoku_kropki_negative: toggleKropkiNegative,
@@ -5742,6 +5856,7 @@ var SudokuTools = (function() {
         },
         generateWithFullClues: SudokuSolver.generateWithFullClues,
         prepareBattleGrid: prepareBattleGrid,
+        restoreGeneratedMarks: restoreGeneratedMarks,
         setBattleDigit: setBattleDigit,
         focusBattleCell: focusBattleCell,
         pauseGenerator: pauseGenerator,

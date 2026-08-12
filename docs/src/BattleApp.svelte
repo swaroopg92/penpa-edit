@@ -16,7 +16,10 @@
     6: ["classic", "diagonal", "anti king", "anti knight", "non consecutive", "kropki", "xv", "consecutive", "battenburg", "disjoint", "mirror", "symmetric unequal"],
     9: ["classic", "diagonal", "anti diagonal", "anti king", "anti knight", "non consecutive", "kropki", "xv", "consecutive", "battenburg", "disjoint", "windoku", "mirror", "symmetric unequal"],
   };
-  $: variantOptions = battleVariantIdsBySize[gridSize].map((value) => ({
+  const basicBattleVariantIds = new Set(["classic", "diagonal", "xv", "kropki", "consecutive", "anti knight", "anti king", "windoku"]);
+  $: variantOptions = battleVariantIdsBySize[gridSize]
+    .filter((value) => advancedVariants || basicBattleVariantIds.has(value))
+    .map((value) => ({
     value,
     label: value === "classic" ? "Classic" : variationByValue.get(value)?.name || (value.charAt(0).toUpperCase() + value.slice(1)),
   })).sort((a, b) => {
@@ -42,6 +45,7 @@
   let difficulty: Difficulty = "easy";
   let selectedVariants: string[] = [];
   let selectedVariant = "classic";
+  let advancedVariants = false;
   let landingMode: "create" | null = null;
   let room: BattleRoom | null = null;
   let players: BattlePlayer[] = [];
@@ -127,6 +131,11 @@
   function chooseGridSize(size: 6 | 9) {
     gridSize = size;
     if (!battleVariantIdsBySize[size].includes(selectedVariant)) chooseVariant("classic");
+  }
+
+  function toggleAdvancedVariants(enabled: boolean) {
+    advancedVariants = enabled;
+    if (!enabled && !basicBattleVariantIds.has(selectedVariant)) chooseVariant("classic");
   }
 
   function syncBattleReveal(visible: boolean) {
@@ -222,11 +231,13 @@
         const generateFn = frame.SudokuTools.generatePuzzleFromScratch || frame.SudokuTools.generatePuzzle;
         generateFn(room?.grid_size || gridSize, roomVariants, null, Date.now(), roomDifficulty);
       });
+      frame.SudokuTools.restoreGeneratedMarks?.(result);
       const duplicate = String(frame.pu.maketext_duplicate());
       const hashIndex = duplicate.indexOf("#");
       if (hashIndex < 0) throw new Error("Could not serialize the generated board.");
       const variantParam = `&variants=${encodeURIComponent(roomVariants.join(","))}`;
-      return { result, puzzleHash: duplicate.slice(hashIndex) + variantParam };
+      const puzzleHash = duplicate.slice(hashIndex).replace(/&variants=[^&]*/g, "") + variantParam;
+      return { result, puzzleHash };
     } finally {
       generating = false; clearInterval(generationClock);
     }
@@ -671,6 +682,7 @@
           <div class="choice-row"><span>Grid</span><button class:active={gridSize === 6} on:click={() => chooseGridSize(6)}>6×6</button><button class:active={gridSize === 9} on:click={() => chooseGridSize(9)}>9×9</button></div>
           <div class="choice-row difficulty"><span>Difficulty</span>{#each ["easy", "normal", "hard"] as level}<button class:active={difficulty === level} on:click={() => difficulty = level as Difficulty}>{level}</button>{/each}</div>
           <label class="variant-select"><span>Variants</span><select value={selectedVariant} on:change={(event) => chooseVariant(event.currentTarget.value)}>{#each variantOptions as option}<option value={option.value}>{option.label}</option>{/each}</select></label>
+          <label class="advanced-toggle"><span>Advanced</span><input type="checkbox" checked={advancedVariants} on:change={(event) => toggleAdvancedVariants(event.currentTarget.checked)} /></label>
           <button class="primary wide" disabled={busy} on:click={createRoom}>{busy ? "Creating…" : "Create room"}</button>
         {/if}
       </div>
@@ -807,6 +819,7 @@
   @media(max-width:700px){main{padding:8px}header{margin-bottom:7px}h1{font-size:23px}.lobby-layout{grid-template-columns:1fr}.room-shell{height:auto;min-height:calc(100dvh - 48px);gap:6px}.room-bar{padding:6px 8px;gap:7px}.room-meta{display:none}.room-bar .identity strong{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mobile-score-strip{display:flex;align-items:center;gap:8px;min-height:30px}.mobile-score-strip span{display:flex;align-items:center;gap:3px}.mobile-score-strip i{width:8px;height:8px;border-radius:50%;background:var(--player-color)}.mobile-score-strip button{margin-left:auto}.players{display:none;gap:4px}.players.mobile-expanded{display:flex}.player{min-width:0;flex:1 0 78px;max-width:120px;padding:4px 5px;border-left-width:4px;font-size:11px}.player i{display:none}.player span{max-width:70px}.battle-actions{display:grid;grid-template-columns:repeat(2,1fr)}.battle-actions button{padding:7px 5px;font-size:12px}.play-layout{display:flex;flex-direction:column;flex:1}.layout-balance{display:none}.board-stage{height:min(58dvh,620px);flex:1 1 390px;border-radius:8px}.variants{grid-template-columns:1fr}.difficulty button{padding-inline:8px}}
 
   .landing-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.landing-choices button{min-height:54px}.variant-select{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:7px;margin-top:14px;color:#586875;font-size:13px}.variant-select select{min-width:0;padding:9px 12px;border:1px solid #bdc9d2;border-radius:8px;background:#fff;color:#23313d;font-size:13px;cursor:pointer}.variant-select select:hover{border-color:#2582b8}main.dark .variant-select select{border-color:#435360;background:#1c2832;color:#e1e8ed}
+  .advanced-toggle{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:7px;margin-top:10px;color:#586875;font-size:13px}.advanced-toggle input{justify-self:start;margin:0;accent-color:#1688ca}
   main.in-room{height:100dvh;min-height:0;padding:10px;overflow:hidden}.room-shell{width:100%;max-width:1500px;height:100%;min-height:0}.mobile-room-summary{display:none}.room-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:10px;height:100%;min-height:0}.room-sidebar{display:flex;flex-direction:column;gap:6px;min-height:0;padding:10px;border:1px solid #d6dee4;border-radius:12px;background:#fff;overflow:hidden}.sidebar-title,.room-code{display:flex;flex-direction:column;gap:2px}.sidebar-title small,.room-code small{color:#71808c}.room-code strong{font-size:20px;letter-spacing:.08em}.room-sidebar .identity{margin:0}.variant-rules-section{max-height:120px;overflow-y:auto;flex-shrink:1}.player-section{flex-shrink:0}.room-sidebar .players{display:flex;flex-direction:column;gap:6px;overflow-y:auto}.room-sidebar .player{width:100%;min-width:0}.desktop-timer{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;text-align:center;display:block}.battle-actions{display:flex;flex-direction:column;margin-top:auto;flex-shrink:0}.danger{border-color:#d13b32!important;background:#b42318!important;color:#fff!important}
   .sidebar-divider{border:0;border-top:1px solid #e2e8f0;margin:2px 0}main.dark .sidebar-divider{border-top-color:#334155}
   .play-area{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;min-width:0;min-height:0}.board-stage{height:100%;min-width:0}.right-controls{display:flex;flex-direction:column;gap:8px;width:190px;height:100%;min-height:0}.right-controls .battle-input-panel{margin-top:auto}

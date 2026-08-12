@@ -14,8 +14,10 @@
   type SolverTimeLimit = "60" | "120" | "none";
   const solverTimeLimitStorageKey = "sudotoku-solver-time-limit";
   const solverToastStorageKey = "sudotoku-solver-toast";
+  const solverAnimateDigitsStorageKey = "sudotoku-solver-animate-digits";
   let solverTimeLimit: SolverTimeLimit = "60";
   let solverToastsEnabled = true;
+  let solverAnimateDigits = true;
 
   function publishSolverPreferences() {
     if (typeof window === "undefined") return;
@@ -23,6 +25,7 @@
       timeLimitMs:
         solverTimeLimit === "none" ? null : Number(solverTimeLimit) * 1000,
       toast: solverToastsEnabled,
+      animateDigits: solverAnimateDigits,
     };
   }
 
@@ -34,6 +37,8 @@
       }
       solverToastsEnabled =
         window.localStorage.getItem(solverToastStorageKey) !== "off";
+      solverAnimateDigits =
+        window.localStorage.getItem(solverAnimateDigitsStorageKey) !== "off";
     } catch {
       // Keep defaults when browser storage is unavailable.
     }
@@ -54,6 +59,16 @@
     solverToastsEnabled = enabled;
     try {
       window.localStorage.setItem(solverToastStorageKey, enabled ? "on" : "off");
+    } catch {
+      // The preference still applies for the current session.
+    }
+    publishSolverPreferences();
+  }
+
+  function updateSolverAnimateDigits(enabled: boolean) {
+    solverAnimateDigits = enabled;
+    try {
+      window.localStorage.setItem(solverAnimateDigitsStorageKey, enabled ? "on" : "off");
     } catch {
       // The preference still applies for the current session.
     }
@@ -563,9 +578,13 @@
       toolPanelOptions = [{ value: "X", label: "X", submode: "cross", sym: "cross", num: 1 }];
     } else if (variant === "termination") {
       toolPanelOptions = [{ value: "0", label: "0" }];
+    } else if (variant === "consecutive" || variant === "consecutivepairs") {
+      toolPanelOptions = [
+        { value: "vertical", input: "1", label: "Vertical bar", submode: "bars_G", sym: "bars_G", num: 1 },
+        { value: "horizontal", input: "2", label: "Horizontal bar", submode: "bars_G", sym: "bars_G", num: 2 },
+      ];
     } else if (
-      (variant === "consecutive" ||
-        variant === "evensumpairs" ||
+      (variant === "evensumpairs" ||
         variant === "oddsumpairs" ||
         variant === "fadedkropki" ||
         variant === "oneortwodifferencepairs") &&
@@ -3161,6 +3180,14 @@
               <option value="on">On</option>
               <option value="off">Off</option>
             </select>
+          </label>
+          <label>
+            <span>Animate digits</span>
+            <input
+              type="checkbox"
+              checked={solverAnimateDigits}
+              on:change={(e) => updateSolverAnimateDigits(e.currentTarget.checked)}
+            />
           </label>
         </div>
         <div class="studio-modal-actions">

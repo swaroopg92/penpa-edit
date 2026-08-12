@@ -664,8 +664,7 @@ test("applies a solution to a legacy puzzle mode without Sudoku settings", funct
     const changed = SudokuSolver.applySolution(puzzle, solution);
 
     assert.equal(changed, 81);
-    assert.equal(puzzle.mode.qa, "pu_a", "Solve Once leaves Penpa in Solution mode for share links");
-    assert.deepEqual(puzzle.mode.pu_a.sudoku, ["1", 9]);
+    assert.equal(puzzle.mode.qa, "pu_q", "Solve Once keeps Penpa in Set mode");
     assert.deepEqual(puzzle.pu_a.number[28], ["5", 9, "1"]);
 });
 
@@ -1106,6 +1105,124 @@ test("prunes generated puzzles to rotational pair minimality", function() {
         const withoutXV = { ...generated.constraints, xv: [] };
         assert.notEqual(SudokuCSP.createProblem(generated.board, withoutXV).enumerateAnswers(2).length, 1);
     }
+});
+
+test("generated XV marks resolve both vertical and horizontal Penpa edge points", function() {
+    const puzzle = variantPuzzle("xv");
+    puzzle.point = {
+        1000: { type: 2, neighbor: [28, 41] },
+        1001: { type: 3, neighbor: [28, 29] }
+    };
+
+    assert.equal(SudokuSolver.pointForCells(puzzle,
+        [{ row: 0, col: 0 }, { row: 1, col: 0 }], "edge"), 1000);
+    assert.equal(SudokuSolver.pointForCells(puzzle,
+        [{ row: 0, col: 0 }, { row: 0, col: 1 }], "edge"), 1001);
+});
+
+test("generated XV marks survive the Penpa round trip and preserve the generated solution", function() {
+    const generated = SudokuGenerator.generate({ size: 6, variants: ["classic", "xv"], seed: 7728017 });
+    const nx0 = 10;
+    const puzzle = {
+        nx: 6, ny: 6, nx0, ny0: nx0, space: [0, 0, 0, 0],
+        activeSudokuVariants: ["classic", "xv"],
+        xvNegativeConstraint: true,
+        centerlist: [], point: {},
+        pu_q: { number: {}, numberS: {}, symbol: {}, surface: {}, wall: {} }
+    };
+    const cellKey = (row, col) => (row + 2) * nx0 + col + 2;
+    for (let row = 0; row < 6; row++) for (let col = 0; col < 6; col++) {
+        puzzle.centerlist.push(cellKey(row, col));
+    }
+    let pointKey = 1000;
+    for (let row = 0; row < 6; row++) for (let col = 0; col < 6; col++) {
+        if (row < 5) puzzle.point[pointKey++] = { type: 2, neighbor: [cellKey(row, col), cellKey(row + 1, col)] };
+        if (col < 5) puzzle.point[pointKey++] = { type: 3, neighbor: [cellKey(row, col), cellKey(row, col + 1)] };
+    }
+    generated.xvMarks.forEach(function(mark) {
+        if (mark.kind === "none") return;
+        const key = SudokuSolver.pointForCells(puzzle, mark.cells, "edge");
+        assert.notEqual(key, null);
+        puzzle.pu_q.number[key] = [mark.kind, 6, "5"];
+    });
+
+    const parsed = SudokuSolver.readConstraints(puzzle);
+    const expectedMarked = generated.xvMarks.filter((mark) => mark.kind !== "none");
+    assert.equal(parsed.xv.filter((mark) => mark.kind !== "none").length, expectedMarked.length);
+    const answers = SudokuCSP.createProblem(generated.board, parsed).enumerateAnswers(2);
+    assert.equal(answers.length, 1);
+    assert.deepEqual(answers[0], generated.solution);
+});
+
+test("generation board animator places and removes one digit every 25ms", function() {
+    const scheduled = [];
+    const applied = [];
+    const animator = SudokuSolver.createGenerationBoardAnimator({
+        initialBoard: [[0, 0]],
+        schedule: function(callback, delay) {
+            scheduled.push({ callback, delay });
+            return scheduled.length;
+        },
+        cancel: function() {},
+        applyCell: function(row, col, digit) { applied.push([row, col, digit]); }
+    });
+
+    animator.enqueue([[4, 7]]);
+    animator.enqueue([[0, 7]]);
+    assert.equal(scheduled.length, 1);
+    assert.equal(scheduled[0].delay, 25);
+
+    scheduled.shift().callback();
+    assert.deepEqual(applied, [[0, 0, 4]]);
+    assert.equal(scheduled[0].delay, 25);
+    scheduled.shift().callback();
+    assert.deepEqual(applied, [[0, 0, 4], [0, 1, 7]]);
+    scheduled.shift().callback();
+    assert.deepEqual(applied, [[0, 0, 4], [0, 1, 7], [0, 0, 0]]);
+});
+
+test("generation board animator uses 25ms ticks and randomizes the initial full grid", function() {
+    const scheduled = [];
+    const applied = [];
+    const animator = SudokuSolver.createGenerationBoardAnimator({
+        initialBoard: [[0, 0, 0]],
+        intervalMs: 25,
+        random: function() { return 0; },
+        schedule: function(callback, delay) { scheduled.push({ callback, delay }); return scheduled.length; },
+        cancel: function() {},
+        applyCell: function(row, col, digit) { applied.push([row, col, digit]); }
+    });
+    animator.enqueue([[1, 2, 3]], { randomize: true });
+    assert.equal(scheduled[0].delay, 25);
+    while (scheduled.length) scheduled.shift().callback();
+    assert.deepEqual(applied.map((change) => change[1]), [1, 2, 0]);
+});
+
+test("battle generation bypasses the board animator", function() {
+    assert.equal(SudokuSolver.shouldAnimateGeneration({ battleMode: true }, {}), false);
+    assert.equal(SudokuSolver.shouldAnimateGeneration({}, { isBattleMode: true }), false);
+    assert.equal(SudokuSolver.shouldAnimateGeneration({}, {}), true);
+});
+
+test("Consecutive generation returns persistent orientation-aware bars", function() {
+    const generated = SudokuGenerator.generate({ size: 6, variants: ["classic", "consecutive"], seed: 31 });
+    assert.ok(generated.consecutiveMarks.length > 0);
+    generated.consecutiveMarks.filter((mark) => mark.kind !== "none").forEach(function(mark) {
+        const expected = mark.cells[0].row === mark.cells[1].row ? 1 : 2;
+        assert.equal(SudokuSolver.consecutiveBarDirection(mark.cells), expected);
+    });
+});
+
+test("solver undo uses the Set-layer history and remains redoable", function() {
+    const calls = [];
+    const puzzle = {
+        mode: { qa: "pu_a" },
+        mode_qa: function(mode) { this.mode.qa = mode; calls.push(["mode", mode]); },
+        undo: function() { calls.push(["undo", this.mode.qa]); }
+    };
+    SudokuSolver.undoSolverEdit(puzzle);
+    assert.deepEqual(calls, [["mode", "pu_q"], ["undo", "pu_q"]]);
+    assert.equal(puzzle.mode.qa, "pu_q");
 });
 
 test("can complete an existing grid before symmetric minimal pruning", function() {

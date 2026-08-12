@@ -7988,7 +7988,8 @@ class Puzzle {
         } else if (edit_mode === "symbol") {
             if (str_num.indexOf(key) != -1) {
                 const symbolname = this.mode[this.mode.qa].symbol[0];
-                if (this.activeSudokuVariant === "teneleven" && symbolname === "bars_G" && this.isKropkiEdge(this.cursol)) {
+                if ((this.activeSudokuVariant === "teneleven" || this.consecutive_mode) &&
+                    symbolname === "bars_G" && this.isKropkiEdge(this.cursol)) {
                     const edgeCells = this.point[this.cursol].neighbor
                         .filter((cell) => this.centerlist.includes(cell));
                     // The bar follows the shared edge: vertical between cells in
@@ -9866,10 +9867,30 @@ class Puzzle {
         return true;
     }
 
-    cycleConsecutiveDot(num) {
+    consecutiveBarDirection(num) {
+        if (!this.isKropkiEdge(num)) return 1;
+        let edgeCells = this.point[num].neighbor.filter((cell) => this.centerlist.includes(cell));
+        // Left/right cells share a vertical edge; top/bottom cells share a horizontal edge.
+        return this.point[edgeCells[0]].y === this.point[edgeCells[1]].y ? 1 : 2;
+    }
+
+    cycleConsecutiveBar(num) {
         if (!this.isKropkiEdge(num)) {
             return false;
         }
+        let current = this[this.mode.qa].symbol[num];
+        let direction = this.consecutiveBarDirection(num);
+        this.undoredo_counter++;
+        if (!current || current[1] !== "bars_G" || current[0] !== direction) {
+            this.set_value("symbol", num, [direction, "bars_G", 2], null);
+        } else {
+            this.remove_value("symbol", num, true);
+        }
+        return true;
+    }
+
+    cycleConsecutiveDot(num) {
+        if (!this.isKropkiEdge(num)) return false;
         let current = this[this.mode.qa].symbol[num];
         this.undoredo_counter++;
         if (!current || current[1] !== "circle_SS" || current[0] !== 1) {
@@ -9911,8 +9932,8 @@ class Puzzle {
                 this.redraw();
                 return;
             }
-            if (this.consecutive_mode && this.mode[this.mode.qa].symbol[0] === "circle_SS") {
-                this.cycleConsecutiveDot(num);
+            if (this.consecutive_mode && this.mode[this.mode.qa].symbol[0] === "bars_G") {
+                this.cycleConsecutiveBar(num);
                 this.redraw();
                 return;
             }

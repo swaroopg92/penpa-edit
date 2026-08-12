@@ -227,6 +227,15 @@ const penpa_constraints = {
             "submodeset": ["1", "circle_SS"],
             "styleset": ["", ""]
         },
+        "consecutive": {
+            "show": ["mo_surface_lb",
+                "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",
+                "mo_symbol_lb", "ms1", "ms1_bars", "li_bars", "ul_bars"
+            ],
+            "modeset": ["sudoku", "symbol"],
+            "submodeset": ["1", "bars_G"],
+            "styleset": ["", ""]
+        },
         "consecutivepairs": {
             "show": ["mo_surface_lb",
                 "mo_sudoku_lb", "sub_sudoku1_lb", "sub_sudoku2_lb", "sub_sudoku3_lb",

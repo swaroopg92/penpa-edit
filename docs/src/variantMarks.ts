@@ -97,7 +97,10 @@ export function inferredMarkChoice(variation: Variation): VariantMarkChoice {
         return { position: "outside", mark: "text" };
     }
     if (["productkiller", "solokiller"].includes(variation.value)) return { position: "center", mark: "cage" };
-    if (variation.value === "consecutive" || variation.value === "evensumpairs") {
+    if (variation.value === "consecutive") {
+        return { position: "edge", mark: "bars" };
+    }
+    if (variation.value === "evensumpairs") {
         return { position: "edge", mark: "circle" };
     }
     const multiSignals = [

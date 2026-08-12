@@ -10696,6 +10696,7 @@ var SudokuGenerator = (function() {
             oddEvenMarks: marks.oddEven,
             kropkiMarks: marks.kropki,
             xvMarks: marks.xv,
+            consecutiveMarks: marks.consecutive,
             battenburgMarks: marks.battenburg,
             preserveExisting: options.preserveExisting === true,
             givens: givens,
