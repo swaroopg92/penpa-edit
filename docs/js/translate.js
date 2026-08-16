@@ -472,6 +472,11 @@ function trans() {
             EN: "Automatically Shorten with TinyURL",
             ZH: "自动使用TinyURL缩短链接"
         },
+        "warn_long_links_chk_lb": {
+            EN: 'Warn on Very Long Links',
+            JP: '非常に長いリンクについて警告してください',
+            ZH: '警告：关于非常长的链接'
+        },
         "filename_lb": {JP: "ファイル名：", EN: "File name:", ZH: "文件名："},
         "extend_lb": {JP: "拡張出力", EN: "Extended Output", ZH: "输出扩展"},
         "save3texttitle": {
@@ -643,6 +648,7 @@ const PenpaText = {
         'lb_settings_surface_second_orange',
         'lb_settings_surface_second_purple',
         'lb_settings_surface_second_brown',
+        'lb_settings_warn_long_links',
         'lb_settings_tools',
         'lb_settings_custom_colors',
         'lb_settings_floating_panel',
@@ -831,6 +837,7 @@ const PenpaText = {
         lb_settings_surface_second_orange: {EN: 'Orange', JP: '橙', ZH: '橙'},
         lb_settings_surface_second_purple: {EN: 'Purple', JP: '紫', ZH: '紫'},
         lb_settings_surface_second_brown: {EN: 'Brown', JP: '茶', ZH: '棕'},
+        lb_settings_warn_long_links: {EN: 'Warn on Very Long Links', JP: '非常に長いリンクについて警告してください', ZH: '警告：关于非常长的链接'},
         lb_settings_tools: {EN: 'Tools', JP: '機能', ZH: '工具'},
         lb_settings_custom_colors: {EN: 'Custom Colors (Beta):', JP: '色の設定', ZH: '自定义颜色'},
         lb_settings_floating_panel: {EN: 'Floating Panel:', JP: 'パネル', ZH: '浮窗面板'},
@@ -1154,6 +1161,11 @@ const PenpaText = {
             EN: 'In case of \"URL too long Error\". Type/Paste Penpa-edit URL here and click on Load button. You can also load puzz.link puzzles here',
             JP: "URLが長すぎるエラーの時はここに入力。puzz.linkの一部のリンクにも対応。",
             ZH: '如果出现“链接过长”错误，可在此处输入/粘贴Penpa-edit链接并点击加载按钮。也可以在此处加载puzz.link谜题。'
+        },
+        long_link_warning: {
+            EN: 'Your link may be too long to load normally. In case of \"URL too long Error\", open Penpa, click \"Load\", and type/paste the URL into the box.',
+            JP: "リンクが長すぎて通常読み込めないかもしれません。「URLが長すぎるエラー」が出た場合は、Penpaを開き、「読み込み」をクリックし、URLを入力してボックスに貼り付けてください。",
+            ZH: '你的链接可能太长，无法正常加载。如果出现"URL 太长错误"，打开Penpa，点击"加载"，然后输入并粘贴URL到框里。'
         },
 
         "answer_check_shading exact color": {

@@ -22,6 +22,25 @@ function deleteCookie(name) {
     setCookie(name, '', -1);
 }
 
+/**
+ * Helper that attempts to parse the value as a boolean flag (true/false) to make the settings
+ * code more concise.
+ *
+ * @param {any} value
+ */
+function parseBooleanish(value) {
+    if (!value) { return false; }
+
+    if (typeof value === 'string') {
+        if (value === "true" || value === "1") { return true; }
+        if (value === "false" || value === "0" || value == "") { return false; }
+    } else if (typeof value === "number") {
+        return value > 0;
+    }
+
+    return Boolean(value);
+}
+
 const UserSettings = {
     // Cookie Expiry Constant
     _expDate: 2147483647,
@@ -417,6 +436,24 @@ const UserSettings = {
         return this._shorten_links;
     },
 
+    /** @private Stored value for warn_long_links setting. */
+    _warn_long_links: true,
+    /**
+     * When enabled, warn the user that the generated link may be too long and cause "URI too long"
+     * error when attempting to visit as normal. Infrequent/new Penpa users may not know that this
+     * issue can happen and requires working around via the "Load" button.
+     *
+     * @param {boolean} newValue New value to set.
+     */
+    set warn_long_links(newValue) {
+        this._warn_long_links = parseBooleanish(newValue);
+        document.getElementById("warn_long_links_dropdown").value = this._warn_long_links ? 1 : 0;
+        document.getElementById("warn_long_links_chk").checked = this._warn_long_links ? 'checked' : null;
+    },
+    get warn_long_links() {
+        return this._warn_long_links;
+    },
+
     _panel_shown: false,
     set panel_shown(newValue) {
         if (newValue === undefined) { newValue = false; }
@@ -453,7 +490,7 @@ const UserSettings = {
     get quick_panel_button() {
         return this._quick_panel_btn;
     },
-    
+
     _resize_whitespace: false,
     set resize_whitespace(newValue) {
         const button = document.getElementById("resize_whitespace_button");
@@ -483,18 +520,19 @@ const UserSettings = {
         'starbattle_dots',
         'sudoku_centre_size',
         'sudoku_normal_size',
-        'timerbar_status'
+        'timerbar_status',
+        'warn_long_links'
     ],
     gridtype_size: [
         'gridtype',
         'displaysize'
     ],
 
-    clearSettings: function() {
-        this.can_save.forEach(function(setting) {
+    clearSettings: function () {
+        this.can_save.forEach(function (setting) {
             deleteCookie(setting);
         });
-        this.gridtype_size.forEach(function(setting) {
+        this.gridtype_size.forEach(function (setting) {
             deleteCookie(setting);
         });
         deleteCookie('tab_settings');
@@ -541,8 +579,11 @@ const UserSettings = {
 
             this._settingsLoaded = true;
         } else {
-            this.gridtype_size.forEach(function(setting) {
-                UserSettings[setting] = getCookie(setting);
+            this.gridtype_size.forEach(function (setting) {
+                let cookieValue = getCookie(setting);
+                if (cookieValue !== null) {
+                    UserSettings[setting] = cookieValue;
+                }
             });
         }
     }

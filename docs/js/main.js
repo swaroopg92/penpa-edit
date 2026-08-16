@@ -2282,6 +2282,14 @@ onload = function() {
         UserSettings.shorten_links = this.checked;
     }
 
+    // Warn on long links setting
+    document.getElementById("warn_long_links_dropdown").onchange = function() {
+        UserSettings.warn_long_links = String(this.value) === "1";
+    }
+    document.getElementById("warn_long_links_chk").onchange = function() {
+        UserSettings.warn_long_links = this.checked;
+    }
+
     // Timer pause and unpause
     document.getElementById("sw_pause").addEventListener("click", pauseTimer);
     document.getElementById("sw_start").addEventListener("click", startTimer);

@@ -123,6 +123,7 @@
             "./js/class_uniform.js",
             "./js/class_panel.js",
             "./js/style.js",
+            "./js/io.js",
             "./js/general.js",
             "./js/customcolor.js",
             "./js/translate.js"
@@ -1190,7 +1191,9 @@
             <input type="checkbox" name="save_undo" id="save_undo"><br/>
             <label class="label_nb" for="auto_shorten_chk" id="auto_shorten_chk_lb">Automatically Shorten with
                 TinyURL</label>
-            <input type="checkbox" name="auto_shorten_chk" id="auto_shorten_chk"/>
+            <input type="checkbox" name="auto_shorten_chk" id="auto_shorten_chk"/><br/>
+            <label class="label_nb" for="warn_long_links_chk" id="warn_long_links_chk_lb">Warn on Very Long Links</label>
+            <input type="checkbox" name="warn_long_links_chk" id="warn_long_links_chk" checked />
         </div>
         <div class="nb_button">
             <input type="button" id="address_edit" value="Editing URL"/>
@@ -1754,6 +1757,17 @@
                         <select id="shorten_links_dropdown">
                             <option value="1" class="lb_generic_on">ON</option>
                             <option value="0" selected class="lb_generic_off">OFF</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label id="lb_settings_warn_long_links">Warn on Very Long Links:</label>
+                    </td>
+                    <td>
+                        <select id="warn_long_links_dropdown">
+                            <option value="1" selected class="lb_generic_on">ON</option>
+                            <option value="0" class="lb_generic_off">OFF</option>
                         </select>
                     </td>
                 </tr>

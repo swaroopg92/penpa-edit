@@ -1615,6 +1615,18 @@ async function request_shortlink(url) {
 
 async function update_textarea(text) {
     let newText = text;
+
+    if (
+        newText.length > PenpaIO.MAX_URI_LENGTH &&
+        UserSettings.warn_long_links
+    ) {
+        Swal.fire({
+            html: PenpaText.get('long_link_warning'),
+            icon: 'info',
+            confirmButtonText: PenpaText.get('close'),
+        });
+    }
+
     if (UserSettings.shorten_links) {
         let shortened = await request_shortlink(newText);
         if (shortened && pu.isReplay) {
