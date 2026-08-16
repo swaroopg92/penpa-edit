@@ -147,7 +147,7 @@ const UserSettings = {
     // Check conflicts on pencil marks
     _check_pencil_marks: false,
     set check_pencil_marks(newValue) {
-        this._check_pencil_marks = newValue === "1" || newValue === "true" || newValue === true;
+        this._check_pencil_marks = parseBooleanish(newValue);
         document.getElementById("check_pencil_marks_opt").value = this._check_pencil_marks ? "1" : "0";
         if (window.pu)
             pu.redraw();
@@ -213,7 +213,7 @@ const UserSettings = {
 
     _outline_text: false,
     set outline_text(newValue) {
-        this._outline_text = newValue === "1" || newValue === "true" || newValue === true;
+        this._outline_text = parseBooleanish(newValue);
         document.getElementById("outline_text_opt").value = this._outline_text ? "1" : "0";
         if (window.pu)
             pu.redraw();
@@ -249,7 +249,7 @@ const UserSettings = {
     // Setting to ignore all
     _ignore_line_style: false,
     set ignore_line_style(newValue) {
-        this._ignore_line_style = newValue === "1" || newValue === "true" || newValue === true;
+        this._ignore_line_style = parseBooleanish(newValue);
         document.getElementById("ignore_line_style_opt").value = this._ignore_line_style ? "1" : "0";
         this.attemptSave();
     },
@@ -422,14 +422,9 @@ const UserSettings = {
 
     _shorten_links: false,
     set shorten_links(newValue) {
-        if (newValue === undefined) { newValue = false; }
-        // [ZW] Not sure how this is happening but a value of "false" can get stored in
-        // the settings which is interpreted as true
-        if (newValue === "false") { newValue = false; }
-        this._shorten_links = newValue;
-
-        document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;
-        document.getElementById("auto_shorten_chk").checked = newValue ? 'checked' : null;
+        const parsedValue = parseBooleanish(newValue);
+        document.getElementById("shorten_links_dropdown").value = this._shorten_links ? 1 : 0;
+        document.getElementById("auto_shorten_chk").checked = this._shorten_links ? 'checked' : null;
         this.attemptSave();
     },
     get shorten_links() {
@@ -544,24 +539,24 @@ const UserSettings = {
     _settingsLoaded: false,
 
     // Handle saving settings if needed
-    attemptSave: function() {
+    attemptSave: function () {
         if (!this._settingsLoaded) {
             return;
         }
 
-        this.can_save.forEach(function(setting) {
+        this.can_save.forEach(function (setting) {
             setCookie(setting, UserSettings[setting], this._expDate);
         });
-        this.gridtype_size.forEach(function(setting) {
+        this.gridtype_size.forEach(function (setting) {
             setCookie(setting, UserSettings[setting], this._expDate);
         });
         setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), this._expDate);
         // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, this._expDate);
     },
 
-    loadFromCookies: function(load = "others") {
+    loadFromCookies: function (load = "others") {
         if (load === "others") {
-            this.can_save.forEach(function(setting) {
+            this.can_save.forEach(function (setting) {
                 let cookieQuery = getCookie(setting);
                 if (cookieQuery !== null) {
                     UserSettings[setting] = cookieQuery;
