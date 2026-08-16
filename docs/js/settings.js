@@ -22,6 +22,25 @@ function deleteCookie(name) {
     setCookie(name, '', -1);
 }
 
+/**
+ * Helper that attempts to parse the value as a boolean flag (true/false) to make the settings
+ * code more concise.
+ *
+ * @param {any} value
+ */
+function parseBooleanish(value) {
+    if (!value) { return false; }
+
+    if (typeof value === 'string') {
+        if (value === "true" || value === "1") { return true; }
+        if (value === "false" || value === "0" || value == "") { return false; }
+    } else if (typeof value === "number") {
+        return value > 0;
+    }
+
+    return Boolean(value);
+}
+
 const UserSettings = {
     // Cookie Expiry Constant
     _expDate: 2147483647,
@@ -128,7 +147,7 @@ const UserSettings = {
     // Check conflicts on pencil marks
     _check_pencil_marks: false,
     set check_pencil_marks(newValue) {
-        this._check_pencil_marks = newValue === "1" || newValue === "true" || newValue === true;
+        this._check_pencil_marks = parseBooleanish(newValue);
         document.getElementById("check_pencil_marks_opt").value = this._check_pencil_marks ? "1" : "0";
         if (window.pu)
             pu.redraw();
@@ -194,7 +213,7 @@ const UserSettings = {
 
     _outline_text: false,
     set outline_text(newValue) {
-        this._outline_text = newValue === "1" || newValue === "true" || newValue === true;
+        this._outline_text = parseBooleanish(newValue);
         document.getElementById("outline_text_opt").value = this._outline_text ? "1" : "0";
         if (window.pu)
             pu.redraw();
@@ -230,7 +249,7 @@ const UserSettings = {
     // Setting to ignore all
     _ignore_line_style: false,
     set ignore_line_style(newValue) {
-        this._ignore_line_style = newValue === "1" || newValue === "true" || newValue === true;
+        this._ignore_line_style = parseBooleanish(newValue);
         document.getElementById("ignore_line_style_opt").value = this._ignore_line_style ? "1" : "0";
         this.attemptSave();
     },
@@ -403,18 +422,31 @@ const UserSettings = {
 
     _shorten_links: false,
     set shorten_links(newValue) {
-        if (newValue === undefined) { newValue = false; }
-        // [ZW] Not sure how this is happening but a value of "false" can get stored in
-        // the settings which is interpreted as true
-        if (newValue === "false") { newValue = false; }
-        this._shorten_links = newValue;
-
-        document.getElementById("shorten_links_dropdown").value = newValue ? 1 : 0;
-        document.getElementById("auto_shorten_chk").checked = newValue ? 'checked' : null;
+        const parsedValue = parseBooleanish(newValue);
+        document.getElementById("shorten_links_dropdown").value = this._shorten_links ? 1 : 0;
+        document.getElementById("auto_shorten_chk").checked = this._shorten_links ? 'checked' : null;
         this.attemptSave();
     },
     get shorten_links() {
         return this._shorten_links;
+    },
+
+    /** @private Stored value for warn_long_links setting. */
+    _warn_long_links: true,
+    /**
+     * When enabled, warn the user that the generated link may be too long and cause "URI too long"
+     * error when attempting to visit as normal. Infrequent/new Penpa users may not know that this
+     * issue can happen and requires working around via the "Load" button.
+     *
+     * @param {boolean} newValue New value to set.
+     */
+    set warn_long_links(newValue) {
+        this._warn_long_links = parseBooleanish(newValue);
+        document.getElementById("warn_long_links_dropdown").value = this._warn_long_links ? 1 : 0;
+        document.getElementById("warn_long_links_chk").checked = this._warn_long_links ? 'checked' : null;
+    },
+    get warn_long_links() {
+        return this._warn_long_links;
     },
 
     _panel_shown: false,
@@ -453,7 +485,7 @@ const UserSettings = {
     get quick_panel_button() {
         return this._quick_panel_btn;
     },
-    
+
     _resize_whitespace: false,
     set resize_whitespace(newValue) {
         const button = document.getElementById("resize_whitespace_button");
@@ -483,18 +515,19 @@ const UserSettings = {
         'starbattle_dots',
         'sudoku_centre_size',
         'sudoku_normal_size',
-        'timerbar_status'
+        'timerbar_status',
+        'warn_long_links'
     ],
     gridtype_size: [
         'gridtype',
         'displaysize'
     ],
 
-    clearSettings: function() {
-        this.can_save.forEach(function(setting) {
+    clearSettings: function () {
+        this.can_save.forEach(function (setting) {
             deleteCookie(setting);
         });
-        this.gridtype_size.forEach(function(setting) {
+        this.gridtype_size.forEach(function (setting) {
             deleteCookie(setting);
         });
         deleteCookie('tab_settings');
@@ -506,24 +539,24 @@ const UserSettings = {
     _settingsLoaded: false,
 
     // Handle saving settings if needed
-    attemptSave: function() {
+    attemptSave: function () {
         if (!this._settingsLoaded) {
             return;
         }
 
-        this.can_save.forEach(function(setting) {
+        this.can_save.forEach(function (setting) {
             setCookie(setting, UserSettings[setting], this._expDate);
         });
-        this.gridtype_size.forEach(function(setting) {
+        this.gridtype_size.forEach(function (setting) {
             setCookie(setting, UserSettings[setting], this._expDate);
         });
         setCookie("tab_settings", JSON.stringify(getValues('mode_choices')), this._expDate);
         // setCookie("different_solution_tab", document.getElementById("multitab_settings_opt").value, this._expDate);
     },
 
-    loadFromCookies: function(load = "others") {
+    loadFromCookies: function (load = "others") {
         if (load === "others") {
-            this.can_save.forEach(function(setting) {
+            this.can_save.forEach(function (setting) {
                 let cookieQuery = getCookie(setting);
                 if (cookieQuery !== null) {
                     UserSettings[setting] = cookieQuery;
@@ -541,8 +574,11 @@ const UserSettings = {
 
             this._settingsLoaded = true;
         } else {
-            this.gridtype_size.forEach(function(setting) {
-                UserSettings[setting] = getCookie(setting);
+            this.gridtype_size.forEach(function (setting) {
+                let cookieValue = getCookie(setting);
+                if (cookieValue !== null) {
+                    UserSettings[setting] = cookieValue;
+                }
             });
         }
     }

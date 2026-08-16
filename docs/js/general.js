@@ -1615,6 +1615,18 @@ async function request_shortlink(url) {
 
 async function update_textarea(text) {
     let newText = text;
+
+    if (
+        newText.length > PenpaIO.MAX_URI_LENGTH &&
+        UserSettings.warn_long_links
+    ) {
+        Swal.fire({
+            html: PenpaText.get('long_link_warning'),
+            icon: 'info',
+            confirmButtonText: PenpaText.get('close'),
+        });
+    }
+
     if (UserSettings.shorten_links) {
         let shortened = await request_shortlink(newText);
         if (shortened && pu.isReplay) {
@@ -1902,55 +1914,53 @@ function export_sudoku() {
 
 async function import_url(urlstring) {
     urlstring = urlstring || document.getElementById("urlstring").value;
-    if (urlstring !== "") {
-        if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
 
-            let param = urlstring.split('&');
-            let paramArray = [];
+    if (urlstring === "") {
+        return;
+    }
 
-            // Decompose address into elements
-            for (var i = 0; i < param.length; i++) {
-                let paramItem = param[i].split('=');
-                paramArray[paramItem[0]] = paramItem[1];
-            }
+    if (urlstring.indexOf("/penpa-edit/") !== -1 || urlstring.match(/m=(?:edit|solve)/gi)) {
+        let param = urlstring.split('&');
+        let paramArray = [];
 
-            const hash = PenpaProgress.getHash(paramArray.p);
-
-            // Decrypt puzzle data
-            let local_data = await PenpaProgress.tryLoad(hash);
-
-            if (local_data && local_data.includes('&p=')) {
-                // This is to account for old links and new links together
-                var url;
-                if (local_data.includes("#")) {
-                    url = local_data.split('#')[1];
-                } else {
-                    url = local_data.split('?')[1];
-                }
-                load(url, type = 'localstorage', origurl = paramArray.p);
-            } else {
-                if (urlstring.includes("#")) {
-                    urlstring = urlstring.split("/penpa-edit/#")[1];
-                } else {
-                    urlstring = urlstring.split("/penpa-edit/?")[1];
-                }
-                load(urlstring, 'local');
-            }
-
-            document.getElementById("modal-load").style.display = 'none';
-            if (UserSettings.tab_settings > 0) {
-                selectBox.setValue(UserSettings.tab_settings);
-            }
-        } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p(\.html)?\?/)) {
-            decode_puzzlink(urlstring);
-            document.getElementById("modal-load").style.display = 'none';
-        } else {
-            Swal.fire({
-                html: PenpaText.get('invalid_url'),
-                icon: 'error',
-                confirmButtonText: PenpaText.get('close'),
-            });
+        // Decompose address into elements
+        for (var i = 0; i < param.length; i++) {
+            let paramItem = param[i].split('=');
+            paramArray[paramItem[0]] = paramItem[1];
         }
+
+        const hash = PenpaProgress.getHash(paramArray.p);
+
+        // Decrypt puzzle data
+        let local_data = await PenpaProgress.tryLoad(hash);
+
+        if (local_data && local_data.includes('&p=')) {
+            // This is to account for old links and new links together
+            load(
+                PenpaIO.getPuzzleDataFromUrl(local_data),
+                'localstorage',
+                paramArray.p
+            );
+        } else {
+            load(
+                PenpaIO.getPuzzleDataFromUrl(urlstring),
+                'local'
+            );
+        }
+
+        document.getElementById("modal-load").style.display = 'none';
+        if (UserSettings.tab_settings > 0) {
+            selectBox.setValue(UserSettings.tab_settings);
+        }
+    } else if (urlstring.match(/\/puzz.link\/p\?|pzprxs\.vercel\.app\/p\?|\/pzv\.jp\/p(\.html)?\?/)) {
+        decode_puzzlink(urlstring);
+        document.getElementById("modal-load").style.display = 'none';
+    } else {
+        Swal.fire({
+            html: PenpaText.get('invalid_url'),
+            icon: 'error',
+            confirmButtonText: PenpaText.get('close'),
+        });
     }
 }
 

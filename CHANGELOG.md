@@ -1,4 +1,7 @@
 ## History
+
+* to-release...
+    * Add warning on very long links that may require load via UI
 * 2026/06/02 ver 3.2.4
     * Cage mode in all grid types except cairo pentagonal
     * Bug fixes and code improvement
