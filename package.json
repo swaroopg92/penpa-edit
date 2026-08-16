@@ -20,6 +20,7 @@
     "dompurify": "^3.0.6",
     "easytimer.js": "=4.3.0",
     "jquery": "=3.7.0",
+    "localforage": "^1.10.0",
     "sweetalert2": "=11.14.4"
   }
 }
