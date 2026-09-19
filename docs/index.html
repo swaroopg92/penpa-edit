@@ -1544,7 +1544,8 @@
                 Non-Square Check</label></span>
             <input type="checkbox" name="sudokuIgnoreNotSquare" id="sudokuIgnoreNotSquare">
         </div>
-        <div id="sudokuIOFail" class="is_hidden error_msg">Error: it contains non-alpha-numeric characters</div>
+        <div id="sudokuIOFail" class="is_hidden error_msg">Error: it contains non-alphanumeric characters</div>
+        <div id="sudokuIOFailNonPerfect" class="is_hidden error_msg">Error: Number of digits is not a perfect square</div>
         <div class="nb_button">
             <input type="button" id="load_input" value="Import Sudoku" onclick="import_sudoku();"/>
             <input type="button" id="export_input" value="Export Sudoku" onclick="export_sudoku();"/>

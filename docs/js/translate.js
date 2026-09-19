@@ -666,7 +666,9 @@ const PenpaText = {
         'lb_settings_local_storage',
         'clear_storage_one',
         'clear_storage_all',
-        'local_storage_browser_message'
+        'local_storage_browser_message',
+        'sudokuIOFail',
+        'sudokuIOFailNonPerfect'
     ],
     _placeholder: [
         'saveimagename',
@@ -902,7 +904,18 @@ const PenpaText = {
             JP: '数独サイズ: $vには対応していません。',
             ZH: '不支持大小为 $v 的数独盘面'
         },
-
+        sudokuIOFail: {
+            EN: 'Error: it contains non-alphanumeric characters.',
+            // The translations are Google Translations of the text
+            // 'Error: it contains characters besides 0-9 or A-Z.',
+            JP: 'エラー：0～9またはA～Z以外の文字が含まれています。',
+            ZH: '错误：它包含除 0-9 或 A-Z 之外的字符。'
+        },
+        sudokuIOFailNonPerfect: {
+            EN: 'Error: Number of digits is not a perfect square.',
+            JP: 'エラー：桁数が完全平方数ではありません。',
+            ZH: '错误：位数不是完全平方数。'
+        },
         // Modals
         f2_title: {
             EN: 'Are you sure to switch to Editing Mode?',
