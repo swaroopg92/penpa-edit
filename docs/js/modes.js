@@ -758,7 +758,7 @@ const penpa_modes = {
     },
     'penrose_P3': {
         //modes
-        'mode': ['surface', 'line', 'lineE', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
+        'mode': ['surface', 'line', 'lineE', 'wall', 'number', 'symbol', 'special', 'cage', 'combi', 'sudoku', 'board', 'move'],
         //submodes
         'sub': ['line1', 'line3', 'line4',
             'lineE1', 'lineE3', 'lineE4', 'lineE5',

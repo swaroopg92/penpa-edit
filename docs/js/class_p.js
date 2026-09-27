@@ -9381,11 +9381,14 @@ class Puzzle {
         if (this.mouse_mode === "down_left") {
             this.drawing = true;
             this.drawing_mode = 100;
-            this.last = num;
+            if (this.type.indexOf(this.point[num].type) != -1) {
+                this.last = num;
+            }
             this.type = this.type_set();
         } else if (this.mouse_mode === "move") {
-            this.re_wallmove(num);
-            this.last = num;
+            if (this.type.indexOf(this.point[num].type) != -1) {
+                this.re_wallmove(num);
+            }
         } else if (this.mouse_mode === "up") {
             this.drawing = false;
             this.last = -1;
@@ -9405,6 +9408,7 @@ class Puzzle {
                 array = "wall";
                 var key = (Math.min(num, this.last)).toString() + "," + (Math.max(num, this.last)).toString();
                 this.re_line(array, key, line_style);
+                this.last = num;
             }
             this.redraw();
         }

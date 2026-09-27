@@ -7698,7 +7698,17 @@ class Puzzle_penrose_P3 extends Puzzle {
                     point[edge[e]].use = 1;
                 }
             }
-
+            for (let e = 0; e < 4; e++) {
+                // Update mapping edge -> adjacent edge
+                let ee = edge[e];
+                let ef = edge[(e + 2) % 4];
+                if (point[ee].adjacent.indexOf(ef) == -1) {
+                    point[ee].adjacent = point[ee].adjacent.concat([ef])
+                }
+                if (point[ef].adjacent.indexOf(ee) == -1) {
+                    point[ef].adjacent = point[ef].adjacent.concat([ee])
+                }
+            }
             // Create face
             type = 0;
             point[k] = new Point(xcen, ycen, type, adja, surround, use, edge);
@@ -7732,7 +7742,7 @@ class Puzzle_penrose_P3 extends Puzzle {
             }
         }
 
-        this.point = this.point_connect_corners(this.create_corners(this.fix_points(point), 0.25, this.fix_points(point).length + 1)[0]);
+        this.point = this.point_connect_corners(this.create_corners(point, 0.25, point.length + 1)[0]);
     }
 
     reset_frame() {
@@ -7847,11 +7857,7 @@ class Puzzle_penrose_P3 extends Puzzle {
                 }
                 break;
             case "wall":
-                if (this.drawing) {
-                    type = [this.point[this.last].type];
-                } else {
-                    type = [2];
-                }
+                type = [2];
                 break;
             case "cage":
                 if (submode === "1") {
@@ -8120,6 +8126,8 @@ class Puzzle_penrose_P3 extends Puzzle {
             this.draw_frame();
             this.draw_polygonsp("pu_q");
             this.draw_polygonsp("pu_a");
+            this.draw_wall("pu_q");
+            this.draw_wall("pu_a");
             this.draw_line("pu_q");
             this.draw_line("pu_a");
             this.draw_lattice();
@@ -8138,6 +8146,7 @@ class Puzzle_penrose_P3 extends Puzzle {
             this.draw_symbol("pu_q", 1);
             this.draw_frame();
             this.draw_polygonsp("pu_q");
+            this.draw_wall("pu_q");
             this.draw_line("pu_q");
             this.draw_lattice();
             this.draw_selection();
@@ -8316,6 +8325,21 @@ class Puzzle_penrose_P3 extends Puzzle {
         }
     }
 
+    draw_wall(pu) {
+        for (var i in this[pu].wall) {
+            set_line_style(this.ctx, this[pu].wall[i]);
+            if (UserSettings.custom_colors_on && this[pu + "_col"].wall[i]) {
+                this.ctx.strokeStyle = this[pu + "_col"].wall[i];
+            }
+            this.ctx.lineCap = "butt";
+            var i1 = i.split(",")[0];
+            var i2 = i.split(",")[1];
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
+            this.ctx.lineTo(this.point[i2].x, this.point[i2].y);
+            this.ctx.stroke();
+        }
+    }
 
     draw_symbol(pu, layer) {
         /*symbol_layer*/
