@@ -7412,13 +7412,15 @@ class Puzzle {
         }
         // Square grid
         else if (this.grid_is_square()) {
-            this.selection.sort((a, b) => a >= b);
+            // Sort visually so copied data follows the grid after a transform
+            this.selection.sort((a, b) => this.point[a].y - this.point[b].y || this.point[a].x - this.point[b].x);
             let base_point = this.point[this.selection[0]];
-            [base_x, base_y] = base_point.index;
 
             rel_coords = (p) => {
-                let [x, y] = this.point[p].index;
-                return {x: x - base_x, y: y - base_y};
+                return {
+                    x: Math.round((this.point[p].x - base_point.x) / this.size),
+                    y: Math.round((this.point[p].y - base_point.y) / this.size)
+                };
             }
         }
         // Unsupported grid type
