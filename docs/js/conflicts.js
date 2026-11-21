@@ -499,7 +499,7 @@ class Conflicts {
         const symbol_indices = Object.keys(this.pu.pu_q.symbol);
         for (let index of symbol_indices) {
             const symbol = this.pu.pu_q.symbol[index];
-            if (!Array.isArray(symbol) && (symbol[1] !== "bars_G" || symbol[1] !== "circle_SS")) {
+            if (!Array.isArray(symbol) || (symbol[1] !== "bars_G" && symbol[1] !== "circle_SS")) {
                 // Not a grey bar.
                 continue;
             }
